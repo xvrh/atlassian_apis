@@ -16,6 +16,3 @@ dev_dependencies:
   json_serializable:
   pedantic:
   test:
-
-dependency_overrides:
-  dart_style: ^2.0.0

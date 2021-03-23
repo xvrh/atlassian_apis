@@ -1,10 +1,12 @@
-import 'package:jira/jira.dart';
+import 'package:http/http.dart';
+import 'package:jira/service_management.dart';
 
 void main() {
-  var jira = JiraClient();
+  var client = Client();
+  var serviceManagement = ServiceManagementApi(client);
 
-  jira.getAlternativeIssueTypes();
-  jira.issueTypes.getAlternative('');
+  serviceManagement.organization.getOrganizations2(serviceDeskId: 1);
+  serviceManagement.request.createCustomerRequest();
 
   jira.close();
 }

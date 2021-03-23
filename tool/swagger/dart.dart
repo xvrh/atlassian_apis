@@ -5,46 +5,68 @@ import 'dart_keywords.dart';
 import 'swagger_spec.dart' as sw;
 
 class Api {
+  final String name;
   final sw.Spec _spec;
   final _complexTypes = <ComplexType>[];
   final _topLevelEnums = <String, EnumDartType>{};
   final TypeAliases typeAliases;
-  late final Service _service;
+  final _services = <Service>[];
 
-  Api(this._spec, {Map<String, String>? typeAliases})
+  Api(this.name, this._spec, {Map<String, String>? typeAliases})
       : typeAliases = TypeAliases(typeAliases) {
-    _service = Service(_spec.info, this.typeAliases);
+    for (var tag in _spec.tags) {
+      var service = Service(_spec.info, tag, this.typeAliases);
+      _services.add(service);
+    }
+
     for (final pathEntry in _spec.paths.entries) {
       for (final methodEntry
           in pathEntry.value.entries.where((e) => e.key != 'options')) {
-        var httpMethod = methodEntry.key;
-        var path = methodEntry.value;
+        var httpMethodName = methodEntry.key;
         var url = pathEntry.key;
         if (url.startsWith('/')) {
           url = url.substring(1);
         }
 
-        _service.operations
-            .add(Operation(this, path, url, httpMethod: httpMethod));
+        var httpMethod =
+            sw.HttpMethod.all.firstWhereOrNull((m) => m.name == httpMethodName);
+
+        if (httpMethod != null) {
+          var path =
+              sw.Path.fromJson(methodEntry.value! as Map<String, Object?>);
+          var service = _services.firstWhere(
+              (s) => path.tags.any((t) => t == s.tag.name),
+              orElse: () =>
+                  throw Exception('Unknown tag ${path.tags} ${pathEntry.key}'));
+
+          var initialMethodName = _normalizeOperationId(path.operationId);
+          var methodName = initialMethodName;
+          var operationIndex = 1;
+          while (true) {
+            if (service.operations.any((o) => o.methodName == methodName)) {
+              ++operationIndex;
+              methodName = '$initialMethodName$operationIndex';
+            } else {
+              break;
+            }
+          }
+
+          service.operations.add(
+              Operation(this, methodName, path, url, httpMethod: httpMethod));
+        } else {
+          print('Unknown http method $httpMethodName ${pathEntry.key} $name');
+        }
       }
     }
 
-    // Search for top-level enum first
-    for (var definition in _spec.definitions.entries) {
-      var schema = definition.value;
-      if (schema.enums != null) {
-        var enumName = definition.key;
-        _topLevelEnums[enumName] = EnumDartType(this, null, enumName, schema);
-      }
-    }
-    for (var definitionEntry in _spec.definitions.entries) {
+    for (var definitionEntry in _spec.components.schemas.entries) {
       var definitionName = definitionEntry.key;
       var definition = definitionEntry.value;
 
-      if (definition.type == 'object') {
-        _complexTypes.add(
-            ComplexType(this, _typeNameToDartType(definitionName), definition));
-      }
+      //if (definition.type == 'object') {
+      _complexTypes.add(
+          ComplexType(this, _typeNameToDartType(definitionName), definition));
+      //}
     }
   }
 
@@ -59,17 +81,20 @@ class Api {
   DartType typeFromSchema(sw.Schema schema) {
     var type = schema.type;
     if (schema.ref != null) {
-      return parseDartType(schema.ref!.replaceAll('#/definitions/', ''));
+      return parseDartType(schema.ref!.replaceAll('#/components/schemas/', ''));
     } else if (type == 'array') {
       return ListDartType(this, typeFromSchema(schema.items!));
     } else if (type == 'object') {
-      return MapDartType(this, schema.additionalProperties);
+      return MapDartType(this, null);
     } else {
       if (type == 'string' && schema.format == 'date-time') {
         return DateTimeType(this);
       } else {
         if (type == null) {
-          throw Exception('Type is null for schema $schema');
+          //throw Exception('Type is null for schema $schema');
+          // TODO(xha): support allOf
+          "";
+          return MapDartType(this, null);
         }
         return parseDartType(type);
       }
@@ -113,25 +138,43 @@ class Api {
   String toCode() {
     final buffer = StringBuffer();
 
+    var className = '${name.words.toUpperCamel()}Api';
+
     buffer.writeln('''
-// @dart=2.12
 // Generated code - Do not edit manually
-// This code is generated with the script in tool/generate_api.dart
-    
-// ${_spec.info.title}
-// ${_spec.info.description}
-// Version: ${_spec.info.version ?? ''}
 
-import 'api_utils.dart' show BaseApi, ApiPath, ApiClient, ApiRequest;
-
-export 'api_utils.dart' show ApiClient, ApiException;
+import 'api_utils.dart' show ApiClient, Client;
 
 // ignore_for_file: deprecated_member_use_from_same_package
 
+class $className {
+  final ApiClient _client;
+  
+  $className._(this._client);
+  
+  factory $className(Client client) => $className._(ApiClient(client));
 ''');
 
-    buffer.writeln(_service.toCode());
-    buffer.writeln();
+    for (var service in _services) {
+      var tag = service.tag;
+      var description = tag.description;
+      if (description.isNotEmpty) {
+        buffer.writeln(_toComment(description, indent: 2));
+      }
+      buffer.writeln(
+          'late final ${tag.name.words.toLowerCamel()} = ${service.className}._(_client);');
+      buffer.writeln();
+    }
+
+    buffer.writeln('''
+  void close() => _client.close();
+}
+''');
+
+    for (var service in _services) {
+      buffer.writeln(service.toCode());
+      buffer.writeln();
+    }
 
     var generatedClasses = <String>[];
     for (var topLevelEnum in _topLevelEnums.values) {
@@ -178,13 +221,16 @@ class TypeAliases {
 
 class Service {
   final sw.Info info;
+  final sw.Tag tag;
   final List<Operation> operations = [];
-  late String _className;
+  late final String _className;
 
-  Service(this.info, TypeAliases aliases) {
-    var name = info.title.words.toUpperCamel();
+  Service(this.info, this.tag, TypeAliases aliases) {
+    var name = '${tag.name.words.toUpperCamel()}Api';
     _className = aliases[name] ?? name;
   }
+
+  String get className => _className;
 
   String toCode() {
     final buffer = StringBuffer();
@@ -194,19 +240,11 @@ class Service {
     }
     buffer.writeln('''
 
-class $_className extends BaseApi {
-  static const name = '$_className';
-
-  $_className(ApiClient client): super(client);
+class $_className {
+    final ApiClient _client;
+  
+  $_className._(this._client);
 ''');
-
-    buffer.writeln(
-        'static final paths = <ApiPath, Future Function($_className, ApiRequest)>{');
-    for (var operation in operations) {
-      buffer.writeln(operation.toCodeFromRequest());
-      buffer.write(',');
-    }
-    buffer.writeln('};');
 
     for (var operation in operations) {
       buffer.writeln(operation.toCode());
@@ -221,35 +259,61 @@ class $_className extends BaseApi {
 
 class Operation {
   final Api _api;
+  final String methodName;
   final sw.Path path;
   final String url;
   final sw.HttpMethod httpMethod;
-  final String _operationId;
 
-  Operation(this._api, this.path, this.url, {required this.httpMethod})
-      : assert(!url.startsWith('/')),
-        _operationId = _operationName(url, httpMethod);
+  Operation(this._api, this.methodName, this.path, this.url,
+      {required this.httpMethod})
+      : assert(!url.startsWith('/'));
 
-  static String _operationName(String url, sw.HttpMethod httpMethod) {
-    return [httpMethod.toString(), ...url.words].toLowerCamel();
+  DartType? _findBody() {
+    var body = path.requestBody;
+    if (body != null) {
+      var contents = body.content;
+      if (contents != null) {
+        var content = contents.entries.first.value;
+        return _api.typeFromSchema(content.schema!);
+      }
+    }
+    return null;
   }
 
   String toCode() {
     final buffer = StringBuffer();
 
+    var body = _findBody();
+
+    var allParameters = <sw.Parameter>[];
+    for (var parameter in path.parameters) {
+      if (parameter.name.isEmpty) {
+        assert(parameter.ref != null);
+        var refParam = _api._spec.components.parameters[
+            parameter.ref!.replaceAll('#/components/parameters/', '')]!;
+        allParameters.add(refParam);
+      } else {
+        allParameters.add(parameter);
+      }
+    }
+
     var parameters = '';
     var namedParameterMode = true;
-    if (path.parameters.length == 1 &&
-        (path.parameters[0].required ||
-            path.parameters[0].location == sw.ParameterLocation.path)) {
+    if (allParameters.length == 1 &&
+        (allParameters[0].required ||
+            allParameters[0].location == sw.ParameterLocation.path) &&
+        body == null) {
       namedParameterMode = false;
     }
     var encodedParameters = <String>[];
-    for (final parameter in path.parameters) {
+    for (final parameter in allParameters) {
       var parameterType = _api.typeFromParameter(parameter);
 
       encodedParameters.add(
-          "${parameter.required && namedParameterMode ? 'required' : ''} ${parameterType.toString()}${parameter.required ? '' : '?'} ${_toCamelCase(parameter.name)}");
+          "${parameter.required && namedParameterMode ? 'required' : ''} ${parameterType.toString()}${parameter.required ? '' : '?'} ${dartIdentifier(parameter.name)}");
+    }
+    if (body != null) {
+      encodedParameters.add('required $body body');
     }
     if (encodedParameters.isNotEmpty) {
       var joinedParameters = encodedParameters.join(', ');
@@ -260,65 +324,79 @@ class Operation {
       }
     }
 
-    var response = path.responses['200']!;
+    //TODO(xha): get the error case to document exceptions
+    var responses = path.responses.entries
+        .where((s) => s.key.startsWith('2') || s.key.startsWith('3'))
+        .toList();
+    if (responses.isEmpty) {
+      throw Exception(
+          'No status code 2xx found for $methodName / ${_api.name}');
+    } else if (responses.length > 1) {
+      //TODO(xha): support a way to give the user the status code to know if the
+      // the resource was created or updated (200 or 201)
+      //throw Exception(
+      //    'Several ${responses.map((p) => p.key)} ${path.operationId} ${_api.name}');
+    }
+    var response = responses.first.value;
+
     var returnTypeName = 'void';
     DartType? returnDartType;
-    if (response.schema != null) {
-      returnDartType = _api.typeFromSchema(response.schema!);
-      returnTypeName = returnDartType.toString();
+    if (response.content.isNotEmpty) {
+      var responseSchema = response.content.entries.first.value.schema;
+      if (responseSchema != null &&
+          (responseSchema.type != null || responseSchema.ref != null)) {
+        returnDartType = _api.typeFromSchema(responseSchema);
+        returnTypeName = returnDartType.toString();
+      }
     }
 
-    buffer.writeln(
-        "static const ApiPath ${_operationId}Path = ApiPath.${httpMethod.toLowerCase()}(name, '$url');");
-    buffer.writeln('');
-
-    buffer.writeln('/// ${httpMethod.toUpperCase()} /$url');
-    buffer
-        .writeln('Future<$returnTypeName> $_operationId($parameters) async {');
+    buffer.writeln(_toComment(path.description));
+    buffer.writeln('Future<$returnTypeName> $methodName($parameters) async {');
 
     var pathParametersCode = '';
     var queryParametersCode = '';
     var pathParameters =
-        path.parameters.where((p) => p.location == sw.ParameterLocation.path);
+        allParameters.where((p) => p.location == sw.ParameterLocation.path);
     if (pathParameters.isNotEmpty) {
       pathParametersCode = ', pathParameters: {';
       for (var parameter in pathParameters) {
+        var parameterType = _api.typeFromParameter(parameter);
         pathParametersCode +=
-            "'${parameter.name}': ${_toCamelCase(parameter.name)}, ";
+            "'${parameter.name}': ${parameterType.identifierToString(dartIdentifier(parameter.name))}, ";
       }
       pathParametersCode += '}';
     }
 
     var queryParameters =
-        path.parameters.where((p) => p.location == sw.ParameterLocation.query);
+        allParameters.where((p) => p.location == sw.ParameterLocation.query);
     if (queryParameters.isNotEmpty) {
       queryParametersCode = ', queryParameters: {';
       for (var parameter in queryParameters) {
+        var parameterType = _api.typeFromParameter(parameter);
+        if (!parameter.required) {
+          queryParametersCode +=
+              'if (${dartIdentifier(parameter.name)} != null)\n';
+        }
         queryParametersCode +=
-            "'${parameter.name}': ${_toCamelCase(parameter.name)}, ";
+            "'${parameter.name}': ${parameterType.identifierToString(dartIdentifier(parameter.name))}, \n";
       }
       queryParametersCode += '}';
     }
 
     var bodyParameterCode = '';
-    if (httpMethod.toUpperCase() != 'GET') {
-      var bodyParameter = path.parameters
-          .firstWhereOrNull((p) => p.location == sw.ParameterLocation.body);
-      if (bodyParameter != null) {
-        var bodyType = _api.typeFromParameter(bodyParameter);
-        var jsonEncodeCode =
-            bodyType.toJsonCode(PropertyName(bodyParameter.name), {});
-
+    if (httpMethod != sw.HttpMethod.get) {
+      if (body != null) {
+        var jsonEncodeCode = body.toJsonCode(PropertyName('body'), {});
         bodyParameterCode = ', body: $jsonEncodeCode';
       }
     }
 
-    var sendCode = 'await send(ApiRequest<$returnTypeName>(${_operationId}Path'
-        '$pathParametersCode$queryParametersCode$bodyParameterCode),)';
+    var sendCode = "await _client.send('${httpMethod.name}', '$url'"
+        '$pathParametersCode$queryParametersCode$bodyParameterCode,)';
 
     if (returnDartType != null) {
       var decodeCode = _fromJsonCodeForComplexType(
-          _api, returnDartType, '$sendCode,',
+          _api, returnDartType, sendCode,
           accessorIsNullable: false, targetIsNullable: false);
       buffer.write('return $decodeCode;');
     } else {
@@ -328,55 +406,6 @@ class Operation {
     buffer.writeln('}');
 
     return buffer.toString();
-  }
-
-  String toCodeFromRequest() {
-    var parameters = <String, String>{};
-    var namedParameters = <String, String>{};
-
-    var namedParameterMode = true;
-    if (path.parameters.length == 1 &&
-        (path.parameters[0].required ||
-            path.parameters[0].location == sw.ParameterLocation.path)) {
-      namedParameterMode = false;
-    }
-    for (final parameter in path.parameters
-        .where((p) => p.location == sw.ParameterLocation.path)) {
-      parameters[_toCamelCase(parameter.name)] =
-          "request.pathParameters['${parameter.name}']!";
-    }
-
-    for (var parameter in path.parameters
-        .where((p) => p.location == sw.ParameterLocation.query)) {
-      parameters[_toCamelCase(parameter.name)] =
-          "request.queryParameters['${parameter.name}']${parameter.required ? '!' : ''}";
-    }
-
-    var bodyParameter = path.parameters
-        .firstWhereOrNull((p) => p.location == sw.ParameterLocation.body);
-    if (bodyParameter != null) {
-      var dartType = _api.typeFromSchema(bodyParameter.schema!);
-      parameters[_toCamelCase(bodyParameter.name)] =
-          _fromJsonCodeForComplexType(_api, dartType, 'request.body!',
-              accessorIsNullable: false, targetIsNullable: false);
-    }
-
-    var positionalParameters = <String>[];
-
-    if (namedParameterMode) {
-      namedParameters.addAll(parameters);
-    } else {
-      positionalParameters.addAll(parameters.values);
-    }
-
-    var parametersCode = positionalParameters.join(',');
-    if (parametersCode.isNotEmpty && namedParameters.isNotEmpty) {
-      parametersCode += ',';
-    }
-    parametersCode +=
-        namedParameters.entries.map((e) => '${e.key}: ${e.value}').join(', ');
-
-    return '${_operationId}Path: (api, request) => api.$_operationId($parametersCode)';
   }
 }
 
@@ -451,7 +480,7 @@ class ComplexType extends DartType {
         }
       }
       buffer.writeln(
-          '$typeName${_isPropertyRequired(property) ? '' : '?'} ${property.name.camelCased};');
+          'final $typeName${_isPropertyRequired(property) ? '' : '?'} ${property.name.camelCased};');
     }
 
     buffer.writeln();
@@ -605,6 +634,14 @@ class DartType {
 
   String get defaultValue => simpleType?.defaultValue ?? 'null';
 
+  String identifierToString(String identifier) {
+    var simpleType = this.simpleType;
+    if (simpleType != null) {
+      return simpleType.identifierToString(identifier);
+    }
+    return "'\$$identifier'";
+  }
+
   String toJsonCode(
       PropertyName propertyName, Map<DartType, String> genericTypes) {
     if (genericTypes.containsKey(this)) {
@@ -665,6 +702,7 @@ class SimpleType {
   final String defaultValue;
   final String Function(String) castNullable;
   final String Function(String) castNonNullable;
+  final String Function(String) identifierToString;
 
   static final integer = SimpleType(
     'int',
@@ -681,6 +719,7 @@ class SimpleType {
   static final string = SimpleType(
     'String',
     defaultValue: "''",
+    identifierToString: (id) => id,
   );
   static final object = SimpleType(
     'Object',
@@ -698,16 +737,20 @@ class SimpleType {
     required this.defaultValue,
     String Function(String)? castNullable,
     String Function(String)? castNonNullable,
+    String Function(String)? identifierToString,
   })  : castNullable = castNullable ?? _defaultNullableCasting(name),
-        castNonNullable = castNonNullable ?? _defaultNonNullableCasting(name);
+        castNonNullable = castNonNullable ?? _defaultNonNullableCasting(name),
+        identifierToString = identifierToString ?? _defaultIdentifierToString;
 
   static String Function(String) _defaultNullableCasting(String type) {
     return (accessor) => '$accessor as $type?';
   }
 
   static String Function(String) _defaultNonNullableCasting(String type) {
-    return (accessor) => '$accessor! as $type';
+    return (accessor) => '$accessor as $type';
   }
+
+  static String _defaultIdentifierToString(String id) => "'\$$id'";
 }
 
 class ListDartType extends DartType {
@@ -718,7 +761,7 @@ class ListDartType extends DartType {
   }
 
   @override
-  String get defaultValue => simpleType?.defaultValue ?? '<${itemType.name}>[]';
+  String get defaultValue => simpleType?.defaultValue ?? '[]';
 
   @override
   String toJsonCode(
@@ -755,8 +798,7 @@ class MapDartType extends DartType {
   }
 
   @override
-  String get defaultValue =>
-      simpleType?.defaultValue ?? '<String, ${_itemType.name}>{}';
+  String get defaultValue => simpleType?.defaultValue ?? '{}';
 
   @override
   String toJsonCode(
@@ -822,26 +864,27 @@ class EnumDartType extends DartType {
     buffer.writeln('class $name {');
     for (var enumValue in enums) {
       buffer.writeln(
-          "static const ${_toCamelCase(enumValue)} = $name._('$enumValue');");
+          "static const ${dartIdentifier(enumValue)} = $name._('$enumValue');");
     }
-    buffer.writeln("static const \$unknown = $name._('');");
     buffer.writeln('');
     buffer.writeln('static const values = [');
     for (var enumValue in enums) {
-      buffer.writeln('${_toCamelCase(enumValue)},');
+      buffer.writeln('${dartIdentifier(enumValue)},');
     }
     buffer.writeln('];');
-    buffer.writeln('');
-    buffer.writeln('final String value;');
-    buffer.writeln('');
-    buffer.writeln('const $name._(this.value);');
-    buffer.writeln('');
-    buffer.writeln(
-        'static $name fromValue(String value) => values.firstWhere((e) => e.value == value, orElse: () => \$unknown);');
-    buffer.writeln('');
-    buffer.writeln('@override');
-    buffer.writeln('String toString() => value;');
+    buffer.writeln('''
+  final String value;
 
+  const $name._(this.value);
+
+  static $name fromValue(String value) => values.firstWhere((e) => e.value == value, orElse: () => $name._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+''');
     buffer.writeln('}');
 
     return '$buffer';
@@ -885,7 +928,7 @@ class PropertyName {
 
   PropertyName(this.original) {
     if (!original.contains('.')) {
-      _camelCased = preventKeywords(_toCamelCase(original));
+      _camelCased = dartIdentifier(dartIdentifier(original));
     } else {
       _camelCased = original;
     }
@@ -897,8 +940,10 @@ class PropertyName {
   String toString() => original;
 }
 
-String _toCamelCase(String input) =>
-    input.words.map((e) => e.toLowerCase()).toLowerCamel();
+String _normalizeOperationId(String id) {
+  var name = id.split('.').last.split('_').first;
+  return name.words.toLowerCamel();
+}
 
 String _toComment(String? comment, {int indent = 0}) {
   if (comment != null && comment.isNotEmpty) {

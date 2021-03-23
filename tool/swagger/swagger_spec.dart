@@ -1,16 +1,32 @@
 import 'package:json_annotation/json_annotation.dart';
-
+import 'package:collection/collection.dart';
 part 'swagger_spec.g.dart';
 
-enum HttpMethod { get, post, put, delete }
+class HttpMethod {
+  static const get = HttpMethod('get');
+  static const post = HttpMethod('post');
+  static const put = HttpMethod('put');
+  static const delete = HttpMethod('delete');
+
+  static const all = [get, post, put, delete];
+
+  final String name;
+  const HttpMethod(this.name);
+}
 
 @JsonSerializable(createToJson: false)
 class Spec {
   final Info info;
-  final Map<String, Schema> definitions;
-  final Map<String, Map<HttpMethod, Path>> paths;
+  final List<Tag> tags;
+  final Components components;
+  final Map<String, Map<String, Object?>> paths;
 
-  Spec({required this.info, required this.definitions, required this.paths});
+  Spec(
+    this.info,
+    this.tags,
+    this.components,
+    this.paths,
+  );
 
   factory Spec.fromJson(Map<String, dynamic> json) => _$SpecFromJson(json);
 }
@@ -28,22 +44,54 @@ class Info {
 }
 
 @JsonSerializable(createToJson: false)
+class Tag {
+  final String name;
+  final String description;
+
+  Tag({required this.name, String? description})
+      : description = description ?? '';
+
+  factory Tag.fromJson(Map<String, dynamic> json) => _$TagFromJson(json);
+}
+
+@JsonSerializable(createToJson: false, disallowUnrecognizedKeys: true)
+class Components {
+  final Map<String, Schema> schemas;
+  final Map<String, Object> securitySchemes;
+  final Map<String, Request> requestBodies;
+  final Map<String, Parameter> parameters;
+
+  Components(this.schemas, this.securitySchemes,
+      {Map<String, Request>? requestBodies, Map<String, Parameter>? parameters})
+      : requestBodies = requestBodies ?? {},
+        parameters = parameters ?? {};
+
+  factory Components.fromJson(Map<String, dynamic> json) =>
+      _$ComponentsFromJson(json);
+}
+
+@JsonSerializable(createToJson: false)
 class Path {
   final String summary;
+  final List<String> tags;
   final String description;
   final String operationId;
   final bool deprecated;
   final List<Parameter> parameters;
   final Map<String, Response> responses;
+  final Request? requestBody;
 
   Path(
       {required this.description,
       required this.operationId,
+      List<String>? tags,
       String? summary,
       bool? deprecated,
       List<Parameter>? parameters,
+      this.requestBody,
       Map<String, Response>? responses})
       : summary = summary ?? '',
+        tags = tags ?? const [],
         deprecated = deprecated ?? false,
         parameters = parameters ?? const [],
         responses = responses ?? const {};
@@ -51,23 +99,61 @@ class Path {
   factory Path.fromJson(Map<String, dynamic> json) => _$PathFromJson(json);
 }
 
+@JsonSerializable(createToJson: false, disallowUnrecognizedKeys: true)
+class Request {
+  final Map<String, Content>? content;
+  final bool required;
+  final String? description;
+
+  @JsonKey(name: r'$ref')
+  final String? ref;
+
+  @JsonKey(name: r'x-examples')
+  Object? examples;
+
+  Request(this.content, {bool? required, this.description, this.ref})
+      : required = required ?? false;
+
+  factory Request.fromJson(Map<String, dynamic> json) =>
+      _$RequestFromJson(json);
+}
+
 @JsonSerializable(createToJson: false)
 class Response {
   final String description;
-  final Map<String, Parameter> content;
+  final Map<String, Content> content;
 
-  Response({String? description, required this.content})
-      : description = description ?? '';
+  Response({String? description, Map<String, Content>? content})
+      : content = content ?? {},
+        description = description ?? '';
 
   factory Response.fromJson(Map<String, dynamic> json) =>
       _$ResponseFromJson(json);
 }
 
-enum ParameterLocation { query, path, body, formData }
+@JsonSerializable(createToJson: false, disallowUnrecognizedKeys: true)
+class Content {
+  final String description;
+  final Object? example, examples;
+  final Schema? schema;
 
-@JsonSerializable(createToJson: false)
+  Content({
+    String? description,
+    bool? required,
+    this.schema,
+    this.example,
+    this.examples,
+  }) : description = description ?? '';
+
+  factory Content.fromJson(Map<String, dynamic> json) =>
+      _$ContentFromJson(json);
+}
+
+enum ParameterLocation { query, path, formData, header }
+
+@JsonSerializable(createToJson: false, disallowUnrecognizedKeys: true)
 class Parameter {
-  @JsonKey(name: 'in')
+  @JsonKey(name: 'in', defaultValue: ParameterLocation.query)
   final ParameterLocation location;
 
   final String name;
@@ -76,30 +162,80 @@ class Parameter {
   final String? type;
   final Schema? schema;
   final Schema? items;
+  final String? style;
+  final bool? explode;
+
+  @JsonKey(defaultValue: false)
+  final bool deprecated;
+
+  @JsonKey(name: 'x-showInExample')
+  Object? showInExample;
+
+  @JsonKey(name: 'x-changes')
+  Object? changes;
+
+  @JsonKey(name: r'$ref')
+  final String? ref;
 
   Parameter(
-      {required this.location,
-      required this.name,
-      String? description,
-      bool? required,
-      this.type,
-      this.schema,
-      this.items})
-      : description = description ?? '',
+    this.location,
+    String? name,
+    String? description,
+    bool? required,
+    this.type,
+    this.schema,
+    this.items,
+    this.style,
+    this.explode,
+    this.ref,
+    this.deprecated,
+  )   : name = name ?? '',
+        description = description ?? '',
         required = required ?? false;
 
   factory Parameter.fromJson(Map<String, dynamic> json) =>
       _$ParameterFromJson(json);
 }
 
-@JsonSerializable(createToJson: false)
+@JsonSerializable(createToJson: false, disallowUnrecognizedKeys: true)
 class Schema {
   final String? type;
   final String? format;
   final Map<String, Schema> properties;
-  final Schema? additionalProperties;
+  final Object? additionalProperties;
   final String description;
   final List<String> required;
+  final List<Schema>? allOf, anyOf, oneOf;
+  final Object? example;
+  final Object? discriminator;
+  final String? title;
+
+  @JsonKey(defaultValue: false)
+  final bool deprecated;
+
+  @JsonKey(defaultValue: false)
+  final bool uniqueItems;
+
+  @JsonKey(defaultValue: false)
+  final bool readOnly;
+
+  @JsonKey(defaultValue: false)
+  final bool writeOnly;
+
+  final Map<String, Object?>? xml;
+
+  final int? maxLength,
+      minLength,
+      maxItems,
+      minItems,
+      maxProperties,
+      minProperties,
+      maximum,
+      minimum;
+  final String? pattern;
+
+  @JsonKey(name: 'default')
+  final Object? defaultValue;
 
   @JsonKey(name: 'enum')
   final List<String>? enums;
@@ -109,19 +245,52 @@ class Schema {
 
   final Schema? items;
 
-  Schema({
-    required this.type,
+  Schema(
+    this.type,
     this.format,
     Map<String, Schema>? properties,
     this.additionalProperties,
-    this.enums,
+    List<String?>? enums,
     this.ref,
     this.items,
     String? description,
     List<String>? required,
-  })  : properties = properties ?? const {},
+    this.allOf,
+    this.anyOf,
+    this.oneOf,
+    this.deprecated,
+    this.uniqueItems,
+    this.readOnly,
+    this.writeOnly,
+    this.xml,
+    this.maxLength,
+    this.minLength,
+    this.maxItems,
+    this.minItems,
+    this.minProperties,
+    this.maxProperties,
+    this.maximum,
+    this.minimum,
+    this.pattern,
+    this.defaultValue,
+    this.example,
+    this.discriminator,
+    this.title,
+  )   : properties = properties ?? const {},
         required = required ?? const [],
-        description = description ?? '';
+        description = description ?? '',
+        enums = _nullIfEmpty(enums?.whereNotNull().toList());
 
   factory Schema.fromJson(Map<String, dynamic> json) => _$SchemaFromJson(json);
+
+  static List<String>? _nullIfEmpty(List<String>? list) {
+    if (list == null || list.isEmpty) {
+      return null;
+    }
+    return list;
+  }
+
+  @override
+  String toString() =>
+      'Schema(description: $description, type: $type, format: $format, properties: $properties)';
 }
