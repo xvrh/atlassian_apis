@@ -6,7 +6,7 @@ void main() {
   var serviceManagement = ServiceManagementApi(client);
 
   serviceManagement.organization.getOrganizations2(serviceDeskId: 1);
-  serviceManagement.request.createCustomerRequest();
+  serviceManagement.request.createCustomerRequest(body: RequestCreateDTO());
 
-  jira.close();
+  client.close();
 }
