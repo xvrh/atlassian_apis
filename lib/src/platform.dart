@@ -492,7 +492,7 @@ class AvatarsApi {
       int? x,
       int? y,
       required int size,
-      required Map<String, Object> body}) async {
+      required Map<String, dynamic> body}) async {
     return Avatar.fromJson(await _client.send(
       'post',
       'rest/api/3/universal_avatar/type/{type}/owner/{entityId}',
@@ -662,7 +662,7 @@ class DashboardsApi {
       {required String dashboardId,
       required String itemId,
       required String propertyKey,
-      required Map<String, Object> body}) async {
+      required Map<String, dynamic> body}) async {
     await _client.send(
       'put',
       'rest/api/3/dashboard/{dashboardId}/items/{itemId}/properties/{propertyKey}',
@@ -2068,7 +2068,7 @@ class IssueCommentPropertiesApi {
   Future<void> setCommentProperty(
       {required String commentId,
       required String propertyKey,
-      required Map<String, Object> body}) async {
+      required Map<String, dynamic> body}) async {
     await _client.send(
       'put',
       'rest/api/3/comment/{commentId}/properties/{propertyKey}',
@@ -3449,7 +3449,7 @@ class IssuePropertiesApi {
   Future<void> setIssueProperty(
       {required String issueIdOrKey,
       required String propertyKey,
-      required Map<String, Object> body}) async {
+      required Map<String, dynamic> body}) async {
     await _client.send(
       'put',
       'rest/api/3/issue/{issueIdOrKey}/properties/{propertyKey}',
@@ -3986,7 +3986,7 @@ class IssueTypesApi {
       int? x,
       int? y,
       required int size,
-      required Map<String, Object> body}) async {
+      required Map<String, dynamic> body}) async {
     return Avatar.fromJson(await _client.send(
       'post',
       'rest/api/3/issuetype/{id}/avatar2',
@@ -4411,7 +4411,7 @@ class IssueTypePropertiesApi {
   Future<void> setIssueTypeProperty(
       {required String issueTypeId,
       required String propertyKey,
-      required Map<String, Object> body}) async {
+      required Map<String, dynamic> body}) async {
     await _client.send(
       'put',
       'rest/api/3/issuetype/{issueTypeId}/properties/{propertyKey}',
@@ -4894,7 +4894,7 @@ class IssueWorklogPropertiesApi {
       {required String issueIdOrKey,
       required String worklogId,
       required String propertyKey,
-      required Map<String, Object> body}) async {
+      required Map<String, dynamic> body}) async {
     await _client.send(
       'put',
       'rest/api/3/issue/{issueIdOrKey}/worklog/{worklogId}/properties/{propertyKey}',
@@ -6031,7 +6031,7 @@ class ProjectAvatarsApi {
       int? x,
       int? y,
       int? size,
-      required Map<String, Object> body}) async {
+      required Map<String, dynamic> body}) async {
     return Avatar.fromJson(await _client.send(
       'post',
       'rest/api/3/project/{projectIdOrKey}/avatar2',
@@ -6476,7 +6476,7 @@ class ProjectPropertiesApi {
   Future<void> setProjectProperty(
       {required String projectIdOrKey,
       required String propertyKey,
-      required Map<String, Object> body}) async {
+      required Map<String, dynamic> body}) async {
     await _client.send(
       'put',
       'rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}',
@@ -7888,7 +7888,7 @@ class UserPropertiesApi {
       String? userKey,
       String? username,
       required String propertyKey,
-      required Map<String, Object> body}) async {
+      required Map<String, dynamic> body}) async {
     await _client.send(
       'put',
       'rest/api/3/user/properties/{propertyKey}',
@@ -9161,7 +9161,7 @@ class AppPropertiesApi {
   Future<OperationMessage> putAddonProperty(
       {required String addonKey,
       required String propertyKey,
-      required Map<String, Object> body}) async {
+      required Map<String, dynamic> body}) async {
     return OperationMessage.fromJson(await _client.send(
       'put',
       'rest/atlassian-connect/1/addons/{addonKey}/properties/{propertyKey}',
@@ -12907,15 +12907,14 @@ class EntityProperty {
   final String? key;
 
   /// The value of the property. Required on create and update.
-  final Map<String, Object>? value;
+  final Map<String, dynamic>? value;
 
   EntityProperty({this.key, this.value});
 
   factory EntityProperty.fromJson(Map<String, Object?> json) {
     return EntityProperty(
       key: json['key'] as String?,
-      value: (json['value'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      value: json['value'] as Map<String, Object?>?,
     );
   }
 
@@ -12933,7 +12932,7 @@ class EntityProperty {
     return json;
   }
 
-  EntityProperty copyWith({String? key, Map<String, Object>? value}) {
+  EntityProperty copyWith({String? key, Map<String, dynamic>? value}) {
     return EntityProperty(
       key: key ?? this.key,
       value: value ?? this.value,
@@ -12944,7 +12943,7 @@ class EntityProperty {
 /// Bulk issue property update request details.
 class BulkIssuePropertyUpdateRequest {
   /// The value of the property. The value must be a [valid](https://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
-  final Map<String, Object>? value;
+  final Map<String, dynamic>? value;
 
   /// EXPERIMENTAL. The Jira expression to calculate the value of the property. The value of the expression must be an object that can be converted to JSON, such as a number, boolean, string, list, or map. The context variables available to the expression are `issue` and `user`. Issues for which the expression returns a value whose JSON representation is longer than 32768 characters are ignored.
   final String? expression;
@@ -12956,8 +12955,7 @@ class BulkIssuePropertyUpdateRequest {
 
   factory BulkIssuePropertyUpdateRequest.fromJson(Map<String, Object?> json) {
     return BulkIssuePropertyUpdateRequest(
-      value: (json['value'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      value: json['value'] as Map<String, Object?>?,
       expression: json['expression'] as String?,
       filter: json['filter'] != null
           ? IssueFilterForBulkPropertySet.fromJson(
@@ -12985,7 +12983,7 @@ class BulkIssuePropertyUpdateRequest {
   }
 
   BulkIssuePropertyUpdateRequest copyWith(
-      {Map<String, Object>? value,
+      {Map<String, dynamic>? value,
       String? expression,
       IssueFilterForBulkPropertySet? filter}) {
     return BulkIssuePropertyUpdateRequest(
@@ -13002,7 +13000,7 @@ class IssueFilterForBulkPropertySet {
   final List<int> entityIds;
 
   /// The value of properties to perform the bulk operation on.
-  final Map<String, Object>? currentValue;
+  final Map<String, dynamic>? currentValue;
 
   /// Whether the bulk operation occurs only when the property is present on or absent from an issue.
   final bool hasProperty;
@@ -13018,8 +13016,7 @@ class IssueFilterForBulkPropertySet {
               ?.map((i) => (i as num?)?.toInt() ?? 0)
               .toList() ??
           [],
-      currentValue: (json['currentValue'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      currentValue: json['currentValue'] as Map<String, Object?>?,
       hasProperty: json['hasProperty'] as bool? ?? false,
     );
   }
@@ -13040,7 +13037,7 @@ class IssueFilterForBulkPropertySet {
 
   IssueFilterForBulkPropertySet copyWith(
       {List<int>? entityIds,
-      Map<String, Object>? currentValue,
+      Map<String, dynamic>? currentValue,
       bool? hasProperty}) {
     return IssueFilterForBulkPropertySet(
       entityIds: entityIds ?? this.entityIds,
@@ -13056,7 +13053,7 @@ class IssueFilterForBulkPropertyDelete {
   final List<int> entityIds;
 
   /// The value of properties to perform the bulk operation on.
-  final Map<String, Object>? currentValue;
+  final Map<String, dynamic>? currentValue;
 
   IssueFilterForBulkPropertyDelete({List<int>? entityIds, this.currentValue})
       : entityIds = entityIds ?? [];
@@ -13067,8 +13064,7 @@ class IssueFilterForBulkPropertyDelete {
               ?.map((i) => (i as num?)?.toInt() ?? 0)
               .toList() ??
           [],
-      currentValue: (json['currentValue'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      currentValue: json['currentValue'] as Map<String, Object?>?,
     );
   }
 
@@ -13085,7 +13081,7 @@ class IssueFilterForBulkPropertyDelete {
   }
 
   IssueFilterForBulkPropertyDelete copyWith(
-      {List<int>? entityIds, Map<String, Object>? currentValue}) {
+      {List<int>? entityIds, Map<String, dynamic>? currentValue}) {
     return IssueFilterForBulkPropertyDelete(
       entityIds: entityIds ?? this.entityIds,
       currentValue: currentValue ?? this.currentValue,
@@ -16123,7 +16119,7 @@ class TaskProgressBeanObject {
   final String? message;
 
   /// The result of the task execution.
-  final Map<String, Object>? result;
+  final Map<String, dynamic>? result;
 
   /// The ID of the user who submitted the task.
   final int submittedBy;
@@ -16169,8 +16165,7 @@ class TaskProgressBeanObject {
       status: TaskProgressBeanObjectStatus.fromValue(
           json['status'] as String? ?? ''),
       message: json['message'] as String?,
-      result: (json['result'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      result: json['result'] as Map<String, Object?>?,
       submittedBy: (json['submittedBy'] as num?)?.toInt() ?? 0,
       progress: (json['progress'] as num?)?.toInt() ?? 0,
       elapsedRuntime: (json['elapsedRuntime'] as num?)?.toInt() ?? 0,
@@ -16229,7 +16224,7 @@ class TaskProgressBeanObject {
       String? description,
       TaskProgressBeanObjectStatus? status,
       String? message,
-      Map<String, Object>? result,
+      Map<String, dynamic>? result,
       int? submittedBy,
       int? progress,
       int? elapsedRuntime,
@@ -16739,7 +16734,7 @@ class JiraExpressionEvaluationMetaDataBean {
 /// The result of evaluating a Jira expression.
 class JiraExpressionResult {
   /// The value of the evaluated expression. It may be a primitive JSON value or a Jira REST API object. (Some expressions do not produce any meaningful results—for example, an expression that returns a lambda function—if that's the case a simple string representation is returned. These string representations should not be relied upon and may change without notice.)
-  final Map<String, Object> value;
+  final Map<String, dynamic> value;
 
   /// Contains various characteristics of the performed expression evaluation.
   final JiraExpressionEvaluationMetaDataBean? meta;
@@ -16748,9 +16743,7 @@ class JiraExpressionResult {
 
   factory JiraExpressionResult.fromJson(Map<String, Object?> json) {
     return JiraExpressionResult(
-      value: (json['value'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
+      value: json['value'] as Map<String, Object?>? ?? {},
       meta: json['meta'] != null
           ? JiraExpressionEvaluationMetaDataBean.fromJson(
               json['meta']! as Map<String, Object?>)
@@ -16771,7 +16764,7 @@ class JiraExpressionResult {
   }
 
   JiraExpressionResult copyWith(
-      {Map<String, Object>? value,
+      {Map<String, dynamic>? value,
       JiraExpressionEvaluationMetaDataBean? meta}) {
     return JiraExpressionResult(
       value: value ?? this.value,
@@ -20251,7 +20244,7 @@ class Comment {
   final UserDetails? author;
 
   /// The comment text in [Atlassian Document Format](https://developer.atlassian.com/cloud/jira/platform/apis/document/structure/).
-  final Map<String, Object>? body;
+  final Map<String, dynamic>? body;
 
   /// The rendered version of the comment.
   final String? renderedBody;
@@ -20296,8 +20289,7 @@ class Comment {
       author: json['author'] != null
           ? UserDetails.fromJson(json['author']! as Map<String, Object?>)
           : null,
-      body: (json['body'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      body: json['body'] as Map<String, Object?>?,
       renderedBody: json['renderedBody'] as String?,
       updateAuthor: json['updateAuthor'] != null
           ? UserDetails.fromJson(json['updateAuthor']! as Map<String, Object?>)
@@ -20366,7 +20358,7 @@ class Comment {
       {String? self,
       String? id,
       UserDetails? author,
-      Map<String, Object>? body,
+      Map<String, dynamic>? body,
       String? renderedBody,
       UserDetails? updateAuthor,
       DateTime? created,
@@ -21046,7 +21038,7 @@ class Worklog {
   final UserDetails? updateAuthor;
 
   /// A comment about the worklog in [Atlassian Document Format](https://developer.atlassian.com/cloud/jira/platform/apis/document/structure/). Optional when creating or updating a worklog.
-  final Map<String, Object>? comment;
+  final Map<String, dynamic>? comment;
 
   /// The datetime on which the worklog was created.
   final DateTime? created;
@@ -21100,8 +21092,7 @@ class Worklog {
       updateAuthor: json['updateAuthor'] != null
           ? UserDetails.fromJson(json['updateAuthor']! as Map<String, Object?>)
           : null,
-      comment: (json['comment'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      comment: json['comment'] as Map<String, Object?>?,
       created: DateTime.tryParse(json['created'] as String? ?? ''),
       updated: DateTime.tryParse(json['updated'] as String? ?? ''),
       visibility: json['visibility'] != null
@@ -21180,7 +21171,7 @@ class Worklog {
       {String? self,
       UserDetails? author,
       UserDetails? updateAuthor,
-      Map<String, Object>? comment,
+      Map<String, dynamic>? comment,
       DateTime? created,
       DateTime? updated,
       Visibility? visibility,
@@ -21579,10 +21570,10 @@ class FieldMetadata {
   final List<String> operations;
 
   /// The list of values allowed in the field.
-  final List<Map<String, Object>> allowedValues;
+  final List<Map<String, dynamic>> allowedValues;
 
   /// The default value of the field.
-  final Map<String, Object>? defaultValue;
+  final Map<String, dynamic>? defaultValue;
 
   FieldMetadata(
       {required this.required,
@@ -21592,7 +21583,7 @@ class FieldMetadata {
       this.autoCompleteUrl,
       bool? hasDefaultValue,
       required this.operations,
-      List<Map<String, Object>>? allowedValues,
+      List<Map<String, dynamic>>? allowedValues,
       this.defaultValue})
       : hasDefaultValue = hasDefaultValue ?? false,
         allowedValues = allowedValues ?? [];
@@ -21611,14 +21602,10 @@ class FieldMetadata {
               .toList() ??
           [],
       allowedValues: (json['allowedValues'] as List<Object?>?)
-              ?.map((i) =>
-                  (i as Map<String, Object?>?)
-                      ?.map((k, v) => MapEntry(k, v ?? {})) ??
-                  {})
+              ?.map((i) => i as Map<String, Object?>? ?? {})
               .toList() ??
           [],
-      defaultValue: (json['defaultValue'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      defaultValue: json['defaultValue'] as Map<String, Object?>?,
     );
   }
 
@@ -21658,8 +21645,8 @@ class FieldMetadata {
       String? autoCompleteUrl,
       bool? hasDefaultValue,
       List<String>? operations,
-      List<Map<String, Object>>? allowedValues,
-      Map<String, Object>? defaultValue}) {
+      List<Map<String, dynamic>>? allowedValues,
+      Map<String, dynamic>? defaultValue}) {
     return FieldMetadata(
       required: required ?? this.required,
       schema: schema ?? this.schema,
@@ -22051,29 +22038,25 @@ class SuggestedIssue {
 /// Details of an operation to perform on a field.
 class FieldUpdateOperation {
   /// A map containing the name of a field and the value to add to it.
-  final Map<String, Object>? add;
+  final Map<String, dynamic>? add;
 
   /// A map containing the name of a field and the value to set in it.
-  final Map<String, Object>? set;
+  final Map<String, dynamic>? set;
 
   /// A map containing the name of a field and the value to removed from it.
-  final Map<String, Object>? remove;
+  final Map<String, dynamic>? remove;
 
   /// A map containing the name of a field and the value to edit in it.
-  final Map<String, Object>? edit;
+  final Map<String, dynamic>? edit;
 
   FieldUpdateOperation({this.add, this.set, this.remove, this.edit});
 
   factory FieldUpdateOperation.fromJson(Map<String, Object?> json) {
     return FieldUpdateOperation(
-      add: (json['add'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      set: (json['set'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      remove: (json['remove'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      edit: (json['edit'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      add: json['add'] as Map<String, Object?>?,
+      set: json['set'] as Map<String, Object?>?,
+      remove: json['remove'] as Map<String, Object?>?,
+      edit: json['edit'] as Map<String, Object?>?,
     );
   }
 
@@ -22100,10 +22083,10 @@ class FieldUpdateOperation {
   }
 
   FieldUpdateOperation copyWith(
-      {Map<String, Object>? add,
-      Map<String, Object>? set,
-      Map<String, Object>? remove,
-      Map<String, Object>? edit}) {
+      {Map<String, dynamic>? add,
+      Map<String, dynamic>? set,
+      Map<String, dynamic>? remove,
+      Map<String, dynamic>? edit}) {
     return FieldUpdateOperation(
       add: add ?? this.add,
       set: set ?? this.set,
@@ -37772,15 +37755,14 @@ class WorkflowTransitionRule {
   final String type;
 
   /// The configuration of the transition rule. This is currently returned only for some of the rule types. Availability of this property is subject to change.
-  final Map<String, Object>? configuration;
+  final Map<String, dynamic>? configuration;
 
   WorkflowTransitionRule({required this.type, this.configuration});
 
   factory WorkflowTransitionRule.fromJson(Map<String, Object?> json) {
     return WorkflowTransitionRule(
       type: json['type'] as String? ?? '',
-      configuration: (json['configuration'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      configuration: json['configuration'] as Map<String, Object?>?,
     );
   }
 
@@ -37797,7 +37779,7 @@ class WorkflowTransitionRule {
   }
 
   WorkflowTransitionRule copyWith(
-      {String? type, Map<String, Object>? configuration}) {
+      {String? type, Map<String, dynamic>? configuration}) {
     return WorkflowTransitionRule(
       type: type ?? this.type,
       configuration: configuration ?? this.configuration,

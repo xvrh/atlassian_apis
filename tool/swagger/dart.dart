@@ -100,7 +100,8 @@ class Api {
           // TODO(xha): support allOf
           "";
 
-          return MapDartType(this, null);
+          return MapDartType.withTypes(
+              this, DartType(this, 'String'), DartType(this, 'dynamic'));
         }
         return parseDartType(type);
       }

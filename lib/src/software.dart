@@ -1320,7 +1320,7 @@ class FeatureFlagsApi {
   /// In the case of multiple Feature Flags being submitted in one request, each is validated individually prior to submission. Details of which Feature Flags failed submission (if any) are available in the response object.
   ///
   /// Only apps that define the Feature Flags module can access this resource. This resource requires the 'WRITE' scope.
-  Future<void> submitFeatureFlags({required Map<String, Object> body}) async {
+  Future<void> submitFeatureFlags({required Map<String, dynamic> body}) async {
     await _client.send(
       'post',
       'featureflags/0.1/bulk',
@@ -1401,7 +1401,7 @@ class DeploymentsApi {
   ///
   /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and on-premise integrations, can access this resource.
   /// This resource requires the 'WRITE' scope for Connect apps.
-  Future<void> submitDeployments({required Map<String, Object> body}) async {
+  Future<void> submitDeployments({required Map<String, dynamic> body}) async {
     await _client.send(
       'post',
       'deployments/0.1/bulk',
@@ -2676,14 +2676,14 @@ class PageBean {
   final int? startAt;
   final int? total;
   final bool isLast;
-  final List<Map<String, Object>> values;
+  final List<Map<String, dynamic>> values;
 
   PageBean(
       {this.maxResults,
       this.startAt,
       this.total,
       bool? isLast,
-      List<Map<String, Object>>? values})
+      List<Map<String, dynamic>>? values})
       : isLast = isLast ?? false,
         values = values ?? [];
 
@@ -2694,10 +2694,7 @@ class PageBean {
       total: (json['total'] as num?)?.toInt(),
       isLast: json['isLast'] as bool? ?? false,
       values: (json['values'] as List<Object?>?)
-              ?.map((i) =>
-                  (i as Map<String, Object?>?)
-                      ?.map((k, v) => MapEntry(k, v ?? {})) ??
-                  {})
+              ?.map((i) => i as Map<String, Object?>? ?? {})
               .toList() ??
           [],
     );
@@ -2730,7 +2727,7 @@ class PageBean {
       int? startAt,
       int? total,
       bool? isLast,
-      List<Map<String, Object>>? values}) {
+      List<Map<String, dynamic>>? values}) {
     return PageBean(
       maxResults: maxResults ?? this.maxResults,
       startAt: startAt ?? this.startAt,
@@ -5017,10 +5014,10 @@ class FieldMetaBean {
   final List<String> operations;
 
   /// The list of values allowed in the field.
-  final List<Map<String, Object>> allowedValues;
+  final List<Map<String, dynamic>> allowedValues;
 
   /// The default value of the field.
-  final Map<String, Object>? defaultValue;
+  final Map<String, dynamic>? defaultValue;
 
   FieldMetaBean(
       {bool? required,
@@ -5030,7 +5027,7 @@ class FieldMetaBean {
       this.autoCompleteUrl,
       bool? hasDefaultValue,
       List<String>? operations,
-      List<Map<String, Object>>? allowedValues,
+      List<Map<String, dynamic>>? allowedValues,
       this.defaultValue})
       : required = required ?? false,
         hasDefaultValue = hasDefaultValue ?? false,
@@ -5050,14 +5047,10 @@ class FieldMetaBean {
               .toList() ??
           [],
       allowedValues: (json['allowedValues'] as List<Object?>?)
-              ?.map((i) =>
-                  (i as Map<String, Object?>?)
-                      ?.map((k, v) => MapEntry(k, v ?? {})) ??
-                  {})
+              ?.map((i) => i as Map<String, Object?>? ?? {})
               .toList() ??
           [],
-      defaultValue: (json['defaultValue'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      defaultValue: json['defaultValue'] as Map<String, Object?>?,
     );
   }
 
@@ -5103,8 +5096,8 @@ class FieldMetaBean {
       String? autoCompleteUrl,
       bool? hasDefaultValue,
       List<String>? operations,
-      List<Map<String, Object>>? allowedValues,
-      Map<String, Object>? defaultValue}) {
+      List<Map<String, dynamic>>? allowedValues,
+      Map<String, dynamic>? defaultValue}) {
     return FieldMetaBean(
       required: required ?? this.required,
       schema: schema ?? this.schema,
