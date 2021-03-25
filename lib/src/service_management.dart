@@ -1,6 +1,6 @@
 // Generated code - Do not edit manually
 
-import 'api_utils.dart' show ApiClient, Client;
+import 'api_utils.dart' show ApiClient, Client, File;
 
 // ignore_for_file: deprecated_member_use_from_same_package
 
@@ -896,14 +896,14 @@ class ServicedeskApi {
   ///
   /// **[Permissions](#permissions) required**: Permission to add attachments in this Service Desk.
   Future<void> attachTemporaryFile(
-      {required int serviceDeskId, required String body}) async {
+      {required int serviceDeskId, File? file}) async {
     await _client.send(
       'post',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/attachTemporaryFile',
       pathParameters: {
         'serviceDeskId': '$serviceDeskId',
       },
-      body: body,
+      file: file,
     );
   }
 
@@ -1298,7 +1298,7 @@ class CustomerRequestStatusDTO {
       json['statusCategory'] = statusCategory.value;
     }
     if (statusDate != null) {
-      json['statusDate'] = statusDate.map((k, v) => MapEntry(k, v));
+      json['statusDate'] = statusDate;
     }
     return json;
   }
@@ -1474,9 +1474,9 @@ class PagedDTOCustomerRequestStatusDTO {
     }
     json['isLastPage'] = isLastPage;
     json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -1633,7 +1633,7 @@ class I18nErrorMessage {
     if (i18nKey != null) {
       json['i18nKey'] = i18nKey;
     }
-    json['parameters'] = parameters.map((i) => i).toList();
+    json['parameters'] = parameters;
     return json;
   }
 
@@ -1718,9 +1718,9 @@ class PagedDTORequestTypeGroupDTO {
     }
     json['isLastPage'] = isLastPage;
     json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -1881,7 +1881,7 @@ class EntityProperty {
       json['key'] = key;
     }
     if (value != null) {
-      json['value'] = value.map((k, v) => MapEntry(k, v));
+      json['value'] = value;
     }
     return json;
   }
@@ -1933,7 +1933,7 @@ class ArticleDTO {
       json['excerpt'] = excerpt;
     }
     if (source != null) {
-      json['source'] = source.map((k, v) => MapEntry(k, v));
+      json['source'] = source;
     }
     if (content != null) {
       json['content'] = content.toJson();
@@ -2057,9 +2057,9 @@ class PagedDTOArticleDTO {
     }
     json['isLastPage'] = isLastPage;
     json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -2265,7 +2265,7 @@ class UserDTO {
       json['timeZone'] = timeZone;
     }
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -2299,7 +2299,7 @@ class UserLinkDTO {
   final String? jiraRest;
 
   /// Links to the various sizes of the customer's avatar. Note that this property is deprecated, and will be removed in future versions.
-  final Map<String, Object>? avatarUrls;
+  final Map<String, dynamic>? avatarUrls;
 
   UserLinkDTO({this.self, this.jiraRest, this.avatarUrls});
 
@@ -2307,8 +2307,7 @@ class UserLinkDTO {
     return UserLinkDTO(
       self: json['self'] as String?,
       jiraRest: json['jiraRest'] as String?,
-      avatarUrls: (json['avatarUrls'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      avatarUrls: json['avatarUrls'] as Map<String, Object?>?,
     );
   }
 
@@ -2325,13 +2324,13 @@ class UserLinkDTO {
       json['jiraRest'] = jiraRest;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls.map((k, v) => MapEntry(k, v));
+      json['avatarUrls'] = avatarUrls;
     }
     return json;
   }
 
   UserLinkDTO copyWith(
-      {String? self, String? jiraRest, Map<String, Object>? avatarUrls}) {
+      {String? self, String? jiraRest, Map<String, dynamic>? avatarUrls}) {
     return UserLinkDTO(
       self: self ?? this.self,
       jiraRest: jiraRest ?? this.jiraRest,
@@ -2460,10 +2459,10 @@ class AttachmentDTO {
       json['filename'] = filename;
     }
     if (author != null) {
-      json['author'] = author.map((k, v) => MapEntry(k, v));
+      json['author'] = author;
     }
     if (created != null) {
-      json['created'] = created.map((k, v) => MapEntry(k, v));
+      json['created'] = created;
     }
     if (size != null) {
       json['size'] = size;
@@ -2472,7 +2471,7 @@ class AttachmentDTO {
       json['mimeType'] = mimeType;
     }
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -2633,21 +2632,21 @@ class CommentDTO {
       json['body'] = body;
     }
     if (renderedBody != null) {
-      json['renderedBody'] = renderedBody.map((k, v) => MapEntry(k, v));
+      json['renderedBody'] = renderedBody;
     }
     if (author != null) {
-      json['author'] = author.map((k, v) => MapEntry(k, v));
+      json['author'] = author;
     }
     if (created != null) {
-      json['created'] = created.map((k, v) => MapEntry(k, v));
+      json['created'] = created;
     }
     if (attachments != null) {
-      json['attachments'] = attachments.map((k, v) => MapEntry(k, v));
+      json['attachments'] = attachments;
     }
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     json['public'] = public;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -2749,9 +2748,9 @@ class PagedDTOAttachmentDTO {
     }
     json['isLastPage'] = isLastPage;
     json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -2880,7 +2879,7 @@ class Expandable {
     var expands = this.expands;
 
     final json = <String, Object?>{};
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     return json;
   }
 
@@ -2964,9 +2963,9 @@ class PagedDTOCommentDTO {
     }
     json['isLastPage'] = isLastPage;
     json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -3055,7 +3054,7 @@ class OrganizationDTO {
       json['name'] = name;
     }
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -3143,9 +3142,9 @@ class PagedDTOOrganizationDTO {
     }
     json['isLastPage'] = isLastPage;
     json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -3272,9 +3271,9 @@ class PagedDTOUserDTO {
     }
     json['isLastPage'] = isLastPage;
     json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -3329,8 +3328,8 @@ class UsersOrganizationUpdateDTO {
     var accountIds = this.accountIds;
 
     final json = <String, Object?>{};
-    json['usernames'] = usernames.map((i) => i).toList();
-    json['accountIds'] = accountIds.map((i) => i).toList();
+    json['usernames'] = usernames;
+    json['accountIds'] = accountIds;
     return json;
   }
 
@@ -3454,9 +3453,9 @@ class PagedDTOCustomerTransitionDTO {
     }
     json['isLastPage'] = isLastPage;
     json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -3536,8 +3535,7 @@ class CustomerTransitionExecutionDTO {
       json['id'] = id;
     }
     if (additionalComment != null) {
-      json['additionalComment'] =
-          additionalComment.map((k, v) => MapEntry(k, v));
+      json['additionalComment'] = additionalComment;
     }
     return json;
   }
@@ -3626,7 +3624,7 @@ class JsonTypeBean {
   final int? customId;
 
   /// If the field is a custom field, the configuration of the field.
-  final Map<String, Object>? configuration;
+  final Map<String, dynamic>? configuration;
 
   JsonTypeBean(
       {required this.type,
@@ -3643,8 +3641,7 @@ class JsonTypeBean {
       system: json['system'] as String?,
       custom: json['custom'] as String?,
       customId: (json['customId'] as num?)?.toInt(),
-      configuration: (json['configuration'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      configuration: json['configuration'] as Map<String, Object?>?,
     );
   }
 
@@ -3671,7 +3668,7 @@ class JsonTypeBean {
       json['customId'] = customId;
     }
     if (configuration != null) {
-      json['configuration'] = configuration.map((k, v) => MapEntry(k, v));
+      json['configuration'] = configuration;
     }
     return json;
   }
@@ -3682,7 +3679,7 @@ class JsonTypeBean {
       String? system,
       String? custom,
       int? customId,
-      Map<String, Object>? configuration}) {
+      Map<String, dynamic>? configuration}) {
     return JsonTypeBean(
       type: type ?? this.type,
       items: items ?? this.items,
@@ -3767,9 +3764,9 @@ class PagedDTORequestTypeDTO {
     }
     json['isLastPage'] = isLastPage;
     json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -3900,16 +3897,16 @@ class RequestTypeDTO {
     if (serviceDeskId != null) {
       json['serviceDeskId'] = serviceDeskId;
     }
-    json['groupIds'] = groupIds.map((i) => i).toList();
+    json['groupIds'] = groupIds;
     if (icon != null) {
-      json['icon'] = icon.map((k, v) => MapEntry(k, v));
+      json['icon'] = icon;
     }
     if (fields != null) {
-      json['fields'] = fields.map((k, v) => MapEntry(k, v));
+      json['fields'] = fields;
     }
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -4025,7 +4022,7 @@ class RequestTypeFieldDTO {
     json['defaultValues'] = defaultValues.map((i) => i.toJson()).toList();
     json['validValues'] = validValues.map((i) => i.toJson()).toList();
     if (jiraSchema != null) {
-      json['jiraSchema'] = jiraSchema.map((k, v) => MapEntry(k, v));
+      json['jiraSchema'] = jiraSchema;
     }
     json['visible'] = visible;
     return json;
@@ -4133,7 +4130,7 @@ class RequestTypeIconDTO {
       json['id'] = id;
     }
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -4148,14 +4145,13 @@ class RequestTypeIconDTO {
 
 class RequestTypeIconLinkDTO {
   /// URLs for the request type icons.
-  final Map<String, Object>? iconUrls;
+  final Map<String, dynamic>? iconUrls;
 
   RequestTypeIconLinkDTO({this.iconUrls});
 
   factory RequestTypeIconLinkDTO.fromJson(Map<String, Object?> json) {
     return RequestTypeIconLinkDTO(
-      iconUrls: (json['iconUrls'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      iconUrls: json['iconUrls'] as Map<String, Object?>?,
     );
   }
 
@@ -4164,12 +4160,12 @@ class RequestTypeIconLinkDTO {
 
     final json = <String, Object?>{};
     if (iconUrls != null) {
-      json['iconUrls'] = iconUrls.map((k, v) => MapEntry(k, v));
+      json['iconUrls'] = iconUrls;
     }
     return json;
   }
 
-  RequestTypeIconLinkDTO copyWith({Map<String, Object>? iconUrls}) {
+  RequestTypeIconLinkDTO copyWith({Map<String, dynamic>? iconUrls}) {
     return RequestTypeIconLinkDTO(
       iconUrls: iconUrls ?? this.iconUrls,
     );
@@ -4249,9 +4245,9 @@ class PagedDTOQueueDTO {
     }
     json['isLastPage'] = isLastPage;
     json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -4337,12 +4333,12 @@ class QueueDTO {
     if (jql != null) {
       json['jql'] = jql;
     }
-    json['fields'] = fields.map((i) => i).toList();
+    json['fields'] = fields;
     if (issueCount != null) {
       json['issueCount'] = issueCount;
     }
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -4573,14 +4569,14 @@ class Changelog {
       json['id'] = id;
     }
     if (author != null) {
-      json['author'] = author.map((k, v) => MapEntry(k, v));
+      json['author'] = author;
     }
     if (created != null) {
       json['created'] = created.toIso8601String();
     }
     json['items'] = items.map((i) => i.toJson()).toList();
     if (historyMetadata != null) {
-      json['historyMetadata'] = historyMetadata.map((k, v) => MapEntry(k, v));
+      json['historyMetadata'] = historyMetadata;
     }
     return json;
   }
@@ -4682,18 +4678,17 @@ class FieldMetadata {
 
     final json = <String, Object?>{};
     json['required'] = required;
-    json['schema'] = schema.map((k, v) => MapEntry(k, v));
+    json['schema'] = schema;
     json['name'] = name;
     json['key'] = key;
     if (autoCompleteUrl != null) {
       json['autoCompleteUrl'] = autoCompleteUrl;
     }
     json['hasDefaultValue'] = hasDefaultValue;
-    json['operations'] = operations.map((i) => i).toList();
-    json['allowedValues'] =
-        allowedValues.map((i) => i.map((k, v) => MapEntry(k, v))).toList();
+    json['operations'] = operations;
+    json['allowedValues'] = allowedValues;
     if (defaultValue != null) {
-      json['defaultValue'] = defaultValue.map((k, v) => MapEntry(k, v));
+      json['defaultValue'] = defaultValue;
     }
     return json;
   }
@@ -4755,7 +4750,7 @@ class HistoryMetadata {
   final Map<String, Object>? cause;
 
   /// Additional arbitrary information about the history record.
-  final Map<String, Object>? extraData;
+  final Map<String, dynamic>? extraData;
 
   HistoryMetadata(
       {this.type,
@@ -4785,8 +4780,7 @@ class HistoryMetadata {
           ?.map((k, v) => MapEntry(k, v ?? {})),
       cause: (json['cause'] as Map<String, Object?>?)
           ?.map((k, v) => MapEntry(k, v ?? {})),
-      extraData: (json['extraData'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      extraData: json['extraData'] as Map<String, Object?>?,
     );
   }
 
@@ -4826,16 +4820,16 @@ class HistoryMetadata {
       json['emailDescriptionKey'] = emailDescriptionKey;
     }
     if (actor != null) {
-      json['actor'] = actor.map((k, v) => MapEntry(k, v));
+      json['actor'] = actor;
     }
     if (generator != null) {
-      json['generator'] = generator.map((k, v) => MapEntry(k, v));
+      json['generator'] = generator;
     }
     if (cause != null) {
-      json['cause'] = cause.map((k, v) => MapEntry(k, v));
+      json['cause'] = cause;
     }
     if (extraData != null) {
-      json['extraData'] = extraData.map((k, v) => MapEntry(k, v));
+      json['extraData'] = extraData;
     }
     return json;
   }
@@ -4851,7 +4845,7 @@ class HistoryMetadata {
       Map<String, Object>? actor,
       Map<String, Object>? generator,
       Map<String, Object>? cause,
-      Map<String, Object>? extraData}) {
+      Map<String, dynamic>? extraData}) {
     return HistoryMetadata(
       type: type ?? this.type,
       description: description ?? this.description,
@@ -4992,9 +4986,9 @@ class IncludedFields {
     var excluded = this.excluded;
 
     final json = <String, Object?>{};
-    json['included'] = included.map((i) => i).toList();
-    json['actuallyIncluded'] = actuallyIncluded.map((i) => i).toList();
-    json['excluded'] = excluded.map((i) => i).toList();
+    json['included'] = included;
+    json['actuallyIncluded'] = actuallyIncluded;
+    json['excluded'] = excluded;
     return json;
   }
 
@@ -5024,16 +5018,16 @@ class IssueBean {
   final String? key;
 
   /// The rendered value of each field present on the issue.
-  final Map<String, Object>? renderedFields;
+  final Map<String, dynamic>? renderedFields;
 
   /// Details of the issue properties identified in the request.
-  final Map<String, Object>? properties;
+  final Map<String, dynamic>? properties;
 
   /// The ID and name of each field present on the issue.
-  final Map<String, Object>? names;
+  final Map<String, dynamic>? names;
 
   /// The schema describing each field present on the issue.
-  final Map<String, Object>? schema;
+  final Map<String, dynamic>? schema;
 
   /// The transitions that can be performed on the issue.
   final List<IssueTransition> transitions;
@@ -5048,9 +5042,9 @@ class IssueBean {
   final Map<String, Object>? changelog;
 
   /// The versions of each field on the issue.
-  final Map<String, Object>? versionedRepresentations;
+  final Map<String, dynamic>? versionedRepresentations;
   final IncludedFields? fieldsToInclude;
-  final Map<String, Object>? fields;
+  final Map<String, dynamic>? fields;
 
   IssueBean(
       {this.expand,
@@ -5076,14 +5070,10 @@ class IssueBean {
       id: json['id'] as String?,
       self: json['self'] as String?,
       key: json['key'] as String?,
-      renderedFields: (json['renderedFields'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      properties: (json['properties'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      names: (json['names'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      schema: (json['schema'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      renderedFields: json['renderedFields'] as Map<String, Object?>?,
+      properties: json['properties'] as Map<String, Object?>?,
+      names: json['names'] as Map<String, Object?>?,
+      schema: json['schema'] as Map<String, Object?>?,
       transitions: (json['transitions'] as List<Object?>?)
               ?.map((i) => IssueTransition.fromJson(
                   i as Map<String, Object?>? ?? const {}))
@@ -5096,14 +5086,12 @@ class IssueBean {
       changelog: (json['changelog'] as Map<String, Object?>?)
           ?.map((k, v) => MapEntry(k, v ?? {})),
       versionedRepresentations:
-          (json['versionedRepresentations'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})),
+          json['versionedRepresentations'] as Map<String, Object?>?,
       fieldsToInclude: json['fieldsToInclude'] != null
           ? IncludedFields.fromJson(
               json['fieldsToInclude']! as Map<String, Object?>)
           : null,
-      fields: (json['fields'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      fields: json['fields'] as Map<String, Object?>?,
     );
   }
 
@@ -5138,36 +5126,35 @@ class IssueBean {
       json['key'] = key;
     }
     if (renderedFields != null) {
-      json['renderedFields'] = renderedFields.map((k, v) => MapEntry(k, v));
+      json['renderedFields'] = renderedFields;
     }
     if (properties != null) {
-      json['properties'] = properties.map((k, v) => MapEntry(k, v));
+      json['properties'] = properties;
     }
     if (names != null) {
-      json['names'] = names.map((k, v) => MapEntry(k, v));
+      json['names'] = names;
     }
     if (schema != null) {
-      json['schema'] = schema.map((k, v) => MapEntry(k, v));
+      json['schema'] = schema;
     }
     json['transitions'] = transitions.map((i) => i.toJson()).toList();
     if (operations != null) {
-      json['operations'] = operations.map((k, v) => MapEntry(k, v));
+      json['operations'] = operations;
     }
     if (editmeta != null) {
-      json['editmeta'] = editmeta.map((k, v) => MapEntry(k, v));
+      json['editmeta'] = editmeta;
     }
     if (changelog != null) {
-      json['changelog'] = changelog.map((k, v) => MapEntry(k, v));
+      json['changelog'] = changelog;
     }
     if (versionedRepresentations != null) {
-      json['versionedRepresentations'] =
-          versionedRepresentations.map((k, v) => MapEntry(k, v));
+      json['versionedRepresentations'] = versionedRepresentations;
     }
     if (fieldsToInclude != null) {
       json['fieldsToInclude'] = fieldsToInclude.toJson();
     }
     if (fields != null) {
-      json['fields'] = fields.map((k, v) => MapEntry(k, v));
+      json['fields'] = fields;
     }
     return json;
   }
@@ -5177,17 +5164,17 @@ class IssueBean {
       String? id,
       String? self,
       String? key,
-      Map<String, Object>? renderedFields,
-      Map<String, Object>? properties,
-      Map<String, Object>? names,
-      Map<String, Object>? schema,
+      Map<String, dynamic>? renderedFields,
+      Map<String, dynamic>? properties,
+      Map<String, dynamic>? names,
+      Map<String, dynamic>? schema,
       List<IssueTransition>? transitions,
       Map<String, Object>? operations,
       Map<String, Object>? editmeta,
       Map<String, Object>? changelog,
-      Map<String, Object>? versionedRepresentations,
+      Map<String, dynamic>? versionedRepresentations,
       IncludedFields? fieldsToInclude,
-      Map<String, Object>? fields}) {
+      Map<String, dynamic>? fields}) {
     return IssueBean(
       expand: expand ?? this.expand,
       id: id ?? this.id,
@@ -5236,7 +5223,7 @@ class IssueTransition {
   final bool isConditional;
 
   /// Details of the fields associated with the issue transition screen. Use this information to populate `fields` and `update` in a transition request.
-  final Map<String, Object>? fields;
+  final Map<String, dynamic>? fields;
 
   /// Expand options that include additional transition details in the response.
   final String? expand;
@@ -5272,8 +5259,7 @@ class IssueTransition {
       isInitial: json['isInitial'] as bool? ?? false,
       isAvailable: json['isAvailable'] as bool? ?? false,
       isConditional: json['isConditional'] as bool? ?? false,
-      fields: (json['fields'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      fields: json['fields'] as Map<String, Object?>?,
       expand: json['expand'] as String?,
       looped: json['looped'] as bool? ?? false,
     );
@@ -5300,7 +5286,7 @@ class IssueTransition {
       json['name'] = name;
     }
     if (to != null) {
-      json['to'] = to.map((k, v) => MapEntry(k, v));
+      json['to'] = to;
     }
     json['hasScreen'] = hasScreen;
     json['isGlobal'] = isGlobal;
@@ -5308,7 +5294,7 @@ class IssueTransition {
     json['isAvailable'] = isAvailable;
     json['isConditional'] = isConditional;
     if (fields != null) {
-      json['fields'] = fields.map((k, v) => MapEntry(k, v));
+      json['fields'] = fields;
     }
     if (expand != null) {
       json['expand'] = expand;
@@ -5326,7 +5312,7 @@ class IssueTransition {
       bool? isInitial,
       bool? isAvailable,
       bool? isConditional,
-      Map<String, Object>? fields,
+      Map<String, dynamic>? fields,
       String? expand,
       bool? looped}) {
     return IssueTransition(
@@ -5347,14 +5333,13 @@ class IssueTransition {
 
 /// A list of editable field details.
 class IssueUpdateMetadata {
-  final Map<String, Object>? fields;
+  final Map<String, dynamic>? fields;
 
   IssueUpdateMetadata({this.fields});
 
   factory IssueUpdateMetadata.fromJson(Map<String, Object?> json) {
     return IssueUpdateMetadata(
-      fields: (json['fields'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      fields: json['fields'] as Map<String, Object?>?,
     );
   }
 
@@ -5363,12 +5348,12 @@ class IssueUpdateMetadata {
 
     final json = <String, Object?>{};
     if (fields != null) {
-      json['fields'] = fields.map((k, v) => MapEntry(k, v));
+      json['fields'] = fields;
     }
     return json;
   }
 
-  IssueUpdateMetadata copyWith({Map<String, Object>? fields}) {
+  IssueUpdateMetadata copyWith({Map<String, dynamic>? fields}) {
     return IssueUpdateMetadata(
       fields: fields ?? this.fields,
     );
@@ -5626,9 +5611,9 @@ class PagedDTOIssueBean {
     }
     json['isLastPage'] = isLastPage;
     json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -5870,7 +5855,7 @@ class StatusDetails {
       json['id'] = id;
     }
     if (statusCategory != null) {
-      json['statusCategory'] = statusCategory.map((k, v) => MapEntry(k, v));
+      json['statusCategory'] = statusCategory;
     }
     return json;
   }
@@ -5987,7 +5972,7 @@ class UserDetails {
       json['emailAddress'] = emailAddress;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls.map((k, v) => MapEntry(k, v));
+      json['avatarUrls'] = avatarUrls;
     }
     if (displayName != null) {
       json['displayName'] = displayName;
@@ -6058,8 +6043,8 @@ class RequestParticipantUpdateDTO {
     var accountIds = this.accountIds;
 
     final json = <String, Object?>{};
-    json['usernames'] = usernames.map((i) => i).toList();
-    json['accountIds'] = accountIds.map((i) => i).toList();
+    json['usernames'] = usernames;
+    json['accountIds'] = accountIds;
     return json;
   }
 
@@ -6130,8 +6115,8 @@ class ServiceDeskCustomerDTO {
     var accountIds = this.accountIds;
 
     final json = <String, Object?>{};
-    json['usernames'] = usernames.map((i) => i).toList();
-    json['accountIds'] = accountIds.map((i) => i).toList();
+    json['usernames'] = usernames;
+    json['accountIds'] = accountIds;
     return json;
   }
 
@@ -6178,7 +6163,7 @@ class CSATFeedbackFullDTO {
       json['rating'] = rating;
     }
     if (comment != null) {
-      json['comment'] = comment.map((k, v) => MapEntry(k, v));
+      json['comment'] = comment;
     }
     return json;
   }
@@ -6289,11 +6274,9 @@ class AttachmentCreateDTO {
     var public = this.public;
 
     final json = <String, Object?>{};
-    json['temporaryAttachmentIds'] =
-        temporaryAttachmentIds.map((i) => i).toList();
+    json['temporaryAttachmentIds'] = temporaryAttachmentIds;
     if (additionalComment != null) {
-      json['additionalComment'] =
-          additionalComment.map((k, v) => MapEntry(k, v));
+      json['additionalComment'] = additionalComment;
     }
     json['public'] = public;
     return json;
@@ -6336,10 +6319,10 @@ class AttachmentCreateResultDTO {
 
     final json = <String, Object?>{};
     if (comment != null) {
-      json['comment'] = comment.map((k, v) => MapEntry(k, v));
+      json['comment'] = comment;
     }
     if (attachments != null) {
-      json['attachments'] = attachments.map((k, v) => MapEntry(k, v));
+      json['attachments'] = attachments;
     }
     return json;
   }
@@ -6435,13 +6418,13 @@ class ApprovalDTO {
     json['canAnswerApproval'] = canAnswerApproval;
     json['approvers'] = approvers.map((i) => i.toJson()).toList();
     if (createdDate != null) {
-      json['createdDate'] = createdDate.map((k, v) => MapEntry(k, v));
+      json['createdDate'] = createdDate;
     }
     if (completedDate != null) {
-      json['completedDate'] = completedDate.map((k, v) => MapEntry(k, v));
+      json['completedDate'] = completedDate;
     }
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -6519,7 +6502,7 @@ class ApproverDTO {
 
     final json = <String, Object?>{};
     if (approver != null) {
-      json['approver'] = approver.map((k, v) => MapEntry(k, v));
+      json['approver'] = approver;
     }
     if (approverDecision != null) {
       json['approverDecision'] = approverDecision.value;
@@ -6691,9 +6674,9 @@ class PagedDTOApprovalDTO {
     }
     json['isLastPage'] = isLastPage;
     json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -6775,14 +6758,14 @@ class SoftwareInfoDTO {
       json['platformVersion'] = platformVersion;
     }
     if (buildDate != null) {
-      json['buildDate'] = buildDate.map((k, v) => MapEntry(k, v));
+      json['buildDate'] = buildDate;
     }
     if (buildChangeSet != null) {
       json['buildChangeSet'] = buildChangeSet;
     }
     json['isLicensedForUse'] = isLicensedForUse;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -6878,9 +6861,9 @@ class PagedDTOServiceDeskDTO {
     }
     json['isLastPage'] = isLastPage;
     json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -6956,7 +6939,7 @@ class ServiceDeskDTO {
       json['projectKey'] = projectKey;
     }
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -7014,7 +6997,7 @@ class RequestCreateDTO {
   final String? requestTypeId;
 
   /// JSON map of Jira field IDs and their values representing the content of the request.
-  final Map<String, Object>? requestFieldValues;
+  final Map<String, dynamic>? requestFieldValues;
 
   /// List of customers to participate in the request, as a list of `accountId` values.
   final List<String> requestParticipants;
@@ -7038,8 +7021,7 @@ class RequestCreateDTO {
     return RequestCreateDTO(
       serviceDeskId: json['serviceDeskId'] as String?,
       requestTypeId: json['requestTypeId'] as String?,
-      requestFieldValues: (json['requestFieldValues'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      requestFieldValues: json['requestFieldValues'] as Map<String, Object?>?,
       requestParticipants: (json['requestParticipants'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -7065,10 +7047,9 @@ class RequestCreateDTO {
       json['requestTypeId'] = requestTypeId;
     }
     if (requestFieldValues != null) {
-      json['requestFieldValues'] =
-          requestFieldValues.map((k, v) => MapEntry(k, v));
+      json['requestFieldValues'] = requestFieldValues;
     }
-    json['requestParticipants'] = requestParticipants.map((i) => i).toList();
+    json['requestParticipants'] = requestParticipants;
     if (raiseOnBehalfOf != null) {
       json['raiseOnBehalfOf'] = raiseOnBehalfOf;
     }
@@ -7081,7 +7062,7 @@ class RequestCreateDTO {
   RequestCreateDTO copyWith(
       {String? serviceDeskId,
       String? requestTypeId,
-      Map<String, Object>? requestFieldValues,
+      Map<String, dynamic>? requestFieldValues,
       List<String>? requestParticipants,
       String? raiseOnBehalfOf,
       String? channel}) {
@@ -7163,17 +7144,16 @@ class CustomerRequestActionsDTO {
 
     final json = <String, Object?>{};
     if (addAttachment != null) {
-      json['addAttachment'] = addAttachment.map((k, v) => MapEntry(k, v));
+      json['addAttachment'] = addAttachment;
     }
     if (addComment != null) {
-      json['addComment'] = addComment.map((k, v) => MapEntry(k, v));
+      json['addComment'] = addComment;
     }
     if (addParticipant != null) {
-      json['addParticipant'] = addParticipant.map((k, v) => MapEntry(k, v));
+      json['addParticipant'] = addParticipant;
     }
     if (removeParticipant != null) {
-      json['removeParticipant'] =
-          removeParticipant.map((k, v) => MapEntry(k, v));
+      json['removeParticipant'] = removeParticipant;
     }
     return json;
   }
@@ -7342,46 +7322,46 @@ class CustomerRequestDTO {
       json['requestTypeId'] = requestTypeId;
     }
     if (requestType != null) {
-      json['requestType'] = requestType.map((k, v) => MapEntry(k, v));
+      json['requestType'] = requestType;
     }
     if (serviceDeskId != null) {
       json['serviceDeskId'] = serviceDeskId;
     }
     if (serviceDesk != null) {
-      json['serviceDesk'] = serviceDesk.map((k, v) => MapEntry(k, v));
+      json['serviceDesk'] = serviceDesk;
     }
     if (createdDate != null) {
-      json['createdDate'] = createdDate.map((k, v) => MapEntry(k, v));
+      json['createdDate'] = createdDate;
     }
     if (reporter != null) {
-      json['reporter'] = reporter.map((k, v) => MapEntry(k, v));
+      json['reporter'] = reporter;
     }
     json['requestFieldValues'] =
         requestFieldValues.map((i) => i.toJson()).toList();
     if (currentStatus != null) {
-      json['currentStatus'] = currentStatus.map((k, v) => MapEntry(k, v));
+      json['currentStatus'] = currentStatus;
     }
     if (status != null) {
-      json['status'] = status.map((k, v) => MapEntry(k, v));
+      json['status'] = status;
     }
     if (participants != null) {
-      json['participants'] = participants.map((k, v) => MapEntry(k, v));
+      json['participants'] = participants;
     }
     if (sla != null) {
-      json['sla'] = sla.map((k, v) => MapEntry(k, v));
+      json['sla'] = sla;
     }
     if (attachments != null) {
-      json['attachments'] = attachments.map((k, v) => MapEntry(k, v));
+      json['attachments'] = attachments;
     }
     if (comments != null) {
-      json['comments'] = comments.map((k, v) => MapEntry(k, v));
+      json['comments'] = comments;
     }
     if (actions != null) {
-      json['actions'] = actions.map((k, v) => MapEntry(k, v));
+      json['actions'] = actions;
     }
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -7439,7 +7419,7 @@ class CustomerRequestFieldValueDTO {
   final Map<String, Object>? value;
 
   /// Value of the field rendered in the UI.
-  final Map<String, Object>? renderedValue;
+  final Map<String, dynamic>? renderedValue;
 
   CustomerRequestFieldValueDTO(
       {this.fieldId, this.label, this.value, this.renderedValue});
@@ -7450,8 +7430,7 @@ class CustomerRequestFieldValueDTO {
       label: json['label'] as String?,
       value: (json['value'] as Map<String, Object?>?)
           ?.map((k, v) => MapEntry(k, v ?? {})),
-      renderedValue: (json['renderedValue'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      renderedValue: json['renderedValue'] as Map<String, Object?>?,
     );
   }
 
@@ -7469,10 +7448,10 @@ class CustomerRequestFieldValueDTO {
       json['label'] = label;
     }
     if (value != null) {
-      json['value'] = value.map((k, v) => MapEntry(k, v));
+      json['value'] = value;
     }
     if (renderedValue != null) {
-      json['renderedValue'] = renderedValue.map((k, v) => MapEntry(k, v));
+      json['renderedValue'] = renderedValue;
     }
     return json;
   }
@@ -7481,7 +7460,7 @@ class CustomerRequestFieldValueDTO {
       {String? fieldId,
       String? label,
       Map<String, Object>? value,
-      Map<String, Object>? renderedValue}) {
+      Map<String, dynamic>? renderedValue}) {
     return CustomerRequestFieldValueDTO(
       fieldId: fieldId ?? this.fieldId,
       label: label ?? this.label,
@@ -7658,9 +7637,9 @@ class PagedDTOSlaInformationDTO {
     }
     json['isLastPage'] = isLastPage;
     json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -7739,20 +7718,20 @@ class SlaInformationCompletedCycleDTO {
 
     final json = <String, Object?>{};
     if (startTime != null) {
-      json['startTime'] = startTime.map((k, v) => MapEntry(k, v));
+      json['startTime'] = startTime;
     }
     if (stopTime != null) {
-      json['stopTime'] = stopTime.map((k, v) => MapEntry(k, v));
+      json['stopTime'] = stopTime;
     }
     json['breached'] = breached;
     if (goalDuration != null) {
-      json['goalDuration'] = goalDuration.map((k, v) => MapEntry(k, v));
+      json['goalDuration'] = goalDuration;
     }
     if (elapsedTime != null) {
-      json['elapsedTime'] = elapsedTime.map((k, v) => MapEntry(k, v));
+      json['elapsedTime'] = elapsedTime;
     }
     if (remainingTime != null) {
-      json['remainingTime'] = remainingTime.map((k, v) => MapEntry(k, v));
+      json['remainingTime'] = remainingTime;
     }
     return json;
   }
@@ -7831,10 +7810,10 @@ class SlaInformationDTO {
     }
     json['completedCycles'] = completedCycles.map((i) => i.toJson()).toList();
     if (ongoingCycle != null) {
-      json['ongoingCycle'] = ongoingCycle.map((k, v) => MapEntry(k, v));
+      json['ongoingCycle'] = ongoingCycle;
     }
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }
@@ -7923,22 +7902,22 @@ class SlaInformationOngoingCycleDTO {
 
     final json = <String, Object?>{};
     if (startTime != null) {
-      json['startTime'] = startTime.map((k, v) => MapEntry(k, v));
+      json['startTime'] = startTime;
     }
     if (breachTime != null) {
-      json['breachTime'] = breachTime.map((k, v) => MapEntry(k, v));
+      json['breachTime'] = breachTime;
     }
     json['breached'] = breached;
     json['paused'] = paused;
     json['withinCalendarHours'] = withinCalendarHours;
     if (goalDuration != null) {
-      json['goalDuration'] = goalDuration.map((k, v) => MapEntry(k, v));
+      json['goalDuration'] = goalDuration;
     }
     if (elapsedTime != null) {
-      json['elapsedTime'] = elapsedTime.map((k, v) => MapEntry(k, v));
+      json['elapsedTime'] = elapsedTime;
     }
     if (remainingTime != null) {
-      json['remainingTime'] = remainingTime.map((k, v) => MapEntry(k, v));
+      json['remainingTime'] = remainingTime;
     }
     return json;
   }
@@ -8069,9 +8048,9 @@ class PagedDTOCustomerRequestDTO {
     }
     json['isLastPage'] = isLastPage;
     json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands.map((i) => i).toList();
+    json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.map((k, v) => MapEntry(k, v));
+      json['_links'] = links;
     }
     return json;
   }

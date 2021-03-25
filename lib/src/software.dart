@@ -1,6 +1,6 @@
 // Generated code - Do not edit manually
 
-import 'api_utils.dart' show ApiClient, Client;
+import 'api_utils.dart' show ApiClient, Client, File;
 
 // ignore_for_file: deprecated_member_use_from_same_package
 
@@ -132,11 +132,11 @@ class BacklogApi {
   ///  <br />
   ///  This operation is equivalent to remove future and active sprints from a given set of issues.
   ///  At most 50 issues may be moved at once.
-  Future<void> moveIssuesToBacklog({required Map<String, Object> body}) async {
+  Future<void> moveIssuesToBacklog({required Map<String, dynamic> body}) async {
     await _client.send(
       'post',
       'agile/1.0/backlog/issue',
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -146,14 +146,14 @@ class BacklogApi {
   ///  If the board does not have sprints this will put the issues back into the backlog from the board.
   ///  At most 50 issues may be moved at once.
   Future<void> moveIssuesToBacklogForBoard(
-      {required int boardId, required Map<String, Object> body}) async {
+      {required int boardId, required Map<String, dynamic> body}) async {
     await _client.send(
       'post',
       'agile/1.0/backlog/{boardId}/issue',
       pathParameters: {
         'boardId': '$boardId',
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 }
@@ -166,7 +166,7 @@ class BoardApi {
   BoardApi._(this._client);
 
   /// Returns all boards. This only includes boards that the user has permission to view.
-  Future<Map<String, Object>> getAllBoards(
+  Future<Map<String, dynamic>> getAllBoards(
       {int? startAt,
       int? maxResults,
       String? type,
@@ -179,7 +179,7 @@ class BoardApi {
       String? orderBy,
       String? expand,
       int? filterId}) async {
-    return (await _client.send(
+    return await _client.send(
       'get',
       'agile/1.0/board',
       queryParameters: {
@@ -197,8 +197,7 @@ class BoardApi {
         if (expand != null) 'expand': expand,
         if (filterId != null) 'filterId': '$filterId',
       },
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+    ) as Map<String, Object?>;
   }
 
   /// Creates a new board. Board name, type and filter ID is required.
@@ -229,21 +228,20 @@ class BoardApi {
   ///  If you do not ORDER BY the Rank field for the filter of your board, you will not be able to reorder issues on the board.
   ///  </li>
   ///  </ul>
-  Future<Map<String, Object>> createBoard(
-      {required Map<String, Object> body}) async {
-    return (await _client.send(
+  Future<Map<String, dynamic>> createBoard(
+      {required Map<String, dynamic> body}) async {
+    return await _client.send(
       'post',
       'agile/1.0/board',
-      body: body.map((k, v) => MapEntry(k, v)),
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+      body: body,
+    ) as Map<String, Object?>;
   }
 
   /// Returns any boards which use the provided filter id.  This method can be executed by users without a valid
   ///  software license in order to find which boards are using a particular filter.
-  Future<Map<String, Object>> getBoardByFilterId(
+  Future<Map<String, dynamic>> getBoardByFilterId(
       {required int filterId, int? startAt, int? maxResults}) async {
-    return (await _client.send(
+    return await _client.send(
       'get',
       'agile/1.0/board/filter/{filterId}',
       pathParameters: {
@@ -253,22 +251,20 @@ class BoardApi {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
       },
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+    ) as Map<String, Object?>;
   }
 
   /// Returns the board for the given board ID. This board will only be returned if the user has permission to view it.
   ///  Admins without the view permission will see the board as a private one, so will see only a subset of the board's
   ///  data (board location for instance).
-  Future<Map<String, Object>> getBoard(int boardId) async {
-    return (await _client.send(
+  Future<Map<String, dynamic>> getBoard(int boardId) async {
+    return await _client.send(
       'get',
       'agile/1.0/board/{boardId}',
       pathParameters: {
         'boardId': '$boardId',
       },
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+    ) as Map<String, Object?>;
   }
 
   /// Deletes the board. Admin without the view permission can still remove the board.
@@ -334,15 +330,14 @@ class BoardApi {
   ///  </li>
   ///  <li>`ranking` - Contains information about custom field used for ranking in the given board.</li>
   ///  </ul>
-  Future<Map<String, Object>> getConfiguration(int boardId) async {
-    return (await _client.send(
+  Future<Map<String, dynamic>> getConfiguration(int boardId) async {
+    return await _client.send(
       'get',
       'agile/1.0/board/{boardId}/configuration',
       pathParameters: {
         'boardId': '$boardId',
       },
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+    ) as Map<String, Object?>;
   }
 
   /// Returns all epics from the board, for the given board ID. This only includes epics that the user has permission to view.
@@ -427,29 +422,27 @@ class BoardApi {
   }
 
   ///
-  Future<Map<String, Object>> getFeaturesForBoard(int boardId) async {
-    return (await _client.send(
+  Future<Map<String, dynamic>> getFeaturesForBoard(int boardId) async {
+    return await _client.send(
       'get',
       'agile/1.0/board/{boardId}/features',
       pathParameters: {
         'boardId': '$boardId',
       },
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+    ) as Map<String, Object?>;
   }
 
   ///
-  Future<Map<String, Object>> toggleFeatures(
-      {required int boardId, required Map<String, Object> body}) async {
-    return (await _client.send(
+  Future<Map<String, dynamic>> toggleFeatures(
+      {required int boardId, required Map<String, dynamic> body}) async {
+    return await _client.send(
       'put',
       'agile/1.0/board/{boardId}/features',
       pathParameters: {
         'boardId': '$boardId',
       },
-      body: body.map((k, v) => MapEntry(k, v)),
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+      body: body,
+    ) as Map<String, Object?>;
   }
 
   /// Returns all issues from a board, for a given board ID. This only includes issues that the user has permission to view.
@@ -489,14 +482,14 @@ class BoardApi {
   ///  Or transitions the issue(s) to the first column for a kanban board with backlog.
   ///  At most 50 issues may be moved at once.
   Future<void> moveIssuesToBoard(
-      {required int boardId, required Map<String, Object> body}) async {
+      {required int boardId, required Map<String, dynamic> body}) async {
     await _client.send(
       'post',
       'agile/1.0/board/{boardId}/issue',
       pathParameters: {
         'boardId': '$boardId',
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -608,9 +601,9 @@ class BoardApi {
   }
 
   /// Returns all quick filters from a board, for a given board ID.
-  Future<Map<String, Object>> getAllQuickFilters(
+  Future<Map<String, dynamic>> getAllQuickFilters(
       {required int boardId, int? startAt, int? maxResults}) async {
-    return (await _client.send(
+    return await _client.send(
       'get',
       'agile/1.0/board/{boardId}/quickfilter',
       pathParameters: {
@@ -620,35 +613,32 @@ class BoardApi {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
       },
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+    ) as Map<String, Object?>;
   }
 
   /// Returns the quick filter for a given quick filter ID. The quick filter will only be returned if the user can view the board
   ///  that the quick filter belongs to.
-  Future<Map<String, Object>> getQuickFilter(
+  Future<Map<String, dynamic>> getQuickFilter(
       {required int boardId, required int quickFilterId}) async {
-    return (await _client.send(
+    return await _client.send(
       'get',
       'agile/1.0/board/{boardId}/quickfilter/{quickFilterId}',
       pathParameters: {
         'boardId': '$boardId',
         'quickFilterId': '$quickFilterId',
       },
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+    ) as Map<String, Object?>;
   }
 
   ///
-  Future<Map<String, Object>> getReportsForBoard(int boardId) async {
-    return (await _client.send(
+  Future<Map<String, dynamic>> getReportsForBoard(int boardId) async {
+    return await _client.send(
       'get',
       'agile/1.0/board/{boardId}/reports',
       pathParameters: {
         'boardId': '$boardId',
       },
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+    ) as Map<String, Object?>;
   }
 
   /// Returns all sprints from a board, for a given board ID. This only includes sprints that the user has permission to view.
@@ -768,11 +758,12 @@ class EpicApi {
   ///
   ///  <b>Note:</b> This operation does not work for epics in next-gen projects.
   ///  Instead, update the issue using `{ fields: { parent: {} } }`
-  Future<void> removeIssuesFromEpic({required Map<String, Object> body}) async {
+  Future<void> removeIssuesFromEpic(
+      {required Map<String, dynamic> body}) async {
     await _client.send(
       'post',
       'agile/1.0/epic/none/issue',
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -813,14 +804,14 @@ class EpicApi {
   ///
   ///  <b>Note:</b> This operation does not work for epics in next-gen projects.
   Future<void> partiallyUpdateEpic(
-      {required String epicIdOrKey, required Map<String, Object> body}) async {
+      {required String epicIdOrKey, required Map<String, dynamic> body}) async {
     await _client.send(
       'post',
       'agile/1.0/epic/{epicIdOrKey}',
       pathParameters: {
         'epicIdOrKey': epicIdOrKey,
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -867,14 +858,14 @@ class EpicApi {
   ///
   ///  <b>Note:</b> This operation does not work for epics in next-gen projects.
   Future<void> moveIssuesToEpic(
-      {required String epicIdOrKey, required Map<String, Object> body}) async {
+      {required String epicIdOrKey, required Map<String, dynamic> body}) async {
     await _client.send(
       'post',
       'agile/1.0/epic/{epicIdOrKey}/issue',
       pathParameters: {
         'epicIdOrKey': epicIdOrKey,
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -886,14 +877,14 @@ class EpicApi {
   ///
   ///  <b>Note:</b> This operation does not work for epics in next-gen projects.
   Future<void> rankEpics(
-      {required String epicIdOrKey, required Map<String, Object> body}) async {
+      {required String epicIdOrKey, required Map<String, dynamic> body}) async {
     await _client.send(
       'put',
       'agile/1.0/epic/{epicIdOrKey}/rank',
       pathParameters: {
         'epicIdOrKey': epicIdOrKey,
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 }
@@ -915,11 +906,11 @@ class IssueApi {
   ///  <p>
   ///  If rankCustomFieldId is not defined, the default rank field will be used.
   ///  </p>
-  Future<void> rankIssues({required Map<String, Object> body}) async {
+  Future<void> rankIssues({required Map<String, dynamic> body}) async {
     await _client.send(
       'put',
       'agile/1.0/issue/rank',
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -987,7 +978,7 @@ class IssueApi {
   Future<void> estimateIssueForBoard(
       {required String issueIdOrKey,
       int? boardId,
-      required Map<String, Object> body}) async {
+      required Map<String, dynamic> body}) async {
     await _client.send(
       'put',
       'agile/1.0/issue/{issueIdOrKey}/estimation',
@@ -997,21 +988,20 @@ class IssueApi {
       queryParameters: {
         if (boardId != null) 'boardId': '$boardId',
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
   ///
-  Future<Map<String, Object>> getFeaturesForProject(
+  Future<Map<String, dynamic>> getFeaturesForProject(
       String projectIdOrKey) async {
-    return (await _client.send(
+    return await _client.send(
       'get',
       'agile/1.0/project/{projectIdOrKey}/features',
       pathParameters: {
         'projectIdOrKey': projectIdOrKey,
       },
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+    ) as Map<String, Object?>;
   }
 }
 
@@ -1028,11 +1018,11 @@ class SprintApi {
   ///  Note that the sprint name is trimmed. Also, when starting sprints from the UI, the "endDate" set through this
   ///  call is ignored and instead the last sprint's duration is used to fill the form.
   ///  </p>
-  Future<void> createSprint({required Map<String, Object> body}) async {
+  Future<void> createSprint({required Map<String, dynamic> body}) async {
     await _client.send(
       'post',
       'agile/1.0/sprint',
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -1061,14 +1051,14 @@ class SprintApi {
   ///  <li>The completeDate field cannot be updated manually.</li>
   ///  </ul>
   Future<void> partiallyUpdateSprint(
-      {required int sprintId, required Map<String, Object> body}) async {
+      {required int sprintId, required Map<String, dynamic> body}) async {
     await _client.send(
       'post',
       'agile/1.0/sprint/{sprintId}',
       pathParameters: {
         'sprintId': '$sprintId',
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -1086,14 +1076,14 @@ class SprintApi {
   ///  <li>The completeDate field cannot be updated manually.</li>
   ///  </ul>
   Future<void> updateSprint(
-      {required int sprintId, required Map<String, Object> body}) async {
+      {required int sprintId, required Map<String, dynamic> body}) async {
     await _client.send(
       'put',
       'agile/1.0/sprint/{sprintId}',
       pathParameters: {
         'sprintId': '$sprintId',
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -1139,14 +1129,14 @@ class SprintApi {
   ///  Issues can only be moved to open or active sprints.
   ///  The maximum number of issues that can be moved in one operation is 50.
   Future<void> moveIssuesToSprintAndRank(
-      {required int sprintId, required Map<String, Object> body}) async {
+      {required int sprintId, required Map<String, dynamic> body}) async {
     await _client.send(
       'post',
       'agile/1.0/sprint/{sprintId}/issue',
       pathParameters: {
         'sprintId': '$sprintId',
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -1209,14 +1199,14 @@ class SprintApi {
 
   /// Swap the position of the sprint with the second sprint.
   Future<void> swapSprint(
-      {required int sprintId, required Map<String, Object> body}) async {
+      {required int sprintId, required Map<String, dynamic> body}) async {
     await _client.send(
       'post',
       'agile/1.0/sprint/{sprintId}/swap',
       pathParameters: {
         'sprintId': '$sprintId',
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 }
@@ -1229,28 +1219,26 @@ class DevelopmentInformationApi {
   DevelopmentInformationApi._(this._client);
 
   /// Stores development information provided in the request to make it available when viewing issues in Jira. Existing repository and entity data for the same ID will be replaced if the updateSequenceId of existing data is less than the incoming data. Submissions are performed asynchronously. Submitted data will eventually be available in Jira; most updates are available within a short period of time, but may take some time during peak load and/or maintenance times.
-  Future<Map<String, Object>> storeDevelopmentInformation(
+  Future<Map<String, dynamic>> storeDevelopmentInformation(
       {required String authorization,
-      required Map<String, Object> body}) async {
-    return (await _client.send(
+      required Map<String, dynamic> body}) async {
+    return await _client.send(
       'post',
       'devinfo/0.10/bulk',
-      body: body.map((k, v) => MapEntry(k, v)),
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+      body: body,
+    ) as Map<String, Object?>;
   }
 
   /// For the specified repository ID, retrieves the repository and the most recent 400 development information entities. The result will be what is currently stored, ignoring any pending updates or deletes.
-  Future<Map<String, Object>> getRepository(
+  Future<Map<String, dynamic>> getRepository(
       {required String repositoryId, required String authorization}) async {
-    return (await _client.send(
+    return await _client.send(
       'get',
       'devinfo/0.10/repository/{repositoryId}',
       pathParameters: {
         'repositoryId': repositoryId,
       },
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+    ) as Map<String, Object?>;
   }
 
   /// Deletes the repository data stored by the given ID and all related development information entities. Deletion is performed asynchronously.
@@ -1283,16 +1271,15 @@ class DevelopmentInformationApi {
   }
 
   /// Checks if development information which have all the provided properties exists. For example, if request is `GET existsByProperties?accountId=123&projectId=ABC` then result will be positive only if there is at least one entity or repository with both properties `accountId=123` and `projectId=ABC`. Special property `_updateSequenceId` can be used to filter all entities with updateSequenceId less or equal than the value specified. In addition to the optional `_updateSequenceId`, one or more query params must be supplied to specify properties to search by.
-  Future<Map<String, Object>> existsByProperties(
+  Future<Map<String, dynamic>> existsByProperties(
       {required String authorization, int? updateSequenceId}) async {
-    return (await _client.send(
+    return await _client.send(
       'get',
       'devinfo/0.10/existsByProperties',
       queryParameters: {
         if (updateSequenceId != null) '_updateSequenceId': '$updateSequenceId',
       },
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+    ) as Map<String, Object?>;
   }
 
   /// Deletes particular development information entity. Deletion is performed asynchronously.
@@ -1337,7 +1324,7 @@ class FeatureFlagsApi {
     await _client.send(
       'post',
       'featureflags/0.1/bulk',
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -1418,7 +1405,7 @@ class DeploymentsApi {
     await _client.send(
       'post',
       'deployments/0.1/bulk',
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -1531,14 +1518,13 @@ class BuildsApi {
   ///
   /// Only Connect apps that define the `jiraBuildInfoProvider` module, and on-premise integrations, can access this resource.
   /// This resource requires the 'WRITE' scope for Connect apps.
-  Future<Map<String, Object>> submitBuilds(
-      {required Map<String, Object> body}) async {
-    return (await _client.send(
+  Future<Map<String, dynamic>> submitBuilds(
+      {required Map<String, dynamic> body}) async {
+    return await _client.send(
       'post',
       'builds/0.1/bulk',
-      body: body.map((k, v) => MapEntry(k, v)),
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+      body: body,
+    ) as Map<String, Object?>;
   }
 
   /// Bulk delete all builds data that match the given request.
@@ -1633,14 +1619,13 @@ class RemoteLinksApi {
   ///
   /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module can access this resource. This resource
   /// requires the 'WRITE' scope for Connect apps.
-  Future<Map<String, Object>> submitRemoteLinks(
-      {required Map<String, Object> body}) async {
-    return (await _client.send(
+  Future<Map<String, dynamic>> submitRemoteLinks(
+      {required Map<String, dynamic> body}) async {
+    return await _client.send(
       'post',
       'remotelinks/1.0/bulk',
-      body: body.map((k, v) => MapEntry(k, v)),
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+      body: body,
+    ) as Map<String, Object?>;
   }
 
   /// Bulk delete all Remote Links data that match the given request.
@@ -1659,7 +1644,7 @@ class RemoteLinksApi {
   /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module, and on-premise integrations, can access this resource.
   /// This resource requires the 'WRITE' scope for Connect apps.
   Future<void> deleteRemoteLinksByProperty(
-      {int? updateSequenceNumber, Map<String, Object>? params}) async {
+      {int? updateSequenceNumber, Map<String, dynamic>? params}) async {
     await _client.send(
       'delete',
       'remotelinks/1.0/bulkByProperties',
@@ -1711,18 +1696,15 @@ class RemoteLinksApi {
 }
 
 class ReportsResponseBean {
-  final List<Map<String, Object>> reports;
+  final List<Map<String, dynamic>> reports;
 
-  ReportsResponseBean({List<Map<String, Object>>? reports})
+  ReportsResponseBean({List<Map<String, dynamic>>? reports})
       : reports = reports ?? [];
 
   factory ReportsResponseBean.fromJson(Map<String, Object?> json) {
     return ReportsResponseBean(
       reports: (json['reports'] as List<Object?>?)
-              ?.map((i) =>
-                  (i as Map<String, Object?>?)
-                      ?.map((k, v) => MapEntry(k, v ?? {})) ??
-                  {})
+              ?.map((i) => i as Map<String, Object?>? ?? {})
               .toList() ??
           [],
     );
@@ -1732,12 +1714,11 @@ class ReportsResponseBean {
     var reports = this.reports;
 
     final json = <String, Object?>{};
-    json['reports'] =
-        reports.map((i) => i.map((k, v) => MapEntry(k, v))).toList();
+    json['reports'] = reports;
     return json;
   }
 
-  ReportsResponseBean copyWith({List<Map<String, Object>>? reports}) {
+  ReportsResponseBean copyWith({List<Map<String, dynamic>>? reports}) {
     return ReportsResponseBean(
       reports: reports ?? this.reports,
     );
@@ -1789,7 +1770,7 @@ class IssueRankRequestBean {
     var rankCustomFieldId = this.rankCustomFieldId;
 
     final json = <String, Object?>{};
-    json['issues'] = issues.map((i) => i).toList();
+    json['issues'] = issues;
     if (rankBeforeIssue != null) {
       json['rankBeforeIssue'] = rankBeforeIssue;
     }
@@ -1862,7 +1843,7 @@ class IssueAssignRequestBean {
     var issues = this.issues;
 
     final json = <String, Object?>{};
-    json['issues'] = issues.map((i) => i).toList();
+    json['issues'] = issues;
     return json;
   }
 
@@ -2740,8 +2721,7 @@ class PageBean {
       json['total'] = total;
     }
     json['isLast'] = isLast;
-    json['values'] =
-        values.map((i) => i.map((k, v) => MapEntry(k, v))).toList();
+    json['values'] = values;
     return json;
   }
 
@@ -2857,7 +2837,7 @@ class PageBeanBoardBeanValuesItemAdminsUsersItem {
   final String? accountId;
 
   /// The avatars of the user.
-  final Map<String, Object>? avatarUrls;
+  final Map<String, dynamic>? avatarUrls;
 
   PageBeanBoardBeanValuesItemAdminsUsersItem(
       {this.key,
@@ -2878,8 +2858,7 @@ class PageBeanBoardBeanValuesItemAdminsUsersItem {
       displayName: json['displayName'] as String?,
       active: json['active'] as bool? ?? false,
       accountId: json['accountId'] as String?,
-      avatarUrls: (json['avatarUrls'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      avatarUrls: json['avatarUrls'] as Map<String, Object?>?,
     );
   }
 
@@ -2910,7 +2889,7 @@ class PageBeanBoardBeanValuesItemAdminsUsersItem {
       json['accountId'] = accountId;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls.map((k, v) => MapEntry(k, v));
+      json['avatarUrls'] = avatarUrls;
     }
     return json;
   }
@@ -2922,7 +2901,7 @@ class PageBeanBoardBeanValuesItemAdminsUsersItem {
       String? displayName,
       bool? active,
       String? accountId,
-      Map<String, Object>? avatarUrls}) {
+      Map<String, dynamic>? avatarUrls}) {
     return PageBeanBoardBeanValuesItemAdminsUsersItem(
       key: key ?? this.key,
       self: self ?? this.self,
@@ -3315,7 +3294,7 @@ class BasicUser {
   final String? accountId;
 
   /// The avatars of the user.
-  final Map<String, Object>? avatarUrls;
+  final Map<String, dynamic>? avatarUrls;
 
   BasicUser(
       {this.key,
@@ -3335,8 +3314,7 @@ class BasicUser {
       displayName: json['displayName'] as String?,
       active: json['active'] as bool? ?? false,
       accountId: json['accountId'] as String?,
-      avatarUrls: (json['avatarUrls'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      avatarUrls: json['avatarUrls'] as Map<String, Object?>?,
     );
   }
 
@@ -3367,7 +3345,7 @@ class BasicUser {
       json['accountId'] = accountId;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls.map((k, v) => MapEntry(k, v));
+      json['avatarUrls'] = avatarUrls;
     }
     return json;
   }
@@ -3379,7 +3357,7 @@ class BasicUser {
       String? displayName,
       bool? active,
       String? accountId,
-      Map<String, Object>? avatarUrls}) {
+      Map<String, dynamic>? avatarUrls}) {
     return BasicUser(
       key: key ?? this.key,
       self: self ?? this.self,
@@ -3413,7 +3391,7 @@ class BoardAdminsBeanUsersItem {
   final String? accountId;
 
   /// The avatars of the user.
-  final Map<String, Object>? avatarUrls;
+  final Map<String, dynamic>? avatarUrls;
 
   BoardAdminsBeanUsersItem(
       {this.key,
@@ -3433,8 +3411,7 @@ class BoardAdminsBeanUsersItem {
       displayName: json['displayName'] as String?,
       active: json['active'] as bool? ?? false,
       accountId: json['accountId'] as String?,
-      avatarUrls: (json['avatarUrls'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      avatarUrls: json['avatarUrls'] as Map<String, Object?>?,
     );
   }
 
@@ -3465,7 +3442,7 @@ class BoardAdminsBeanUsersItem {
       json['accountId'] = accountId;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls.map((k, v) => MapEntry(k, v));
+      json['avatarUrls'] = avatarUrls;
     }
     return json;
   }
@@ -3477,7 +3454,7 @@ class BoardAdminsBeanUsersItem {
       String? displayName,
       bool? active,
       String? accountId,
-      Map<String, Object>? avatarUrls}) {
+      Map<String, dynamic>? avatarUrls}) {
     return BoardAdminsBeanUsersItem(
       key: key ?? this.key,
       self: self ?? this.self,
@@ -3591,7 +3568,7 @@ class BoardBeanAdminsUsersItem {
   final String? accountId;
 
   /// The avatars of the user.
-  final Map<String, Object>? avatarUrls;
+  final Map<String, dynamic>? avatarUrls;
 
   BoardBeanAdminsUsersItem(
       {this.key,
@@ -3611,8 +3588,7 @@ class BoardBeanAdminsUsersItem {
       displayName: json['displayName'] as String?,
       active: json['active'] as bool? ?? false,
       accountId: json['accountId'] as String?,
-      avatarUrls: (json['avatarUrls'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      avatarUrls: json['avatarUrls'] as Map<String, Object?>?,
     );
   }
 
@@ -3643,7 +3619,7 @@ class BoardBeanAdminsUsersItem {
       json['accountId'] = accountId;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls.map((k, v) => MapEntry(k, v));
+      json['avatarUrls'] = avatarUrls;
     }
     return json;
   }
@@ -3655,7 +3631,7 @@ class BoardBeanAdminsUsersItem {
       String? displayName,
       bool? active,
       String? accountId,
-      Map<String, Object>? avatarUrls}) {
+      Map<String, dynamic>? avatarUrls}) {
     return BoardBeanAdminsUsersItem(
       key: key ?? this.key,
       self: self ?? this.self,
@@ -4323,10 +4299,10 @@ class SearchResultsBean {
   final List<String> warningMessages;
 
   /// The ID and name of each field in the search results.
-  final Map<String, Object>? names;
+  final Map<String, dynamic>? names;
 
   /// The schema describing the field types in the search results.
-  final Map<String, Object>? schema;
+  final Map<String, dynamic>? schema;
 
   SearchResultsBean(
       {this.expand,
@@ -4355,10 +4331,8 @@ class SearchResultsBean {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      names: (json['names'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      schema: (json['schema'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      names: json['names'] as Map<String, Object?>?,
+      schema: json['schema'] as Map<String, Object?>?,
     );
   }
 
@@ -4386,12 +4360,12 @@ class SearchResultsBean {
       json['total'] = total;
     }
     json['issues'] = issues.map((i) => i.toJson()).toList();
-    json['warningMessages'] = warningMessages.map((i) => i).toList();
+    json['warningMessages'] = warningMessages;
     if (names != null) {
-      json['names'] = names.map((k, v) => MapEntry(k, v));
+      json['names'] = names;
     }
     if (schema != null) {
-      json['schema'] = schema.map((k, v) => MapEntry(k, v));
+      json['schema'] = schema;
     }
     return json;
   }
@@ -4403,8 +4377,8 @@ class SearchResultsBean {
       int? total,
       List<IssueBean>? issues,
       List<String>? warningMessages,
-      Map<String, Object>? names,
-      Map<String, Object>? schema}) {
+      Map<String, dynamic>? names,
+      Map<String, dynamic>? schema}) {
     return SearchResultsBean(
       expand: expand ?? this.expand,
       startAt: startAt ?? this.startAt,
@@ -4578,7 +4552,7 @@ class ChangeHistoryBean {
   final String? id;
 
   /// The user who made the change.
-  final Map<String, Object>? author;
+  final Map<String, dynamic>? author;
 
   /// The date on which the change took place.
   final DateTime? created;
@@ -4587,7 +4561,7 @@ class ChangeHistoryBean {
   final List<ChangeHistoryBeanItemsItem> items;
 
   /// The history metadata associated with the changed.
-  final Map<String, Object>? historyMetadata;
+  final Map<String, dynamic>? historyMetadata;
 
   ChangeHistoryBean(
       {this.id,
@@ -4600,16 +4574,14 @@ class ChangeHistoryBean {
   factory ChangeHistoryBean.fromJson(Map<String, Object?> json) {
     return ChangeHistoryBean(
       id: json['id'] as String?,
-      author: (json['author'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      author: json['author'] as Map<String, Object?>?,
       created: DateTime.tryParse(json['created'] as String? ?? ''),
       items: (json['items'] as List<Object?>?)
               ?.map((i) => ChangeHistoryBeanItemsItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      historyMetadata: (json['historyMetadata'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      historyMetadata: json['historyMetadata'] as Map<String, Object?>?,
     );
   }
 
@@ -4625,24 +4597,24 @@ class ChangeHistoryBean {
       json['id'] = id;
     }
     if (author != null) {
-      json['author'] = author.map((k, v) => MapEntry(k, v));
+      json['author'] = author;
     }
     if (created != null) {
       json['created'] = created.toIso8601String();
     }
     json['items'] = items.map((i) => i.toJson()).toList();
     if (historyMetadata != null) {
-      json['historyMetadata'] = historyMetadata.map((k, v) => MapEntry(k, v));
+      json['historyMetadata'] = historyMetadata;
     }
     return json;
   }
 
   ChangeHistoryBean copyWith(
       {String? id,
-      Map<String, Object>? author,
+      Map<String, dynamic>? author,
       DateTime? created,
       List<ChangeHistoryBeanItemsItem>? items,
-      Map<String, Object>? historyMetadata}) {
+      Map<String, dynamic>? historyMetadata}) {
     return ChangeHistoryBean(
       id: id ?? this.id,
       author: author ?? this.author,
@@ -4853,7 +4825,7 @@ class ChangelogBeanHistoriesItem {
   final String? id;
 
   /// The user who made the change.
-  final Map<String, Object>? author;
+  final Map<String, dynamic>? author;
 
   /// The date on which the change took place.
   final DateTime? created;
@@ -4862,7 +4834,7 @@ class ChangelogBeanHistoriesItem {
   final List<ChangelogBeanHistoriesItemItemsItem> items;
 
   /// The history metadata associated with the changed.
-  final Map<String, Object>? historyMetadata;
+  final Map<String, dynamic>? historyMetadata;
 
   ChangelogBeanHistoriesItem(
       {this.id,
@@ -4875,16 +4847,14 @@ class ChangelogBeanHistoriesItem {
   factory ChangelogBeanHistoriesItem.fromJson(Map<String, Object?> json) {
     return ChangelogBeanHistoriesItem(
       id: json['id'] as String?,
-      author: (json['author'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      author: json['author'] as Map<String, Object?>?,
       created: DateTime.tryParse(json['created'] as String? ?? ''),
       items: (json['items'] as List<Object?>?)
               ?.map((i) => ChangelogBeanHistoriesItemItemsItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      historyMetadata: (json['historyMetadata'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      historyMetadata: json['historyMetadata'] as Map<String, Object?>?,
     );
   }
 
@@ -4900,24 +4870,24 @@ class ChangelogBeanHistoriesItem {
       json['id'] = id;
     }
     if (author != null) {
-      json['author'] = author.map((k, v) => MapEntry(k, v));
+      json['author'] = author;
     }
     if (created != null) {
       json['created'] = created.toIso8601String();
     }
     json['items'] = items.map((i) => i.toJson()).toList();
     if (historyMetadata != null) {
-      json['historyMetadata'] = historyMetadata.map((k, v) => MapEntry(k, v));
+      json['historyMetadata'] = historyMetadata;
     }
     return json;
   }
 
   ChangelogBeanHistoriesItem copyWith(
       {String? id,
-      Map<String, Object>? author,
+      Map<String, dynamic>? author,
       DateTime? created,
       List<ChangelogBeanHistoriesItemItemsItem>? items,
-      Map<String, Object>? historyMetadata}) {
+      Map<String, dynamic>? historyMetadata}) {
     return ChangelogBeanHistoriesItem(
       id: id ?? this.id,
       author: author ?? this.author,
@@ -4997,14 +4967,13 @@ class ChangelogBean {
 
 class EditMetaBean {
   /// A list of editable field details.
-  final Map<String, Object>? fields;
+  final Map<String, dynamic>? fields;
 
   EditMetaBean({this.fields});
 
   factory EditMetaBean.fromJson(Map<String, Object?> json) {
     return EditMetaBean(
-      fields: (json['fields'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      fields: json['fields'] as Map<String, Object?>?,
     );
   }
 
@@ -5013,12 +4982,12 @@ class EditMetaBean {
 
     final json = <String, Object?>{};
     if (fields != null) {
-      json['fields'] = fields.map((k, v) => MapEntry(k, v));
+      json['fields'] = fields;
     }
     return json;
   }
 
-  EditMetaBean copyWith({Map<String, Object>? fields}) {
+  EditMetaBean copyWith({Map<String, dynamic>? fields}) {
     return EditMetaBean(
       fields: fields ?? this.fields,
     );
@@ -5030,7 +4999,7 @@ class FieldMetaBean {
   final bool required;
 
   /// The data type of the field.
-  final Map<String, Object>? schema;
+  final Map<String, dynamic>? schema;
 
   /// The name of the field.
   final String? name;
@@ -5071,8 +5040,7 @@ class FieldMetaBean {
   factory FieldMetaBean.fromJson(Map<String, Object?> json) {
     return FieldMetaBean(
       required: json['required'] as bool? ?? false,
-      schema: (json['schema'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      schema: json['schema'] as Map<String, Object?>?,
       name: json['name'] as String?,
       key: json['key'] as String?,
       autoCompleteUrl: json['autoCompleteUrl'] as String?,
@@ -5107,7 +5075,7 @@ class FieldMetaBean {
     final json = <String, Object?>{};
     json['required'] = required;
     if (schema != null) {
-      json['schema'] = schema.map((k, v) => MapEntry(k, v));
+      json['schema'] = schema;
     }
     if (name != null) {
       json['name'] = name;
@@ -5119,18 +5087,17 @@ class FieldMetaBean {
       json['autoCompleteUrl'] = autoCompleteUrl;
     }
     json['hasDefaultValue'] = hasDefaultValue;
-    json['operations'] = operations.map((i) => i).toList();
-    json['allowedValues'] =
-        allowedValues.map((i) => i.map((k, v) => MapEntry(k, v))).toList();
+    json['operations'] = operations;
+    json['allowedValues'] = allowedValues;
     if (defaultValue != null) {
-      json['defaultValue'] = defaultValue.map((k, v) => MapEntry(k, v));
+      json['defaultValue'] = defaultValue;
     }
     return json;
   }
 
   FieldMetaBean copyWith(
       {bool? required,
-      Map<String, Object>? schema,
+      Map<String, dynamic>? schema,
       String? name,
       String? key,
       String? autoCompleteUrl,
@@ -5173,16 +5140,16 @@ class HistoryMetadata {
   final String? emailDescriptionKey;
 
   /// Details of the user whose action created the history record.
-  final Map<String, Object>? actor;
+  final Map<String, dynamic>? actor;
 
   /// Details of the system that generated the history record.
-  final Map<String, Object>? generator;
+  final Map<String, dynamic>? generator;
 
   /// Details of the cause that triggered the creation the history record.
-  final Map<String, Object>? cause;
+  final Map<String, dynamic>? cause;
 
   /// Additional arbitrary information about the history record.
-  final Map<String, Object>? extraData;
+  final Map<String, dynamic>? extraData;
 
   HistoryMetadata(
       {this.type,
@@ -5204,14 +5171,10 @@ class HistoryMetadata {
       activityDescriptionKey: json['activityDescriptionKey'] as String?,
       emailDescription: json['emailDescription'] as String?,
       emailDescriptionKey: json['emailDescriptionKey'] as String?,
-      actor: (json['actor'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      generator: (json['generator'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      cause: (json['cause'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      extraData: (json['extraData'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      actor: json['actor'] as Map<String, Object?>?,
+      generator: json['generator'] as Map<String, Object?>?,
+      cause: json['cause'] as Map<String, Object?>?,
+      extraData: json['extraData'] as Map<String, Object?>?,
     );
   }
 
@@ -5247,16 +5210,16 @@ class HistoryMetadata {
       json['emailDescriptionKey'] = emailDescriptionKey;
     }
     if (actor != null) {
-      json['actor'] = actor.map((k, v) => MapEntry(k, v));
+      json['actor'] = actor;
     }
     if (generator != null) {
-      json['generator'] = generator.map((k, v) => MapEntry(k, v));
+      json['generator'] = generator;
     }
     if (cause != null) {
-      json['cause'] = cause.map((k, v) => MapEntry(k, v));
+      json['cause'] = cause;
     }
     if (extraData != null) {
-      json['extraData'] = extraData.map((k, v) => MapEntry(k, v));
+      json['extraData'] = extraData;
     }
     return json;
   }
@@ -5268,10 +5231,10 @@ class HistoryMetadata {
       String? activityDescriptionKey,
       String? emailDescription,
       String? emailDescriptionKey,
-      Map<String, Object>? actor,
-      Map<String, Object>? generator,
-      Map<String, Object>? cause,
-      Map<String, Object>? extraData}) {
+      Map<String, dynamic>? actor,
+      Map<String, dynamic>? generator,
+      Map<String, dynamic>? cause,
+      Map<String, dynamic>? extraData}) {
     return HistoryMetadata(
       type: type ?? this.type,
       description: description ?? this.description,
@@ -5383,7 +5346,7 @@ class IssueBeanTransitionsItem {
   final String? name;
 
   /// Details of the issue status after the transition.
-  final Map<String, Object>? to;
+  final Map<String, dynamic>? to;
 
   /// Whether there is a screen associated with the issue transition.
   final bool hasScreen;
@@ -5401,7 +5364,7 @@ class IssueBeanTransitionsItem {
   final bool isConditional;
 
   /// Details of the fields associated with the issue transition screen. Use this information to populate `fields` and `update` in a transition request.
-  final Map<String, Object>? fields;
+  final Map<String, dynamic>? fields;
 
   /// Expand options that include additional transition details in the response.
   final String? expand;
@@ -5430,15 +5393,13 @@ class IssueBeanTransitionsItem {
     return IssueBeanTransitionsItem(
       id: json['id'] as String?,
       name: json['name'] as String?,
-      to: (json['to'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      to: json['to'] as Map<String, Object?>?,
       hasScreen: json['hasScreen'] as bool? ?? false,
       isGlobal: json['isGlobal'] as bool? ?? false,
       isInitial: json['isInitial'] as bool? ?? false,
       isAvailable: json['isAvailable'] as bool? ?? false,
       isConditional: json['isConditional'] as bool? ?? false,
-      fields: (json['fields'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      fields: json['fields'] as Map<String, Object?>?,
       expand: json['expand'] as String?,
       looped: json['looped'] as bool? ?? false,
     );
@@ -5465,7 +5426,7 @@ class IssueBeanTransitionsItem {
       json['name'] = name;
     }
     if (to != null) {
-      json['to'] = to.map((k, v) => MapEntry(k, v));
+      json['to'] = to;
     }
     json['hasScreen'] = hasScreen;
     json['isGlobal'] = isGlobal;
@@ -5473,7 +5434,7 @@ class IssueBeanTransitionsItem {
     json['isAvailable'] = isAvailable;
     json['isConditional'] = isConditional;
     if (fields != null) {
-      json['fields'] = fields.map((k, v) => MapEntry(k, v));
+      json['fields'] = fields;
     }
     if (expand != null) {
       json['expand'] = expand;
@@ -5485,13 +5446,13 @@ class IssueBeanTransitionsItem {
   IssueBeanTransitionsItem copyWith(
       {String? id,
       String? name,
-      Map<String, Object>? to,
+      Map<String, dynamic>? to,
       bool? hasScreen,
       bool? isGlobal,
       bool? isInitial,
       bool? isAvailable,
       bool? isConditional,
-      Map<String, Object>? fields,
+      Map<String, dynamic>? fields,
       String? expand,
       bool? looped}) {
     return IssueBeanTransitionsItem(
@@ -5524,32 +5485,32 @@ class IssueBean {
   final String? key;
 
   /// The rendered value of each field present on the issue.
-  final Map<String, Object>? renderedFields;
+  final Map<String, dynamic>? renderedFields;
 
   /// Details of the issue properties identified in the request.
-  final Map<String, Object>? properties;
+  final Map<String, dynamic>? properties;
 
   /// The ID and name of each field present on the issue.
-  final Map<String, Object>? names;
+  final Map<String, dynamic>? names;
 
   /// The schema describing each field present on the issue.
-  final Map<String, Object>? schema;
+  final Map<String, dynamic>? schema;
 
   /// The transitions that can be performed on the issue.
   final List<IssueBeanTransitionsItem> transitions;
 
   /// The operations that can be performed on the issue.
-  final Map<String, Object>? operations;
+  final Map<String, dynamic>? operations;
 
   /// The metadata for the fields on the issue that can be amended.
-  final Map<String, Object>? editmeta;
+  final Map<String, dynamic>? editmeta;
 
   ///  Details of changelogs associated with the issue.
-  final Map<String, Object>? changelog;
+  final Map<String, dynamic>? changelog;
 
   /// The versions of each field on the issue.
-  final Map<String, Object>? versionedRepresentations;
-  final Map<String, Object>? fields;
+  final Map<String, dynamic>? versionedRepresentations;
+  final Map<String, dynamic>? fields;
 
   IssueBean(
       {this.expand,
@@ -5574,30 +5535,21 @@ class IssueBean {
       id: json['id'] as String?,
       self: json['self'] as String?,
       key: json['key'] as String?,
-      renderedFields: (json['renderedFields'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      properties: (json['properties'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      names: (json['names'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      schema: (json['schema'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      renderedFields: json['renderedFields'] as Map<String, Object?>?,
+      properties: json['properties'] as Map<String, Object?>?,
+      names: json['names'] as Map<String, Object?>?,
+      schema: json['schema'] as Map<String, Object?>?,
       transitions: (json['transitions'] as List<Object?>?)
               ?.map((i) => IssueBeanTransitionsItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      operations: (json['operations'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      editmeta: (json['editmeta'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      changelog: (json['changelog'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      operations: json['operations'] as Map<String, Object?>?,
+      editmeta: json['editmeta'] as Map<String, Object?>?,
+      changelog: json['changelog'] as Map<String, Object?>?,
       versionedRepresentations:
-          (json['versionedRepresentations'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})),
-      fields: (json['fields'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+          json['versionedRepresentations'] as Map<String, Object?>?,
+      fields: json['fields'] as Map<String, Object?>?,
     );
   }
 
@@ -5631,33 +5583,32 @@ class IssueBean {
       json['key'] = key;
     }
     if (renderedFields != null) {
-      json['renderedFields'] = renderedFields.map((k, v) => MapEntry(k, v));
+      json['renderedFields'] = renderedFields;
     }
     if (properties != null) {
-      json['properties'] = properties.map((k, v) => MapEntry(k, v));
+      json['properties'] = properties;
     }
     if (names != null) {
-      json['names'] = names.map((k, v) => MapEntry(k, v));
+      json['names'] = names;
     }
     if (schema != null) {
-      json['schema'] = schema.map((k, v) => MapEntry(k, v));
+      json['schema'] = schema;
     }
     json['transitions'] = transitions.map((i) => i.toJson()).toList();
     if (operations != null) {
-      json['operations'] = operations.map((k, v) => MapEntry(k, v));
+      json['operations'] = operations;
     }
     if (editmeta != null) {
-      json['editmeta'] = editmeta.map((k, v) => MapEntry(k, v));
+      json['editmeta'] = editmeta;
     }
     if (changelog != null) {
-      json['changelog'] = changelog.map((k, v) => MapEntry(k, v));
+      json['changelog'] = changelog;
     }
     if (versionedRepresentations != null) {
-      json['versionedRepresentations'] =
-          versionedRepresentations.map((k, v) => MapEntry(k, v));
+      json['versionedRepresentations'] = versionedRepresentations;
     }
     if (fields != null) {
-      json['fields'] = fields.map((k, v) => MapEntry(k, v));
+      json['fields'] = fields;
     }
     return json;
   }
@@ -5667,16 +5618,16 @@ class IssueBean {
       String? id,
       String? self,
       String? key,
-      Map<String, Object>? renderedFields,
-      Map<String, Object>? properties,
-      Map<String, Object>? names,
-      Map<String, Object>? schema,
+      Map<String, dynamic>? renderedFields,
+      Map<String, dynamic>? properties,
+      Map<String, dynamic>? names,
+      Map<String, dynamic>? schema,
       List<IssueBeanTransitionsItem>? transitions,
-      Map<String, Object>? operations,
-      Map<String, Object>? editmeta,
-      Map<String, Object>? changelog,
-      Map<String, Object>? versionedRepresentations,
-      Map<String, Object>? fields}) {
+      Map<String, dynamic>? operations,
+      Map<String, dynamic>? editmeta,
+      Map<String, dynamic>? changelog,
+      Map<String, dynamic>? versionedRepresentations,
+      Map<String, dynamic>? fields}) {
     return IssueBean(
       expand: expand ?? this.expand,
       id: id ?? this.id,
@@ -5705,7 +5656,7 @@ class IssueTransitionBean {
   final String? name;
 
   /// Details of the issue status after the transition.
-  final Map<String, Object>? to;
+  final Map<String, dynamic>? to;
 
   /// Whether there is a screen associated with the issue transition.
   final bool hasScreen;
@@ -5723,7 +5674,7 @@ class IssueTransitionBean {
   final bool isConditional;
 
   /// Details of the fields associated with the issue transition screen. Use this information to populate `fields` and `update` in a transition request.
-  final Map<String, Object>? fields;
+  final Map<String, dynamic>? fields;
 
   /// Expand options that include additional transition details in the response.
   final String? expand;
@@ -5752,15 +5703,13 @@ class IssueTransitionBean {
     return IssueTransitionBean(
       id: json['id'] as String?,
       name: json['name'] as String?,
-      to: (json['to'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      to: json['to'] as Map<String, Object?>?,
       hasScreen: json['hasScreen'] as bool? ?? false,
       isGlobal: json['isGlobal'] as bool? ?? false,
       isInitial: json['isInitial'] as bool? ?? false,
       isAvailable: json['isAvailable'] as bool? ?? false,
       isConditional: json['isConditional'] as bool? ?? false,
-      fields: (json['fields'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      fields: json['fields'] as Map<String, Object?>?,
       expand: json['expand'] as String?,
       looped: json['looped'] as bool? ?? false,
     );
@@ -5787,7 +5736,7 @@ class IssueTransitionBean {
       json['name'] = name;
     }
     if (to != null) {
-      json['to'] = to.map((k, v) => MapEntry(k, v));
+      json['to'] = to;
     }
     json['hasScreen'] = hasScreen;
     json['isGlobal'] = isGlobal;
@@ -5795,7 +5744,7 @@ class IssueTransitionBean {
     json['isAvailable'] = isAvailable;
     json['isConditional'] = isConditional;
     if (fields != null) {
-      json['fields'] = fields.map((k, v) => MapEntry(k, v));
+      json['fields'] = fields;
     }
     if (expand != null) {
       json['expand'] = expand;
@@ -5807,13 +5756,13 @@ class IssueTransitionBean {
   IssueTransitionBean copyWith(
       {String? id,
       String? name,
-      Map<String, Object>? to,
+      Map<String, dynamic>? to,
       bool? hasScreen,
       bool? isGlobal,
       bool? isInitial,
       bool? isAvailable,
       bool? isConditional,
-      Map<String, Object>? fields,
+      Map<String, dynamic>? fields,
       String? expand,
       bool? looped}) {
     return IssueTransitionBean(
@@ -5849,7 +5798,7 @@ class JsonTypeBean {
   final int? customId;
 
   /// If the field is a custom field, the configuration of the field.
-  final Map<String, Object>? configuration;
+  final Map<String, dynamic>? configuration;
 
   JsonTypeBean(
       {this.type,
@@ -5866,8 +5815,7 @@ class JsonTypeBean {
       system: json['system'] as String?,
       custom: json['custom'] as String?,
       customId: (json['customId'] as num?)?.toInt(),
-      configuration: (json['configuration'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      configuration: json['configuration'] as Map<String, Object?>?,
     );
   }
 
@@ -5896,7 +5844,7 @@ class JsonTypeBean {
       json['customId'] = customId;
     }
     if (configuration != null) {
-      json['configuration'] = configuration.map((k, v) => MapEntry(k, v));
+      json['configuration'] = configuration;
     }
     return json;
   }
@@ -5907,7 +5855,7 @@ class JsonTypeBean {
       String? system,
       String? custom,
       int? customId,
-      Map<String, Object>? configuration}) {
+      Map<String, dynamic>? configuration}) {
     return JsonTypeBean(
       type: type ?? this.type,
       items: items ?? this.items,
@@ -6371,7 +6319,7 @@ class StatusJsonBean {
   final String? id;
 
   /// The category assigned to the status.
-  final Map<String, Object>? statusCategory;
+  final Map<String, dynamic>? statusCategory;
 
   StatusJsonBean(
       {this.self,
@@ -6390,8 +6338,7 @@ class StatusJsonBean {
       iconUrl: json['iconUrl'] as String?,
       name: json['name'] as String?,
       id: json['id'] as String?,
-      statusCategory: (json['statusCategory'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      statusCategory: json['statusCategory'] as Map<String, Object?>?,
     );
   }
 
@@ -6424,7 +6371,7 @@ class StatusJsonBean {
       json['id'] = id;
     }
     if (statusCategory != null) {
-      json['statusCategory'] = statusCategory.map((k, v) => MapEntry(k, v));
+      json['statusCategory'] = statusCategory;
     }
     return json;
   }
@@ -6436,7 +6383,7 @@ class StatusJsonBean {
       String? iconUrl,
       String? name,
       String? id,
-      Map<String, Object>? statusCategory}) {
+      Map<String, dynamic>? statusCategory}) {
     return StatusJsonBean(
       self: self ?? this.self,
       statusColor: statusColor ?? this.statusColor,
@@ -6466,7 +6413,7 @@ class UserJsonBean {
   final String? emailAddress;
 
   /// The avatars of the user.
-  final Map<String, Object>? avatarUrls;
+  final Map<String, dynamic>? avatarUrls;
 
   /// The display name of the user. Depending on the user’s privacy settings, this may return an alternative value.
   final String? displayName;
@@ -6500,8 +6447,7 @@ class UserJsonBean {
       key: json['key'] as String?,
       accountId: json['accountId'] as String?,
       emailAddress: json['emailAddress'] as String?,
-      avatarUrls: (json['avatarUrls'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      avatarUrls: json['avatarUrls'] as Map<String, Object?>?,
       displayName: json['displayName'] as String?,
       active: json['active'] as bool? ?? false,
       timeZone: json['timeZone'] as String?,
@@ -6538,7 +6484,7 @@ class UserJsonBean {
       json['emailAddress'] = emailAddress;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls.map((k, v) => MapEntry(k, v));
+      json['avatarUrls'] = avatarUrls;
     }
     if (displayName != null) {
       json['displayName'] = displayName;
@@ -6559,7 +6505,7 @@ class UserJsonBean {
       String? key,
       String? accountId,
       String? emailAddress,
-      Map<String, Object>? avatarUrls,
+      Map<String, dynamic>? avatarUrls,
       String? displayName,
       bool? active,
       String? timeZone,
@@ -6617,7 +6563,7 @@ class PartialSuccessBeanEntriesItem {
     if (status != null) {
       json['status'] = status;
     }
-    json['errors'] = errors.map((i) => i).toList();
+    json['errors'] = errors;
     return json;
   }
 
@@ -6700,7 +6646,7 @@ class Entry {
     if (status != null) {
       json['status'] = status;
     }
-    json['errors'] = errors.map((i) => i).toList();
+    json['errors'] = errors;
     return json;
   }
 

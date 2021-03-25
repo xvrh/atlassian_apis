@@ -1,6 +1,6 @@
 // Generated code - Do not edit manually
 
-import 'api_utils.dart' show ApiClient, Client;
+import 'api_utils.dart' show ApiClient, Client, File;
 
 // ignore_for_file: deprecated_member_use_from_same_package
 
@@ -505,7 +505,7 @@ class AvatarsApi {
         if (y != null) 'y': '$y',
         'size': '$size',
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     ));
   }
 
@@ -671,7 +671,7 @@ class DashboardsApi {
         'itemId': itemId,
         'propertyKey': propertyKey,
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -991,14 +991,14 @@ class FiltersApi {
   ///  *  filters shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
   ///  *  filters shared with a public project.
   ///  *  filters shared with the public.
-  Future<void> setColumns({required int id, required List<String> body}) async {
+  Future<void> setColumns({required int id, List<String>? body}) async {
     await _client.send(
       'put',
       'rest/api/3/filter/{id}/columns',
       pathParameters: {
         'id': '$id',
       },
-      body: body.map((i) => i).toList(),
+      body: body,
     );
   }
 
@@ -1835,14 +1835,14 @@ class IssueAttachmentsApi {
   ///  *  *Browse Projects* and *Create attachments* [ project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
   ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
   Future<List<Attachment>> addAttachment(
-      {required String issueIdOrKey, required String body}) async {
+      {required String issueIdOrKey, File? file}) async {
     return (await _client.send(
       'post',
       'rest/api/3/issue/{issueIdOrKey}/attachments',
       pathParameters: {
         'issueIdOrKey': issueIdOrKey,
       },
-      body: body,
+      file: file,
     ) as List<Object?>)
         .map((i) => Attachment.fromJson(i as Map<String, Object?>? ?? const {}))
         .toList();
@@ -2076,7 +2076,7 @@ class IssueCommentPropertiesApi {
         'commentId': commentId,
         'propertyKey': propertyKey,
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -3186,12 +3186,11 @@ class IssueNavigatorSettingsApi {
   /// A navigable field is one that can be used as a column on the issue navigator. Find details of navigable issue columns using [Get fields](#api-rest-api-3-field-get).
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> setIssueNavigatorDefaultColumns(
-      {required List<String> body}) async {
+  Future<void> setIssueNavigatorDefaultColumns({List<String>? body}) async {
     await _client.send(
       'put',
       'rest/api/3/settings/columns',
-      body: body.map((i) => i).toList(),
+      body: body,
     );
   }
 }
@@ -3458,7 +3457,7 @@ class IssuePropertiesApi {
         'issueIdOrKey': issueIdOrKey,
         'propertyKey': propertyKey,
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -3999,7 +3998,7 @@ class IssueTypesApi {
         if (y != null) 'y': '$y',
         'size': '$size',
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     ));
   }
 }
@@ -4420,7 +4419,7 @@ class IssueTypePropertiesApi {
         'issueTypeId': issueTypeId,
         'propertyKey': propertyKey,
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -4904,7 +4903,7 @@ class IssueWorklogPropertiesApi {
         'worklogId': worklogId,
         'propertyKey': propertyKey,
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -6044,7 +6043,7 @@ class ProjectAvatarsApi {
         if (y != null) 'y': '$y',
         if (size != null) 'size': '$size',
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     ));
   }
 
@@ -6485,7 +6484,7 @@ class ProjectPropertiesApi {
         'projectIdOrKey': projectIdOrKey,
         'propertyKey': propertyKey,
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -6521,15 +6520,14 @@ class ProjectRolesApi {
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for any project on the site or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<Map<String, Object>> getProjectRoles(String projectIdOrKey) async {
-    return (await _client.send(
+  Future<Map<String, dynamic>> getProjectRoles(String projectIdOrKey) async {
+    return await _client.send(
       'get',
       'rest/api/3/project/{projectIdOrKey}/role',
       pathParameters: {
         'projectIdOrKey': projectIdOrKey,
       },
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+    ) as Map<String, Object?>;
   }
 
   /// Returns a project role's details and actors associated with the project. The list of actors is sorted by display name.
@@ -7721,15 +7719,14 @@ class UsersApi {
   ///
   ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the columns on any user.
   ///  *  Permission to access Jira, to set the calling user's columns.
-  Future<void> setUserColumns(
-      {String? accountId, required List<String> body}) async {
+  Future<void> setUserColumns({String? accountId, List<String>? body}) async {
     await _client.send(
       'put',
       'rest/api/3/user/columns',
       queryParameters: {
         if (accountId != null) 'accountId': accountId,
       },
-      body: body.map((i) => i).toList(),
+      body: body,
     );
   }
 
@@ -7903,7 +7900,7 @@ class UserPropertiesApi {
         if (userKey != null) 'userKey': userKey,
         if (username != null) 'username': username,
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     );
   }
 
@@ -9172,7 +9169,7 @@ class AppPropertiesApi {
         'addonKey': addonKey,
         'propertyKey': propertyKey,
       },
-      body: body.map((k, v) => MapEntry(k, v)),
+      body: body,
     ));
   }
 
@@ -9437,11 +9434,11 @@ class ApplicationRole {
     if (key != null) {
       json['key'] = key;
     }
-    json['groups'] = groups.map((i) => i).toList();
+    json['groups'] = groups;
     if (name != null) {
       json['name'] = name;
     }
-    json['defaultGroups'] = defaultGroups.map((i) => i).toList();
+    json['defaultGroups'] = defaultGroups;
     json['selectedByDefault'] = selectedByDefault;
     json['defined'] = defined;
     if (numberOfSeats != null) {
@@ -9679,7 +9676,7 @@ class Component {
       json['description'] = description;
     }
     if (lead != null) {
-      json['lead'] = lead.map((k, v) => MapEntry(k, v));
+      json['lead'] = lead;
     }
     if (leadUserName != null) {
       json['leadUserName'] = leadUserName;
@@ -9691,13 +9688,13 @@ class Component {
       json['assigneeType'] = assigneeType.value;
     }
     if (assignee != null) {
-      json['assignee'] = assignee.map((k, v) => MapEntry(k, v));
+      json['assignee'] = assignee;
     }
     if (realAssigneeType != null) {
       json['realAssigneeType'] = realAssigneeType.value;
     }
     if (realAssignee != null) {
-      json['realAssignee'] = realAssignee.map((k, v) => MapEntry(k, v));
+      json['realAssignee'] = realAssignee;
     }
     json['isAssigneeTypeValid'] = isAssigneeTypeValid;
     if (project != null) {
@@ -9886,7 +9883,7 @@ class Dashboard {
       json['name'] = name;
     }
     if (owner != null) {
-      json['owner'] = owner.map((k, v) => MapEntry(k, v));
+      json['owner'] = owner;
     }
     if (popularity != null) {
       json['popularity'] = popularity;
@@ -10099,7 +10096,7 @@ class HierarchyLevel {
     if (level != null) {
       json['level'] = level;
     }
-    json['issueTypeIds'] = issueTypeIds.map((i) => i).toList();
+    json['issueTypeIds'] = issueTypeIds;
     if (externalUuid != null) {
       json['externalUuid'] = externalUuid;
     }
@@ -10259,7 +10256,7 @@ class IssueTypeDetails {
       json['hierarchyLevel'] = hierarchyLevel;
     }
     if (scope != null) {
-      json['scope'] = scope.map((k, v) => MapEntry(k, v));
+      json['scope'] = scope;
     }
     return json;
   }
@@ -10449,7 +10446,7 @@ class Project {
   final String? name;
 
   /// The name and self URL for each role defined in the project. For more information, see [Create project role](#api-rest-api-3-role-post).
-  final Map<String, Object>? roles;
+  final Map<String, dynamic>? roles;
 
   /// The URLs of the project's avatars.
   final Map<String, Object>? avatarUrls;
@@ -10479,7 +10476,7 @@ class Project {
   final Map<String, Object>? permissions;
 
   /// Map of project properties
-  final Map<String, Object>? properties;
+  final Map<String, dynamic>? properties;
 
   /// Unique ID for next-gen projects.
   final String? uuid;
@@ -10581,8 +10578,7 @@ class Project {
               .toList() ??
           [],
       name: json['name'] as String?,
-      roles: (json['roles'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      roles: json['roles'] as Map<String, Object?>?,
       avatarUrls: (json['avatarUrls'] as Map<String, Object?>?)
           ?.map((k, v) => MapEntry(k, v ?? {})),
       projectCategory: (json['projectCategory'] as Map<String, Object?>?)
@@ -10600,8 +10596,7 @@ class Project {
           ?.map((k, v) => MapEntry(k, v ?? {})),
       permissions: (json['permissions'] as Map<String, Object?>?)
           ?.map((k, v) => MapEntry(k, v ?? {})),
-      properties: (json['properties'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      properties: json['properties'] as Map<String, Object?>?,
       uuid: json['uuid'] as String?,
       insight: (json['insight'] as Map<String, Object?>?)
           ?.map((k, v) => MapEntry(k, v ?? {})),
@@ -10670,7 +10665,7 @@ class Project {
       json['description'] = description;
     }
     if (lead != null) {
-      json['lead'] = lead.map((k, v) => MapEntry(k, v));
+      json['lead'] = lead;
     }
     json['components'] = components.map((i) => i.toJson()).toList();
     json['issueTypes'] = issueTypes.map((i) => i.toJson()).toList();
@@ -10688,13 +10683,13 @@ class Project {
       json['name'] = name;
     }
     if (roles != null) {
-      json['roles'] = roles.map((k, v) => MapEntry(k, v));
+      json['roles'] = roles;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls.map((k, v) => MapEntry(k, v));
+      json['avatarUrls'] = avatarUrls;
     }
     if (projectCategory != null) {
-      json['projectCategory'] = projectCategory.map((k, v) => MapEntry(k, v));
+      json['projectCategory'] = projectCategory;
     }
     if (projectTypeKey != null) {
       json['projectTypeKey'] = projectTypeKey.value;
@@ -10706,20 +10701,19 @@ class Project {
     json['favourite'] = favourite;
     json['isPrivate'] = isPrivate;
     if (issueTypeHierarchy != null) {
-      json['issueTypeHierarchy'] =
-          issueTypeHierarchy.map((k, v) => MapEntry(k, v));
+      json['issueTypeHierarchy'] = issueTypeHierarchy;
     }
     if (permissions != null) {
-      json['permissions'] = permissions.map((k, v) => MapEntry(k, v));
+      json['permissions'] = permissions;
     }
     if (properties != null) {
-      json['properties'] = properties.map((k, v) => MapEntry(k, v));
+      json['properties'] = properties;
     }
     if (uuid != null) {
       json['uuid'] = uuid;
     }
     if (insight != null) {
-      json['insight'] = insight.map((k, v) => MapEntry(k, v));
+      json['insight'] = insight;
     }
     json['deleted'] = deleted;
     if (retentionTillDate != null) {
@@ -10729,14 +10723,14 @@ class Project {
       json['deletedDate'] = deletedDate.toIso8601String();
     }
     if (deletedBy != null) {
-      json['deletedBy'] = deletedBy.map((k, v) => MapEntry(k, v));
+      json['deletedBy'] = deletedBy;
     }
     json['archived'] = archived;
     if (archivedDate != null) {
       json['archivedDate'] = archivedDate.toIso8601String();
     }
     if (archivedBy != null) {
-      json['archivedBy'] = archivedBy.map((k, v) => MapEntry(k, v));
+      json['archivedBy'] = archivedBy;
     }
     return json;
   }
@@ -10755,7 +10749,7 @@ class Project {
       ProjectAssigneeType? assigneeType,
       List<Version>? versions,
       String? name,
-      Map<String, Object>? roles,
+      Map<String, dynamic>? roles,
       Map<String, Object>? avatarUrls,
       Map<String, Object>? projectCategory,
       ProjectProjectTypeKey? projectTypeKey,
@@ -10765,7 +10759,7 @@ class Project {
       bool? isPrivate,
       Map<String, Object>? issueTypeHierarchy,
       Map<String, Object>? permissions,
-      Map<String, Object>? properties,
+      Map<String, dynamic>? properties,
       String? uuid,
       Map<String, Object>? insight,
       bool? deleted,
@@ -11024,10 +11018,10 @@ class ProjectForScope {
     }
     json['simplified'] = simplified;
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls.map((k, v) => MapEntry(k, v));
+      json['avatarUrls'] = avatarUrls;
     }
     if (projectCategory != null) {
-      json['projectCategory'] = projectCategory.map((k, v) => MapEntry(k, v));
+      json['projectCategory'] = projectCategory;
     }
     return json;
   }
@@ -11250,7 +11244,7 @@ class ProjectRole {
     }
     json['actors'] = actors.map((i) => i.toJson()).toList();
     if (scope != null) {
-      json['scope'] = scope.map((k, v) => MapEntry(k, v));
+      json['scope'] = scope;
     }
     if (translatedName != null) {
       json['translatedName'] = translatedName;
@@ -11429,10 +11423,10 @@ class RoleActor {
       json['avatarUrl'] = avatarUrl;
     }
     if (actorUser != null) {
-      json['actorUser'] = actorUser.map((k, v) => MapEntry(k, v));
+      json['actorUser'] = actorUser;
     }
     if (actorGroup != null) {
-      json['actorGroup'] = actorGroup.map((k, v) => MapEntry(k, v));
+      json['actorGroup'] = actorGroup;
     }
     return json;
   }
@@ -11511,7 +11505,7 @@ class Scope {
       json['type'] = type.value;
     }
     if (project != null) {
-      json['project'] = project.map((k, v) => MapEntry(k, v));
+      json['project'] = project;
     }
     return json;
   }
@@ -11601,13 +11595,13 @@ class SharePermission {
     }
     json['type'] = type.value;
     if (project != null) {
-      json['project'] = project.map((k, v) => MapEntry(k, v));
+      json['project'] = project;
     }
     if (role != null) {
-      json['role'] = role.map((k, v) => MapEntry(k, v));
+      json['role'] = role;
     }
     if (group != null) {
-      json['group'] = group.map((k, v) => MapEntry(k, v));
+      json['group'] = group;
     }
     return json;
   }
@@ -12083,7 +12077,7 @@ class User {
       json['emailAddress'] = emailAddress;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls.map((k, v) => MapEntry(k, v));
+      json['avatarUrls'] = avatarUrls;
     }
     if (displayName != null) {
       json['displayName'] = displayName;
@@ -12096,10 +12090,10 @@ class User {
       json['locale'] = locale;
     }
     if (groups != null) {
-      json['groups'] = groups.map((k, v) => MapEntry(k, v));
+      json['groups'] = groups;
     }
     if (applicationRoles != null) {
-      json['applicationRoles'] = applicationRoles.map((k, v) => MapEntry(k, v));
+      json['applicationRoles'] = applicationRoles;
     }
     if (expand != null) {
       json['expand'] = expand;
@@ -12242,7 +12236,7 @@ class UserBean {
       json['accountId'] = accountId;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls.map((k, v) => MapEntry(k, v));
+      json['avatarUrls'] = avatarUrls;
     }
     return json;
   }
@@ -12494,8 +12488,7 @@ class Version {
     }
     json['operations'] = operations.map((i) => i.toJson()).toList();
     if (issuesStatusForFixVersion != null) {
-      json['issuesStatusForFixVersion'] =
-          issuesStatusForFixVersion.map((k, v) => MapEntry(k, v));
+      json['issuesStatusForFixVersion'] = issuesStatusForFixVersion;
     }
     return json;
   }
@@ -12605,7 +12598,7 @@ class ErrorCollection {
   final List<String> errorMessages;
 
   /// The list of errors by parameter returned by the operation. For example,"projectKey": "Project keys must start with an uppercase letter, followed by one or more uppercase alphanumeric characters."
-  final Map<String, Object>? errors;
+  final Map<String, dynamic>? errors;
   final int? status;
 
   ErrorCollection({List<String>? errorMessages, this.errors, this.status})
@@ -12617,8 +12610,7 @@ class ErrorCollection {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      errors: (json['errors'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      errors: json['errors'] as Map<String, Object?>?,
       status: (json['status'] as num?)?.toInt(),
     );
   }
@@ -12629,9 +12621,9 @@ class ErrorCollection {
     var status = this.status;
 
     final json = <String, Object?>{};
-    json['errorMessages'] = errorMessages.map((i) => i).toList();
+    json['errorMessages'] = errorMessages;
     if (errors != null) {
-      json['errors'] = errors.map((k, v) => MapEntry(k, v));
+      json['errors'] = errors;
     }
     if (status != null) {
       json['status'] = status;
@@ -12640,7 +12632,9 @@ class ErrorCollection {
   }
 
   ErrorCollection copyWith(
-      {List<String>? errorMessages, Map<String, Object>? errors, int? status}) {
+      {List<String>? errorMessages,
+      Map<String, dynamic>? errors,
+      int? status}) {
     return ErrorCollection(
       errorMessages: errorMessages ?? this.errorMessages,
       errors: errors ?? this.errors,
@@ -12899,7 +12893,7 @@ class EntityProperty {
       json['key'] = key;
     }
     if (value != null) {
-      json['value'] = value.map((k, v) => MapEntry(k, v));
+      json['value'] = value;
     }
     return json;
   }
@@ -12942,13 +12936,13 @@ class BulkIssuePropertyUpdateRequest {
 
     final json = <String, Object?>{};
     if (value != null) {
-      json['value'] = value.map((k, v) => MapEntry(k, v));
+      json['value'] = value;
     }
     if (expression != null) {
       json['expression'] = expression;
     }
     if (filter != null) {
-      json['filter'] = filter.map((k, v) => MapEntry(k, v));
+      json['filter'] = filter;
     }
     return json;
   }
@@ -12999,9 +12993,9 @@ class IssueFilterForBulkPropertySet {
     var hasProperty = this.hasProperty;
 
     final json = <String, Object?>{};
-    json['entityIds'] = entityIds.map((i) => i).toList();
+    json['entityIds'] = entityIds;
     if (currentValue != null) {
-      json['currentValue'] = currentValue.map((k, v) => MapEntry(k, v));
+      json['currentValue'] = currentValue;
     }
     json['hasProperty'] = hasProperty;
     return json;
@@ -13046,9 +13040,9 @@ class IssueFilterForBulkPropertyDelete {
     var currentValue = this.currentValue;
 
     final json = <String, Object?>{};
-    json['entityIds'] = entityIds.map((i) => i).toList();
+    json['entityIds'] = entityIds;
     if (currentValue != null) {
-      json['currentValue'] = currentValue.map((k, v) => MapEntry(k, v));
+      json['currentValue'] = currentValue;
     }
     return json;
   }
@@ -13068,7 +13062,7 @@ class IssueEntityProperties {
   final List<int> entitiesIds;
 
   /// A list of entity property keys and values.
-  final Map<String, Object>? properties;
+  final Map<String, dynamic>? properties;
 
   IssueEntityProperties({List<int>? entitiesIds, this.properties})
       : entitiesIds = entitiesIds ?? [];
@@ -13079,8 +13073,7 @@ class IssueEntityProperties {
               ?.map((i) => (i as num?)?.toInt() ?? 0)
               .toList() ??
           [],
-      properties: (json['properties'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      properties: json['properties'] as Map<String, Object?>?,
     );
   }
 
@@ -13089,15 +13082,15 @@ class IssueEntityProperties {
     var properties = this.properties;
 
     final json = <String, Object?>{};
-    json['entitiesIds'] = entitiesIds.map((i) => i).toList();
+    json['entitiesIds'] = entitiesIds;
     if (properties != null) {
-      json['properties'] = properties.map((k, v) => MapEntry(k, v));
+      json['properties'] = properties;
     }
     return json;
   }
 
   IssueEntityProperties copyWith(
-      {List<int>? entitiesIds, Map<String, Object>? properties}) {
+      {List<int>? entitiesIds, Map<String, dynamic>? properties}) {
     return IssueEntityProperties(
       entitiesIds: entitiesIds ?? this.entitiesIds,
       properties: properties ?? this.properties,
@@ -13106,7 +13099,7 @@ class IssueEntityProperties {
 }
 
 class JsonNode {
-  final Map<String, Object>? elements;
+  final Map<String, dynamic>? elements;
   final bool pojo;
   final bool containerNode;
   final bool missingNode;
@@ -13138,9 +13131,9 @@ class JsonNode {
   final bool valueAsBoolean;
   final String? textValue;
   final String? valueAsText;
-  final Map<String, Object>? fieldNames;
+  final Map<String, dynamic>? fieldNames;
   final bool array;
-  final Map<String, Object>? fields;
+  final Map<String, dynamic>? fields;
   final bool null$;
 
   JsonNode(
@@ -13204,8 +13197,7 @@ class JsonNode {
 
   factory JsonNode.fromJson(Map<String, Object?> json) {
     return JsonNode(
-      elements: (json['elements'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      elements: json['elements'] as Map<String, Object?>?,
       pojo: json['pojo'] as bool? ?? false,
       containerNode: json['containerNode'] as bool? ?? false,
       missingNode: json['missingNode'] as bool? ?? false,
@@ -13242,11 +13234,9 @@ class JsonNode {
       valueAsBoolean: json['valueAsBoolean'] as bool? ?? false,
       textValue: json['textValue'] as String?,
       valueAsText: json['valueAsText'] as String?,
-      fieldNames: (json['fieldNames'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      fieldNames: json['fieldNames'] as Map<String, Object?>?,
       array: json['array'] as bool? ?? false,
-      fields: (json['fields'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      fields: json['fields'] as Map<String, Object?>?,
       null$: json['null'] as bool? ?? false,
     );
   }
@@ -13291,7 +13281,7 @@ class JsonNode {
 
     final json = <String, Object?>{};
     if (elements != null) {
-      json['elements'] = elements.map((k, v) => MapEntry(k, v));
+      json['elements'] = elements;
     }
     json['pojo'] = pojo;
     json['containerNode'] = containerNode;
@@ -13331,7 +13321,7 @@ class JsonNode {
       json['decimalValue'] = decimalValue;
     }
     json['booleanValue'] = booleanValue;
-    json['binaryValue'] = binaryValue.map((i) => i).toList();
+    json['binaryValue'] = binaryValue;
     if (valueAsInt != null) {
       json['valueAsInt'] = valueAsInt;
     }
@@ -13349,18 +13339,18 @@ class JsonNode {
       json['valueAsText'] = valueAsText;
     }
     if (fieldNames != null) {
-      json['fieldNames'] = fieldNames.map((k, v) => MapEntry(k, v));
+      json['fieldNames'] = fieldNames;
     }
     json['array'] = array;
     if (fields != null) {
-      json['fields'] = fields.map((k, v) => MapEntry(k, v));
+      json['fields'] = fields;
     }
     json['null'] = null$;
     return json;
   }
 
   JsonNode copyWith(
-      {Map<String, Object>? elements,
+      {Map<String, dynamic>? elements,
       bool? pojo,
       bool? containerNode,
       bool? missingNode,
@@ -13392,9 +13382,9 @@ class JsonNode {
       bool? valueAsBoolean,
       String? textValue,
       String? valueAsText,
-      Map<String, Object>? fieldNames,
+      Map<String, dynamic>? fieldNames,
       bool? array,
-      Map<String, Object>? fields,
+      Map<String, dynamic>? fields,
       bool? null$}) {
     return JsonNode(
       elements: elements ?? this.elements,
@@ -13603,7 +13593,7 @@ class ServerInformation {
     if (version != null) {
       json['version'] = version;
     }
-    json['versionNumbers'] = versionNumbers.map((i) => i).toList();
+    json['versionNumbers'] = versionNumbers;
     if (deploymentType != null) {
       json['deploymentType'] = deploymentType;
     }
@@ -13891,8 +13881,8 @@ class IssuesAndJQLQueries {
     var issueIds = this.issueIds;
 
     final json = <String, Object?>{};
-    json['jqls'] = jqls.map((i) => i).toList();
-    json['issueIds'] = issueIds.map((i) => i).toList();
+    json['jqls'] = jqls;
+    json['issueIds'] = issueIds;
     return json;
   }
 
@@ -13963,8 +13953,8 @@ class IssueMatchesForJQL {
     var errors = this.errors;
 
     final json = <String, Object?>{};
-    json['matchedIssues'] = matchedIssues.map((i) => i).toList();
-    json['errors'] = errors.map((i) => i).toList();
+    json['matchedIssues'] = matchedIssues;
+    json['errors'] = errors;
     return json;
   }
 
@@ -14136,7 +14126,7 @@ class JqlQueriesToParse {
     var queries = this.queries;
 
     final json = <String, Object?>{};
-    json['queries'] = queries.map((i) => i).toList();
+    json['queries'] = queries;
     return json;
   }
 
@@ -14488,7 +14478,7 @@ class FunctionOperand {
 
     final json = <String, Object?>{};
     json['function'] = function;
-    json['arguments'] = arguments.map((i) => i).toList();
+    json['arguments'] = arguments;
     return json;
   }
 
@@ -15027,9 +15017,9 @@ class ParsedJqlQuery {
     final json = <String, Object?>{};
     json['query'] = query;
     if (structure != null) {
-      json['structure'] = structure.map((k, v) => MapEntry(k, v));
+      json['structure'] = structure;
     }
-    json['errors'] = errors.map((i) => i).toList();
+    json['errors'] = errors;
     return json;
   }
 
@@ -15320,19 +15310,19 @@ class EventNotification {
       json['parameter'] = parameter;
     }
     if (group != null) {
-      json['group'] = group.map((k, v) => MapEntry(k, v));
+      json['group'] = group;
     }
     if (field != null) {
-      json['field'] = field.map((k, v) => MapEntry(k, v));
+      json['field'] = field;
     }
     if (emailAddress != null) {
       json['emailAddress'] = emailAddress;
     }
     if (projectRole != null) {
-      json['projectRole'] = projectRole.map((k, v) => MapEntry(k, v));
+      json['projectRole'] = projectRole;
     }
     if (user != null) {
-      json['user'] = user.map((k, v) => MapEntry(k, v));
+      json['user'] = user;
     }
     return json;
   }
@@ -15504,12 +15494,12 @@ class FieldDetails {
     json['orderable'] = orderable;
     json['navigable'] = navigable;
     json['searchable'] = searchable;
-    json['clauseNames'] = clauseNames.map((i) => i).toList();
+    json['clauseNames'] = clauseNames;
     if (scope != null) {
-      json['scope'] = scope.map((k, v) => MapEntry(k, v));
+      json['scope'] = scope;
     }
     if (schema != null) {
-      json['schema'] = schema.map((k, v) => MapEntry(k, v));
+      json['schema'] = schema;
     }
     return json;
   }
@@ -15558,7 +15548,7 @@ class JsonTypeBean {
   final int? customId;
 
   /// If the field is a custom field, the configuration of the field.
-  final Map<String, Object>? configuration;
+  final Map<String, dynamic>? configuration;
 
   JsonTypeBean(
       {required this.type,
@@ -15575,8 +15565,7 @@ class JsonTypeBean {
       system: json['system'] as String?,
       custom: json['custom'] as String?,
       customId: (json['customId'] as num?)?.toInt(),
-      configuration: (json['configuration'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      configuration: json['configuration'] as Map<String, Object?>?,
     );
   }
 
@@ -15603,7 +15592,7 @@ class JsonTypeBean {
       json['customId'] = customId;
     }
     if (configuration != null) {
-      json['configuration'] = configuration.map((k, v) => MapEntry(k, v));
+      json['configuration'] = configuration;
     }
     return json;
   }
@@ -15614,7 +15603,7 @@ class JsonTypeBean {
       String? system,
       String? custom,
       int? customId,
-      Map<String, Object>? configuration}) {
+      Map<String, dynamic>? configuration}) {
     return JsonTypeBean(
       type: type ?? this.type,
       items: items ?? this.items,
@@ -15669,7 +15658,7 @@ class NotificationEvent {
       json['description'] = description;
     }
     if (templateEvent != null) {
-      json['templateEvent'] = templateEvent.map((k, v) => MapEntry(k, v));
+      json['templateEvent'] = templateEvent;
     }
     return json;
   }
@@ -15765,7 +15754,7 @@ class NotificationScheme {
     json['notificationSchemeEvents'] =
         notificationSchemeEvents.map((i) => i.toJson()).toList();
     if (scope != null) {
-      json['scope'] = scope.map((k, v) => MapEntry(k, v));
+      json['scope'] = scope;
     }
     return json;
   }
@@ -15927,7 +15916,7 @@ class UserDetails {
       json['emailAddress'] = emailAddress;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls.map((k, v) => MapEntry(k, v));
+      json['avatarUrls'] = avatarUrls;
     }
     if (displayName != null) {
       json['displayName'] = displayName;
@@ -16170,7 +16159,7 @@ class TaskProgressBeanObject {
       json['message'] = message;
     }
     if (result != null) {
-      json['result'] = result.map((k, v) => MapEntry(k, v));
+      json['result'] = result;
     }
     json['submittedBy'] = submittedBy;
     json['progress'] = progress;
@@ -16309,7 +16298,7 @@ class JexpIssues {
 
     final json = <String, Object?>{};
     if (jql != null) {
-      json['jql'] = jql.map((k, v) => MapEntry(k, v));
+      json['jql'] = jql;
     }
     return json;
   }
@@ -16466,13 +16455,13 @@ class JiraExpressionEvalContextBean {
 
     final json = <String, Object?>{};
     if (issue != null) {
-      json['issue'] = issue.map((k, v) => MapEntry(k, v));
+      json['issue'] = issue;
     }
     if (issues != null) {
-      json['issues'] = issues.map((k, v) => MapEntry(k, v));
+      json['issues'] = issues;
     }
     if (project != null) {
-      json['project'] = project.map((k, v) => MapEntry(k, v));
+      json['project'] = project;
     }
     if (sprint != null) {
       json['sprint'] = sprint;
@@ -16533,7 +16522,7 @@ class JiraExpressionEvalRequestBean {
     final json = <String, Object?>{};
     json['expression'] = expression;
     if (context != null) {
-      json['context'] = context.map((k, v) => MapEntry(k, v));
+      json['context'] = context;
     }
     return json;
   }
@@ -16597,7 +16586,7 @@ class IssuesJqlMetaDataBean {
     json['maxResults'] = maxResults;
     json['count'] = count;
     json['totalCount'] = totalCount;
-    json['validationWarnings'] = validationWarnings.map((i) => i).toList();
+    json['validationWarnings'] = validationWarnings;
     return json;
   }
 
@@ -16673,10 +16662,10 @@ class JiraExpressionEvaluationMetaDataBean {
 
     final json = <String, Object?>{};
     if (complexity != null) {
-      json['complexity'] = complexity.map((k, v) => MapEntry(k, v));
+      json['complexity'] = complexity;
     }
     if (issues != null) {
-      json['issues'] = issues.map((k, v) => MapEntry(k, v));
+      json['issues'] = issues;
     }
     return json;
   }
@@ -16715,9 +16704,9 @@ class JiraExpressionResult {
     var meta = this.meta;
 
     final json = <String, Object?>{};
-    json['value'] = value.map((k, v) => MapEntry(k, v));
+    json['value'] = value;
     if (meta != null) {
-      json['meta'] = meta.map((k, v) => MapEntry(k, v));
+      json['meta'] = meta;
     }
     return json;
   }
@@ -16775,11 +16764,10 @@ class JiraExpressionsComplexityBean {
     var primitiveValues = this.primitiveValues;
 
     final json = <String, Object?>{};
-    json['steps'] = steps.map((k, v) => MapEntry(k, v));
-    json['expensiveOperations'] =
-        expensiveOperations.map((k, v) => MapEntry(k, v));
-    json['beans'] = beans.map((k, v) => MapEntry(k, v));
-    json['primitiveValues'] = primitiveValues.map((k, v) => MapEntry(k, v));
+    json['steps'] = steps;
+    json['expensiveOperations'] = expensiveOperations;
+    json['beans'] = beans;
+    json['primitiveValues'] = primitiveValues;
     return json;
   }
 
@@ -16839,7 +16827,7 @@ class JiraExpressionForAnalysis {
   final List<String> expressions;
 
   /// Context variables and their types. The type checker assumes that [common context variables](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/#context-variables), such as `issue` or `project`, are available in context and sets their type. Use this property to override the default types or provide details of new variables.
-  final Map<String, Object>? contextVariables;
+  final Map<String, dynamic>? contextVariables;
 
   JiraExpressionForAnalysis({required this.expressions, this.contextVariables});
 
@@ -16849,8 +16837,7 @@ class JiraExpressionForAnalysis {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      contextVariables: (json['contextVariables'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      contextVariables: json['contextVariables'] as Map<String, Object?>?,
     );
   }
 
@@ -16859,15 +16846,15 @@ class JiraExpressionForAnalysis {
     var contextVariables = this.contextVariables;
 
     final json = <String, Object?>{};
-    json['expressions'] = expressions.map((i) => i).toList();
+    json['expressions'] = expressions;
     if (contextVariables != null) {
-      json['contextVariables'] = contextVariables.map((k, v) => MapEntry(k, v));
+      json['contextVariables'] = contextVariables;
     }
     return json;
   }
 
   JiraExpressionForAnalysis copyWith(
-      {List<String>? expressions, Map<String, Object>? contextVariables}) {
+      {List<String>? expressions, Map<String, dynamic>? contextVariables}) {
     return JiraExpressionForAnalysis(
       expressions: expressions ?? this.expressions,
       contextVariables: contextVariables ?? this.contextVariables,
@@ -16960,15 +16947,14 @@ class JiraExpressionComplexity {
   final String expensiveOperations;
 
   /// Variables used in the formula, mapped to the parts of the expression they refer to.
-  final Map<String, Object>? variables;
+  final Map<String, dynamic>? variables;
 
   JiraExpressionComplexity({required this.expensiveOperations, this.variables});
 
   factory JiraExpressionComplexity.fromJson(Map<String, Object?> json) {
     return JiraExpressionComplexity(
       expensiveOperations: json['expensiveOperations'] as String? ?? '',
-      variables: (json['variables'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      variables: json['variables'] as Map<String, Object?>?,
     );
   }
 
@@ -16979,13 +16965,13 @@ class JiraExpressionComplexity {
     final json = <String, Object?>{};
     json['expensiveOperations'] = expensiveOperations;
     if (variables != null) {
-      json['variables'] = variables.map((k, v) => MapEntry(k, v));
+      json['variables'] = variables;
     }
     return json;
   }
 
   JiraExpressionComplexity copyWith(
-      {String? expensiveOperations, Map<String, Object>? variables}) {
+      {String? expensiveOperations, Map<String, dynamic>? variables}) {
     return JiraExpressionComplexity(
       expensiveOperations: expensiveOperations ?? this.expensiveOperations,
       variables: variables ?? this.variables,
@@ -17269,7 +17255,7 @@ class ScreenScheme {
       json['description'] = description;
     }
     if (screens != null) {
-      json['screens'] = screens.map((k, v) => MapEntry(k, v));
+      json['screens'] = screens;
     }
     return json;
   }
@@ -17379,7 +17365,7 @@ class ScreenSchemeDetails {
     if (description != null) {
       json['description'] = description;
     }
-    json['screens'] = screens.map((k, v) => MapEntry(k, v));
+    json['screens'] = screens;
     return json;
   }
 
@@ -17456,7 +17442,7 @@ class UpdateScreenSchemeDetails {
       json['description'] = description;
     }
     if (screens != null) {
-      json['screens'] = screens.map((k, v) => MapEntry(k, v));
+      json['screens'] = screens;
     }
     return json;
   }
@@ -18105,7 +18091,7 @@ class UserWriteBean {
     if (notification != null) {
       json['notification'] = notification;
     }
-    json['applicationKeys'] = applicationKeys.map((i) => i).toList();
+    json['applicationKeys'] = applicationKeys;
     return json;
   }
 
@@ -18191,7 +18177,7 @@ class Avatar {
   final String? fileName;
 
   /// The list of avatar icon URLs.
-  final Map<String, Object>? urls;
+  final Map<String, dynamic>? urls;
 
   Avatar(
       {required this.id,
@@ -18213,8 +18199,7 @@ class Avatar {
       isSelected: json['isSelected'] as bool? ?? false,
       isDeletable: json['isDeletable'] as bool? ?? false,
       fileName: json['fileName'] as String?,
-      urls: (json['urls'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      urls: json['urls'] as Map<String, Object?>?,
     );
   }
 
@@ -18239,7 +18224,7 @@ class Avatar {
       json['fileName'] = fileName;
     }
     if (urls != null) {
-      json['urls'] = urls.map((k, v) => MapEntry(k, v));
+      json['urls'] = urls;
     }
     return json;
   }
@@ -18251,7 +18236,7 @@ class Avatar {
       bool? isSelected,
       bool? isDeletable,
       String? fileName,
-      Map<String, Object>? urls}) {
+      Map<String, dynamic>? urls}) {
     return Avatar(
       id: id ?? this.id,
       owner: owner ?? this.owner,
@@ -18441,7 +18426,7 @@ class StatusDetails {
       json['id'] = id;
     }
     if (statusCategory != null) {
-      json['statusCategory'] = statusCategory.map((k, v) => MapEntry(k, v));
+      json['statusCategory'] = statusCategory;
     }
     return json;
   }
@@ -18644,7 +18629,7 @@ class Screen {
       json['description'] = description;
     }
     if (scope != null) {
-      json['scope'] = scope.map((k, v) => MapEntry(k, v));
+      json['scope'] = scope;
     }
     return json;
   }
@@ -19523,14 +19508,14 @@ class ComponentWithIssueCount {
       json['assigneeType'] = assigneeType.value;
     }
     if (lead != null) {
-      json['lead'] = lead.map((k, v) => MapEntry(k, v));
+      json['lead'] = lead;
     }
     if (realAssignee != null) {
-      json['realAssignee'] = realAssignee.map((k, v) => MapEntry(k, v));
+      json['realAssignee'] = realAssignee;
     }
     json['isAssigneeTypeValid'] = isAssigneeTypeValid;
     if (assignee != null) {
-      json['assignee'] = assignee.map((k, v) => MapEntry(k, v));
+      json['assignee'] = assignee;
     }
     if (realAssigneeType != null) {
       json['realAssigneeType'] = realAssigneeType.value;
@@ -20294,16 +20279,16 @@ class Comment {
       json['id'] = id;
     }
     if (author != null) {
-      json['author'] = author.map((k, v) => MapEntry(k, v));
+      json['author'] = author;
     }
     if (body != null) {
-      json['body'] = body.map((k, v) => MapEntry(k, v));
+      json['body'] = body;
     }
     if (renderedBody != null) {
       json['renderedBody'] = renderedBody;
     }
     if (updateAuthor != null) {
-      json['updateAuthor'] = updateAuthor.map((k, v) => MapEntry(k, v));
+      json['updateAuthor'] = updateAuthor;
     }
     if (created != null) {
       json['created'] = created.toIso8601String();
@@ -20312,7 +20297,7 @@ class Comment {
       json['updated'] = updated.toIso8601String();
     }
     if (visibility != null) {
-      json['visibility'] = visibility.map((k, v) => MapEntry(k, v));
+      json['visibility'] = visibility;
     }
     json['jsdPublic'] = jsdPublic;
     json['properties'] = properties.map((i) => i.toJson()).toList();
@@ -20413,22 +20398,22 @@ class Fields {
       json['summary'] = summary;
     }
     if (status != null) {
-      json['status'] = status.map((k, v) => MapEntry(k, v));
+      json['status'] = status;
     }
     if (priority != null) {
-      json['priority'] = priority.map((k, v) => MapEntry(k, v));
+      json['priority'] = priority;
     }
     if (assignee != null) {
-      json['assignee'] = assignee.map((k, v) => MapEntry(k, v));
+      json['assignee'] = assignee;
     }
     if (timetracking != null) {
-      json['timetracking'] = timetracking.map((k, v) => MapEntry(k, v));
+      json['timetracking'] = timetracking;
     }
     if (issuetype != null) {
       json['issuetype'] = issuetype.toJson();
     }
     if (issueType != null) {
-      json['issueType'] = issueType.map((k, v) => MapEntry(k, v));
+      json['issueType'] = issueType;
     }
     return json;
   }
@@ -20638,7 +20623,7 @@ class LinkedIssue {
       json['self'] = self;
     }
     if (fields != null) {
-      json['fields'] = fields.map((k, v) => MapEntry(k, v));
+      json['fields'] = fields;
     }
     return json;
   }
@@ -20902,9 +20887,9 @@ class IssueLink {
     if (self != null) {
       json['self'] = self;
     }
-    json['type'] = type.map((k, v) => MapEntry(k, v));
-    json['inwardIssue'] = inwardIssue.map((k, v) => MapEntry(k, v));
-    json['outwardIssue'] = outwardIssue.map((k, v) => MapEntry(k, v));
+    json['type'] = type;
+    json['inwardIssue'] = inwardIssue;
+    json['outwardIssue'] = outwardIssue;
     return json;
   }
 
@@ -21089,13 +21074,13 @@ class Worklog {
       json['self'] = self;
     }
     if (author != null) {
-      json['author'] = author.map((k, v) => MapEntry(k, v));
+      json['author'] = author;
     }
     if (updateAuthor != null) {
-      json['updateAuthor'] = updateAuthor.map((k, v) => MapEntry(k, v));
+      json['updateAuthor'] = updateAuthor;
     }
     if (comment != null) {
-      json['comment'] = comment.map((k, v) => MapEntry(k, v));
+      json['comment'] = comment;
     }
     if (created != null) {
       json['created'] = created.toIso8601String();
@@ -21104,7 +21089,7 @@ class Worklog {
       json['updated'] = updated.toIso8601String();
     }
     if (visibility != null) {
-      json['visibility'] = visibility.map((k, v) => MapEntry(k, v));
+      json['visibility'] = visibility;
     }
     if (started != null) {
       json['started'] = started.toIso8601String();
@@ -21345,7 +21330,7 @@ class IssueSecurityLevelMember {
     final json = <String, Object?>{};
     json['id'] = id;
     json['issueSecurityLevelId'] = issueSecurityLevelId;
-    json['holder'] = holder.map((k, v) => MapEntry(k, v));
+    json['holder'] = holder;
     return json;
   }
 
@@ -21586,18 +21571,17 @@ class FieldMetadata {
 
     final json = <String, Object?>{};
     json['required'] = required;
-    json['schema'] = schema.map((k, v) => MapEntry(k, v));
+    json['schema'] = schema;
     json['name'] = name;
     json['key'] = key;
     if (autoCompleteUrl != null) {
       json['autoCompleteUrl'] = autoCompleteUrl;
     }
     json['hasDefaultValue'] = hasDefaultValue;
-    json['operations'] = operations.map((i) => i).toList();
-    json['allowedValues'] =
-        allowedValues.map((i) => i.map((k, v) => MapEntry(k, v))).toList();
+    json['operations'] = operations;
+    json['allowedValues'] = allowedValues;
     if (defaultValue != null) {
-      json['defaultValue'] = defaultValue.map((k, v) => MapEntry(k, v));
+      json['defaultValue'] = defaultValue;
     }
     return json;
   }
@@ -21653,7 +21637,7 @@ class IssueTransition {
   final bool isConditional;
 
   /// Details of the fields associated with the issue transition screen. Use this information to populate `fields` and `update` in a transition request.
-  final Map<String, Object>? fields;
+  final Map<String, dynamic>? fields;
 
   /// Expand options that include additional transition details in the response.
   final String? expand;
@@ -21689,8 +21673,7 @@ class IssueTransition {
       isInitial: json['isInitial'] as bool? ?? false,
       isAvailable: json['isAvailable'] as bool? ?? false,
       isConditional: json['isConditional'] as bool? ?? false,
-      fields: (json['fields'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      fields: json['fields'] as Map<String, Object?>?,
       expand: json['expand'] as String?,
       looped: json['looped'] as bool? ?? false,
     );
@@ -21717,7 +21700,7 @@ class IssueTransition {
       json['name'] = name;
     }
     if (to != null) {
-      json['to'] = to.map((k, v) => MapEntry(k, v));
+      json['to'] = to;
     }
     json['hasScreen'] = hasScreen;
     json['isGlobal'] = isGlobal;
@@ -21725,7 +21708,7 @@ class IssueTransition {
     json['isAvailable'] = isAvailable;
     json['isConditional'] = isConditional;
     if (fields != null) {
-      json['fields'] = fields.map((k, v) => MapEntry(k, v));
+      json['fields'] = fields;
     }
     if (expand != null) {
       json['expand'] = expand;
@@ -21743,7 +21726,7 @@ class IssueTransition {
       bool? isInitial,
       bool? isAvailable,
       bool? isConditional,
-      Map<String, Object>? fields,
+      Map<String, dynamic>? fields,
       String? expand,
       bool? looped}) {
     return IssueTransition(
@@ -22037,16 +22020,16 @@ class FieldUpdateOperation {
 
     final json = <String, Object?>{};
     if (add != null) {
-      json['add'] = add.map((k, v) => MapEntry(k, v));
+      json['add'] = add;
     }
     if (set != null) {
-      json['set'] = set.map((k, v) => MapEntry(k, v));
+      json['set'] = set;
     }
     if (remove != null) {
-      json['remove'] = remove.map((k, v) => MapEntry(k, v));
+      json['remove'] = remove;
     }
     if (edit != null) {
-      json['edit'] = edit.map((k, v) => MapEntry(k, v));
+      json['edit'] = edit;
     }
     return json;
   }
@@ -22098,7 +22081,7 @@ class HistoryMetadata {
   final Map<String, Object>? cause;
 
   /// Additional arbitrary information about the history record.
-  final Map<String, Object>? extraData;
+  final Map<String, dynamic>? extraData;
 
   HistoryMetadata(
       {this.type,
@@ -22128,8 +22111,7 @@ class HistoryMetadata {
           ?.map((k, v) => MapEntry(k, v ?? {})),
       cause: (json['cause'] as Map<String, Object?>?)
           ?.map((k, v) => MapEntry(k, v ?? {})),
-      extraData: (json['extraData'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      extraData: json['extraData'] as Map<String, Object?>?,
     );
   }
 
@@ -22169,16 +22151,16 @@ class HistoryMetadata {
       json['emailDescriptionKey'] = emailDescriptionKey;
     }
     if (actor != null) {
-      json['actor'] = actor.map((k, v) => MapEntry(k, v));
+      json['actor'] = actor;
     }
     if (generator != null) {
-      json['generator'] = generator.map((k, v) => MapEntry(k, v));
+      json['generator'] = generator;
     }
     if (cause != null) {
-      json['cause'] = cause.map((k, v) => MapEntry(k, v));
+      json['cause'] = cause;
     }
     if (extraData != null) {
-      json['extraData'] = extraData.map((k, v) => MapEntry(k, v));
+      json['extraData'] = extraData;
     }
     return json;
   }
@@ -22194,7 +22176,7 @@ class HistoryMetadata {
       Map<String, Object>? actor,
       Map<String, Object>? generator,
       Map<String, Object>? cause,
-      Map<String, Object>? extraData}) {
+      Map<String, dynamic>? extraData}) {
     return HistoryMetadata(
       type: type ?? this.type,
       description: description ?? this.description,
@@ -22305,10 +22287,10 @@ class IssueUpdateDetails {
   final Map<String, Object>? transition;
 
   /// List of issue screen fields to update, specifying the sub-field to update and its value for each field. This field provides a straightforward option when setting a sub-field. When multiple sub-fields or other operations are required, use `update`. Fields included in here cannot be included in `update`.
-  final Map<String, Object>? fields;
+  final Map<String, dynamic>? fields;
 
   /// List of operations to perform on issue screen fields. Note that fields included in here cannot be included in `fields`.
-  final Map<String, Object>? update;
+  final Map<String, dynamic>? update;
 
   /// Additional issue history details.
   final Map<String, Object>? historyMetadata;
@@ -22328,10 +22310,8 @@ class IssueUpdateDetails {
     return IssueUpdateDetails(
       transition: (json['transition'] as Map<String, Object?>?)
           ?.map((k, v) => MapEntry(k, v ?? {})),
-      fields: (json['fields'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      update: (json['update'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      fields: json['fields'] as Map<String, Object?>?,
+      update: json['update'] as Map<String, Object?>?,
       historyMetadata: (json['historyMetadata'] as Map<String, Object?>?)
           ?.map((k, v) => MapEntry(k, v ?? {})),
       properties: (json['properties'] as List<Object?>?)
@@ -22351,16 +22331,16 @@ class IssueUpdateDetails {
 
     final json = <String, Object?>{};
     if (transition != null) {
-      json['transition'] = transition.map((k, v) => MapEntry(k, v));
+      json['transition'] = transition;
     }
     if (fields != null) {
-      json['fields'] = fields.map((k, v) => MapEntry(k, v));
+      json['fields'] = fields;
     }
     if (update != null) {
-      json['update'] = update.map((k, v) => MapEntry(k, v));
+      json['update'] = update;
     }
     if (historyMetadata != null) {
-      json['historyMetadata'] = historyMetadata.map((k, v) => MapEntry(k, v));
+      json['historyMetadata'] = historyMetadata;
     }
     json['properties'] = properties.map((i) => i.toJson()).toList();
     return json;
@@ -22368,8 +22348,8 @@ class IssueUpdateDetails {
 
   IssueUpdateDetails copyWith(
       {Map<String, Object>? transition,
-      Map<String, Object>? fields,
-      Map<String, Object>? update,
+      Map<String, dynamic>? fields,
+      Map<String, dynamic>? update,
       Map<String, Object>? historyMetadata,
       List<EntityProperty>? properties}) {
     return IssueUpdateDetails(
@@ -22593,14 +22573,14 @@ class Changelog {
       json['id'] = id;
     }
     if (author != null) {
-      json['author'] = author.map((k, v) => MapEntry(k, v));
+      json['author'] = author;
     }
     if (created != null) {
       json['created'] = created.toIso8601String();
     }
     json['items'] = items.map((i) => i.toJson()).toList();
     if (historyMetadata != null) {
-      json['historyMetadata'] = historyMetadata.map((k, v) => MapEntry(k, v));
+      json['historyMetadata'] = historyMetadata;
     }
     return json;
   }
@@ -22657,9 +22637,9 @@ class IncludedFields {
     var actuallyIncluded = this.actuallyIncluded;
 
     final json = <String, Object?>{};
-    json['excluded'] = excluded.map((i) => i).toList();
-    json['included'] = included.map((i) => i).toList();
-    json['actuallyIncluded'] = actuallyIncluded.map((i) => i).toList();
+    json['excluded'] = excluded;
+    json['included'] = included;
+    json['actuallyIncluded'] = actuallyIncluded;
     return json;
   }
 
@@ -22689,16 +22669,16 @@ class IssueBean {
   final String? key;
 
   /// The rendered value of each field present on the issue.
-  final Map<String, Object>? renderedFields;
+  final Map<String, dynamic>? renderedFields;
 
   /// Details of the issue properties identified in the request.
-  final Map<String, Object>? properties;
+  final Map<String, dynamic>? properties;
 
   /// The ID and name of each field present on the issue.
-  final Map<String, Object>? names;
+  final Map<String, dynamic>? names;
 
   /// The schema describing each field present on the issue.
-  final Map<String, Object>? schema;
+  final Map<String, dynamic>? schema;
 
   /// The transitions that can be performed on the issue.
   final List<IssueTransition> transitions;
@@ -22713,9 +22693,9 @@ class IssueBean {
   final Map<String, Object>? changelog;
 
   /// The versions of each field on the issue.
-  final Map<String, Object>? versionedRepresentations;
+  final Map<String, dynamic>? versionedRepresentations;
   final IncludedFields? fieldsToInclude;
-  final Map<String, Object>? fields;
+  final Map<String, dynamic>? fields;
 
   IssueBean(
       {this.expand,
@@ -22741,14 +22721,10 @@ class IssueBean {
       id: json['id'] as String?,
       self: json['self'] as String?,
       key: json['key'] as String?,
-      renderedFields: (json['renderedFields'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      properties: (json['properties'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      names: (json['names'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      schema: (json['schema'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      renderedFields: json['renderedFields'] as Map<String, Object?>?,
+      properties: json['properties'] as Map<String, Object?>?,
+      names: json['names'] as Map<String, Object?>?,
+      schema: json['schema'] as Map<String, Object?>?,
       transitions: (json['transitions'] as List<Object?>?)
               ?.map((i) => IssueTransition.fromJson(
                   i as Map<String, Object?>? ?? const {}))
@@ -22761,14 +22737,12 @@ class IssueBean {
       changelog: (json['changelog'] as Map<String, Object?>?)
           ?.map((k, v) => MapEntry(k, v ?? {})),
       versionedRepresentations:
-          (json['versionedRepresentations'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})),
+          json['versionedRepresentations'] as Map<String, Object?>?,
       fieldsToInclude: json['fieldsToInclude'] != null
           ? IncludedFields.fromJson(
               json['fieldsToInclude']! as Map<String, Object?>)
           : null,
-      fields: (json['fields'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      fields: json['fields'] as Map<String, Object?>?,
     );
   }
 
@@ -22803,36 +22777,35 @@ class IssueBean {
       json['key'] = key;
     }
     if (renderedFields != null) {
-      json['renderedFields'] = renderedFields.map((k, v) => MapEntry(k, v));
+      json['renderedFields'] = renderedFields;
     }
     if (properties != null) {
-      json['properties'] = properties.map((k, v) => MapEntry(k, v));
+      json['properties'] = properties;
     }
     if (names != null) {
-      json['names'] = names.map((k, v) => MapEntry(k, v));
+      json['names'] = names;
     }
     if (schema != null) {
-      json['schema'] = schema.map((k, v) => MapEntry(k, v));
+      json['schema'] = schema;
     }
     json['transitions'] = transitions.map((i) => i.toJson()).toList();
     if (operations != null) {
-      json['operations'] = operations.map((k, v) => MapEntry(k, v));
+      json['operations'] = operations;
     }
     if (editmeta != null) {
-      json['editmeta'] = editmeta.map((k, v) => MapEntry(k, v));
+      json['editmeta'] = editmeta;
     }
     if (changelog != null) {
-      json['changelog'] = changelog.map((k, v) => MapEntry(k, v));
+      json['changelog'] = changelog;
     }
     if (versionedRepresentations != null) {
-      json['versionedRepresentations'] =
-          versionedRepresentations.map((k, v) => MapEntry(k, v));
+      json['versionedRepresentations'] = versionedRepresentations;
     }
     if (fieldsToInclude != null) {
       json['fieldsToInclude'] = fieldsToInclude.toJson();
     }
     if (fields != null) {
-      json['fields'] = fields.map((k, v) => MapEntry(k, v));
+      json['fields'] = fields;
     }
     return json;
   }
@@ -22842,17 +22815,17 @@ class IssueBean {
       String? id,
       String? self,
       String? key,
-      Map<String, Object>? renderedFields,
-      Map<String, Object>? properties,
-      Map<String, Object>? names,
-      Map<String, Object>? schema,
+      Map<String, dynamic>? renderedFields,
+      Map<String, dynamic>? properties,
+      Map<String, dynamic>? names,
+      Map<String, dynamic>? schema,
       List<IssueTransition>? transitions,
       Map<String, Object>? operations,
       Map<String, Object>? editmeta,
       Map<String, Object>? changelog,
-      Map<String, Object>? versionedRepresentations,
+      Map<String, dynamic>? versionedRepresentations,
       IncludedFields? fieldsToInclude,
-      Map<String, Object>? fields}) {
+      Map<String, dynamic>? fields}) {
     return IssueBean(
       expand: expand ?? this.expand,
       id: id ?? this.id,
@@ -22876,14 +22849,13 @@ class IssueBean {
 
 /// A list of editable field details.
 class IssueUpdateMetadata {
-  final Map<String, Object>? fields;
+  final Map<String, dynamic>? fields;
 
   IssueUpdateMetadata({this.fields});
 
   factory IssueUpdateMetadata.fromJson(Map<String, Object?> json) {
     return IssueUpdateMetadata(
-      fields: (json['fields'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      fields: json['fields'] as Map<String, Object?>?,
     );
   }
 
@@ -22892,12 +22864,12 @@ class IssueUpdateMetadata {
 
     final json = <String, Object?>{};
     if (fields != null) {
-      json['fields'] = fields.map((k, v) => MapEntry(k, v));
+      json['fields'] = fields;
     }
     return json;
   }
 
-  IssueUpdateMetadata copyWith({Map<String, Object>? fields}) {
+  IssueUpdateMetadata copyWith({Map<String, dynamic>? fields}) {
     return IssueUpdateMetadata(
       fields: fields ?? this.fields,
     );
@@ -23192,7 +23164,7 @@ class CreatedIssue {
       json['self'] = self;
     }
     if (transition != null) {
-      json['transition'] = transition.map((k, v) => MapEntry(k, v));
+      json['transition'] = transition;
     }
     return json;
   }
@@ -23453,7 +23425,7 @@ class IssueTypeIssueCreateMetadata {
   final String? expand;
 
   /// List of the fields available when creating an issue for the issue type.
-  final Map<String, Object>? fields;
+  final Map<String, dynamic>? fields;
 
   IssueTypeIssueCreateMetadata(
       {this.self,
@@ -23484,8 +23456,7 @@ class IssueTypeIssueCreateMetadata {
       scope: (json['scope'] as Map<String, Object?>?)
           ?.map((k, v) => MapEntry(k, v ?? {})),
       expand: json['expand'] as String?,
-      fields: (json['fields'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      fields: json['fields'] as Map<String, Object?>?,
     );
   }
 
@@ -23530,13 +23501,13 @@ class IssueTypeIssueCreateMetadata {
       json['hierarchyLevel'] = hierarchyLevel;
     }
     if (scope != null) {
-      json['scope'] = scope.map((k, v) => MapEntry(k, v));
+      json['scope'] = scope;
     }
     if (expand != null) {
       json['expand'] = expand;
     }
     if (fields != null) {
-      json['fields'] = fields.map((k, v) => MapEntry(k, v));
+      json['fields'] = fields;
     }
     return json;
   }
@@ -23553,7 +23524,7 @@ class IssueTypeIssueCreateMetadata {
       int? hierarchyLevel,
       Map<String, Object>? scope,
       String? expand,
-      Map<String, Object>? fields}) {
+      Map<String, dynamic>? fields}) {
     return IssueTypeIssueCreateMetadata(
       self: self ?? this.self,
       id: id ?? this.id,
@@ -23647,7 +23618,7 @@ class ProjectIssueCreateMetadata {
       json['name'] = name;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls.map((k, v) => MapEntry(k, v));
+      json['avatarUrls'] = avatarUrls;
     }
     json['issuetypes'] = issuetypes.map((i) => i.toJson()).toList();
     return json;
@@ -23820,13 +23791,13 @@ class RemoteIssueLink {
       json['globalId'] = globalId;
     }
     if (application != null) {
-      json['application'] = application.map((k, v) => MapEntry(k, v));
+      json['application'] = application;
     }
     if (relationship != null) {
       json['relationship'] = relationship;
     }
     if (object != null) {
-      json['object'] = object.map((k, v) => MapEntry(k, v));
+      json['object'] = object;
     }
     return json;
   }
@@ -23899,10 +23870,10 @@ class RemoteObject {
       json['summary'] = summary;
     }
     if (icon != null) {
-      json['icon'] = icon.map((k, v) => MapEntry(k, v));
+      json['icon'] = icon;
     }
     if (status != null) {
-      json['status'] = status.map((k, v) => MapEntry(k, v));
+      json['status'] = status;
     }
     return json;
   }
@@ -23948,7 +23919,7 @@ class Status {
     final json = <String, Object?>{};
     json['resolved'] = resolved;
     if (icon != null) {
-      json['icon'] = icon.map((k, v) => MapEntry(k, v));
+      json['icon'] = icon;
     }
     return json;
   }
@@ -24062,12 +24033,12 @@ class RemoteIssueLinkRequest {
       json['globalId'] = globalId;
     }
     if (application != null) {
-      json['application'] = application.map((k, v) => MapEntry(k, v));
+      json['application'] = application;
     }
     if (relationship != null) {
       json['relationship'] = relationship;
     }
-    json['object'] = object.map((k, v) => MapEntry(k, v));
+    json['object'] = object;
     return json;
   }
 
@@ -24174,10 +24145,10 @@ class Notification {
       json['htmlBody'] = htmlBody;
     }
     if (to != null) {
-      json['to'] = to.map((k, v) => MapEntry(k, v));
+      json['to'] = to;
     }
     if (restrict != null) {
-      json['restrict'] = restrict.map((k, v) => MapEntry(k, v));
+      json['restrict'] = restrict;
     }
     return json;
   }
@@ -24542,7 +24513,7 @@ class IssueCommentListRequestBean {
     var ids = this.ids;
 
     final json = <String, Object?>{};
-    json['ids'] = ids.map((i) => i).toList();
+    json['ids'] = ids;
     return json;
   }
 
@@ -24830,7 +24801,7 @@ class Attachment {
       json['filename'] = filename;
     }
     if (author != null) {
-      json['author'] = author.map((k, v) => MapEntry(k, v));
+      json['author'] = author;
     }
     if (created != null) {
       json['created'] = created.toIso8601String();
@@ -24913,7 +24884,7 @@ class Group {
       json['self'] = self;
     }
     if (users != null) {
-      json['users'] = users.map((k, v) => MapEntry(k, v));
+      json['users'] = users;
     }
     if (expand != null) {
       json['expand'] = expand;
@@ -25978,10 +25949,10 @@ class ScreenWithTab {
       json['description'] = description;
     }
     if (scope != null) {
-      json['scope'] = scope.map((k, v) => MapEntry(k, v));
+      json['scope'] = scope;
     }
     if (tab != null) {
-      json['tab'] = tab.map((k, v) => MapEntry(k, v));
+      json['tab'] = tab;
     }
     return json;
   }
@@ -26037,7 +26008,7 @@ class Context {
       json['name'] = name;
     }
     if (scope != null) {
-      json['scope'] = scope.map((k, v) => MapEntry(k, v));
+      json['scope'] = scope;
     }
     return json;
   }
@@ -26458,7 +26429,7 @@ class OrderOfCustomFieldOptions {
     var position = this.position;
 
     final json = <String, Object?>{};
-    json['customFieldOptionIds'] = customFieldOptionIds.map((i) => i).toList();
+    json['customFieldOptionIds'] = customFieldOptionIds;
     if (after != null) {
       json['after'] = after;
     }
@@ -26720,7 +26691,7 @@ class CustomFieldOptionValue {
 
     final json = <String, Object?>{};
     json['value'] = value;
-    json['cascadingOptions'] = cascadingOptions.map((i) => i).toList();
+    json['cascadingOptions'] = cascadingOptions;
     return json;
   }
 
@@ -26892,7 +26863,7 @@ class CustomFieldOptionDetails {
     if (value != null) {
       json['value'] = value;
     }
-    json['cascadingOptions'] = cascadingOptions.map((i) => i).toList();
+    json['cascadingOptions'] = cascadingOptions;
     return json;
   }
 
@@ -27105,8 +27076,8 @@ class ActorInputBean {
     var group = this.group;
 
     final json = <String, Object?>{};
-    json['user'] = user.map((i) => i).toList();
-    json['group'] = group.map((i) => i).toList();
+    json['user'] = user;
+    json['group'] = group;
     return json;
   }
 
@@ -27123,15 +27094,14 @@ class ProjectRoleActorsUpdateBean {
   final int? id;
 
   /// The actors to add to the project role. Add groups using `atlassian-group-role-actor` and a list of group names. For example, `"atlassian-group-role-actor":["another","administrators"]}`. Add users using `atlassian-user-role-actor` and a list of account IDs. For example, `"atlassian-user-role-actor":["12345678-9abc-def1-2345-6789abcdef12", "abcdef12-3456-789a-bcde-f123456789ab"]`.
-  final Map<String, Object>? categorisedActors;
+  final Map<String, dynamic>? categorisedActors;
 
   ProjectRoleActorsUpdateBean({this.id, this.categorisedActors});
 
   factory ProjectRoleActorsUpdateBean.fromJson(Map<String, Object?> json) {
     return ProjectRoleActorsUpdateBean(
       id: (json['id'] as num?)?.toInt(),
-      categorisedActors: (json['categorisedActors'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      categorisedActors: json['categorisedActors'] as Map<String, Object?>?,
     );
   }
 
@@ -27144,14 +27114,13 @@ class ProjectRoleActorsUpdateBean {
       json['id'] = id;
     }
     if (categorisedActors != null) {
-      json['categorisedActors'] =
-          categorisedActors.map((k, v) => MapEntry(k, v));
+      json['categorisedActors'] = categorisedActors;
     }
     return json;
   }
 
   ProjectRoleActorsUpdateBean copyWith(
-      {int? id, Map<String, Object>? categorisedActors}) {
+      {int? id, Map<String, dynamic>? categorisedActors}) {
     return ProjectRoleActorsUpdateBean(
       id: id ?? this.id,
       categorisedActors: categorisedActors ?? this.categorisedActors,
@@ -27188,8 +27157,8 @@ class ActorsMap {
     var group = this.group;
 
     final json = <String, Object?>{};
-    json['user'] = user.map((i) => i).toList();
-    json['group'] = group.map((i) => i).toList();
+    json['user'] = user;
+    json['group'] = group;
     return json;
   }
 
@@ -27285,7 +27254,7 @@ class ProjectRoleDetails {
     }
     json['admin'] = admin;
     if (scope != null) {
-      json['scope'] = scope.map((k, v) => MapEntry(k, v));
+      json['scope'] = scope;
     }
     json['roleConfigurable'] = roleConfigurable;
     if (translatedName != null) {
@@ -27544,9 +27513,8 @@ class IssueTypeScreenSchemesProjects {
     var projectIds = this.projectIds;
 
     final json = <String, Object?>{};
-    json['issueTypeScreenScheme'] =
-        issueTypeScreenScheme.map((k, v) => MapEntry(k, v));
-    json['projectIds'] = projectIds.map((i) => i).toList();
+    json['issueTypeScreenScheme'] = issueTypeScreenScheme;
+    json['projectIds'] = projectIds;
     return json;
   }
 
@@ -28046,7 +28014,7 @@ class IssueTypeIds {
     var issueTypeIds = this.issueTypeIds;
 
     final json = <String, Object?>{};
-    json['issueTypeIds'] = issueTypeIds.map((i) => i).toList();
+    json['issueTypeIds'] = issueTypeIds;
     return json;
   }
 
@@ -28081,7 +28049,7 @@ class AttachmentMetadata {
   final String? mimeType;
 
   /// Additional properties of the attachment.
-  final Map<String, Object>? properties;
+  final Map<String, dynamic>? properties;
 
   /// The URL of the attachment.
   final String? content;
@@ -28111,8 +28079,7 @@ class AttachmentMetadata {
       created: DateTime.tryParse(json['created'] as String? ?? ''),
       size: (json['size'] as num?)?.toInt(),
       mimeType: json['mimeType'] as String?,
-      properties: (json['properties'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      properties: json['properties'] as Map<String, Object?>?,
       content: json['content'] as String?,
       thumbnail: json['thumbnail'] as String?,
     );
@@ -28141,7 +28108,7 @@ class AttachmentMetadata {
       json['filename'] = filename;
     }
     if (author != null) {
-      json['author'] = author.map((k, v) => MapEntry(k, v));
+      json['author'] = author;
     }
     if (created != null) {
       json['created'] = created.toIso8601String();
@@ -28153,7 +28120,7 @@ class AttachmentMetadata {
       json['mimeType'] = mimeType;
     }
     if (properties != null) {
-      json['properties'] = properties.map((k, v) => MapEntry(k, v));
+      json['properties'] = properties;
     }
     if (content != null) {
       json['content'] = content;
@@ -28172,7 +28139,7 @@ class AttachmentMetadata {
       DateTime? created,
       int? size,
       String? mimeType,
-      Map<String, Object>? properties,
+      Map<String, dynamic>? properties,
       String? content,
       String? thumbnail}) {
     return AttachmentMetadata(
@@ -28749,8 +28716,8 @@ class IssueTypeSchemeProjects {
     var projectIds = this.projectIds;
 
     final json = <String, Object?>{};
-    json['issueTypeScheme'] = issueTypeScheme.map((k, v) => MapEntry(k, v));
-    json['projectIds'] = projectIds.map((i) => i).toList();
+    json['issueTypeScheme'] = issueTypeScheme;
+    json['projectIds'] = projectIds;
     return json;
   }
 
@@ -29084,7 +29051,7 @@ class IssueTypeSchemeDetails {
     if (defaultIssueTypeId != null) {
       json['defaultIssueTypeId'] = defaultIssueTypeId;
     }
-    json['issueTypeIds'] = issueTypeIds.map((i) => i).toList();
+    json['issueTypeIds'] = issueTypeIds;
     return json;
   }
 
@@ -29212,7 +29179,7 @@ class OrderOfIssueTypes {
     var position = this.position;
 
     final json = <String, Object?>{};
-    json['issueTypeIds'] = issueTypeIds.map((i) => i).toList();
+    json['issueTypeIds'] = issueTypeIds;
     if (after != null) {
       json['after'] = after;
     }
@@ -29416,7 +29383,7 @@ class WorklogIdsRequestBean {
     var ids = this.ids;
 
     final json = <String, Object?>{};
-    json['ids'] = ids.map((i) => i).toList();
+    json['ids'] = ids;
     return json;
   }
 
@@ -29491,7 +29458,7 @@ class IssueFieldOption {
   final String value;
 
   /// The properties of the object, as arbitrary key-value pairs. These properties can be searched using JQL, if the extractions (see [Issue Field Option Property Index](https://developer.atlassian.com/cloud/jira/platform/modules/issue-field-option-property-index/)) are defined in the descriptor for the issue field module.
-  final Map<String, Object>? properties;
+  final Map<String, dynamic>? properties;
   final IssueFieldOptionConfiguration? config;
 
   IssueFieldOption(
@@ -29501,8 +29468,7 @@ class IssueFieldOption {
     return IssueFieldOption(
       id: (json['id'] as num?)?.toInt() ?? 0,
       value: json['value'] as String? ?? '',
-      properties: (json['properties'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      properties: json['properties'] as Map<String, Object?>?,
       config: json['config'] != null
           ? IssueFieldOptionConfiguration.fromJson(
               json['config']! as Map<String, Object?>)
@@ -29520,7 +29486,7 @@ class IssueFieldOption {
     json['id'] = id;
     json['value'] = value;
     if (properties != null) {
-      json['properties'] = properties.map((k, v) => MapEntry(k, v));
+      json['properties'] = properties;
     }
     if (config != null) {
       json['config'] = config.toJson();
@@ -29531,7 +29497,7 @@ class IssueFieldOption {
   IssueFieldOption copyWith(
       {int? id,
       String? value,
-      Map<String, Object>? properties,
+      Map<String, dynamic>? properties,
       IssueFieldOptionConfiguration? config}) {
     return IssueFieldOption(
       id: id ?? this.id,
@@ -29572,7 +29538,7 @@ class IssueFieldOptionConfiguration {
 
     final json = <String, Object?>{};
     if (scope != null) {
-      json['scope'] = scope.map((k, v) => MapEntry(k, v));
+      json['scope'] = scope;
     }
     json['attributes'] = attributes.map((i) => i.value).toList();
     return json;
@@ -29650,10 +29616,10 @@ class IssueFieldOptionScopeBean {
     var global = this.global;
 
     final json = <String, Object?>{};
-    json['projects'] = projects.map((i) => i).toList();
+    json['projects'] = projects;
     json['projects2'] = projects2.map((i) => i.toJson()).toList();
     if (global != null) {
-      json['global'] = global.map((k, v) => MapEntry(k, v));
+      json['global'] = global;
     }
     return json;
   }
@@ -29840,7 +29806,7 @@ class IssueFieldOptionCreateBean {
   final String value;
 
   /// The properties of the option as arbitrary key-value pairs. These properties can be searched using JQL, if the extractions (see https://developer.atlassian.com/cloud/jira/platform/modules/issue-field-option-property-index/) are defined in the descriptor for the issue field module.
-  final Map<String, Object>? properties;
+  final Map<String, dynamic>? properties;
   final IssueFieldOptionConfiguration? config;
 
   IssueFieldOptionCreateBean(
@@ -29849,8 +29815,7 @@ class IssueFieldOptionCreateBean {
   factory IssueFieldOptionCreateBean.fromJson(Map<String, Object?> json) {
     return IssueFieldOptionCreateBean(
       value: json['value'] as String? ?? '',
-      properties: (json['properties'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      properties: json['properties'] as Map<String, Object?>?,
       config: json['config'] != null
           ? IssueFieldOptionConfiguration.fromJson(
               json['config']! as Map<String, Object?>)
@@ -29866,7 +29831,7 @@ class IssueFieldOptionCreateBean {
     final json = <String, Object?>{};
     json['value'] = value;
     if (properties != null) {
-      json['properties'] = properties.map((k, v) => MapEntry(k, v));
+      json['properties'] = properties;
     }
     if (config != null) {
       json['config'] = config.toJson();
@@ -29876,7 +29841,7 @@ class IssueFieldOptionCreateBean {
 
   IssueFieldOptionCreateBean copyWith(
       {String? value,
-      Map<String, Object>? properties,
+      Map<String, dynamic>? properties,
       IssueFieldOptionConfiguration? config}) {
     return IssueFieldOptionCreateBean(
       value: value ?? this.value,
@@ -29922,10 +29887,10 @@ class RemoveOptionFromIssuesResult {
     var errors = this.errors;
 
     final json = <String, Object?>{};
-    json['modifiedIssues'] = modifiedIssues.map((i) => i).toList();
-    json['unmodifiedIssues'] = unmodifiedIssues.map((i) => i).toList();
+    json['modifiedIssues'] = modifiedIssues;
+    json['unmodifiedIssues'] = unmodifiedIssues;
     if (errors != null) {
-      json['errors'] = errors.map((k, v) => MapEntry(k, v));
+      json['errors'] = errors;
     }
     return json;
   }
@@ -29944,7 +29909,7 @@ class RemoveOptionFromIssuesResult {
 
 class SimpleErrorCollection {
   /// The list of errors by parameter returned by the operation. For example,"projectKey": "Project keys must start with an uppercase letter, followed by one or more uppercase alphanumeric characters."
-  final Map<String, Object>? errors;
+  final Map<String, dynamic>? errors;
 
   /// The list of error messages produced by this operation. For example, "input parameter 'key' must be provided"
   final List<String> errorMessages;
@@ -29956,8 +29921,7 @@ class SimpleErrorCollection {
 
   factory SimpleErrorCollection.fromJson(Map<String, Object?> json) {
     return SimpleErrorCollection(
-      errors: (json['errors'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      errors: json['errors'] as Map<String, Object?>?,
       errorMessages: (json['errorMessages'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -29973,9 +29937,9 @@ class SimpleErrorCollection {
 
     final json = <String, Object?>{};
     if (errors != null) {
-      json['errors'] = errors.map((k, v) => MapEntry(k, v));
+      json['errors'] = errors;
     }
-    json['errorMessages'] = errorMessages.map((i) => i).toList();
+    json['errorMessages'] = errorMessages;
     if (httpStatusCode != null) {
       json['httpStatusCode'] = httpStatusCode;
     }
@@ -29983,7 +29947,7 @@ class SimpleErrorCollection {
   }
 
   SimpleErrorCollection copyWith(
-      {Map<String, Object>? errors,
+      {Map<String, dynamic>? errors,
       List<String>? errorMessages,
       int? httpStatusCode}) {
     return SimpleErrorCollection(
@@ -30097,7 +30061,7 @@ class TaskProgressBeanRemoveOptionFromIssuesResult {
       json['message'] = message;
     }
     if (result != null) {
-      json['result'] = result.map((k, v) => MapEntry(k, v));
+      json['result'] = result;
     }
     json['submittedBy'] = submittedBy;
     json['progress'] = progress;
@@ -30808,7 +30772,7 @@ class FieldConfigurationSchemeProjects {
     if (fieldConfigurationScheme != null) {
       json['fieldConfigurationScheme'] = fieldConfigurationScheme.toJson();
     }
-    json['projectIds'] = projectIds.map((i) => i).toList();
+    json['projectIds'] = projectIds;
     return json;
   }
 
@@ -31730,7 +31694,7 @@ class CustomFieldContextDefaultValueMultipleOption {
 
     final json = <String, Object?>{};
     json['contextId'] = contextId;
-    json['optionIds'] = optionIds.map((i) => i).toList();
+    json['optionIds'] = optionIds;
     json['type'] = type;
     return json;
   }
@@ -31946,8 +31910,8 @@ class CreateCustomFieldContext {
     if (description != null) {
       json['description'] = description;
     }
-    json['projectIds'] = projectIds.map((i) => i).toList();
-    json['issueTypeIds'] = issueTypeIds.map((i) => i).toList();
+    json['projectIds'] = projectIds;
+    json['issueTypeIds'] = issueTypeIds;
     return json;
   }
 
@@ -31987,7 +31951,7 @@ class ProjectIds {
     var projectIds = this.projectIds;
 
     final json = <String, Object?>{};
-    json['projectIds'] = projectIds.map((i) => i).toList();
+    json['projectIds'] = projectIds;
     return json;
   }
 
@@ -32502,7 +32466,7 @@ class PermissionGrant {
       json['self'] = self;
     }
     if (holder != null) {
-      json['holder'] = holder.map((k, v) => MapEntry(k, v));
+      json['holder'] = holder;
     }
     if (permission != null) {
       json['permission'] = permission;
@@ -32598,7 +32562,7 @@ class PermissionScheme {
       json['description'] = description;
     }
     if (scope != null) {
-      json['scope'] = scope.map((k, v) => MapEntry(k, v));
+      json['scope'] = scope;
     }
     json['permissions'] = permissions.map((i) => i.toJson()).toList();
     return json;
@@ -32627,14 +32591,13 @@ class PermissionScheme {
 /// Details about permissions.
 class Permissions {
   /// List of permissions.
-  final Map<String, Object>? permissions;
+  final Map<String, dynamic>? permissions;
 
   Permissions({this.permissions});
 
   factory Permissions.fromJson(Map<String, Object?> json) {
     return Permissions(
-      permissions: (json['permissions'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      permissions: json['permissions'] as Map<String, Object?>?,
     );
   }
 
@@ -32643,12 +32606,12 @@ class Permissions {
 
     final json = <String, Object?>{};
     if (permissions != null) {
-      json['permissions'] = permissions.map((k, v) => MapEntry(k, v));
+      json['permissions'] = permissions;
     }
     return json;
   }
 
-  Permissions copyWith({Map<String, Object>? permissions}) {
+  Permissions copyWith({Map<String, dynamic>? permissions}) {
     return Permissions(
       permissions: permissions ?? this.permissions,
     );
@@ -32817,7 +32780,7 @@ class BulkPermissionsRequestBean {
     final json = <String, Object?>{};
     json['projectPermissions'] =
         projectPermissions.map((i) => i.toJson()).toList();
-    json['globalPermissions'] = globalPermissions.map((i) => i).toList();
+    json['globalPermissions'] = globalPermissions;
     if (accountId != null) {
       json['accountId'] = accountId;
     }
@@ -32875,9 +32838,9 @@ class BulkProjectPermissions {
     var permissions = this.permissions;
 
     final json = <String, Object?>{};
-    json['issues'] = issues.map((i) => i).toList();
-    json['projects'] = projects.map((i) => i).toList();
-    json['permissions'] = permissions.map((i) => i).toList();
+    json['issues'] = issues;
+    json['projects'] = projects;
+    json['permissions'] = permissions;
     return json;
   }
 
@@ -32923,7 +32886,7 @@ class BulkPermissionGrants {
     final json = <String, Object?>{};
     json['projectPermissions'] =
         projectPermissions.map((i) => i.toJson()).toList();
-    json['globalPermissions'] = globalPermissions.map((i) => i).toList();
+    json['globalPermissions'] = globalPermissions;
     return json;
   }
 
@@ -32972,8 +32935,8 @@ class BulkProjectPermissionGrants {
 
     final json = <String, Object?>{};
     json['permission'] = permission;
-    json['issues'] = issues.map((i) => i).toList();
-    json['projects'] = projects.map((i) => i).toList();
+    json['issues'] = issues;
+    json['projects'] = projects;
     return json;
   }
 
@@ -33006,7 +32969,7 @@ class PermissionsKeysBean {
     var permissions = this.permissions;
 
     final json = <String, Object?>{};
-    json['permissions'] = permissions.map((i) => i).toList();
+    json['permissions'] = permissions;
     return json;
   }
 
@@ -33379,7 +33342,7 @@ class RegisteredWebhook {
     if (createdWebhookId != null) {
       json['createdWebhookId'] = createdWebhookId;
     }
-    json['errors'] = errors.map((i) => i).toList();
+    json['errors'] = errors;
     return json;
   }
 
@@ -33604,7 +33567,7 @@ class ContainerForWebhookIDs {
     var webhookIds = this.webhookIds;
 
     final json = <String, Object?>{};
-    json['webhookIds'] = webhookIds.map((i) => i).toList();
+    json['webhookIds'] = webhookIds;
     return json;
   }
 
@@ -33834,10 +33797,10 @@ class SearchResults {
   final List<String> warningMessages;
 
   /// The ID and name of each field in the search results.
-  final Map<String, Object>? names;
+  final Map<String, dynamic>? names;
 
   /// The schema describing the field types in the search results.
-  final Map<String, Object>? schema;
+  final Map<String, dynamic>? schema;
 
   SearchResults(
       {this.expand,
@@ -33866,10 +33829,8 @@ class SearchResults {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      names: (json['names'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      schema: (json['schema'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      names: json['names'] as Map<String, Object?>?,
+      schema: json['schema'] as Map<String, Object?>?,
     );
   }
 
@@ -33897,12 +33858,12 @@ class SearchResults {
       json['total'] = total;
     }
     json['issues'] = issues.map((i) => i.toJson()).toList();
-    json['warningMessages'] = warningMessages.map((i) => i).toList();
+    json['warningMessages'] = warningMessages;
     if (names != null) {
-      json['names'] = names.map((k, v) => MapEntry(k, v));
+      json['names'] = names;
     }
     if (schema != null) {
-      json['schema'] = schema.map((k, v) => MapEntry(k, v));
+      json['schema'] = schema;
     }
     return json;
   }
@@ -33914,8 +33875,8 @@ class SearchResults {
       int? total,
       List<IssueBean>? issues,
       List<String>? warningMessages,
-      Map<String, Object>? names,
-      Map<String, Object>? schema}) {
+      Map<String, dynamic>? names,
+      Map<String, dynamic>? schema}) {
     return SearchResults(
       expand: expand ?? this.expand,
       startAt: startAt ?? this.startAt,
@@ -34048,12 +34009,12 @@ class SearchRequestBean {
     if (maxResults != null) {
       json['maxResults'] = maxResults;
     }
-    json['fields'] = fields.map((i) => i).toList();
+    json['fields'] = fields;
     if (validateQuery != null) {
       json['validateQuery'] = validateQuery.value;
     }
-    json['expand'] = expand.map((i) => i).toList();
-    json['properties'] = properties.map((i) => i).toList();
+    json['expand'] = expand;
+    json['properties'] = properties;
     json['fieldsByKeys'] = fieldsByKeys;
     return json;
   }
@@ -34202,8 +34163,8 @@ class FieldReferenceData {
     if (cfid != null) {
       json['cfid'] = cfid;
     }
-    json['operators'] = operators.map((i) => i).toList();
-    json['types'] = types.map((i) => i).toList();
+    json['operators'] = operators;
+    json['types'] = types;
     return json;
   }
 
@@ -34346,7 +34307,7 @@ class FunctionReferenceData {
     if (isList != null) {
       json['isList'] = isList.value;
     }
-    json['types'] = types.map((i) => i).toList();
+    json['types'] = types;
     return json;
   }
 
@@ -34435,7 +34396,7 @@ class JQLReferenceData {
         visibleFieldNames.map((i) => i.toJson()).toList();
     json['visibleFunctionNames'] =
         visibleFunctionNames.map((i) => i.toJson()).toList();
-    json['jqlReservedWords'] = jqlReservedWords.map((i) => i).toList();
+    json['jqlReservedWords'] = jqlReservedWords;
     return json;
   }
 
@@ -34544,7 +34505,7 @@ class JQLPersonalDataMigrationRequest {
     var queryStrings = this.queryStrings;
 
     final json = <String, Object?>{};
-    json['queryStrings'] = queryStrings.map((i) => i).toList();
+    json['queryStrings'] = queryStrings;
     return json;
   }
 
@@ -34589,7 +34550,7 @@ class ConvertedJQLQueries {
     var queriesWithUnknownUsers = this.queriesWithUnknownUsers;
 
     final json = <String, Object?>{};
-    json['queryStrings'] = queryStrings.map((i) => i).toList();
+    json['queryStrings'] = queryStrings;
     json['queriesWithUnknownUsers'] =
         queriesWithUnknownUsers.map((i) => i.toJson()).toList();
     return json;
@@ -34756,7 +34717,7 @@ class Filter {
       json['description'] = description;
     }
     if (owner != null) {
-      json['owner'] = owner.map((k, v) => MapEntry(k, v));
+      json['owner'] = owner;
     }
     if (jql != null) {
       json['jql'] = jql;
@@ -34773,10 +34734,10 @@ class Filter {
     }
     json['sharePermissions'] = sharePermissions.map((i) => i.toJson()).toList();
     if (sharedUsers != null) {
-      json['sharedUsers'] = sharedUsers.map((k, v) => MapEntry(k, v));
+      json['sharedUsers'] = sharedUsers;
     }
     if (subscriptions != null) {
-      json['subscriptions'] = subscriptions.map((k, v) => MapEntry(k, v));
+      json['subscriptions'] = subscriptions;
     }
     return json;
   }
@@ -34846,10 +34807,10 @@ class FilterSubscription {
       json['id'] = id;
     }
     if (user != null) {
-      json['user'] = user.map((k, v) => MapEntry(k, v));
+      json['user'] = user;
     }
     if (group != null) {
-      json['group'] = group.map((k, v) => MapEntry(k, v));
+      json['group'] = group;
     }
     return json;
   }
@@ -35129,7 +35090,7 @@ class FilterDetails {
       json['description'] = description;
     }
     if (owner != null) {
-      json['owner'] = owner.map((k, v) => MapEntry(k, v));
+      json['owner'] = owner;
     }
     if (jql != null) {
       json['jql'] = jql;
@@ -35506,7 +35467,7 @@ class PageBeanString {
       json['total'] = total;
     }
     json['isLast'] = isLast;
-    json['values'] = values.map((i) => i).toList();
+    json['values'] = values;
     return json;
   }
 
@@ -35609,7 +35570,7 @@ class DeprecatedWorkflow {
       json['steps'] = steps;
     }
     if (scope != null) {
-      json['scope'] = scope.map((k, v) => MapEntry(k, v));
+      json['scope'] = scope;
     }
     json['default'] = default$;
     return json;
@@ -35763,8 +35724,7 @@ class Configuration {
     json['timeTrackingEnabled'] = timeTrackingEnabled;
     json['attachmentsEnabled'] = attachmentsEnabled;
     if (timeTrackingConfiguration != null) {
-      json['timeTrackingConfiguration'] =
-          timeTrackingConfiguration.map((k, v) => MapEntry(k, v));
+      json['timeTrackingConfiguration'] = timeTrackingConfiguration;
     }
     return json;
   }
@@ -35996,7 +35956,7 @@ class ApplicationProperty {
     if (example != null) {
       json['example'] = example;
     }
-    json['allowedValues'] = allowedValues.map((i) => i).toList();
+    json['allowedValues'] = allowedValues;
     return json;
   }
 
@@ -36223,13 +36183,13 @@ class WorkflowScheme {
   final String? defaultWorkflow;
 
   /// The issue type to workflow mappings, where each mapping is an issue type ID and workflow name pair. Note that an issue type can only be mapped to one workflow in a workflow scheme.
-  final Map<String, Object>? issueTypeMappings;
+  final Map<String, dynamic>? issueTypeMappings;
 
   /// For draft workflow schemes, this property is the name of the default workflow for the original workflow scheme. The default workflow has *All Unassigned Issue Types* assigned to it in Jira.
   final String? originalDefaultWorkflow;
 
   /// For draft workflow schemes, this property is the issue type to workflow mappings for the original workflow scheme, where each mapping is an issue type ID and workflow name pair. Note that an issue type can only be mapped to one workflow in a workflow scheme.
-  final Map<String, Object>? originalIssueTypeMappings;
+  final Map<String, dynamic>? originalIssueTypeMappings;
 
   /// Whether the workflow scheme is a draft or not.
   final bool draft;
@@ -36251,7 +36211,7 @@ class WorkflowScheme {
   final bool updateDraftIfNeeded;
 
   /// The issue types available in Jira.
-  final Map<String, Object>? issueTypes;
+  final Map<String, dynamic>? issueTypes;
 
   WorkflowScheme(
       {this.id,
@@ -36276,20 +36236,17 @@ class WorkflowScheme {
       name: json['name'] as String?,
       description: json['description'] as String?,
       defaultWorkflow: json['defaultWorkflow'] as String?,
-      issueTypeMappings: (json['issueTypeMappings'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      issueTypeMappings: json['issueTypeMappings'] as Map<String, Object?>?,
       originalDefaultWorkflow: json['originalDefaultWorkflow'] as String?,
       originalIssueTypeMappings:
-          (json['originalIssueTypeMappings'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})),
+          json['originalIssueTypeMappings'] as Map<String, Object?>?,
       draft: json['draft'] as bool? ?? false,
       lastModifiedUser: (json['lastModifiedUser'] as Map<String, Object?>?)
           ?.map((k, v) => MapEntry(k, v ?? {})),
       lastModified: json['lastModified'] as String?,
       self: json['self'] as String?,
       updateDraftIfNeeded: json['updateDraftIfNeeded'] as bool? ?? false,
-      issueTypes: (json['issueTypes'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      issueTypes: json['issueTypes'] as Map<String, Object?>?,
     );
   }
 
@@ -36322,19 +36279,17 @@ class WorkflowScheme {
       json['defaultWorkflow'] = defaultWorkflow;
     }
     if (issueTypeMappings != null) {
-      json['issueTypeMappings'] =
-          issueTypeMappings.map((k, v) => MapEntry(k, v));
+      json['issueTypeMappings'] = issueTypeMappings;
     }
     if (originalDefaultWorkflow != null) {
       json['originalDefaultWorkflow'] = originalDefaultWorkflow;
     }
     if (originalIssueTypeMappings != null) {
-      json['originalIssueTypeMappings'] =
-          originalIssueTypeMappings.map((k, v) => MapEntry(k, v));
+      json['originalIssueTypeMappings'] = originalIssueTypeMappings;
     }
     json['draft'] = draft;
     if (lastModifiedUser != null) {
-      json['lastModifiedUser'] = lastModifiedUser.map((k, v) => MapEntry(k, v));
+      json['lastModifiedUser'] = lastModifiedUser;
     }
     if (lastModified != null) {
       json['lastModified'] = lastModified;
@@ -36344,7 +36299,7 @@ class WorkflowScheme {
     }
     json['updateDraftIfNeeded'] = updateDraftIfNeeded;
     if (issueTypes != null) {
-      json['issueTypes'] = issueTypes.map((k, v) => MapEntry(k, v));
+      json['issueTypes'] = issueTypes;
     }
     return json;
   }
@@ -36354,15 +36309,15 @@ class WorkflowScheme {
       String? name,
       String? description,
       String? defaultWorkflow,
-      Map<String, Object>? issueTypeMappings,
+      Map<String, dynamic>? issueTypeMappings,
       String? originalDefaultWorkflow,
-      Map<String, Object>? originalIssueTypeMappings,
+      Map<String, dynamic>? originalIssueTypeMappings,
       bool? draft,
       Map<String, Object>? lastModifiedUser,
       String? lastModified,
       String? self,
       bool? updateDraftIfNeeded,
-      Map<String, Object>? issueTypes}) {
+      Map<String, dynamic>? issueTypes}) {
     return WorkflowScheme(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -36428,7 +36383,7 @@ class IssueTypesWorkflowMapping {
     if (workflow != null) {
       json['workflow'] = workflow;
     }
-    json['issueTypes'] = issueTypes.map((i) => i).toList();
+    json['issueTypes'] = issueTypes;
     json['defaultMapping'] = defaultMapping;
     json['updateDraftIfNeeded'] = updateDraftIfNeeded;
     return json;
@@ -36595,8 +36550,8 @@ class WorkflowSchemeAssociations {
     var workflowScheme = this.workflowScheme;
 
     final json = <String, Object?>{};
-    json['projectIds'] = projectIds.map((i) => i).toList();
-    json['workflowScheme'] = workflowScheme.map((k, v) => MapEntry(k, v));
+    json['projectIds'] = projectIds;
+    json['workflowScheme'] = workflowScheme;
     return json;
   }
 
@@ -37286,7 +37241,7 @@ class Transition {
     json['id'] = id;
     json['name'] = name;
     json['description'] = description;
-    json['from'] = from.map((i) => i).toList();
+    json['from'] = from;
     json['to'] = to;
     json['type'] = type.value;
     if (screen != null) {
@@ -37588,7 +37543,7 @@ class WorkflowSimpleCondition {
   final String type;
 
   /// The configuration of the transition rule. This is currently returned only for some of the rule types. Availability of this property is subject to change.
-  final Map<String, Object>? configuration;
+  final Map<String, dynamic>? configuration;
   final String nodeType;
 
   WorkflowSimpleCondition(
@@ -37597,8 +37552,7 @@ class WorkflowSimpleCondition {
   factory WorkflowSimpleCondition.fromJson(Map<String, Object?> json) {
     return WorkflowSimpleCondition(
       type: json['type'] as String? ?? '',
-      configuration: (json['configuration'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      configuration: json['configuration'] as Map<String, Object?>?,
       nodeType: json['nodeType'] as String? ?? '',
     );
   }
@@ -37611,14 +37565,14 @@ class WorkflowSimpleCondition {
     final json = <String, Object?>{};
     json['type'] = type;
     if (configuration != null) {
-      json['configuration'] = configuration.map((k, v) => MapEntry(k, v));
+      json['configuration'] = configuration;
     }
     json['nodeType'] = nodeType;
     return json;
   }
 
   WorkflowSimpleCondition copyWith(
-      {String? type, Map<String, Object>? configuration, String? nodeType}) {
+      {String? type, Map<String, dynamic>? configuration, String? nodeType}) {
     return WorkflowSimpleCondition(
       type: type ?? this.type,
       configuration: configuration ?? this.configuration,
@@ -37726,7 +37680,7 @@ class WorkflowTransitionRule {
     final json = <String, Object?>{};
     json['type'] = type;
     if (configuration != null) {
-      json['configuration'] = configuration.map((k, v) => MapEntry(k, v));
+      json['configuration'] = configuration;
     }
     return json;
   }
@@ -37778,7 +37732,7 @@ class ConnectWorkflowTransitionRule {
     json['key'] = key;
     json['configuration'] = configuration.toJson();
     if (transition != null) {
-      json['transition'] = transition.map((k, v) => MapEntry(k, v));
+      json['transition'] = transition;
     }
     return json;
   }
@@ -38102,7 +38056,7 @@ class WorkflowTransitionRulesUpdateErrorDetails {
   final WorkflowId workflowId;
 
   /// A list of transition rule update errors, indexed by the transition rule ID. Any transition rule that appears here wasn't updated.
-  final Map<String, Object> ruleUpdateErrors;
+  final Map<String, dynamic> ruleUpdateErrors;
 
   /// The list of errors that specify why the workflow update failed. The workflow was not updated if the list contains any entries.
   final List<String> updateErrors;
@@ -38117,9 +38071,7 @@ class WorkflowTransitionRulesUpdateErrorDetails {
     return WorkflowTransitionRulesUpdateErrorDetails(
       workflowId: WorkflowId.fromJson(
           json['workflowId'] as Map<String, Object?>? ?? const {}),
-      ruleUpdateErrors: (json['ruleUpdateErrors'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
+      ruleUpdateErrors: json['ruleUpdateErrors'] as Map<String, Object?>? ?? {},
       updateErrors: (json['updateErrors'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -38134,14 +38086,14 @@ class WorkflowTransitionRulesUpdateErrorDetails {
 
     final json = <String, Object?>{};
     json['workflowId'] = workflowId.toJson();
-    json['ruleUpdateErrors'] = ruleUpdateErrors.map((k, v) => MapEntry(k, v));
-    json['updateErrors'] = updateErrors.map((i) => i).toList();
+    json['ruleUpdateErrors'] = ruleUpdateErrors;
+    json['updateErrors'] = updateErrors;
     return json;
   }
 
   WorkflowTransitionRulesUpdateErrorDetails copyWith(
       {WorkflowId? workflowId,
-      Map<String, Object>? ruleUpdateErrors,
+      Map<String, dynamic>? ruleUpdateErrors,
       List<String>? updateErrors}) {
     return WorkflowTransitionRulesUpdateErrorDetails(
       workflowId: workflowId ?? this.workflowId,

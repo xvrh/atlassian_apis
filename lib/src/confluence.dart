@@ -1,6 +1,6 @@
 // Generated code - Do not edit manually
 
-import 'api_utils.dart' show ApiClient, Client;
+import 'api_utils.dart' show ApiClient, Client, File;
 
 // ignore_for_file: deprecated_member_use_from_same_package
 
@@ -770,11 +770,11 @@ class ContentChildrenAndDescendantsApi {
   /// Caution: This API can move pages to the top level of a space. Top-level pages are difficult to find in the UI
   /// because they do not show up in the page tree display. To avoid this, never use `before` or `after` positions
   /// when the `targetId` is a top-level page.
-  Future<Map<String, Object>> movePage(
+  Future<Map<String, dynamic>> movePage(
       {required String id,
       required String position,
       required String targetId}) async {
-    return (await _client.send(
+    return await _client.send(
       'put',
       'api/content/{id}/move/{position}/{targetId}',
       pathParameters: {
@@ -782,8 +782,7 @@ class ContentChildrenAndDescendantsApi {
         'position': position,
         'targetId': targetId,
       },
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+    ) as Map<String, Object?>;
   }
 
   /// Returns all children of a given type, for a piece of content.
@@ -1404,9 +1403,9 @@ class ContentRestrictionsApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content.
-  Future<Map<String, Object>> getRestrictionsByOperation(
+  Future<Map<String, dynamic>> getRestrictionsByOperation(
       {required String id, List<String>? expand}) async {
-    return (await _client.send(
+    return await _client.send(
       'get',
       'api/content/{id}/restriction/byOperation',
       pathParameters: {
@@ -1415,8 +1414,7 @@ class ContentRestrictionsApi {
       queryParameters: {
         if (expand != null) 'expand': '$expand',
       },
-    ) as Map<String, Object?>)
-        .map((k, v) => MapEntry(k, v ?? {}));
+    ) as Map<String, Object?>;
   }
 
   /// Returns the restictions on a piece of content for a given operation (read
@@ -3955,7 +3953,7 @@ class AttachmentUpdateType {
 class AuditRecordAuthor {
   final AuditRecordAuthorType type;
   final String displayName;
-  final Map<String, Object> operations;
+  final Map<String, dynamic> operations;
 
   /// This property has been deprecated and will be removed soon.
   final String username;
@@ -3974,9 +3972,7 @@ class AuditRecordAuthor {
     return AuditRecordAuthor(
       type: AuditRecordAuthorType.fromValue(json['type'] as String? ?? ''),
       displayName: json['displayName'] as String? ?? '',
-      operations: (json['operations'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
+      operations: json['operations'] as Map<String, Object?>? ?? {},
       username: json['username'] as String? ?? '',
       userKey: json['userKey'] as String? ?? '',
     );
@@ -3992,7 +3988,7 @@ class AuditRecordAuthor {
     final json = <String, Object?>{};
     json['type'] = type.value;
     json['displayName'] = displayName;
-    json['operations'] = operations.map((k, v) => MapEntry(k, v));
+    json['operations'] = operations;
     json['username'] = username;
     json['userKey'] = userKey;
     return json;
@@ -4001,7 +3997,7 @@ class AuditRecordAuthor {
   AuditRecordAuthor copyWith(
       {AuditRecordAuthorType? type,
       String? displayName,
-      Map<String, Object>? operations,
+      Map<String, dynamic>? operations,
       String? username,
       String? userKey}) {
     return AuditRecordAuthor(
@@ -4211,7 +4207,7 @@ class AuditRecordCreateAuthor {
   final String? displayName;
 
   /// Always defaults to null.
-  final Map<String, Object>? operations;
+  final Map<String, dynamic>? operations;
 
   /// This property has been deprecated and will be removed soon.
   final String? username;
@@ -4231,8 +4227,7 @@ class AuditRecordCreateAuthor {
       type:
           AuditRecordCreateAuthorType.fromValue(json['type'] as String? ?? ''),
       displayName: json['displayName'] as String?,
-      operations: (json['operations'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      operations: json['operations'] as Map<String, Object?>?,
       username: json['username'] as String?,
       userKey: json['userKey'] as String?,
     );
@@ -4251,7 +4246,7 @@ class AuditRecordCreateAuthor {
       json['displayName'] = displayName;
     }
     if (operations != null) {
-      json['operations'] = operations.map((k, v) => MapEntry(k, v));
+      json['operations'] = operations;
     }
     if (username != null) {
       json['username'] = username;
@@ -4265,7 +4260,7 @@ class AuditRecordCreateAuthor {
   AuditRecordCreateAuthor copyWith(
       {AuditRecordCreateAuthorType? type,
       String? displayName,
-      Map<String, Object>? operations,
+      Map<String, dynamic>? operations,
       String? username,
       String? userKey}) {
     return AuditRecordCreateAuthor(
@@ -7047,7 +7042,7 @@ class ContentMetadataCurrentuser {
 class ContentMetadata {
   final ContentMetadataCurrentuser? currentuser;
   final GenericLinks? properties;
-  final Map<String, Object>? frontend;
+  final Map<String, dynamic>? frontend;
   final LabelArray? labels;
 
   ContentMetadata(
@@ -7062,8 +7057,7 @@ class ContentMetadata {
       properties: json['properties'] != null
           ? GenericLinks.fromJson(json['properties']! as Map<String, Object?>)
           : null,
-      frontend: (json['frontend'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      frontend: json['frontend'] as Map<String, Object?>?,
       labels: json['labels'] != null
           ? LabelArray.fromJson(json['labels']! as Map<String, Object?>)
           : null,
@@ -7084,7 +7078,7 @@ class ContentMetadata {
       json['properties'] = properties.toJson();
     }
     if (frontend != null) {
-      json['frontend'] = frontend.map((k, v) => MapEntry(k, v));
+      json['frontend'] = frontend;
     }
     if (labels != null) {
       json['labels'] = labels.toJson();
@@ -7095,7 +7089,7 @@ class ContentMetadata {
   ContentMetadata copyWith(
       {ContentMetadataCurrentuser? currentuser,
       GenericLinks? properties,
-      Map<String, Object>? frontend,
+      Map<String, dynamic>? frontend,
       LabelArray? labels}) {
     return ContentMetadata(
       currentuser: currentuser ?? this.currentuser,
@@ -7171,7 +7165,7 @@ class ContentProperty {
   final String key;
 
   /// The value of the content property. This can be empty or a complex object.
-  final Map<String, Object> value;
+  final Map<String, dynamic> value;
   final ContentPropertyVersion? version;
   final Content? content;
   final GenericLinks links;
@@ -7188,9 +7182,7 @@ class ContentProperty {
     return ContentProperty(
       id: (json['id'] as num?)?.toInt() ?? 0,
       key: json['key'] as String? ?? '',
-      value: (json['value'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
+      value: json['value'] as Map<String, Object?>? ?? {},
       version: json['version'] != null
           ? ContentPropertyVersion.fromJson(
               json['version']! as Map<String, Object?>)
@@ -7214,7 +7206,7 @@ class ContentProperty {
     final json = <String, Object?>{};
     json['id'] = id;
     json['key'] = key;
-    json['value'] = value.map((k, v) => MapEntry(k, v));
+    json['value'] = value;
     if (version != null) {
       json['version'] = version.toJson();
     }
@@ -7228,7 +7220,7 @@ class ContentProperty {
   ContentProperty copyWith(
       {int? id,
       String? key,
-      Map<String, Object>? value,
+      Map<String, dynamic>? value,
       ContentPropertyVersion? version,
       Content? content,
       GenericLinks? links}) {
@@ -7406,7 +7398,7 @@ class ContentPropertyUpdateVersion {
 
 class ContentPropertyUpdate {
   /// The value of the content property. This can be empty or a complex object.
-  final Map<String, Object> value;
+  final Map<String, dynamic> value;
 
   /// The version number of the property.
   final ContentPropertyUpdateVersion version;
@@ -7415,9 +7407,7 @@ class ContentPropertyUpdate {
 
   factory ContentPropertyUpdate.fromJson(Map<String, Object?> json) {
     return ContentPropertyUpdate(
-      value: (json['value'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
+      value: json['value'] as Map<String, Object?>? ?? {},
       version: ContentPropertyUpdateVersion.fromJson(
           json['version'] as Map<String, Object?>? ?? const {}),
     );
@@ -7428,13 +7418,13 @@ class ContentPropertyUpdate {
     var version = this.version;
 
     final json = <String, Object?>{};
-    json['value'] = value.map((k, v) => MapEntry(k, v));
+    json['value'] = value;
     json['version'] = version.toJson();
     return json;
   }
 
   ContentPropertyUpdate copyWith(
-      {Map<String, Object>? value, ContentPropertyUpdateVersion? version}) {
+      {Map<String, dynamic>? value, ContentPropertyUpdateVersion? version}) {
     return ContentPropertyUpdate(
       value: value ?? this.value,
       version: version ?? this.version,
@@ -9491,7 +9481,7 @@ class CQLPersonalDataConvertedQueries {
     var queryStrings = this.queryStrings;
 
     final json = <String, Object?>{};
-    json['queryStrings'] = queryStrings.map((i) => i).toList();
+    json['queryStrings'] = queryStrings;
     return json;
   }
 
@@ -9522,7 +9512,7 @@ class CQLPersonalDataMigrationRequest {
     var queryStrings = this.queryStrings;
 
     final json = <String, Object?>{};
-    json['queryStrings'] = queryStrings.map((i) => i).toList();
+    json['queryStrings'] = queryStrings;
     return json;
   }
 
@@ -10450,7 +10440,7 @@ class LookAndFeelSettingsSelected {
 
 class LongTaskStatusName {
   final String key;
-  final List<Map<String, Object>> args;
+  final List<Map<String, dynamic>> args;
 
   LongTaskStatusName({required this.key, required this.args});
 
@@ -10458,10 +10448,7 @@ class LongTaskStatusName {
     return LongTaskStatusName(
       key: json['key'] as String? ?? '',
       args: (json['args'] as List<Object?>?)
-              ?.map((i) =>
-                  (i as Map<String, Object?>?)
-                      ?.map((k, v) => MapEntry(k, v ?? {})) ??
-                  {})
+              ?.map((i) => i as Map<String, Object?>? ?? {})
               .toList() ??
           [],
     );
@@ -10473,11 +10460,11 @@ class LongTaskStatusName {
 
     final json = <String, Object?>{};
     json['key'] = key;
-    json['args'] = args.map((i) => i.map((k, v) => MapEntry(k, v))).toList();
+    json['args'] = args;
     return json;
   }
 
-  LongTaskStatusName copyWith({String? key, List<Map<String, Object>>? args}) {
+  LongTaskStatusName copyWith({String? key, List<Map<String, dynamic>>? args}) {
     return LongTaskStatusName(
       key: key ?? this.key,
       args: args ?? this.args,
@@ -10516,7 +10503,7 @@ class LongTaskStatus {
   final List<Message> messages;
   final String? status;
   final List<Message> errors;
-  final Map<String, Object>? additionalDetails;
+  final Map<String, dynamic>? additionalDetails;
 
   LongTaskStatus(
       {required this.id,
@@ -10549,8 +10536,7 @@ class LongTaskStatus {
                   Message.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      additionalDetails: (json['additionalDetails'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      additionalDetails: json['additionalDetails'] as Map<String, Object?>?,
     );
   }
 
@@ -10577,8 +10563,7 @@ class LongTaskStatus {
     }
     json['errors'] = errors.map((i) => i.toJson()).toList();
     if (additionalDetails != null) {
-      json['additionalDetails'] =
-          additionalDetails.map((k, v) => MapEntry(k, v));
+      json['additionalDetails'] = additionalDetails;
     }
     return json;
   }
@@ -10592,7 +10577,7 @@ class LongTaskStatus {
       List<Message>? messages,
       String? status,
       List<Message>? errors,
-      Map<String, Object>? additionalDetails}) {
+      Map<String, dynamic>? additionalDetails}) {
     return LongTaskStatus(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -10685,7 +10670,7 @@ class LongTaskStatusWithLinks {
 class MacroInstance {
   final String? name;
   final String? body;
-  final Map<String, Object>? parameters;
+  final Map<String, dynamic>? parameters;
   final GenericLinks? links;
 
   MacroInstance({this.name, this.body, this.parameters, this.links});
@@ -10694,8 +10679,7 @@ class MacroInstance {
     return MacroInstance(
       name: json['name'] as String?,
       body: json['body'] as String?,
-      parameters: (json['parameters'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      parameters: json['parameters'] as Map<String, Object?>?,
       links: json['_links'] != null
           ? GenericLinks.fromJson(json['_links']! as Map<String, Object?>)
           : null,
@@ -10716,7 +10700,7 @@ class MacroInstance {
       json['body'] = body;
     }
     if (parameters != null) {
-      json['parameters'] = parameters.map((k, v) => MapEntry(k, v));
+      json['parameters'] = parameters;
     }
     if (links != null) {
       json['_links'] = links.toJson();
@@ -10727,7 +10711,7 @@ class MacroInstance {
   MacroInstance copyWith(
       {String? name,
       String? body,
-      Map<String, Object>? parameters,
+      Map<String, dynamic>? parameters,
       GenericLinks? links}) {
     return MacroInstance(
       name: name ?? this.name,
@@ -10799,7 +10783,7 @@ class MenusLookAndFeel {
 
 class Message {
   final String translation;
-  final List<Map<String, Object>> args;
+  final List<Map<String, dynamic>> args;
 
   Message({required this.translation, required this.args});
 
@@ -10807,10 +10791,7 @@ class Message {
     return Message(
       translation: json['translation'] as String? ?? '',
       args: (json['args'] as List<Object?>?)
-              ?.map((i) =>
-                  (i as Map<String, Object?>?)
-                      ?.map((k, v) => MapEntry(k, v ?? {})) ??
-                  {})
+              ?.map((i) => i as Map<String, Object?>? ?? {})
               .toList() ??
           [],
     );
@@ -10822,11 +10803,11 @@ class Message {
 
     final json = <String, Object?>{};
     json['translation'] = translation;
-    json['args'] = args.map((i) => i.map((k, v) => MapEntry(k, v))).toList();
+    json['args'] = args;
     return json;
   }
 
-  Message copyWith({String? translation, List<Map<String, Object>>? args}) {
+  Message copyWith({String? translation, List<Map<String, dynamic>>? args}) {
     return Message(
       translation: translation ?? this.translation,
       args: args ?? this.args,
@@ -11469,8 +11450,8 @@ class RelationExpandable {
 class Relation {
   final String name;
   final RelationData? relationData;
-  final Map<String, Object>? source;
-  final Map<String, Object>? target;
+  final Map<String, dynamic>? source;
+  final Map<String, dynamic>? target;
   final RelationExpandable expandable;
   final GenericLinks links;
 
@@ -11488,10 +11469,8 @@ class Relation {
       relationData: json['relationData'] != null
           ? RelationData.fromJson(json['relationData']! as Map<String, Object?>)
           : null,
-      source: (json['source'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      target: (json['target'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      source: json['source'] as Map<String, Object?>?,
+      target: json['target'] as Map<String, Object?>?,
       expandable: RelationExpandable.fromJson(
           json['_expandable'] as Map<String, Object?>? ?? const {}),
       links: GenericLinks.fromJson(
@@ -11513,10 +11492,10 @@ class Relation {
       json['relationData'] = relationData.toJson();
     }
     if (source != null) {
-      json['source'] = source.map((k, v) => MapEntry(k, v));
+      json['source'] = source;
     }
     if (target != null) {
-      json['target'] = target.map((k, v) => MapEntry(k, v));
+      json['target'] = target;
     }
     json['_expandable'] = expandable.toJson();
     json['_links'] = links.toJson();
@@ -11526,8 +11505,8 @@ class Relation {
   Relation copyWith(
       {String? name,
       RelationData? relationData,
-      Map<String, Object>? source,
-      Map<String, Object>? target,
+      Map<String, dynamic>? source,
+      Map<String, dynamic>? target,
       RelationExpandable? expandable,
       GenericLinks? links}) {
     return Relation(
@@ -12974,7 +12953,7 @@ class SpacePropertyExpandable {
 class SpaceProperty {
   final int id;
   final String key;
-  final Map<String, Object> value;
+  final Map<String, dynamic> value;
   final SpacePropertyVersion? version;
   final Space? space;
   final SpacePropertyExpandable expandable;
@@ -12991,9 +12970,7 @@ class SpaceProperty {
     return SpaceProperty(
       id: (json['id'] as num?)?.toInt() ?? 0,
       key: json['key'] as String? ?? '',
-      value: (json['value'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
+      value: json['value'] as Map<String, Object?>? ?? {},
       version: json['version'] != null
           ? SpacePropertyVersion.fromJson(
               json['version']! as Map<String, Object?>)
@@ -13017,7 +12994,7 @@ class SpaceProperty {
     final json = <String, Object?>{};
     json['id'] = id;
     json['key'] = key;
-    json['value'] = value.map((k, v) => MapEntry(k, v));
+    json['value'] = value;
     if (version != null) {
       json['version'] = version.toJson();
     }
@@ -13031,7 +13008,7 @@ class SpaceProperty {
   SpaceProperty copyWith(
       {int? id,
       String? key,
-      Map<String, Object>? value,
+      Map<String, dynamic>? value,
       SpacePropertyVersion? version,
       Space? space,
       SpacePropertyExpandable? expandable}) {
@@ -13209,7 +13186,7 @@ class SpacePropertyUpdateVersion {
 
 class SpacePropertyUpdate {
   /// The value of the property.
-  final Map<String, Object> value;
+  final Map<String, dynamic> value;
 
   /// The version number of the property.
   final SpacePropertyUpdateVersion version;
@@ -13218,9 +13195,7 @@ class SpacePropertyUpdate {
 
   factory SpacePropertyUpdate.fromJson(Map<String, Object?> json) {
     return SpacePropertyUpdate(
-      value: (json['value'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
+      value: json['value'] as Map<String, Object?>? ?? {},
       version: SpacePropertyUpdateVersion.fromJson(
           json['version'] as Map<String, Object?>? ?? const {}),
     );
@@ -13231,13 +13206,13 @@ class SpacePropertyUpdate {
     var version = this.version;
 
     final json = <String, Object?>{};
-    json['value'] = value.map((k, v) => MapEntry(k, v));
+    json['value'] = value;
     json['version'] = version.toJson();
     return json;
   }
 
   SpacePropertyUpdate copyWith(
-      {Map<String, Object>? value, SpacePropertyUpdateVersion? version}) {
+      {Map<String, dynamic>? value, SpacePropertyUpdateVersion? version}) {
     return SpacePropertyUpdate(
       value: value ?? this.value,
       version: version ?? this.version,
@@ -14793,7 +14768,7 @@ class UsersUserKeys {
 
     final json = <String, Object?>{};
     json['users'] = users.map((i) => i.toJson()).toList();
-    json['userKeys'] = userKeys.map((i) => i).toList();
+    json['userKeys'] = userKeys;
     if (links != null) {
       json['_links'] = links.toJson();
     }
@@ -15460,8 +15435,8 @@ class WebResourceDependencies {
     var superbatch = this.superbatch;
 
     final json = <String, Object?>{};
-    json['keys'] = keys.map((i) => i).toList();
-    json['contexts'] = contexts.map((i) => i).toList();
+    json['keys'] = keys;
+    json['contexts'] = contexts;
     if (uris != null) {
       json['uris'] = uris.toJson();
     }

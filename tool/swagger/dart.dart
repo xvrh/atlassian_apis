@@ -85,7 +85,8 @@ class Api {
     } else if (type == 'array') {
       return ListDartType(this, typeFromSchema(schema.items!));
     } else if (type == 'object') {
-      return MapDartType(this, null);
+      return MapDartType.withTypes(
+          this, DartType(this, 'String'), DartType(this, 'dynamic'));
     } else {
       if (type == 'string' && schema.format == 'date-time') {
         return DateTimeType(this);
@@ -126,7 +127,7 @@ class Api {
           'uuid': 'String',
           'file': 'MultipartFile',
           'object': 'Map',
-          'dynamic': 'Object',
+          'dynamic': 'dynamic',
         }[type] ??
         typeAliases[type] ??
         type.toCapitalized();
@@ -143,7 +144,7 @@ class Api {
     buffer.writeln('''
 // Generated code - Do not edit manually
 
-import 'api_utils.dart' show ApiClient, Client;
+import 'api_utils.dart' show ApiClient, Client, File;
 
 // ignore_for_file: deprecated_member_use_from_same_package
 
@@ -268,13 +269,12 @@ class Operation {
       {required this.httpMethod})
       : assert(!url.startsWith('/'));
 
-  DartType? _findBody() {
+  RequestBody? _findBody() {
     var body = path.requestBody;
     if (body != null) {
       var contents = body.content;
       if (contents != null) {
-        var content = contents.entries.first.value;
-        return _api.typeFromSchema(content.schema!);
+        return RequestBody(_api, body, contents);
       }
     }
     return null;
@@ -313,7 +313,8 @@ class Operation {
           "${parameter.required && namedParameterMode ? 'required' : ''} ${parameterType.toString()}${parameter.required ? '' : '?'} ${dartIdentifier(parameter.name)}");
     }
     if (body != null) {
-      encodedParameters.add('required $body body');
+      encodedParameters.add(
+          '${body.isRequired ? 'required' : ''} ${body.typeName}${!body.isRequired ? '?' : ''} ${body.isFileUpload ? 'file' : 'body'}');
     }
     if (encodedParameters.isNotEmpty) {
       var joinedParameters = encodedParameters.join(', ');
@@ -386,8 +387,14 @@ class Operation {
     var bodyParameterCode = '';
     if (httpMethod != sw.HttpMethod.get) {
       if (body != null) {
-        var jsonEncodeCode = body.toJsonCode(PropertyName('body'), {});
-        bodyParameterCode = ', body: $jsonEncodeCode';
+        var bodyJson = body.jsonDartType;
+        if (bodyJson != null) {
+          var jsonEncodeCode = bodyJson.toJsonCode(PropertyName('body'), {});
+          bodyParameterCode = ', body: $jsonEncodeCode';
+        } else {
+          assert(body.isFileUpload);
+          bodyParameterCode = ', file: file';
+        }
       }
     }
 
@@ -406,6 +413,41 @@ class Operation {
     buffer.writeln('}');
 
     return buffer.toString();
+  }
+}
+
+class RequestBody {
+  final Api _api;
+  final sw.Request request;
+  bool _isFileUpload = false;
+  late sw.Content _content;
+  DartType? _jsonDartType;
+
+  RequestBody(this._api, this.request, Map<String, sw.Content> contents) {
+    var content = contents.entries.first;
+    _content = content.value;
+    if (content.key == 'multipart/form-data' &&
+        content.value.schema?.format == 'binary') {
+      _isFileUpload = true;
+    } else {
+      _jsonDartType = _api.typeFromSchema(_content.schema!);
+    }
+  }
+
+  bool get isRequired => request.required;
+
+  bool get isFileUpload => _isFileUpload;
+
+  DartType? get jsonDartType => _jsonDartType;
+
+  String get typeName {
+    var jsonType = _jsonDartType;
+    if (jsonType != null) {
+      return jsonType.toString();
+    } else {
+      assert(_isFileUpload);
+      return 'File';
+    }
   }
 }
 
@@ -446,10 +488,6 @@ class ComplexType extends DartType {
 
   String get className => name;
 
-  String get nameDeclaration {
-    return className;
-  }
-
   bool _isPropertyRequired(Property property) {
     return _definitionRequireProperty(property) ||
         property.type is ListDartType ||
@@ -469,7 +507,7 @@ class ComplexType extends DartType {
         buffer.writeln('@deprecated');
       }
     }
-    buffer.writeln('class $nameDeclaration {');
+    buffer.writeln('class $name {');
     for (final property in _properties) {
       var typeName = property.type.toDeclarationString({});
 
@@ -664,7 +702,13 @@ class DartType {
       }
     } else if (!targetIsNullable && accessorIsNullable) {
       if (simpleType != null) {
-        return '${simpleType.castNullable(accessor)} ?? ${simpleType.defaultValue}';
+        var code = simpleType.castNullable(accessor);
+        var defaultValue = simpleType.defaultValue;
+        if (defaultValue.isNotEmpty) {
+          return '$code ?? ${simpleType.defaultValue}';
+        } else {
+          return code;
+        }
       } else {
         return '$name.fromJson($accessor as Map<String, Object?>? ?? const {})';
       }
@@ -727,9 +771,16 @@ class SimpleType {
     castNonNullable: (a) => a,
     castNullable: (a) => a,
   );
+  static final dynamicType = SimpleType(
+    'dynamic',
+    defaultValue: '',
+    castNonNullable: (a) => a,
+    castNullable: (a) => a,
+  );
 
   static final all = <String, SimpleType>{
-    for (var e in [integer, number, boolean, string, object]) e.name: e
+    for (var e in [integer, number, boolean, string, object, dynamicType])
+      e.name: e
   };
 
   SimpleType(
@@ -767,8 +818,11 @@ class ListDartType extends DartType {
   String toJsonCode(
       PropertyName propertyName, Map<DartType, String> genericTypes) {
     var itemJsonCode = itemType.toJsonCode(PropertyName('i'), genericTypes);
-
-    return '${propertyName.camelCased}.map((i) => $itemJsonCode).toList()';
+    if (itemJsonCode != 'i') {
+      return '${propertyName.camelCased}.map((i) => $itemJsonCode).toList()';
+    } else {
+      return propertyName.camelCased;
+    }
   }
 
   @override
@@ -797,6 +851,13 @@ class MapDartType extends DartType {
     genericParameters.add(_itemType);
   }
 
+  MapDartType.withTypes(Api api, DartType key, DartType value)
+      : super(api, 'Map') {
+    genericParameters.add(key);
+    genericParameters.add(value);
+    _itemType = value;
+  }
+
   @override
   String get defaultValue => simpleType?.defaultValue ?? '{}';
 
@@ -804,8 +865,11 @@ class MapDartType extends DartType {
   String toJsonCode(
       PropertyName propertyName, Map<DartType, String> genericTypes) {
     var itemJsonCode = _itemType.toJsonCode(PropertyName('v'), genericTypes);
-
-    return '${propertyName.camelCased}.map((k, v) => MapEntry(k, $itemJsonCode))';
+    if (itemJsonCode != 'v') {
+      return '${propertyName.camelCased}.map((k, v) => MapEntry(k, $itemJsonCode))';
+    } else {
+      return propertyName.camelCased;
+    }
   }
 
   @override
@@ -813,8 +877,15 @@ class MapDartType extends DartType {
       {required bool accessorIsNullable, required bool targetIsNullable}) {
     var qMark = accessorIsNullable ? '?' : '';
 
-    var code =
-        "($accessor as Map<String, Object?>$qMark)$qMark.map((k, v) => MapEntry(k, ${_itemType.fromJsonCode('v', genericTypes, accessorIsNullable: true, targetIsNullable: false)}))";
+    var itemCode = _itemType.fromJsonCode('v', genericTypes,
+        accessorIsNullable: true, targetIsNullable: false);
+    var castedAccessor = '$accessor as Map<String, Object?>$qMark';
+    String code;
+    if (itemCode != 'v') {
+      code = '($castedAccessor)$qMark.map((k, v) => MapEntry(k, $itemCode))';
+    } else {
+      code = castedAccessor;
+    }
     if (accessorIsNullable && !targetIsNullable) {
       return '$code ?? {}';
     }
