@@ -54,7 +54,8 @@ class Api {
           service.operations.add(
               Operation(this, methodName, path, url, httpMethod: httpMethod));
         } else {
-          print('Unknown http method $httpMethodName ${pathEntry.key} $name');
+          // TODO(xha): some paths contains a "parameters" entry that contains
+          // some header parameter definition to add or require (ie. Authorization).
         }
       }
     }
@@ -63,10 +64,8 @@ class Api {
       var definitionName = definitionEntry.key;
       var definition = definitionEntry.value;
 
-      //if (definition.type == 'object') {
       _complexTypes.add(
           ComplexType(this, _typeNameToDartType(definitionName), definition));
-      //}
     }
   }
 
@@ -95,6 +94,7 @@ class Api {
           //throw Exception('Type is null for schema $schema');
           // TODO(xha): support allOf
           "";
+
           return MapDartType(this, null);
         }
         return parseDartType(type);
@@ -144,7 +144,7 @@ class Api {
     buffer.writeln('''
 // Generated code - Do not edit manually
 
-import 'api_utils.dart' show ApiClient, Client, File;
+import 'api_utils.dart';
 
 // ignore_for_file: deprecated_member_use_from_same_package
 
@@ -354,53 +354,43 @@ class Operation {
     buffer.writeln(_toComment(path.description));
     buffer.writeln('Future<$returnTypeName> $methodName($parameters) async {');
 
-    var pathParametersCode = '';
-    var queryParametersCode = '';
+    var parametersCode = '';
+
     var pathParameters =
         allParameters.where((p) => p.location == sw.ParameterLocation.path);
     if (pathParameters.isNotEmpty) {
-      pathParametersCode = ', pathParameters: {';
+      parametersCode += ', pathParameters: {';
       for (var parameter in pathParameters) {
         var parameterType = _api.typeFromParameter(parameter);
-        pathParametersCode +=
+        parametersCode +=
             "'${parameter.name}': ${parameterType.identifierToString(dartIdentifier(parameter.name))}, ";
       }
-      pathParametersCode += '}';
+      parametersCode += '}';
     }
 
-    var queryParameters =
-        allParameters.where((p) => p.location == sw.ParameterLocation.query);
-    if (queryParameters.isNotEmpty) {
-      queryParametersCode = ', queryParameters: {';
-      for (var parameter in queryParameters) {
-        var parameterType = _api.typeFromParameter(parameter);
-        if (!parameter.required) {
-          queryParametersCode +=
-              'if (${dartIdentifier(parameter.name)} != null)\n';
-        }
-        queryParametersCode +=
-            "'${parameter.name}': ${parameterType.identifierToString(dartIdentifier(parameter.name))}, \n";
-      }
-      queryParametersCode += '}';
-    }
+    parametersCode += _codeForParameters(
+      'queryParameters',
+      allParameters
+          .where((p) => p.location == sw.ParameterLocation.query)
+          .toList(),
+    );
+    parametersCode += _codeForHeaders(allParameters);
 
-    var bodyParameterCode = '';
     if (httpMethod != sw.HttpMethod.get) {
       if (body != null) {
         var bodyJson = body.jsonDartType;
         if (bodyJson != null) {
           var jsonEncodeCode = bodyJson.toJsonCode(PropertyName('body'), {});
-          bodyParameterCode = ', body: $jsonEncodeCode';
+          parametersCode += ', body: $jsonEncodeCode';
         } else {
           assert(body.isFileUpload);
-          bodyParameterCode = ', file: file';
+          parametersCode += ', file: file';
         }
       }
     }
 
-    var sendCode = "await _client.send('${httpMethod.name}', '$url'"
-        '$pathParametersCode$queryParametersCode$bodyParameterCode,)';
-
+    var sendCode =
+        "await _client.send('${httpMethod.name}', '$url'$parametersCode,)";
     if (returnDartType != null) {
       var decodeCode = _fromJsonCodeForComplexType(
           _api, returnDartType, sendCode,
@@ -413,6 +403,44 @@ class Operation {
     buffer.writeln('}');
 
     return buffer.toString();
+  }
+
+  String _codeForParameters(String name, List<sw.Parameter> parameters) {
+    var queryParametersCode = '';
+    if (parameters.isNotEmpty) {
+      queryParametersCode = ', $name: {';
+      for (var parameter in parameters) {
+        var parameterType = _api.typeFromParameter(parameter);
+        if (!parameter.required) {
+          queryParametersCode +=
+              'if (${dartIdentifier(parameter.name)} != null)\n';
+        }
+        queryParametersCode +=
+            "'${parameter.name}': ${parameterType.identifierToString(dartIdentifier(parameter.name))}, \n";
+      }
+      queryParametersCode += '}';
+    }
+    return queryParametersCode;
+  }
+
+  String _codeForHeaders(Iterable<sw.Parameter> parameters) {
+    parameters = parameters
+        .where((p) =>
+            p.location == sw.ParameterLocation.header &&
+            p.name != 'Authorization')
+        .toList();
+
+    var queryParametersCode = '';
+    if (parameters.isNotEmpty) {
+      queryParametersCode = ', headers: {';
+      for (var parameter in parameters) {
+        var defaultValue = parameter.schema?.defaultValue;
+
+        queryParametersCode += "'${parameter.name}': '$defaultValue', \n";
+      }
+      queryParametersCode += '}';
+    }
+    return queryParametersCode;
   }
 }
 

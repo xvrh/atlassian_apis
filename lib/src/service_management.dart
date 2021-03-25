@@ -1,6 +1,6 @@
 // Generated code - Do not edit manually
 
-import 'api_utils.dart' show ApiClient, Client, File;
+import 'api_utils.dart';
 
 // ignore_for_file: deprecated_member_use_from_same_package
 

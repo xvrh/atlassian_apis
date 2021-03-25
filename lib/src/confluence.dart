@@ -1,6 +1,6 @@
 // Generated code - Do not edit manually
 
-import 'api_utils.dart' show ApiClient, Client, File;
+import 'api_utils.dart';
 
 // ignore_for_file: deprecated_member_use_from_same_package
 
@@ -1918,6 +1918,9 @@ class ContentWatchesApi {
         if (username != null) 'username': username,
         'accountId': accountId,
       },
+      headers: {
+        'X-Atlassian-Token': 'no-check',
+      },
     );
   }
 
@@ -1977,6 +1980,9 @@ class ContentWatchesApi {
         if (key != null) 'key': key,
         if (username != null) 'username': username,
         'accountId': accountId,
+      },
+      headers: {
+        'X-Atlassian-Token': 'no-check',
       },
     );
   }
@@ -2065,6 +2071,9 @@ class ContentWatchesApi {
         if (key != null) 'key': key,
         if (username != null) 'username': username,
         'accountId': accountId,
+      },
+      headers: {
+        'X-Atlassian-Token': 'no-check',
       },
     );
   }
