@@ -1269,7 +1269,7 @@ class CustomerRequestStatusDTO {
   final CustomerRequestStatusDTOStatusCategory? statusCategory;
 
   /// Date on which the status was attained.
-  final Map<String, Object>? statusDate;
+  final DateDTO? statusDate;
 
   CustomerRequestStatusDTO({this.status, this.statusCategory, this.statusDate});
 
@@ -1280,8 +1280,9 @@ class CustomerRequestStatusDTO {
           ? CustomerRequestStatusDTOStatusCategory.fromValue(
               json['statusCategory']! as String)
           : null,
-      statusDate: (json['statusDate'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      statusDate: json['statusDate'] != null
+          ? DateDTO.fromJson(json['statusDate']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -1298,7 +1299,7 @@ class CustomerRequestStatusDTO {
       json['statusCategory'] = statusCategory.value;
     }
     if (statusDate != null) {
-      json['statusDate'] = statusDate;
+      json['statusDate'] = statusDate.toJson();
     }
     return json;
   }
@@ -1306,7 +1307,7 @@ class CustomerRequestStatusDTO {
   CustomerRequestStatusDTO copyWith(
       {String? status,
       CustomerRequestStatusDTOStatusCategory? statusCategory,
-      Map<String, Object>? statusDate}) {
+      DateDTO? statusDate}) {
     return CustomerRequestStatusDTO(
       status: status ?? this.status,
       statusCategory: statusCategory ?? this.statusCategory,
@@ -1419,7 +1420,7 @@ class PagedDTOCustomerRequestStatusDTO {
   final List<String> expands;
 
   /// List of the links relating to the page.
-  final Map<String, Object>? links;
+  final PagedLinkDTO? links;
 
   PagedDTOCustomerRequestStatusDTO(
       {this.size,
@@ -1448,8 +1449,9 @@ class PagedDTOCustomerRequestStatusDTO {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -1476,7 +1478,7 @@ class PagedDTOCustomerRequestStatusDTO {
     json['values'] = values.map((i) => i.toJson()).toList();
     json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -1488,7 +1490,7 @@ class PagedDTOCustomerRequestStatusDTO {
       bool? isLastPage,
       List<CustomerRequestStatusDTO>? values,
       List<String>? expands,
-      Map<String, Object>? links}) {
+      PagedLinkDTO? links}) {
     return PagedDTOCustomerRequestStatusDTO(
       size: size ?? this.size,
       start: start ?? this.start,
@@ -1663,7 +1665,7 @@ class PagedDTORequestTypeGroupDTO {
   final List<String> expands;
 
   /// List of the links relating to the page.
-  final Map<String, Object>? links;
+  final PagedLinkDTO? links;
 
   PagedDTORequestTypeGroupDTO(
       {this.size,
@@ -1692,8 +1694,9 @@ class PagedDTORequestTypeGroupDTO {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -1720,7 +1723,7 @@ class PagedDTORequestTypeGroupDTO {
     json['values'] = values.map((i) => i.toJson()).toList();
     json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -1732,7 +1735,7 @@ class PagedDTORequestTypeGroupDTO {
       bool? isLastPage,
       List<RequestTypeGroupDTO>? values,
       List<String>? expands,
-      Map<String, Object>? links}) {
+      PagedLinkDTO? links}) {
     return PagedDTORequestTypeGroupDTO(
       size: size ?? this.size,
       start: start ?? this.start,
@@ -1902,7 +1905,7 @@ class ArticleDTO {
   final String? excerpt;
 
   /// Source of the article.
-  final Map<String, Object>? source;
+  final SourceDTO? source;
   final ContentDTO? content;
 
   ArticleDTO({this.title, this.excerpt, this.source, this.content});
@@ -1911,8 +1914,9 @@ class ArticleDTO {
     return ArticleDTO(
       title: json['title'] as String?,
       excerpt: json['excerpt'] as String?,
-      source: (json['source'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      source: json['source'] != null
+          ? SourceDTO.fromJson(json['source']! as Map<String, Object?>)
+          : null,
       content: json['content'] != null
           ? ContentDTO.fromJson(json['content']! as Map<String, Object?>)
           : null,
@@ -1933,7 +1937,7 @@ class ArticleDTO {
       json['excerpt'] = excerpt;
     }
     if (source != null) {
-      json['source'] = source;
+      json['source'] = source.toJson();
     }
     if (content != null) {
       json['content'] = content.toJson();
@@ -1944,7 +1948,7 @@ class ArticleDTO {
   ArticleDTO copyWith(
       {String? title,
       String? excerpt,
-      Map<String, Object>? source,
+      SourceDTO? source,
       ContentDTO? content}) {
     return ArticleDTO(
       title: title ?? this.title,
@@ -2002,7 +2006,7 @@ class PagedDTOArticleDTO {
   final List<String> expands;
 
   /// List of the links relating to the page.
-  final Map<String, Object>? links;
+  final PagedLinkDTO? links;
 
   PagedDTOArticleDTO(
       {this.size,
@@ -2031,8 +2035,9 @@ class PagedDTOArticleDTO {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -2059,7 +2064,7 @@ class PagedDTOArticleDTO {
     json['values'] = values.map((i) => i.toJson()).toList();
     json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -2071,7 +2076,7 @@ class PagedDTOArticleDTO {
       bool? isLastPage,
       List<ArticleDTO>? values,
       List<String>? expands,
-      Map<String, Object>? links}) {
+      PagedLinkDTO? links}) {
     return PagedDTOArticleDTO(
       size: size ?? this.size,
       start: start ?? this.start,
@@ -2207,7 +2212,7 @@ class UserDTO {
   final String? timeZone;
 
   /// URLs for the customer record and related items.
-  final Map<String, Object>? links;
+  final UserLinkDTO? links;
 
   UserDTO(
       {this.accountId,
@@ -2229,8 +2234,9 @@ class UserDTO {
       displayName: json['displayName'] as String?,
       active: json['active'] as bool? ?? false,
       timeZone: json['timeZone'] as String?,
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? UserLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -2265,7 +2271,7 @@ class UserDTO {
       json['timeZone'] = timeZone;
     }
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -2278,7 +2284,7 @@ class UserDTO {
       String? displayName,
       bool? active,
       String? timeZone,
-      Map<String, Object>? links}) {
+      UserLinkDTO? links}) {
     return UserDTO(
       accountId: accountId ?? this.accountId,
       name: name ?? this.name,
@@ -2410,10 +2416,10 @@ class AttachmentDTO {
   final String? filename;
 
   /// Details of the user who attached the file.
-  final Map<String, Object>? author;
+  final UserDTO? author;
 
   /// Date the attachment was added.
-  final Map<String, Object>? created;
+  final DateDTO? created;
 
   /// Size of the attachment in bytes.
   final int? size;
@@ -2422,7 +2428,7 @@ class AttachmentDTO {
   final String? mimeType;
 
   /// Various URLs for the attachment.
-  final Map<String, Object>? links;
+  final AttachmentLinkDTO? links;
 
   AttachmentDTO(
       {this.filename,
@@ -2435,14 +2441,17 @@ class AttachmentDTO {
   factory AttachmentDTO.fromJson(Map<String, Object?> json) {
     return AttachmentDTO(
       filename: json['filename'] as String?,
-      author: (json['author'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      created: (json['created'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      author: json['author'] != null
+          ? UserDTO.fromJson(json['author']! as Map<String, Object?>)
+          : null,
+      created: json['created'] != null
+          ? DateDTO.fromJson(json['created']! as Map<String, Object?>)
+          : null,
       size: (json['size'] as num?)?.toInt(),
       mimeType: json['mimeType'] as String?,
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? AttachmentLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -2459,10 +2468,10 @@ class AttachmentDTO {
       json['filename'] = filename;
     }
     if (author != null) {
-      json['author'] = author;
+      json['author'] = author.toJson();
     }
     if (created != null) {
-      json['created'] = created;
+      json['created'] = created.toJson();
     }
     if (size != null) {
       json['size'] = size;
@@ -2471,18 +2480,18 @@ class AttachmentDTO {
       json['mimeType'] = mimeType;
     }
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
 
   AttachmentDTO copyWith(
       {String? filename,
-      Map<String, Object>? author,
-      Map<String, Object>? created,
+      UserDTO? author,
+      DateDTO? created,
       int? size,
       String? mimeType,
-      Map<String, Object>? links}) {
+      AttachmentLinkDTO? links}) {
     return AttachmentDTO(
       filename: filename ?? this.filename,
       author: author ?? this.author,
@@ -2558,16 +2567,16 @@ class CommentDTO {
   final String? body;
 
   /// The rendered body of the comment.
-  final Map<String, Object>? renderedBody;
+  final RenderedValueDTO? renderedBody;
 
   /// Details of the customer who authored the comment.
-  final Map<String, Object>? author;
+  final UserDTO? author;
 
   /// Date the comment was created.
-  final Map<String, Object>? created;
+  final DateDTO? created;
 
   /// List of the attachments included in the comment.
-  final Map<String, Object>? attachments;
+  final PagedDTOAttachmentDTO? attachments;
 
   /// List of items that can be expanded in the response by specifying the expand query parameter.
   final List<String> expands;
@@ -2576,7 +2585,7 @@ class CommentDTO {
   final bool public;
 
   /// REST API URL link to the comment.
-  final Map<String, Object>? links;
+  final SelfLinkDTO? links;
 
   CommentDTO(
       {this.id,
@@ -2595,21 +2604,28 @@ class CommentDTO {
     return CommentDTO(
       id: json['id'] as String?,
       body: json['body'] as String?,
-      renderedBody: (json['renderedBody'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      author: (json['author'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      created: (json['created'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      attachments: (json['attachments'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      renderedBody: json['renderedBody'] != null
+          ? RenderedValueDTO.fromJson(
+              json['renderedBody']! as Map<String, Object?>)
+          : null,
+      author: json['author'] != null
+          ? UserDTO.fromJson(json['author']! as Map<String, Object?>)
+          : null,
+      created: json['created'] != null
+          ? DateDTO.fromJson(json['created']! as Map<String, Object?>)
+          : null,
+      attachments: json['attachments'] != null
+          ? PagedDTOAttachmentDTO.fromJson(
+              json['attachments']! as Map<String, Object?>)
+          : null,
       expands: (json['_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
       public: json['public'] as bool? ?? false,
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? SelfLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -2632,21 +2648,21 @@ class CommentDTO {
       json['body'] = body;
     }
     if (renderedBody != null) {
-      json['renderedBody'] = renderedBody;
+      json['renderedBody'] = renderedBody.toJson();
     }
     if (author != null) {
-      json['author'] = author;
+      json['author'] = author.toJson();
     }
     if (created != null) {
-      json['created'] = created;
+      json['created'] = created.toJson();
     }
     if (attachments != null) {
-      json['attachments'] = attachments;
+      json['attachments'] = attachments.toJson();
     }
     json['_expands'] = expands;
     json['public'] = public;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -2654,13 +2670,13 @@ class CommentDTO {
   CommentDTO copyWith(
       {String? id,
       String? body,
-      Map<String, Object>? renderedBody,
-      Map<String, Object>? author,
-      Map<String, Object>? created,
-      Map<String, Object>? attachments,
+      RenderedValueDTO? renderedBody,
+      UserDTO? author,
+      DateDTO? created,
+      PagedDTOAttachmentDTO? attachments,
       List<String>? expands,
       bool? public,
-      Map<String, Object>? links}) {
+      SelfLinkDTO? links}) {
     return CommentDTO(
       id: id ?? this.id,
       body: body ?? this.body,
@@ -2693,7 +2709,7 @@ class PagedDTOAttachmentDTO {
   final List<String> expands;
 
   /// List of the links relating to the page.
-  final Map<String, Object>? links;
+  final PagedLinkDTO? links;
 
   PagedDTOAttachmentDTO(
       {this.size,
@@ -2722,8 +2738,9 @@ class PagedDTOAttachmentDTO {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -2750,7 +2767,7 @@ class PagedDTOAttachmentDTO {
     json['values'] = values.map((i) => i.toJson()).toList();
     json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -2762,7 +2779,7 @@ class PagedDTOAttachmentDTO {
       bool? isLastPage,
       List<AttachmentDTO>? values,
       List<String>? expands,
-      Map<String, Object>? links}) {
+      PagedLinkDTO? links}) {
     return PagedDTOAttachmentDTO(
       size: size ?? this.size,
       start: start ?? this.start,
@@ -2908,7 +2925,7 @@ class PagedDTOCommentDTO {
   final List<String> expands;
 
   /// List of the links relating to the page.
-  final Map<String, Object>? links;
+  final PagedLinkDTO? links;
 
   PagedDTOCommentDTO(
       {this.size,
@@ -2937,8 +2954,9 @@ class PagedDTOCommentDTO {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -2965,7 +2983,7 @@ class PagedDTOCommentDTO {
     json['values'] = values.map((i) => i.toJson()).toList();
     json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -2977,7 +2995,7 @@ class PagedDTOCommentDTO {
       bool? isLastPage,
       List<CommentDTO>? values,
       List<String>? expands,
-      Map<String, Object>? links}) {
+      PagedLinkDTO? links}) {
     return PagedDTOCommentDTO(
       size: size ?? this.size,
       start: start ?? this.start,
@@ -3028,7 +3046,7 @@ class OrganizationDTO {
   final String? name;
 
   /// REST API URL to the organization.
-  final Map<String, Object>? links;
+  final SelfLinkDTO? links;
 
   OrganizationDTO({this.id, this.name, this.links});
 
@@ -3036,8 +3054,9 @@ class OrganizationDTO {
     return OrganizationDTO(
       id: json['id'] as String?,
       name: json['name'] as String?,
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? SelfLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -3054,13 +3073,12 @@ class OrganizationDTO {
       json['name'] = name;
     }
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
 
-  OrganizationDTO copyWith(
-      {String? id, String? name, Map<String, Object>? links}) {
+  OrganizationDTO copyWith({String? id, String? name, SelfLinkDTO? links}) {
     return OrganizationDTO(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -3087,7 +3105,7 @@ class PagedDTOOrganizationDTO {
   final List<String> expands;
 
   /// List of the links relating to the page.
-  final Map<String, Object>? links;
+  final PagedLinkDTO? links;
 
   PagedDTOOrganizationDTO(
       {this.size,
@@ -3116,8 +3134,9 @@ class PagedDTOOrganizationDTO {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -3144,7 +3163,7 @@ class PagedDTOOrganizationDTO {
     json['values'] = values.map((i) => i.toJson()).toList();
     json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -3156,7 +3175,7 @@ class PagedDTOOrganizationDTO {
       bool? isLastPage,
       List<OrganizationDTO>? values,
       List<String>? expands,
-      Map<String, Object>? links}) {
+      PagedLinkDTO? links}) {
     return PagedDTOOrganizationDTO(
       size: size ?? this.size,
       start: start ?? this.start,
@@ -3216,7 +3235,7 @@ class PagedDTOUserDTO {
   final List<String> expands;
 
   /// List of the links relating to the page.
-  final Map<String, Object>? links;
+  final PagedLinkDTO? links;
 
   PagedDTOUserDTO(
       {this.size,
@@ -3245,8 +3264,9 @@ class PagedDTOUserDTO {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -3273,7 +3293,7 @@ class PagedDTOUserDTO {
     json['values'] = values.map((i) => i.toJson()).toList();
     json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -3285,7 +3305,7 @@ class PagedDTOUserDTO {
       bool? isLastPage,
       List<UserDTO>? values,
       List<String>? expands,
-      Map<String, Object>? links}) {
+      PagedLinkDTO? links}) {
     return PagedDTOUserDTO(
       size: size ?? this.size,
       start: start ?? this.start,
@@ -3398,7 +3418,7 @@ class PagedDTOCustomerTransitionDTO {
   final List<String> expands;
 
   /// List of the links relating to the page.
-  final Map<String, Object>? links;
+  final PagedLinkDTO? links;
 
   PagedDTOCustomerTransitionDTO(
       {this.size,
@@ -3427,8 +3447,9 @@ class PagedDTOCustomerTransitionDTO {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -3455,7 +3476,7 @@ class PagedDTOCustomerTransitionDTO {
     json['values'] = values.map((i) => i.toJson()).toList();
     json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -3467,7 +3488,7 @@ class PagedDTOCustomerTransitionDTO {
       bool? isLastPage,
       List<CustomerTransitionDTO>? values,
       List<String>? expands,
-      Map<String, Object>? links}) {
+      PagedLinkDTO? links}) {
     return PagedDTOCustomerTransitionDTO(
       size: size ?? this.size,
       start: start ?? this.start,
@@ -3514,15 +3535,17 @@ class CustomerTransitionExecutionDTO {
   final String? id;
 
   /// Comment explaining the reason for the transition.
-  final Map<String, Object>? additionalComment;
+  final AdditionalCommentDTO? additionalComment;
 
   CustomerTransitionExecutionDTO({this.id, this.additionalComment});
 
   factory CustomerTransitionExecutionDTO.fromJson(Map<String, Object?> json) {
     return CustomerTransitionExecutionDTO(
       id: json['id'] as String?,
-      additionalComment: (json['additionalComment'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      additionalComment: json['additionalComment'] != null
+          ? AdditionalCommentDTO.fromJson(
+              json['additionalComment']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -3535,13 +3558,13 @@ class CustomerTransitionExecutionDTO {
       json['id'] = id;
     }
     if (additionalComment != null) {
-      json['additionalComment'] = additionalComment;
+      json['additionalComment'] = additionalComment.toJson();
     }
     return json;
   }
 
   CustomerTransitionExecutionDTO copyWith(
-      {String? id, Map<String, Object>? additionalComment}) {
+      {String? id, AdditionalCommentDTO? additionalComment}) {
     return CustomerTransitionExecutionDTO(
       id: id ?? this.id,
       additionalComment: additionalComment ?? this.additionalComment,
@@ -3709,7 +3732,7 @@ class PagedDTORequestTypeDTO {
   final List<String> expands;
 
   /// List of the links relating to the page.
-  final Map<String, Object>? links;
+  final PagedLinkDTO? links;
 
   PagedDTORequestTypeDTO(
       {this.size,
@@ -3738,8 +3761,9 @@ class PagedDTORequestTypeDTO {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -3766,7 +3790,7 @@ class PagedDTORequestTypeDTO {
     json['values'] = values.map((i) => i.toJson()).toList();
     json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -3778,7 +3802,7 @@ class PagedDTORequestTypeDTO {
       bool? isLastPage,
       List<RequestTypeDTO>? values,
       List<String>? expands,
-      Map<String, Object>? links}) {
+      PagedLinkDTO? links}) {
     return PagedDTORequestTypeDTO(
       size: size ?? this.size,
       start: start ?? this.start,
@@ -3814,16 +3838,16 @@ class RequestTypeDTO {
   final List<String> groupIds;
 
   /// Links to the request type's icons.
-  final Map<String, Object>? icon;
+  final RequestTypeIconDTO? icon;
 
   /// Fields and additional metadata for creating a request that uses the request type
-  final Map<String, Object>? fields;
+  final CustomerRequestCreateMetaDTO? fields;
 
   /// List of items that can be expanded in the response by specifying the expand query parameter.
   final List<String> expands;
 
   /// REST API URL for the request type.
-  final Map<String, Object>? links;
+  final SelfLinkDTO? links;
 
   RequestTypeDTO(
       {this.id,
@@ -3852,16 +3876,20 @@ class RequestTypeDTO {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      icon: (json['icon'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      fields: (json['fields'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      icon: json['icon'] != null
+          ? RequestTypeIconDTO.fromJson(json['icon']! as Map<String, Object?>)
+          : null,
+      fields: json['fields'] != null
+          ? CustomerRequestCreateMetaDTO.fromJson(
+              json['fields']! as Map<String, Object?>)
+          : null,
       expands: (json['_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? SelfLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -3899,14 +3927,14 @@ class RequestTypeDTO {
     }
     json['groupIds'] = groupIds;
     if (icon != null) {
-      json['icon'] = icon;
+      json['icon'] = icon.toJson();
     }
     if (fields != null) {
-      json['fields'] = fields;
+      json['fields'] = fields.toJson();
     }
     json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -3919,10 +3947,10 @@ class RequestTypeDTO {
       String? issueTypeId,
       String? serviceDeskId,
       List<String>? groupIds,
-      Map<String, Object>? icon,
-      Map<String, Object>? fields,
+      RequestTypeIconDTO? icon,
+      CustomerRequestCreateMetaDTO? fields,
       List<String>? expands,
-      Map<String, Object>? links}) {
+      SelfLinkDTO? links}) {
     return RequestTypeDTO(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -3959,7 +3987,7 @@ class RequestTypeFieldDTO {
   final List<RequestTypeFieldValueDTO> validValues;
 
   /// Jira specific implementation details for the field in the UI.
-  final Map<String, Object>? jiraSchema;
+  final JsonTypeBean? jiraSchema;
   final bool visible;
 
   RequestTypeFieldDTO(
@@ -3992,8 +4020,9 @@ class RequestTypeFieldDTO {
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      jiraSchema: (json['jiraSchema'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      jiraSchema: json['jiraSchema'] != null
+          ? JsonTypeBean.fromJson(json['jiraSchema']! as Map<String, Object?>)
+          : null,
       visible: json['visible'] as bool? ?? false,
     );
   }
@@ -4022,7 +4051,7 @@ class RequestTypeFieldDTO {
     json['defaultValues'] = defaultValues.map((i) => i.toJson()).toList();
     json['validValues'] = validValues.map((i) => i.toJson()).toList();
     if (jiraSchema != null) {
-      json['jiraSchema'] = jiraSchema;
+      json['jiraSchema'] = jiraSchema.toJson();
     }
     json['visible'] = visible;
     return json;
@@ -4035,7 +4064,7 @@ class RequestTypeFieldDTO {
       bool? required,
       List<RequestTypeFieldValueDTO>? defaultValues,
       List<RequestTypeFieldValueDTO>? validValues,
-      Map<String, Object>? jiraSchema,
+      JsonTypeBean? jiraSchema,
       bool? visible}) {
     return RequestTypeFieldDTO(
       fieldId: fieldId ?? this.fieldId,
@@ -4109,15 +4138,17 @@ class RequestTypeIconDTO {
   final String? id;
 
   /// Map of the URLs for the request type icons.
-  final Map<String, Object>? links;
+  final RequestTypeIconLinkDTO? links;
 
   RequestTypeIconDTO({this.id, this.links});
 
   factory RequestTypeIconDTO.fromJson(Map<String, Object?> json) {
     return RequestTypeIconDTO(
       id: json['id'] as String?,
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? RequestTypeIconLinkDTO.fromJson(
+              json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -4130,12 +4161,12 @@ class RequestTypeIconDTO {
       json['id'] = id;
     }
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
 
-  RequestTypeIconDTO copyWith({String? id, Map<String, Object>? links}) {
+  RequestTypeIconDTO copyWith({String? id, RequestTypeIconLinkDTO? links}) {
     return RequestTypeIconDTO(
       id: id ?? this.id,
       links: links ?? this.links,
@@ -4190,7 +4221,7 @@ class PagedDTOQueueDTO {
   final List<String> expands;
 
   /// List of the links relating to the page.
-  final Map<String, Object>? links;
+  final PagedLinkDTO? links;
 
   PagedDTOQueueDTO(
       {this.size,
@@ -4219,8 +4250,9 @@ class PagedDTOQueueDTO {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -4247,7 +4279,7 @@ class PagedDTOQueueDTO {
     json['values'] = values.map((i) => i.toJson()).toList();
     json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -4259,7 +4291,7 @@ class PagedDTOQueueDTO {
       bool? isLastPage,
       List<QueueDTO>? values,
       List<String>? expands,
-      Map<String, Object>? links}) {
+      PagedLinkDTO? links}) {
     return PagedDTOQueueDTO(
       size: size ?? this.size,
       start: start ?? this.start,
@@ -4289,7 +4321,7 @@ class QueueDTO {
   final int? issueCount;
 
   /// REST API URL to the queue.
-  final Map<String, Object>? links;
+  final SelfLinkDTO? links;
 
   QueueDTO(
       {this.id,
@@ -4310,8 +4342,9 @@ class QueueDTO {
               .toList() ??
           [],
       issueCount: (json['issueCount'] as num?)?.toInt(),
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? SelfLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -4338,7 +4371,7 @@ class QueueDTO {
       json['issueCount'] = issueCount;
     }
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -4349,7 +4382,7 @@ class QueueDTO {
       String? jql,
       List<String>? fields,
       int? issueCount,
-      Map<String, Object>? links}) {
+      SelfLinkDTO? links}) {
     return QueueDTO(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -4522,7 +4555,7 @@ class Changelog {
   final String? id;
 
   /// The user who made the change.
-  final Map<String, Object>? author;
+  final UserDetails? author;
 
   /// The date on which the change took place.
   final DateTime? created;
@@ -4531,7 +4564,7 @@ class Changelog {
   final List<ChangeDetails> items;
 
   /// The history metadata associated with the changed.
-  final Map<String, Object>? historyMetadata;
+  final HistoryMetadata? historyMetadata;
 
   Changelog(
       {this.id,
@@ -4544,16 +4577,19 @@ class Changelog {
   factory Changelog.fromJson(Map<String, Object?> json) {
     return Changelog(
       id: json['id'] as String?,
-      author: (json['author'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      author: json['author'] != null
+          ? UserDetails.fromJson(json['author']! as Map<String, Object?>)
+          : null,
       created: DateTime.tryParse(json['created'] as String? ?? ''),
       items: (json['items'] as List<Object?>?)
               ?.map((i) => ChangeDetails.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      historyMetadata: (json['historyMetadata'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      historyMetadata: json['historyMetadata'] != null
+          ? HistoryMetadata.fromJson(
+              json['historyMetadata']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -4569,24 +4605,24 @@ class Changelog {
       json['id'] = id;
     }
     if (author != null) {
-      json['author'] = author;
+      json['author'] = author.toJson();
     }
     if (created != null) {
       json['created'] = created.toIso8601String();
     }
     json['items'] = items.map((i) => i.toJson()).toList();
     if (historyMetadata != null) {
-      json['historyMetadata'] = historyMetadata;
+      json['historyMetadata'] = historyMetadata.toJson();
     }
     return json;
   }
 
   Changelog copyWith(
       {String? id,
-      Map<String, Object>? author,
+      UserDetails? author,
       DateTime? created,
       List<ChangeDetails>? items,
-      Map<String, Object>? historyMetadata}) {
+      HistoryMetadata? historyMetadata}) {
     return Changelog(
       id: id ?? this.id,
       author: author ?? this.author,
@@ -4603,7 +4639,7 @@ class FieldMetadata {
   final bool required;
 
   /// The data type of the field.
-  final Map<String, Object> schema;
+  final JsonTypeBean schema;
 
   /// The name of the field.
   final String name;
@@ -4642,9 +4678,8 @@ class FieldMetadata {
   factory FieldMetadata.fromJson(Map<String, Object?> json) {
     return FieldMetadata(
       required: json['required'] as bool? ?? false,
-      schema: (json['schema'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
+      schema: JsonTypeBean.fromJson(
+          json['schema'] as Map<String, Object?>? ?? const {}),
       name: json['name'] as String? ?? '',
       key: json['key'] as String? ?? '',
       autoCompleteUrl: json['autoCompleteUrl'] as String?,
@@ -4678,7 +4713,7 @@ class FieldMetadata {
 
     final json = <String, Object?>{};
     json['required'] = required;
-    json['schema'] = schema;
+    json['schema'] = schema.toJson();
     json['name'] = name;
     json['key'] = key;
     if (autoCompleteUrl != null) {
@@ -4695,7 +4730,7 @@ class FieldMetadata {
 
   FieldMetadata copyWith(
       {bool? required,
-      Map<String, Object>? schema,
+      JsonTypeBean? schema,
       String? name,
       String? key,
       String? autoCompleteUrl,
@@ -4741,13 +4776,13 @@ class HistoryMetadata {
   final String? emailDescriptionKey;
 
   /// Details of the user whose action created the history record.
-  final Map<String, Object>? actor;
+  final HistoryMetadataParticipant? actor;
 
   /// Details of the system that generated the history record.
-  final Map<String, Object>? generator;
+  final HistoryMetadataParticipant? generator;
 
   /// Details of the cause that triggered the creation the history record.
-  final Map<String, Object>? cause;
+  final HistoryMetadataParticipant? cause;
 
   /// Additional arbitrary information about the history record.
   final Map<String, dynamic>? extraData;
@@ -4774,12 +4809,18 @@ class HistoryMetadata {
       activityDescriptionKey: json['activityDescriptionKey'] as String?,
       emailDescription: json['emailDescription'] as String?,
       emailDescriptionKey: json['emailDescriptionKey'] as String?,
-      actor: (json['actor'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      generator: (json['generator'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      cause: (json['cause'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      actor: json['actor'] != null
+          ? HistoryMetadataParticipant.fromJson(
+              json['actor']! as Map<String, Object?>)
+          : null,
+      generator: json['generator'] != null
+          ? HistoryMetadataParticipant.fromJson(
+              json['generator']! as Map<String, Object?>)
+          : null,
+      cause: json['cause'] != null
+          ? HistoryMetadataParticipant.fromJson(
+              json['cause']! as Map<String, Object?>)
+          : null,
       extraData: json['extraData'] as Map<String, Object?>?,
     );
   }
@@ -4820,13 +4861,13 @@ class HistoryMetadata {
       json['emailDescriptionKey'] = emailDescriptionKey;
     }
     if (actor != null) {
-      json['actor'] = actor;
+      json['actor'] = actor.toJson();
     }
     if (generator != null) {
-      json['generator'] = generator;
+      json['generator'] = generator.toJson();
     }
     if (cause != null) {
-      json['cause'] = cause;
+      json['cause'] = cause.toJson();
     }
     if (extraData != null) {
       json['extraData'] = extraData;
@@ -4842,9 +4883,9 @@ class HistoryMetadata {
       String? activityDescriptionKey,
       String? emailDescription,
       String? emailDescriptionKey,
-      Map<String, Object>? actor,
-      Map<String, Object>? generator,
-      Map<String, Object>? cause,
+      HistoryMetadataParticipant? actor,
+      HistoryMetadataParticipant? generator,
+      HistoryMetadataParticipant? cause,
       Map<String, dynamic>? extraData}) {
     return HistoryMetadata(
       type: type ?? this.type,
@@ -5033,13 +5074,13 @@ class IssueBean {
   final List<IssueTransition> transitions;
 
   /// The operations that can be performed on the issue.
-  final Map<String, Object>? operations;
+  final Operations? operations;
 
   /// The metadata for the fields on the issue that can be amended.
-  final Map<String, Object>? editmeta;
+  final IssueUpdateMetadata? editmeta;
 
   /// Details of changelogs associated with the issue.
-  final Map<String, Object>? changelog;
+  final PageOfChangelogs? changelog;
 
   /// The versions of each field on the issue.
   final Map<String, dynamic>? versionedRepresentations;
@@ -5079,12 +5120,17 @@ class IssueBean {
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      operations: (json['operations'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      editmeta: (json['editmeta'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      changelog: (json['changelog'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      operations: json['operations'] != null
+          ? Operations.fromJson(json['operations']! as Map<String, Object?>)
+          : null,
+      editmeta: json['editmeta'] != null
+          ? IssueUpdateMetadata.fromJson(
+              json['editmeta']! as Map<String, Object?>)
+          : null,
+      changelog: json['changelog'] != null
+          ? PageOfChangelogs.fromJson(
+              json['changelog']! as Map<String, Object?>)
+          : null,
       versionedRepresentations:
           json['versionedRepresentations'] as Map<String, Object?>?,
       fieldsToInclude: json['fieldsToInclude'] != null
@@ -5139,13 +5185,13 @@ class IssueBean {
     }
     json['transitions'] = transitions.map((i) => i.toJson()).toList();
     if (operations != null) {
-      json['operations'] = operations;
+      json['operations'] = operations.toJson();
     }
     if (editmeta != null) {
-      json['editmeta'] = editmeta;
+      json['editmeta'] = editmeta.toJson();
     }
     if (changelog != null) {
-      json['changelog'] = changelog;
+      json['changelog'] = changelog.toJson();
     }
     if (versionedRepresentations != null) {
       json['versionedRepresentations'] = versionedRepresentations;
@@ -5169,9 +5215,9 @@ class IssueBean {
       Map<String, dynamic>? names,
       Map<String, dynamic>? schema,
       List<IssueTransition>? transitions,
-      Map<String, Object>? operations,
-      Map<String, Object>? editmeta,
-      Map<String, Object>? changelog,
+      Operations? operations,
+      IssueUpdateMetadata? editmeta,
+      PageOfChangelogs? changelog,
       Map<String, dynamic>? versionedRepresentations,
       IncludedFields? fieldsToInclude,
       Map<String, dynamic>? fields}) {
@@ -5205,7 +5251,7 @@ class IssueTransition {
   final String? name;
 
   /// Details of the issue status after the transition.
-  final Map<String, Object>? to;
+  final StatusDetails? to;
 
   /// Whether there is a screen associated with the issue transition.
   final bool hasScreen;
@@ -5252,8 +5298,9 @@ class IssueTransition {
     return IssueTransition(
       id: json['id'] as String?,
       name: json['name'] as String?,
-      to: (json['to'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      to: json['to'] != null
+          ? StatusDetails.fromJson(json['to']! as Map<String, Object?>)
+          : null,
       hasScreen: json['hasScreen'] as bool? ?? false,
       isGlobal: json['isGlobal'] as bool? ?? false,
       isInitial: json['isInitial'] as bool? ?? false,
@@ -5286,7 +5333,7 @@ class IssueTransition {
       json['name'] = name;
     }
     if (to != null) {
-      json['to'] = to;
+      json['to'] = to.toJson();
     }
     json['hasScreen'] = hasScreen;
     json['isGlobal'] = isGlobal;
@@ -5306,7 +5353,7 @@ class IssueTransition {
   IssueTransition copyWith(
       {String? id,
       String? name,
-      Map<String, Object>? to,
+      StatusDetails? to,
       bool? hasScreen,
       bool? isGlobal,
       bool? isInitial,
@@ -5556,7 +5603,7 @@ class PagedDTOIssueBean {
   final List<String> expands;
 
   /// List of the links relating to the page.
-  final Map<String, Object>? links;
+  final PagedLinkDTO? links;
 
   PagedDTOIssueBean(
       {this.size,
@@ -5585,8 +5632,9 @@ class PagedDTOIssueBean {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -5613,7 +5661,7 @@ class PagedDTOIssueBean {
     json['values'] = values.map((i) => i.toJson()).toList();
     json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -5625,7 +5673,7 @@ class PagedDTOIssueBean {
       bool? isLastPage,
       List<IssueBean>? values,
       List<String>? expands,
-      Map<String, Object>? links}) {
+      PagedLinkDTO? links}) {
     return PagedDTOIssueBean(
       size: size ?? this.size,
       start: start ?? this.start,
@@ -5808,7 +5856,7 @@ class StatusDetails {
   final String? id;
 
   /// The category assigned to the status.
-  final Map<String, Object>? statusCategory;
+  final StatusCategory? statusCategory;
 
   StatusDetails(
       {this.self,
@@ -5825,8 +5873,10 @@ class StatusDetails {
       iconUrl: json['iconUrl'] as String?,
       name: json['name'] as String?,
       id: json['id'] as String?,
-      statusCategory: (json['statusCategory'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      statusCategory: json['statusCategory'] != null
+          ? StatusCategory.fromJson(
+              json['statusCategory']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -5855,7 +5905,7 @@ class StatusDetails {
       json['id'] = id;
     }
     if (statusCategory != null) {
-      json['statusCategory'] = statusCategory;
+      json['statusCategory'] = statusCategory.toJson();
     }
     return json;
   }
@@ -5866,7 +5916,7 @@ class StatusDetails {
       String? iconUrl,
       String? name,
       String? id,
-      Map<String, Object>? statusCategory}) {
+      StatusCategory? statusCategory}) {
     return StatusDetails(
       self: self ?? this.self,
       description: description ?? this.description,
@@ -5900,7 +5950,7 @@ class UserDetails {
   final String? emailAddress;
 
   /// The avatars of the user.
-  final Map<String, Object>? avatarUrls;
+  final AvatarUrlsBean? avatarUrls;
 
   /// The display name of the user. Depending on the user’s privacy settings, this may return an alternative value.
   final String? displayName;
@@ -5934,8 +5984,9 @@ class UserDetails {
       key: json['key'] as String?,
       accountId: json['accountId'] as String?,
       emailAddress: json['emailAddress'] as String?,
-      avatarUrls: (json['avatarUrls'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      avatarUrls: json['avatarUrls'] != null
+          ? AvatarUrlsBean.fromJson(json['avatarUrls']! as Map<String, Object?>)
+          : null,
       displayName: json['displayName'] as String?,
       active: json['active'] as bool? ?? false,
       timeZone: json['timeZone'] as String?,
@@ -5972,7 +6023,7 @@ class UserDetails {
       json['emailAddress'] = emailAddress;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls;
+      json['avatarUrls'] = avatarUrls.toJson();
     }
     if (displayName != null) {
       json['displayName'] = displayName;
@@ -5993,7 +6044,7 @@ class UserDetails {
       String? key,
       String? accountId,
       String? emailAddress,
-      Map<String, Object>? avatarUrls,
+      AvatarUrlsBean? avatarUrls,
       String? displayName,
       bool? active,
       String? timeZone,
@@ -6137,7 +6188,7 @@ class CSATFeedbackFullDTO {
   final int? rating;
 
   /// (Optional) The comment provided with this feedback.
-  final Map<String, Object>? comment;
+  final AdditionalCommentDTO? comment;
 
   CSATFeedbackFullDTO({this.type, this.rating, this.comment});
 
@@ -6145,8 +6196,10 @@ class CSATFeedbackFullDTO {
     return CSATFeedbackFullDTO(
       type: json['type'] as String?,
       rating: (json['rating'] as num?)?.toInt(),
-      comment: (json['comment'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      comment: json['comment'] != null
+          ? AdditionalCommentDTO.fromJson(
+              json['comment']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -6163,13 +6216,13 @@ class CSATFeedbackFullDTO {
       json['rating'] = rating;
     }
     if (comment != null) {
-      json['comment'] = comment;
+      json['comment'] = comment.toJson();
     }
     return json;
   }
 
   CSATFeedbackFullDTO copyWith(
-      {String? type, int? rating, Map<String, Object>? comment}) {
+      {String? type, int? rating, AdditionalCommentDTO? comment}) {
     return CSATFeedbackFullDTO(
       type: type ?? this.type,
       rating: rating ?? this.rating,
@@ -6244,7 +6297,7 @@ class AttachmentCreateDTO {
   final List<String> temporaryAttachmentIds;
 
   /// Comment about the attachments.
-  final Map<String, Object>? additionalComment;
+  final AdditionalCommentDTO? additionalComment;
 
   /// Indicates whether the attachments are to be public (true) or private/internal (false).
   final bool public;
@@ -6262,8 +6315,10 @@ class AttachmentCreateDTO {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      additionalComment: (json['additionalComment'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      additionalComment: json['additionalComment'] != null
+          ? AdditionalCommentDTO.fromJson(
+              json['additionalComment']! as Map<String, Object?>)
+          : null,
       public: json['public'] as bool? ?? false,
     );
   }
@@ -6276,7 +6331,7 @@ class AttachmentCreateDTO {
     final json = <String, Object?>{};
     json['temporaryAttachmentIds'] = temporaryAttachmentIds;
     if (additionalComment != null) {
-      json['additionalComment'] = additionalComment;
+      json['additionalComment'] = additionalComment.toJson();
     }
     json['public'] = public;
     return json;
@@ -6284,7 +6339,7 @@ class AttachmentCreateDTO {
 
   AttachmentCreateDTO copyWith(
       {List<String>? temporaryAttachmentIds,
-      Map<String, Object>? additionalComment,
+      AdditionalCommentDTO? additionalComment,
       bool? public}) {
     return AttachmentCreateDTO(
       temporaryAttachmentIds:
@@ -6297,19 +6352,22 @@ class AttachmentCreateDTO {
 
 class AttachmentCreateResultDTO {
   /// Details of the comment included with the attachments.
-  final Map<String, Object>? comment;
+  final CommentDTO? comment;
 
   /// List of the attachments added.
-  final Map<String, Object>? attachments;
+  final PagedDTOAttachmentDTO? attachments;
 
   AttachmentCreateResultDTO({this.comment, this.attachments});
 
   factory AttachmentCreateResultDTO.fromJson(Map<String, Object?> json) {
     return AttachmentCreateResultDTO(
-      comment: (json['comment'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      attachments: (json['attachments'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      comment: json['comment'] != null
+          ? CommentDTO.fromJson(json['comment']! as Map<String, Object?>)
+          : null,
+      attachments: json['attachments'] != null
+          ? PagedDTOAttachmentDTO.fromJson(
+              json['attachments']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -6319,16 +6377,16 @@ class AttachmentCreateResultDTO {
 
     final json = <String, Object?>{};
     if (comment != null) {
-      json['comment'] = comment;
+      json['comment'] = comment.toJson();
     }
     if (attachments != null) {
-      json['attachments'] = attachments;
+      json['attachments'] = attachments.toJson();
     }
     return json;
   }
 
   AttachmentCreateResultDTO copyWith(
-      {Map<String, Object>? comment, Map<String, Object>? attachments}) {
+      {CommentDTO? comment, PagedDTOAttachmentDTO? attachments}) {
     return AttachmentCreateResultDTO(
       comment: comment ?? this.comment,
       attachments: attachments ?? this.attachments,
@@ -6353,13 +6411,13 @@ class ApprovalDTO {
   final List<ApproverDTO> approvers;
 
   /// Date the approval was created.
-  final Map<String, Object>? createdDate;
+  final DateDTO? createdDate;
 
   /// Date the approval was completed.
-  final Map<String, Object>? completedDate;
+  final DateDTO? completedDate;
 
   /// The REST API URL of the approval.
-  final Map<String, Object>? links;
+  final SelfLinkDTO? links;
 
   ApprovalDTO(
       {this.id,
@@ -6386,12 +6444,15 @@ class ApprovalDTO {
                   ApproverDTO.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      createdDate: (json['createdDate'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      completedDate: (json['completedDate'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      createdDate: json['createdDate'] != null
+          ? DateDTO.fromJson(json['createdDate']! as Map<String, Object?>)
+          : null,
+      completedDate: json['completedDate'] != null
+          ? DateDTO.fromJson(json['completedDate']! as Map<String, Object?>)
+          : null,
+      links: json['_links'] != null
+          ? SelfLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -6418,13 +6479,13 @@ class ApprovalDTO {
     json['canAnswerApproval'] = canAnswerApproval;
     json['approvers'] = approvers.map((i) => i.toJson()).toList();
     if (createdDate != null) {
-      json['createdDate'] = createdDate;
+      json['createdDate'] = createdDate.toJson();
     }
     if (completedDate != null) {
-      json['completedDate'] = completedDate;
+      json['completedDate'] = completedDate.toJson();
     }
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -6435,9 +6496,9 @@ class ApprovalDTO {
       ApprovalDTOFinalDecision? finalDecision,
       bool? canAnswerApproval,
       List<ApproverDTO>? approvers,
-      Map<String, Object>? createdDate,
-      Map<String, Object>? completedDate,
-      Map<String, Object>? links}) {
+      DateDTO? createdDate,
+      DateDTO? completedDate,
+      SelfLinkDTO? links}) {
     return ApprovalDTO(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -6478,7 +6539,7 @@ class ApprovalDTOFinalDecision {
 
 class ApproverDTO {
   /// Details of the User who is providing approval.
-  final Map<String, Object>? approver;
+  final UserDTO? approver;
 
   /// Decision made by the approver.
   final ApproverDTOApproverDecision? approverDecision;
@@ -6487,8 +6548,9 @@ class ApproverDTO {
 
   factory ApproverDTO.fromJson(Map<String, Object?> json) {
     return ApproverDTO(
-      approver: (json['approver'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      approver: json['approver'] != null
+          ? UserDTO.fromJson(json['approver']! as Map<String, Object?>)
+          : null,
       approverDecision: json['approverDecision'] != null
           ? ApproverDTOApproverDecision.fromValue(
               json['approverDecision']! as String)
@@ -6502,7 +6564,7 @@ class ApproverDTO {
 
     final json = <String, Object?>{};
     if (approver != null) {
-      json['approver'] = approver;
+      json['approver'] = approver.toJson();
     }
     if (approverDecision != null) {
       json['approverDecision'] = approverDecision.value;
@@ -6511,8 +6573,7 @@ class ApproverDTO {
   }
 
   ApproverDTO copyWith(
-      {Map<String, Object>? approver,
-      ApproverDTOApproverDecision? approverDecision}) {
+      {UserDTO? approver, ApproverDTOApproverDecision? approverDecision}) {
     return ApproverDTO(
       approver: approver ?? this.approver,
       approverDecision: approverDecision ?? this.approverDecision,
@@ -6619,7 +6680,7 @@ class PagedDTOApprovalDTO {
   final List<String> expands;
 
   /// List of the links relating to the page.
-  final Map<String, Object>? links;
+  final PagedLinkDTO? links;
 
   PagedDTOApprovalDTO(
       {this.size,
@@ -6648,8 +6709,9 @@ class PagedDTOApprovalDTO {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -6676,7 +6738,7 @@ class PagedDTOApprovalDTO {
     json['values'] = values.map((i) => i.toJson()).toList();
     json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -6688,7 +6750,7 @@ class PagedDTOApprovalDTO {
       bool? isLastPage,
       List<ApprovalDTO>? values,
       List<String>? expands,
-      Map<String, Object>? links}) {
+      PagedLinkDTO? links}) {
     return PagedDTOApprovalDTO(
       size: size ?? this.size,
       start: start ?? this.start,
@@ -6709,7 +6771,7 @@ class SoftwareInfoDTO {
   final String? platformVersion;
 
   /// Date of the current build.
-  final Map<String, Object>? buildDate;
+  final DateDTO? buildDate;
 
   /// Reference of the change set included in the build.
   final String? buildChangeSet;
@@ -6718,7 +6780,7 @@ class SoftwareInfoDTO {
   final bool isLicensedForUse;
 
   /// REST API URL of the instance.
-  final Map<String, Object>? links;
+  final SelfLinkDTO? links;
 
   SoftwareInfoDTO(
       {this.version,
@@ -6733,12 +6795,14 @@ class SoftwareInfoDTO {
     return SoftwareInfoDTO(
       version: json['version'] as String?,
       platformVersion: json['platformVersion'] as String?,
-      buildDate: (json['buildDate'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      buildDate: json['buildDate'] != null
+          ? DateDTO.fromJson(json['buildDate']! as Map<String, Object?>)
+          : null,
       buildChangeSet: json['buildChangeSet'] as String?,
       isLicensedForUse: json['isLicensedForUse'] as bool? ?? false,
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? SelfLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -6758,14 +6822,14 @@ class SoftwareInfoDTO {
       json['platformVersion'] = platformVersion;
     }
     if (buildDate != null) {
-      json['buildDate'] = buildDate;
+      json['buildDate'] = buildDate.toJson();
     }
     if (buildChangeSet != null) {
       json['buildChangeSet'] = buildChangeSet;
     }
     json['isLicensedForUse'] = isLicensedForUse;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -6773,10 +6837,10 @@ class SoftwareInfoDTO {
   SoftwareInfoDTO copyWith(
       {String? version,
       String? platformVersion,
-      Map<String, Object>? buildDate,
+      DateDTO? buildDate,
       String? buildChangeSet,
       bool? isLicensedForUse,
-      Map<String, Object>? links}) {
+      SelfLinkDTO? links}) {
     return SoftwareInfoDTO(
       version: version ?? this.version,
       platformVersion: platformVersion ?? this.platformVersion,
@@ -6806,7 +6870,7 @@ class PagedDTOServiceDeskDTO {
   final List<String> expands;
 
   /// List of the links relating to the page.
-  final Map<String, Object>? links;
+  final PagedLinkDTO? links;
 
   PagedDTOServiceDeskDTO(
       {this.size,
@@ -6835,8 +6899,9 @@ class PagedDTOServiceDeskDTO {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -6863,7 +6928,7 @@ class PagedDTOServiceDeskDTO {
     json['values'] = values.map((i) => i.toJson()).toList();
     json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -6875,7 +6940,7 @@ class PagedDTOServiceDeskDTO {
       bool? isLastPage,
       List<ServiceDeskDTO>? values,
       List<String>? expands,
-      Map<String, Object>? links}) {
+      PagedLinkDTO? links}) {
     return PagedDTOServiceDeskDTO(
       size: size ?? this.size,
       start: start ?? this.start,
@@ -6902,7 +6967,7 @@ class ServiceDeskDTO {
   final String? projectKey;
 
   /// REST API URL to the service desk.
-  final Map<String, Object>? links;
+  final SelfLinkDTO? links;
 
   ServiceDeskDTO(
       {this.id, this.projectId, this.projectName, this.projectKey, this.links});
@@ -6913,8 +6978,9 @@ class ServiceDeskDTO {
       projectId: json['projectId'] as String?,
       projectName: json['projectName'] as String?,
       projectKey: json['projectKey'] as String?,
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? SelfLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -6939,7 +7005,7 @@ class ServiceDeskDTO {
       json['projectKey'] = projectKey;
     }
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -6949,7 +7015,7 @@ class ServiceDeskDTO {
       String? projectId,
       String? projectName,
       String? projectKey,
-      Map<String, Object>? links}) {
+      SelfLinkDTO? links}) {
     return ServiceDeskDTO(
       id: id ?? this.id,
       projectId: projectId ?? this.projectId,
@@ -7106,16 +7172,16 @@ class CustomerRequestActionDTO {
 
 class CustomerRequestActionsDTO {
   /// Action of adding attachments to a request.
-  final Map<String, Object>? addAttachment;
+  final CustomerRequestActionDTO? addAttachment;
 
   /// Action of adding comments to a request.
-  final Map<String, Object>? addComment;
+  final CustomerRequestActionDTO? addComment;
 
   /// Action of adding participants to a request.
-  final Map<String, Object>? addParticipant;
+  final CustomerRequestActionDTO? addParticipant;
 
   /// Action of removing participants from a request.
-  final Map<String, Object>? removeParticipant;
+  final CustomerRequestActionDTO? removeParticipant;
 
   CustomerRequestActionsDTO(
       {this.addAttachment,
@@ -7125,14 +7191,22 @@ class CustomerRequestActionsDTO {
 
   factory CustomerRequestActionsDTO.fromJson(Map<String, Object?> json) {
     return CustomerRequestActionsDTO(
-      addAttachment: (json['addAttachment'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      addComment: (json['addComment'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      addParticipant: (json['addParticipant'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      removeParticipant: (json['removeParticipant'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      addAttachment: json['addAttachment'] != null
+          ? CustomerRequestActionDTO.fromJson(
+              json['addAttachment']! as Map<String, Object?>)
+          : null,
+      addComment: json['addComment'] != null
+          ? CustomerRequestActionDTO.fromJson(
+              json['addComment']! as Map<String, Object?>)
+          : null,
+      addParticipant: json['addParticipant'] != null
+          ? CustomerRequestActionDTO.fromJson(
+              json['addParticipant']! as Map<String, Object?>)
+          : null,
+      removeParticipant: json['removeParticipant'] != null
+          ? CustomerRequestActionDTO.fromJson(
+              json['removeParticipant']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -7144,25 +7218,25 @@ class CustomerRequestActionsDTO {
 
     final json = <String, Object?>{};
     if (addAttachment != null) {
-      json['addAttachment'] = addAttachment;
+      json['addAttachment'] = addAttachment.toJson();
     }
     if (addComment != null) {
-      json['addComment'] = addComment;
+      json['addComment'] = addComment.toJson();
     }
     if (addParticipant != null) {
-      json['addParticipant'] = addParticipant;
+      json['addParticipant'] = addParticipant.toJson();
     }
     if (removeParticipant != null) {
-      json['removeParticipant'] = removeParticipant;
+      json['removeParticipant'] = removeParticipant.toJson();
     }
     return json;
   }
 
   CustomerRequestActionsDTO copyWith(
-      {Map<String, Object>? addAttachment,
-      Map<String, Object>? addComment,
-      Map<String, Object>? addParticipant,
-      Map<String, Object>? removeParticipant}) {
+      {CustomerRequestActionDTO? addAttachment,
+      CustomerRequestActionDTO? addComment,
+      CustomerRequestActionDTO? addParticipant,
+      CustomerRequestActionDTO? removeParticipant}) {
     return CustomerRequestActionsDTO(
       addAttachment: addAttachment ?? this.addAttachment,
       addComment: addComment ?? this.addComment,
@@ -7183,49 +7257,49 @@ class CustomerRequestDTO {
   final String? requestTypeId;
 
   /// Expandable details of the request type.
-  final Map<String, Object>? requestType;
+  final RequestTypeDTO? requestType;
 
   /// ID of the service desk the request belongs to.
   final String? serviceDeskId;
 
   /// Expandable details of the service desk.
-  final Map<String, Object>? serviceDesk;
+  final ServiceDeskDTO? serviceDesk;
 
   /// Date on which the request was created.
-  final Map<String, Object>? createdDate;
+  final DateDTO? createdDate;
 
   /// Details of the customer reporting the request.
-  final Map<String, Object>? reporter;
+  final UserDTO? reporter;
 
   /// JSON map of Jira field IDs and their values representing the content of the request.
   final List<CustomerRequestFieldValueDTO> requestFieldValues;
 
   /// Status of the request.
-  final Map<String, Object>? currentStatus;
+  final CustomerRequestStatusDTO? currentStatus;
 
   /// Expandable details of the request's status history.
-  final Map<String, Object>? status;
+  final PagedDTOCustomerRequestStatusDTO? status;
 
   /// Expandable details of the customers participating in the request.
-  final Map<String, Object>? participants;
+  final PagedDTOUserDTO? participants;
 
   /// Expandable details of the SLAs relating to the request.
-  final Map<String, Object>? sla;
+  final PagedDTOSlaInformationDTO? sla;
 
   /// List of attachments included with the request.
-  final Map<String, Object>? attachments;
+  final PagedDTOAttachmentDTO? attachments;
 
   /// List of comments included with the request.
-  final Map<String, Object>? comments;
+  final PagedDTOCommentDTO? comments;
 
   /// List of actions that the user can take on the request.
-  final Map<String, Object>? actions;
+  final CustomerRequestActionsDTO? actions;
 
   /// List of items that can be expanded in the response by specifying the expand query parameter.
   final List<String> expands;
 
   /// List of links associated with the request.
-  final Map<String, Object>? links;
+  final CustomerRequestLinkDTO? links;
 
   CustomerRequestDTO(
       {this.issueId,
@@ -7254,40 +7328,62 @@ class CustomerRequestDTO {
       issueId: json['issueId'] as String?,
       issueKey: json['issueKey'] as String?,
       requestTypeId: json['requestTypeId'] as String?,
-      requestType: (json['requestType'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      requestType: json['requestType'] != null
+          ? RequestTypeDTO.fromJson(
+              json['requestType']! as Map<String, Object?>)
+          : null,
       serviceDeskId: json['serviceDeskId'] as String?,
-      serviceDesk: (json['serviceDesk'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      createdDate: (json['createdDate'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      reporter: (json['reporter'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      serviceDesk: json['serviceDesk'] != null
+          ? ServiceDeskDTO.fromJson(
+              json['serviceDesk']! as Map<String, Object?>)
+          : null,
+      createdDate: json['createdDate'] != null
+          ? DateDTO.fromJson(json['createdDate']! as Map<String, Object?>)
+          : null,
+      reporter: json['reporter'] != null
+          ? UserDTO.fromJson(json['reporter']! as Map<String, Object?>)
+          : null,
       requestFieldValues: (json['requestFieldValues'] as List<Object?>?)
               ?.map((i) => CustomerRequestFieldValueDTO.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      currentStatus: (json['currentStatus'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      status: (json['status'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      participants: (json['participants'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      sla: (json['sla'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      attachments: (json['attachments'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      comments: (json['comments'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      actions: (json['actions'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      currentStatus: json['currentStatus'] != null
+          ? CustomerRequestStatusDTO.fromJson(
+              json['currentStatus']! as Map<String, Object?>)
+          : null,
+      status: json['status'] != null
+          ? PagedDTOCustomerRequestStatusDTO.fromJson(
+              json['status']! as Map<String, Object?>)
+          : null,
+      participants: json['participants'] != null
+          ? PagedDTOUserDTO.fromJson(
+              json['participants']! as Map<String, Object?>)
+          : null,
+      sla: json['sla'] != null
+          ? PagedDTOSlaInformationDTO.fromJson(
+              json['sla']! as Map<String, Object?>)
+          : null,
+      attachments: json['attachments'] != null
+          ? PagedDTOAttachmentDTO.fromJson(
+              json['attachments']! as Map<String, Object?>)
+          : null,
+      comments: json['comments'] != null
+          ? PagedDTOCommentDTO.fromJson(
+              json['comments']! as Map<String, Object?>)
+          : null,
+      actions: json['actions'] != null
+          ? CustomerRequestActionsDTO.fromJson(
+              json['actions']! as Map<String, Object?>)
+          : null,
       expands: (json['_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? CustomerRequestLinkDTO.fromJson(
+              json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -7322,46 +7418,46 @@ class CustomerRequestDTO {
       json['requestTypeId'] = requestTypeId;
     }
     if (requestType != null) {
-      json['requestType'] = requestType;
+      json['requestType'] = requestType.toJson();
     }
     if (serviceDeskId != null) {
       json['serviceDeskId'] = serviceDeskId;
     }
     if (serviceDesk != null) {
-      json['serviceDesk'] = serviceDesk;
+      json['serviceDesk'] = serviceDesk.toJson();
     }
     if (createdDate != null) {
-      json['createdDate'] = createdDate;
+      json['createdDate'] = createdDate.toJson();
     }
     if (reporter != null) {
-      json['reporter'] = reporter;
+      json['reporter'] = reporter.toJson();
     }
     json['requestFieldValues'] =
         requestFieldValues.map((i) => i.toJson()).toList();
     if (currentStatus != null) {
-      json['currentStatus'] = currentStatus;
+      json['currentStatus'] = currentStatus.toJson();
     }
     if (status != null) {
-      json['status'] = status;
+      json['status'] = status.toJson();
     }
     if (participants != null) {
-      json['participants'] = participants;
+      json['participants'] = participants.toJson();
     }
     if (sla != null) {
-      json['sla'] = sla;
+      json['sla'] = sla.toJson();
     }
     if (attachments != null) {
-      json['attachments'] = attachments;
+      json['attachments'] = attachments.toJson();
     }
     if (comments != null) {
-      json['comments'] = comments;
+      json['comments'] = comments.toJson();
     }
     if (actions != null) {
-      json['actions'] = actions;
+      json['actions'] = actions.toJson();
     }
     json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -7370,21 +7466,21 @@ class CustomerRequestDTO {
       {String? issueId,
       String? issueKey,
       String? requestTypeId,
-      Map<String, Object>? requestType,
+      RequestTypeDTO? requestType,
       String? serviceDeskId,
-      Map<String, Object>? serviceDesk,
-      Map<String, Object>? createdDate,
-      Map<String, Object>? reporter,
+      ServiceDeskDTO? serviceDesk,
+      DateDTO? createdDate,
+      UserDTO? reporter,
       List<CustomerRequestFieldValueDTO>? requestFieldValues,
-      Map<String, Object>? currentStatus,
-      Map<String, Object>? status,
-      Map<String, Object>? participants,
-      Map<String, Object>? sla,
-      Map<String, Object>? attachments,
-      Map<String, Object>? comments,
-      Map<String, Object>? actions,
+      CustomerRequestStatusDTO? currentStatus,
+      PagedDTOCustomerRequestStatusDTO? status,
+      PagedDTOUserDTO? participants,
+      PagedDTOSlaInformationDTO? sla,
+      PagedDTOAttachmentDTO? attachments,
+      PagedDTOCommentDTO? comments,
+      CustomerRequestActionsDTO? actions,
       List<String>? expands,
-      Map<String, Object>? links}) {
+      CustomerRequestLinkDTO? links}) {
     return CustomerRequestDTO(
       issueId: issueId ?? this.issueId,
       issueKey: issueKey ?? this.issueKey,
@@ -7582,7 +7678,7 @@ class PagedDTOSlaInformationDTO {
   final List<String> expands;
 
   /// List of the links relating to the page.
-  final Map<String, Object>? links;
+  final PagedLinkDTO? links;
 
   PagedDTOSlaInformationDTO(
       {this.size,
@@ -7611,8 +7707,9 @@ class PagedDTOSlaInformationDTO {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -7639,7 +7736,7 @@ class PagedDTOSlaInformationDTO {
     json['values'] = values.map((i) => i.toJson()).toList();
     json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -7651,7 +7748,7 @@ class PagedDTOSlaInformationDTO {
       bool? isLastPage,
       List<SlaInformationDTO>? values,
       List<String>? expands,
-      Map<String, Object>? links}) {
+      PagedLinkDTO? links}) {
     return PagedDTOSlaInformationDTO(
       size: size ?? this.size,
       start: start ?? this.start,
@@ -7666,22 +7763,22 @@ class PagedDTOSlaInformationDTO {
 
 class SlaInformationCompletedCycleDTO {
   /// Time and date at which the SLA cycle started.
-  final Map<String, Object>? startTime;
+  final DateDTO? startTime;
 
   /// Time and date at which the SLA cycle completed.
-  final Map<String, Object>? stopTime;
+  final DateDTO? stopTime;
 
   /// Indicates if the SLA (duration) was exceeded (true) or not (false).
   final bool breached;
 
   /// Duration within which the service should have been completed.
-  final Map<String, Object>? goalDuration;
+  final DurationDTO? goalDuration;
 
   /// Duration in which the service was completed.
-  final Map<String, Object>? elapsedTime;
+  final DurationDTO? elapsedTime;
 
   /// Duration remaining after the service was completed.
-  final Map<String, Object>? remainingTime;
+  final DurationDTO? remainingTime;
 
   SlaInformationCompletedCycleDTO(
       {this.startTime,
@@ -7694,17 +7791,22 @@ class SlaInformationCompletedCycleDTO {
 
   factory SlaInformationCompletedCycleDTO.fromJson(Map<String, Object?> json) {
     return SlaInformationCompletedCycleDTO(
-      startTime: (json['startTime'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      stopTime: (json['stopTime'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      startTime: json['startTime'] != null
+          ? DateDTO.fromJson(json['startTime']! as Map<String, Object?>)
+          : null,
+      stopTime: json['stopTime'] != null
+          ? DateDTO.fromJson(json['stopTime']! as Map<String, Object?>)
+          : null,
       breached: json['breached'] as bool? ?? false,
-      goalDuration: (json['goalDuration'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      elapsedTime: (json['elapsedTime'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      remainingTime: (json['remainingTime'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      goalDuration: json['goalDuration'] != null
+          ? DurationDTO.fromJson(json['goalDuration']! as Map<String, Object?>)
+          : null,
+      elapsedTime: json['elapsedTime'] != null
+          ? DurationDTO.fromJson(json['elapsedTime']! as Map<String, Object?>)
+          : null,
+      remainingTime: json['remainingTime'] != null
+          ? DurationDTO.fromJson(json['remainingTime']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -7718,31 +7820,31 @@ class SlaInformationCompletedCycleDTO {
 
     final json = <String, Object?>{};
     if (startTime != null) {
-      json['startTime'] = startTime;
+      json['startTime'] = startTime.toJson();
     }
     if (stopTime != null) {
-      json['stopTime'] = stopTime;
+      json['stopTime'] = stopTime.toJson();
     }
     json['breached'] = breached;
     if (goalDuration != null) {
-      json['goalDuration'] = goalDuration;
+      json['goalDuration'] = goalDuration.toJson();
     }
     if (elapsedTime != null) {
-      json['elapsedTime'] = elapsedTime;
+      json['elapsedTime'] = elapsedTime.toJson();
     }
     if (remainingTime != null) {
-      json['remainingTime'] = remainingTime;
+      json['remainingTime'] = remainingTime.toJson();
     }
     return json;
   }
 
   SlaInformationCompletedCycleDTO copyWith(
-      {Map<String, Object>? startTime,
-      Map<String, Object>? stopTime,
+      {DateDTO? startTime,
+      DateDTO? stopTime,
       bool? breached,
-      Map<String, Object>? goalDuration,
-      Map<String, Object>? elapsedTime,
-      Map<String, Object>? remainingTime}) {
+      DurationDTO? goalDuration,
+      DurationDTO? elapsedTime,
+      DurationDTO? remainingTime}) {
     return SlaInformationCompletedCycleDTO(
       startTime: startTime ?? this.startTime,
       stopTime: stopTime ?? this.stopTime,
@@ -7765,10 +7867,10 @@ class SlaInformationDTO {
   final List<SlaInformationCompletedCycleDTO> completedCycles;
 
   /// Details of the active cycle for the SLA.
-  final Map<String, Object>? ongoingCycle;
+  final SlaInformationOngoingCycleDTO? ongoingCycle;
 
   /// REST API URL for the SLA.
-  final Map<String, Object>? links;
+  final SelfLinkDTO? links;
 
   SlaInformationDTO(
       {this.id,
@@ -7787,10 +7889,13 @@ class SlaInformationDTO {
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      ongoingCycle: (json['ongoingCycle'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      ongoingCycle: json['ongoingCycle'] != null
+          ? SlaInformationOngoingCycleDTO.fromJson(
+              json['ongoingCycle']! as Map<String, Object?>)
+          : null,
+      links: json['_links'] != null
+          ? SelfLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -7810,10 +7915,10 @@ class SlaInformationDTO {
     }
     json['completedCycles'] = completedCycles.map((i) => i.toJson()).toList();
     if (ongoingCycle != null) {
-      json['ongoingCycle'] = ongoingCycle;
+      json['ongoingCycle'] = ongoingCycle.toJson();
     }
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -7822,8 +7927,8 @@ class SlaInformationDTO {
       {String? id,
       String? name,
       List<SlaInformationCompletedCycleDTO>? completedCycles,
-      Map<String, Object>? ongoingCycle,
-      Map<String, Object>? links}) {
+      SlaInformationOngoingCycleDTO? ongoingCycle,
+      SelfLinkDTO? links}) {
     return SlaInformationDTO(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -7836,10 +7941,10 @@ class SlaInformationDTO {
 
 class SlaInformationOngoingCycleDTO {
   /// Time and date at which the SLA cycle started.
-  final Map<String, Object>? startTime;
+  final DateDTO? startTime;
 
   /// Time and date at which the SLA cycle would have breached its limit.
-  final Map<String, Object>? breachTime;
+  final DateDTO? breachTime;
 
   /// Indicates whether the SLA has been breached (true) or not (false).
   final bool breached;
@@ -7851,13 +7956,13 @@ class SlaInformationOngoingCycleDTO {
   final bool withinCalendarHours;
 
   /// Duration within which the service should be completed.
-  final Map<String, Object>? goalDuration;
+  final DurationDTO? goalDuration;
 
   /// Duration of the service.
-  final Map<String, Object>? elapsedTime;
+  final DurationDTO? elapsedTime;
 
   /// Duration remaining in which to complete the service.
-  final Map<String, Object>? remainingTime;
+  final DurationDTO? remainingTime;
 
   SlaInformationOngoingCycleDTO(
       {this.startTime,
@@ -7874,19 +7979,24 @@ class SlaInformationOngoingCycleDTO {
 
   factory SlaInformationOngoingCycleDTO.fromJson(Map<String, Object?> json) {
     return SlaInformationOngoingCycleDTO(
-      startTime: (json['startTime'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      breachTime: (json['breachTime'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      startTime: json['startTime'] != null
+          ? DateDTO.fromJson(json['startTime']! as Map<String, Object?>)
+          : null,
+      breachTime: json['breachTime'] != null
+          ? DateDTO.fromJson(json['breachTime']! as Map<String, Object?>)
+          : null,
       breached: json['breached'] as bool? ?? false,
       paused: json['paused'] as bool? ?? false,
       withinCalendarHours: json['withinCalendarHours'] as bool? ?? false,
-      goalDuration: (json['goalDuration'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      elapsedTime: (json['elapsedTime'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      remainingTime: (json['remainingTime'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      goalDuration: json['goalDuration'] != null
+          ? DurationDTO.fromJson(json['goalDuration']! as Map<String, Object?>)
+          : null,
+      elapsedTime: json['elapsedTime'] != null
+          ? DurationDTO.fromJson(json['elapsedTime']! as Map<String, Object?>)
+          : null,
+      remainingTime: json['remainingTime'] != null
+          ? DurationDTO.fromJson(json['remainingTime']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -7902,35 +8012,35 @@ class SlaInformationOngoingCycleDTO {
 
     final json = <String, Object?>{};
     if (startTime != null) {
-      json['startTime'] = startTime;
+      json['startTime'] = startTime.toJson();
     }
     if (breachTime != null) {
-      json['breachTime'] = breachTime;
+      json['breachTime'] = breachTime.toJson();
     }
     json['breached'] = breached;
     json['paused'] = paused;
     json['withinCalendarHours'] = withinCalendarHours;
     if (goalDuration != null) {
-      json['goalDuration'] = goalDuration;
+      json['goalDuration'] = goalDuration.toJson();
     }
     if (elapsedTime != null) {
-      json['elapsedTime'] = elapsedTime;
+      json['elapsedTime'] = elapsedTime.toJson();
     }
     if (remainingTime != null) {
-      json['remainingTime'] = remainingTime;
+      json['remainingTime'] = remainingTime.toJson();
     }
     return json;
   }
 
   SlaInformationOngoingCycleDTO copyWith(
-      {Map<String, Object>? startTime,
-      Map<String, Object>? breachTime,
+      {DateDTO? startTime,
+      DateDTO? breachTime,
       bool? breached,
       bool? paused,
       bool? withinCalendarHours,
-      Map<String, Object>? goalDuration,
-      Map<String, Object>? elapsedTime,
-      Map<String, Object>? remainingTime}) {
+      DurationDTO? goalDuration,
+      DurationDTO? elapsedTime,
+      DurationDTO? remainingTime}) {
     return SlaInformationOngoingCycleDTO(
       startTime: startTime ?? this.startTime,
       breachTime: breachTime ?? this.breachTime,
@@ -7993,7 +8103,7 @@ class PagedDTOCustomerRequestDTO {
   final List<String> expands;
 
   /// List of the links relating to the page.
-  final Map<String, Object>? links;
+  final PagedLinkDTO? links;
 
   PagedDTOCustomerRequestDTO(
       {this.size,
@@ -8022,8 +8132,9 @@ class PagedDTOCustomerRequestDTO {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: (json['_links'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      links: json['_links'] != null
+          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -8050,7 +8161,7 @@ class PagedDTOCustomerRequestDTO {
     json['values'] = values.map((i) => i.toJson()).toList();
     json['_expands'] = expands;
     if (links != null) {
-      json['_links'] = links;
+      json['_links'] = links.toJson();
     }
     return json;
   }
@@ -8062,7 +8173,7 @@ class PagedDTOCustomerRequestDTO {
       bool? isLastPage,
       List<CustomerRequestDTO>? values,
       List<String>? expands,
-      Map<String, Object>? links}) {
+      PagedLinkDTO? links}) {
     return PagedDTOCustomerRequestDTO(
       size: size ?? this.size,
       start: start ?? this.start,

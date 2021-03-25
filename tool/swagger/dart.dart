@@ -91,6 +91,11 @@ class Api {
         return DateTimeType(this);
       } else {
         if (type == null) {
+          var allOf = schema.allOf;
+          if (allOf != null && allOf.isNotEmpty) {
+            return typeFromSchema(allOf.first);
+          }
+
           //throw Exception('Type is null for schema $schema');
           // TODO(xha): support allOf
           "";

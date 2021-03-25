@@ -9560,7 +9560,7 @@ class Component {
   final String? description;
 
   /// The user details for the component's lead user.
-  final Map<String, Object>? lead;
+  final User? lead;
 
   /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
   final String? leadUserName;
@@ -9580,7 +9580,7 @@ class Component {
   final ComponentAssigneeType? assigneeType;
 
   /// The details of the user associated with `assigneeType`, if any. See `realAssignee` for details of the user assigned to issues created with this component.
-  final Map<String, Object>? assignee;
+  final User? assignee;
 
   /// The type of the assignee that is assigned to issues created with this component, when an assignee cannot be set from the `assigneeType`. For example, `assigneeType` is set to `COMPONENT_LEAD` but no component lead is set. This property is set to one of the following values:
   ///
@@ -9591,7 +9591,7 @@ class Component {
   final ComponentRealAssigneeType? realAssigneeType;
 
   /// The user assigned to issues created with this component, when `assigneeType` does not identify a valid assignee.
-  final Map<String, Object>? realAssignee;
+  final User? realAssignee;
 
   /// Whether a user is associated with `assigneeType`. For example, if the `assigneeType` is set to `COMPONENT_LEAD` but the component lead is not set, then `false` is returned.
   final bool isAssigneeTypeValid;
@@ -9625,21 +9625,24 @@ class Component {
       id: json['id'] as String?,
       name: json['name'] as String?,
       description: json['description'] as String?,
-      lead: (json['lead'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      lead: json['lead'] != null
+          ? User.fromJson(json['lead']! as Map<String, Object?>)
+          : null,
       leadUserName: json['leadUserName'] as String?,
       leadAccountId: json['leadAccountId'] as String?,
       assigneeType: json['assigneeType'] != null
           ? ComponentAssigneeType.fromValue(json['assigneeType']! as String)
           : null,
-      assignee: (json['assignee'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      assignee: json['assignee'] != null
+          ? User.fromJson(json['assignee']! as Map<String, Object?>)
+          : null,
       realAssigneeType: json['realAssigneeType'] != null
           ? ComponentRealAssigneeType.fromValue(
               json['realAssigneeType']! as String)
           : null,
-      realAssignee: (json['realAssignee'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      realAssignee: json['realAssignee'] != null
+          ? User.fromJson(json['realAssignee']! as Map<String, Object?>)
+          : null,
       isAssigneeTypeValid: json['isAssigneeTypeValid'] as bool? ?? false,
       project: json['project'] as String?,
       projectId: (json['projectId'] as num?)?.toInt(),
@@ -9676,7 +9679,7 @@ class Component {
       json['description'] = description;
     }
     if (lead != null) {
-      json['lead'] = lead;
+      json['lead'] = lead.toJson();
     }
     if (leadUserName != null) {
       json['leadUserName'] = leadUserName;
@@ -9688,13 +9691,13 @@ class Component {
       json['assigneeType'] = assigneeType.value;
     }
     if (assignee != null) {
-      json['assignee'] = assignee;
+      json['assignee'] = assignee.toJson();
     }
     if (realAssigneeType != null) {
       json['realAssigneeType'] = realAssigneeType.value;
     }
     if (realAssignee != null) {
-      json['realAssignee'] = realAssignee;
+      json['realAssignee'] = realAssignee.toJson();
     }
     json['isAssigneeTypeValid'] = isAssigneeTypeValid;
     if (project != null) {
@@ -9711,13 +9714,13 @@ class Component {
       String? id,
       String? name,
       String? description,
-      Map<String, Object>? lead,
+      User? lead,
       String? leadUserName,
       String? leadAccountId,
       ComponentAssigneeType? assigneeType,
-      Map<String, Object>? assignee,
+      User? assignee,
       ComponentRealAssigneeType? realAssigneeType,
-      Map<String, Object>? realAssignee,
+      User? realAssignee,
       bool? isAssigneeTypeValid,
       String? project,
       int? projectId}) {
@@ -9808,7 +9811,7 @@ class Dashboard {
   final String? name;
 
   /// The owner of the dashboard.
-  final Map<String, Object>? owner;
+  final UserBean? owner;
 
   /// The number of users who have this dashboard as a favorite.
   final int? popularity;
@@ -9845,8 +9848,9 @@ class Dashboard {
       id: json['id'] as String?,
       isFavourite: json['isFavourite'] as bool? ?? false,
       name: json['name'] as String?,
-      owner: (json['owner'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      owner: json['owner'] != null
+          ? UserBean.fromJson(json['owner']! as Map<String, Object?>)
+          : null,
       popularity: (json['popularity'] as num?)?.toInt(),
       rank: (json['rank'] as num?)?.toInt(),
       self: json['self'] as String?,
@@ -9883,7 +9887,7 @@ class Dashboard {
       json['name'] = name;
     }
     if (owner != null) {
-      json['owner'] = owner;
+      json['owner'] = owner.toJson();
     }
     if (popularity != null) {
       json['popularity'] = popularity;
@@ -9906,7 +9910,7 @@ class Dashboard {
       String? id,
       bool? isFavourite,
       String? name,
-      Map<String, Object>? owner,
+      UserBean? owner,
       int? popularity,
       int? rank,
       String? self,
@@ -10186,7 +10190,7 @@ class IssueTypeDetails {
   final int? hierarchyLevel;
 
   /// Details of the next-gen projects the issue type is available in.
-  final Map<String, Object>? scope;
+  final Scope? scope;
 
   IssueTypeDetails(
       {this.self,
@@ -10212,8 +10216,9 @@ class IssueTypeDetails {
       avatarId: (json['avatarId'] as num?)?.toInt(),
       entityId: json['entityId'] as String?,
       hierarchyLevel: (json['hierarchyLevel'] as num?)?.toInt(),
-      scope: (json['scope'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      scope: json['scope'] != null
+          ? Scope.fromJson(json['scope']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -10256,7 +10261,7 @@ class IssueTypeDetails {
       json['hierarchyLevel'] = hierarchyLevel;
     }
     if (scope != null) {
-      json['scope'] = scope;
+      json['scope'] = scope.toJson();
     }
     return json;
   }
@@ -10271,7 +10276,7 @@ class IssueTypeDetails {
       int? avatarId,
       String? entityId,
       int? hierarchyLevel,
-      Map<String, Object>? scope}) {
+      Scope? scope}) {
     return IssueTypeDetails(
       self: self ?? this.self,
       id: id ?? this.id,
@@ -10422,7 +10427,7 @@ class Project {
   final String? description;
 
   /// The username of the project lead.
-  final Map<String, Object>? lead;
+  final User? lead;
 
   /// List of the components contained in the project.
   final List<Component> components;
@@ -10449,10 +10454,10 @@ class Project {
   final Map<String, dynamic>? roles;
 
   /// The URLs of the project's avatars.
-  final Map<String, Object>? avatarUrls;
+  final AvatarUrlsBean? avatarUrls;
 
   /// The category the project belongs to.
-  final Map<String, Object>? projectCategory;
+  final ProjectCategory? projectCategory;
 
   /// The [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes) of the project.
   final ProjectProjectTypeKey? projectTypeKey;
@@ -10470,10 +10475,10 @@ class Project {
   final bool isPrivate;
 
   /// The issue type hierarchy for the project.
-  final Map<String, Object>? issueTypeHierarchy;
+  final Hierarchy? issueTypeHierarchy;
 
   /// User permissions on the project
-  final Map<String, Object>? permissions;
+  final ProjectPermissions? permissions;
 
   /// Map of project properties
   final Map<String, dynamic>? properties;
@@ -10482,7 +10487,7 @@ class Project {
   final String? uuid;
 
   /// Insights about the project.
-  final Map<String, Object>? insight;
+  final ProjectInsight? insight;
 
   /// Whether the project is marked as deleted.
   final bool deleted;
@@ -10494,7 +10499,7 @@ class Project {
   final DateTime? deletedDate;
 
   /// The user who marked the project as deleted.
-  final Map<String, Object>? deletedBy;
+  final User? deletedBy;
 
   /// Whether the project is archived.
   final bool archived;
@@ -10503,7 +10508,7 @@ class Project {
   final DateTime? archivedDate;
 
   /// The user who archived the project.
-  final Map<String, Object>? archivedBy;
+  final User? archivedBy;
 
   Project(
       {this.expand,
@@ -10555,8 +10560,9 @@ class Project {
       id: json['id'] as String?,
       key: json['key'] as String?,
       description: json['description'] as String?,
-      lead: (json['lead'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      lead: json['lead'] != null
+          ? User.fromJson(json['lead']! as Map<String, Object?>)
+          : null,
       components: (json['components'] as List<Object?>?)
               ?.map((i) =>
                   Component.fromJson(i as Map<String, Object?>? ?? const {}))
@@ -10579,10 +10585,13 @@ class Project {
           [],
       name: json['name'] as String?,
       roles: json['roles'] as Map<String, Object?>?,
-      avatarUrls: (json['avatarUrls'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      projectCategory: (json['projectCategory'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      avatarUrls: json['avatarUrls'] != null
+          ? AvatarUrlsBean.fromJson(json['avatarUrls']! as Map<String, Object?>)
+          : null,
+      projectCategory: json['projectCategory'] != null
+          ? ProjectCategory.fromJson(
+              json['projectCategory']! as Map<String, Object?>)
+          : null,
       projectTypeKey: json['projectTypeKey'] != null
           ? ProjectProjectTypeKey.fromValue(json['projectTypeKey']! as String)
           : null,
@@ -10592,24 +10601,31 @@ class Project {
           : null,
       favourite: json['favourite'] as bool? ?? false,
       isPrivate: json['isPrivate'] as bool? ?? false,
-      issueTypeHierarchy: (json['issueTypeHierarchy'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      permissions: (json['permissions'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      issueTypeHierarchy: json['issueTypeHierarchy'] != null
+          ? Hierarchy.fromJson(
+              json['issueTypeHierarchy']! as Map<String, Object?>)
+          : null,
+      permissions: json['permissions'] != null
+          ? ProjectPermissions.fromJson(
+              json['permissions']! as Map<String, Object?>)
+          : null,
       properties: json['properties'] as Map<String, Object?>?,
       uuid: json['uuid'] as String?,
-      insight: (json['insight'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      insight: json['insight'] != null
+          ? ProjectInsight.fromJson(json['insight']! as Map<String, Object?>)
+          : null,
       deleted: json['deleted'] as bool? ?? false,
       retentionTillDate:
           DateTime.tryParse(json['retentionTillDate'] as String? ?? ''),
       deletedDate: DateTime.tryParse(json['deletedDate'] as String? ?? ''),
-      deletedBy: (json['deletedBy'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      deletedBy: json['deletedBy'] != null
+          ? User.fromJson(json['deletedBy']! as Map<String, Object?>)
+          : null,
       archived: json['archived'] as bool? ?? false,
       archivedDate: DateTime.tryParse(json['archivedDate'] as String? ?? ''),
-      archivedBy: (json['archivedBy'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      archivedBy: json['archivedBy'] != null
+          ? User.fromJson(json['archivedBy']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -10665,7 +10681,7 @@ class Project {
       json['description'] = description;
     }
     if (lead != null) {
-      json['lead'] = lead;
+      json['lead'] = lead.toJson();
     }
     json['components'] = components.map((i) => i.toJson()).toList();
     json['issueTypes'] = issueTypes.map((i) => i.toJson()).toList();
@@ -10686,10 +10702,10 @@ class Project {
       json['roles'] = roles;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls;
+      json['avatarUrls'] = avatarUrls.toJson();
     }
     if (projectCategory != null) {
-      json['projectCategory'] = projectCategory;
+      json['projectCategory'] = projectCategory.toJson();
     }
     if (projectTypeKey != null) {
       json['projectTypeKey'] = projectTypeKey.value;
@@ -10701,10 +10717,10 @@ class Project {
     json['favourite'] = favourite;
     json['isPrivate'] = isPrivate;
     if (issueTypeHierarchy != null) {
-      json['issueTypeHierarchy'] = issueTypeHierarchy;
+      json['issueTypeHierarchy'] = issueTypeHierarchy.toJson();
     }
     if (permissions != null) {
-      json['permissions'] = permissions;
+      json['permissions'] = permissions.toJson();
     }
     if (properties != null) {
       json['properties'] = properties;
@@ -10713,7 +10729,7 @@ class Project {
       json['uuid'] = uuid;
     }
     if (insight != null) {
-      json['insight'] = insight;
+      json['insight'] = insight.toJson();
     }
     json['deleted'] = deleted;
     if (retentionTillDate != null) {
@@ -10723,14 +10739,14 @@ class Project {
       json['deletedDate'] = deletedDate.toIso8601String();
     }
     if (deletedBy != null) {
-      json['deletedBy'] = deletedBy;
+      json['deletedBy'] = deletedBy.toJson();
     }
     json['archived'] = archived;
     if (archivedDate != null) {
       json['archivedDate'] = archivedDate.toIso8601String();
     }
     if (archivedBy != null) {
-      json['archivedBy'] = archivedBy;
+      json['archivedBy'] = archivedBy.toJson();
     }
     return json;
   }
@@ -10741,7 +10757,7 @@ class Project {
       String? id,
       String? key,
       String? description,
-      Map<String, Object>? lead,
+      User? lead,
       List<Component>? components,
       List<IssueTypeDetails>? issueTypes,
       String? url,
@@ -10750,25 +10766,25 @@ class Project {
       List<Version>? versions,
       String? name,
       Map<String, dynamic>? roles,
-      Map<String, Object>? avatarUrls,
-      Map<String, Object>? projectCategory,
+      AvatarUrlsBean? avatarUrls,
+      ProjectCategory? projectCategory,
       ProjectProjectTypeKey? projectTypeKey,
       bool? simplified,
       ProjectStyle? style,
       bool? favourite,
       bool? isPrivate,
-      Map<String, Object>? issueTypeHierarchy,
-      Map<String, Object>? permissions,
+      Hierarchy? issueTypeHierarchy,
+      ProjectPermissions? permissions,
       Map<String, dynamic>? properties,
       String? uuid,
-      Map<String, Object>? insight,
+      ProjectInsight? insight,
       bool? deleted,
       DateTime? retentionTillDate,
       DateTime? deletedDate,
-      Map<String, Object>? deletedBy,
+      User? deletedBy,
       bool? archived,
       DateTime? archivedDate,
-      Map<String, Object>? archivedBy}) {
+      User? archivedBy}) {
     return Project(
       expand: expand ?? this.expand,
       self: self ?? this.self,
@@ -10956,10 +10972,10 @@ class ProjectForScope {
   final bool simplified;
 
   /// The URLs of the project's avatars.
-  final Map<String, Object>? avatarUrls;
+  final AvatarUrlsBean? avatarUrls;
 
   /// The category the project belongs to.
-  final Map<String, Object>? projectCategory;
+  final UpdatedProjectCategory? projectCategory;
 
   ProjectForScope(
       {this.self,
@@ -10983,10 +10999,13 @@ class ProjectForScope {
               json['projectTypeKey']! as String)
           : null,
       simplified: json['simplified'] as bool? ?? false,
-      avatarUrls: (json['avatarUrls'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      projectCategory: (json['projectCategory'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      avatarUrls: json['avatarUrls'] != null
+          ? AvatarUrlsBean.fromJson(json['avatarUrls']! as Map<String, Object?>)
+          : null,
+      projectCategory: json['projectCategory'] != null
+          ? UpdatedProjectCategory.fromJson(
+              json['projectCategory']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -11018,10 +11037,10 @@ class ProjectForScope {
     }
     json['simplified'] = simplified;
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls;
+      json['avatarUrls'] = avatarUrls.toJson();
     }
     if (projectCategory != null) {
-      json['projectCategory'] = projectCategory;
+      json['projectCategory'] = projectCategory.toJson();
     }
     return json;
   }
@@ -11033,8 +11052,8 @@ class ProjectForScope {
       String? name,
       ProjectForScopeProjectTypeKey? projectTypeKey,
       bool? simplified,
-      Map<String, Object>? avatarUrls,
-      Map<String, Object>? projectCategory}) {
+      AvatarUrlsBean? avatarUrls,
+      UpdatedProjectCategory? projectCategory}) {
     return ProjectForScope(
       self: self ?? this.self,
       id: id ?? this.id,
@@ -11160,7 +11179,7 @@ class ProjectRole {
   final List<RoleActor> actors;
 
   /// The scope of the role. Indicated for roles associated with [next-gen projects](https://confluence.atlassian.com/x/loMyO).
-  final Map<String, Object>? scope;
+  final Scope? scope;
 
   /// The translated name of the project role.
   final String? translatedName;
@@ -11206,8 +11225,9 @@ class ProjectRole {
                   RoleActor.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      scope: (json['scope'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      scope: json['scope'] != null
+          ? Scope.fromJson(json['scope']! as Map<String, Object?>)
+          : null,
       translatedName: json['translatedName'] as String?,
       currentUserRole: json['currentUserRole'] as bool? ?? false,
       admin: json['admin'] as bool? ?? false,
@@ -11244,7 +11264,7 @@ class ProjectRole {
     }
     json['actors'] = actors.map((i) => i.toJson()).toList();
     if (scope != null) {
-      json['scope'] = scope;
+      json['scope'] = scope.toJson();
     }
     if (translatedName != null) {
       json['translatedName'] = translatedName;
@@ -11262,7 +11282,7 @@ class ProjectRole {
       int? id,
       String? description,
       List<RoleActor>? actors,
-      Map<String, Object>? scope,
+      Scope? scope,
       String? translatedName,
       bool? currentUserRole,
       bool? admin,
@@ -11369,8 +11389,8 @@ class RoleActor {
 
   /// The avatar of the role actor.
   final String? avatarUrl;
-  final Map<String, Object>? actorUser;
-  final Map<String, Object>? actorGroup;
+  final ProjectRoleUser? actorUser;
+  final ProjectRoleGroup? actorGroup;
 
   RoleActor(
       {this.id,
@@ -11390,10 +11410,13 @@ class RoleActor {
           : null,
       name: json['name'] as String?,
       avatarUrl: json['avatarUrl'] as String?,
-      actorUser: (json['actorUser'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      actorGroup: (json['actorGroup'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      actorUser: json['actorUser'] != null
+          ? ProjectRoleUser.fromJson(json['actorUser']! as Map<String, Object?>)
+          : null,
+      actorGroup: json['actorGroup'] != null
+          ? ProjectRoleGroup.fromJson(
+              json['actorGroup']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -11423,10 +11446,10 @@ class RoleActor {
       json['avatarUrl'] = avatarUrl;
     }
     if (actorUser != null) {
-      json['actorUser'] = actorUser;
+      json['actorUser'] = actorUser.toJson();
     }
     if (actorGroup != null) {
-      json['actorGroup'] = actorGroup;
+      json['actorGroup'] = actorGroup.toJson();
     }
     return json;
   }
@@ -11437,8 +11460,8 @@ class RoleActor {
       RoleActorType? type,
       String? name,
       String? avatarUrl,
-      Map<String, Object>? actorUser,
-      Map<String, Object>? actorGroup}) {
+      ProjectRoleUser? actorUser,
+      ProjectRoleGroup? actorGroup}) {
     return RoleActor(
       id: id ?? this.id,
       displayName: displayName ?? this.displayName,
@@ -11482,7 +11505,7 @@ class Scope {
   final ScopeType? type;
 
   /// The project the item has scope in.
-  final Map<String, Object>? project;
+  final ProjectForScope? project;
 
   Scope({this.type, this.project});
 
@@ -11491,8 +11514,9 @@ class Scope {
       type: json['type'] != null
           ? ScopeType.fromValue(json['type']! as String)
           : null,
-      project: (json['project'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      project: json['project'] != null
+          ? ProjectForScope.fromJson(json['project']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -11505,12 +11529,12 @@ class Scope {
       json['type'] = type.value;
     }
     if (project != null) {
-      json['project'] = project;
+      json['project'] = project.toJson();
     }
     return json;
   }
 
-  Scope copyWith({ScopeType? type, Map<String, Object>? project}) {
+  Scope copyWith({ScopeType? type, ProjectForScope? project}) {
     return Scope(
       type: type ?? this.type,
       project: project ?? this.project,
@@ -11557,14 +11581,14 @@ class SharePermission {
 
   /// The project that the filter is shared with. This is similar to the project object returned by [Get project](#api-rest-api-3-project-projectIdOrKey-get) but it contains a subset of the properties, which are: `self`, `id`, `key`, `assigneeType`, `name`, `roles`, `avatarUrls`, `projectType`, `simplified`.
   /// For a request, specify the `id` for the project.
-  final Map<String, Object>? project;
+  final Project? project;
 
   /// The project role that the filter is shared with.
   /// For a request, specify the `id` for the role. You must also specify the `project` object and `id` for the project that the role is in.
-  final Map<String, Object>? role;
+  final ProjectRole? role;
 
   /// The group that the filter is shared with. For a request, specify the `name` property for the group.
-  final Map<String, Object>? group;
+  final GroupName? group;
 
   SharePermission(
       {this.id, required this.type, this.project, this.role, this.group});
@@ -11573,12 +11597,15 @@ class SharePermission {
     return SharePermission(
       id: (json['id'] as num?)?.toInt(),
       type: SharePermissionType.fromValue(json['type'] as String? ?? ''),
-      project: (json['project'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      role: (json['role'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      group: (json['group'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      project: json['project'] != null
+          ? Project.fromJson(json['project']! as Map<String, Object?>)
+          : null,
+      role: json['role'] != null
+          ? ProjectRole.fromJson(json['role']! as Map<String, Object?>)
+          : null,
+      group: json['group'] != null
+          ? GroupName.fromJson(json['group']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -11595,13 +11622,13 @@ class SharePermission {
     }
     json['type'] = type.value;
     if (project != null) {
-      json['project'] = project;
+      json['project'] = project.toJson();
     }
     if (role != null) {
-      json['role'] = role;
+      json['role'] = role.toJson();
     }
     if (group != null) {
-      json['group'] = group;
+      json['group'] = group.toJson();
     }
     return json;
   }
@@ -11609,9 +11636,9 @@ class SharePermission {
   SharePermission copyWith(
       {int? id,
       SharePermissionType? type,
-      Map<String, Object>? project,
-      Map<String, Object>? role,
-      Map<String, Object>? group}) {
+      Project? project,
+      ProjectRole? role,
+      GroupName? group}) {
     return SharePermission(
       id: id ?? this.id,
       type: type ?? this.type,
@@ -11977,7 +12004,7 @@ class User {
   final String? emailAddress;
 
   /// The avatars of the user.
-  final Map<String, Object>? avatarUrls;
+  final AvatarUrlsBean? avatarUrls;
 
   /// The display name of the user. Depending on the user’s privacy setting, this may return an alternative value.
   final String? displayName;
@@ -11992,10 +12019,10 @@ class User {
   final String? locale;
 
   /// The groups that the user belongs to.
-  final Map<String, Object>? groups;
+  final SimpleListWrapperGroupName? groups;
 
   /// The application roles the user is assigned to.
-  final Map<String, Object>? applicationRoles;
+  final SimpleListWrapperApplicationRole? applicationRoles;
 
   /// Expand options that include additional user details in the response.
   final String? expand;
@@ -12027,16 +12054,21 @@ class User {
           : null,
       name: json['name'] as String?,
       emailAddress: json['emailAddress'] as String?,
-      avatarUrls: (json['avatarUrls'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      avatarUrls: json['avatarUrls'] != null
+          ? AvatarUrlsBean.fromJson(json['avatarUrls']! as Map<String, Object?>)
+          : null,
       displayName: json['displayName'] as String?,
       active: json['active'] as bool? ?? false,
       timeZone: json['timeZone'] as String?,
       locale: json['locale'] as String?,
-      groups: (json['groups'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      applicationRoles: (json['applicationRoles'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      groups: json['groups'] != null
+          ? SimpleListWrapperGroupName.fromJson(
+              json['groups']! as Map<String, Object?>)
+          : null,
+      applicationRoles: json['applicationRoles'] != null
+          ? SimpleListWrapperApplicationRole.fromJson(
+              json['applicationRoles']! as Map<String, Object?>)
+          : null,
       expand: json['expand'] as String?,
     );
   }
@@ -12077,7 +12109,7 @@ class User {
       json['emailAddress'] = emailAddress;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls;
+      json['avatarUrls'] = avatarUrls.toJson();
     }
     if (displayName != null) {
       json['displayName'] = displayName;
@@ -12090,10 +12122,10 @@ class User {
       json['locale'] = locale;
     }
     if (groups != null) {
-      json['groups'] = groups;
+      json['groups'] = groups.toJson();
     }
     if (applicationRoles != null) {
-      json['applicationRoles'] = applicationRoles;
+      json['applicationRoles'] = applicationRoles.toJson();
     }
     if (expand != null) {
       json['expand'] = expand;
@@ -12108,13 +12140,13 @@ class User {
       UserAccountType? accountType,
       String? name,
       String? emailAddress,
-      Map<String, Object>? avatarUrls,
+      AvatarUrlsBean? avatarUrls,
       String? displayName,
       bool? active,
       String? timeZone,
       String? locale,
-      Map<String, Object>? groups,
-      Map<String, Object>? applicationRoles,
+      SimpleListWrapperGroupName? groups,
+      SimpleListWrapperApplicationRole? applicationRoles,
       String? expand}) {
     return User(
       self: self ?? this.self,
@@ -12184,7 +12216,7 @@ class UserBean {
   final String? accountId;
 
   /// The avatars of the user.
-  final Map<String, Object>? avatarUrls;
+  final UserBeanAvatarUrls? avatarUrls;
 
   UserBean(
       {this.key,
@@ -12204,8 +12236,10 @@ class UserBean {
       displayName: json['displayName'] as String?,
       active: json['active'] as bool? ?? false,
       accountId: json['accountId'] as String?,
-      avatarUrls: (json['avatarUrls'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      avatarUrls: json['avatarUrls'] != null
+          ? UserBeanAvatarUrls.fromJson(
+              json['avatarUrls']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -12236,7 +12270,7 @@ class UserBean {
       json['accountId'] = accountId;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls;
+      json['avatarUrls'] = avatarUrls.toJson();
     }
     return json;
   }
@@ -12248,7 +12282,7 @@ class UserBean {
       String? displayName,
       bool? active,
       String? accountId,
-      Map<String, Object>? avatarUrls}) {
+      UserBeanAvatarUrls? avatarUrls}) {
     return UserBean(
       key: key ?? this.key,
       self: self ?? this.self,
@@ -12374,7 +12408,7 @@ class Version {
   final List<SimpleLink> operations;
 
   /// If the expand option `issuesstatus` is used, returns the count of issues in this version for each of the status categories *to do*, *in progress*, *done*, and *unmapped*. The *unmapped* property contains a count of issues with a status other than *to do*, *in progress*, and *done*.
-  final Map<String, Object>? issuesStatusForFixVersion;
+  final VersionIssuesStatus? issuesStatusForFixVersion;
 
   Version(
       {this.expand,
@@ -12421,9 +12455,10 @@ class Version {
                   SimpleLink.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      issuesStatusForFixVersion:
-          (json['issuesStatusForFixVersion'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})),
+      issuesStatusForFixVersion: json['issuesStatusForFixVersion'] != null
+          ? VersionIssuesStatus.fromJson(
+              json['issuesStatusForFixVersion']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -12488,7 +12523,7 @@ class Version {
     }
     json['operations'] = operations.map((i) => i.toJson()).toList();
     if (issuesStatusForFixVersion != null) {
-      json['issuesStatusForFixVersion'] = issuesStatusForFixVersion;
+      json['issuesStatusForFixVersion'] = issuesStatusForFixVersion.toJson();
     }
     return json;
   }
@@ -12510,7 +12545,7 @@ class Version {
       int? projectId,
       String? moveUnfixedIssuesTo,
       List<SimpleLink>? operations,
-      Map<String, Object>? issuesStatusForFixVersion}) {
+      VersionIssuesStatus? issuesStatusForFixVersion}) {
     return Version(
       expand: expand ?? this.expand,
       self: self ?? this.self,
@@ -12915,7 +12950,7 @@ class BulkIssuePropertyUpdateRequest {
   final String? expression;
 
   /// The bulk operation filter.
-  final Map<String, Object>? filter;
+  final IssueFilterForBulkPropertySet? filter;
 
   BulkIssuePropertyUpdateRequest({this.value, this.expression, this.filter});
 
@@ -12924,8 +12959,10 @@ class BulkIssuePropertyUpdateRequest {
       value: (json['value'] as Map<String, Object?>?)
           ?.map((k, v) => MapEntry(k, v ?? {})),
       expression: json['expression'] as String?,
-      filter: (json['filter'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      filter: json['filter'] != null
+          ? IssueFilterForBulkPropertySet.fromJson(
+              json['filter']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -12942,7 +12979,7 @@ class BulkIssuePropertyUpdateRequest {
       json['expression'] = expression;
     }
     if (filter != null) {
-      json['filter'] = filter;
+      json['filter'] = filter.toJson();
     }
     return json;
   }
@@ -12950,7 +12987,7 @@ class BulkIssuePropertyUpdateRequest {
   BulkIssuePropertyUpdateRequest copyWith(
       {Map<String, Object>? value,
       String? expression,
-      Map<String, Object>? filter}) {
+      IssueFilterForBulkPropertySet? filter}) {
     return BulkIssuePropertyUpdateRequest(
       value: value ?? this.value,
       expression: expression ?? this.expression,
@@ -14989,7 +15026,7 @@ class ParsedJqlQuery {
   final String query;
 
   /// The syntax tree of the query. Empty if the query was invalid.
-  final Map<String, Object>? structure;
+  final JqlQuery? structure;
 
   /// The list of syntax or validation errors.
   final List<String> errors;
@@ -15000,8 +15037,9 @@ class ParsedJqlQuery {
   factory ParsedJqlQuery.fromJson(Map<String, Object?> json) {
     return ParsedJqlQuery(
       query: json['query'] as String? ?? '',
-      structure: (json['structure'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      structure: json['structure'] != null
+          ? JqlQuery.fromJson(json['structure']! as Map<String, Object?>)
+          : null,
       errors: (json['errors'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -15017,14 +15055,14 @@ class ParsedJqlQuery {
     final json = <String, Object?>{};
     json['query'] = query;
     if (structure != null) {
-      json['structure'] = structure;
+      json['structure'] = structure.toJson();
     }
     json['errors'] = errors;
     return json;
   }
 
   ParsedJqlQuery copyWith(
-      {String? query, Map<String, Object>? structure, List<String>? errors}) {
+      {String? query, JqlQuery? structure, List<String>? errors}) {
     return ParsedJqlQuery(
       query: query ?? this.query,
       structure: structure ?? this.structure,
@@ -15239,19 +15277,19 @@ class EventNotification {
   final String? parameter;
 
   /// The specified group.
-  final Map<String, Object>? group;
+  final GroupName? group;
 
   /// The custom user or group field.
-  final Map<String, Object>? field;
+  final FieldDetails? field;
 
   /// The email address.
   final String? emailAddress;
 
   /// The specified project role.
-  final Map<String, Object>? projectRole;
+  final ProjectRole? projectRole;
 
   /// The specified user.
-  final Map<String, Object>? user;
+  final UserDetails? user;
 
   EventNotification(
       {this.expand,
@@ -15273,15 +15311,19 @@ class EventNotification {
               json['notificationType']! as String)
           : null,
       parameter: json['parameter'] as String?,
-      group: (json['group'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      field: (json['field'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      group: json['group'] != null
+          ? GroupName.fromJson(json['group']! as Map<String, Object?>)
+          : null,
+      field: json['field'] != null
+          ? FieldDetails.fromJson(json['field']! as Map<String, Object?>)
+          : null,
       emailAddress: json['emailAddress'] as String?,
-      projectRole: (json['projectRole'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      user: (json['user'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      projectRole: json['projectRole'] != null
+          ? ProjectRole.fromJson(json['projectRole']! as Map<String, Object?>)
+          : null,
+      user: json['user'] != null
+          ? UserDetails.fromJson(json['user']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -15310,19 +15352,19 @@ class EventNotification {
       json['parameter'] = parameter;
     }
     if (group != null) {
-      json['group'] = group;
+      json['group'] = group.toJson();
     }
     if (field != null) {
-      json['field'] = field;
+      json['field'] = field.toJson();
     }
     if (emailAddress != null) {
       json['emailAddress'] = emailAddress;
     }
     if (projectRole != null) {
-      json['projectRole'] = projectRole;
+      json['projectRole'] = projectRole.toJson();
     }
     if (user != null) {
-      json['user'] = user;
+      json['user'] = user.toJson();
     }
     return json;
   }
@@ -15332,11 +15374,11 @@ class EventNotification {
       int? id,
       EventNotificationNotificationType? notificationType,
       String? parameter,
-      Map<String, Object>? group,
-      Map<String, Object>? field,
+      GroupName? group,
+      FieldDetails? field,
       String? emailAddress,
-      Map<String, Object>? projectRole,
-      Map<String, Object>? user}) {
+      ProjectRole? projectRole,
+      UserDetails? user}) {
     return EventNotification(
       expand: expand ?? this.expand,
       id: id ?? this.id,
@@ -15426,10 +15468,10 @@ class FieldDetails {
   final List<String> clauseNames;
 
   /// The scope of the field.
-  final Map<String, Object>? scope;
+  final Scope? scope;
 
   /// The data schema for the field.
-  final Map<String, Object>? schema;
+  final JsonTypeBean? schema;
 
   FieldDetails(
       {this.id,
@@ -15461,10 +15503,12 @@ class FieldDetails {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      scope: (json['scope'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      schema: (json['schema'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      scope: json['scope'] != null
+          ? Scope.fromJson(json['scope']! as Map<String, Object?>)
+          : null,
+      schema: json['schema'] != null
+          ? JsonTypeBean.fromJson(json['schema']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -15496,10 +15540,10 @@ class FieldDetails {
     json['searchable'] = searchable;
     json['clauseNames'] = clauseNames;
     if (scope != null) {
-      json['scope'] = scope;
+      json['scope'] = scope.toJson();
     }
     if (schema != null) {
-      json['schema'] = schema;
+      json['schema'] = schema.toJson();
     }
     return json;
   }
@@ -15513,8 +15557,8 @@ class FieldDetails {
       bool? navigable,
       bool? searchable,
       List<String>? clauseNames,
-      Map<String, Object>? scope,
-      Map<String, Object>? schema}) {
+      Scope? scope,
+      JsonTypeBean? schema}) {
     return FieldDetails(
       id: id ?? this.id,
       key: key ?? this.key,
@@ -15627,7 +15671,7 @@ class NotificationEvent {
   final String? description;
 
   /// The template of the event. Only custom events configured by Jira administrators have template.
-  final Map<String, Object>? templateEvent;
+  final NotificationEvent? templateEvent;
 
   NotificationEvent({this.id, this.name, this.description, this.templateEvent});
 
@@ -15636,8 +15680,10 @@ class NotificationEvent {
       id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String?,
       description: json['description'] as String?,
-      templateEvent: (json['templateEvent'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      templateEvent: json['templateEvent'] != null
+          ? NotificationEvent.fromJson(
+              json['templateEvent']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -15658,7 +15704,7 @@ class NotificationEvent {
       json['description'] = description;
     }
     if (templateEvent != null) {
-      json['templateEvent'] = templateEvent;
+      json['templateEvent'] = templateEvent.toJson();
     }
     return json;
   }
@@ -15667,7 +15713,7 @@ class NotificationEvent {
       {int? id,
       String? name,
       String? description,
-      Map<String, Object>? templateEvent}) {
+      NotificationEvent? templateEvent}) {
     return NotificationEvent(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -15696,7 +15742,7 @@ class NotificationScheme {
   final List<NotificationSchemeEvent> notificationSchemeEvents;
 
   /// The scope of the notification scheme.
-  final Map<String, Object>? scope;
+  final Scope? scope;
 
   NotificationScheme(
       {this.expand,
@@ -15721,8 +15767,9 @@ class NotificationScheme {
                       i as Map<String, Object?>? ?? const {}))
                   .toList() ??
               [],
-      scope: (json['scope'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      scope: json['scope'] != null
+          ? Scope.fromJson(json['scope']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -15754,7 +15801,7 @@ class NotificationScheme {
     json['notificationSchemeEvents'] =
         notificationSchemeEvents.map((i) => i.toJson()).toList();
     if (scope != null) {
-      json['scope'] = scope;
+      json['scope'] = scope.toJson();
     }
     return json;
   }
@@ -15766,7 +15813,7 @@ class NotificationScheme {
       String? name,
       String? description,
       List<NotificationSchemeEvent>? notificationSchemeEvents,
-      Map<String, Object>? scope}) {
+      Scope? scope}) {
     return NotificationScheme(
       expand: expand ?? this.expand,
       id: id ?? this.id,
@@ -15844,7 +15891,7 @@ class UserDetails {
   final String? emailAddress;
 
   /// The avatars of the user.
-  final Map<String, Object>? avatarUrls;
+  final AvatarUrlsBean? avatarUrls;
 
   /// The display name of the user. Depending on the user’s privacy settings, this may return an alternative value.
   final String? displayName;
@@ -15878,8 +15925,9 @@ class UserDetails {
       key: json['key'] as String?,
       accountId: json['accountId'] as String?,
       emailAddress: json['emailAddress'] as String?,
-      avatarUrls: (json['avatarUrls'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      avatarUrls: json['avatarUrls'] != null
+          ? AvatarUrlsBean.fromJson(json['avatarUrls']! as Map<String, Object?>)
+          : null,
       displayName: json['displayName'] as String?,
       active: json['active'] as bool? ?? false,
       timeZone: json['timeZone'] as String?,
@@ -15916,7 +15964,7 @@ class UserDetails {
       json['emailAddress'] = emailAddress;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls;
+      json['avatarUrls'] = avatarUrls.toJson();
     }
     if (displayName != null) {
       json['displayName'] = displayName;
@@ -15937,7 +15985,7 @@ class UserDetails {
       String? key,
       String? accountId,
       String? emailAddress,
-      Map<String, Object>? avatarUrls,
+      AvatarUrlsBean? avatarUrls,
       String? displayName,
       bool? active,
       String? timeZone,
@@ -16282,14 +16330,15 @@ class IdOrKeyBean {
 /// The JQL specifying the issues available in the evaluated Jira expression under the `issues` context variable.
 class JexpIssues {
   /// The JQL query that specifies the set of issues available in the Jira expression.
-  final Map<String, Object>? jql;
+  final JexpJqlIssues? jql;
 
   JexpIssues({this.jql});
 
   factory JexpIssues.fromJson(Map<String, Object?> json) {
     return JexpIssues(
-      jql: (json['jql'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      jql: json['jql'] != null
+          ? JexpJqlIssues.fromJson(json['jql']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -16298,12 +16347,12 @@ class JexpIssues {
 
     final json = <String, Object?>{};
     if (jql != null) {
-      json['jql'] = jql;
+      json['jql'] = jql.toJson();
     }
     return json;
   }
 
-  JexpIssues copyWith({Map<String, Object>? jql}) {
+  JexpIssues copyWith({JexpJqlIssues? jql}) {
     return JexpIssues(
       jql: jql ?? this.jql,
     );
@@ -16400,13 +16449,13 @@ class JexpJqlIssuesValidation {
 
 class JiraExpressionEvalContextBean {
   /// The issue that is available under the `issue` variable when evaluating the expression.
-  final Map<String, Object>? issue;
+  final IdOrKeyBean? issue;
 
   /// The collection of issues that is available under the `issues` variable when evaluating the expression.
-  final Map<String, Object>? issues;
+  final JexpIssues? issues;
 
   /// The project that is available under the `project` variable when evaluating the expression.
-  final Map<String, Object>? project;
+  final IdOrKeyBean? project;
 
   /// The ID of the sprint that is available under the `sprint` variable when evaluating the expression.
   final int? sprint;
@@ -16431,12 +16480,15 @@ class JiraExpressionEvalContextBean {
 
   factory JiraExpressionEvalContextBean.fromJson(Map<String, Object?> json) {
     return JiraExpressionEvalContextBean(
-      issue: (json['issue'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      issues: (json['issues'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      project: (json['project'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      issue: json['issue'] != null
+          ? IdOrKeyBean.fromJson(json['issue']! as Map<String, Object?>)
+          : null,
+      issues: json['issues'] != null
+          ? JexpIssues.fromJson(json['issues']! as Map<String, Object?>)
+          : null,
+      project: json['project'] != null
+          ? IdOrKeyBean.fromJson(json['project']! as Map<String, Object?>)
+          : null,
       sprint: (json['sprint'] as num?)?.toInt(),
       board: (json['board'] as num?)?.toInt(),
       serviceDesk: (json['serviceDesk'] as num?)?.toInt(),
@@ -16455,13 +16507,13 @@ class JiraExpressionEvalContextBean {
 
     final json = <String, Object?>{};
     if (issue != null) {
-      json['issue'] = issue;
+      json['issue'] = issue.toJson();
     }
     if (issues != null) {
-      json['issues'] = issues;
+      json['issues'] = issues.toJson();
     }
     if (project != null) {
-      json['project'] = project;
+      json['project'] = project.toJson();
     }
     if (sprint != null) {
       json['sprint'] = sprint;
@@ -16479,9 +16531,9 @@ class JiraExpressionEvalContextBean {
   }
 
   JiraExpressionEvalContextBean copyWith(
-      {Map<String, Object>? issue,
-      Map<String, Object>? issues,
-      Map<String, Object>? project,
+      {IdOrKeyBean? issue,
+      JexpIssues? issues,
+      IdOrKeyBean? project,
       int? sprint,
       int? board,
       int? serviceDesk,
@@ -16503,15 +16555,17 @@ class JiraExpressionEvalRequestBean {
   final String expression;
 
   /// The context in which the Jira expression is evaluated.
-  final Map<String, Object>? context;
+  final JiraExpressionEvalContextBean? context;
 
   JiraExpressionEvalRequestBean({required this.expression, this.context});
 
   factory JiraExpressionEvalRequestBean.fromJson(Map<String, Object?> json) {
     return JiraExpressionEvalRequestBean(
       expression: json['expression'] as String? ?? '',
-      context: (json['context'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      context: json['context'] != null
+          ? JiraExpressionEvalContextBean.fromJson(
+              json['context']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -16522,13 +16576,13 @@ class JiraExpressionEvalRequestBean {
     final json = <String, Object?>{};
     json['expression'] = expression;
     if (context != null) {
-      json['context'] = context;
+      json['context'] = context.toJson();
     }
     return json;
   }
 
   JiraExpressionEvalRequestBean copyWith(
-      {String? expression, Map<String, Object>? context}) {
+      {String? expression, JiraExpressionEvalContextBean? context}) {
     return JiraExpressionEvalRequestBean(
       expression: expression ?? this.expression,
       context: context ?? this.context,
@@ -16639,20 +16693,23 @@ class IssuesMetaBean {
 
 class JiraExpressionEvaluationMetaDataBean {
   /// Contains information about the expression complexity. For example, the number of steps it took to evaluate the expression.
-  final Map<String, Object>? complexity;
+  final JiraExpressionsComplexityBean? complexity;
 
   /// Contains information about the `issues` variable in the context. For example, is the issues were loaded with JQL, information about the page will be included here.
-  final Map<String, Object>? issues;
+  final IssuesMetaBean? issues;
 
   JiraExpressionEvaluationMetaDataBean({this.complexity, this.issues});
 
   factory JiraExpressionEvaluationMetaDataBean.fromJson(
       Map<String, Object?> json) {
     return JiraExpressionEvaluationMetaDataBean(
-      complexity: (json['complexity'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      issues: (json['issues'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      complexity: json['complexity'] != null
+          ? JiraExpressionsComplexityBean.fromJson(
+              json['complexity']! as Map<String, Object?>)
+          : null,
+      issues: json['issues'] != null
+          ? IssuesMetaBean.fromJson(json['issues']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -16662,16 +16719,16 @@ class JiraExpressionEvaluationMetaDataBean {
 
     final json = <String, Object?>{};
     if (complexity != null) {
-      json['complexity'] = complexity;
+      json['complexity'] = complexity.toJson();
     }
     if (issues != null) {
-      json['issues'] = issues;
+      json['issues'] = issues.toJson();
     }
     return json;
   }
 
   JiraExpressionEvaluationMetaDataBean copyWith(
-      {Map<String, Object>? complexity, Map<String, Object>? issues}) {
+      {JiraExpressionsComplexityBean? complexity, IssuesMetaBean? issues}) {
     return JiraExpressionEvaluationMetaDataBean(
       complexity: complexity ?? this.complexity,
       issues: issues ?? this.issues,
@@ -16685,7 +16742,7 @@ class JiraExpressionResult {
   final Map<String, Object> value;
 
   /// Contains various characteristics of the performed expression evaluation.
-  final Map<String, Object>? meta;
+  final JiraExpressionEvaluationMetaDataBean? meta;
 
   JiraExpressionResult({required this.value, this.meta});
 
@@ -16694,8 +16751,10 @@ class JiraExpressionResult {
       value: (json['value'] as Map<String, Object?>?)
               ?.map((k, v) => MapEntry(k, v ?? {})) ??
           {},
-      meta: (json['meta'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      meta: json['meta'] != null
+          ? JiraExpressionEvaluationMetaDataBean.fromJson(
+              json['meta']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -16706,13 +16765,14 @@ class JiraExpressionResult {
     final json = <String, Object?>{};
     json['value'] = value;
     if (meta != null) {
-      json['meta'] = meta;
+      json['meta'] = meta.toJson();
     }
     return json;
   }
 
   JiraExpressionResult copyWith(
-      {Map<String, Object>? value, Map<String, Object>? meta}) {
+      {Map<String, Object>? value,
+      JiraExpressionEvaluationMetaDataBean? meta}) {
     return JiraExpressionResult(
       value: value ?? this.value,
       meta: meta ?? this.meta,
@@ -16722,16 +16782,16 @@ class JiraExpressionResult {
 
 class JiraExpressionsComplexityBean {
   /// The number of steps it took to evaluate the expression, where a step is a high-level operation performed by the expression. A step is an operation such as arithmetic, accessing a property, accessing a context variable, or calling a function.
-  final Map<String, Object> steps;
+  final JiraExpressionsComplexityValueBean steps;
 
   /// The number of expensive operations executed while evaluating the expression. Expensive operations are those that load additional data, such as entity properties, comments, or custom fields.
-  final Map<String, Object> expensiveOperations;
+  final JiraExpressionsComplexityValueBean expensiveOperations;
 
   /// The number of Jira REST API beans returned in the response.
-  final Map<String, Object> beans;
+  final JiraExpressionsComplexityValueBean beans;
 
   /// The number of primitive values returned in the response.
-  final Map<String, Object> primitiveValues;
+  final JiraExpressionsComplexityValueBean primitiveValues;
 
   JiraExpressionsComplexityBean(
       {required this.steps,
@@ -16741,19 +16801,14 @@ class JiraExpressionsComplexityBean {
 
   factory JiraExpressionsComplexityBean.fromJson(Map<String, Object?> json) {
     return JiraExpressionsComplexityBean(
-      steps: (json['steps'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
-      expensiveOperations:
-          (json['expensiveOperations'] as Map<String, Object?>?)
-                  ?.map((k, v) => MapEntry(k, v ?? {})) ??
-              {},
-      beans: (json['beans'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
-      primitiveValues: (json['primitiveValues'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
+      steps: JiraExpressionsComplexityValueBean.fromJson(
+          json['steps'] as Map<String, Object?>? ?? const {}),
+      expensiveOperations: JiraExpressionsComplexityValueBean.fromJson(
+          json['expensiveOperations'] as Map<String, Object?>? ?? const {}),
+      beans: JiraExpressionsComplexityValueBean.fromJson(
+          json['beans'] as Map<String, Object?>? ?? const {}),
+      primitiveValues: JiraExpressionsComplexityValueBean.fromJson(
+          json['primitiveValues'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -16764,18 +16819,18 @@ class JiraExpressionsComplexityBean {
     var primitiveValues = this.primitiveValues;
 
     final json = <String, Object?>{};
-    json['steps'] = steps;
-    json['expensiveOperations'] = expensiveOperations;
-    json['beans'] = beans;
-    json['primitiveValues'] = primitiveValues;
+    json['steps'] = steps.toJson();
+    json['expensiveOperations'] = expensiveOperations.toJson();
+    json['beans'] = beans.toJson();
+    json['primitiveValues'] = primitiveValues.toJson();
     return json;
   }
 
   JiraExpressionsComplexityBean copyWith(
-      {Map<String, Object>? steps,
-      Map<String, Object>? expensiveOperations,
-      Map<String, Object>? beans,
-      Map<String, Object>? primitiveValues}) {
+      {JiraExpressionsComplexityValueBean? steps,
+      JiraExpressionsComplexityValueBean? expensiveOperations,
+      JiraExpressionsComplexityValueBean? beans,
+      JiraExpressionsComplexityValueBean? primitiveValues}) {
     return JiraExpressionsComplexityBean(
       steps: steps ?? this.steps,
       expensiveOperations: expensiveOperations ?? this.expensiveOperations,
@@ -17224,7 +17279,7 @@ class ScreenScheme {
   final String? description;
 
   /// The IDs of the screens for the screen types of the screen scheme.
-  final Map<String, Object>? screens;
+  final ScreenTypes? screens;
 
   ScreenScheme({this.id, this.name, this.description, this.screens});
 
@@ -17233,8 +17288,9 @@ class ScreenScheme {
       id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String?,
       description: json['description'] as String?,
-      screens: (json['screens'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      screens: json['screens'] != null
+          ? ScreenTypes.fromJson(json['screens']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -17255,16 +17311,13 @@ class ScreenScheme {
       json['description'] = description;
     }
     if (screens != null) {
-      json['screens'] = screens;
+      json['screens'] = screens.toJson();
     }
     return json;
   }
 
   ScreenScheme copyWith(
-      {int? id,
-      String? name,
-      String? description,
-      Map<String, Object>? screens}) {
+      {int? id, String? name, String? description, ScreenTypes? screens}) {
     return ScreenScheme(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -17340,7 +17393,7 @@ class ScreenSchemeDetails {
   final String? description;
 
   /// The IDs of the screens for the screen types of the screen scheme. Only screens used in classic projects are accepted.
-  final Map<String, Object> screens;
+  final ScreenTypes screens;
 
   ScreenSchemeDetails(
       {required this.name, this.description, required this.screens});
@@ -17349,9 +17402,8 @@ class ScreenSchemeDetails {
     return ScreenSchemeDetails(
       name: json['name'] as String? ?? '',
       description: json['description'] as String?,
-      screens: (json['screens'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
+      screens: ScreenTypes.fromJson(
+          json['screens'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -17365,12 +17417,12 @@ class ScreenSchemeDetails {
     if (description != null) {
       json['description'] = description;
     }
-    json['screens'] = screens;
+    json['screens'] = screens.toJson();
     return json;
   }
 
   ScreenSchemeDetails copyWith(
-      {String? name, String? description, Map<String, Object>? screens}) {
+      {String? name, String? description, ScreenTypes? screens}) {
     return ScreenSchemeDetails(
       name: name ?? this.name,
       description: description ?? this.description,
@@ -17416,7 +17468,7 @@ class UpdateScreenSchemeDetails {
   final String? description;
 
   /// The IDs of the screens for the screen types of the screen scheme. Only screens used in classic projects are accepted.
-  final Map<String, Object>? screens;
+  final UpdateScreenTypes? screens;
 
   UpdateScreenSchemeDetails({this.name, this.description, this.screens});
 
@@ -17424,8 +17476,9 @@ class UpdateScreenSchemeDetails {
     return UpdateScreenSchemeDetails(
       name: json['name'] as String?,
       description: json['description'] as String?,
-      screens: (json['screens'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      screens: json['screens'] != null
+          ? UpdateScreenTypes.fromJson(json['screens']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -17442,13 +17495,13 @@ class UpdateScreenSchemeDetails {
       json['description'] = description;
     }
     if (screens != null) {
-      json['screens'] = screens;
+      json['screens'] = screens.toJson();
     }
     return json;
   }
 
   UpdateScreenSchemeDetails copyWith(
-      {String? name, String? description, Map<String, Object>? screens}) {
+      {String? name, String? description, UpdateScreenTypes? screens}) {
     return UpdateScreenSchemeDetails(
       name: name ?? this.name,
       description: description ?? this.description,
@@ -18379,7 +18432,7 @@ class StatusDetails {
   final String? id;
 
   /// The category assigned to the status.
-  final Map<String, Object>? statusCategory;
+  final StatusCategory? statusCategory;
 
   StatusDetails(
       {this.self,
@@ -18396,8 +18449,10 @@ class StatusDetails {
       iconUrl: json['iconUrl'] as String?,
       name: json['name'] as String?,
       id: json['id'] as String?,
-      statusCategory: (json['statusCategory'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      statusCategory: json['statusCategory'] != null
+          ? StatusCategory.fromJson(
+              json['statusCategory']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -18426,7 +18481,7 @@ class StatusDetails {
       json['id'] = id;
     }
     if (statusCategory != null) {
-      json['statusCategory'] = statusCategory;
+      json['statusCategory'] = statusCategory.toJson();
     }
     return json;
   }
@@ -18437,7 +18492,7 @@ class StatusDetails {
       String? iconUrl,
       String? name,
       String? id,
-      Map<String, Object>? statusCategory}) {
+      StatusCategory? statusCategory}) {
     return StatusDetails(
       self: self ?? this.self,
       description: description ?? this.description,
@@ -18598,7 +18653,7 @@ class Screen {
   final String? description;
 
   /// The scope of the screen.
-  final Map<String, Object>? scope;
+  final Scope? scope;
 
   Screen({this.id, this.name, this.description, this.scope});
 
@@ -18607,8 +18662,9 @@ class Screen {
       id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String?,
       description: json['description'] as String?,
-      scope: (json['scope'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      scope: json['scope'] != null
+          ? Scope.fromJson(json['scope']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -18629,16 +18685,12 @@ class Screen {
       json['description'] = description;
     }
     if (scope != null) {
-      json['scope'] = scope;
+      json['scope'] = scope.toJson();
     }
     return json;
   }
 
-  Screen copyWith(
-      {int? id,
-      String? name,
-      String? description,
-      Map<String, Object>? scope}) {
+  Screen copyWith({int? id, String? name, String? description, Scope? scope}) {
     return Screen(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -19405,16 +19457,16 @@ class ComponentWithIssueCount {
   final ComponentWithIssueCountAssigneeType? assigneeType;
 
   /// The user details for the component's lead user.
-  final Map<String, Object>? lead;
+  final User? lead;
 
   /// The user assigned to issues created with this component, when `assigneeType` does not identify a valid assignee.
-  final Map<String, Object>? realAssignee;
+  final User? realAssignee;
 
   /// Whether a user is associated with `assigneeType`. For example, if the `assigneeType` is set to `COMPONENT_LEAD` but the component lead is not set, then `false` is returned.
   final bool isAssigneeTypeValid;
 
   /// The details of the user associated with `assigneeType`, if any. See `realAssignee` for details of the user assigned to issues created with this component.
-  final Map<String, Object>? assignee;
+  final User? assignee;
 
   /// The type of the assignee that is assigned to issues created with this component, when an assignee cannot be set from the `assigneeType`. For example, `assigneeType` is set to `COMPONENT_LEAD` but no component lead is set. This property is set to one of the following values:
   ///
@@ -19457,13 +19509,16 @@ class ComponentWithIssueCount {
           ? ComponentWithIssueCountAssigneeType.fromValue(
               json['assigneeType']! as String)
           : null,
-      lead: (json['lead'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      realAssignee: (json['realAssignee'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      lead: json['lead'] != null
+          ? User.fromJson(json['lead']! as Map<String, Object?>)
+          : null,
+      realAssignee: json['realAssignee'] != null
+          ? User.fromJson(json['realAssignee']! as Map<String, Object?>)
+          : null,
       isAssigneeTypeValid: json['isAssigneeTypeValid'] as bool? ?? false,
-      assignee: (json['assignee'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      assignee: json['assignee'] != null
+          ? User.fromJson(json['assignee']! as Map<String, Object?>)
+          : null,
       realAssigneeType: json['realAssigneeType'] != null
           ? ComponentWithIssueCountRealAssigneeType.fromValue(
               json['realAssigneeType']! as String)
@@ -19508,14 +19563,14 @@ class ComponentWithIssueCount {
       json['assigneeType'] = assigneeType.value;
     }
     if (lead != null) {
-      json['lead'] = lead;
+      json['lead'] = lead.toJson();
     }
     if (realAssignee != null) {
-      json['realAssignee'] = realAssignee;
+      json['realAssignee'] = realAssignee.toJson();
     }
     json['isAssigneeTypeValid'] = isAssigneeTypeValid;
     if (assignee != null) {
-      json['assignee'] = assignee;
+      json['assignee'] = assignee.toJson();
     }
     if (realAssigneeType != null) {
       json['realAssigneeType'] = realAssigneeType.value;
@@ -19536,10 +19591,10 @@ class ComponentWithIssueCount {
       String? project,
       String? self,
       ComponentWithIssueCountAssigneeType? assigneeType,
-      Map<String, Object>? lead,
-      Map<String, Object>? realAssignee,
+      User? lead,
+      User? realAssignee,
       bool? isAssigneeTypeValid,
-      Map<String, Object>? assignee,
+      User? assignee,
       ComponentWithIssueCountRealAssigneeType? realAssigneeType,
       String? name,
       String? id}) {
@@ -20193,7 +20248,7 @@ class Comment {
   final String? id;
 
   /// The ID of the user who created the comment.
-  final Map<String, Object>? author;
+  final UserDetails? author;
 
   /// The comment text in [Atlassian Document Format](https://developer.atlassian.com/cloud/jira/platform/apis/document/structure/).
   final Map<String, Object>? body;
@@ -20202,7 +20257,7 @@ class Comment {
   final String? renderedBody;
 
   /// The ID of the user who updated the comment last.
-  final Map<String, Object>? updateAuthor;
+  final UserDetails? updateAuthor;
 
   /// The date and time at which the comment was created.
   final DateTime? created;
@@ -20211,7 +20266,7 @@ class Comment {
   final DateTime? updated;
 
   /// The group or role to which this comment is visible. Optional on create and update.
-  final Map<String, Object>? visibility;
+  final Visibility? visibility;
 
   /// Whether the comment is visible in Jira Service Desk. Defaults to true when comments are created in the Jira Cloud Platform. This includes when the site doesn't use Jira Service Desk or the project isn't a Jira Service Desk project and, therefore, there is no Jira Service Desk for the issue to be visible on. To create a comment with its visibility in Jira Service Desk set to false, use the Jira Service Desk REST API [Create request comment](https://developer.atlassian.com/cloud/jira/service-desk/rest/#api-rest-servicedeskapi-request-issueIdOrKey-comment-post) operation.
   final bool jsdPublic;
@@ -20238,17 +20293,20 @@ class Comment {
     return Comment(
       self: json['self'] as String?,
       id: json['id'] as String?,
-      author: (json['author'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      author: json['author'] != null
+          ? UserDetails.fromJson(json['author']! as Map<String, Object?>)
+          : null,
       body: (json['body'] as Map<String, Object?>?)
           ?.map((k, v) => MapEntry(k, v ?? {})),
       renderedBody: json['renderedBody'] as String?,
-      updateAuthor: (json['updateAuthor'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      updateAuthor: json['updateAuthor'] != null
+          ? UserDetails.fromJson(json['updateAuthor']! as Map<String, Object?>)
+          : null,
       created: DateTime.tryParse(json['created'] as String? ?? ''),
       updated: DateTime.tryParse(json['updated'] as String? ?? ''),
-      visibility: (json['visibility'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      visibility: json['visibility'] != null
+          ? Visibility.fromJson(json['visibility']! as Map<String, Object?>)
+          : null,
       jsdPublic: json['jsdPublic'] as bool? ?? false,
       properties: (json['properties'] as List<Object?>?)
               ?.map((i) => EntityProperty.fromJson(
@@ -20279,7 +20337,7 @@ class Comment {
       json['id'] = id;
     }
     if (author != null) {
-      json['author'] = author;
+      json['author'] = author.toJson();
     }
     if (body != null) {
       json['body'] = body;
@@ -20288,7 +20346,7 @@ class Comment {
       json['renderedBody'] = renderedBody;
     }
     if (updateAuthor != null) {
-      json['updateAuthor'] = updateAuthor;
+      json['updateAuthor'] = updateAuthor.toJson();
     }
     if (created != null) {
       json['created'] = created.toIso8601String();
@@ -20297,7 +20355,7 @@ class Comment {
       json['updated'] = updated.toIso8601String();
     }
     if (visibility != null) {
-      json['visibility'] = visibility;
+      json['visibility'] = visibility.toJson();
     }
     json['jsdPublic'] = jsdPublic;
     json['properties'] = properties.map((i) => i.toJson()).toList();
@@ -20307,13 +20365,13 @@ class Comment {
   Comment copyWith(
       {String? self,
       String? id,
-      Map<String, Object>? author,
+      UserDetails? author,
       Map<String, Object>? body,
       String? renderedBody,
-      Map<String, Object>? updateAuthor,
+      UserDetails? updateAuthor,
       DateTime? created,
       DateTime? updated,
-      Map<String, Object>? visibility,
+      Visibility? visibility,
       bool? jsdPublic,
       List<EntityProperty>? properties}) {
     return Comment(
@@ -20338,22 +20396,22 @@ class Fields {
   final String? summary;
 
   /// The status of the linked issue.
-  final Map<String, Object>? status;
+  final StatusDetails? status;
 
   /// The priority of the linked issue.
-  final Map<String, Object>? priority;
+  final Priority? priority;
 
   /// The assignee of the linked issue.
-  final Map<String, Object>? assignee;
+  final UserDetails? assignee;
 
   /// The time tracking of the linked issue.
-  final Map<String, Object>? timetracking;
+  final TimeTrackingDetails? timetracking;
 
   /// The type of the linked issue.
   final IssueTypeDetails? issuetype;
 
   /// The type of the linked issue.
-  final Map<String, Object>? issueType;
+  final IssueTypeDetails? issueType;
 
   Fields(
       {this.summary,
@@ -20367,20 +20425,27 @@ class Fields {
   factory Fields.fromJson(Map<String, Object?> json) {
     return Fields(
       summary: json['summary'] as String?,
-      status: (json['status'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      priority: (json['priority'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      assignee: (json['assignee'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      timetracking: (json['timetracking'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      status: json['status'] != null
+          ? StatusDetails.fromJson(json['status']! as Map<String, Object?>)
+          : null,
+      priority: json['priority'] != null
+          ? Priority.fromJson(json['priority']! as Map<String, Object?>)
+          : null,
+      assignee: json['assignee'] != null
+          ? UserDetails.fromJson(json['assignee']! as Map<String, Object?>)
+          : null,
+      timetracking: json['timetracking'] != null
+          ? TimeTrackingDetails.fromJson(
+              json['timetracking']! as Map<String, Object?>)
+          : null,
       issuetype: json['issuetype'] != null
           ? IssueTypeDetails.fromJson(
               json['issuetype']! as Map<String, Object?>)
           : null,
-      issueType: (json['issueType'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      issueType: json['issueType'] != null
+          ? IssueTypeDetails.fromJson(
+              json['issueType']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -20398,34 +20463,34 @@ class Fields {
       json['summary'] = summary;
     }
     if (status != null) {
-      json['status'] = status;
+      json['status'] = status.toJson();
     }
     if (priority != null) {
-      json['priority'] = priority;
+      json['priority'] = priority.toJson();
     }
     if (assignee != null) {
-      json['assignee'] = assignee;
+      json['assignee'] = assignee.toJson();
     }
     if (timetracking != null) {
-      json['timetracking'] = timetracking;
+      json['timetracking'] = timetracking.toJson();
     }
     if (issuetype != null) {
       json['issuetype'] = issuetype.toJson();
     }
     if (issueType != null) {
-      json['issueType'] = issueType;
+      json['issueType'] = issueType.toJson();
     }
     return json;
   }
 
   Fields copyWith(
       {String? summary,
-      Map<String, Object>? status,
-      Map<String, Object>? priority,
-      Map<String, Object>? assignee,
-      Map<String, Object>? timetracking,
+      StatusDetails? status,
+      Priority? priority,
+      UserDetails? assignee,
+      TimeTrackingDetails? timetracking,
       IssueTypeDetails? issuetype,
-      Map<String, Object>? issueType}) {
+      IssueTypeDetails? issueType}) {
     return Fields(
       summary: summary ?? this.summary,
       status: status ?? this.status,
@@ -20592,7 +20657,7 @@ class LinkedIssue {
   final String? self;
 
   /// The fields associated with the issue.
-  final Map<String, Object>? fields;
+  final Fields? fields;
 
   LinkedIssue({this.id, this.key, this.self, this.fields});
 
@@ -20601,8 +20666,9 @@ class LinkedIssue {
       id: json['id'] as String?,
       key: json['key'] as String?,
       self: json['self'] as String?,
-      fields: (json['fields'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      fields: json['fields'] != null
+          ? Fields.fromJson(json['fields']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -20623,13 +20689,13 @@ class LinkedIssue {
       json['self'] = self;
     }
     if (fields != null) {
-      json['fields'] = fields;
+      json['fields'] = fields.toJson();
     }
     return json;
   }
 
   LinkedIssue copyWith(
-      {String? id, String? key, String? self, Map<String, Object>? fields}) {
+      {String? id, String? key, String? self, Fields? fields}) {
     return LinkedIssue(
       id: id ?? this.id,
       key: key ?? this.key,
@@ -20842,13 +20908,13 @@ class IssueLink {
   final String? self;
 
   /// The type of link between the issues.
-  final Map<String, Object> type;
+  final IssueLinkType type;
 
   /// The issue the link joins to.
-  final Map<String, Object> inwardIssue;
+  final LinkedIssue inwardIssue;
 
   /// The issue the link originates from.
-  final Map<String, Object> outwardIssue;
+  final LinkedIssue outwardIssue;
 
   IssueLink(
       {this.id,
@@ -20861,15 +20927,12 @@ class IssueLink {
     return IssueLink(
       id: json['id'] as String?,
       self: json['self'] as String?,
-      type: (json['type'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
-      inwardIssue: (json['inwardIssue'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
-      outwardIssue: (json['outwardIssue'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
+      type: IssueLinkType.fromJson(
+          json['type'] as Map<String, Object?>? ?? const {}),
+      inwardIssue: LinkedIssue.fromJson(
+          json['inwardIssue'] as Map<String, Object?>? ?? const {}),
+      outwardIssue: LinkedIssue.fromJson(
+          json['outwardIssue'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -20887,18 +20950,18 @@ class IssueLink {
     if (self != null) {
       json['self'] = self;
     }
-    json['type'] = type;
-    json['inwardIssue'] = inwardIssue;
-    json['outwardIssue'] = outwardIssue;
+    json['type'] = type.toJson();
+    json['inwardIssue'] = inwardIssue.toJson();
+    json['outwardIssue'] = outwardIssue.toJson();
     return json;
   }
 
   IssueLink copyWith(
       {String? id,
       String? self,
-      Map<String, Object>? type,
-      Map<String, Object>? inwardIssue,
-      Map<String, Object>? outwardIssue}) {
+      IssueLinkType? type,
+      LinkedIssue? inwardIssue,
+      LinkedIssue? outwardIssue}) {
     return IssueLink(
       id: id ?? this.id,
       self: self ?? this.self,
@@ -20977,10 +21040,10 @@ class Worklog {
   final String? self;
 
   /// Details of the user who created the worklog.
-  final Map<String, Object>? author;
+  final UserDetails? author;
 
   /// Details of the user who last updated the worklog.
-  final Map<String, Object>? updateAuthor;
+  final UserDetails? updateAuthor;
 
   /// A comment about the worklog in [Atlassian Document Format](https://developer.atlassian.com/cloud/jira/platform/apis/document/structure/). Optional when creating or updating a worklog.
   final Map<String, Object>? comment;
@@ -20992,7 +21055,7 @@ class Worklog {
   final DateTime? updated;
 
   /// Details about any restrictions in the visibility of the worklog. Optional when creating or updating a worklog.
-  final Map<String, Object>? visibility;
+  final Visibility? visibility;
 
   /// The datetime on which the worklog effort was started. Required when creating a worklog. Optional when updating a worklog.
   final DateTime? started;
@@ -21031,16 +21094,19 @@ class Worklog {
   factory Worklog.fromJson(Map<String, Object?> json) {
     return Worklog(
       self: json['self'] as String?,
-      author: (json['author'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      updateAuthor: (json['updateAuthor'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      author: json['author'] != null
+          ? UserDetails.fromJson(json['author']! as Map<String, Object?>)
+          : null,
+      updateAuthor: json['updateAuthor'] != null
+          ? UserDetails.fromJson(json['updateAuthor']! as Map<String, Object?>)
+          : null,
       comment: (json['comment'] as Map<String, Object?>?)
           ?.map((k, v) => MapEntry(k, v ?? {})),
       created: DateTime.tryParse(json['created'] as String? ?? ''),
       updated: DateTime.tryParse(json['updated'] as String? ?? ''),
-      visibility: (json['visibility'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      visibility: json['visibility'] != null
+          ? Visibility.fromJson(json['visibility']! as Map<String, Object?>)
+          : null,
       started: DateTime.tryParse(json['started'] as String? ?? ''),
       timeSpent: json['timeSpent'] as String?,
       timeSpentSeconds: (json['timeSpentSeconds'] as num?)?.toInt(),
@@ -21074,10 +21140,10 @@ class Worklog {
       json['self'] = self;
     }
     if (author != null) {
-      json['author'] = author;
+      json['author'] = author.toJson();
     }
     if (updateAuthor != null) {
-      json['updateAuthor'] = updateAuthor;
+      json['updateAuthor'] = updateAuthor.toJson();
     }
     if (comment != null) {
       json['comment'] = comment;
@@ -21089,7 +21155,7 @@ class Worklog {
       json['updated'] = updated.toIso8601String();
     }
     if (visibility != null) {
-      json['visibility'] = visibility;
+      json['visibility'] = visibility.toJson();
     }
     if (started != null) {
       json['started'] = started.toIso8601String();
@@ -21112,12 +21178,12 @@ class Worklog {
 
   Worklog copyWith(
       {String? self,
-      Map<String, Object>? author,
-      Map<String, Object>? updateAuthor,
+      UserDetails? author,
+      UserDetails? updateAuthor,
       Map<String, Object>? comment,
       DateTime? created,
       DateTime? updated,
-      Map<String, Object>? visibility,
+      Visibility? visibility,
       DateTime? started,
       String? timeSpent,
       int? timeSpentSeconds,
@@ -21304,7 +21370,7 @@ class IssueSecurityLevelMember {
   final int issueSecurityLevelId;
 
   /// The user or group being granted the permission. It consists of a `type` and a type-dependent `parameter`. See [Holder object](#holder-object) in *Get all permission schemes* for more information.
-  final Map<String, Object> holder;
+  final PermissionHolder holder;
 
   IssueSecurityLevelMember(
       {required this.id,
@@ -21316,9 +21382,8 @@ class IssueSecurityLevelMember {
       id: (json['id'] as num?)?.toInt() ?? 0,
       issueSecurityLevelId:
           (json['issueSecurityLevelId'] as num?)?.toInt() ?? 0,
-      holder: (json['holder'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
+      holder: PermissionHolder.fromJson(
+          json['holder'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -21330,12 +21395,12 @@ class IssueSecurityLevelMember {
     final json = <String, Object?>{};
     json['id'] = id;
     json['issueSecurityLevelId'] = issueSecurityLevelId;
-    json['holder'] = holder;
+    json['holder'] = holder.toJson();
     return json;
   }
 
   IssueSecurityLevelMember copyWith(
-      {int? id, int? issueSecurityLevelId, Map<String, Object>? holder}) {
+      {int? id, int? issueSecurityLevelId, PermissionHolder? holder}) {
     return IssueSecurityLevelMember(
       id: id ?? this.id,
       issueSecurityLevelId: issueSecurityLevelId ?? this.issueSecurityLevelId,
@@ -21496,7 +21561,7 @@ class FieldMetadata {
   final bool required;
 
   /// The data type of the field.
-  final Map<String, Object> schema;
+  final JsonTypeBean schema;
 
   /// The name of the field.
   final String name;
@@ -21535,9 +21600,8 @@ class FieldMetadata {
   factory FieldMetadata.fromJson(Map<String, Object?> json) {
     return FieldMetadata(
       required: json['required'] as bool? ?? false,
-      schema: (json['schema'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
+      schema: JsonTypeBean.fromJson(
+          json['schema'] as Map<String, Object?>? ?? const {}),
       name: json['name'] as String? ?? '',
       key: json['key'] as String? ?? '',
       autoCompleteUrl: json['autoCompleteUrl'] as String?,
@@ -21571,7 +21635,7 @@ class FieldMetadata {
 
     final json = <String, Object?>{};
     json['required'] = required;
-    json['schema'] = schema;
+    json['schema'] = schema.toJson();
     json['name'] = name;
     json['key'] = key;
     if (autoCompleteUrl != null) {
@@ -21588,7 +21652,7 @@ class FieldMetadata {
 
   FieldMetadata copyWith(
       {bool? required,
-      Map<String, Object>? schema,
+      JsonTypeBean? schema,
       String? name,
       String? key,
       String? autoCompleteUrl,
@@ -21619,7 +21683,7 @@ class IssueTransition {
   final String? name;
 
   /// Details of the issue status after the transition.
-  final Map<String, Object>? to;
+  final StatusDetails? to;
 
   /// Whether there is a screen associated with the issue transition.
   final bool hasScreen;
@@ -21666,8 +21730,9 @@ class IssueTransition {
     return IssueTransition(
       id: json['id'] as String?,
       name: json['name'] as String?,
-      to: (json['to'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      to: json['to'] != null
+          ? StatusDetails.fromJson(json['to']! as Map<String, Object?>)
+          : null,
       hasScreen: json['hasScreen'] as bool? ?? false,
       isGlobal: json['isGlobal'] as bool? ?? false,
       isInitial: json['isInitial'] as bool? ?? false,
@@ -21700,7 +21765,7 @@ class IssueTransition {
       json['name'] = name;
     }
     if (to != null) {
-      json['to'] = to;
+      json['to'] = to.toJson();
     }
     json['hasScreen'] = hasScreen;
     json['isGlobal'] = isGlobal;
@@ -21720,7 +21785,7 @@ class IssueTransition {
   IssueTransition copyWith(
       {String? id,
       String? name,
-      Map<String, Object>? to,
+      StatusDetails? to,
       bool? hasScreen,
       bool? isGlobal,
       bool? isInitial,
@@ -22072,13 +22137,13 @@ class HistoryMetadata {
   final String? emailDescriptionKey;
 
   /// Details of the user whose action created the history record.
-  final Map<String, Object>? actor;
+  final HistoryMetadataParticipant? actor;
 
   /// Details of the system that generated the history record.
-  final Map<String, Object>? generator;
+  final HistoryMetadataParticipant? generator;
 
   /// Details of the cause that triggered the creation the history record.
-  final Map<String, Object>? cause;
+  final HistoryMetadataParticipant? cause;
 
   /// Additional arbitrary information about the history record.
   final Map<String, dynamic>? extraData;
@@ -22105,12 +22170,18 @@ class HistoryMetadata {
       activityDescriptionKey: json['activityDescriptionKey'] as String?,
       emailDescription: json['emailDescription'] as String?,
       emailDescriptionKey: json['emailDescriptionKey'] as String?,
-      actor: (json['actor'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      generator: (json['generator'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      cause: (json['cause'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      actor: json['actor'] != null
+          ? HistoryMetadataParticipant.fromJson(
+              json['actor']! as Map<String, Object?>)
+          : null,
+      generator: json['generator'] != null
+          ? HistoryMetadataParticipant.fromJson(
+              json['generator']! as Map<String, Object?>)
+          : null,
+      cause: json['cause'] != null
+          ? HistoryMetadataParticipant.fromJson(
+              json['cause']! as Map<String, Object?>)
+          : null,
       extraData: json['extraData'] as Map<String, Object?>?,
     );
   }
@@ -22151,13 +22222,13 @@ class HistoryMetadata {
       json['emailDescriptionKey'] = emailDescriptionKey;
     }
     if (actor != null) {
-      json['actor'] = actor;
+      json['actor'] = actor.toJson();
     }
     if (generator != null) {
-      json['generator'] = generator;
+      json['generator'] = generator.toJson();
     }
     if (cause != null) {
-      json['cause'] = cause;
+      json['cause'] = cause.toJson();
     }
     if (extraData != null) {
       json['extraData'] = extraData;
@@ -22173,9 +22244,9 @@ class HistoryMetadata {
       String? activityDescriptionKey,
       String? emailDescription,
       String? emailDescriptionKey,
-      Map<String, Object>? actor,
-      Map<String, Object>? generator,
-      Map<String, Object>? cause,
+      HistoryMetadataParticipant? actor,
+      HistoryMetadataParticipant? generator,
+      HistoryMetadataParticipant? cause,
       Map<String, dynamic>? extraData}) {
     return HistoryMetadata(
       type: type ?? this.type,
@@ -22284,7 +22355,7 @@ class HistoryMetadataParticipant {
 /// Details of an issue update request.
 class IssueUpdateDetails {
   /// Details of a transition. Required when performing a transition, optional when creating or editing an issue.
-  final Map<String, Object>? transition;
+  final IssueTransition? transition;
 
   /// List of issue screen fields to update, specifying the sub-field to update and its value for each field. This field provides a straightforward option when setting a sub-field. When multiple sub-fields or other operations are required, use `update`. Fields included in here cannot be included in `update`.
   final Map<String, dynamic>? fields;
@@ -22293,7 +22364,7 @@ class IssueUpdateDetails {
   final Map<String, dynamic>? update;
 
   /// Additional issue history details.
-  final Map<String, Object>? historyMetadata;
+  final HistoryMetadata? historyMetadata;
 
   /// Details of issue properties to be add or update.
   final List<EntityProperty> properties;
@@ -22308,12 +22379,16 @@ class IssueUpdateDetails {
 
   factory IssueUpdateDetails.fromJson(Map<String, Object?> json) {
     return IssueUpdateDetails(
-      transition: (json['transition'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      transition: json['transition'] != null
+          ? IssueTransition.fromJson(
+              json['transition']! as Map<String, Object?>)
+          : null,
       fields: json['fields'] as Map<String, Object?>?,
       update: json['update'] as Map<String, Object?>?,
-      historyMetadata: (json['historyMetadata'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      historyMetadata: json['historyMetadata'] != null
+          ? HistoryMetadata.fromJson(
+              json['historyMetadata']! as Map<String, Object?>)
+          : null,
       properties: (json['properties'] as List<Object?>?)
               ?.map((i) => EntityProperty.fromJson(
                   i as Map<String, Object?>? ?? const {}))
@@ -22331,7 +22406,7 @@ class IssueUpdateDetails {
 
     final json = <String, Object?>{};
     if (transition != null) {
-      json['transition'] = transition;
+      json['transition'] = transition.toJson();
     }
     if (fields != null) {
       json['fields'] = fields;
@@ -22340,17 +22415,17 @@ class IssueUpdateDetails {
       json['update'] = update;
     }
     if (historyMetadata != null) {
-      json['historyMetadata'] = historyMetadata;
+      json['historyMetadata'] = historyMetadata.toJson();
     }
     json['properties'] = properties.map((i) => i.toJson()).toList();
     return json;
   }
 
   IssueUpdateDetails copyWith(
-      {Map<String, Object>? transition,
+      {IssueTransition? transition,
       Map<String, dynamic>? fields,
       Map<String, dynamic>? update,
-      Map<String, Object>? historyMetadata,
+      HistoryMetadata? historyMetadata,
       List<EntityProperty>? properties}) {
     return IssueUpdateDetails(
       transition: transition ?? this.transition,
@@ -22526,7 +22601,7 @@ class Changelog {
   final String? id;
 
   /// The user who made the change.
-  final Map<String, Object>? author;
+  final UserDetails? author;
 
   /// The date on which the change took place.
   final DateTime? created;
@@ -22535,7 +22610,7 @@ class Changelog {
   final List<ChangeDetails> items;
 
   /// The history metadata associated with the changed.
-  final Map<String, Object>? historyMetadata;
+  final HistoryMetadata? historyMetadata;
 
   Changelog(
       {this.id,
@@ -22548,16 +22623,19 @@ class Changelog {
   factory Changelog.fromJson(Map<String, Object?> json) {
     return Changelog(
       id: json['id'] as String?,
-      author: (json['author'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      author: json['author'] != null
+          ? UserDetails.fromJson(json['author']! as Map<String, Object?>)
+          : null,
       created: DateTime.tryParse(json['created'] as String? ?? ''),
       items: (json['items'] as List<Object?>?)
               ?.map((i) => ChangeDetails.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      historyMetadata: (json['historyMetadata'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      historyMetadata: json['historyMetadata'] != null
+          ? HistoryMetadata.fromJson(
+              json['historyMetadata']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -22573,24 +22651,24 @@ class Changelog {
       json['id'] = id;
     }
     if (author != null) {
-      json['author'] = author;
+      json['author'] = author.toJson();
     }
     if (created != null) {
       json['created'] = created.toIso8601String();
     }
     json['items'] = items.map((i) => i.toJson()).toList();
     if (historyMetadata != null) {
-      json['historyMetadata'] = historyMetadata;
+      json['historyMetadata'] = historyMetadata.toJson();
     }
     return json;
   }
 
   Changelog copyWith(
       {String? id,
-      Map<String, Object>? author,
+      UserDetails? author,
       DateTime? created,
       List<ChangeDetails>? items,
-      Map<String, Object>? historyMetadata}) {
+      HistoryMetadata? historyMetadata}) {
     return Changelog(
       id: id ?? this.id,
       author: author ?? this.author,
@@ -22684,13 +22762,13 @@ class IssueBean {
   final List<IssueTransition> transitions;
 
   /// The operations that can be performed on the issue.
-  final Map<String, Object>? operations;
+  final Operations? operations;
 
   /// The metadata for the fields on the issue that can be amended.
-  final Map<String, Object>? editmeta;
+  final IssueUpdateMetadata? editmeta;
 
   /// Details of changelogs associated with the issue.
-  final Map<String, Object>? changelog;
+  final PageOfChangelogs? changelog;
 
   /// The versions of each field on the issue.
   final Map<String, dynamic>? versionedRepresentations;
@@ -22730,12 +22808,17 @@ class IssueBean {
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      operations: (json['operations'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      editmeta: (json['editmeta'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      changelog: (json['changelog'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      operations: json['operations'] != null
+          ? Operations.fromJson(json['operations']! as Map<String, Object?>)
+          : null,
+      editmeta: json['editmeta'] != null
+          ? IssueUpdateMetadata.fromJson(
+              json['editmeta']! as Map<String, Object?>)
+          : null,
+      changelog: json['changelog'] != null
+          ? PageOfChangelogs.fromJson(
+              json['changelog']! as Map<String, Object?>)
+          : null,
       versionedRepresentations:
           json['versionedRepresentations'] as Map<String, Object?>?,
       fieldsToInclude: json['fieldsToInclude'] != null
@@ -22790,13 +22873,13 @@ class IssueBean {
     }
     json['transitions'] = transitions.map((i) => i.toJson()).toList();
     if (operations != null) {
-      json['operations'] = operations;
+      json['operations'] = operations.toJson();
     }
     if (editmeta != null) {
-      json['editmeta'] = editmeta;
+      json['editmeta'] = editmeta.toJson();
     }
     if (changelog != null) {
-      json['changelog'] = changelog;
+      json['changelog'] = changelog.toJson();
     }
     if (versionedRepresentations != null) {
       json['versionedRepresentations'] = versionedRepresentations;
@@ -22820,9 +22903,9 @@ class IssueBean {
       Map<String, dynamic>? names,
       Map<String, dynamic>? schema,
       List<IssueTransition>? transitions,
-      Map<String, Object>? operations,
-      Map<String, Object>? editmeta,
-      Map<String, Object>? changelog,
+      Operations? operations,
+      IssueUpdateMetadata? editmeta,
+      PageOfChangelogs? changelog,
       Map<String, dynamic>? versionedRepresentations,
       IncludedFields? fieldsToInclude,
       Map<String, dynamic>? fields}) {
@@ -23133,7 +23216,7 @@ class CreatedIssue {
   final String? self;
 
   /// The response code and messages related to any requested transition.
-  final Map<String, Object>? transition;
+  final NestedResponse? transition;
 
   CreatedIssue({this.id, this.key, this.self, this.transition});
 
@@ -23142,8 +23225,9 @@ class CreatedIssue {
       id: json['id'] as String?,
       key: json['key'] as String?,
       self: json['self'] as String?,
-      transition: (json['transition'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      transition: json['transition'] != null
+          ? NestedResponse.fromJson(json['transition']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -23164,16 +23248,13 @@ class CreatedIssue {
       json['self'] = self;
     }
     if (transition != null) {
-      json['transition'] = transition;
+      json['transition'] = transition.toJson();
     }
     return json;
   }
 
   CreatedIssue copyWith(
-      {String? id,
-      String? key,
-      String? self,
-      Map<String, Object>? transition}) {
+      {String? id, String? key, String? self, NestedResponse? transition}) {
     return CreatedIssue(
       id: id ?? this.id,
       key: key ?? this.key,
@@ -23419,7 +23500,7 @@ class IssueTypeIssueCreateMetadata {
   final int? hierarchyLevel;
 
   /// Details of the next-gen projects the issue type is available in.
-  final Map<String, Object>? scope;
+  final Scope? scope;
 
   /// Expand options that include additional issue type metadata details in the response.
   final String? expand;
@@ -23453,8 +23534,9 @@ class IssueTypeIssueCreateMetadata {
       avatarId: (json['avatarId'] as num?)?.toInt(),
       entityId: json['entityId'] as String?,
       hierarchyLevel: (json['hierarchyLevel'] as num?)?.toInt(),
-      scope: (json['scope'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      scope: json['scope'] != null
+          ? Scope.fromJson(json['scope']! as Map<String, Object?>)
+          : null,
       expand: json['expand'] as String?,
       fields: json['fields'] as Map<String, Object?>?,
     );
@@ -23501,7 +23583,7 @@ class IssueTypeIssueCreateMetadata {
       json['hierarchyLevel'] = hierarchyLevel;
     }
     if (scope != null) {
-      json['scope'] = scope;
+      json['scope'] = scope.toJson();
     }
     if (expand != null) {
       json['expand'] = expand;
@@ -23522,7 +23604,7 @@ class IssueTypeIssueCreateMetadata {
       int? avatarId,
       String? entityId,
       int? hierarchyLevel,
-      Map<String, Object>? scope,
+      Scope? scope,
       String? expand,
       Map<String, dynamic>? fields}) {
     return IssueTypeIssueCreateMetadata(
@@ -23560,7 +23642,7 @@ class ProjectIssueCreateMetadata {
   final String? name;
 
   /// List of the project's avatars, returning the avatar size and associated URL.
-  final Map<String, Object>? avatarUrls;
+  final AvatarUrlsBean? avatarUrls;
 
   /// List of the issue types supported by the project.
   final List<IssueTypeIssueCreateMetadata> issuetypes;
@@ -23582,8 +23664,9 @@ class ProjectIssueCreateMetadata {
       id: json['id'] as String?,
       key: json['key'] as String?,
       name: json['name'] as String?,
-      avatarUrls: (json['avatarUrls'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      avatarUrls: json['avatarUrls'] != null
+          ? AvatarUrlsBean.fromJson(json['avatarUrls']! as Map<String, Object?>)
+          : null,
       issuetypes: (json['issuetypes'] as List<Object?>?)
               ?.map((i) => IssueTypeIssueCreateMetadata.fromJson(
                   i as Map<String, Object?>? ?? const {}))
@@ -23618,7 +23701,7 @@ class ProjectIssueCreateMetadata {
       json['name'] = name;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls;
+      json['avatarUrls'] = avatarUrls.toJson();
     }
     json['issuetypes'] = issuetypes.map((i) => i.toJson()).toList();
     return json;
@@ -23630,7 +23713,7 @@ class ProjectIssueCreateMetadata {
       String? id,
       String? key,
       String? name,
-      Map<String, Object>? avatarUrls,
+      AvatarUrlsBean? avatarUrls,
       List<IssueTypeIssueCreateMetadata>? issuetypes}) {
     return ProjectIssueCreateMetadata(
       expand: expand ?? this.expand,
@@ -23743,13 +23826,13 @@ class RemoteIssueLink {
   final String? globalId;
 
   /// Details of the remote application the linked item is in.
-  final Map<String, Object>? application;
+  final Application? application;
 
   /// Description of the relationship between the issue and the linked item.
   final String? relationship;
 
   /// Details of the item linked to.
-  final Map<String, Object>? object;
+  final RemoteObject? object;
 
   RemoteIssueLink(
       {this.id,
@@ -23764,11 +23847,13 @@ class RemoteIssueLink {
       id: (json['id'] as num?)?.toInt(),
       self: json['self'] as String?,
       globalId: json['globalId'] as String?,
-      application: (json['application'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      application: json['application'] != null
+          ? Application.fromJson(json['application']! as Map<String, Object?>)
+          : null,
       relationship: json['relationship'] as String?,
-      object: (json['object'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      object: json['object'] != null
+          ? RemoteObject.fromJson(json['object']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -23791,13 +23876,13 @@ class RemoteIssueLink {
       json['globalId'] = globalId;
     }
     if (application != null) {
-      json['application'] = application;
+      json['application'] = application.toJson();
     }
     if (relationship != null) {
       json['relationship'] = relationship;
     }
     if (object != null) {
-      json['object'] = object;
+      json['object'] = object.toJson();
     }
     return json;
   }
@@ -23806,9 +23891,9 @@ class RemoteIssueLink {
       {int? id,
       String? self,
       String? globalId,
-      Map<String, Object>? application,
+      Application? application,
       String? relationship,
-      Map<String, Object>? object}) {
+      RemoteObject? object}) {
     return RemoteIssueLink(
       id: id ?? this.id,
       self: self ?? this.self,
@@ -23832,10 +23917,10 @@ class RemoteObject {
   final String? summary;
 
   /// Details of the icon for the item. If no icon is defined, the default link icon is used in Jira.
-  final Map<String, Object>? icon;
+  final Icon? icon;
 
   /// The status of the item.
-  final Map<String, Object>? status;
+  final Status? status;
 
   RemoteObject(
       {required this.url,
@@ -23849,10 +23934,12 @@ class RemoteObject {
       url: json['url'] as String? ?? '',
       title: json['title'] as String? ?? '',
       summary: json['summary'] as String?,
-      icon: (json['icon'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      status: (json['status'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      icon: json['icon'] != null
+          ? Icon.fromJson(json['icon']! as Map<String, Object?>)
+          : null,
+      status: json['status'] != null
+          ? Status.fromJson(json['status']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -23870,10 +23957,10 @@ class RemoteObject {
       json['summary'] = summary;
     }
     if (icon != null) {
-      json['icon'] = icon;
+      json['icon'] = icon.toJson();
     }
     if (status != null) {
-      json['status'] = status;
+      json['status'] = status.toJson();
     }
     return json;
   }
@@ -23882,8 +23969,8 @@ class RemoteObject {
       {String? url,
       String? title,
       String? summary,
-      Map<String, Object>? icon,
-      Map<String, Object>? status}) {
+      Icon? icon,
+      Status? status}) {
     return RemoteObject(
       url: url ?? this.url,
       title: title ?? this.title,
@@ -23900,15 +23987,16 @@ class Status {
   final bool resolved;
 
   /// Details of the icon representing the status. If not provided, no status icon displays in Jira.
-  final Map<String, Object>? icon;
+  final Icon? icon;
 
   Status({bool? resolved, this.icon}) : resolved = resolved ?? false;
 
   factory Status.fromJson(Map<String, Object?> json) {
     return Status(
       resolved: json['resolved'] as bool? ?? false,
-      icon: (json['icon'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      icon: json['icon'] != null
+          ? Icon.fromJson(json['icon']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -23919,12 +24007,12 @@ class Status {
     final json = <String, Object?>{};
     json['resolved'] = resolved;
     if (icon != null) {
-      json['icon'] = icon;
+      json['icon'] = icon.toJson();
     }
     return json;
   }
 
-  Status copyWith({bool? resolved, Map<String, Object>? icon}) {
+  Status copyWith({bool? resolved, Icon? icon}) {
     return Status(
       resolved: resolved ?? this.resolved,
       icon: icon ?? this.icon,
@@ -23996,13 +24084,13 @@ class RemoteIssueLinkRequest {
   final String? globalId;
 
   /// Details of the remote application the linked item is in. For example, trello.
-  final Map<String, Object>? application;
+  final Application? application;
 
   /// Description of the relationship between the issue and the linked item. If not set, the relationship description "links to" is used in Jira.
   final String? relationship;
 
   /// Details of the item linked to.
-  final Map<String, Object> object;
+  final RemoteObject object;
 
   RemoteIssueLinkRequest(
       {this.globalId,
@@ -24013,12 +24101,12 @@ class RemoteIssueLinkRequest {
   factory RemoteIssueLinkRequest.fromJson(Map<String, Object?> json) {
     return RemoteIssueLinkRequest(
       globalId: json['globalId'] as String?,
-      application: (json['application'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      application: json['application'] != null
+          ? Application.fromJson(json['application']! as Map<String, Object?>)
+          : null,
       relationship: json['relationship'] as String?,
-      object: (json['object'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
+      object: RemoteObject.fromJson(
+          json['object'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -24033,20 +24121,20 @@ class RemoteIssueLinkRequest {
       json['globalId'] = globalId;
     }
     if (application != null) {
-      json['application'] = application;
+      json['application'] = application.toJson();
     }
     if (relationship != null) {
       json['relationship'] = relationship;
     }
-    json['object'] = object;
+    json['object'] = object.toJson();
     return json;
   }
 
   RemoteIssueLinkRequest copyWith(
       {String? globalId,
-      Map<String, Object>? application,
+      Application? application,
       String? relationship,
-      Map<String, Object>? object}) {
+      RemoteObject? object}) {
     return RemoteIssueLinkRequest(
       globalId: globalId ?? this.globalId,
       application: application ?? this.application,
@@ -24107,10 +24195,10 @@ class Notification {
   final String? htmlBody;
 
   /// The recipients of the email notification for the issue.
-  final Map<String, Object>? to;
+  final NotificationRecipients? to;
 
   /// Restricts the notifications to users with the specified permissions.
-  final Map<String, Object>? restrict;
+  final NotificationRecipientsRestrictions? restrict;
 
   Notification(
       {this.subject, this.textBody, this.htmlBody, this.to, this.restrict});
@@ -24120,10 +24208,13 @@ class Notification {
       subject: json['subject'] as String?,
       textBody: json['textBody'] as String?,
       htmlBody: json['htmlBody'] as String?,
-      to: (json['to'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      restrict: (json['restrict'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      to: json['to'] != null
+          ? NotificationRecipients.fromJson(json['to']! as Map<String, Object?>)
+          : null,
+      restrict: json['restrict'] != null
+          ? NotificationRecipientsRestrictions.fromJson(
+              json['restrict']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -24145,10 +24236,10 @@ class Notification {
       json['htmlBody'] = htmlBody;
     }
     if (to != null) {
-      json['to'] = to;
+      json['to'] = to.toJson();
     }
     if (restrict != null) {
-      json['restrict'] = restrict;
+      json['restrict'] = restrict.toJson();
     }
     return json;
   }
@@ -24157,8 +24248,8 @@ class Notification {
       {String? subject,
       String? textBody,
       String? htmlBody,
-      Map<String, Object>? to,
-      Map<String, Object>? restrict}) {
+      NotificationRecipients? to,
+      NotificationRecipientsRestrictions? restrict}) {
     return Notification(
       subject: subject ?? this.subject,
       textBody: textBody ?? this.textBody,
@@ -24736,7 +24827,7 @@ class Attachment {
   final String? filename;
 
   /// Details of the user who added the attachment.
-  final Map<String, Object>? author;
+  final UserDetails? author;
 
   /// The datetime the attachment was created.
   final DateTime? created;
@@ -24769,8 +24860,9 @@ class Attachment {
       self: json['self'] as String?,
       id: json['id'] as String?,
       filename: json['filename'] as String?,
-      author: (json['author'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      author: json['author'] != null
+          ? UserDetails.fromJson(json['author']! as Map<String, Object?>)
+          : null,
       created: DateTime.tryParse(json['created'] as String? ?? ''),
       size: (json['size'] as num?)?.toInt(),
       mimeType: json['mimeType'] as String?,
@@ -24801,7 +24893,7 @@ class Attachment {
       json['filename'] = filename;
     }
     if (author != null) {
-      json['author'] = author;
+      json['author'] = author.toJson();
     }
     if (created != null) {
       json['created'] = created.toIso8601String();
@@ -24825,7 +24917,7 @@ class Attachment {
       {String? self,
       String? id,
       String? filename,
-      Map<String, Object>? author,
+      UserDetails? author,
       DateTime? created,
       int? size,
       String? mimeType,
@@ -24853,7 +24945,7 @@ class Group {
   final String? self;
 
   /// A paginated list of the users that are members of the group. A maximum of 50 users is returned in the list, to access additional users append `[start-index:end-index]` to the expand request. For example, to access the next 50 users, use`?expand=users[51:100]`.
-  final Map<String, Object>? users;
+  final PagedListUserDetailsApplicationUser? users;
 
   /// Expand options that include additional group details in the response.
   final String? expand;
@@ -24864,8 +24956,10 @@ class Group {
     return Group(
       name: json['name'] as String?,
       self: json['self'] as String?,
-      users: (json['users'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      users: json['users'] != null
+          ? PagedListUserDetailsApplicationUser.fromJson(
+              json['users']! as Map<String, Object?>)
+          : null,
       expand: json['expand'] as String?,
     );
   }
@@ -24884,7 +24978,7 @@ class Group {
       json['self'] = self;
     }
     if (users != null) {
-      json['users'] = users;
+      json['users'] = users.toJson();
     }
     if (expand != null) {
       json['expand'] = expand;
@@ -24895,7 +24989,7 @@ class Group {
   Group copyWith(
       {String? name,
       String? self,
-      Map<String, Object>? users,
+      PagedListUserDetailsApplicationUser? users,
       String? expand}) {
     return Group(
       name: name ?? this.name,
@@ -25912,10 +26006,10 @@ class ScreenWithTab {
   final String? description;
 
   /// The scope of the screen.
-  final Map<String, Object>? scope;
+  final Scope? scope;
 
   /// The tab for the screen
-  final Map<String, Object>? tab;
+  final ScreenableTab? tab;
 
   ScreenWithTab({this.id, this.name, this.description, this.scope, this.tab});
 
@@ -25924,10 +26018,12 @@ class ScreenWithTab {
       id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String?,
       description: json['description'] as String?,
-      scope: (json['scope'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      tab: (json['tab'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      scope: json['scope'] != null
+          ? Scope.fromJson(json['scope']! as Map<String, Object?>)
+          : null,
+      tab: json['tab'] != null
+          ? ScreenableTab.fromJson(json['tab']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -25949,10 +26045,10 @@ class ScreenWithTab {
       json['description'] = description;
     }
     if (scope != null) {
-      json['scope'] = scope;
+      json['scope'] = scope.toJson();
     }
     if (tab != null) {
-      json['tab'] = tab;
+      json['tab'] = tab.toJson();
     }
     return json;
   }
@@ -25961,8 +26057,8 @@ class ScreenWithTab {
       {int? id,
       String? name,
       String? description,
-      Map<String, Object>? scope,
-      Map<String, Object>? tab}) {
+      Scope? scope,
+      ScreenableTab? tab}) {
     return ScreenWithTab(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -25982,7 +26078,7 @@ class Context {
   final String? name;
 
   /// The scope of the context.
-  final Map<String, Object>? scope;
+  final Scope? scope;
 
   Context({this.id, this.name, this.scope});
 
@@ -25990,8 +26086,9 @@ class Context {
     return Context(
       id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String?,
-      scope: (json['scope'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      scope: json['scope'] != null
+          ? Scope.fromJson(json['scope']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -26008,12 +26105,12 @@ class Context {
       json['name'] = name;
     }
     if (scope != null) {
-      json['scope'] = scope;
+      json['scope'] = scope.toJson();
     }
     return json;
   }
 
-  Context copyWith({int? id, String? name, Map<String, Object>? scope}) {
+  Context copyWith({int? id, String? name, Scope? scope}) {
     return Context(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -27188,7 +27285,7 @@ class ProjectRoleDetails {
   final bool admin;
 
   /// The scope of the role. Indicated for roles associated with [next-gen projects](https://confluence.atlassian.com/x/loMyO).
-  final Map<String, Object>? scope;
+  final Scope? scope;
 
   /// Whether the roles are configurable for this project.
   final bool roleConfigurable;
@@ -27220,8 +27317,9 @@ class ProjectRoleDetails {
       id: (json['id'] as num?)?.toInt(),
       description: json['description'] as String?,
       admin: json['admin'] as bool? ?? false,
-      scope: (json['scope'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      scope: json['scope'] != null
+          ? Scope.fromJson(json['scope']! as Map<String, Object?>)
+          : null,
       roleConfigurable: json['roleConfigurable'] as bool? ?? false,
       translatedName: json['translatedName'] as String?,
       default$: json['default'] as bool? ?? false,
@@ -27254,7 +27352,7 @@ class ProjectRoleDetails {
     }
     json['admin'] = admin;
     if (scope != null) {
-      json['scope'] = scope;
+      json['scope'] = scope.toJson();
     }
     json['roleConfigurable'] = roleConfigurable;
     if (translatedName != null) {
@@ -27270,7 +27368,7 @@ class ProjectRoleDetails {
       int? id,
       String? description,
       bool? admin,
-      Map<String, Object>? scope,
+      Scope? scope,
       bool? roleConfigurable,
       String? translatedName,
       bool? default$}) {
@@ -27487,7 +27585,7 @@ class IssueTypeScreenScheme {
 /// Issue type screen scheme with a list of the projects that use it.
 class IssueTypeScreenSchemesProjects {
   /// Details of an issue type screen scheme.
-  final Map<String, Object> issueTypeScreenScheme;
+  final IssueTypeScreenScheme issueTypeScreenScheme;
 
   /// The IDs of the projects using the issue type screen scheme.
   final List<String> projectIds;
@@ -27497,10 +27595,8 @@ class IssueTypeScreenSchemesProjects {
 
   factory IssueTypeScreenSchemesProjects.fromJson(Map<String, Object?> json) {
     return IssueTypeScreenSchemesProjects(
-      issueTypeScreenScheme:
-          (json['issueTypeScreenScheme'] as Map<String, Object?>?)
-                  ?.map((k, v) => MapEntry(k, v ?? {})) ??
-              {},
+      issueTypeScreenScheme: IssueTypeScreenScheme.fromJson(
+          json['issueTypeScreenScheme'] as Map<String, Object?>? ?? const {}),
       projectIds: (json['projectIds'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -27513,13 +27609,14 @@ class IssueTypeScreenSchemesProjects {
     var projectIds = this.projectIds;
 
     final json = <String, Object?>{};
-    json['issueTypeScreenScheme'] = issueTypeScreenScheme;
+    json['issueTypeScreenScheme'] = issueTypeScreenScheme.toJson();
     json['projectIds'] = projectIds;
     return json;
   }
 
   IssueTypeScreenSchemesProjects copyWith(
-      {Map<String, Object>? issueTypeScreenScheme, List<String>? projectIds}) {
+      {IssueTypeScreenScheme? issueTypeScreenScheme,
+      List<String>? projectIds}) {
     return IssueTypeScreenSchemesProjects(
       issueTypeScreenScheme:
           issueTypeScreenScheme ?? this.issueTypeScreenScheme,
@@ -28037,7 +28134,7 @@ class AttachmentMetadata {
   final String? filename;
 
   /// Details of the user who attached the file.
-  final Map<String, Object>? author;
+  final User? author;
 
   /// The datetime the attachment was created.
   final DateTime? created;
@@ -28074,8 +28171,9 @@ class AttachmentMetadata {
       id: (json['id'] as num?)?.toInt(),
       self: json['self'] as String?,
       filename: json['filename'] as String?,
-      author: (json['author'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      author: json['author'] != null
+          ? User.fromJson(json['author']! as Map<String, Object?>)
+          : null,
       created: DateTime.tryParse(json['created'] as String? ?? ''),
       size: (json['size'] as num?)?.toInt(),
       mimeType: json['mimeType'] as String?,
@@ -28108,7 +28206,7 @@ class AttachmentMetadata {
       json['filename'] = filename;
     }
     if (author != null) {
-      json['author'] = author;
+      json['author'] = author.toJson();
     }
     if (created != null) {
       json['created'] = created.toIso8601String();
@@ -28135,7 +28233,7 @@ class AttachmentMetadata {
       {int? id,
       String? self,
       String? filename,
-      Map<String, Object>? author,
+      User? author,
       DateTime? created,
       int? size,
       String? mimeType,
@@ -28691,7 +28789,7 @@ class PageBeanIssueTypeScheme {
 /// Issue type scheme with a list of the projects that use it.
 class IssueTypeSchemeProjects {
   /// Details of an issue type scheme.
-  final Map<String, Object> issueTypeScheme;
+  final IssueTypeScheme issueTypeScheme;
 
   /// The IDs of the projects using the issue type scheme.
   final List<String> projectIds;
@@ -28701,9 +28799,8 @@ class IssueTypeSchemeProjects {
 
   factory IssueTypeSchemeProjects.fromJson(Map<String, Object?> json) {
     return IssueTypeSchemeProjects(
-      issueTypeScheme: (json['issueTypeScheme'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
+      issueTypeScheme: IssueTypeScheme.fromJson(
+          json['issueTypeScheme'] as Map<String, Object?>? ?? const {}),
       projectIds: (json['projectIds'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -28716,13 +28813,13 @@ class IssueTypeSchemeProjects {
     var projectIds = this.projectIds;
 
     final json = <String, Object?>{};
-    json['issueTypeScheme'] = issueTypeScheme;
+    json['issueTypeScheme'] = issueTypeScheme.toJson();
     json['projectIds'] = projectIds;
     return json;
   }
 
   IssueTypeSchemeProjects copyWith(
-      {Map<String, Object>? issueTypeScheme, List<String>? projectIds}) {
+      {IssueTypeScheme? issueTypeScheme, List<String>? projectIds}) {
     return IssueTypeSchemeProjects(
       issueTypeScheme: issueTypeScheme ?? this.issueTypeScheme,
       projectIds: projectIds ?? this.projectIds,
@@ -29511,7 +29608,7 @@ class IssueFieldOption {
 /// Details of the projects the option is available in.
 class IssueFieldOptionConfiguration {
   /// Defines the projects that the option is available in. If the scope is not defined, then the option is available in all projects.
-  final Map<String, Object>? scope;
+  final IssueFieldOptionScopeBean? scope;
 
   /// DEPRECATED
   final List<IssueFieldOptionConfigurationAttributes> attributes;
@@ -29522,8 +29619,10 @@ class IssueFieldOptionConfiguration {
 
   factory IssueFieldOptionConfiguration.fromJson(Map<String, Object?> json) {
     return IssueFieldOptionConfiguration(
-      scope: (json['scope'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      scope: json['scope'] != null
+          ? IssueFieldOptionScopeBean.fromJson(
+              json['scope']! as Map<String, Object?>)
+          : null,
       attributes: (json['attributes'] as List<Object?>?)
               ?.map((i) => IssueFieldOptionConfigurationAttributes.fromValue(
                   i as String? ?? ''))
@@ -29538,14 +29637,14 @@ class IssueFieldOptionConfiguration {
 
     final json = <String, Object?>{};
     if (scope != null) {
-      json['scope'] = scope;
+      json['scope'] = scope.toJson();
     }
     json['attributes'] = attributes.map((i) => i.value).toList();
     return json;
   }
 
   IssueFieldOptionConfiguration copyWith(
-      {Map<String, Object>? scope,
+      {IssueFieldOptionScopeBean? scope,
       List<IssueFieldOptionConfigurationAttributes>? attributes}) {
     return IssueFieldOptionConfiguration(
       scope: scope ?? this.scope,
@@ -29587,7 +29686,7 @@ class IssueFieldOptionScopeBean {
   final List<ProjectScopeBean> projects2;
 
   /// Defines the behavior of the option within the global context. If this property is set, even if set to an empty object, then the option is available in all projects.
-  final Map<String, Object>? global;
+  final GlobalScopeBean? global;
 
   IssueFieldOptionScopeBean(
       {List<int>? projects, List<ProjectScopeBean>? projects2, this.global})
@@ -29605,8 +29704,9 @@ class IssueFieldOptionScopeBean {
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      global: (json['global'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      global: json['global'] != null
+          ? GlobalScopeBean.fromJson(json['global']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -29619,7 +29719,7 @@ class IssueFieldOptionScopeBean {
     json['projects'] = projects;
     json['projects2'] = projects2.map((i) => i.toJson()).toList();
     if (global != null) {
-      json['global'] = global;
+      json['global'] = global.toJson();
     }
     return json;
   }
@@ -29627,7 +29727,7 @@ class IssueFieldOptionScopeBean {
   IssueFieldOptionScopeBean copyWith(
       {List<int>? projects,
       List<ProjectScopeBean>? projects2,
-      Map<String, Object>? global}) {
+      GlobalScopeBean? global}) {
     return IssueFieldOptionScopeBean(
       projects: projects ?? this.projects,
       projects2: projects2 ?? this.projects2,
@@ -29859,7 +29959,7 @@ class RemoveOptionFromIssuesResult {
   final List<int> unmodifiedIssues;
 
   /// A collection of errors related to unchanged issues. The collection size is limited, which means not all errors may be returned.
-  final Map<String, Object>? errors;
+  final SimpleErrorCollection? errors;
 
   RemoveOptionFromIssuesResult(
       {List<int>? modifiedIssues, List<int>? unmodifiedIssues, this.errors})
@@ -29876,8 +29976,10 @@ class RemoveOptionFromIssuesResult {
               ?.map((i) => (i as num?)?.toInt() ?? 0)
               .toList() ??
           [],
-      errors: (json['errors'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      errors: json['errors'] != null
+          ? SimpleErrorCollection.fromJson(
+              json['errors']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -29890,7 +29992,7 @@ class RemoveOptionFromIssuesResult {
     json['modifiedIssues'] = modifiedIssues;
     json['unmodifiedIssues'] = unmodifiedIssues;
     if (errors != null) {
-      json['errors'] = errors;
+      json['errors'] = errors.toJson();
     }
     return json;
   }
@@ -29898,7 +30000,7 @@ class RemoveOptionFromIssuesResult {
   RemoveOptionFromIssuesResult copyWith(
       {List<int>? modifiedIssues,
       List<int>? unmodifiedIssues,
-      Map<String, Object>? errors}) {
+      SimpleErrorCollection? errors}) {
     return RemoveOptionFromIssuesResult(
       modifiedIssues: modifiedIssues ?? this.modifiedIssues,
       unmodifiedIssues: unmodifiedIssues ?? this.unmodifiedIssues,
@@ -29976,7 +30078,7 @@ class TaskProgressBeanRemoveOptionFromIssuesResult {
   final String? message;
 
   /// The result of the task execution.
-  final Map<String, Object>? result;
+  final RemoveOptionFromIssuesResult? result;
 
   /// The ID of the user who submitted the task.
   final int submittedBy;
@@ -30023,8 +30125,10 @@ class TaskProgressBeanRemoveOptionFromIssuesResult {
       status: TaskProgressBeanRemoveOptionFromIssuesResultStatus.fromValue(
           json['status'] as String? ?? ''),
       message: json['message'] as String?,
-      result: (json['result'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      result: json['result'] != null
+          ? RemoveOptionFromIssuesResult.fromJson(
+              json['result']! as Map<String, Object?>)
+          : null,
       submittedBy: (json['submittedBy'] as num?)?.toInt() ?? 0,
       progress: (json['progress'] as num?)?.toInt() ?? 0,
       elapsedRuntime: (json['elapsedRuntime'] as num?)?.toInt() ?? 0,
@@ -30061,7 +30165,7 @@ class TaskProgressBeanRemoveOptionFromIssuesResult {
       json['message'] = message;
     }
     if (result != null) {
-      json['result'] = result;
+      json['result'] = result.toJson();
     }
     json['submittedBy'] = submittedBy;
     json['progress'] = progress;
@@ -30083,7 +30187,7 @@ class TaskProgressBeanRemoveOptionFromIssuesResult {
       String? description,
       TaskProgressBeanRemoveOptionFromIssuesResultStatus? status,
       String? message,
-      Map<String, Object>? result,
+      RemoveOptionFromIssuesResult? result,
       int? submittedBy,
       int? progress,
       int? elapsedRuntime,
@@ -32435,7 +32539,7 @@ class PermissionGrant {
   final String? self;
 
   /// The user or group being granted the permission. It consists of a `type` and a type-dependent `parameter`. See [Holder object](#holder-object) in *Get all permission schemes* for more information.
-  final Map<String, Object>? holder;
+  final PermissionHolder? holder;
 
   /// The permission to grant. This permission can be one of the built-in permissions or a custom permission added by an app. See [Built-in permissions](#built-in-permissions) in *Get all permission schemes* for more information about the built-in permissions. See the [project permission](https://developer.atlassian.com/cloud/jira/platform/modules/project-permission/) and [global permission](https://developer.atlassian.com/cloud/jira/platform/modules/global-permission/) module documentation for more information about custom permissions.
   final String? permission;
@@ -32446,8 +32550,9 @@ class PermissionGrant {
     return PermissionGrant(
       id: (json['id'] as num?)?.toInt(),
       self: json['self'] as String?,
-      holder: (json['holder'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      holder: json['holder'] != null
+          ? PermissionHolder.fromJson(json['holder']! as Map<String, Object?>)
+          : null,
       permission: json['permission'] as String?,
     );
   }
@@ -32466,7 +32571,7 @@ class PermissionGrant {
       json['self'] = self;
     }
     if (holder != null) {
-      json['holder'] = holder;
+      json['holder'] = holder.toJson();
     }
     if (permission != null) {
       json['permission'] = permission;
@@ -32475,10 +32580,7 @@ class PermissionGrant {
   }
 
   PermissionGrant copyWith(
-      {int? id,
-      String? self,
-      Map<String, Object>? holder,
-      String? permission}) {
+      {int? id, String? self, PermissionHolder? holder, String? permission}) {
     return PermissionGrant(
       id: id ?? this.id,
       self: self ?? this.self,
@@ -32506,7 +32608,7 @@ class PermissionScheme {
   final String? description;
 
   /// The scope of the permission scheme.
-  final Map<String, Object>? scope;
+  final Scope? scope;
 
   /// The permission scheme to create or update. See [About permission schemes and grants](#about-permission-schemes-and-grants) for more information.
   final List<PermissionGrant> permissions;
@@ -32528,8 +32630,9 @@ class PermissionScheme {
       self: json['self'] as String?,
       name: json['name'] as String? ?? '',
       description: json['description'] as String?,
-      scope: (json['scope'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      scope: json['scope'] != null
+          ? Scope.fromJson(json['scope']! as Map<String, Object?>)
+          : null,
       permissions: (json['permissions'] as List<Object?>?)
               ?.map((i) => PermissionGrant.fromJson(
                   i as Map<String, Object?>? ?? const {}))
@@ -32562,7 +32665,7 @@ class PermissionScheme {
       json['description'] = description;
     }
     if (scope != null) {
-      json['scope'] = scope;
+      json['scope'] = scope.toJson();
     }
     json['permissions'] = permissions.map((i) => i.toJson()).toList();
     return json;
@@ -32574,7 +32677,7 @@ class PermissionScheme {
       String? self,
       String? name,
       String? description,
-      Map<String, Object>? scope,
+      Scope? scope,
       List<PermissionGrant>? permissions}) {
     return PermissionScheme(
       expand: expand ?? this.expand,
@@ -34622,7 +34725,7 @@ class Filter {
   final String? description;
 
   /// The user who owns the filter. This is defaulted to the creator of the filter, however Jira administrators can change the owner of a shared filter in the admin settings.
-  final Map<String, Object>? owner;
+  final User? owner;
 
   /// The JQL query for the filter. For example, *project = SSP AND issuetype = Bug*.
   final String? jql;
@@ -34643,10 +34746,10 @@ class Filter {
   final List<SharePermission> sharePermissions;
 
   /// A paginated list of the users that the filter is shared with. This includes users that are members of the groups or can browse the projects that the filter is shared with.
-  final Map<String, Object>? sharedUsers;
+  final UserList? sharedUsers;
 
   /// A paginated list of the users that are subscribed to the filter.
-  final Map<String, Object>? subscriptions;
+  final FilterSubscriptionsList? subscriptions;
 
   Filter(
       {this.self,
@@ -34671,8 +34774,9 @@ class Filter {
       id: json['id'] as String?,
       name: json['name'] as String? ?? '',
       description: json['description'] as String?,
-      owner: (json['owner'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      owner: json['owner'] != null
+          ? User.fromJson(json['owner']! as Map<String, Object?>)
+          : null,
       jql: json['jql'] as String?,
       viewUrl: json['viewUrl'] as String?,
       searchUrl: json['searchUrl'] as String?,
@@ -34683,10 +34787,13 @@ class Filter {
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      sharedUsers: (json['sharedUsers'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      subscriptions: (json['subscriptions'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      sharedUsers: json['sharedUsers'] != null
+          ? UserList.fromJson(json['sharedUsers']! as Map<String, Object?>)
+          : null,
+      subscriptions: json['subscriptions'] != null
+          ? FilterSubscriptionsList.fromJson(
+              json['subscriptions']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -34717,7 +34824,7 @@ class Filter {
       json['description'] = description;
     }
     if (owner != null) {
-      json['owner'] = owner;
+      json['owner'] = owner.toJson();
     }
     if (jql != null) {
       json['jql'] = jql;
@@ -34734,10 +34841,10 @@ class Filter {
     }
     json['sharePermissions'] = sharePermissions.map((i) => i.toJson()).toList();
     if (sharedUsers != null) {
-      json['sharedUsers'] = sharedUsers;
+      json['sharedUsers'] = sharedUsers.toJson();
     }
     if (subscriptions != null) {
-      json['subscriptions'] = subscriptions;
+      json['subscriptions'] = subscriptions.toJson();
     }
     return json;
   }
@@ -34747,15 +34854,15 @@ class Filter {
       String? id,
       String? name,
       String? description,
-      Map<String, Object>? owner,
+      User? owner,
       String? jql,
       String? viewUrl,
       String? searchUrl,
       bool? favourite,
       int? favouritedCount,
       List<SharePermission>? sharePermissions,
-      Map<String, Object>? sharedUsers,
-      Map<String, Object>? subscriptions}) {
+      UserList? sharedUsers,
+      FilterSubscriptionsList? subscriptions}) {
     return Filter(
       self: self ?? this.self,
       id: id ?? this.id,
@@ -34780,20 +34887,22 @@ class FilterSubscription {
   final int? id;
 
   /// The user subscribing to filter.
-  final Map<String, Object>? user;
+  final User? user;
 
   /// The group subscribing to filter.
-  final Map<String, Object>? group;
+  final GroupName? group;
 
   FilterSubscription({this.id, this.user, this.group});
 
   factory FilterSubscription.fromJson(Map<String, Object?> json) {
     return FilterSubscription(
       id: (json['id'] as num?)?.toInt(),
-      user: (json['user'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
-      group: (json['group'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      user: json['user'] != null
+          ? User.fromJson(json['user']! as Map<String, Object?>)
+          : null,
+      group: json['group'] != null
+          ? GroupName.fromJson(json['group']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -34807,16 +34916,15 @@ class FilterSubscription {
       json['id'] = id;
     }
     if (user != null) {
-      json['user'] = user;
+      json['user'] = user.toJson();
     }
     if (group != null) {
-      json['group'] = group;
+      json['group'] = group.toJson();
     }
     return json;
   }
 
-  FilterSubscription copyWith(
-      {int? id, Map<String, Object>? user, Map<String, Object>? group}) {
+  FilterSubscription copyWith({int? id, User? user, GroupName? group}) {
     return FilterSubscription(
       id: id ?? this.id,
       user: user ?? this.user,
@@ -34998,7 +35106,7 @@ class FilterDetails {
   final String? description;
 
   /// The user who owns the filter. This is defaulted to the creator of the filter, however Jira administrators can change the owner of a shared filter in the admin settings.
-  final Map<String, Object>? owner;
+  final User? owner;
 
   /// The JQL query for the filter. For example, *project = SSP AND issuetype = Bug*.
   final String? jql;
@@ -35044,8 +35152,9 @@ class FilterDetails {
       id: json['id'] as String?,
       name: json['name'] as String? ?? '',
       description: json['description'] as String?,
-      owner: (json['owner'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      owner: json['owner'] != null
+          ? User.fromJson(json['owner']! as Map<String, Object?>)
+          : null,
       jql: json['jql'] as String?,
       viewUrl: json['viewUrl'] as String?,
       searchUrl: json['searchUrl'] as String?,
@@ -35090,7 +35199,7 @@ class FilterDetails {
       json['description'] = description;
     }
     if (owner != null) {
-      json['owner'] = owner;
+      json['owner'] = owner.toJson();
     }
     if (jql != null) {
       json['jql'] = jql;
@@ -35115,7 +35224,7 @@ class FilterDetails {
       String? id,
       String? name,
       String? description,
-      Map<String, Object>? owner,
+      User? owner,
       String? jql,
       String? viewUrl,
       String? searchUrl,
@@ -35512,7 +35621,7 @@ class DeprecatedWorkflow {
   final int? steps;
 
   /// The scope where this workflow applies
-  final Map<String, Object>? scope;
+  final Scope? scope;
   final bool default$;
 
   DeprecatedWorkflow(
@@ -35534,8 +35643,9 @@ class DeprecatedWorkflow {
       lastModifiedUser: json['lastModifiedUser'] as String?,
       lastModifiedUserAccountId: json['lastModifiedUserAccountId'] as String?,
       steps: (json['steps'] as num?)?.toInt(),
-      scope: (json['scope'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      scope: json['scope'] != null
+          ? Scope.fromJson(json['scope']! as Map<String, Object?>)
+          : null,
       default$: json['default'] as bool? ?? false,
     );
   }
@@ -35570,7 +35680,7 @@ class DeprecatedWorkflow {
       json['steps'] = steps;
     }
     if (scope != null) {
-      json['scope'] = scope;
+      json['scope'] = scope.toJson();
     }
     json['default'] = default$;
     return json;
@@ -35583,7 +35693,7 @@ class DeprecatedWorkflow {
       String? lastModifiedUser,
       String? lastModifiedUserAccountId,
       int? steps,
-      Map<String, Object>? scope,
+      Scope? scope,
       bool? default$}) {
     return DeprecatedWorkflow(
       name: name ?? this.name,
@@ -35670,7 +35780,7 @@ class Configuration {
   final bool attachmentsEnabled;
 
   /// The configuration of time tracking.
-  final Map<String, Object>? timeTrackingConfiguration;
+  final TimeTrackingConfiguration? timeTrackingConfiguration;
 
   Configuration(
       {bool? votingEnabled,
@@ -35699,9 +35809,10 @@ class Configuration {
       issueLinkingEnabled: json['issueLinkingEnabled'] as bool? ?? false,
       timeTrackingEnabled: json['timeTrackingEnabled'] as bool? ?? false,
       attachmentsEnabled: json['attachmentsEnabled'] as bool? ?? false,
-      timeTrackingConfiguration:
-          (json['timeTrackingConfiguration'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})),
+      timeTrackingConfiguration: json['timeTrackingConfiguration'] != null
+          ? TimeTrackingConfiguration.fromJson(
+              json['timeTrackingConfiguration']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -35724,7 +35835,7 @@ class Configuration {
     json['timeTrackingEnabled'] = timeTrackingEnabled;
     json['attachmentsEnabled'] = attachmentsEnabled;
     if (timeTrackingConfiguration != null) {
-      json['timeTrackingConfiguration'] = timeTrackingConfiguration;
+      json['timeTrackingConfiguration'] = timeTrackingConfiguration.toJson();
     }
     return json;
   }
@@ -35737,7 +35848,7 @@ class Configuration {
       bool? issueLinkingEnabled,
       bool? timeTrackingEnabled,
       bool? attachmentsEnabled,
-      Map<String, Object>? timeTrackingConfiguration}) {
+      TimeTrackingConfiguration? timeTrackingConfiguration}) {
     return Configuration(
       votingEnabled: votingEnabled ?? this.votingEnabled,
       watchingEnabled: watchingEnabled ?? this.watchingEnabled,
@@ -36195,7 +36306,7 @@ class WorkflowScheme {
   final bool draft;
 
   /// The user that last modified the draft workflow scheme. A modification is a change to the issue type-project mappings only. This property does not apply to non-draft workflows.
-  final Map<String, Object>? lastModifiedUser;
+  final User? lastModifiedUser;
 
   /// The date-time that the draft workflow scheme was last modified. A modification is a change to the issue type-project mappings only. This property does not apply to non-draft workflows.
   final String? lastModified;
@@ -36241,8 +36352,9 @@ class WorkflowScheme {
       originalIssueTypeMappings:
           json['originalIssueTypeMappings'] as Map<String, Object?>?,
       draft: json['draft'] as bool? ?? false,
-      lastModifiedUser: (json['lastModifiedUser'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      lastModifiedUser: json['lastModifiedUser'] != null
+          ? User.fromJson(json['lastModifiedUser']! as Map<String, Object?>)
+          : null,
       lastModified: json['lastModified'] as String?,
       self: json['self'] as String?,
       updateDraftIfNeeded: json['updateDraftIfNeeded'] as bool? ?? false,
@@ -36289,7 +36401,7 @@ class WorkflowScheme {
     }
     json['draft'] = draft;
     if (lastModifiedUser != null) {
-      json['lastModifiedUser'] = lastModifiedUser;
+      json['lastModifiedUser'] = lastModifiedUser.toJson();
     }
     if (lastModified != null) {
       json['lastModified'] = lastModified;
@@ -36313,7 +36425,7 @@ class WorkflowScheme {
       String? originalDefaultWorkflow,
       Map<String, dynamic>? originalIssueTypeMappings,
       bool? draft,
-      Map<String, Object>? lastModifiedUser,
+      User? lastModifiedUser,
       String? lastModified,
       String? self,
       bool? updateDraftIfNeeded,
@@ -36528,7 +36640,7 @@ class WorkflowSchemeAssociations {
   final List<String> projectIds;
 
   /// The workflow scheme.
-  final Map<String, Object> workflowScheme;
+  final WorkflowScheme workflowScheme;
 
   WorkflowSchemeAssociations(
       {required this.projectIds, required this.workflowScheme});
@@ -36539,9 +36651,8 @@ class WorkflowSchemeAssociations {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      workflowScheme: (json['workflowScheme'] as Map<String, Object?>?)
-              ?.map((k, v) => MapEntry(k, v ?? {})) ??
-          {},
+      workflowScheme: WorkflowScheme.fromJson(
+          json['workflowScheme'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -36551,12 +36662,12 @@ class WorkflowSchemeAssociations {
 
     final json = <String, Object?>{};
     json['projectIds'] = projectIds;
-    json['workflowScheme'] = workflowScheme;
+    json['workflowScheme'] = workflowScheme.toJson();
     return json;
   }
 
   WorkflowSchemeAssociations copyWith(
-      {List<String>? projectIds, Map<String, Object>? workflowScheme}) {
+      {List<String>? projectIds, WorkflowScheme? workflowScheme}) {
     return WorkflowSchemeAssociations(
       projectIds: projectIds ?? this.projectIds,
       workflowScheme: workflowScheme ?? this.workflowScheme,
@@ -37702,7 +37813,7 @@ class ConnectWorkflowTransitionRule {
   /// The key of the rule, as defined in the Connect app descriptor.
   final String key;
   final RuleConfiguration configuration;
-  final Map<String, Object>? transition;
+  final WorkflowTransition? transition;
 
   ConnectWorkflowTransitionRule(
       {required this.id,
@@ -37716,8 +37827,10 @@ class ConnectWorkflowTransitionRule {
       key: json['key'] as String? ?? '',
       configuration: RuleConfiguration.fromJson(
           json['configuration'] as Map<String, Object?>? ?? const {}),
-      transition: (json['transition'] as Map<String, Object?>?)
-          ?.map((k, v) => MapEntry(k, v ?? {})),
+      transition: json['transition'] != null
+          ? WorkflowTransition.fromJson(
+              json['transition']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -37732,7 +37845,7 @@ class ConnectWorkflowTransitionRule {
     json['key'] = key;
     json['configuration'] = configuration.toJson();
     if (transition != null) {
-      json['transition'] = transition;
+      json['transition'] = transition.toJson();
     }
     return json;
   }
@@ -37741,7 +37854,7 @@ class ConnectWorkflowTransitionRule {
       {String? id,
       String? key,
       RuleConfiguration? configuration,
-      Map<String, Object>? transition}) {
+      WorkflowTransition? transition}) {
     return ConnectWorkflowTransitionRule(
       id: id ?? this.id,
       key: key ?? this.key,
