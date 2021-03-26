@@ -79,7 +79,8 @@ class AuditApi {
   AuditApi._(this._client);
 
   /// Returns all records in the audit log, optionally for a certain date range.
-  /// This contains information about events like space exports, group membership
+  /// This contains information about events like space exports, group
+  /// membership
   /// changes, app installations, etc. For more information, see
   /// [Audit log](https://confluence.atlassian.com/confcloud/audit-log-802164269.html)
   /// in the Confluence administrator's guide.
@@ -152,7 +153,8 @@ class AuditApi {
     ));
   }
 
-  /// Sets the retention period for records in the audit log. The retention period
+  /// Sets the retention period for records in the audit log. The retention
+  /// period
   /// can be set to a maximum of 20 years.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -166,10 +168,13 @@ class AuditApi {
     ));
   }
 
-  /// Returns records from the audit log, for a time period back from the current
-  /// date. For example, you can use this method to get the last 3 months of records.
+  /// Returns records from the audit log, for a time period back from the
+  /// current
+  /// date. For example, you can use this method to get the last 3 months of
+  /// records.
   ///
-  /// This contains information about events like space exports, group membership
+  /// This contains information about events like space exports, group
+  /// membership
   /// changes, app installations, etc. For more information, see
   /// [Audit log](https://confluence.atlassian.com/confcloud/audit-log-802164269.html)
   /// in the Confluence administrator's guide.
@@ -205,7 +210,8 @@ class ContentApi {
 
   /// Returns all content in a Confluence instance.
   ///
-  /// By default, the following objects are expanded: `space`, `history`, `version`.
+  /// By default, the following objects are expanded: `space`, `history`,
+  /// `version`.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
@@ -241,15 +247,21 @@ class ContentApi {
 
   /// Creates a new piece of content or publishes an existing draft.
   ///
-  /// To publish a draft, add the `id` and `status` properties to the body of the request.
-  /// Set the `id` to the ID of the draft and set the `status` to 'current'. When the
-  /// request is sent, a new piece of content will be created and the metadata from the
+  /// To publish a draft, add the `id` and `status` properties to the body of
+  /// the request.
+  /// Set the `id` to the ID of the draft and set the `status` to 'current'.
+  /// When the
+  /// request is sent, a new piece of content will be created and the metadata
+  /// from the
   /// draft will be transferred into it.
   ///
-  /// By default, the following objects are expanded: `space`, `history`, `version`.
+  /// By default, the following objects are expanded: `space`, `history`,
+  /// `version`.
   ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'Add' permission for the
-  /// space that the content will be created in, and permission to view the draft if publishing a draft.
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Add' permission for the
+  /// space that the content will be created in, and permission to view the
+  /// draft if publishing a draft.
   Future<Content> createContent(
       {String? status,
       List<String>? expand,
@@ -267,9 +279,11 @@ class ContentApi {
 
   /// Publishes a legacy draft of a page created from a blueprint. Legacy drafts
   /// will eventually be removed in favor of shared drafts. For now, this method
-  /// works the same as [Publish shared draft](#api-content-blueprint-instance-draftId-put).
+  /// works the same as
+  /// [Publish shared draft](#api-content-blueprint-instance-draftId-put).
   ///
-  /// By default, the following objects are expanded: `body.storage`, `history`, `space`, `version`, `ancestors`.
+  /// By default, the following objects are expanded: `body.storage`, `history`,
+  /// `space`, `version`, `ancestors`.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the draft and 'Add' permission for the space that
@@ -291,7 +305,8 @@ class ContentApi {
 
   /// Publishes a shared draft of a page created from a blueprint.
   ///
-  /// By default, the following objects are expanded: `body.storage`, `history`, `space`, `version`, `ancestors`.
+  /// By default, the following objects are expanded: `body.storage`, `history`,
+  /// `space`, `version`, `ancestors`.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the draft and 'Add' permission for the space that
@@ -335,18 +350,23 @@ class ContentApi {
   ///   "_links": {
   ///     "base": "<url>",
   ///     "context": "<url>",
-  ///     "next": "/rest/api/content/search?cql=type=page&limit=25&cursor=raNDoMsTRiNg",
+  ///     "next":
+  /// "/rest/api/content/search?cql=type=page&limit=25&cursor=raNDoMsTRiNg",
   ///     "self": "<url>"
   ///   }
   /// }
   /// ```
   ///
-  /// When additional results are available, returns `next` and `prev` URLs to retrieve them in subsequent calls. The URLs each contain a cursor that points to the appropriate set of results. Use `limit` to specify the number of results returned in each call.
+  /// When additional results are available, returns `next` and `prev` URLs to
+  /// retrieve them in subsequent calls. The URLs each contain a cursor that
+  /// points to the appropriate set of results. Use `limit` to specify the
+  /// number of results returned in each call.
   /// Example subsequent call (taken from example response):
   /// ```
   /// https://your-domain.atlassian.net/wiki/rest/api/content/search?cql=type=page&limit=25&cursor=raNDoMsTRiNg
   /// ```
-  /// The response to this will have a `prev` URL similar to the `next` in the example response.
+  /// The response to this will have a `prev` URL similar to the `next` in the
+  /// example response.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
@@ -372,10 +392,12 @@ class ContentApi {
 
   /// Returns a single piece of content, like a page or a blog post.
   ///
-  /// By default, the following objects are expanded: `space`, `history`, `version`.
+  /// By default, the following objects are expanded: `space`, `history`,
+  /// `version`.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to view the content. If the content is a blog post, 'View' permission
+  /// Permission to view the content. If the content is a blog post, 'View'
+  /// permission
   /// for the space is required.
   Future<Content> getContentById(
       {required String id,
@@ -402,7 +424,8 @@ class ContentApi {
   }
 
   /// Updates a piece of content. Use this method to update the title or body
-  /// of a piece of content, change the status, change the parent page, and more.
+  /// of a piece of content, change the status, change the parent page, and
+  /// more.
   ///
   /// Note, updating draft content is currently not supported.
   ///
@@ -430,16 +453,20 @@ class ContentApi {
   /// Moves a piece of content to the space's trash or purges it from the trash,
   /// depending on the content's type and status:
   ///
-  /// - If the content's type is `page` or `blogpost` and its status is `current`,
+  /// - If the content's type is `page` or `blogpost` and its status is
+  /// `current`,
   /// it will be trashed.
-  /// - If the content's type is `page` or `blogpost` and its status is `trashed`,
+  /// - If the content's type is `page` or `blogpost` and its status is
+  /// `trashed`,
   /// the content will be purged from the trash and deleted permanently. Note,
-  /// you must also set the `status` query parameter to `trashed` in your request.
+  /// you must also set the `status` query parameter to `trashed` in your
+  /// request.
   /// - If the content's type is `comment` or `attachment`, it will be deleted
   /// permanently without being trashed.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// 'Delete' permission for the space that the content is in, and permission to edit the content.
+  /// 'Delete' permission for the space that the content is in, and permission
+  /// to edit the content.
   Future<void> deleteContent({required String id, String? status}) async {
     await _client.send(
       'delete',
@@ -455,7 +482,8 @@ class ContentApi {
 
   /// Returns the most recent update for a piece of content.
   ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: Permission to view the content.
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the content.
   Future<ContentHistory> getHistoryForContent(
       {required String id, List<String>? expand}) async {
     return ContentHistory.fromJson(await _client.send(
@@ -483,7 +511,8 @@ class ContentAttachmentsApi {
   /// By default, the following objects are expanded: `metadata`.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to view the content. If the content is a blog post, 'View' permission
+  /// Permission to view the content. If the content is a blog post, 'View'
+  /// permission
   /// for the space is required.
   Future<ContentArray> getAttachments(
       {required String id,
@@ -516,29 +545,34 @@ class ContentAttachmentsApi {
   /// for this method, otherwise it will be blocked. This protects against XSRF
   /// attacks, which is necessary as this method accepts multipart/form-data.
   ///
-  /// The media type 'multipart/form-data' is defined in [RFC 7578](https://www.ietf.org/rfc/rfc7578.txt).
+  /// The media type 'multipart/form-data' is defined in
+  /// [RFC 7578](https://www.ietf.org/rfc/rfc7578.txt).
   /// Most client libraries have classes that make it easier to implement
-  /// multipart posts, like the [MultipartEntityBuilder](http://hc.apache.org/httpcomponents-client-5.0.x/current/httpclient5/apidocs/)
+  /// multipart posts, like the
+  /// [MultipartEntityBuilder](http://hc.apache.org/httpcomponents-client-5.0.x/current/httpclient5/apidocs/)
   /// Java class provided by Apache HTTP Components.
   ///
-  /// Note, according to [RFC 7578](https://tools.ietf.org/html/rfc7578#section-4.5),
+  /// Note, according to
+  /// [RFC 7578](https://tools.ietf.org/html/rfc7578#section-4.5),
   /// in the case where the form data is text,
   /// the charset parameter for the "text/plain" Content-Type may be used to
   /// indicate the character encoding used in that part. In the case of this
-  /// API endpoint, the `comment` body parameter should be sent with `type=text/plain`
+  /// API endpoint, the `comment` body parameter should be sent with
+  /// `type=text/plain`
   /// and `charset=utf-8` values. This will force the charset to be UTF-8.
   ///
   /// Example: This curl command attaches a file ('example.txt') to a container
   /// (id='123') with a comment and `minorEdits`=true.
   ///
   /// ``` bash
-  /// curl -D- \
-  ///   -u admin:admin \
-  ///   -X POST \
-  ///   -H 'X-Atlassian-Token: nocheck' \
-  ///   -F 'file=@"example.txt"' \
-  ///   -F 'minorEdit="true"' \
-  ///   -F 'comment="Example attachment comment"; type=text/plain; charset=utf-8' \
+  /// curl -D-
+  ///   -u admin:admin
+  ///   -X POST
+  ///   -H 'X-Atlassian-Token: nocheck'
+  ///   -F 'file=@"example.txt"'
+  ///   -F 'minorEdit="true"'
+  ///   -F 'comment="Example attachment comment"; type=text/plain;
+  /// charset=utf-8'
   ///   http://myhost/rest/api/content/123/child/attachment
   /// ```
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -565,30 +599,37 @@ class ContentAttachmentsApi {
   /// for this method, otherwise it will be blocked. This protects against XSRF
   /// attacks, which is necessary as this method accepts multipart/form-data.
   ///
-  /// The media type 'multipart/form-data' is defined in [RFC 7578](https://www.ietf.org/rfc/rfc7578.txt).
+  /// The media type 'multipart/form-data' is defined in
+  /// [RFC 7578](https://www.ietf.org/rfc/rfc7578.txt).
   /// Most client libraries have classes that make it easier to implement
-  /// multipart posts, like the [MultipartEntityBuilder](http://hc.apache.org/httpcomponents-client-5.0.x/current/httpclient5/apidocs/)
+  /// multipart posts, like the
+  /// [MultipartEntityBuilder](http://hc.apache.org/httpcomponents-client-5.0.x/current/httpclient5/apidocs/)
   /// Java class provided by Apache HTTP Components.
   ///
-  /// Note, according to [RFC 7578](https://tools.ietf.org/html/rfc7578#section-4.5),
+  /// Note, according to
+  /// [RFC 7578](https://tools.ietf.org/html/rfc7578#section-4.5),
   /// in the case where the form data is text,
   /// the charset parameter for the "text/plain" Content-Type may be used to
   /// indicate the character encoding used in that part. In the case of this
-  /// API endpoint, the `comment` body parameter should be sent with `type=text/plain`
+  /// API endpoint, the `comment` body parameter should be sent with
+  /// `type=text/plain`
   /// and `charset=utf-8` values. This will force the charset to be UTF-8.
   ///
   /// Example: This curl command attaches a file ('example.txt') to a piece of
-  /// content (id='123') with a comment and `minorEdits`=true. If the 'example.txt'
-  /// file already exists, it will update it with a new version of the attachment.
+  /// content (id='123') with a comment and `minorEdits`=true. If the
+  /// 'example.txt'
+  /// file already exists, it will update it with a new version of the
+  /// attachment.
   ///
   /// ``` bash
-  /// curl -D- \
-  ///   -u admin:admin \
-  ///   -X PUT \
-  ///   -H 'X-Atlassian-Token: nocheck' \
-  ///   -F 'file=@"example.txt"' \
-  ///   -F 'minorEdit="true"' \
-  ///   -F 'comment="Example attachment comment"; type=text/plain; charset=utf-8' \
+  /// curl -D-
+  ///   -u admin:admin
+  ///   -X PUT
+  ///   -H 'X-Atlassian-Token: nocheck'
+  ///   -F 'file=@"example.txt"'
+  ///   -F 'minorEdit="true"'
+  ///   -F 'comment="Example attachment comment"; type=text/plain;
+  /// charset=utf-8'
   ///   http://myhost/rest/api/content/123/child/attachment
   /// ```
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -607,7 +648,8 @@ class ContentAttachmentsApi {
     ));
   }
 
-  /// Updates the attachment properties, i.e. the non-binary data of an attachment
+  /// Updates the attachment properties, i.e. the non-binary data of an
+  /// attachment
   /// like the filename, media-type, comment, and parent container.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -630,36 +672,43 @@ class ContentAttachmentsApi {
   /// Updates the binary data of an attachment, given the attachment ID, and
   /// optionally the comment and the minor edit field.
   ///
-  /// This method is essentially the same as [Create or update attachments](#api-content-id-child-attachment-put),
+  /// This method is essentially the same as
+  /// [Create or update attachments](#api-content-id-child-attachment-put),
   /// except that it matches the attachment ID rather than the name.
   ///
   /// Note, you must set a `X-Atlassian-Token: nocheck` header on the request
   /// for this method, otherwise it will be blocked. This protects against XSRF
   /// attacks, which is necessary as this method accepts multipart/form-data.
   ///
-  /// The media type 'multipart/form-data' is defined in [RFC 7578](https://www.ietf.org/rfc/rfc7578.txt).
+  /// The media type 'multipart/form-data' is defined in
+  /// [RFC 7578](https://www.ietf.org/rfc/rfc7578.txt).
   /// Most client libraries have classes that make it easier to implement
-  /// multipart posts, like the [MultipartEntityBuilder](http://hc.apache.org/httpcomponents-client-5.0.x/current/httpclient5/apidocs/)
+  /// multipart posts, like the
+  /// [MultipartEntityBuilder](http://hc.apache.org/httpcomponents-client-5.0.x/current/httpclient5/apidocs/)
   /// Java class provided by Apache HTTP Components.
   ///
-  /// Note, according to [RFC 7578](https://tools.ietf.org/html/rfc7578#section-4.5),
+  /// Note, according to
+  /// [RFC 7578](https://tools.ietf.org/html/rfc7578#section-4.5),
   /// in the case where the form data is text,
   /// the charset parameter for the "text/plain" Content-Type may be used to
   /// indicate the character encoding used in that part. In the case of this
-  /// API endpoint, the `comment` body parameter should be sent with `type=text/plain`
+  /// API endpoint, the `comment` body parameter should be sent with
+  /// `type=text/plain`
   /// and `charset=utf-8` values. This will force the charset to be UTF-8.
   ///
-  /// Example: This curl command updates an attachment (id='att456') that is attached
+  /// Example: This curl command updates an attachment (id='att456') that is
+  /// attached
   /// to a piece of content (id='123') with a comment and `minorEdits`=true.
   ///
   /// ``` bash
-  /// curl -D- \
-  ///   -u admin:admin \
-  ///   -X POST \
-  ///   -H 'X-Atlassian-Token: nocheck' \
-  ///   -F 'file=@"example.txt"' \
-  ///   -F 'minorEdit="true"' \
-  ///   -F 'comment="Example attachment comment"; type=text/plain; charset=utf-8' \
+  /// curl -D-
+  ///   -u admin:admin
+  ///   -X POST
+  ///   -H 'X-Atlassian-Token: nocheck'
+  ///   -F 'file=@"example.txt"'
+  ///   -F 'minorEdit="true"'
+  ///   -F 'comment="Example attachment comment"; type=text/plain;
+  /// charset=utf-8'
   ///   http://myhost/rest/api/content/123/child/attachment/att456/data
   /// ```
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -695,7 +744,8 @@ class ContentBodyApi {
   /// - styled_view: none
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// If request specifies 'contentIdContext', 'View' permission for the space, and permission to view the content.
+  /// If request specifies 'contentIdContext', 'View' permission for the space,
+  /// and permission to view the content.
   Future<ContentBody> convertContentBody(
       {required String to,
       List<String>? expand,
@@ -728,7 +778,8 @@ class ContentChildrenAndDescendantsApi {
 
   ContentChildrenAndDescendantsApi._(this._client);
 
-  /// Returns a map of the direct children of a piece of content. A piece of content
+  /// Returns a map of the direct children of a piece of content. A piece of
+  /// content
   /// has different types of child content, depending on its type. These are
   /// the default parent-child content type relationships:
   ///
@@ -741,10 +792,12 @@ class ContentChildrenAndDescendantsApi {
   /// new content types that create new parent-child content relationships.
   ///
   /// Note, the map will always include all child content types that are valid
-  /// for the content. However, if the content has no instances of a child content
+  /// for the content. However, if the content has no instances of a child
+  /// content
   /// type, the map will contain an empty array for that child content type.
   ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'View' permission for the space,
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'View' permission for the space,
   /// and permission to view the content if it is a page.
   Future<ContentChildren> getContentChildren(
       {required String id, List<String>? expand, int? parentVersion}) async {
@@ -763,12 +816,16 @@ class ContentChildrenAndDescendantsApi {
 
   /// Move a page to a new location relative to a target page:
   ///
-  /// * `before` - move the page under the same parent as the target, before the target in the list of children
-  /// * `after` - move the page under the same parent as the target, after the target in the list of children
+  /// * `before` - move the page under the same parent as the target, before the
+  /// target in the list of children
+  /// * `after` - move the page under the same parent as the target, after the
+  /// target in the list of children
   /// * `append` - move the page to be a child of the target
   ///
-  /// Caution: This API can move pages to the top level of a space. Top-level pages are difficult to find in the UI
-  /// because they do not show up in the page tree display. To avoid this, never use `before` or `after` positions
+  /// Caution: This API can move pages to the top level of a space. Top-level
+  /// pages are difficult to find in the UI
+  /// because they do not show up in the page tree display. To avoid this, never
+  /// use `before` or `after` positions
   /// when the `targetId` is a top-level page.
   Future<Map<String, dynamic>> movePage(
       {required String id,
@@ -786,7 +843,8 @@ class ContentChildrenAndDescendantsApi {
   }
 
   /// Returns all children of a given type, for a piece of content.
-  /// A piece of content has different types of child content, depending on its type:
+  /// A piece of content has different types of child content, depending on its
+  /// type:
   ///
   /// - `page`: child content is `page`, `comment`, `attachment`
   /// - `blogpost`: child content is `comment`, `attachment`
@@ -796,9 +854,11 @@ class ContentChildrenAndDescendantsApi {
   /// Custom content types that are provided by apps can also be returned.
   ///
   /// Note, this method only returns direct children. To return children at all
-  /// levels, use [Get descendants by type](#api-content-id-descendant-type-get).
+  /// levels, use
+  /// [Get descendants by type](#api-content-id-descendant-type-get).
   ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'View' permission for the space,
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'View' permission for the space,
   /// and permission to view the content if it is a page.
   Future<ContentArray> getContentChildrenByType(
       {required String id,
@@ -828,15 +888,18 @@ class ContentChildrenAndDescendantsApi {
   /// method returns child pages at all levels, rather than just the direct
   /// child pages.
   ///
-  /// A piece of content has different types of descendants, depending on its type:
+  /// A piece of content has different types of descendants, depending on its
+  /// type:
   ///
   /// - `page`: descendant is `page`, `comment`, `attachment`
   /// - `blogpost`: descendant is `comment`, `attachment`
   /// - `attachment`: descendant is `comment`
   /// - `comment`: descendant is `attachment`
   ///
-  /// The map will always include all descendant types that are valid for the content.
-  /// However, if the content has no instances of a descendant type, the map will
+  /// The map will always include all descendant types that are valid for the
+  /// content.
+  /// However, if the content has no instances of a descendant type, the map
+  /// will
   /// contain an empty array for that descendant type.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -858,10 +921,12 @@ class ContentChildrenAndDescendantsApi {
 
   /// Returns all descendants of a given type, for a piece of content. This is
   /// similar to [Get content children by type](#api-content-id-child-type-get),
-  /// except that this method returns child pages at all levels, rather than just
+  /// except that this method returns child pages at all levels, rather than
+  /// just
   /// the direct child pages.
   ///
-  /// A piece of content has different types of descendants, depending on its type:
+  /// A piece of content has different types of descendants, depending on its
+  /// type:
   ///
   /// - `page`: descendant is `page`, `comment`, `attachment`
   /// - `blogpost`: descendant is `comment`, `attachment`
@@ -894,10 +959,15 @@ class ContentChildrenAndDescendantsApi {
     ));
   }
 
-  /// Copy page hierarchy allows the copying of an entire hierarchy of pages and their associated properties, permissions and attachments.
-  ///  The id path parameter refers to the content id of the page to copy, and the new parent of this copied page is defined using the destinationPageId in the request body.
-  ///  The titleOptions object defines the rules of renaming page titles during the copy;
-  ///  for example, search and replace can be used in conjunction to rewrite the copied page titles.
+  /// Copy page hierarchy allows the copying of an entire hierarchy of pages and
+  /// their associated properties, permissions and attachments.
+  ///  The id path parameter refers to the content id of the page to copy, and
+  /// the new parent of this copied page is defined using the destinationPageId
+  /// in the request body.
+  ///  The titleOptions object defines the rules of renaming page titles during
+  /// the copy;
+  ///  for example, search and replace can be used in conjunction to rewrite the
+  /// copied page titles.
   ///
   ///  Response example:
   ///  <pre>`
@@ -921,17 +991,25 @@ class ContentChildrenAndDescendantsApi {
     );
   }
 
-  /// Copies a single page and its associated properties, permissions, attachments, and custom contents.
-  ///  The `id` path parameter refers to the content ID of the page to copy. The target of the page to be copied
-  ///  is defined using the `destination` in the request body and can be one of the following types.
+  /// Copies a single page and its associated properties, permissions,
+  /// attachments, and custom contents.
+  ///  The `id` path parameter refers to the content ID of the page to copy. The
+  /// target of the page to be copied
+  ///  is defined using the `destination` in the request body and can be one of
+  /// the following types.
   ///
-  ///   - `space`: page will be copied to the specified space as a root page on the space
-  ///   - `parent_page`: page will be copied as a child of the specified parent page
+  ///   - `space`: page will be copied to the specified space as a root page on
+  /// the space
+  ///   - `parent_page`: page will be copied as a child of the specified parent
+  /// page
   ///   - `existing_page`: page will be copied and replace the specified page
   ///
-  /// By default, the following objects are expanded: `space`, `history`, `version`.
+  /// By default, the following objects are expanded: `space`, `history`,
+  /// `version`.
   ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'Add' permission for the space that the content will be copied in and permission to update the content if copying to an `existing_page`.
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Add' permission for the space that the content will be copied in and
+  /// permission to update the content if copying to an `existing_page`.
   Future<Content> copyPage(
       {required String id,
       List<String>? expand,
@@ -958,12 +1036,14 @@ class ContentMacroBodyApi {
   ContentMacroBodyApi._(this._client);
 
   /// Returns the body of a macro in storage format, for the given macro ID.
-  /// This includes information like the name of the macro, the body of the macro,
+  /// This includes information like the name of the macro, the body of the
+  /// macro,
   /// and any macro parameters. This method is mainly used by Cloud apps.
   ///
   /// About the macro ID: When a macro is created in a new version of content,
   /// Confluence will generate a random ID for it, unless an ID is specified
-  /// (by an app). The macro ID will look similar to this: '50884bd9-0cb8-41d5-98be-f80943c14f96'.
+  /// (by an app). The macro ID will look similar to this:
+  /// '50884bd9-0cb8-41d5-98be-f80943c14f96'.
   /// The ID is then persisted as new versions of content are created, and is
   /// only modified by Confluence if there are conflicting IDs.
   ///
@@ -999,7 +1079,8 @@ class ContentCommentsApi {
 
   /// Returns the comments on a piece of content.
   ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'View' permission for the space,
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'View' permission for the space,
   /// and permission to view the content if it is a page.
   Future<ContentArray> getContentComments(
       {required String id,
@@ -1037,7 +1118,8 @@ class ContentLabelsApi {
   /// Returns the labels on a piece of content.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// 'View' permission for the space and permission to view the content if it is a page.
+  /// 'View' permission for the space and permission to view the content if it
+  /// is a page.
   Future<LabelArray> getLabelsForContent(
       {required String id, String? prefix, int? start, int? limit}) async {
     return LabelArray.fromJson(await _client.send(
@@ -1058,8 +1140,10 @@ class ContentLabelsApi {
   ///
   /// Notes:
   ///
-  /// - Labels can also be added when creating content ([Create content](#api-content-post)).
-  /// - Labels can be updated when updating content ([Update content](#api-content-id-put)).
+  /// - Labels can also be added when creating content
+  /// ([Create content](#api-content-post)).
+  /// - Labels can be updated when updating content
+  /// ([Update content](#api-content-id-put)).
   /// This will delete the existing labels and replace them with the labels in
   /// the request.
   ///
@@ -1111,9 +1195,11 @@ class ContentLabelsApi {
   /// [Remove label from content using query parameter](#api-content-id-label-delete)
   /// except that the label name is specified via a path parameter.
   ///
-  /// Use this method if the label name does not have "/" characters, as the path
+  /// Use this method if the label name does not have "/" characters, as the
+  /// path
   /// parameter does not accept "/" characters for security reasons. Otherwise,
-  /// use [Remove label from content using query parameter](#api-content-id-label-delete).
+  /// use
+  /// [Remove label from content using query parameter](#api-content-id-label-delete).
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to update the content.
@@ -1137,9 +1223,12 @@ class ContentPermissionsApi {
 
   ContentPermissionsApi._(this._client);
 
-  /// Check if a user or a group can perform an operation to the specified content. The `operation` to check
-  /// must be provided. The user’s account ID or the ID of the group can be provided in the `subject` to check
-  /// permissions against a specified user or group. The following permission checks are done to make sure that the
+  /// Check if a user or a group can perform an operation to the specified
+  /// content. The `operation` to check
+  /// must be provided. The user’s account ID or the ID of the group can be
+  /// provided in the `subject` to check
+  /// permissions against a specified user or group. The following permission
+  /// checks are done to make sure that the
   /// user or group has the proper access:
   ///
   /// - site permissions
@@ -1147,7 +1236,8 @@ class ContentPermissionsApi {
   /// - content restrictions
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to access the Confluence site ('Can use' global permission) if checking permission for self,
+  /// Permission to access the Confluence site ('Can use' global permission) if
+  /// checking permission for self,
   /// otherwise 'Confluence Administrator' global permission is required.
   Future<PermissionCheckResponse> permissionCheck(
       {required String id, required ContentPermissionRequest body}) async {
@@ -1170,10 +1260,12 @@ class ContentPropertiesApi {
   ContentPropertiesApi._(this._client);
 
   /// Returns the properties for a piece of content. For more information
-  /// about content properties, see [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+  /// about content properties, see
+  /// [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// 'View' permission for the space, and permission to view the content if it is a page.
+  /// 'View' permission for the space, and permission to view the content if it
+  /// is a page.
   Future<ContentPropertyArray> getContentProperties(
       {required String id,
       List<String>? expand,
@@ -1194,9 +1286,11 @@ class ContentPropertiesApi {
   }
 
   /// Creates a property for an existing piece of content. For more information
-  /// about content properties, see [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+  /// about content properties, see
+  /// [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
   ///
-  /// This is the same as [Create content property for key](#api-content-id-property-key-post)
+  /// This is the same as
+  /// [Create content property for key](#api-content-id-property-key-post)
   /// except that the key is specified in the request body instead of as a
   /// path parameter.
   ///
@@ -1217,11 +1311,13 @@ class ContentPropertiesApi {
     ));
   }
 
-  /// Returns a content property for a piece of content. For more information, see
+  /// Returns a content property for a piece of content. For more information,
+  /// see
   /// [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// 'View' permission for the space, and permission to view the content if it is a page.
+  /// 'View' permission for the space, and permission to view the content if it
+  /// is a page.
   Future<ContentProperty> getContentProperty(
       {required String id, required String key, List<String>? expand}) async {
     return ContentProperty.fromJson(await _client.send(
@@ -1238,9 +1334,11 @@ class ContentPropertiesApi {
   }
 
   /// Creates a property for an existing piece of content. For more information
-  /// about content properties, see [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+  /// about content properties, see
+  /// [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
   ///
-  /// This is the same as [Create content property](#api-content-id-property-post)
+  /// This is the same as
+  /// [Create content property](#api-content-id-property-post)
   /// except that the key is specified as a path parameter instead of in the
   /// request body.
   ///
@@ -1266,7 +1364,8 @@ class ContentPropertiesApi {
 
   /// Updates an existing content property. This method will also create a new
   /// property for a piece of content, if the property key does not exist and
-  /// the property version is 1. For more information about content properties, see
+  /// the property version is 1. For more information about content properties,
+  /// see
   /// [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -1286,7 +1385,8 @@ class ContentPropertiesApi {
     ));
   }
 
-  /// Deletes a content property. For more information about content properties, see
+  /// Deletes a content property. For more information about content properties,
+  /// see
   /// [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -1444,14 +1544,18 @@ class ContentRestrictionsApi {
   }
 
   /// Returns whether the specified content restriction applies to a group.
-  /// For example, if a page with `id=123` has a `read` restriction for the `admins` group,
+  /// For example, if a page with `id=123` has a `read` restriction for the
+  /// `admins` group,
   /// the following request will return `true`:
   ///
   /// `https://your-domain.atlassian.net/wiki/rest/api/content/123/restriction/byOperation/read/group/admins`
   ///
-  /// Note that a response of `true` does not guarantee that the group can view the page, as it does not account for
-  /// account-inherited restrictions, space permissions, or even product access. For more
-  /// information, see [Confluence permissions](https://confluence.atlassian.com/x/_AozKw).
+  /// Note that a response of `true` does not guarantee that the group can view
+  /// the page, as it does not account for
+  /// account-inherited restrictions, space permissions, or even product access.
+  /// For more
+  /// information, see
+  /// [Confluence permissions](https://confluence.atlassian.com/x/_AozKw).
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content.
@@ -1511,14 +1615,18 @@ class ContentRestrictionsApi {
   }
 
   /// Returns whether the specified content restriction applies to a group.
-  /// For example, if a page with `id=123` has a `read` restriction for the `123456` group id,
+  /// For example, if a page with `id=123` has a `read` restriction for the
+  /// `123456` group id,
   /// the following request will return `true`:
   ///
   /// `https://your-domain.atlassian.net/wiki/rest/api/content/123/restriction/byOperation/read/byGroupId/123456`
   ///
-  /// Note that a response of `true` does not guarantee that the group can view the page, as it does not account for
-  /// account-inherited restrictions, space permissions, or even product access. For more
-  /// information, see [Confluence permissions](https://confluence.atlassian.com/x/_AozKw).
+  /// Note that a response of `true` does not guarantee that the group can view
+  /// the page, as it does not account for
+  /// account-inherited restrictions, space permissions, or even product access.
+  /// For more
+  /// information, see
+  /// [Confluence permissions](https://confluence.atlassian.com/x/_AozKw).
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content.
@@ -1537,7 +1645,8 @@ class ContentRestrictionsApi {
     );
   }
 
-  /// Adds a group to a content restriction by Group Id. That is, grant read or update
+  /// Adds a group to a content restriction by Group Id. That is, grant read or
+  /// update
   /// permission to the group for a piece of content.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -1578,14 +1687,19 @@ class ContentRestrictionsApi {
   }
 
   /// Returns whether the specified content restriction applies to a user.
-  /// For example, if a page with `id=123` has a `read` restriction for a user with an account ID of
-  /// `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`, the following request will return `true`:
+  /// For example, if a page with `id=123` has a `read` restriction for a user
+  /// with an account ID of
+  /// `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`, the following request will
+  /// return `true`:
   ///
   /// `https://your-domain.atlassian.net/wiki/rest/api/content/123/restriction/byOperation/read/user?accountId=384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`
   ///
-  /// Note that a response of `true` does not guarantee that the user can view the page, as it does not account for
-  /// account-inherited restrictions, space permissions, or even product access. For more
-  /// information, see [Confluence permissions](https://confluence.atlassian.com/x/_AozKw).
+  /// Note that a response of `true` does not guarantee that the user can view
+  /// the page, as it does not account for
+  /// account-inherited restrictions, space permissions, or even product access.
+  /// For more
+  /// information, see
+  /// [Confluence permissions](https://confluence.atlassian.com/x/_AozKw).
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content.
@@ -1673,7 +1787,8 @@ class ContentVersionsApi {
   /// Returns the versions for a piece of content in descending order.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to view the content. If the content is a blog post, 'View' permission
+  /// Permission to view the content. If the content is a blog post, 'View'
+  /// permission
   /// for the space is required.
   Future<VersionArray> getContentVersions(
       {required String id,
@@ -1694,7 +1809,8 @@ class ContentVersionsApi {
     ));
   }
 
-  /// Restores a historical version to be the latest version. That is, a new version
+  /// Restores a historical version to be the latest version. That is, a new
+  /// version
   /// is created with the content of the historical version.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -1719,7 +1835,8 @@ class ContentVersionsApi {
   /// Returns a version for a piece of content.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to view the content. If the content is a blog post, 'View' permission
+  /// Permission to view the content. If the content is a blog post, 'View'
+  /// permission
   /// for the space is required.
   Future<Version> getContentVersion(
       {required String id,
@@ -1740,7 +1857,8 @@ class ContentVersionsApi {
 
   /// Delete a historical version. This does not delete the changes made to the
   /// content in that version, rather the changes for the deleted version are
-  /// rolled up into the next version. Note, you cannot delete the current version.
+  /// rolled up into the next version. Note, you cannot delete the current
+  /// version.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to update the content.
@@ -1767,9 +1885,11 @@ class ContentWatchesApi {
   /// Returns the watches for a page. A user that watches a page will receive
   /// receive notifications when the page is updated.
   ///
-  /// If you want to manage watches for a page, use the following `user` methods:
+  /// If you want to manage watches for a page, use the following `user`
+  /// methods:
   ///
-  /// - [Get content watch status for user](#api-user-watch-content-contentId-get)
+  /// -
+  /// [Get content watch status for user](#api-user-watch-content-contentId-get)
   /// - [Add content watch](#api-user-watch-content-contentId-post)
   /// - [Remove content watch](#api-user-watch-content-contentId-delete)
   ///
@@ -1790,11 +1910,13 @@ class ContentWatchesApi {
     ));
   }
 
-  /// Returns all space watches for the space that the content is in. A user that
+  /// Returns all space watches for the space that the content is in. A user
+  /// that
   /// watches a space will receive receive notifications when any content in the
   /// space is updated.
   ///
-  /// If you want to manage watches for a space, use the following `user` methods:
+  /// If you want to manage watches for a space, use the following `user`
+  /// methods:
   ///
   /// - [Get space watch status for user](#api-user-watch-space-spaceKey-get)
   /// - [Add space watch](#api-user-watch-space-spaceKey-post)
@@ -1836,11 +1958,13 @@ class ContentWatchesApi {
   /// Returns whether a user is watching a piece of content. Choose the user by
   /// doing one of the following:
   ///
-  /// - Specify a user via a query parameter: Use the `accountId` to identify the user.
+  /// - Specify a user via a query parameter: Use the `accountId` to identify
+  /// the user.
   /// - Do not specify a user: The currently logged-in user will be used.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// 'Confluence Administrator' global permission if specifying a user, otherwise
+  /// 'Confluence Administrator' global permission if specifying a user,
+  /// otherwise
   /// permission to access the Confluence site ('Can use' global permission).
   Future<UserWatch> getContentWatchStatus(
       {required String contentId,
@@ -1864,14 +1988,16 @@ class ContentWatchesApi {
   /// Adds a user as a watcher to a piece of content. Choose the user by doing
   /// one of the following:
   ///
-  /// - Specify a user via a query parameter: Use the `accountId` to identify the user.
+  /// - Specify a user via a query parameter: Use the `accountId` to identify
+  /// the user.
   /// - Do not specify a user: The currently logged-in user will be used.
   ///
   /// Note, you must add the `X-Atlassian-Token: no-check` header when making a
   /// request, as this operation has XSRF protection.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// 'Confluence Administrator' global permission if specifying a user, otherwise
+  /// 'Confluence Administrator' global permission if specifying a user,
+  /// otherwise
   /// permission to access the Confluence site ('Can use' global permission).
   Future<void> addContentWatcher(
       {required String contentId,
@@ -1895,11 +2021,13 @@ class ContentWatchesApi {
   /// Removes a user as a watcher from a piece of content. Choose the user by
   /// doing one of the following:
   ///
-  /// - Specify a user via a query parameter: Use the `accountId` to identify the user.
+  /// - Specify a user via a query parameter: Use the `accountId` to identify
+  /// the user.
   /// - Do not specify a user: The currently logged-in user will be used.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// 'Confluence Administrator' global permission if specifying a user, otherwise
+  /// 'Confluence Administrator' global permission if specifying a user,
+  /// otherwise
   /// permission to access the Confluence site ('Can use' global permission).
   Future<void> removeContentWatcher(
       {required String xAtlassianToken,
@@ -1927,11 +2055,13 @@ class ContentWatchesApi {
   /// Returns whether a user is watching a label. Choose the user by doing one
   /// of the following:
   ///
-  /// - Specify a user via a query parameter: Use the `accountId` to identify the user.
+  /// - Specify a user via a query parameter: Use the `accountId` to identify
+  /// the user.
   /// - Do not specify a user: The currently logged-in user will be used.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// 'Confluence Administrator' global permission if specifying a user, otherwise
+  /// 'Confluence Administrator' global permission if specifying a user,
+  /// otherwise
   /// permission to access the Confluence site ('Can use' global permission).
   Future<UserWatch> isWatchingLabel(
       {required String labelName,
@@ -1955,14 +2085,16 @@ class ContentWatchesApi {
   /// Adds a user as a watcher to a label. Choose the user by doing one of the
   /// following:
   ///
-  /// - Specify a user via a query parameter: Use the `accountId` to identify the user.
+  /// - Specify a user via a query parameter: Use the `accountId` to identify
+  /// the user.
   /// - Do not specify a user: The currently logged-in user will be used.
   ///
   /// Note, you must add the `X-Atlassian-Token: no-check` header when making a
   /// request, as this operation has XSRF protection.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// 'Confluence Administrator' global permission if specifying a user, otherwise
+  /// 'Confluence Administrator' global permission if specifying a user,
+  /// otherwise
   /// permission to access the Confluence site ('Can use' global permission).
   Future<void> addLabelWatcher(
       {required String xAtlassianToken,
@@ -1990,11 +2122,13 @@ class ContentWatchesApi {
   /// Removes a user as a watcher from a label. Choose the user by doing one of
   /// the following:
   ///
-  /// - Specify a user via a query parameter: Use the `accountId` to identify the user.
+  /// - Specify a user via a query parameter: Use the `accountId` to identify
+  /// the user.
   /// - Do not specify a user: The currently logged-in user will be used.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// 'Confluence Administrator' global permission if specifying a user, otherwise
+  /// 'Confluence Administrator' global permission if specifying a user,
+  /// otherwise
   /// permission to access the Confluence site ('Can use' global permission).
   Future<void> removeLabelWatcher(
       {required String labelName,
@@ -2018,11 +2152,13 @@ class ContentWatchesApi {
   /// Returns whether a user is watching a space. Choose the user by
   /// doing one of the following:
   ///
-  /// - Specify a user via a query parameter: Use the `accountId` to identify the user.
+  /// - Specify a user via a query parameter: Use the `accountId` to identify
+  /// the user.
   /// - Do not specify a user: The currently logged-in user will be used.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// 'Confluence Administrator' global permission if specifying a user, otherwise
+  /// 'Confluence Administrator' global permission if specifying a user,
+  /// otherwise
   /// permission to access the Confluence site ('Can use' global permission).
   Future<UserWatch> isWatchingSpace(
       {required String spaceKey,
@@ -2046,14 +2182,16 @@ class ContentWatchesApi {
   /// Adds a user as a watcher to a space. Choose the user by doing one of the
   /// following:
   ///
-  /// - Specify a user via a query parameter: Use the `accountId` to identify the user.
+  /// - Specify a user via a query parameter: Use the `accountId` to identify
+  /// the user.
   /// - Do not specify a user: The currently logged-in user will be used.
   ///
   /// Note, you must add the `X-Atlassian-Token: no-check` header when making a
   /// request, as this operation has XSRF protection.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// 'Confluence Administrator' global permission if specifying a user, otherwise
+  /// 'Confluence Administrator' global permission if specifying a user,
+  /// otherwise
   /// permission to access the Confluence site ('Can use' global permission).
   Future<void> addSpaceWatcher(
       {required String xAtlassianToken,
@@ -2081,11 +2219,13 @@ class ContentWatchesApi {
   /// Removes a user as a watcher from a space. Choose the user by doing one of
   /// the following:
   ///
-  /// - Specify a user via a query parameter: Use the `accountId` to identify the user.
+  /// - Specify a user via a query parameter: Use the `accountId` to identify
+  /// the user.
   /// - Do not specify a user: The currently logged-in user will be used.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// 'Confluence Administrator' global permission if specifying a user, otherwise
+  /// 'Confluence Administrator' global permission if specifying a user,
+  /// otherwise
   /// permission to access the Confluence site ('Can use' global permission).
   Future<void> removeSpaceWatch(
       {required String spaceKey,
@@ -2116,7 +2256,8 @@ class DynamicModulesApi {
 
   /// Returns all modules registered dynamically by the calling app.
   ///
-  /// **[Permissions](#permissions) required:** Only Connect apps can make this request.
+  /// **[Permissions](#permissions) required:** Only Connect apps can make this
+  /// request.
   Future<ConnectModules> getModules() async {
     return ConnectModules.fromJson(await _client.send(
       'get',
@@ -2124,9 +2265,12 @@ class DynamicModulesApi {
     ));
   }
 
-  /// Registers a list of modules. For the list of modules that support dynamic registration, see [Dynamic modules](https://developer.atlassian.com/cloud/confluence/dynamic-modules/).
+  /// Registers a list of modules. For the list of modules that support dynamic
+  /// registration, see
+  /// [Dynamic modules](https://developer.atlassian.com/cloud/confluence/dynamic-modules/).
   ///
-  /// **[Permissions](#permissions) required:** Only Connect apps can make this request.
+  /// **[Permissions](#permissions) required:** Only Connect apps can make this
+  /// request.
   Future<void> registerModules({required ConnectModules body}) async {
     await _client.send(
       'post',
@@ -2137,7 +2281,8 @@ class DynamicModulesApi {
 
   /// Remove all or a list of modules registered by the calling app.
   ///
-  /// **[Permissions](#permissions) required:** Only Connect apps can make this request.
+  /// **[Permissions](#permissions) required:** Only Connect apps can make this
+  /// request.
   Future<void> removeModules(List<String> moduleKey) async {
     await _client.send(
       'delete',
@@ -2386,7 +2531,8 @@ class InlineTasksApi {
   /// Returns inline tasks based on the search query.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to access the Confluence site ('Can use' global permission). Only tasks
+  /// Permission to access the Confluence site ('Can use' global permission).
+  /// Only tasks
   /// in contents that the user has permission to view are returned.
   Future<TaskPageResponse> searchTasks(
       {int? start,
@@ -2433,10 +2579,12 @@ class LabelInfoApi {
 
   LabelInfoApi._(this._client);
 
-  /// Returns label information and a list of contents associated with the label.
+  /// Returns label information and a list of contents associated with the
+  /// label.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to access the Confluence site ('Can use' global permission). Only contents
+  /// Permission to access the Confluence site ('Can use' global permission).
+  /// Only contents
   /// that the user is permitted to view is returned.
   Future<LabelDetails> getAllLabelContent(
       {required String name, String? type, int? start, int? limit}) async {
@@ -2460,8 +2608,10 @@ class LongRunningTaskApi {
 
   LongRunningTaskApi._(this._client);
 
-  /// Returns information about all active long-running tasks (e.g. space export),
-  /// such as how long each task has been running and the percentage of each task
+  /// Returns information about all active long-running tasks (e.g. space
+  /// export),
+  /// such as how long each task has been running and the percentage of each
+  /// task
   /// that has completed.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -2506,7 +2656,8 @@ class RelationApi {
   ///
   /// For example, the following method finds all content that the current user
   /// has an 'ignore' relationship with:
-  /// `GET https://your-domain.atlassian.net/wiki/rest/api/relation/ignore/from/user/current/to/content`
+  /// `GET
+  /// https://your-domain.atlassian.net/wiki/rest/api/relation/ignore/from/user/current/to/content`
   /// Note, 'ignore' is an example custom relationship type.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -2549,7 +2700,8 @@ class RelationApi {
   ///
   /// For example, you can use this method to find whether the current user has
   /// selected a particular page as a favorite (i.e. 'save for later'):
-  /// `GET https://your-domain.atlassian.net/wiki/rest/api/relation/favourite/from/user/current/to/content/123`
+  /// `GET
+  /// https://your-domain.atlassian.net/wiki/rest/api/relation/favourite/from/user/current/to/content/123`
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view both the target entity and source entity.
@@ -2585,12 +2737,14 @@ class RelationApi {
   }
 
   /// Creates a relationship between two entities (user, space, content). The
-  /// 'favourite' relationship is supported by default, but you can use this method
+  /// 'favourite' relationship is supported by default, but you can use this
+  /// method
   /// to create any type of relationship between two entities.
   ///
   /// For example, the following method creates a 'sibling' relationship between
   /// two pieces of content:
-  /// `GET https://your-domain.atlassian.net/wiki/rest/api/relation/sibling/from/content/123/to/content/456`
+  /// `GET
+  /// https://your-domain.atlassian.net/wiki/rest/api/relation/sibling/from/content/123/to/content/456`
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
@@ -2662,9 +2816,11 @@ class RelationApi {
   /// Returns all target entities that have a particular relationship to the
   /// source entity. Note, relationships are one way.
   ///
-  /// For example, the following method finds all users that have a 'collaborator'
+  /// For example, the following method finds all users that have a
+  /// 'collaborator'
   /// relationship to a piece of content with an ID of '1234':
-  /// `GET https://your-domain.atlassian.net/wiki/rest/api/relation/collaborator/to/content/1234/from/user`
+  /// `GET
+  /// https://your-domain.atlassian.net/wiki/rest/api/relation/collaborator/to/content/1234/from/user`
   /// Note, 'collaborator' is an example custom relationship type.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -2739,13 +2895,17 @@ class SearchApi {
   /// }
   /// ```
   ///
-  /// When additional results are available, returns `next` and `prev` URLs to retrieve them in subsequent calls. The URLs each contain a cursor that points to the appropriate set of results. Use `limit` to specify the number of results returned in each call.
+  /// When additional results are available, returns `next` and `prev` URLs to
+  /// retrieve them in subsequent calls. The URLs each contain a cursor that
+  /// points to the appropriate set of results. Use `limit` to specify the
+  /// number of results returned in each call.
   ///
   /// Example subsequent call (taken from example response):
   /// ```
   /// https://your-domain.atlassian.net/wiki/rest/api/search?cql=type=page&limit=25&cursor=raNDoMsTRiNg
   /// ```
-  /// The response to this will have a `prev` URL similar to the `next` in the example response.
+  /// The response to this will have a `prev` URL similar to the `next` in the
+  /// example response.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the entities. Note, only entities that the user has
@@ -2773,7 +2933,8 @@ class SearchApi {
   /// Searches for users using user-specific queries from the
   /// [Confluence Query Language (CQL)](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/).
   ///
-  /// Note that some user fields may be set to null depending on the user's privacy settings.
+  /// Note that some user fields may be set to null depending on the user's
+  /// privacy settings.
   /// These are: email, profilePicture, and displayName.
   Future<SearchPageResponseSearchResult> search2(
       {required String cql, int? start, int? limit}) async {
@@ -3077,7 +3238,8 @@ class SpacePermissionsApi {
 
   /// Adds new permission to space.
   ///
-  /// If the permission to be added is a group permission, the group can be identified
+  /// If the permission to be added is a group permission, the group can be
+  /// identified
   /// by its group name or group id.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -3094,7 +3256,8 @@ class SpacePermissionsApi {
     ));
   }
 
-  /// Removes a space permission. Note that removing Read Space permission for a user or group will remove all
+  /// Removes a space permission. Note that removing Read Space permission for a
+  /// user or group will remove all
   /// the space permissions for that user or group.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -3119,9 +3282,11 @@ class SpacePropertiesApi {
 
   SpacePropertiesApi._(this._client);
 
-  /// Returns all properties for the given space. Space properties are a key-value storage associated with a space.
+  /// Returns all properties for the given space. Space properties are a
+  /// key-value storage associated with a space.
   ///
-  /// **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**: ‘View’ permission for the space.
+  /// **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:
+  /// ‘View’ permission for the space.
   Future<SpacePropertyArray> getSpaceProperties(
       {required String spaceKey,
       List<String>? expand,
@@ -3159,7 +3324,8 @@ class SpacePropertiesApi {
 
   /// Returns a space property.
   ///
-  /// **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**: ‘View’ permission for the space.
+  /// **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:
+  /// ‘View’ permission for the space.
   Future<SpaceProperty> getSpaceProperty(
       {required String spaceKey,
       required String key,
@@ -3178,7 +3344,8 @@ class SpacePropertiesApi {
   }
 
   /// Creates a new space property. This is the same as `POST
-  /// /api/space/{spaceKey}/property` but the key for the property is passed as a
+  /// /api/space/{spaceKey}/property` but the key for the property is passed as
+  /// a
   /// path parameter, rather than in the request body.
   ///
   /// **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:
@@ -3282,10 +3449,12 @@ class TemplateApi {
 
   TemplateApi._(this._client);
 
-  /// Creates a new content template. Note, blueprint templates cannot be created via the REST API.
+  /// Creates a new content template. Note, blueprint templates cannot be
+  /// created via the REST API.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// 'Admin' permission for the space to create a space template or 'Confluence Administrator'
+  /// 'Admin' permission for the space to create a space template or 'Confluence
+  /// Administrator'
   /// global permission to create a global template.
   Future<ContentTemplate> createContentTemplate(
       {required ContentTemplateCreate body}) async {
@@ -3300,7 +3469,8 @@ class TemplateApi {
   /// via the REST API.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// 'Admin' permission for the space to create a space template or 'Confluence Administrator'
+  /// 'Admin' permission for the space to create a space template or 'Confluence
+  /// Administrator'
   /// global permission to create a global template.
   Future<ContentTemplate> updateContentTemplate(
       {required ContentTemplateUpdate body}) async {
@@ -3376,7 +3546,8 @@ class TemplateApi {
   /// - If the template is a content template, it is deleted.
   /// - If the template is a modified space-level blueprint template, it reverts
   /// to the template inherited from the global-level blueprint template.
-  /// - If the template is a modified global-level blueprint template, it reverts
+  /// - If the template is a modified global-level blueprint template, it
+  /// reverts
   /// to the default global-level blueprint template.
   ///
   ///  Note, unmodified blueprint templates cannot be deleted.
@@ -3400,7 +3571,8 @@ class ThemesApi {
 
   /// Returns all themes, not including the default theme.
   ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: None
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// None
   Future<ThemeArray> getThemes({int? start, int? limit}) async {
     return ThemeArray.fromJson(await _client.send(
       'get',
@@ -3414,7 +3586,8 @@ class ThemesApi {
 
   /// Returns the globally assigned theme.
   ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: None
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// None
   Future<Theme> getGlobalTheme() async {
     return Theme.fromJson(await _client.send(
       'get',
@@ -3425,7 +3598,8 @@ class ThemesApi {
   /// Returns a theme. This includes information about the theme name,
   /// description, and icon.
   ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: None
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// None
   Future<Theme> getTheme(String themeKey) async {
     return Theme.fromJson(await _client.send(
       'get',
@@ -3440,7 +3614,8 @@ class ThemesApi {
   /// theme is set, this means that the space is inheriting the global look
   /// and feel settings.
   ///
-  /// **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**: ‘View’ permission for the space.
+  /// **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:
+  /// ‘View’ permission for the space.
   Future<Theme> getSpaceTheme(String spaceKey) async {
     return Theme.fromJson(await _client.send(
       'get',
@@ -3493,7 +3668,8 @@ class UsersApi {
   UsersApi._(this._client);
 
   /// Returns a user. This includes information about the user, such as the
-  /// display name, account ID, profile picture, and more. The information returned may be
+  /// display name, account ID, profile picture, and more. The information
+  /// returned may be
   /// restricted by the user's profile visibility settings.
   ///
   /// **Note:** to add, edit, or delete users in your organization, see the
@@ -3589,8 +3765,10 @@ class UsersApi {
     ));
   }
 
-  /// Returns a user's email address. This API is only available to apps approved by
-  /// Atlassian, according to these [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603).
+  /// Returns a user's email address. This API is only available to apps
+  /// approved by
+  /// Atlassian, according to these
+  /// [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603).
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
@@ -3605,8 +3783,10 @@ class UsersApi {
     ));
   }
 
-  /// Returns user email addresses for a set of accountIds. This API is only available to apps approved by
-  /// Atlassian, according to these [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603).
+  /// Returns user email addresses for a set of accountIds. This API is only
+  /// available to apps approved by
+  /// Atlassian, according to these
+  /// [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603).
   ///
   /// Any accounts which are not available will not be included in the result.
   ///
@@ -3623,10 +3803,13 @@ class UsersApi {
     ));
   }
 
-  /// Returns the accountIds for the users specified in the key or username parameters. Note that multiple key and username parameters can be specified.
+  /// Returns the accountIds for the users specified in the key or username
+  /// parameters. Note that multiple key and username parameters can be
+  /// specified.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// 'Confluence Administrator' global permission if specifying a user, otherwise
+  /// 'Confluence Administrator' global permission if specifying a user,
+  /// otherwise
   /// permission to access the Confluence site ('Can use' global permission).
   Future<MigratedUserArray> getBulkUserMigration(
       {required List<String> key,
@@ -4312,7 +4495,8 @@ class AuditRecordCreate {
   /// The IP address of the computer where the event was initiated from.
   final String remoteAddress;
 
-  /// The creation date-time of the audit record, as a timestamp. This is converted
+  /// The creation date-time of the audit record, as a timestamp. This is
+  /// converted
   /// to a date-time display in the Confluence UI. If the `creationDate` is not
   /// specified, then it will be set to the timestamp for the current date-time.
   final int? creationDate;
@@ -4779,7 +4963,9 @@ class ChangedValue {
   }
 }
 
-/// A [Connect module](https://developer.atlassian.com/cloud/confluence/modules/admin-page/) in the same format as in the
+/// A
+/// [Connect module](https://developer.atlassian.com/cloud/confluence/modules/admin-page/)
+/// in the same format as in the
 /// [app descriptor](https://developer.atlassian.com/cloud/confluence/app-descriptor/).
 class ConnectModule {
   ConnectModule();
@@ -4809,7 +4995,8 @@ class ConnectModules {
   }
 }
 
-/// Container for content. This can be either a space (containing a page or blogpost)
+/// Container for content. This can be either a space (containing a page or
+/// blogpost)
 /// or a page/blog post (containing an attachment or comment)
 class Container {
   Container();
@@ -6416,7 +6603,8 @@ class ContentCreate {
   final String? id;
   final String title;
 
-  /// The type of the new content. Custom content types defined by apps are also supported.
+  /// The type of the new content. Custom content types defined by apps are also
+  /// supported.
   final ContentCreateType type;
 
   /// The space that the content is being created in.
@@ -6433,7 +6621,8 @@ class ContentCreate {
   /// Only one body format should be specified as the property for
   /// this object, e.g. `storage`.
   ///
-  /// Note, `editor2` format is used by Atlassian only. `anonymous_export_view` is
+  /// Note, `editor2` format is used by Atlassian only. `anonymous_export_view`
+  /// is
   /// the same as 'export_view' format but only content viewable by an anonymous
   /// user is included.
   final ContentCreateBody body;
@@ -7683,7 +7872,8 @@ class ContentRestrictionArray {
   final int limit;
   final int size;
 
-  /// This property is used by the UI to figure out whether a set of restrictions
+  /// This property is used by the UI to figure out whether a set of
+  /// restrictions
   /// has changed.
   final String restrictionsHash;
   final GenericLinks links;
@@ -7754,17 +7944,24 @@ class ContentRestrictionUpdateRestrictionsUserItem {
   /// Set to 'known'.
   final ContentRestrictionUpdateRestrictionsUserItemType type;
 
-  /// This property is no longer available and will be removed from the documentation soon.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon.
   /// Use `accountId` instead.
-  /// See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// See the
+  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? username;
 
-  /// This property is no longer available and will be removed from the documentation soon.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon.
   /// Use `accountId` instead.
-  /// See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// See the
+  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? userKey;
 
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products.
   /// For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.
   final String accountId;
 
@@ -8071,17 +8268,24 @@ class AddContentRestrictionRestrictionsUserItem {
   /// Set to 'known'.
   final AddContentRestrictionRestrictionsUserItemType type;
 
-  /// This property is no longer available and will be removed from the documentation soon.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon.
   /// Use `accountId` instead.
-  /// See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// See the
+  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? username;
 
-  /// This property is no longer available and will be removed from the documentation soon.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon.
   /// Use `accountId` instead.
-  /// See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// See the
+  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? userKey;
 
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products.
   /// For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.
   final String accountId;
 
@@ -8575,7 +8779,8 @@ class ContentTemplateCreate {
   /// Labels for the new template.
   final List<Label> labels;
 
-  /// The key for the space of the new template. Only applies to space templates.
+  /// The key for the space of the new template. Only applies to space
+  /// templates.
   /// If the spaceKey is not specified, the template will be created as a global
   /// template.
   final ContentTemplateCreateSpace? space;
@@ -8826,9 +9031,12 @@ class ContentTemplateUpdateTemplateType {
   String toString() => value;
 }
 
-/// The new version for the updated content. Set this to the current version number incremented by one, unless you are changing the status to 'draft' which must have a version number of 1.
+/// The new version for the updated content. Set this to the current version
+/// number incremented by one, unless you are changing the status to 'draft'
+/// which must have a version number of 1.
 ///
-/// To get the current version number, use [Get content by ID](#api-content-id-get) and retrieve `version.number`.
+/// To get the current version number, use
+/// [Get content by ID](#api-content-id-get) and retrieve `version.number`.
 class ContentUpdateVersion {
   /// The version number.
   final int number;
@@ -8884,8 +9092,10 @@ class ContentUpdateAncestorsItem {
 }
 
 /// The updated body of the content. Does not apply to attachments.
-/// If you are not sure how to generate these formats, you can create a page in the
-/// Confluence application, retrieve the content using [Get content](#api-content-get),
+/// If you are not sure how to generate these formats, you can create a page in
+/// the
+/// Confluence application, retrieve the content using
+/// [Get content](#api-content-get),
 /// and expand the desired content format, e.g. `expand=body.storage`.
 class ContentUpdateBody {
   final ContentBodyCreate? view;
@@ -8979,28 +9189,37 @@ class ContentUpdateBody {
 }
 
 class ContentUpdate {
-  /// The new version for the updated content. Set this to the current version number incremented by one, unless you are changing the status to 'draft' which must have a version number of 1.
+  /// The new version for the updated content. Set this to the current version
+  /// number incremented by one, unless you are changing the status to 'draft'
+  /// which must have a version number of 1.
   ///
-  /// To get the current version number, use [Get content by ID](#api-content-id-get) and retrieve `version.number`.
+  /// To get the current version number, use
+  /// [Get content by ID](#api-content-id-get) and retrieve `version.number`.
   final ContentUpdateVersion version;
 
-  /// The updated title of the content. If you are not changing this field, set this to the current `title`.
+  /// The updated title of the content. If you are not changing this field, set
+  /// this to the current `title`.
   final String title;
 
   /// The type of content. Set this to the current type of the content.
   final ContentUpdateType type;
 
-  /// The updated status of the content. Note, if you change the status of a page from
-  /// 'current' to 'draft' and it has an existing draft, the existing draft will be deleted
+  /// The updated status of the content. Note, if you change the status of a
+  /// page from
+  /// 'current' to 'draft' and it has an existing draft, the existing draft will
+  /// be deleted
   /// in favor of the updated page.
   final ContentUpdateStatus? status;
 
-  /// The new parent for the content. Only one parent content 'id' can be specified.
+  /// The new parent for the content. Only one parent content 'id' can be
+  /// specified.
   final List<ContentUpdateAncestorsItem> ancestors;
 
   /// The updated body of the content. Does not apply to attachments.
-  /// If you are not sure how to generate these formats, you can create a page in the
-  /// Confluence application, retrieve the content using [Get content](#api-content-get),
+  /// If you are not sure how to generate these formats, you can create a page
+  /// in the
+  /// Confluence application, retrieve the content using
+  /// [Get content](#api-content-get),
   /// and expand the desired content format, e.g. `expand=body.storage`.
   final ContentUpdateBody? body;
 
@@ -9404,15 +9623,19 @@ class CopyPageRequest {
   }
 }
 
-/// Defines where the page will be copied to, and can be one of the following types.
+/// Defines where the page will be copied to, and can be one of the following
+/// types.
 ///
-///   - `parent_page`: page will be copied as a child of the specified parent page
-///   - `space`: page will be copied to the specified space as a root page on the space
+///   - `parent_page`: page will be copied as a child of the specified parent
+/// page
+///   - `space`: page will be copied to the specified space as a root page on
+/// the space
 ///   - `existing_page`: page will be copied and replace the specified page
 class CopyPageRequestDestination {
   final CopyPageRequestDestinationType type;
 
-  /// The space key for `space` type, and content id for `parent_page` and `existing_page`
+  /// The space key for `space` type, and content id for `parent_page` and
+  /// `existing_page`
   final String value;
 
   CopyPageRequestDestination({required this.type, required this.value});
@@ -9839,7 +10062,8 @@ class HeaderLookAndFeel {
   }
 }
 
-/// This object represents an icon. If used as a profilePicture, this may be returned as null, depending on the user's privacy setting.
+/// This object represents an icon. If used as a profilePicture, this may be
+/// returned as null, depending on the user's privacy setting.
 class Icon {
   final String path;
   final int width;
@@ -10492,7 +10716,8 @@ class LongTaskStatusName {
 /// - `WARN_RENAME_PAGE` - Warning page is rename during copy
 /// - `WARN_IGNORE_COPY_PERMISSION` - Warning could not copy permission
 /// - `WARN_IGNORE_COPY_ATTACHMENT` - Warning could not copy attachment
-/// - `WARN_IGNORE_DELETE_PAGE` - Warning ignoring delete of a non agreed on page
+/// - `WARN_IGNORE_DELETE_PAGE` - Warning ignoring delete of a non agreed on
+/// page
 /// - `STATUS_COPIED_PAGES` - Message total pages are copied
 /// - `STATUS_COPYING_PAGES` - Message copy pages
 /// - `STATUS_RELINK_PAGES` - Message relink pages/attachments
@@ -10973,31 +11198,40 @@ class BulkUserLookupExpandable {
 class BulkUserLookup {
   final BulkUserLookupType type;
 
-  /// This property is no longer available and will be removed from the documentation soon.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon.
   /// Use `accountId` instead.
-  /// See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// See the
+  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? username;
 
-  /// This property is no longer available and will be removed from the documentation soon.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon.
   /// Use `accountId` instead.
-  /// See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// See the
+  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? userKey;
 
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products.
   /// For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.
   final String accountId;
 
   /// The account type of the user, may return empty string if unavailable.
   final String accountType;
 
-  /// The email address of the user. Depending on the user's privacy setting, this may return an empty string.
+  /// The email address of the user. Depending on the user's privacy setting,
+  /// this may return an empty string.
   final String email;
 
   /// The public name or nickname of the user. Will always contain a value.
   final String publicName;
   final Icon profilePicture;
 
-  /// The display name of the user. Depending on the user's privacy setting, this may be the same as publicName.
+  /// The display name of the user. Depending on the user's privacy setting,
+  /// this may be the same as publicName.
   final String displayName;
   final List<OperationCheckResult> operations;
   final UserDetails? details;
@@ -12577,7 +12811,8 @@ class SpaceDescriptionCreatePlain {
   }
 }
 
-/// The description of the new/updated space. Note, only the 'plain' representation
+/// The description of the new/updated space. Note, only the 'plain'
+/// representation
 /// can be used for the description when creating or updating a space.
 class SpaceDescriptionCreate {
   final SpaceDescriptionCreatePlain plain;
@@ -13503,17 +13738,24 @@ class SpaceWatchArray {
 class SpaceWatchUser {
   final String type;
 
-  /// This property is no longer available and will be removed from the documentation soon.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon.
   /// Use `accountId` instead.
-  /// See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// See the
+  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? username;
 
-  /// This property is no longer available and will be removed from the documentation soon.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon.
   /// Use `accountId` instead.
-  /// See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// See the
+  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? userKey;
 
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products.
   /// For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.
   final String accountId;
   final Icon profilePicture;
@@ -14216,31 +14458,40 @@ class UserExpandable {
 class User {
   final UserType type;
 
-  /// This property is no longer available and will be removed from the documentation soon.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon.
   /// Use `accountId` instead.
-  /// See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// See the
+  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? username;
 
-  /// This property is no longer available and will be removed from the documentation soon.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon.
   /// Use `accountId` instead.
-  /// See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// See the
+  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? userKey;
 
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products.
   /// For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.
   final String accountId;
 
   /// The account type of the user, may return empty string if unavailable.
   final UserAccountType accountType;
 
-  /// The email address of the user. Depending on the user's privacy setting, this may return an empty string.
+  /// The email address of the user. Depending on the user's privacy setting,
+  /// this may return an empty string.
   final String email;
 
   /// The public name or nickname of the user. Will always contain a value.
   final String publicName;
   final Icon profilePicture;
 
-  /// The display name of the user. Depending on the user's privacy setting, this may be the same as publicName.
+  /// The display name of the user. Depending on the user's privacy setting,
+  /// this may be the same as publicName.
   final String displayName;
   final List<OperationCheckResult> operations;
   final UserDetails? details;
@@ -14586,17 +14837,20 @@ class UserArrayWithLinks {
 }
 
 class UserDetailsBusiness {
-  /// This property has been deprecated due to privacy changes. There is no replacement. See the
+  /// This property has been deprecated due to privacy changes. There is no
+  /// replacement. See the
   /// [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
   /// for details.
   final String? position;
 
-  /// This property has been deprecated due to privacy changes. There is no replacement. See the
+  /// This property has been deprecated due to privacy changes. There is no
+  /// replacement. See the
   /// [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
   /// for details.
   final String? department;
 
-  /// This property has been deprecated due to privacy changes. There is no replacement. See the
+  /// This property has been deprecated due to privacy changes. There is no
+  /// replacement. See the
   /// [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
   /// for details.
   final String? location;
@@ -14640,22 +14894,26 @@ class UserDetailsBusiness {
 }
 
 class UserDetailsPersonal {
-  /// This property has been deprecated due to privacy changes. There is no replacement. See the
+  /// This property has been deprecated due to privacy changes. There is no
+  /// replacement. See the
   /// [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
   /// for details.
   final String? phone;
 
-  /// This property has been deprecated due to privacy changes. There is no replacement. See the
+  /// This property has been deprecated due to privacy changes. There is no
+  /// replacement. See the
   /// [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
   /// for details.
   final String? im;
 
-  /// This property has been deprecated due to privacy changes. There is no replacement. See the
+  /// This property has been deprecated due to privacy changes. There is no
+  /// replacement. See the
   /// [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
   /// for details.
   final String? website;
 
-  /// This property has been deprecated due to privacy changes. Use the `User.email` property instead. See the
+  /// This property has been deprecated due to privacy changes. Use the
+  /// `User.email` property instead. See the
   /// [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
   /// for details.
   final String? email;
@@ -15208,17 +15466,24 @@ class WatchArray {
 class WatchUser {
   final String type;
 
-  /// This property is no longer available and will be removed from the documentation soon.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon.
   /// Use `accountId` instead.
-  /// See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// See the
+  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? username;
 
-  /// This property is no longer available and will be removed from the documentation soon.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon.
   /// Use `accountId` instead.
-  /// See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// See the
+  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? userKey;
 
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products.
   /// For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.
   final String accountId;
   final Icon profilePicture;
@@ -15478,7 +15743,8 @@ class WebResourceDependencies {
 class PermissionSubject {
   final PermissionSubjectType type;
 
-  /// for `type=user`, identifier should be user's accountId or `anonymous` for anonymous users
+  /// for `type=user`, identifier should be user's accountId or `anonymous` for
+  /// anonymous users
   ///
   /// for `type=group`, identifier should be name of the group or groupId
   final String identifier;
@@ -15538,7 +15804,8 @@ class PermissionSubjectType {
 class PermissionSubjectWithGroupId {
   final PermissionSubjectWithGroupIdType type;
 
-  /// for `type=user`, identifier should be user's accountId or `anonymous` for anonymous users
+  /// for `type=user`, identifier should be user's accountId or `anonymous` for
+  /// anonymous users
   ///
   /// for `type=group`, identifier should be ID of the group
   final String identifier;
@@ -15707,7 +15974,8 @@ class SpacePermissionV2OperationTarget {
 /// This object represents a single space permission. Permissions consist of
 /// at least one operation object with an accompanying subjects object.
 ///
-/// The following combinations of `operation.key` and `operation.target` values are
+/// The following combinations of `operation.key` and `operation.target` values
+/// are
 /// valid for the `operation` object:
 /// ``` bash
 /// 'create': 'page', 'blogpost', 'comment', 'attachment'
@@ -15833,7 +16101,8 @@ class ContentPermissionRequestOperation {
   String toString() => value;
 }
 
-/// This object represents the response for the content permission check API. If the user or group does not have
+/// This object represents the response for the content permission check API. If
+/// the user or group does not have
 /// permissions, the following errors may be returned:
 ///
 /// - Group does not have permission to the space

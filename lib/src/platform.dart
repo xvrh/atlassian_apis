@@ -11,28 +11,40 @@ class PlatformApi {
 
   factory PlatformApi(Client client) => PlatformApi._(ApiClient(client));
 
-  /// This resource represents application roles. Use it to get details of an application role or all application roles.
+  /// This resource represents application roles. Use it to get details of an
+  /// application role or all application roles.
   late final applicationRoles = ApplicationRolesApi._(_client);
 
-  /// This resource represents audits that record activities undertaken in Jira. Use it to get a list of audit records.
+  /// This resource represents audits that record activities undertaken in Jira.
+  /// Use it to get a list of audit records.
   late final auditRecords = AuditRecordsApi._(_client);
 
-  /// This resource represents system and custom avatars. Use it to obtain the details of system or custom avatars as well as add and remove avatars from a project or issue type.
+  /// This resource represents system and custom avatars. Use it to obtain the
+  /// details of system or custom avatars as well as add and remove avatars from
+  /// a project or issue type.
   late final avatars = AvatarsApi._(_client);
 
-  /// This resource represents dashboards. Use it to obtain the details of dashboards as well as add and remove item properties from dashboards.
+  /// This resource represents dashboards. Use it to obtain the details of
+  /// dashboards as well as add and remove item properties from dashboards.
   late final dashboards = DashboardsApi._(_client);
 
-  /// This resource represents [filters](https://confluence.atlassian.com/x/eQiiLQ). Use it to get, create, update, or delete filters. Also use it to configure the columns for a filter and set favorite filters.
+  /// This resource represents
+  /// [filters](https://confluence.atlassian.com/x/eQiiLQ). Use it to get,
+  /// create, update, or delete filters. Also use it to configure the columns
+  /// for a filter and set favorite filters.
   late final filters = FiltersApi._(_client);
 
-  /// This resource represents options for sharing [filters](#api-group-Filters). Use it to get share scopes as well as add and remove share scopes from filters.
+  /// This resource represents options for sharing
+  /// [filters](#api-group-Filters). Use it to get share scopes as well as add
+  /// and remove share scopes from filters.
   late final filterSharing = FilterSharingApi._(_client);
 
-  /// This resource represents a list of users and a list of groups. Use it to obtain the details to populate user and group picker suggestions list.
+  /// This resource represents a list of users and a list of groups. Use it to
+  /// obtain the details to populate user and group picker suggestions list.
   late final groupAndUserPicker = GroupAndUserPickerApi._(_client);
 
-  /// This resource represents groups of users. Use it to get, create, find, and delete groups as well as add and remove users from groups.
+  /// This resource represents groups of users. Use it to get, create, find, and
+  /// delete groups as well as add and remove users from groups.
   late final groups = GroupsApi._(_client);
 
   /// This resource represents Jira issues. Use it to:
@@ -47,7 +59,10 @@ class PlatformApi {
   ///  *  transition an issue.
   late final issues = IssuesApi._(_client);
 
-  /// This resource represents issue attachments and the attachment settings for Jira. Use it to get the metadata for an attachment, delete an attachment, and view the metadata for the contents of an attachment. Also, use it to get the attachment settings for Jira.
+  /// This resource represents issue attachments and the attachment settings for
+  /// Jira. Use it to get the metadata for an attachment, delete an attachment,
+  /// and view the metadata for the contents of an attachment. Also, use it to
+  /// get the attachment settings for Jira.
   late final issueAttachments = IssueAttachmentsApi._(_client);
 
   /// This resource represents issue comments. Use it to:
@@ -57,13 +72,20 @@ class PlatformApi {
   ///  *  get a list of comments by comment ID.
   late final issueComments = IssueCommentsApi._(_client);
 
-  /// This resource represents [issue comment](#api-group-Issue-comments) properties, which provides for storing custom data against an issue comment. Use is to get, set, and delete issue comment properties as well as obtain the keys of all properties on a comment. Comment properties are a type of [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
+  /// This resource represents [issue comment](#api-group-Issue-comments)
+  /// properties, which provides for storing custom data against an issue
+  /// comment. Use is to get, set, and delete issue comment properties as well
+  /// as obtain the keys of all properties on a comment. Comment properties are
+  /// a type of
+  /// [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
   late final issueCommentProperties = IssueCommentPropertiesApi._(_client);
 
-  /// This resource represents issue fields, both system and custom fields. Use it to get fields, field configurations, and create custom fields.
+  /// This resource represents issue fields, both system and custom fields. Use
+  /// it to get fields, field configurations, and create custom fields.
   late final issueFields = IssueFieldsApi._(_client);
 
-  /// This resource represents issue field configurations. Use it to get, set, and delete field configurations and field configuration schemes.
+  /// This resource represents issue field configurations. Use it to get, set,
+  /// and delete field configurations and field configuration schemes.
   late final issueFieldConfigurations = IssueFieldConfigurationsApi._(_client);
 
   /// This resource represents issue custom field contexts. Use it to:
@@ -76,7 +98,9 @@ class PlatformApi {
   ///  *  add issue types to custom field contexts.
   late final issueCustomFieldContexts = IssueCustomFieldContextsApi._(_client);
 
-  /// This resource represents custom issue field select list options created in Jira or using the REST API. This resource supports the following field types:
+  /// This resource represents custom issue field select list options created in
+  /// Jira or using the REST API. This resource supports the following field
+  /// types:
   ///
   ///  *  Checkboxes.
   ///  *  Radio Buttons.
@@ -84,54 +108,94 @@ class PlatformApi {
   ///  *  Select List (multiple choices).
   ///  *  Select List (cascading).
   ///
-  /// See [Issue custom field options (apps)](#api-group-Issue-custom-field-options--apps-) to manipulate custom issue field select list options created by a Connect app.
+  /// See
+  /// [Issue custom field options (apps)](#api-group-Issue-custom-field-options--apps-)
+  /// to manipulate custom issue field select list options created by a Connect
+  /// app.
   ///
-  /// Use this resource to retrieve, create, update, order, and delete custom field options.
+  /// Use this resource to retrieve, create, update, order, and delete custom
+  /// field options.
   late final issueCustomFieldOptions = IssueCustomFieldOptionsApi._(_client);
 
-  /// This resource represents custom issue field select list options created by a Connect app. See [Issue custom field options](#api-group-Issue-custom-field-options) to manipulate options created in Jira or using the REST API.
+  /// This resource represents custom issue field select list options created by
+  /// a Connect app. See
+  /// [Issue custom field options](#api-group-Issue-custom-field-options) to
+  /// manipulate options created in Jira or using the REST API.
   ///
-  /// A select list issue field is a type of [issue field](https://developer.atlassian.com/cloud/jira/platform/modules/issue-field/) that enables a user to select an option from a list. Use this resource to add, remove, and update the options of a select list issue field.
+  /// A select list issue field is a type of
+  /// [issue field](https://developer.atlassian.com/cloud/jira/platform/modules/issue-field/)
+  /// that enables a user to select an option from a list. Use this resource to
+  /// add, remove, and update the options of a select list issue field.
   late final issueCustomFieldOptionsApps =
       IssueCustomFieldOptionsAppsApi._(_client);
 
-  /// This resource represents links between issues. Use it to get, create, and delete links between issues.
+  /// This resource represents links between issues. Use it to get, create, and
+  /// delete links between issues.
   ///
-  /// To use this resource, the site must have [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
+  /// To use this resource, the site must have
+  /// [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
   late final issueLinks = IssueLinksApi._(_client);
 
-  /// This resource represents [issue link](#api-group-Issue-links) types. Use it to get, create, update, and delete link issue types as well as get lists of all link issue types.
+  /// This resource represents [issue link](#api-group-Issue-links) types. Use
+  /// it to get, create, update, and delete link issue types as well as get
+  /// lists of all link issue types.
   ///
-  /// To use this resource, the site must have [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
+  /// To use this resource, the site must have
+  /// [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
   late final issueLinkTypes = IssueLinkTypesApi._(_client);
 
-  /// This resource represents issue navigator settings. Use it to get and set issue navigator default columns.
+  /// This resource represents issue navigator settings. Use it to get and set
+  /// issue navigator default columns.
   late final issueNavigatorSettings = IssueNavigatorSettingsApi._(_client);
 
-  /// This resource represents notification schemes, lists of events and the recipients who will receive notifications for those events. Use this resource to get details of a notification scheme and a list of notification schemes.
+  /// This resource represents notification schemes, lists of events and the
+  /// recipients who will receive notifications for those events. Use this
+  /// resource to get details of a notification scheme and a list of
+  /// notification schemes.
   late final issueNotificationSchemes = IssueNotificationSchemesApi._(_client);
 
-  /// This resource represents issue priorities. Use it to obtain a list of issue priorities and details for individual issue priorities.
+  /// This resource represents issue priorities. Use it to obtain a list of
+  /// issue priorities and details for individual issue priorities.
   late final issuePriorities = IssuePrioritiesApi._(_client);
 
-  /// This resource represents [issue](#api-group-Issues) properties, which provides for storing custom data against an issue. Use it to get, set, and delete issue properties as well as obtain details of all properties on an issue. Operations to bulk update and delete issue properties are also provided. Issue properties are a type of [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
+  /// This resource represents [issue](#api-group-Issues) properties, which
+  /// provides for storing custom data against an issue. Use it to get, set, and
+  /// delete issue properties as well as obtain details of all properties on an
+  /// issue. Operations to bulk update and delete issue properties are also
+  /// provided. Issue properties are a type of
+  /// [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
   late final issueProperties = IssuePropertiesApi._(_client);
 
-  /// This resource represents remote issue links, a way of linking Jira to information in other systems. Use this resource to get, create, update, and delete remote issue links either by ID or global ID. The global ID provides a way of accessing remote issue links using information about the item's remote system host and remote system identifier.
+  /// This resource represents remote issue links, a way of linking Jira to
+  /// information in other systems. Use this resource to get, create, update,
+  /// and delete remote issue links either by ID or global ID. The global ID
+  /// provides a way of accessing remote issue links using information about the
+  /// item's remote system host and remote system identifier.
   late final issueRemoteLinks = IssueRemoteLinksApi._(_client);
 
-  /// This resource represents issue resolution values. Use it to obtain a list of all issue resolution values and the details of individual resolution values.
+  /// This resource represents issue resolution values. Use it to obtain a list
+  /// of all issue resolution values and the details of individual resolution
+  /// values.
   late final issueResolutions = IssueResolutionsApi._(_client);
 
-  /// This resource represents various ways to search for issues. Use it to search for issues with a JQL query and find issues to populate an issue picker.
+  /// This resource represents various ways to search for issues. Use it to
+  /// search for issues with a JQL query and find issues to populate an issue
+  /// picker.
   late final issueSearch = IssueSearchApi._(_client);
 
-  /// This resource represents issue security levels. Use it to obtain the details of any issue security level. For more information about issue security levels, see [Configuring issue-level security](https://confluence.atlassian.com/x/J4lKLg).
+  /// This resource represents issue security levels. Use it to obtain the
+  /// details of any issue security level. For more information about issue
+  /// security levels, see
+  /// [Configuring issue-level security](https://confluence.atlassian.com/x/J4lKLg).
   late final issueSecurityLevel = IssueSecurityLevelApi._(_client);
 
-  /// This resource represents issue security schemes. Use it to get an issue security scheme or list of issues security schemes.
+  /// This resource represents issue security schemes. Use it to get an issue
+  /// security scheme or list of issues security schemes.
   ///
-  /// Issue security schemes control which users or groups of users can view an issue. When an issue security scheme is associated with a project, its security levels can be applied to issues in that project. Sub-tasks also inherit the security level of their parent issue.
+  /// Issue security schemes control which users or groups of users can view an
+  /// issue. When an issue security scheme is associated with a project, its
+  /// security levels can be applied to issues in that project. Sub-tasks also
+  /// inherit the security level of their parent issue.
   late final issueSecuritySchemes = IssueSecuritySchemesApi._(_client);
 
   /// This resource represents issues types. Use it to:
@@ -142,7 +206,8 @@ class PlatformApi {
   ///  *  set an avatar for an issue type.
   late final issueTypes = IssueTypesApi._(_client);
 
-  /// This resource represents issue type schemes in classic projects. Use it to:
+  /// This resource represents issue type schemes in classic projects. Use it
+  /// to:
   ///
   ///  *  get issue type schemes and a list of the projects that use them.
   ///  *  associate issue type schemes with projects.
@@ -154,23 +219,33 @@ class PlatformApi {
 
   /// This resource represents issue type screen schemes. Use it to:
   ///
-  ///  *  get issue type screen schemes and a list of the projects that use them.
+  ///  *  get issue type screen schemes and a list of the projects that use
+  /// them.
   ///  *  create issue type screen schemes.
   ///  *  update issue type screen schemes.
   ///  *  delete issue type screen schemes.
   ///  *  associate issue type screen schemes with projects.
-  ///  *  append issue type to screen scheme mappings to issue type screen schemes.
-  ///  *  remove issue type to screen scheme mappings from issue type screen schemes.
+  ///  *  append issue type to screen scheme mappings to issue type screen
+  /// schemes.
+  ///  *  remove issue type to screen scheme mappings from issue type screen
+  /// schemes.
   ///  *  update default screen scheme of issue type screen scheme.
   late final issueTypeScreenSchemes = IssueTypeScreenSchemesApi._(_client);
 
-  /// This resource represents [issue type](#api-group-Issue-types) properties, which provides for storing custom data against an issue type. Use it to get, create, and delete issue type properties as well as obtain the keys of all properties on a issues type. Issue type properties are a type of [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
+  /// This resource represents [issue type](#api-group-Issue-types) properties,
+  /// which provides for storing custom data against an issue type. Use it to
+  /// get, create, and delete issue type properties as well as obtain the keys
+  /// of all properties on a issues type. Issue type properties are a type of
+  /// [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
   late final issueTypeProperties = IssueTypePropertiesApi._(_client);
 
-  /// This resource represents votes cast by users on an issue. Use it to get details of votes on an issue as well as cast and withdrawal votes.
+  /// This resource represents votes cast by users on an issue. Use it to get
+  /// details of votes on an issue as well as cast and withdrawal votes.
   late final issueVotes = IssueVotesApi._(_client);
 
-  /// This resource represents users watching an issue. Use it to get details of users watching an issue as well as start and stop a user watching an issue.
+  /// This resource represents users watching an issue. Use it to get details of
+  /// users watching an issue as well as start and stop a user watching an
+  /// issue.
   late final issueWatchers = IssueWatchersApi._(_client);
 
   /// This resource represents issue worklogs. Use it to:
@@ -179,74 +254,122 @@ class PlatformApi {
   ///  *  obtain lists of updated or deleted worklogs.
   late final issueWorklogs = IssueWorklogsApi._(_client);
 
-  /// This resource represents [issue worklog](#api-group-Issue-worklogs) properties, which provides for storing custom data against an issue worklog. Use it to get, create, and delete issue worklog properties as well as obtain the keys of all properties on a issue worklog. Issue worklog properties are a type of [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
+  /// This resource represents [issue worklog](#api-group-Issue-worklogs)
+  /// properties, which provides for storing custom data against an issue
+  /// worklog. Use it to get, create, and delete issue worklog properties as
+  /// well as obtain the keys of all properties on a issue worklog. Issue
+  /// worklog properties are a type of
+  /// [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
   late final issueWorklogProperties = IssueWorklogPropertiesApi._(_client);
 
-  /// This resource is a collection of operations for [Jira expressions](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/).
+  /// This resource is a collection of operations for
+  /// [Jira expressions](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/).
   late final jiraExpressions = JiraExpressionsApi._(_client);
 
-  /// This resource represents various settings in Jira. Use it to get and update Jira settings and properties.
+  /// This resource represents various settings in Jira. Use it to get and
+  /// update Jira settings and properties.
   late final jiraSettings = JiraSettingsApi._(_client);
 
-  /// This resource represents JQL search auto-complete details. Use it to obtain JQL search auto-complete data and suggestions for use in programmatic construction of queries or custom query builders. It also provides an operation to convert one or more JQL queries with user identifiers (username or user key) to equivalent JQL queries with account IDs.
+  /// This resource represents JQL search auto-complete details. Use it to
+  /// obtain JQL search auto-complete data and suggestions for use in
+  /// programmatic construction of queries or custom query builders. It also
+  /// provides an operation to convert one or more JQL queries with user
+  /// identifiers (username or user key) to equivalent JQL queries with account
+  /// IDs.
   late final jql = JQLApi._(_client);
 
-  /// This resource represents available labels. Use it to get available labels for the global label field.
+  /// This resource represents available labels. Use it to get available labels
+  /// for the global label field.
   late final labels = LabelsApi._(_client);
 
-  /// This resource represents information about the current user, such as basic details, group membership, application roles, preferences, and locale. Use it to get, create, update, and delete (restore default) values of the user's preferences and locale.
+  /// This resource represents information about the current user, such as basic
+  /// details, group membership, application roles, preferences, and locale. Use
+  /// it to get, create, update, and delete (restore default) values of the
+  /// user's preferences and locale.
   late final myself = MyselfApi._(_client);
 
-  /// This resource represents permissions. Use it to obtain details of all permissions and determine whether the user has certain permissions.
+  /// This resource represents permissions. Use it to obtain details of all
+  /// permissions and determine whether the user has certain permissions.
   late final permissions = PermissionsApi._(_client);
 
-  /// This resource represents permission schemes. Use it to get, create, update, and delete permission schemes as well as get, create, update, and delete details of the permissions granted in those schemes.
+  /// This resource represents permission schemes. Use it to get, create,
+  /// update, and delete permission schemes as well as get, create, update, and
+  /// delete details of the permissions granted in those schemes.
   late final permissionSchemes = PermissionSchemesApi._(_client);
 
-  /// This resource represents projects. Use this resource to get, create, update, and delete projects. Also get statuses available to a project, a project's notification schemes, and update a project's type.
+  /// This resource represents projects. Use this resource to get, create,
+  /// update, and delete projects. Also get statuses available to a project, a
+  /// project's notification schemes, and update a project's type.
   late final projects = ProjectsApi._(_client);
 
-  /// This resource represents avatars associated with a project. Use it to get, load, set, and remove project avatars.
+  /// This resource represents avatars associated with a project. Use it to get,
+  /// load, set, and remove project avatars.
   late final projectAvatars = ProjectAvatarsApi._(_client);
 
-  /// This resource represents project categories. Use it to create, update, and delete project categories as well as obtain a list of all project categories and details of individual categories. For more information on managing project categories, see [Adding, assigning, and deleting project categories](https://confluence.atlassian.com/x/-A5WMg).
+  /// This resource represents project categories. Use it to create, update, and
+  /// delete project categories as well as obtain a list of all project
+  /// categories and details of individual categories. For more information on
+  /// managing project categories, see
+  /// [Adding, assigning, and deleting project categories](https://confluence.atlassian.com/x/-A5WMg).
   late final projectCategories = ProjectCategoriesApi._(_client);
 
-  /// This resource represents project components. Uses to get, create, update, and delete project components. Also get components for project and get a count of issues by component.
+  /// This resource represents project components. Uses to get, create, update,
+  /// and delete project components. Also get components for project and get a
+  /// count of issues by component.
   late final projectComponents = ProjectComponentsApi._(_client);
 
-  /// This resource represents the email address used to send a project's notifications. Use this resource to get and set the [project's sender email address](https://confluence.atlassian.com/x/dolKLg).
+  /// This resource represents the email address used to send a project's
+  /// notifications. Use this resource to get and set the
+  /// [project's sender email address](https://confluence.atlassian.com/x/dolKLg).
   late final projectEmail = ProjectEmailApi._(_client);
 
   /// This resource provides validation for project keys and names.
   late final projectKeyAndNameValidation =
       ProjectKeyAndNameValidationApi._(_client);
 
-  /// This resource represents permission schemes for a project. Use this resource to:
+  /// This resource represents permission schemes for a project. Use this
+  /// resource to:
   ///
-  ///  *  get details of a project's issue security levels available to the calling user.
-  ///  *  get the permission scheme associated with the project or assign different permission scheme to the project.
+  ///  *  get details of a project's issue security levels available to the
+  /// calling user.
+  ///  *  get the permission scheme associated with the project or assign
+  /// different permission scheme to the project.
   ///  *  get details of a project's issue security scheme.
   ///
-  /// See [Managing project permissions](https://confluence.atlassian.com/x/yodKLg) for more information about permission schemes.
+  /// See
+  /// [Managing project permissions](https://confluence.atlassian.com/x/yodKLg)
+  /// for more information about permission schemes.
   late final projectPermissionSchemes = ProjectPermissionSchemesApi._(_client);
 
-  /// This resource represents [project](#api-group-Projects) properties, which provides for storing custom data against a project. Use it to get, create, and delete project properties as well as get a list of property keys for a project. Project properties are a type of [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
+  /// This resource represents [project](#api-group-Projects) properties, which
+  /// provides for storing custom data against a project. Use it to get, create,
+  /// and delete project properties as well as get a list of property keys for a
+  /// project. Project properties are a type of
+  /// [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
   late final projectProperties = ProjectPropertiesApi._(_client);
 
-  /// This resource represents the roles that users can play in projects. Use this resource to get, create, update, and delete project roles.
+  /// This resource represents the roles that users can play in projects. Use
+  /// this resource to get, create, update, and delete project roles.
   late final projectRoles = ProjectRolesApi._(_client);
 
-  /// This resource represents the users assigned to [project roles](#api-group-Issue-comments). Use this resource to get, add, and remove default users from project roles. Also use this resource to add and remove users from a project role associated with a project.
+  /// This resource represents the users assigned to
+  /// [project roles](#api-group-Issue-comments). Use this resource to get, add,
+  /// and remove default users from project roles. Also use this resource to add
+  /// and remove users from a project role associated with a project.
   late final projectRoleActors = ProjectRoleActorsApi._(_client);
 
-  /// This resource represents project types. Use it to obtain a list of all project types, a list of project types accessible to the calling user, and details of a project type.
+  /// This resource represents project types. Use it to obtain a list of all
+  /// project types, a list of project types accessible to the calling user, and
+  /// details of a project type.
   late final projectTypes = ProjectTypesApi._(_client);
 
-  /// This resource represents project versions. Use it to get, get lists of, create, update, move, merge, and delete project versions. This resource also provides counts of issues by version.
+  /// This resource represents project versions. Use it to get, get lists of,
+  /// create, update, move, merge, and delete project versions. This resource
+  /// also provides counts of issues by version.
   late final projectVersions = ProjectVersionsApi._(_client);
 
-  /// This resource represents the screens used to record issue details. Use this resource to:
+  /// This resource represents the screens used to record issue details. Use
+  /// this resource to:
   ///
   ///  *  get details of all screens.
   ///  *  get details of all the fields available for use on screens.
@@ -256,22 +379,31 @@ class PlatformApi {
   ///  *  add a field to the default screen.
   late final screens = ScreensApi._(_client);
 
-  /// This resource represents the screen tabs used to record issue details. Use this resource to get, create, update, move, and delete screen tabs.
+  /// This resource represents the screen tabs used to record issue details. Use
+  /// this resource to get, create, update, move, and delete screen tabs.
   late final screenTabs = ScreenTabsApi._(_client);
 
-  /// This resource represents the screen tab fields used to record issue details. Use this resource to get, add, move, and remove fields from screen tabs.
+  /// This resource represents the screen tab fields used to record issue
+  /// details. Use this resource to get, add, move, and remove fields from
+  /// screen tabs.
   late final screenTabFields = ScreenTabFieldsApi._(_client);
 
-  /// This resource represents screen schemes in classic projects. Use it to get, create, update, and delete screen schemes.
+  /// This resource represents screen schemes in classic projects. Use it to
+  /// get, create, update, and delete screen schemes.
   late final screenSchemes = ScreenSchemesApi._(_client);
 
   /// This resource provides information about the Jira instance.
   late final serverInfo = ServerInfoApi._(_client);
 
-  /// This resource represents a [long-running asynchronous tasks](#async-operations). Use it to obtain details about the progress of a long-running task or cancel a long-running task.
+  /// This resource represents a
+  /// [long-running asynchronous tasks](#async-operations). Use it to obtain
+  /// details about the progress of a long-running task or cancel a long-running
+  /// task.
   late final tasks = TasksApi._(_client);
 
-  /// This resource represents time tracking and time tracking providers. Use it to get and set the time tracking provider, get and set the time tracking options, and disable time tracking.
+  /// This resource represents time tracking and time tracking providers. Use it
+  /// to get and set the time tracking provider, get and set the time tracking
+  /// options, and disable time tracking.
   late final timeTracking = TimeTrackingApi._(_client);
 
   /// This resource represent users. Use this resource to:
@@ -282,63 +414,112 @@ class PlatformApi {
   ///  *  get a list of user account IDs for a list of usernames or user keys.
   late final users = UsersApi._(_client);
 
-  /// This resource represents [user](#api-group-Users) properties and provides for storing custom data against a user. Use it to get, create, and delete user properties as well as get a list of property keys for a user. This resourse is designed for integrations and apps to store per-user data and settings. This enables data used to customized the user experience to be kept in the Jira Cloud instance's database. User properties are a type of [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
+  /// This resource represents [user](#api-group-Users) properties and provides
+  /// for storing custom data against a user. Use it to get, create, and delete
+  /// user properties as well as get a list of property keys for a user. This
+  /// resourse is designed for integrations and apps to store per-user data and
+  /// settings. This enables data used to customized the user experience to be
+  /// kept in the Jira Cloud instance's database. User properties are a type of
+  /// [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
   ///
-  /// This resource does not access the [user properties](https://confluence.atlassian.com/x/8YxjL) created and maintained in Jira.
+  /// This resource does not access the
+  /// [user properties](https://confluence.atlassian.com/x/8YxjL) created and
+  /// maintained in Jira.
   late final userProperties = UserPropertiesApi._(_client);
 
-  /// This resource represents various ways to search for and find users. Use it to obtain list of users including users assignable to projects and issues, users with permissions, user lists for pickup fields, and user lists generated using structured queries. Note that the operations in this resource only return users found within the first 1000 users.
+  /// This resource represents various ways to search for and find users. Use it
+  /// to obtain list of users including users assignable to projects and issues,
+  /// users with permissions, user lists for pickup fields, and user lists
+  /// generated using structured queries. Note that the operations in this
+  /// resource only return users found within the first 1000 users.
   late final userSearch = UserSearchApi._(_client);
 
-  /// This resource represents webhooks. Webhooks are calls sent to a URL when an event occurs in Jira for issues specified by a JQL query. Only Connect apps can register webhooks. For more information, see [Webhooks](https://developer.atlassian.com/cloud/jira/platform/webhooks/#registering-a-webhook-via-the-jira-rest-api-for-connect-apps).
+  /// This resource represents webhooks. Webhooks are calls sent to a URL when
+  /// an event occurs in Jira for issues specified by a JQL query. Only Connect
+  /// apps can register webhooks. For more information, see
+  /// [Webhooks](https://developer.atlassian.com/cloud/jira/platform/webhooks/#registering-a-webhook-via-the-jira-rest-api-for-connect-apps).
   late final webhooks = WebhooksApi._(_client);
 
   /// This resource represents workflows. Use it to get a list of workflows.
   late final workflows = WorkflowsApi._(_client);
 
-  /// This resource represents workflow transition rules. Workflow transition rules define a Connect app routine, such as a [workflow post functions](https://developer.atlassian.com/cloud/jira/platform/modules/workflow-post-function/) that is executed in association with the workflow. Use this resource to read and modify configuration of workflow transition rules.
+  /// This resource represents workflow transition rules. Workflow transition
+  /// rules define a Connect app routine, such as a
+  /// [workflow post functions](https://developer.atlassian.com/cloud/jira/platform/modules/workflow-post-function/)
+  /// that is executed in association with the workflow. Use this resource to
+  /// read and modify configuration of workflow transition rules.
   late final workflowTransitionRules = WorkflowTransitionRulesApi._(_client);
 
-  /// This resource represents workflow schemes. Use this resource to manage workflow schemes and the workflow scheme's workflows and issue types.
+  /// This resource represents workflow schemes. Use this resource to manage
+  /// workflow schemes and the workflow scheme's workflows and issue types.
   ///
-  /// A workflow scheme maps issue types to workflows. A workflow scheme can be associated with one or more projects, which enables the projects to use the workflow-issue type mappings.
+  /// A workflow scheme maps issue types to workflows. A workflow scheme can be
+  /// associated with one or more projects, which enables the projects to use
+  /// the workflow-issue type mappings.
   ///
-  /// Active workflow schemes (workflow schemes that are used by projects) cannot be edited. When an active workflow scheme is edited, a draft copy of the scheme is created. The draft workflow scheme is then be edited and published (replacing the active scheme).
+  /// Active workflow schemes (workflow schemes that are used by projects)
+  /// cannot be edited. When an active workflow scheme is edited, a draft copy
+  /// of the scheme is created. The draft workflow scheme is then be edited and
+  /// published (replacing the active scheme).
   ///
-  /// See [Configuring workflow schemes](https://confluence.atlassian.com/x/tohKLg) for more information.
+  /// See
+  /// [Configuring workflow schemes](https://confluence.atlassian.com/x/tohKLg)
+  /// for more information.
   late final workflowSchemes = WorkflowSchemesApi._(_client);
 
-  /// This resource represents the associations between workflow schemes and projects.
+  /// This resource represents the associations between workflow schemes and
+  /// projects.
   ///
-  /// For more information, see [Managing your workflows](https://confluence.atlassian.com/x/q4hKLg).
+  /// For more information, see
+  /// [Managing your workflows](https://confluence.atlassian.com/x/q4hKLg).
   late final workflowSchemeProjectAssociations =
       WorkflowSchemeProjectAssociationsApi._(_client);
 
-  /// This resource represents draft workflow schemes. Use this resource to manage drafts of workflow schemes.
+  /// This resource represents draft workflow schemes. Use this resource to
+  /// manage drafts of workflow schemes.
   ///
-  /// A workflow scheme maps issue types to workflows. A workflow scheme can be associated with one or more projects, which enables the projects to use the workflow-issue type mappings.
+  /// A workflow scheme maps issue types to workflows. A workflow scheme can be
+  /// associated with one or more projects, which enables the projects to use
+  /// the workflow-issue type mappings.
   ///
-  /// Active workflow schemes (workflow schemes that are used by projects) cannot be edited. Editing an active workflow scheme creates a draft copy of the scheme. The draft workflow scheme can then be edited and published (replacing the active scheme).
+  /// Active workflow schemes (workflow schemes that are used by projects)
+  /// cannot be edited. Editing an active workflow scheme creates a draft copy
+  /// of the scheme. The draft workflow scheme can then be edited and published
+  /// (replacing the active scheme).
   ///
-  /// See [Configuring workflow schemes](https://confluence.atlassian.com/x/tohKLg) for more information.
+  /// See
+  /// [Configuring workflow schemes](https://confluence.atlassian.com/x/tohKLg)
+  /// for more information.
   late final workflowSchemeDrafts = WorkflowSchemeDraftsApi._(_client);
 
-  /// This resource represents issue workflow statuses. Use it to obtain a list of all statuses associated with workflows and the details of a status.
+  /// This resource represents issue workflow statuses. Use it to obtain a list
+  /// of all statuses associated with workflows and the details of a status.
   late final workflowStatuses = WorkflowStatusesApi._(_client);
 
-  /// This resource represents status categories. Use it to obtain a list of all status categories and the details of a category. Status categories provided a mechanism for categorizing [statuses](#api-group-Workflow-statuses).
+  /// This resource represents status categories. Use it to obtain a list of all
+  /// status categories and the details of a category. Status categories
+  /// provided a mechanism for categorizing
+  /// [statuses](#api-group-Workflow-statuses).
   late final workflowStatusCategories = WorkflowStatusCategoriesApi._(_client);
 
-  /// This resource represents workflow transition properties, which provides for storing custom data against a workflow transition. Use it to get, create, and delete workflow transition properties as well as get a list of property keys for a workflow transition. Workflow transition properties are a type of [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
+  /// This resource represents workflow transition properties, which provides
+  /// for storing custom data against a workflow transition. Use it to get,
+  /// create, and delete workflow transition properties as well as get a list of
+  /// property keys for a workflow transition. Workflow transition properties
+  /// are a type of
+  /// [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
   late final workflowTransitionProperties =
       WorkflowTransitionPropertiesApi._(_client);
 
-  /// This resource represents app properties. Use it to store arbitrary data for your
+  /// This resource represents app properties. Use it to store arbitrary data
+  /// for your
   /// [Connect app](https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/#atlassian-connect).
   late final appProperties = AppPropertiesApi._(_client);
 
-  /// This resource represents [modules registered dynamically](https://developer.atlassian.com/cloud/jira/platform/dynamic-modules/)
-  /// by [Connect apps](https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/#atlassian-connect).
+  /// This resource represents
+  /// [modules registered dynamically](https://developer.atlassian.com/cloud/jira/platform/dynamic-modules/)
+  /// by
+  /// [Connect apps](https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/#atlassian-connect).
   late final dynamicModules = DynamicModulesApi._(_client);
 
   void close() => _client.close();
@@ -351,9 +532,13 @@ class ApplicationRolesApi {
 
   ApplicationRolesApi._(this._client);
 
-  /// Returns all application roles. In Jira, application roles are managed using the [Application access configuration](https://confluence.atlassian.com/x/3YxjL) page.
+  /// Returns all application roles. In Jira, application roles are managed
+  /// using the
+  /// [Application access configuration](https://confluence.atlassian.com/x/3YxjL)
+  /// page.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<List<ApplicationRole>> getAllApplicationRoles() async {
     return (await _client.send(
       'get',
@@ -366,7 +551,8 @@ class ApplicationRolesApi {
 
   /// Returns an application role.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ApplicationRole> getApplicationRole(String key) async {
     return ApplicationRole.fromJson(await _client.send(
       'get',
@@ -385,14 +571,18 @@ class AuditRecordsApi {
 
   AuditRecordsApi._(this._client);
 
-  /// Returns a list of audit records. The list can be filtered to include items:
+  /// Returns a list of audit records. The list can be filtered to include
+  /// items:
   ///
-  ///  *  containing a string in at least one field. For example, providing *up* will return all audit records where one or more fields contains words such as *update*.
+  ///  *  containing a string in at least one field. For example, providing *up*
+  /// will return all audit records where one or more fields contains words such
+  /// as *update*.
   ///  *  created on or after a date and time.
   ///  *  created or or before a date and time.
   ///  *  created during a time period.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<AuditRecords> getAuditRecords(
       {int? offset,
       int? limit,
@@ -420,7 +610,8 @@ class AvatarsApi {
 
   AvatarsApi._(this._client);
 
-  /// Returns a list of system avatar details by owner type, where the owner types are issue type, project, or user.
+  /// Returns a list of system avatar details by owner type, where the owner
+  /// types are issue type, project, or user.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -441,8 +632,12 @@ class AvatarsApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  for custom project avatars, *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project the avatar belongs to.
-  ///  *  for custom issue type avatars, *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for at least one project the issue type is used in.
+  ///  *  for custom project avatars, *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project the avatar belongs to.
+  ///  *  for custom issue type avatars, *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for at
+  /// least one project the issue type is used in.
   ///  *  for system avatars, none.
   Future<Avatars> getAvatars(
       {required String type, required String entityId}) async {
@@ -458,10 +653,14 @@ class AvatarsApi {
 
   /// Loads a custom avatar for a project or issue type.
   ///
-  /// Specify the avatar's local file location in the body of the request. Also, include the following headers:
+  /// Specify the avatar's local file location in the body of the request. Also,
+  /// include the following headers:
   ///
-  ///  *  `X-Atlassian-Token: no-check` To prevent XSRF protection blocking the request, for more information see [Special Headers](#special-request-headers).
-  ///  *  `Content-Type: image/image type` Valid image types are JPEG, GIF, or PNG.
+  ///  *  `X-Atlassian-Token: no-check` To prevent XSRF protection blocking the
+  /// request, for more information see
+  /// [Special Headers](#special-request-headers).
+  ///  *  `Content-Type: image/image type` Valid image types are JPEG, GIF, or
+  /// PNG.
   ///
   /// For example:
   /// `curl --request POST `
@@ -474,18 +673,26 @@ class AvatarsApi {
   ///
   /// `--data-binary "<@/path/to/file/with/your/avatar>" `
   ///
-  /// `--url 'https://your-domain.atlassian.net/rest/api/3/universal_avatar/type/{type}/owner/{entityId}'`
+  /// `--url
+  /// 'https://your-domain.atlassian.net/rest/api/3/universal_avatar/type/{type}/owner/{entityId}'`
   ///
-  /// The avatar is cropped to a square. If no crop parameters are specified, the square originates at the top left of the image. The length of the square's sides is set to the smaller of the height or width of the image.
+  /// The avatar is cropped to a square. If no crop parameters are specified,
+  /// the square originates at the top left of the image. The length of the
+  /// square's sides is set to the smaller of the height or width of the image.
   ///
-  /// The cropped image is then used to create avatars of 16x16, 24x24, 32x32, and 48x48 in size.
+  /// The cropped image is then used to create avatars of 16x16, 24x24, 32x32,
+  /// and 48x48 in size.
   ///
   /// After creating the avatar use:
   ///
-  ///  *  [Update issue type](#api-rest-api-3-issuetype-id-put) to set it as the issue type's displayed avatar.
-  ///  *  [Set project avatar](#api-rest-api-3-project-projectIdOrKey-avatar-put) to set it as the project's displayed avatar.
+  ///  *  [Update issue type](#api-rest-api-3-issuetype-id-put) to set it as the
+  /// issue type's displayed avatar.
+  ///  *
+  /// [Set project avatar](#api-rest-api-3-project-projectIdOrKey-avatar-put) to
+  /// set it as the project's displayed avatar.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<Avatar> storeAvatar(
       {required String type,
       required String entityId,
@@ -511,7 +718,8 @@ class AvatarsApi {
 
   /// Deletes an avatar from a project or issue type.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteAvatar(
       {required String type,
       required String owningObjectId,
@@ -535,7 +743,8 @@ class DashboardsApi {
 
   DashboardsApi._(this._client);
 
-  /// Returns a list of dashboards owned by or shared with the user. The list may be filtered to include only favorite or owned dashboards.
+  /// Returns a list of dashboards owned by or shared with the user. The list
+  /// may be filtered to include only favorite or owned dashboards.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -564,15 +773,23 @@ class DashboardsApi {
     ));
   }
 
-  /// Returns a [paginated](#pagination) list of dashboards. This operation is similar to [Get dashboards](#api-rest-api-3-dashboard-get) except that the results can be refined to include dashboards that have specific attributes. For example, dashboards with a particular name. When multiple attributes are specified only filters matching all attributes are returned.
+  /// Returns a [paginated](#pagination) list of dashboards. This operation is
+  /// similar to [Get dashboards](#api-rest-api-3-dashboard-get) except that the
+  /// results can be refined to include dashboards that have specific
+  /// attributes. For example, dashboards with a particular name. When multiple
+  /// attributes are specified only filters matching all attributes are
+  /// returned.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** The following dashboards that match the query parameters are returned:
+  /// **[Permissions](#permissions) required:** The following dashboards that
+  /// match the query parameters are returned:
   ///
   ///  *  Dashboards owned by the user. Not returned for anonymous users.
-  ///  *  Dashboards shared with a group that the user is a member of. Not returned for anonymous users.
-  ///  *  Dashboards shared with a private project that the user can browse. Not returned for anonymous users.
+  ///  *  Dashboards shared with a group that the user is a member of. Not
+  /// returned for anonymous users.
+  ///  *  Dashboards shared with a private project that the user can browse. Not
+  /// returned for anonymous users.
   ///  *  Dashboards shared with a public project.
   ///  *  Dashboards shared with the public.
   Future<PageBeanDashboard> getDashboardsPaginated(
@@ -606,7 +823,11 @@ class DashboardsApi {
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** The user must be the owner of the dashboard or be shared the dashboard. Note, users with the *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) are considered owners of the System dashboard. The System dashboard is considered to be shared with all other users.
+  /// **[Permissions](#permissions) required:** The user must be the owner of
+  /// the dashboard or be shared the dashboard. Note, users with the *Administer
+  /// Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) are
+  /// considered owners of the System dashboard. The System dashboard is
+  /// considered to be shared with all other users.
   Future<PropertyKeys> getDashboardItemPropertyKeys(
       {required String dashboardId, required String itemId}) async {
     return PropertyKeys.fromJson(await _client.send(
@@ -621,15 +842,30 @@ class DashboardsApi {
 
   /// Returns the key and value of a dashboard item property.
   ///
-  /// A dashboard item enables an app to add user-specific information to a user dashboard. Dashboard items are exposed to users as gadgets that users can add to their dashboards. For more information on how users do this, see [Adding and customizing gadgets](https://confluence.atlassian.com/x/7AeiLQ).
+  /// A dashboard item enables an app to add user-specific information to a user
+  /// dashboard. Dashboard items are exposed to users as gadgets that users can
+  /// add to their dashboards. For more information on how users do this, see
+  /// [Adding and customizing gadgets](https://confluence.atlassian.com/x/7AeiLQ).
   ///
-  /// When an app creates a dashboard item it registers a callback to receive the dashboard item ID. The callback fires whenever the item is rendered or, where the item is configurable, the user edits the item. The app then uses this resource to store the item's content or configuration details. For more information on working with dashboard items, see [ Building a dashboard item for a JIRA Connect add-on](https://developer.atlassian.com/server/jira/platform/guide-building-a-dashboard-item-for-a-jira-connect-add-on-33746254/) and the [Dashboard Item](https://developer.atlassian.com/cloud/jira/platform/modules/dashboard-item/) documentation.
+  /// When an app creates a dashboard item it registers a callback to receive
+  /// the dashboard item ID. The callback fires whenever the item is rendered
+  /// or, where the item is configurable, the user edits the item. The app then
+  /// uses this resource to store the item's content or configuration details.
+  /// For more information on working with dashboard items, see
+  /// [ Building a dashboard item for a JIRA Connect add-on](https://developer.atlassian.com/server/jira/platform/guide-building-a-dashboard-item-for-a-jira-connect-add-on-33746254/)
+  /// and the
+  /// [Dashboard Item](https://developer.atlassian.com/cloud/jira/platform/modules/dashboard-item/)
+  /// documentation.
   ///
   /// There is no resource to set or get dashboard items.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** The user must be the owner of the dashboard or be shared the dashboard. Note, users with the *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) are considered owners of the System dashboard. The System dashboard is considered to be shared with all other users.
+  /// **[Permissions](#permissions) required:** The user must be the owner of
+  /// the dashboard or be shared the dashboard. Note, users with the *Administer
+  /// Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) are
+  /// considered owners of the System dashboard. The System dashboard is
+  /// considered to be shared with all other users.
   Future<EntityProperty> getDashboardItemProperty(
       {required String dashboardId,
       required String itemId,
@@ -645,19 +881,36 @@ class DashboardsApi {
     ));
   }
 
-  /// Sets the value of a dashboard item property. Use this resource in apps to store custom data against a dashboard item.
+  /// Sets the value of a dashboard item property. Use this resource in apps to
+  /// store custom data against a dashboard item.
   ///
-  /// A dashboard item enables an app to add user-specific information to a user dashboard. Dashboard items are exposed to users as gadgets that users can add to their dashboards. For more information on how users do this, see [Adding and customizing gadgets](https://confluence.atlassian.com/x/7AeiLQ).
+  /// A dashboard item enables an app to add user-specific information to a user
+  /// dashboard. Dashboard items are exposed to users as gadgets that users can
+  /// add to their dashboards. For more information on how users do this, see
+  /// [Adding and customizing gadgets](https://confluence.atlassian.com/x/7AeiLQ).
   ///
-  /// When an app creates a dashboard item it registers a callback to receive the dashboard item ID. The callback fires whenever the item is rendered or, where the item is configurable, the user edits the item. The app then uses this resource to store the item's content or configuration details. For more information on working with dashboard items, see [ Building a dashboard item for a JIRA Connect add-on](https://developer.atlassian.com/server/jira/platform/guide-building-a-dashboard-item-for-a-jira-connect-add-on-33746254/) and the [Dashboard Item](https://developer.atlassian.com/cloud/jira/platform/modules/dashboard-item/) documentation.
+  /// When an app creates a dashboard item it registers a callback to receive
+  /// the dashboard item ID. The callback fires whenever the item is rendered
+  /// or, where the item is configurable, the user edits the item. The app then
+  /// uses this resource to store the item's content or configuration details.
+  /// For more information on working with dashboard items, see
+  /// [ Building a dashboard item for a JIRA Connect add-on](https://developer.atlassian.com/server/jira/platform/guide-building-a-dashboard-item-for-a-jira-connect-add-on-33746254/)
+  /// and the
+  /// [Dashboard Item](https://developer.atlassian.com/cloud/jira/platform/modules/dashboard-item/)
+  /// documentation.
   ///
   /// There is no resource to set or get dashboard items.
   ///
-  /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
+  /// The value of the request body must be a
+  /// [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The
+  /// maximum length is 32768 characters.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** The user must be the owner of the dashboard. Note, users with the *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) are considered owners of the System dashboard.
+  /// **[Permissions](#permissions) required:** The user must be the owner of
+  /// the dashboard. Note, users with the *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) are
+  /// considered owners of the System dashboard.
   Future<void> setDashboardItemProperty(
       {required String dashboardId,
       required String itemId,
@@ -679,7 +932,10 @@ class DashboardsApi {
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** The user must be the owner of the dashboard. Note, users with the *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) are considered owners of the System dashboard.
+  /// **[Permissions](#permissions) required:** The user must be the owner of
+  /// the dashboard. Note, users with the *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) are
+  /// considered owners of the System dashboard.
   Future<void> deleteDashboardItemProperty(
       {required String dashboardId,
       required String itemId,
@@ -701,7 +957,11 @@ class DashboardsApi {
   ///
   /// **[Permissions](#permissions) required:** None.
   ///
-  /// However, to get a dashboard, the dashboard must be shared with the user or the user must own it. Note, users with the *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) are considered owners of the System dashboard. The System dashboard is considered to be shared with all other users.
+  /// However, to get a dashboard, the dashboard must be shared with the user or
+  /// the user must own it. Note, users with the *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) are
+  /// considered owners of the System dashboard. The System dashboard is
+  /// considered to be shared with all other users.
   Future<Dashboard> getDashboard(String id) async {
     return Dashboard.fromJson(await _client.send(
       'get',
@@ -712,7 +972,8 @@ class DashboardsApi {
     ));
   }
 
-  /// Updates a dashboard, replacing all the dashboard details with those provided.
+  /// Updates a dashboard, replacing all the dashboard details with those
+  /// provided.
   ///
   /// **[Permissions](#permissions) required:** None
   ///
@@ -744,7 +1005,8 @@ class DashboardsApi {
     );
   }
 
-  /// Copies a dashboard. Any values provided in the `dashboard` parameter replace those in the copied dashboard.
+  /// Copies a dashboard. Any values provided in the `dashboard` parameter
+  /// replace those in the copied dashboard.
   ///
   /// **[Permissions](#permissions) required:** None
   ///
@@ -769,15 +1031,20 @@ class FiltersApi {
 
   FiltersApi._(this._client);
 
-  /// Returns all filters. Deprecated, use [ Search for filters](#api-rest-api-3-filter-search-get) that supports search and pagination.
+  /// Returns all filters. Deprecated, use
+  /// [ Search for filters](#api-rest-api-3-filter-search-get) that supports
+  /// search and pagination.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** None, however, only the following filters are returned:
+  /// **[Permissions](#permissions) required:** None, however, only the
+  /// following filters are returned:
   ///
   ///  *  filters owned by the user.
   ///  *  filters shared with a group that the user is a member of.
-  ///  *  filters shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
+  ///  *  filters shared with a private project that the user has *Browse
+  /// projects* [project permission](https://confluence.atlassian.com/x/yodKLg)
+  /// for.
   ///  *  filters shared with a public project.
   ///  *  filters shared with the public.
   Future<List<Filter>> getFilters({String? expand}) async {
@@ -792,7 +1059,9 @@ class FiltersApi {
         .toList();
   }
 
-  /// Creates a filter. The filter is shared according to the [default share scope](#api-rest-api-3-filter-post). The filter is not selected as a favorite.
+  /// Creates a filter. The filter is shared according to the
+  /// [default share scope](#api-rest-api-3-filter-post). The filter is not
+  /// selected as a favorite.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
   Future<Filter> createFilter({String? expand, required Filter body}) async {
@@ -810,15 +1079,18 @@ class FiltersApi {
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** A favorite filter is only visible to the user where the filter is:
+  /// **[Permissions](#permissions) required:** A favorite filter is only
+  /// visible to the user where the filter is:
   ///
   ///  *  owned by the user.
   ///  *  shared with a group that the user is a member of.
-  ///  *  shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
+  ///  *  shared with a private project that the user has *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for.
   ///  *  shared with a public project.
   ///  *  shared with the public.
   ///
-  /// For example, if the user favorites a public filter that is subsequently made private that filter is not returned by this operation.
+  /// For example, if the user favorites a public filter that is subsequently
+  /// made private that filter is not returned by this operation.
   Future<List<Filter>> getFavouriteFilters({String? expand}) async {
     return (await _client.send(
       'get',
@@ -831,17 +1103,22 @@ class FiltersApi {
         .toList();
   }
 
-  /// Returns the filters owned by the user. If `includeFavourites` is `true`, the user's visible favorite filters are also returned.
+  /// Returns the filters owned by the user. If `includeFavourites` is `true`,
+  /// the user's visible favorite filters are also returned.
   ///
-  /// **[Permissions](#permissions) required:** Permission to access Jira, however, a favorite filters is only visible to the user where the filter is:
+  /// **[Permissions](#permissions) required:** Permission to access Jira,
+  /// however, a favorite filters is only visible to the user where the filter
+  /// is:
   ///
   ///  *  owned by the user.
   ///  *  shared with a group that the user is a member of.
-  ///  *  shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
+  ///  *  shared with a private project that the user has *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for.
   ///  *  shared with a public project.
   ///  *  shared with the public.
   ///
-  /// For example, if the user favorites a public filter that is subsequently made private that filter is not returned by this operation.
+  /// For example, if the user favorites a public filter that is subsequently
+  /// made private that filter is not returned by this operation.
   Future<List<Filter>> getMyFilters(
       {String? expand, bool? includeFavourites}) async {
     return (await _client.send(
@@ -857,18 +1134,25 @@ class FiltersApi {
         .toList();
   }
 
-  /// Returns a [paginated](#pagination) list of filters. Use this operation to get:
+  /// Returns a [paginated](#pagination) list of filters. Use this operation to
+  /// get:
   ///
   ///  *  specific filters, by defining `id` only.
-  ///  *  filters that match all of the specified attributes. For example, all filters for a user with a particular word in their name. When multiple attributes are specified only filters matching all attributes are returned.
+  ///  *  filters that match all of the specified attributes. For example, all
+  /// filters for a user with a particular word in their name. When multiple
+  /// attributes are specified only filters matching all attributes are
+  /// returned.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** None, however, only the following filters that match the query parameters are returned:
+  /// **[Permissions](#permissions) required:** None, however, only the
+  /// following filters that match the query parameters are returned:
   ///
   ///  *  filters owned by the user.
   ///  *  filters shared with a group that the user is a member of.
-  ///  *  filters shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
+  ///  *  filters shared with a private project that the user has *Browse
+  /// projects* [project permission](https://confluence.atlassian.com/x/yodKLg)
+  /// for.
   ///  *  filters shared with a public project.
   ///  *  filters shared with the public.
   Future<PageBeanFilterDetails> getFiltersPaginated(
@@ -904,11 +1188,13 @@ class FiltersApi {
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** None, however, the filter is only returned where it is:
+  /// **[Permissions](#permissions) required:** None, however, the filter is
+  /// only returned where it is:
   ///
   ///  *  owned by the user.
   ///  *  shared with a group that the user is a member of.
-  ///  *  shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
+  ///  *  shared with a private project that the user has *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for.
   ///  *  shared with a public project.
   ///  *  shared with the public.
   Future<Filter> getFilter({required int id, String? expand}) async {
@@ -924,9 +1210,11 @@ class FiltersApi {
     ));
   }
 
-  /// Updates a filter. Use this operation to update a filter's name, description, JQL, or sharing.
+  /// Updates a filter. Use this operation to update a filter's name,
+  /// description, JQL, or sharing.
   ///
-  /// **[Permissions](#permissions) required:** Permission to access Jira, however the user must own the filter.
+  /// **[Permissions](#permissions) required:** Permission to access Jira,
+  /// however the user must own the filter.
   Future<Filter> updateFilter(
       {required int id, String? expand, required Filter body}) async {
     return Filter.fromJson(await _client.send(
@@ -944,7 +1232,10 @@ class FiltersApi {
 
   /// Delete a filter.
   ///
-  /// **[Permissions](#permissions) required:** Permission to access Jira, however filters can only be deleted by the creator of the filter or a user with *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** Permission to access Jira,
+  /// however filters can only be deleted by the creator of the filter or a user
+  /// with *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteFilter(int id) async {
     await _client.send(
       'delete',
@@ -955,15 +1246,20 @@ class FiltersApi {
     );
   }
 
-  /// Returns the columns configured for a filter. The column configuration is used when the filter's results are viewed in *List View* with the *Columns* set to *Filter*.
+  /// Returns the columns configured for a filter. The column configuration is
+  /// used when the filter's results are viewed in *List View* with the
+  /// *Columns* set to *Filter*.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** None, however, column details are only returned for:
+  /// **[Permissions](#permissions) required:** None, however, column details
+  /// are only returned for:
   ///
   ///  *  filters owned by the user.
   ///  *  filters shared with a group that the user is a member of.
-  ///  *  filters shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
+  ///  *  filters shared with a private project that the user has *Browse
+  /// projects* [project permission](https://confluence.atlassian.com/x/yodKLg)
+  /// for.
   ///  *  filters shared with a public project.
   ///  *  filters shared with the public.
   Future<List<ColumnItem>> getColumns(int id) async {
@@ -978,17 +1274,24 @@ class FiltersApi {
         .toList();
   }
 
-  /// Sets the columns for a filter. Only navigable fields can be set as columns. Use [Get fields](#api-rest-api-3-field-get) to get the list fields in Jira. A navigable field has `navigable` set to `true`.
+  /// Sets the columns for a filter. Only navigable fields can be set as
+  /// columns. Use [Get fields](#api-rest-api-3-field-get) to get the list
+  /// fields in Jira. A navigable field has `navigable` set to `true`.
   ///
-  /// The parameters for this resource are expressed as HTML form data. For example, in curl:
+  /// The parameters for this resource are expressed as HTML form data. For
+  /// example, in curl:
   ///
-  /// `curl -X PUT -d columns=summary -d columns=description https://your-domain.atlassian.net/rest/api/3/filter/10000/columns`
+  /// `curl -X PUT -d columns=summary -d columns=description
+  /// https://your-domain.atlassian.net/rest/api/3/filter/10000/columns`
   ///
-  /// **[Permissions](#permissions) required:** Permission to access Jira, however, columns are only set for:
+  /// **[Permissions](#permissions) required:** Permission to access Jira,
+  /// however, columns are only set for:
   ///
   ///  *  filters owned by the user.
   ///  *  filters shared with a group that the user is a member of.
-  ///  *  filters shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
+  ///  *  filters shared with a private project that the user has *Browse
+  /// projects* [project permission](https://confluence.atlassian.com/x/yodKLg)
+  /// for.
   ///  *  filters shared with a public project.
   ///  *  filters shared with the public.
   Future<void> setColumns({required int id, List<String>? body}) async {
@@ -1004,11 +1307,14 @@ class FiltersApi {
 
   /// Reset the user's column configuration for the filter to the default.
   ///
-  /// **[Permissions](#permissions) required:** Permission to access Jira, however, columns are only reset for:
+  /// **[Permissions](#permissions) required:** Permission to access Jira,
+  /// however, columns are only reset for:
   ///
   ///  *  filters owned by the user.
   ///  *  filters shared with a group that the user is a member of.
-  ///  *  filters shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
+  ///  *  filters shared with a private project that the user has *Browse
+  /// projects* [project permission](https://confluence.atlassian.com/x/yodKLg)
+  /// for.
   ///  *  filters shared with a public project.
   ///  *  filters shared with the public.
   Future<void> resetColumns(int id) async {
@@ -1023,11 +1329,14 @@ class FiltersApi {
 
   /// Add a filter as a favorite for the user.
   ///
-  /// **[Permissions](#permissions) required:** Permission to access Jira, however, the user can only favorite:
+  /// **[Permissions](#permissions) required:** Permission to access Jira,
+  /// however, the user can only favorite:
   ///
   ///  *  filters owned by the user.
   ///  *  filters shared with a group that the user is a member of.
-  ///  *  filters shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
+  ///  *  filters shared with a private project that the user has *Browse
+  /// projects* [project permission](https://confluence.atlassian.com/x/yodKLg)
+  /// for.
   ///  *  filters shared with a public project.
   ///  *  filters shared with the public.
   Future<Filter> setFavouriteForFilter(
@@ -1044,7 +1353,11 @@ class FiltersApi {
     ));
   }
 
-  /// Removes a filter as a favorite for the user. Note that this operation only removes filters visible to the user from the user's favorites list. For example, if the user favorites a public filter that is subsequently made private (and is therefore no longer visible on their favorites list) they cannot remove it from their favorites list.
+  /// Removes a filter as a favorite for the user. Note that this operation only
+  /// removes filters visible to the user from the user's favorites list. For
+  /// example, if the user favorites a public filter that is subsequently made
+  /// private (and is therefore no longer visible on their favorites list) they
+  /// cannot remove it from their favorites list.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
   Future<Filter> deleteFavouriteForFilter(
@@ -1069,7 +1382,8 @@ class FilterSharingApi {
 
   FilterSharingApi._(this._client);
 
-  /// Returns the default sharing settings for new filters and dashboards for a user.
+  /// Returns the default sharing settings for new filters and dashboards for a
+  /// user.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
   Future<DefaultShareScope> getDefaultShareScope() async {
@@ -1091,15 +1405,20 @@ class FilterSharingApi {
     ));
   }
 
-  /// Returns the share permissions for a filter. A filter can be shared with groups, projects, all logged-in users, or the public. Sharing with all logged-in users or the public is known as a global share permission.
+  /// Returns the share permissions for a filter. A filter can be shared with
+  /// groups, projects, all logged-in users, or the public. Sharing with all
+  /// logged-in users or the public is known as a global share permission.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** None, however, share permissions are only returned for:
+  /// **[Permissions](#permissions) required:** None, however, share permissions
+  /// are only returned for:
   ///
   ///  *  filters owned by the user.
   ///  *  filters shared with a group that the user is a member of.
-  ///  *  filters shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
+  ///  *  filters shared with a private project that the user has *Browse
+  /// projects* [project permission](https://confluence.atlassian.com/x/yodKLg)
+  /// for.
   ///  *  filters shared with a public project.
   ///  *  filters shared with the public.
   Future<List<SharePermission>> getSharePermissions(int id) async {
@@ -1115,11 +1434,16 @@ class FilterSharingApi {
         .toList();
   }
 
-  /// Add a share permissions to a filter. If you add a global share permission (one for all logged-in users or the public) it will overwrite all share permissions for the filter.
+  /// Add a share permissions to a filter. If you add a global share permission
+  /// (one for all logged-in users or the public) it will overwrite all share
+  /// permissions for the filter.
   ///
-  /// Be aware that this operation uses different objects for updating share permissions compared to [Update filter](#api-rest-api-3-filter-id-put).
+  /// Be aware that this operation uses different objects for updating share
+  /// permissions compared to [Update filter](#api-rest-api-3-filter-id-put).
   ///
-  /// **[Permissions](#permissions) required:** *Share dashboards and filters* [global permission](https://confluence.atlassian.com/x/x4dKLg) and the user must own the filter.
+  /// **[Permissions](#permissions) required:** *Share dashboards and filters*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) and the
+  /// user must own the filter.
   Future<List<SharePermission>> addSharePermission(
       {required int id, required SharePermissionInputBean body}) async {
     return (await _client.send(
@@ -1135,15 +1459,20 @@ class FilterSharingApi {
         .toList();
   }
 
-  /// Returns a share permission for a filter. A filter can be shared with groups, projects, all logged-in users, or the public. Sharing with all logged-in users or the public is known as a global share permission.
+  /// Returns a share permission for a filter. A filter can be shared with
+  /// groups, projects, all logged-in users, or the public. Sharing with all
+  /// logged-in users or the public is known as a global share permission.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** None, however, a share permission is only returned for:
+  /// **[Permissions](#permissions) required:** None, however, a share
+  /// permission is only returned for:
   ///
   ///  *  filters owned by the user.
   ///  *  filters shared with a group that the user is a member of.
-  ///  *  filters shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
+  ///  *  filters shared with a private project that the user has *Browse
+  /// projects* [project permission](https://confluence.atlassian.com/x/yodKLg)
+  /// for.
   ///  *  filters shared with a public project.
   ///  *  filters shared with the public.
   Future<SharePermission> getSharePermission(
@@ -1160,7 +1489,8 @@ class FilterSharingApi {
 
   /// Deletes a share permission from a filter.
   ///
-  /// **[Permissions](#permissions) required:** Permission to access Jira and the user must own the filter.
+  /// **[Permissions](#permissions) required:** Permission to access Jira and
+  /// the user must own the filter.
   Future<void> deleteSharePermission(
       {required int id, required int permissionId}) async {
     await _client.send(
@@ -1183,27 +1513,44 @@ class GroupAndUserPickerApi {
 
   /// Returns a list of users and groups matching a string. The string is used:
   ///
-  ///  *  for users, to find a case-insensitive match with display name and e-mail address. Note that if a user has hidden their email address in their user profile, partial matches of the email address will not find the user. An exact match is required.
+  ///  *  for users, to find a case-insensitive match with display name and
+  /// e-mail address. Note that if a user has hidden their email address in
+  /// their user profile, partial matches of the email address will not find the
+  /// user. An exact match is required.
   ///  *  for groups, to find a case-sensitive match with group name.
   ///
-  /// For example, if the string *tin* is used, records with the display name *Tina*, email address *sarah@tinplatetraining.com*, and the group *accounting* would be returned.
+  /// For example, if the string *tin* is used, records with the display name
+  /// *Tina*, email address *sarah@tinplatetraining.com*, and the group
+  /// *accounting* would be returned.
   ///
   /// Optionally, the search can be refined to:
   ///
-  ///  *  the projects and issue types associated with a custom field, such as a user picker. The search can then be further refined to return only users and groups that have permission to view specific:
+  ///  *  the projects and issue types associated with a custom field, such as a
+  /// user picker. The search can then be further refined to return only users
+  /// and groups that have permission to view specific:
   ///
   ///      *  projects.
   ///      *  issue types.
   ///
-  ///     If multiple projects or issue types are specified, they must be a subset of those enabled for the custom field or no results are returned. For example, if a field is enabled for projects A, B, and C then the search could be limited to projects B and C. However, if the search is limited to projects B and D, nothing is returned.
+  ///     If multiple projects or issue types are specified, they must be a
+  /// subset of those enabled for the custom field or no results are returned.
+  /// For example, if a field is enabled for projects A, B, and C then the
+  /// search could be limited to projects B and C. However, if the search is
+  /// limited to projects B and D, nothing is returned.
   ///  *  not return Connect app users and groups.
   ///  *  return groups that have a case-insensitive match with the query.
   ///
-  /// The primary use case for this resource is to populate a picker field suggestion list with users or groups. To this end, the returned object includes an `html` field for each list. This field highlights the matched query term in the item name with the HTML strong tag. Also, each list is wrapped in a response object that contains a header for use in a picker, specifically *Showing X of Y matching groups*.
+  /// The primary use case for this resource is to populate a picker field
+  /// suggestion list with users or groups. To this end, the returned object
+  /// includes an `html` field for each list. This field highlights the matched
+  /// query term in the item name with the HTML strong tag. Also, each list is
+  /// wrapped in a response object that contains a header for use in a picker,
+  /// specifically *Showing X of Y matching groups*.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/yodKLg).
+  /// **[Permissions](#permissions) required:** *Browse users and groups*
+  /// [global permission](https://confluence.atlassian.com/x/yodKLg).
   Future<FoundUsersAndGroups> findUsersAndGroups(
       {required String query,
       int? maxResults,
@@ -1240,11 +1587,13 @@ class GroupsApi {
 
   GroupsApi._(this._client);
 
-  /// This operation is deprecated, use [`group/member`](#api-rest-api-3-group-member-get).
+  /// This operation is deprecated, use
+  /// [`group/member`](#api-rest-api-3-group-member-get).
   ///
   /// Returns all users in a group.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<Group> getGroup({required String groupname, String? expand}) async {
     return Group.fromJson(await _client.send(
       'get',
@@ -1258,7 +1607,9 @@ class GroupsApi {
 
   /// Creates a group.
   ///
-  /// **[Permissions](#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+  /// **[Permissions](#permissions) required:** Site administration (that is,
+  /// member of the *site-admin*
+  /// [group](https://confluence.atlassian.com/x/24xjL)).
   Future<Group> createGroup({required AddGroupBean body}) async {
     return Group.fromJson(await _client.send(
       'post',
@@ -1269,7 +1620,9 @@ class GroupsApi {
 
   /// Deletes a group.
   ///
-  /// **[Permissions](#permissions) required:** Site administration (that is, member of the *site-admin* strategic [group](https://confluence.atlassian.com/x/24xjL)).
+  /// **[Permissions](#permissions) required:** Site administration (that is,
+  /// member of the *site-admin* strategic
+  /// [group](https://confluence.atlassian.com/x/24xjL)).
   Future<void> removeGroup(
       {required String groupname, String? swapGroup}) async {
     await _client.send(
@@ -1284,7 +1637,8 @@ class GroupsApi {
 
   /// Returns a [paginated](#pagination) list of groups.
   ///
-  /// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Browse users and groups*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanGroupDetails> bulkGetGroups(
       {int? startAt,
       int? maxResults,
@@ -1304,9 +1658,11 @@ class GroupsApi {
 
   /// Returns a [paginated](#pagination) list of all users in a group.
   ///
-  /// Note that users are ordered by username, however the username is not returned in the results due to privacy reasons.
+  /// Note that users are ordered by username, however the username is not
+  /// returned in the results due to privacy reasons.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanUserDetails> getUsersFromGroup(
       {required String groupname,
       bool? includeInactiveUsers,
@@ -1327,7 +1683,9 @@ class GroupsApi {
 
   /// Adds a user to a group.
   ///
-  /// **[Permissions](#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+  /// **[Permissions](#permissions) required:** Site administration (that is,
+  /// member of the *site-admin*
+  /// [group](https://confluence.atlassian.com/x/24xjL)).
   Future<Group> addUserToGroup(
       {required String groupname, required UpdateUserToGroupBean body}) async {
     return Group.fromJson(await _client.send(
@@ -1342,7 +1700,9 @@ class GroupsApi {
 
   /// Removes a user from a group.
   ///
-  /// **[Permissions](#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+  /// **[Permissions](#permissions) required:** Site administration (that is,
+  /// member of the *site-admin*
+  /// [group](https://confluence.atlassian.com/x/24xjL)).
   Future<void> removeUserFromGroup(
       {required String groupname,
       String? username,
@@ -1358,15 +1718,25 @@ class GroupsApi {
     );
   }
 
-  /// Returns a list of groups whose names contain a query string. A list of group names can be provided to exclude groups from the results.
+  /// Returns a list of groups whose names contain a query string. A list of
+  /// group names can be provided to exclude groups from the results.
   ///
-  /// The primary use case for this resource is to populate a group picker suggestions list. To this end, the returned object includes the `html` field where the matched query term is highlighted in the group name with the HTML strong tag. Also, the groups list is wrapped in a response object that contains a header for use in the picker, specifically *Showing X of Y matching groups*.
+  /// The primary use case for this resource is to populate a group picker
+  /// suggestions list. To this end, the returned object includes the `html`
+  /// field where the matched query term is highlighted in the group name with
+  /// the HTML strong tag. Also, the groups list is wrapped in a response object
+  /// that contains a header for use in the picker, specifically *Showing X of Y
+  /// matching groups*.
   ///
-  /// The list returns with the groups sorted. If no groups match the list criteria, an empty list is returned.
+  /// The list returns with the groups sorted. If no groups match the list
+  /// criteria, an empty list is returned.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg). Anonymous calls and calls by users without the required permission return an empty list.
+  /// **[Permissions](#permissions) required:** *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg). Anonymous
+  /// calls and calls by users without the required permission return an empty
+  /// list.
   Future<FoundGroups> findGroups(
       {String? accountId,
       String? query,
@@ -1394,18 +1764,35 @@ class IssuesApi {
 
   IssuesApi._(this._client);
 
-  /// Creates an issue or, where the option to create subtasks is enabled in Jira, a subtask. A transition may be applied, to move the issue or subtask to a workflow step other than the default start step, and issue properties set.
+  /// Creates an issue or, where the option to create subtasks is enabled in
+  /// Jira, a subtask. A transition may be applied, to move the issue or subtask
+  /// to a workflow step other than the default start step, and issue properties
+  /// set.
   ///
-  /// The content of the issue or subtask is defined using `update` and `fields`. The fields that can be set in the issue or subtask are determined using the [ Get create issue metadata](#api-rest-api-3-issue-createmeta-get). These are the same fields that appear on the issue's create screen. Note that the `description`, `environment`, and any `textarea` type custom fields (multi-line text fields) take Atlassian Document Format content. Single line custom fields (`textfield`) accept a string and don't handle Atlassian Document Format content.
+  /// The content of the issue or subtask is defined using `update` and
+  /// `fields`. The fields that can be set in the issue or subtask are
+  /// determined using the
+  /// [ Get create issue metadata](#api-rest-api-3-issue-createmeta-get). These
+  /// are the same fields that appear on the issue's create screen. Note that
+  /// the `description`, `environment`, and any `textarea` type custom fields
+  /// (multi-line text fields) take Atlassian Document Format content. Single
+  /// line custom fields (`textfield`) accept a string and don't handle
+  /// Atlassian Document Format content.
   ///
   /// Creating a subtask differs from creating an issue as follows:
   ///
-  ///  *  `issueType` must be set to a subtask issue type (use [ Get create issue metadata](#api-rest-api-3-issue-createmeta-get) to find subtask issue types).
+  ///  *  `issueType` must be set to a subtask issue type (use
+  /// [ Get create issue metadata](#api-rest-api-3-issue-createmeta-get) to find
+  /// subtask issue types).
   ///  *  `parent` must contain the ID or key of the parent issue.
   ///
-  /// In a next-gen project any issue may be made a child providing that the parent and child are members of the same project. In a classic project the parent field is only valid for subtasks.
+  /// In a next-gen project any issue may be made a child providing that the
+  /// parent and child are members of the same project. In a classic project the
+  /// parent field is only valid for subtasks.
   ///
-  /// **[Permissions](#permissions) required:** *Browse projects* and *Create issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project in which the issue or subtask is created.
+  /// **[Permissions](#permissions) required:** *Browse projects* and *Create
+  /// issues* [project permissions](https://confluence.atlassian.com/x/yodKLg)
+  /// for the project in which the issue or subtask is created.
   Future<CreatedIssue> createIssue(
       {bool? updateHistory, required IssueUpdateDetails body}) async {
     return CreatedIssue.fromJson(await _client.send(
@@ -1418,16 +1805,31 @@ class IssuesApi {
     ));
   }
 
-  /// Creates issues and, where the option to create subtasks is enabled in Jira, subtasks. Transitions may be applied, to move the issues or subtasks to a workflow step other than the default start step, and issue properties set.
+  /// Creates issues and, where the option to create subtasks is enabled in
+  /// Jira, subtasks. Transitions may be applied, to move the issues or subtasks
+  /// to a workflow step other than the default start step, and issue properties
+  /// set.
   ///
-  /// The content of each issue or subtask is defined using `update` and `fields`. The fields that can be set in the issue or subtask are determined using the [ Get create issue metadata](#api-rest-api-3-issue-createmeta-get). These are the same fields that appear on the issues' create screens. Note that the `description`, `environment`, and any `textarea` type custom fields (multi-line text fields) take Atlassian Document Format content. Single line custom fields (`textfield`) accept a string and don't handle Atlassian Document Format content.
+  /// The content of each issue or subtask is defined using `update` and
+  /// `fields`. The fields that can be set in the issue or subtask are
+  /// determined using the
+  /// [ Get create issue metadata](#api-rest-api-3-issue-createmeta-get). These
+  /// are the same fields that appear on the issues' create screens. Note that
+  /// the `description`, `environment`, and any `textarea` type custom fields
+  /// (multi-line text fields) take Atlassian Document Format content. Single
+  /// line custom fields (`textfield`) accept a string and don't handle
+  /// Atlassian Document Format content.
   ///
   /// Creating a subtask differs from creating an issue as follows:
   ///
-  ///  *  `issueType` must be set to a subtask issue type (use [ Get create issue metadata](#api-rest-api-3-issue-createmeta-get) to find subtask issue types).
+  ///  *  `issueType` must be set to a subtask issue type (use
+  /// [ Get create issue metadata](#api-rest-api-3-issue-createmeta-get) to find
+  /// subtask issue types).
   ///  *  `parent` the must contain the ID or key of the parent issue.
   ///
-  /// **[Permissions](#permissions) required:** *Browse projects* and *Create issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project in which each issue or subtask is created.
+  /// **[Permissions](#permissions) required:** *Browse projects* and *Create
+  /// issues* [project permissions](https://confluence.atlassian.com/x/yodKLg)
+  /// for the project in which each issue or subtask is created.
   Future<CreatedIssues> createIssues({required IssuesUpdateBean body}) async {
     return CreatedIssues.fromJson(await _client.send(
       'post',
@@ -1436,13 +1838,23 @@ class IssuesApi {
     ));
   }
 
-  /// Returns details of projects, issue types within projects, and, when requested, the create screen fields for each issue type for the user. Use the information to populate the requests in [ Create issue](#api-rest-api-3-issue-post) and [Create issues](#api-rest-api-3-issue-bulk-post).
+  /// Returns details of projects, issue types within projects, and, when
+  /// requested, the create screen fields for each issue type for the user. Use
+  /// the information to populate the requests in
+  /// [ Create issue](#api-rest-api-3-issue-post) and
+  /// [Create issues](#api-rest-api-3-issue-bulk-post).
   ///
-  /// The request can be restricted to specific projects or issue types using the query parameters. The response will contain information for the valid projects, issue types, or project and issue type combinations requested. Note that invalid project, issue type, or project and issue type combinations do not generate errors.
+  /// The request can be restricted to specific projects or issue types using
+  /// the query parameters. The response will contain information for the valid
+  /// projects, issue types, or project and issue type combinations requested.
+  /// Note that invalid project, issue type, or project and issue type
+  /// combinations do not generate errors.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Create issues* [project permission](https://confluence.atlassian.com/x/yodKLg) in the requested projects.
+  /// **[Permissions](#permissions) required:** *Create issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) in the
+  /// requested projects.
   Future<IssueCreateMetadata> getCreateIssueMeta(
       {List<String>? projectIds,
       List<String>? projectKeys,
@@ -1464,14 +1876,21 @@ class IssuesApi {
 
   /// Returns the details for an issue.
   ///
-  /// The issue is identified by its ID or key, however, if the identifier doesn't match an issue, a case-insensitive search and check for moved issues is performed. If a matching issue is found its details are returned, a 302 or other redirect is **not** returned. The issue key returned in the response is the key of the issue found.
+  /// The issue is identified by its ID or key, however, if the identifier
+  /// doesn't match an issue, a case-insensitive search and check for moved
+  /// issues is performed. If a matching issue is found its details are
+  /// returned, a 302 or other redirect is **not** returned. The issue key
+  /// returned in the response is the key of the issue found.
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<IssueBean> getIssue(
       {required String issueIdOrKey,
       List<String>? fields,
@@ -1495,20 +1914,33 @@ class IssuesApi {
     ));
   }
 
-  /// Edits an issue. A transition may be applied and issue properties updated as part of the edit.
+  /// Edits an issue. A transition may be applied and issue properties updated
+  /// as part of the edit.
   ///
-  /// The edits to the issue's fields are defined using `update` and `fields`. The fields that can be edited are determined using [ Get edit issue metadata](#api-rest-api-3-issue-issueIdOrKey-editmeta-get).
+  /// The edits to the issue's fields are defined using `update` and `fields`.
+  /// The fields that can be edited are determined using
+  /// [ Get edit issue metadata](#api-rest-api-3-issue-issueIdOrKey-editmeta-get).
   ///
-  /// The parent field may be set by key or ID. For standard issue types, the parent may be removed by setting `update.parent.set.none` to *true*. Note that the `description`, `environment`, and any `textarea` type custom fields (multi-line text fields) take Atlassian Document Format content. Single line custom fields (`textfield`) accept a string and don't handle Atlassian Document Format content.
+  /// The parent field may be set by key or ID. For standard issue types, the
+  /// parent may be removed by setting `update.parent.set.none` to *true*. Note
+  /// that the `description`, `environment`, and any `textarea` type custom
+  /// fields (multi-line text fields) take Atlassian Document Format content.
+  /// Single line custom fields (`textfield`) accept a string and don't handle
+  /// Atlassian Document Format content.
   ///
-  /// Connect app users with admin permissions (from user permissions and app scopes) can override the screen security configuration using `overrideScreenSecurity` and `overrideEditableFlag`.
+  /// Connect app users with admin permissions (from user permissions and app
+  /// scopes) can override the screen security configuration using
+  /// `overrideScreenSecurity` and `overrideEditableFlag`.
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* and *Edit issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects* and *Edit issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<void> editIssue(
       {required String issueIdOrKey,
       bool? notifyUsers,
@@ -1534,14 +1966,19 @@ class IssuesApi {
 
   /// Deletes an issue.
   ///
-  /// An issue cannot be deleted if it has one or more subtasks. To delete an issue with subtasks, set `deleteSubtasks`. This causes the issue's subtasks to be deleted with the issue.
+  /// An issue cannot be deleted if it has one or more subtasks. To delete an
+  /// issue with subtasks, set `deleteSubtasks`. This causes the issue's
+  /// subtasks to be deleted with the issue.
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* and *Delete issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects* and *Delete issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the issue.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<void> deleteIssue(
       {required String issueIdOrKey, String? deleteSubtasks}) async {
     await _client.send(
@@ -1556,7 +1993,9 @@ class IssuesApi {
     );
   }
 
-  /// Assigns an issue to a user. Use this operation when the calling user does not have the *Edit Issues* permission but has the *Assign issue* permission for the project that the issue is in.
+  /// Assigns an issue to a user. Use this operation when the calling user does
+  /// not have the *Edit Issues* permission but has the *Assign issue*
+  /// permission for the project that the issue is in.
   ///
   /// If `name` or `accountId` is set to:
   ///
@@ -1567,8 +2006,11 @@ class IssuesApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse Projects* and *Assign Issues* [ project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse Projects* and *Assign Issues*
+  /// [ project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<void> assignIssue(
       {required String issueIdOrKey, required User body}) async {
     await _client.send(
@@ -1581,14 +2023,18 @@ class IssuesApi {
     );
   }
 
-  /// Returns a [paginated](#pagination) list of all changelogs for an issue sorted by date, starting from the oldest.
+  /// Returns a [paginated](#pagination) list of all changelogs for an issue
+  /// sorted by date, starting from the oldest.
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<PageBeanChangelog> getChangeLogs(
       {required String issueIdOrKey, int? startAt, int? maxResults}) async {
     return PageBeanChangelog.fromJson(await _client.send(
@@ -1604,21 +2050,30 @@ class IssuesApi {
     ));
   }
 
-  /// Returns the edit screen fields for an issue that are visible to and editable by the user. Use the information to populate the requests in [Edit issue](#api-rest-api-3-issue-issueIdOrKey-put).
+  /// Returns the edit screen fields for an issue that are visible to and
+  /// editable by the user. Use the information to populate the requests in
+  /// [Edit issue](#api-rest-api-3-issue-issueIdOrKey-put).
   ///
-  /// Connect app users with admin permissions (from user permissions and app scopes) can return additional details using:
+  /// Connect app users with admin permissions (from user permissions and app
+  /// scopes) can return additional details using:
   ///
   ///  *  `overrideScreenSecurity` Returns hidden fields.
-  ///  *  `overrideEditableFlag` Returns uneditable fields. For example, where an issue has a workflow status of closed none of its fields are editable.
+  ///  *  `overrideEditableFlag` Returns uneditable fields. For example, where
+  /// an issue has a workflow status of closed none of its fields are editable.
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   ///
-  /// Note: For any fields to be editable the user must have the *Edit issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the issue.
+  /// Note: For any fields to be editable the user must have the *Edit issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// issue.
   Future<IssueUpdateMetadata> getEditIssueMeta(
       {required String issueIdOrKey,
       bool? overrideScreenSecurity,
@@ -1642,8 +2097,11 @@ class IssuesApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<void> notify(
       {required String issueIdOrKey, required Notification body}) async {
     await _client.send(
@@ -1656,18 +2114,27 @@ class IssuesApi {
     );
   }
 
-  /// Returns either all transitions or a transition that can be performed by the user on an issue, based on the issue's status.
+  /// Returns either all transitions or a transition that can be performed by
+  /// the user on an issue, based on the issue's status.
   ///
-  /// Note, if a request is made for a transition that does not exist or cannot be performed on the issue, given its status, the response will return any empty transitions list.
+  /// Note, if a request is made for a transition that does not exist or cannot
+  /// be performed on the issue, given its status, the response will return any
+  /// empty transitions list.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required: A list or transition is returned only when the user has:**
+  /// **[Permissions](#permissions) required: A list or transition is returned
+  /// only when the user has:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   ///
-  /// However, if the user does not have the *Transition issues* [ project permission](https://confluence.atlassian.com/x/yodKLg) the response will not list any transitions.
+  /// However, if the user does not have the *Transition issues*
+  /// [ project permission](https://confluence.atlassian.com/x/yodKLg) the
+  /// response will not list any transitions.
   Future<Transitions> getTransitions(
       {required String issueIdOrKey,
       String? expand,
@@ -1694,16 +2161,24 @@ class IssuesApi {
     ));
   }
 
-  /// Performs an issue transition and, if the transition has a screen, updates the fields from the transition screen.
+  /// Performs an issue transition and, if the transition has a screen, updates
+  /// the fields from the transition screen.
   ///
-  /// sortByCategory To update the fields on the transition screen, specify the fields in the `fields` or `update` parameters in the request body. Get details about the fields using [ Get transitions](#api-rest-api-3-issue-issueIdOrKey-transitions-get) with the `transitions.fields` expand.
+  /// sortByCategory To update the fields on the transition screen, specify the
+  /// fields in the `fields` or `update` parameters in the request body. Get
+  /// details about the fields using
+  /// [ Get transitions](#api-rest-api-3-issue-issueIdOrKey-transitions-get)
+  /// with the `transitions.fields` expand.
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* and *Transition issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects* and *Transition issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<void> doTransition(
       {required String issueIdOrKey, required IssueUpdateDetails body}) async {
     await _client.send(
@@ -1724,9 +2199,12 @@ class IssueAttachmentsApi {
 
   IssueAttachmentsApi._(this._client);
 
-  /// Returns the attachment settings, that is, whether attachments are enabled and the maximum attachment size allowed.
+  /// Returns the attachment settings, that is, whether attachments are enabled
+  /// and the maximum attachment size allowed.
   ///
-  /// Note that there are also [project permissions](https://confluence.atlassian.com/x/yodKLg) that restrict whether users can create and delete attachments.
+  /// Note that there are also
+  /// [project permissions](https://confluence.atlassian.com/x/yodKLg) that
+  /// restrict whether users can create and delete attachments.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -1738,14 +2216,18 @@ class IssueAttachmentsApi {
     ));
   }
 
-  /// Returns the metadata for an attachment. Note that the attachment itself is not returned.
+  /// Returns the metadata for an attachment. Note that the attachment itself is
+  /// not returned.
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<AttachmentMetadata> getAttachment(String id) async {
     return AttachmentMetadata.fromJson(await _client.send(
       'get',
@@ -1760,10 +2242,15 @@ class IssueAttachmentsApi {
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** For the project holding the issue containing the attachment:
+  /// **[Permissions](#permissions) required:** For the project holding the
+  /// issue containing the attachment:
   ///
-  ///  *  *Delete own attachments* [project permission](https://confluence.atlassian.com/x/yodKLg) to delete an attachment created by the calling user.
-  ///  *  *Delete all attachments* [project permission](https://confluence.atlassian.com/x/yodKLg) to delete an attachment created by any user.
+  ///  *  *Delete own attachments*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) to delete
+  /// an attachment created by the calling user.
+  ///  *  *Delete all attachments*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) to delete
+  /// an attachment created by any user.
   Future<void> removeAttachment(String id) async {
     await _client.send(
       'delete',
@@ -1774,16 +2261,28 @@ class IssueAttachmentsApi {
     );
   }
 
-  /// Returns the metadata for the contents of an attachment, if it is an archive, and metadata for the attachment itself. For example, if the attachment is a ZIP archive, then information about the files in the archive is returned and metadata for the ZIP archive. Currently, only the ZIP archive format is supported.
+  /// Returns the metadata for the contents of an attachment, if it is an
+  /// archive, and metadata for the attachment itself. For example, if the
+  /// attachment is a ZIP archive, then information about the files in the
+  /// archive is returned and metadata for the ZIP archive. Currently, only the
+  /// ZIP archive format is supported.
   ///
-  /// Use this operation to retrieve data that is presented to the user, as this operation returns the metadata for the attachment itself, such as the attachment's ID and name. Otherwise, use [ Get contents metadata for an expanded attachment](#api-rest-api-3-attachment-id-expand-raw-get), which only returns the metadata for the attachment's contents.
+  /// Use this operation to retrieve data that is presented to the user, as this
+  /// operation returns the metadata for the attachment itself, such as the
+  /// attachment's ID and name. Otherwise, use
+  /// [ Get contents metadata for an expanded attachment](#api-rest-api-3-attachment-id-expand-raw-get),
+  /// which only returns the metadata for the attachment's contents.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** For the issue containing the attachment:
+  /// **[Permissions](#permissions) required:** For the issue containing the
+  /// attachment:
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<AttachmentArchiveMetadataReadable> expandAttachmentForHumans(
       String id) async {
     return AttachmentArchiveMetadataReadable.fromJson(await _client.send(
@@ -1795,16 +2294,28 @@ class IssueAttachmentsApi {
     ));
   }
 
-  /// Returns the metadata for the contents of an attachment, if it is an archive. For example, if the attachment is a ZIP archive, then information about the files in the archive is returned. Currently, only the ZIP archive format is supported.
+  /// Returns the metadata for the contents of an attachment, if it is an
+  /// archive. For example, if the attachment is a ZIP archive, then information
+  /// about the files in the archive is returned. Currently, only the ZIP
+  /// archive format is supported.
   ///
-  /// Use this operation if you are processing the data without presenting it to the user, as this operation only returns the metadata for the contents of the attachment. Otherwise, to retrieve data to present to the user, use [ Get all metadata for an expanded attachment](#api-rest-api-3-attachment-id-expand-human-get) which also returns the metadata for the attachment itself, such as the attachment's ID and name.
+  /// Use this operation if you are processing the data without presenting it to
+  /// the user, as this operation only returns the metadata for the contents of
+  /// the attachment. Otherwise, to retrieve data to present to the user, use
+  /// [ Get all metadata for an expanded attachment](#api-rest-api-3-attachment-id-expand-human-get)
+  /// which also returns the metadata for the attachment itself, such as the
+  /// attachment's ID and name.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** For the issue containing the attachment:
+  /// **[Permissions](#permissions) required:** For the issue containing the
+  /// attachment:
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<AttachmentArchiveImpl> expandAttachmentForMachines(String id) async {
     return AttachmentArchiveImpl.fromJson(await _client.send(
       'get',
@@ -1815,25 +2326,39 @@ class IssueAttachmentsApi {
     ));
   }
 
-  /// Adds one or more attachments to an issue. Attachments are posted as multipart/form-data ([RFC 1867](https://www.ietf.org/rfc/rfc1867.txt)).
+  /// Adds one or more attachments to an issue. Attachments are posted as
+  /// multipart/form-data ([RFC 1867](https://www.ietf.org/rfc/rfc1867.txt)).
   ///
   /// Note that:
   ///
-  ///  *  The request must have a `X-Atlassian-Token: no-check` header, if not it is blocked. See [Special headers](#special-request-headers) for more information.
-  ///  *  The name of the multipart/form-data parameter that contains the attachments must be `file`.
+  ///  *  The request must have a `X-Atlassian-Token: no-check` header, if not
+  /// it is blocked. See [Special headers](#special-request-headers) for more
+  /// information.
+  ///  *  The name of the multipart/form-data parameter that contains the
+  /// attachments must be `file`.
   ///
-  /// The following example uploads a file called *myfile.txt* to the issue *TEST-123*:
+  /// The following example uploads a file called *myfile.txt* to the issue
+  /// *TEST-123*:
   ///
-  /// `curl -D- -u admin:admin -X POST -H "X-Atlassian-Token: no-check" -F "file=@myfile.txt" https://your-domain.atlassian.net/rest/api/3/issue/TEST-123/attachments`
+  /// `curl -D- -u admin:admin -X POST -H "X-Atlassian-Token: no-check" -F
+  /// "file=@myfile.txt"
+  /// https://your-domain.atlassian.net/rest/api/3/issue/TEST-123/attachments`
   ///
-  /// Tip: Use a client library. Many client libraries have classes for handling multipart POST operations. For example, in Java, the Apache HTTP Components library provides a [MultiPartEntity](http://hc.apache.org/httpcomponents-client-ga/httpmime/apidocs/org/apache/http/entity/mime/MultipartEntity.html) class for multipart POST operations.
+  /// Tip: Use a client library. Many client libraries have classes for handling
+  /// multipart POST operations. For example, in Java, the Apache HTTP
+  /// Components library provides a
+  /// [MultiPartEntity](http://hc.apache.org/httpcomponents-client-ga/httpmime/apidocs/org/apache/http/entity/mime/MultipartEntity.html)
+  /// class for multipart POST operations.
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse Projects* and *Create attachments* [ project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse Projects* and *Create attachments*
+  /// [ project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<List<Attachment>> addAttachment(
       {required String issueIdOrKey, File? file}) async {
     return (await _client.send(
@@ -1856,15 +2381,21 @@ class IssueCommentsApi {
 
   IssueCommentsApi._(this._client);
 
-  /// Returns a [paginated](#pagination) list of just the comments for a list of comments specified by comment IDs.
+  /// Returns a [paginated](#pagination) list of just the comments for a list of
+  /// comments specified by comment IDs.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** Comments are returned where the user:
+  /// **[Permissions](#permissions) required:** Comments are returned where the
+  /// user:
   ///
-  ///  *  has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the comment.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  If the comment has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+  ///  *  has *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the comment.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  If the comment has visibility restrictions, belongs to the group or
+  /// has the role visibility is restricted to.
   Future<PageBeanComment> getCommentsByIds(
       {String? expand, required IssueCommentListRequestBean body}) async {
     return PageBeanComment.fromJson(await _client.send(
@@ -1881,11 +2412,16 @@ class IssueCommentsApi {
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** Comments are included in the response where the user has:
+  /// **[Permissions](#permissions) required:** Comments are included in the
+  /// response where the user has:
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the comment.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  If the comment has visibility restrictions, belongs to the group or has the role visibility is role visibility is restricted to.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the comment.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  If the comment has visibility restrictions, belongs to the group or
+  /// has the role visibility is role visibility is restricted to.
   Future<PageOfComments> getComments(
       {required String issueIdOrKey,
       int? startAt,
@@ -1913,8 +2449,11 @@ class IssueCommentsApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* and *Add comments* [ project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue containing the comment is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects* and *Add comments*
+  /// [ project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue containing the comment is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<Comment> addComment(
       {required String issueIdOrKey,
       String? expand,
@@ -1938,9 +2477,13 @@ class IssueCommentsApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the comment.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  If the comment has visibility restrictions, the user belongs to the group or has the role visibility is restricted to.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the comment.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  If the comment has visibility restrictions, the user belongs to the
+  /// group or has the role visibility is restricted to.
   Future<Comment> getComment(
       {required String issueIdOrKey,
       required String id,
@@ -1964,10 +2507,17 @@ class IssueCommentsApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue containing the comment is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  *Edit all comments*[ project permission](https://confluence.atlassian.com/x/yodKLg) to update any comment or *Edit own comments* to update comment created by the user.
-  ///  *  If the comment has visibility restrictions, the user belongs to the group or has the role visibility is restricted to.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue containing the comment is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  *Edit all
+  /// comments*[ project permission](https://confluence.atlassian.com/x/yodKLg)
+  /// to update any comment or *Edit own comments* to update comment created by
+  /// the user.
+  ///  *  If the comment has visibility restrictions, the user belongs to the
+  /// group or has the role visibility is restricted to.
   Future<Comment> updateComment(
       {required String issueIdOrKey,
       required String id,
@@ -1991,10 +2541,17 @@ class IssueCommentsApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue containing the comment is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  *Delete all comments*[ project permission](https://confluence.atlassian.com/x/yodKLg) to delete any comment or *Delete own comments* to delete comment created by the user,
-  ///  *  If the comment has visibility restrictions, the user belongs to the group or has the role visibility is restricted to.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue containing the comment is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  *Delete all
+  /// comments*[ project permission](https://confluence.atlassian.com/x/yodKLg)
+  /// to delete any comment or *Delete own comments* to delete comment created
+  /// by the user,
+  ///  *  If the comment has visibility restrictions, the user belongs to the
+  /// group or has the role visibility is restricted to.
   Future<void> deleteComment(
       {required String issueIdOrKey, required String id}) async {
     await _client.send(
@@ -2021,9 +2578,13 @@ class IssueCommentPropertiesApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  If the comment has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  If the comment has visibility restrictions, belongs to the group or
+  /// has the role visibility is restricted to.
   Future<PropertyKeys> getCommentPropertyKeys(String commentId) async {
     return PropertyKeys.fromJson(await _client.send(
       'get',
@@ -2040,9 +2601,13 @@ class IssueCommentPropertiesApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  If the comment has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  If the comment has visibility restrictions, belongs to the group or
+  /// has the role visibility is restricted to.
   Future<EntityProperty> getCommentProperty(
       {required String commentId, required String propertyKey}) async {
     return EntityProperty.fromJson(await _client.send(
@@ -2055,16 +2620,24 @@ class IssueCommentPropertiesApi {
     ));
   }
 
-  /// Creates or updates the value of a property for a comment. Use this resource to store custom data against a comment.
+  /// Creates or updates the value of a property for a comment. Use this
+  /// resource to store custom data against a comment.
   ///
-  /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
+  /// The value of the request body must be a
+  /// [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The
+  /// maximum length is 32768 characters.
   ///
   /// **[Permissions](#permissions) required:** either of:
   ///
-  ///  *  *Edit All Comments* [project permission](https://confluence.atlassian.com/x/yodKLg) to create or update the value of a property on any comment.
-  ///  *  *Edit Own Comments* [project permission](https://confluence.atlassian.com/x/yodKLg) to create or update the value of a property on a comment created by the user.
+  ///  *  *Edit All Comments*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) to create
+  /// or update the value of a property on any comment.
+  ///  *  *Edit Own Comments*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) to create
+  /// or update the value of a property on a comment created by the user.
   ///
-  /// Also, when the visibility of a comment is restricted to a role or group the user must be a member of that role or group.
+  /// Also, when the visibility of a comment is restricted to a role or group
+  /// the user must be a member of that role or group.
   Future<void> setCommentProperty(
       {required String commentId,
       required String propertyKey,
@@ -2084,10 +2657,15 @@ class IssueCommentPropertiesApi {
   ///
   /// **[Permissions](#permissions) required:** either of:
   ///
-  ///  *  *Edit All Comments* [project permission](https://confluence.atlassian.com/x/yodKLg) to delete a property from any comment.
-  ///  *  *Edit Own Comments* [project permission](https://confluence.atlassian.com/x/yodKLg) to delete a property from a comment created by the user.
+  ///  *  *Edit All Comments*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) to delete
+  /// a property from any comment.
+  ///  *  *Edit Own Comments*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) to delete
+  /// a property from a comment created by the user.
   ///
-  /// Also, when the visibility of a comment is restricted to a role or group the user must be a member of that role or group.
+  /// Also, when the visibility of a comment is restricted to a role or group
+  /// the user must be a member of that role or group.
   Future<void> deleteCommentProperty(
       {required String commentId, required String propertyKey}) async {
     await _client.send(
@@ -2110,10 +2688,16 @@ class IssueFieldsApi {
 
   /// Returns system and custom issue fields according to the following rules:
   ///
-  ///  *  Fields that cannot be added to the issue navigator are always returned.
+  ///  *  Fields that cannot be added to the issue navigator are always
+  /// returned.
   ///  *  Fields that cannot be placed on an issue screen are always returned.
-  ///  *  Fields that depend on global Jira settings are only returned if the setting is enabled. That is, timetracking fields, subtasks, votes, and watches.
-  ///  *  For all other fields, this operation only returns the fields that the user has permission to view (that is, the field is used in at least one project that the user has *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.)
+  ///  *  Fields that depend on global Jira settings are only returned if the
+  /// setting is enabled. That is, timetracking fields, subtasks, votes, and
+  /// watches.
+  ///  *  For all other fields, this operation only returns the fields that the
+  /// user has permission to view (that is, the field is used in at least one
+  /// project that the user has *Browse Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for.)
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -2130,7 +2714,8 @@ class IssueFieldsApi {
 
   /// Creates a custom field.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<FieldDetails> createCustomField(
       {required CustomFieldDefinitionJsonBean body}) async {
     return FieldDetails.fromJson(await _client.send(
@@ -2140,16 +2725,20 @@ class IssueFieldsApi {
     ));
   }
 
-  /// Returns a [paginated](#pagination) list of fields for Classic Jira projects. The list can include:
+  /// Returns a [paginated](#pagination) list of fields for Classic Jira
+  /// projects. The list can include:
   ///
   ///  *  all fields.
   ///  *  specific fields, by defining `id`.
-  ///  *  fields that contain a string in the field name or description, by defining `query`.
-  ///  *  specific fields that contain a string in the field name or description, by defining `id` and `query`.
+  ///  *  fields that contain a string in the field name or description, by
+  /// defining `query`.
+  ///  *  specific fields that contain a string in the field name or
+  /// description, by defining `id` and `query`.
   ///
   /// Only custom fields can be queried, `type` must be set to `custom`.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanField> getFieldsPaginated(
       {int? startAt,
       int? maxResults,
@@ -2175,7 +2764,8 @@ class IssueFieldsApi {
 
   /// Updates a custom field.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> updateCustomField(
       {required String fieldId, required UpdateCustomFieldDetails body}) async {
     await _client.send(
@@ -2188,9 +2778,12 @@ class IssueFieldsApi {
     );
   }
 
-  /// Returns a [paginated](#pagination) list of the contexts a field is used in. Deprecated, use [ Get custom field contexts](#api-rest-api-3-field-fieldId-context-get).
+  /// Returns a [paginated](#pagination) list of the contexts a field is used
+  /// in. Deprecated, use
+  /// [ Get custom field contexts](#api-rest-api-3-field-fieldId-context-get).
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanContext> getContextsForFieldDeprecated(
       {required String fieldId, int? startAt, int? maxResults}) async {
     return PageBeanContext.fromJson(await _client.send(
@@ -2218,7 +2811,8 @@ class IssueFieldConfigurationsApi {
   ///
   /// Only field configurations used in classic projects are returned.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanFieldConfiguration> getAllFieldConfigurations(
       {int? startAt, int? maxResults, List<int>? id, bool? isDefault}) async {
     return PageBeanFieldConfiguration.fromJson(await _client.send(
@@ -2237,7 +2831,8 @@ class IssueFieldConfigurationsApi {
   ///
   /// Only the fields from configurations used in classic projects are returned.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanFieldConfigurationItem> getFieldConfigurationItems(
       {required int id, int? startAt, int? maxResults}) async {
     return PageBeanFieldConfigurationItem.fromJson(await _client.send(
@@ -2257,7 +2852,8 @@ class IssueFieldConfigurationsApi {
   ///
   /// Only field configuration schemes used in classic projects are returned.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanFieldConfigurationScheme> getAllFieldConfigurationSchemes(
       {int? startAt, int? maxResults, List<int>? id}) async {
     return PageBeanFieldConfigurationScheme.fromJson(await _client.send(
@@ -2271,11 +2867,13 @@ class IssueFieldConfigurationsApi {
     ));
   }
 
-  /// Returns a [paginated](#pagination) list of field configuration issue type items.
+  /// Returns a [paginated](#pagination) list of field configuration issue type
+  /// items.
   ///
   /// Only items used in classic projects are returned.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanFieldConfigurationIssueTypeItem>
       getFieldConfigurationSchemeMappings(
           {int? startAt,
@@ -2293,13 +2891,17 @@ class IssueFieldConfigurationsApi {
     ));
   }
 
-  /// Returns a [paginated](#pagination) list of field configuration schemes and, for each scheme, a list of the projects that use it.
+  /// Returns a [paginated](#pagination) list of field configuration schemes
+  /// and, for each scheme, a list of the projects that use it.
   ///
-  /// The list is sorted by field configuration scheme ID. The first item contains the list of project IDs assigned to the default field configuration scheme.
+  /// The list is sorted by field configuration scheme ID. The first item
+  /// contains the list of project IDs assigned to the default field
+  /// configuration scheme.
   ///
   /// Only field configuration schemes used in classic projects are returned.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanFieldConfigurationSchemeProjects>
       getFieldConfigurationSchemeProjectMapping(
           {int? startAt, int? maxResults, required List<int> projectId}) async {
@@ -2314,11 +2916,14 @@ class IssueFieldConfigurationsApi {
     ));
   }
 
-  /// Assigns a field configuration scheme to a project. If the field configuration scheme ID is `null`, the operation assigns the default field configuration scheme.
+  /// Assigns a field configuration scheme to a project. If the field
+  /// configuration scheme ID is `null`, the operation assigns the default field
+  /// configuration scheme.
   ///
   /// Field configuration schemes can only be assigned to classic projects.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> assignFieldConfigurationSchemeToProject(
       {required FieldConfigurationSchemeProjectAssociation body}) async {
     await _client.send(
@@ -2336,14 +2941,21 @@ class IssueCustomFieldContextsApi {
 
   IssueCustomFieldContextsApi._(this._client);
 
-  /// Returns a [paginated](#pagination) list of [ contexts](https://confluence.atlassian.com/adminjiracloud/what-are-custom-field-contexts-991923859.html) for a custom field. Contexts can be returned as follows:
+  /// Returns a [paginated](#pagination) list of
+  /// [ contexts](https://confluence.atlassian.com/adminjiracloud/what-are-custom-field-contexts-991923859.html)
+  /// for a custom field. Contexts can be returned as follows:
   ///
   ///  *  With no other parameters set, all contexts.
   ///  *  By defining `id` only, all contexts from the list of IDs.
-  ///  *  By defining `isAnyIssueType`, limit the list of contexts returned to either those that apply to all issue types (true) or those that apply to only a subset of issue types (false)
-  ///  *  By defining `isGlobalContext`, limit the list of contexts return to either those that apply to all projects (global contexts) (true) or those that apply to only a subset of projects (false).
+  ///  *  By defining `isAnyIssueType`, limit the list of contexts returned to
+  /// either those that apply to all issue types (true) or those that apply to
+  /// only a subset of issue types (false)
+  ///  *  By defining `isGlobalContext`, limit the list of contexts return to
+  /// either those that apply to all projects (global contexts) (true) or those
+  /// that apply to only a subset of projects (false).
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanCustomFieldContext> getContextsForField(
       {required String fieldId,
       bool? isAnyIssueType,
@@ -2369,9 +2981,12 @@ class IssueCustomFieldContextsApi {
 
   /// Creates a custom field context.
   ///
-  /// If `projectIds` is empty, a global context is created. A global context is one that applies to all project. If `issueTypeIds` is empty, the context applies to all issue types.
+  /// If `projectIds` is empty, a global context is created. A global context is
+  /// one that applies to all project. If `issueTypeIds` is empty, the context
+  /// applies to all issue types.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<CreateCustomFieldContext> createCustomFieldContext(
       {required String fieldId, required CreateCustomFieldContext body}) async {
     return CreateCustomFieldContext.fromJson(await _client.send(
@@ -2384,14 +2999,20 @@ class IssueCustomFieldContextsApi {
     ));
   }
 
-  /// Returns a [paginated](#pagination) list of defaults for a custom field. The results can be filtered by `contextId`, otherwise all values are returned. If no defaults are set for a context, nothing is returned.
+  /// Returns a [paginated](#pagination) list of defaults for a custom field.
+  /// The results can be filtered by `contextId`, otherwise all values are
+  /// returned. If no defaults are set for a context, nothing is returned.
   /// The returned object depends on type of the custom field:
   ///
-  ///  *  `CustomFieldContextDefaultValueSingleOption` (type `option.single`) for single choice select lists and radio buttons.
-  ///  *  `CustomFieldContextDefaultValueMultipleOption` (type `option.multiple`) for multiple choice select lists and checkboxes.
-  ///  *  `CustomFieldContextDefaultValueCascadingOption` (type `option.cascading`) for cascading select lists.
+  ///  *  `CustomFieldContextDefaultValueSingleOption` (type `option.single`)
+  /// for single choice select lists and radio buttons.
+  ///  *  `CustomFieldContextDefaultValueMultipleOption` (type
+  /// `option.multiple`) for multiple choice select lists and checkboxes.
+  ///  *  `CustomFieldContextDefaultValueCascadingOption` (type
+  /// `option.cascading`) for cascading select lists.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanCustomFieldContextDefaultValue> getDefaultValues(
       {required String fieldId,
       List<int>? contextId,
@@ -2411,15 +3032,21 @@ class IssueCustomFieldContextsApi {
     ));
   }
 
-  /// Sets default for contexts of a custom field. Default are defined using these objects:
+  /// Sets default for contexts of a custom field. Default are defined using
+  /// these objects:
   ///
-  ///  *  `CustomFieldContextDefaultValueSingleOption` (type `option.single`) for single choice select lists and radio buttons.
-  ///  *  `CustomFieldContextDefaultValueMultipleOption` (type `option.multiple`) for multiple choice select lists and checkboxes.
-  ///  *  `CustomFieldContextDefaultValueCascadingOption` (type `option.cascading`) for cascading select lists.
+  ///  *  `CustomFieldContextDefaultValueSingleOption` (type `option.single`)
+  /// for single choice select lists and radio buttons.
+  ///  *  `CustomFieldContextDefaultValueMultipleOption` (type
+  /// `option.multiple`) for multiple choice select lists and checkboxes.
+  ///  *  `CustomFieldContextDefaultValueCascadingOption` (type
+  /// `option.cascading`) for cascading select lists.
   ///
-  /// Only one type of default object can be included in a request. To remove a default for a context, set the default parameter to `null`.
+  /// Only one type of default object can be included in a request. To remove a
+  /// default for a context, set the default parameter to `null`.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> setDefaultValues(
       {required String fieldId,
       required CustomFieldContextDefaultValueUpdate body}) async {
@@ -2433,9 +3060,13 @@ class IssueCustomFieldContextsApi {
     );
   }
 
-  /// Returns a [paginated](#pagination) list of context to issue type mappings for a custom field. Mappings are returned for all contexts or a list of contexts. Mappings are ordered first by context ID and then by issue type ID.
+  /// Returns a [paginated](#pagination) list of context to issue type mappings
+  /// for a custom field. Mappings are returned for all contexts or a list of
+  /// contexts. Mappings are ordered first by context ID and then by issue type
+  /// ID.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanIssueTypeToContextMapping> getIssueTypeMappingsForContexts(
       {required String fieldId,
       List<int>? contextId,
@@ -2455,15 +3086,23 @@ class IssueCustomFieldContextsApi {
     ));
   }
 
-  /// Returns a [paginated](#pagination) list of project and issue type mappings and, for each mapping, the ID of a [custom field context](https://confluence.atlassian.com/x/k44fOw) that applies to the project and issue type.
+  /// Returns a [paginated](#pagination) list of project and issue type mappings
+  /// and, for each mapping, the ID of a
+  /// [custom field context](https://confluence.atlassian.com/x/k44fOw) that
+  /// applies to the project and issue type.
   ///
-  /// If there is no custom field context assigned to the project then, if present, the custom field context that applies to all projects is returned if it also applies to the issue type or all issue types. If a custom field context is not found, the returned custom field context ID is `null`.
+  /// If there is no custom field context assigned to the project then, if
+  /// present, the custom field context that applies to all projects is returned
+  /// if it also applies to the issue type or all issue types. If a custom field
+  /// context is not found, the returned custom field context ID is `null`.
   ///
-  /// Duplicate project and issue type mappings cannot be provided in the request.
+  /// Duplicate project and issue type mappings cannot be provided in the
+  /// request.
   ///
   /// The order of the returned values is the same as provided in the request.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanContextForProjectAndIssueType>
       getCustomFieldContextsForProjectsAndIssueTypes(
           {required String fieldId,
@@ -2484,9 +3123,12 @@ class IssueCustomFieldContextsApi {
     ));
   }
 
-  /// Returns a [paginated](#pagination) list of context to project mappings for a custom field. The result can be filtered by `contextId`, or otherwise all mappings are returned. Invalid IDs are ignored.
+  /// Returns a [paginated](#pagination) list of context to project mappings for
+  /// a custom field. The result can be filtered by `contextId`, or otherwise
+  /// all mappings are returned. Invalid IDs are ignored.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanCustomFieldContextProjectMapping> getProjectContextMapping(
       {required String fieldId,
       List<int>? contextId,
@@ -2506,9 +3148,11 @@ class IssueCustomFieldContextsApi {
     ));
   }
 
-  /// Updates a [ custom field context](https://confluence.atlassian.com/adminjiracloud/what-are-custom-field-contexts-991923859.html).
+  /// Updates a
+  /// [ custom field context](https://confluence.atlassian.com/adminjiracloud/what-are-custom-field-contexts-991923859.html).
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> updateCustomFieldContext(
       {required String fieldId,
       required int contextId,
@@ -2524,9 +3168,11 @@ class IssueCustomFieldContextsApi {
     );
   }
 
-  /// Deletes a [ custom field context](https://confluence.atlassian.com/adminjiracloud/what-are-custom-field-contexts-991923859.html).
+  /// Deletes a
+  /// [ custom field context](https://confluence.atlassian.com/adminjiracloud/what-are-custom-field-contexts-991923859.html).
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteCustomFieldContext(
       {required String fieldId, required int contextId}) async {
     await _client.send(
@@ -2539,13 +3185,18 @@ class IssueCustomFieldContextsApi {
     );
   }
 
-  /// Adds issue types to a custom field context, appending the issue types to the issue types list.
+  /// Adds issue types to a custom field context, appending the issue types to
+  /// the issue types list.
   ///
-  /// A custom field context without any issue types applies to all issue types. Adding issue types to such a custom field context would result in it applying to only the listed issue types.
+  /// A custom field context without any issue types applies to all issue types.
+  /// Adding issue types to such a custom field context would result in it
+  /// applying to only the listed issue types.
   ///
-  /// If any of the issue types exists in the custom field context, the operation fails and no issue types are added.
+  /// If any of the issue types exists in the custom field context, the
+  /// operation fails and no issue types are added.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> addIssueTypesToContext(
       {required String fieldId,
       required int contextId,
@@ -2565,7 +3216,8 @@ class IssueCustomFieldContextsApi {
   ///
   /// A custom field context without any issue types applies to all issue types.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> removeIssueTypesFromContext(
       {required String fieldId,
       required int contextId,
@@ -2583,9 +3235,11 @@ class IssueCustomFieldContextsApi {
 
   /// Assigns a custom field context to projects.
   ///
-  /// If any project in the request is assigned to any context of the custom field, the operation fails.
+  /// If any project in the request is assigned to any context of the custom
+  /// field, the operation fails.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> assignProjectsToCustomFieldContext(
       {required String fieldId,
       required int contextId,
@@ -2603,11 +3257,16 @@ class IssueCustomFieldContextsApi {
 
   /// Removes a custom field context from projects.
   ///
-  /// A custom field context without any projects applies to all projects. Removing all projects from a custom field context would result in it applying to all projects.
+  /// A custom field context without any projects applies to all projects.
+  /// Removing all projects from a custom field context would result in it
+  /// applying to all projects.
   ///
-  /// If any project in the request is not assigned to the context, or the operation would result in two global contexts for the field, the operation fails.
+  /// If any project in the request is not assigned to the context, or the
+  /// operation would result in two global contexts for the field, the operation
+  /// fails.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> removeCustomFieldContextFromProjects(
       {required String fieldId,
       required int contextId,
@@ -2631,13 +3290,26 @@ class IssueCustomFieldOptionsApi {
 
   IssueCustomFieldOptionsApi._(this._client);
 
-  /// This operation is deprecated and becomes unavailable on 8 May 2021. Use [Get custom field options (context)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-get) instead. See [Deprecation of custom field options](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-removal-of-custom-field-options-operations/) for details.
+  /// This operation is deprecated and becomes unavailable on 8 May 2021. Use
+  /// [Get custom field options (context)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-get)
+  /// instead. See
+  /// [Deprecation of custom field options](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-removal-of-custom-field-options-operations/)
+  /// for details.
   ///
-  /// Returns a [paginated](#pagination) list of options and, where the custom select field is of the type *Select List (cascading)*, cascading options for custom select fields. Cascading options are included in the item count when determining pagination. Only options from the global context are returned.
+  /// Returns a [paginated](#pagination) list of options and, where the custom
+  /// select field is of the type *Select List (cascading)*, cascading options
+  /// for custom select fields. Cascading options are included in the item count
+  /// when determining pagination. Only options from the global context are
+  /// returned.
   ///
-  /// Note that this operation **only works for issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource**, it cannot be used with issue field select list options created by Connect apps.
+  /// Note that this operation **only works for issue field select list options
+  /// created in Jira or using operations from the
+  /// [Issue custom field options](#api-group-Issue-custom-field-options)
+  /// resource**, it cannot be used with issue field select list options created
+  /// by Connect apps.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanCustomFieldOptionDetails> getOptionsForField(
       {required int fieldId, int? startAt, int? maxResults}) async {
     return PageBeanCustomFieldOptionDetails.fromJson(await _client.send(
@@ -2653,13 +3325,26 @@ class IssueCustomFieldOptionsApi {
     ));
   }
 
-  /// This operation is deprecated and becomes unavailable on 8 May 2021. Use [Update custom field options (context)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-put) instead. See [Deprecation of custom field options](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-removal-of-custom-field-options-operations/) for details.
+  /// This operation is deprecated and becomes unavailable on 8 May 2021. Use
+  /// [Update custom field options (context)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-put)
+  /// instead. See
+  /// [Deprecation of custom field options](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-removal-of-custom-field-options-operations/)
+  /// for details.
   ///
-  /// Updates the options on a custom select field. Where an updated option is in use on an issue, the value on the issue is also updated. Options that are not found are ignored. A maximum of 1000 options, including sub-options of *Select List (cascading)* fields, can be updated per request. The options are updated on the global context of the field.
+  /// Updates the options on a custom select field. Where an updated option is
+  /// in use on an issue, the value on the issue is also updated. Options that
+  /// are not found are ignored. A maximum of 1000 options, including
+  /// sub-options of *Select List (cascading)* fields, can be updated per
+  /// request. The options are updated on the global context of the field.
   ///
-  /// Note that this operation **only works for issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource**, it cannot be used with issue field select list options created by Connect apps.
+  /// Note that this operation **only works for issue field select list options
+  /// created in Jira or using operations from the
+  /// [Issue custom field options](#api-group-Issue-custom-field-options)
+  /// resource**, it cannot be used with issue field select list options created
+  /// by Connect apps.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> updateCustomFieldOptions(
       {required int fieldId, required UpdateCustomFieldOption body}) async {
     await _client.send(
@@ -2672,13 +3357,24 @@ class IssueCustomFieldOptionsApi {
     );
   }
 
-  /// This operation is deprecated and becomes unavailable on 8 May 2021. Use [Create custom field options (context)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-post) instead. See [Deprecation of custom field options](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-removal-of-custom-field-options-operations/) for details.
+  /// This operation is deprecated and becomes unavailable on 8 May 2021. Use
+  /// [Create custom field options (context)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-post)
+  /// instead. See
+  /// [Deprecation of custom field options](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-removal-of-custom-field-options-operations/)
+  /// for details.
   ///
-  /// Creates options and, where the custom select field is of the type *Select List (cascading)*, cascading options for a custom select field. The options are added to the global context of the field.
+  /// Creates options and, where the custom select field is of the type *Select
+  /// List (cascading)*, cascading options for a custom select field. The
+  /// options are added to the global context of the field.
   ///
-  /// Note that this operation **only works for issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource**, it cannot be used with issue field select list options created by Connect apps.
+  /// Note that this operation **only works for issue field select list options
+  /// created in Jira or using operations from the
+  /// [Issue custom field options](#api-group-Issue-custom-field-options)
+  /// resource**, it cannot be used with issue field select list options created
+  /// by Connect apps.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> createCustomFieldOptions(
       {required int fieldId,
       required BulkCreateCustomFieldOptionRequest body}) async {
@@ -2692,18 +3388,31 @@ class IssueCustomFieldOptionsApi {
     );
   }
 
-  /// This operation is deprecated and becomes unavailable on 8 May 2021. Use [Get custom field options (context)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-get) instead. See [Deprecation of custom field options](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-removal-of-custom-field-options-operations/) for details.
+  /// This operation is deprecated and becomes unavailable on 8 May 2021. Use
+  /// [Get custom field options (context)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-get)
+  /// instead. See
+  /// [Deprecation of custom field options](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-removal-of-custom-field-options-operations/)
+  /// for details.
   ///
   /// Returns a custom field option. For example, an option in a select list.
   ///
-  /// Note that this operation **only works for issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource**, it cannot be used with issue field select list options created by Connect apps.
+  /// Note that this operation **only works for issue field select list options
+  /// created in Jira or using operations from the
+  /// [Issue custom field options](#api-group-Issue-custom-field-options)
+  /// resource**, it cannot be used with issue field select list options created
+  /// by Connect apps.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** The custom field option is returned as follows:
+  /// **[Permissions](#permissions) required:** The custom field option is
+  /// returned as follows:
   ///
-  ///  *  if the user has the *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  ///  *  if the user has the *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for at least one project the custom field is used in, and the field is visible in at least one layout the user has permission to view.
+  ///  *  if the user has the *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  ///  *  if the user has the *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for at
+  /// least one project the custom field is used in, and the field is visible in
+  /// at least one layout the user has permission to view.
   Future<CustomFieldOption> getCustomFieldOption(String id) async {
     return CustomFieldOption.fromJson(await _client.send(
       'get',
@@ -2714,11 +3423,18 @@ class IssueCustomFieldOptionsApi {
     ));
   }
 
-  /// Returns a [paginated](#pagination) list of all custom field option for a context. Options are returned first then cascading options, in the order they display in Jira.
+  /// Returns a [paginated](#pagination) list of all custom field option for a
+  /// context. Options are returned first then cascading options, in the order
+  /// they display in Jira.
   ///
-  /// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](#api-group-issue-custom-field-options--apps-) operations.**
+  /// This operation works for custom field options created in Jira or the
+  /// operations from this resource. **To work with issue field select list
+  /// options created for Connect apps use the
+  /// [Issue custom field options (apps)](#api-group-issue-custom-field-options--apps-)
+  /// operations.**
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanCustomFieldContextOption> getOptionsForContext(
       {required String fieldId,
       required int contextId,
@@ -2744,11 +3460,18 @@ class IssueCustomFieldOptionsApi {
 
   /// Updates the options of a custom field.
   ///
-  /// If any of the options are not found, no options are updated. Options where the values in the request match the current values aren't updated and aren't reported in the response.
+  /// If any of the options are not found, no options are updated. Options where
+  /// the values in the request match the current values aren't updated and
+  /// aren't reported in the response.
   ///
-  /// Note that this operation **only works for issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource**, it cannot be used with issue field select list options created by Connect apps.
+  /// Note that this operation **only works for issue field select list options
+  /// created in Jira or using operations from the
+  /// [Issue custom field options](#api-group-Issue-custom-field-options)
+  /// resource**, it cannot be used with issue field select list options created
+  /// by Connect apps.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<CustomFieldUpdatedContextOptionsList> updateCustomFieldOption(
       {required String fieldId,
       required int contextId,
@@ -2764,13 +3487,21 @@ class IssueCustomFieldOptionsApi {
     ));
   }
 
-  /// Creates options and, where the custom select field is of the type Select List (cascading), cascading options for a custom select field. The options are added to a context of the field.
+  /// Creates options and, where the custom select field is of the type Select
+  /// List (cascading), cascading options for a custom select field. The options
+  /// are added to a context of the field.
   ///
-  /// The maximum number of options that can be created per request is 1000 and each field can have a maximum of 10000 options.
+  /// The maximum number of options that can be created per request is 1000 and
+  /// each field can have a maximum of 10000 options.
   ///
-  /// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](#api-group-issue-custom-field-options--apps-) operations.**
+  /// This operation works for custom field options created in Jira or the
+  /// operations from this resource. **To work with issue field select list
+  /// options created for Connect apps use the
+  /// [Issue custom field options (apps)](#api-group-issue-custom-field-options--apps-)
+  /// operations.**
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<CustomFieldCreatedContextOptionsList> createCustomFieldOption(
       {required String fieldId,
       required int contextId,
@@ -2786,11 +3517,17 @@ class IssueCustomFieldOptionsApi {
     ));
   }
 
-  /// Changes the order of custom field options or cascading options in a context.
+  /// Changes the order of custom field options or cascading options in a
+  /// context.
   ///
-  /// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](#api-group-issue-custom-field-options--apps-) operations.**
+  /// This operation works for custom field options created in Jira or the
+  /// operations from this resource. **To work with issue field select list
+  /// options created for Connect apps use the
+  /// [Issue custom field options (apps)](#api-group-issue-custom-field-options--apps-)
+  /// operations.**
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> reorderCustomFieldOptions(
       {required String fieldId,
       required int contextId,
@@ -2808,11 +3545,17 @@ class IssueCustomFieldOptionsApi {
 
   /// Deletes a custom field option.
   ///
-  /// Options with cascading options cannot be deleted without deleting the cascading options first.
+  /// Options with cascading options cannot be deleted without deleting the
+  /// cascading options first.
   ///
-  /// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](#api-group-issue-custom-field-options--apps-) operations.**
+  /// This operation works for custom field options created in Jira or the
+  /// operations from this resource. **To work with issue field select list
+  /// options created for Connect apps use the
+  /// [Issue custom field options (apps)](#api-group-issue-custom-field-options--apps-)
+  /// operations.**
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteCustomFieldOption(
       {required String fieldId,
       required int contextId,
@@ -2836,11 +3579,20 @@ class IssueCustomFieldOptionsAppsApi {
 
   IssueCustomFieldOptionsAppsApi._(this._client);
 
-  /// Returns a [paginated](#pagination) list of all the options of a select list issue field. A select list issue field is a type of [issue field](https://developer.atlassian.com/cloud/jira/platform/modules/issue-field/) that enables a user to select a value from a list of options.
+  /// Returns a [paginated](#pagination) list of all the options of a select
+  /// list issue field. A select list issue field is a type of
+  /// [issue field](https://developer.atlassian.com/cloud/jira/platform/modules/issue-field/)
+  /// that enables a user to select a value from a list of options.
   ///
-  /// Note that this operation **only works for issue field select list options added by Connect apps**, it cannot be used with issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource.
+  /// Note that this operation **only works for issue field select list options
+  /// added by Connect apps**, it cannot be used with issue field select list
+  /// options created in Jira or using operations from the
+  /// [Issue custom field options](#api-group-Issue-custom-field-options)
+  /// resource.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the app providing the field.
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira
+  /// permissions are not required for the app providing the field.
   Future<PageBeanIssueFieldOption> getAllIssueFieldOptions(
       {int? startAt, int? maxResults, required String fieldKey}) async {
     return PageBeanIssueFieldOption.fromJson(await _client.send(
@@ -2858,9 +3610,15 @@ class IssueCustomFieldOptionsAppsApi {
 
   /// Creates an option for a select list issue field.
   ///
-  /// Note that this operation **only works for issue field select list options added by Connect apps**, it cannot be used with issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource.
+  /// Note that this operation **only works for issue field select list options
+  /// added by Connect apps**, it cannot be used with issue field select list
+  /// options created in Jira or using operations from the
+  /// [Issue custom field options](#api-group-Issue-custom-field-options)
+  /// resource.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the app providing the field.
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira
+  /// permissions are not required for the app providing the field.
   Future<IssueFieldOption> createIssueFieldOption(
       {required String fieldKey,
       required IssueFieldOptionCreateBean body}) async {
@@ -2874,9 +3632,14 @@ class IssueCustomFieldOptionsAppsApi {
     ));
   }
 
-  /// Returns a [paginated](#pagination) list of options for a select list issue field that can be viewed and selected by the user.
+  /// Returns a [paginated](#pagination) list of options for a select list issue
+  /// field that can be viewed and selected by the user.
   ///
-  /// Note that this operation **only works for issue field select list options added by Connect apps**, it cannot be used with issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource.
+  /// Note that this operation **only works for issue field select list options
+  /// added by Connect apps**, it cannot be used with issue field select list
+  /// options created in Jira or using operations from the
+  /// [Issue custom field options](#api-group-Issue-custom-field-options)
+  /// resource.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
   Future<PageBeanIssueFieldOption> getSelectableIssueFieldOptions(
@@ -2898,9 +3661,14 @@ class IssueCustomFieldOptionsAppsApi {
     ));
   }
 
-  /// Returns a [paginated](#pagination) list of options for a select list issue field that can be viewed by the user.
+  /// Returns a [paginated](#pagination) list of options for a select list issue
+  /// field that can be viewed by the user.
   ///
-  /// Note that this operation **only works for issue field select list options added by Connect apps**, it cannot be used with issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource.
+  /// Note that this operation **only works for issue field select list options
+  /// added by Connect apps**, it cannot be used with issue field select list
+  /// options created in Jira or using operations from the
+  /// [Issue custom field options](#api-group-Issue-custom-field-options)
+  /// resource.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
   Future<PageBeanIssueFieldOption> getVisibleIssueFieldOptions(
@@ -2924,9 +3692,15 @@ class IssueCustomFieldOptionsAppsApi {
 
   /// Returns an option from a select list issue field.
   ///
-  /// Note that this operation **only works for issue field select list options added by Connect apps**, it cannot be used with issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource.
+  /// Note that this operation **only works for issue field select list options
+  /// added by Connect apps**, it cannot be used with issue field select list
+  /// options created in Jira or using operations from the
+  /// [Issue custom field options](#api-group-Issue-custom-field-options)
+  /// resource.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the app providing the field.
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira
+  /// permissions are not required for the app providing the field.
   Future<IssueFieldOption> getIssueFieldOption(
       {required String fieldKey, required int optionId}) async {
     return IssueFieldOption.fromJson(await _client.send(
@@ -2939,11 +3713,20 @@ class IssueCustomFieldOptionsAppsApi {
     ));
   }
 
-  /// Updates or creates an option for a select list issue field. This operation requires that the option ID is provided when creating an option, therefore, the option ID needs to be specified as a path and body parameter. The option ID provided in the path and body must be identical.
+  /// Updates or creates an option for a select list issue field. This operation
+  /// requires that the option ID is provided when creating an option,
+  /// therefore, the option ID needs to be specified as a path and body
+  /// parameter. The option ID provided in the path and body must be identical.
   ///
-  /// Note that this operation **only works for issue field select list options added by Connect apps**, it cannot be used with issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource.
+  /// Note that this operation **only works for issue field select list options
+  /// added by Connect apps**, it cannot be used with issue field select list
+  /// options created in Jira or using operations from the
+  /// [Issue custom field options](#api-group-Issue-custom-field-options)
+  /// resource.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the app providing the field.
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira
+  /// permissions are not required for the app providing the field.
   Future<IssueFieldOption> updateIssueFieldOption(
       {required String fieldKey,
       required int optionId,
@@ -2961,9 +3744,15 @@ class IssueCustomFieldOptionsAppsApi {
 
   /// Deletes an option from a select list issue field.
   ///
-  /// Note that this operation **only works for issue field select list options added by Connect apps**, it cannot be used with issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource.
+  /// Note that this operation **only works for issue field select list options
+  /// added by Connect apps**, it cannot be used with issue field select list
+  /// options created in Jira or using operations from the
+  /// [Issue custom field options](#api-group-Issue-custom-field-options)
+  /// resource.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the app providing the field.
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira
+  /// permissions are not required for the app providing the field.
   Future<void> deleteIssueFieldOption(
       {required String fieldKey, required int optionId}) async {
     await _client.send(
@@ -2976,13 +3765,23 @@ class IssueCustomFieldOptionsAppsApi {
     );
   }
 
-  /// Deselects an issue-field select-list option from all issues where it is selected. A different option can be selected to replace the deselected option. The update can also be limited to a smaller set of issues by using a JQL query.
+  /// Deselects an issue-field select-list option from all issues where it is
+  /// selected. A different option can be selected to replace the deselected
+  /// option. The update can also be limited to a smaller set of issues by using
+  /// a JQL query.
   ///
-  /// This is an [asynchronous operation](#async). The response object contains a link to the long-running task.
+  /// This is an [asynchronous operation](#async). The response object contains
+  /// a link to the long-running task.
   ///
-  /// Note that this operation **only works for issue field select list options added by Connect apps**, it cannot be used with issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource.
+  /// Note that this operation **only works for issue field select list options
+  /// added by Connect apps**, it cannot be used with issue field select list
+  /// options created in Jira or using operations from the
+  /// [Issue custom field options](#api-group-Issue-custom-field-options)
+  /// resource.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the app providing the field.
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira
+  /// permissions are not required for the app providing the field.
   Future<TaskProgressBeanRemoveOptionFromIssuesResult> replaceIssueFieldOption(
       {int? replaceWith,
       String? jql,
@@ -3011,20 +3810,33 @@ class IssueLinksApi {
 
   IssueLinksApi._(this._client);
 
-  /// Creates a link between two issues. Use this operation to indicate a relationship between two issues and optionally add a comment to the from (outward) issue. To use this resource the site must have [Issue Linking](https://confluence.atlassian.com/x/yoXKM) enabled.
+  /// Creates a link between two issues. Use this operation to indicate a
+  /// relationship between two issues and optionally add a comment to the from
+  /// (outward) issue. To use this resource the site must have
+  /// [Issue Linking](https://confluence.atlassian.com/x/yoXKM) enabled.
   ///
-  /// This resource returns nothing on the creation of an issue link. To obtain the ID of the issue link, use `https://your-domain.atlassian.net/rest/api/3/issue/[linked issue key]?fields=issuelinks`.
+  /// This resource returns nothing on the creation of an issue link. To obtain
+  /// the ID of the issue link, use
+  /// `https://your-domain.atlassian.net/rest/api/3/issue/[linked issue key]?fields=issuelinks`.
   ///
-  /// If the link request duplicates a link, the response indicates that the issue link was created. If the request included a comment, the comment is added.
+  /// If the link request duplicates a link, the response indicates that the
+  /// issue link was created. If the request included a comment, the comment is
+  /// added.
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse project* [project permission](https://confluence.atlassian.com/x/yodKLg) for all the projects containing the issues to be linked,
-  ///  *  *Link issues* [project permission](https://confluence.atlassian.com/x/yodKLg) on the project containing the from (outward) issue,
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  If the comment has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+  ///  *  *Browse project*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for all
+  /// the projects containing the issues to be linked,
+  ///  *  *Link issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) on the
+  /// project containing the from (outward) issue,
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  If the comment has visibility restrictions, belongs to the group or
+  /// has the role visibility is restricted to.
   Future<void> linkIssues({required LinkIssueRequestJsonBean body}) async {
     await _client.send(
       'post',
@@ -3039,8 +3851,11 @@ class IssueLinksApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse project* [project permission](https://confluence.atlassian.com/x/yodKLg) for all the projects containing the linked issues.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, permission to view both of the issues.
+  ///  *  *Browse project*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for all
+  /// the projects containing the linked issues.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, permission to view both of the issues.
   Future<IssueLink> getIssueLink(String linkId) async {
     return IssueLink.fromJson(await _client.send(
       'get',
@@ -3057,9 +3872,14 @@ class IssueLinksApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  Browse project [project permission](https://confluence.atlassian.com/x/yodKLg) for all the projects containing the issues in the link.
-  ///  *  *Link issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for at least one of the projects containing issues in the link.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, permission to view both of the issues.
+  ///  *  Browse project
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for all
+  /// the projects containing the issues in the link.
+  ///  *  *Link issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for at
+  /// least one of the projects containing issues in the link.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, permission to view both of the issues.
   Future<void> deleteIssueLink(String linkId) async {
     await _client.send(
       'delete',
@@ -3080,11 +3900,14 @@ class IssueLinkTypesApi {
 
   /// Returns a list of all issue link types.
   ///
-  /// To use this operation, the site must have [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
+  /// To use this operation, the site must have
+  /// [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for a project in the site.
+  /// **[Permissions](#permissions) required:** *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for a
+  /// project in the site.
   Future<IssueLinkTypes> getIssueLinkTypes() async {
     return IssueLinkTypes.fromJson(await _client.send(
       'get',
@@ -3092,11 +3915,15 @@ class IssueLinkTypesApi {
     ));
   }
 
-  /// Creates an issue link type. Use this operation to create descriptions of the reasons why issues are linked. The issue link type consists of a name and descriptions for a link's inward and outward relationships.
+  /// Creates an issue link type. Use this operation to create descriptions of
+  /// the reasons why issues are linked. The issue link type consists of a name
+  /// and descriptions for a link's inward and outward relationships.
   ///
-  /// To use this operation, the site must have [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
+  /// To use this operation, the site must have
+  /// [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<IssueLinkType> createIssueLinkType(
       {required IssueLinkType body}) async {
     return IssueLinkType.fromJson(await _client.send(
@@ -3108,11 +3935,14 @@ class IssueLinkTypesApi {
 
   /// Returns an issue link type.
   ///
-  /// To use this operation, the site must have [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
+  /// To use this operation, the site must have
+  /// [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for a project in the site.
+  /// **[Permissions](#permissions) required:** *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for a
+  /// project in the site.
   Future<IssueLinkType> getIssueLinkType(String issueLinkTypeId) async {
     return IssueLinkType.fromJson(await _client.send(
       'get',
@@ -3125,9 +3955,11 @@ class IssueLinkTypesApi {
 
   /// Updates an issue link type.
   ///
-  /// To use this operation, the site must have [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
+  /// To use this operation, the site must have
+  /// [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<IssueLinkType> updateIssueLinkType(
       {required String issueLinkTypeId, required IssueLinkType body}) async {
     return IssueLinkType.fromJson(await _client.send(
@@ -3142,9 +3974,11 @@ class IssueLinkTypesApi {
 
   /// Deletes an issue link type.
   ///
-  /// To use this operation, the site must have [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
+  /// To use this operation, the site must have
+  /// [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteIssueLinkType(String issueLinkTypeId) async {
     await _client.send(
       'delete',
@@ -3165,7 +3999,8 @@ class IssueNavigatorSettingsApi {
 
   /// Returns the default issue navigator columns.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<List<ColumnItem>> getIssueNavigatorDefaultColumns() async {
     return (await _client.send(
       'get',
@@ -3177,15 +4012,21 @@ class IssueNavigatorSettingsApi {
 
   /// Sets the default issue navigator columns.
   ///
-  /// The `columns` parameter accepts a navigable field value and is expressed as HTML form data. To specify multiple columns, pass multiple `columns` parameters. For example, in curl:
+  /// The `columns` parameter accepts a navigable field value and is expressed
+  /// as HTML form data. To specify multiple columns, pass multiple `columns`
+  /// parameters. For example, in curl:
   ///
-  /// `curl -X PUT -d columns=summary -d columns=description https://your-domain.atlassian.net/rest/api/3/settings/columns`
+  /// `curl -X PUT -d columns=summary -d columns=description
+  /// https://your-domain.atlassian.net/rest/api/3/settings/columns`
   ///
   /// If no column details are sent, then all default columns are removed.
   ///
-  /// A navigable field is one that can be used as a column on the issue navigator. Find details of navigable issue columns using [Get fields](#api-rest-api-3-field-get).
+  /// A navigable field is one that can be used as a column on the issue
+  /// navigator. Find details of navigable issue columns using
+  /// [Get fields](#api-rest-api-3-field-get).
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> setIssueNavigatorDefaultColumns({List<String>? body}) async {
     await _client.send(
       'put',
@@ -3202,14 +4043,24 @@ class IssueNotificationSchemesApi {
 
   IssueNotificationSchemesApi._(this._client);
 
-  /// Returns a [paginated](#pagination) list of [notification schemes](https://confluence.atlassian.com/x/8YdKLg) ordered by display name.
+  /// Returns a [paginated](#pagination) list of
+  /// [notification schemes](https://confluence.atlassian.com/x/8YdKLg) ordered
+  /// by display name.
   ///
   /// ### About notification schemes ###
   ///
-  /// A notification scheme is a list of events and recipients who will receive notifications for those events. The list is contained within the `notificationSchemeEvents` object and contains pairs of `events` and `notifications`:
+  /// A notification scheme is a list of events and recipients who will receive
+  /// notifications for those events. The list is contained within the
+  /// `notificationSchemeEvents` object and contains pairs of `events` and
+  /// `notifications`:
   ///
-  ///  *  `event` Identifies the type of event. The events can be [Jira system events](https://confluence.atlassian.com/x/8YdKLg#Creatinganotificationscheme-eventsEvents) or [custom events](https://confluence.atlassian.com/x/AIlKLg).
-  ///  *  `notifications` Identifies the [recipients](https://confluence.atlassian.com/x/8YdKLg#Creatinganotificationscheme-recipientsRecipients) of notifications for each event. Recipients can be any of the following types:
+  ///  *  `event` Identifies the type of event. The events can be
+  /// [Jira system events](https://confluence.atlassian.com/x/8YdKLg#Creatinganotificationscheme-eventsEvents)
+  /// or [custom events](https://confluence.atlassian.com/x/AIlKLg).
+  ///  *  `notifications` Identifies the
+  /// [recipients](https://confluence.atlassian.com/x/8YdKLg#Creatinganotificationscheme-recipientsRecipients)
+  /// of notifications for each event. Recipients can be any of the following
+  /// types:
   ///
   ///      *  `CurrentAssignee`
   ///      *  `Reporter`
@@ -3224,9 +4075,12 @@ class IssueNotificationSchemesApi {
   ///      *  `UserCustomField` (the `parameter` is the ID of the custom field)
   ///      *  `GroupCustomField`(the `parameter` is the ID of the custom field)
   ///
-  /// *Note that you should allow for events without recipients to appear in responses.*
+  /// *Note that you should allow for events without recipients to appear in
+  /// responses.*
   ///
-  /// **[Permissions](#permissions) required:** Permission to access Jira, however the user must have permission to administer at least one project associated with a notification scheme for it to be returned.
+  /// **[Permissions](#permissions) required:** Permission to access Jira,
+  /// however the user must have permission to administer at least one project
+  /// associated with a notification scheme for it to be returned.
   Future<PageBeanNotificationScheme> getNotificationSchemes(
       {int? startAt, int? maxResults, String? expand}) async {
     return PageBeanNotificationScheme.fromJson(await _client.send(
@@ -3240,9 +4094,14 @@ class IssueNotificationSchemesApi {
     ));
   }
 
-  /// Returns a [notification scheme](https://confluence.atlassian.com/x/8YdKLg), including the list of events and the recipients who will receive notifications for those events.
+  /// Returns a
+  /// [notification scheme](https://confluence.atlassian.com/x/8YdKLg),
+  /// including the list of events and the recipients who will receive
+  /// notifications for those events.
   ///
-  /// **[Permissions](#permissions) required:** Permission to access Jira, however the user must have permission to administer at least one project associated with the notification scheme.
+  /// **[Permissions](#permissions) required:** Permission to access Jira,
+  /// however the user must have permission to administer at least one project
+  /// associated with the notification scheme.
   Future<NotificationScheme> getNotificationScheme(
       {required int id, String? expand}) async {
     return NotificationScheme.fromJson(await _client.send(
@@ -3298,19 +4157,29 @@ class IssuePropertiesApi {
 
   IssuePropertiesApi._(this._client);
 
-  /// Sets the values of entity properties on issues. It can set up to 10 entity properties on up to 10,000 issues.
+  /// Sets the values of entity properties on issues. It can set up to 10 entity
+  /// properties on up to 10,000 issues.
   ///
-  /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON. The maximum length of single issue property value is 32768 characters. This operation can be accessed anonymously.
+  /// The value of the request body must be a
+  /// [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON. The maximum
+  /// length of single issue property value is 32768 characters. This operation
+  /// can be accessed anonymously.
   ///
   /// This operation is:
   ///
-  ///  *  transactional, either all properties are updated in all eligible issues or, when errors occur, no properties are updated.
-  ///  *  [asynchronous](#async). Follow the `location` link in the response to determine the status of the task and use [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+  ///  *  transactional, either all properties are updated in all eligible
+  /// issues or, when errors occur, no properties are updated.
+  ///  *  [asynchronous](#async). Follow the `location` link in the response to
+  /// determine the status of the task and use
+  /// [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* and *Edit issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects* and *Edit issues*
+  /// [project permissions](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the issue.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<void> bulkSetIssuesProperties(
       {required IssueEntityProperties body}) async {
     await _client.send(
@@ -3322,35 +4191,55 @@ class IssuePropertiesApi {
 
   /// Sets a property value on multiple issues.
   ///
-  /// The value set can be a constant or determined by a [Jira expression](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/). Expressions must be computable with constant complexity when applied to a set of issues. Expressions must also comply with the [restrictions](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/#restrictions) that apply to all Jira expressions.
+  /// The value set can be a constant or determined by a
+  /// [Jira expression](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/).
+  /// Expressions must be computable with constant complexity when applied to a
+  /// set of issues. Expressions must also comply with the
+  /// [restrictions](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/#restrictions)
+  /// that apply to all Jira expressions.
   ///
   /// The issues to be updated can be specified by a filter.
   ///
   /// The filter identifies issues eligible for update using these criteria:
   ///
   ///  *  `entityIds` Only issues from this list are eligible.
-  ///  *  `currentValue` Only issues with the property set to this value are eligible.
+  ///  *  `currentValue` Only issues with the property set to this value are
+  /// eligible.
   ///  *  `hasProperty`:
   ///
   ///      *  If *true*, only issues with the property are eligible.
   ///      *  If *false*, only issues without the property are eligible.
   ///
-  /// If more than one criteria is specified, they are joined with the logical *AND*: only issues that satisfy all criteria are eligible.
+  /// If more than one criteria is specified, they are joined with the logical
+  /// *AND*: only issues that satisfy all criteria are eligible.
   ///
-  /// If an invalid combination of criteria is provided, an error is returned. For example, specifying a `currentValue` and `hasProperty` as *false* would not match any issues (because without the property the property cannot have a value).
+  /// If an invalid combination of criteria is provided, an error is returned.
+  /// For example, specifying a `currentValue` and `hasProperty` as *false*
+  /// would not match any issues (because without the property the property
+  /// cannot have a value).
   ///
-  /// The filter is optional. Without the filter all the issues visible to the user and where the user has the EDIT\_ISSUES permission for the issue are considered eligible.
+  /// The filter is optional. Without the filter all the issues visible to the
+  /// user and where the user has the EDIT_ISSUES permission for the issue are
+  /// considered eligible.
   ///
   /// This operation is:
   ///
-  ///  *  transactional, either all eligible issues are updated or, when errors occur, none are updated.
-  ///  *  [asynchronous](#async). Follow the `location` link in the response to determine the status of the task and use [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+  ///  *  transactional, either all eligible issues are updated or, when errors
+  /// occur, none are updated.
+  ///  *  [asynchronous](#async). Follow the `location` link in the response to
+  /// determine the status of the task and use
+  /// [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for each project containing issues.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  *Edit issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for each issue.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for each
+  /// project containing issues.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  *Edit issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for each
+  /// issue.
   Future<void> bulkSetIssueProperty(
       {required String propertyKey,
       required BulkIssuePropertyUpdateRequest body}) async {
@@ -3364,27 +4253,40 @@ class IssuePropertiesApi {
     );
   }
 
-  /// Deletes a property value from multiple issues. The issues to be updated can be specified by filter criteria.
+  /// Deletes a property value from multiple issues. The issues to be updated
+  /// can be specified by filter criteria.
   ///
   /// The criteria the filter used to identify eligible issues are:
   ///
   ///  *  `entityIds` Only issues from this list are eligible.
-  ///  *  `currentValue` Only issues with the property set to this value are eligible.
+  ///  *  `currentValue` Only issues with the property set to this value are
+  /// eligible.
   ///
-  /// If both criteria is specified, they are joined with the logical *AND*: only issues that satisfy both criteria are considered eligible.
+  /// If both criteria is specified, they are joined with the logical *AND*:
+  /// only issues that satisfy both criteria are considered eligible.
   ///
-  /// If no filter criteria are specified, all the issues visible to the user and where the user has the EDIT\_ISSUES permission for the issue are considered eligible.
+  /// If no filter criteria are specified, all the issues visible to the user
+  /// and where the user has the EDIT_ISSUES permission for the issue are
+  /// considered eligible.
   ///
   /// This operation is:
   ///
-  ///  *  transactional, either the property is deleted from all eligible issues or, when errors occur, no properties are deleted.
-  ///  *  [asynchronous](#async). Follow the `location` link in the response to determine the status of the task and use [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+  ///  *  transactional, either the property is deleted from all eligible issues
+  /// or, when errors occur, no properties are deleted.
+  ///  *  [asynchronous](#async). Follow the `location` link in the response to
+  /// determine the status of the task and use
+  /// [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [ project permission](https://confluence.atlassian.com/x/yodKLg) for each project containing issues.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  *Edit issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for each issue.
+  ///  *  *Browse projects*
+  /// [ project permission](https://confluence.atlassian.com/x/yodKLg) for each
+  /// project containing issues.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  *Edit issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for each
+  /// issue.
   Future<void> bulkDeleteIssueProperty(
       {required String propertyKey,
       required IssueFilterForBulkPropertyDelete body}) async {
@@ -3402,10 +4304,14 @@ class IssuePropertiesApi {
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** Property details are only returned where the user has:
+  /// **[Permissions](#permissions) required:** Property details are only
+  /// returned where the user has:
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the issue.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<PropertyKeys> getIssuePropertyKeys(String issueIdOrKey) async {
     return PropertyKeys.fromJson(await _client.send(
       'get',
@@ -3422,8 +4328,11 @@ class IssuePropertiesApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the issue.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<EntityProperty> getIssueProperty(
       {required String issueIdOrKey, required String propertyKey}) async {
     return EntityProperty.fromJson(await _client.send(
@@ -3436,16 +4345,22 @@ class IssuePropertiesApi {
     ));
   }
 
-  /// Sets the value of an issue's property. Use this resource to store custom data against an issue.
+  /// Sets the value of an issue's property. Use this resource to store custom
+  /// data against an issue.
   ///
-  /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
+  /// The value of the request body must be a
+  /// [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The
+  /// maximum length is 32768 characters.
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* and *Edit issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects* and *Edit issues*
+  /// [project permissions](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the issue.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<void> setIssueProperty(
       {required String issueIdOrKey,
       required String propertyKey,
@@ -3467,8 +4382,11 @@ class IssuePropertiesApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* and *Edit issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects* and *Edit issues*
+  /// [project permissions](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the issue.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<void> deleteIssueProperty(
       {required String issueIdOrKey, required String propertyKey}) async {
     await _client.send(
@@ -3489,16 +4407,25 @@ class IssueRemoteLinksApi {
 
   IssueRemoteLinksApi._(this._client);
 
-  /// Returns the remote issue links for an issue. When a remote issue link global ID is provided the record with that global ID is returned, otherwise all remote issue links are returned. Where a global ID includes reserved URL characters these must be escaped in the request. For example, pass `system=http://www.mycompany.com/support&id=1` as `system%3Dhttp%3A%2F%2Fwww.mycompany.com%2Fsupport%26id%3D1`.
+  /// Returns the remote issue links for an issue. When a remote issue link
+  /// global ID is provided the record with that global ID is returned,
+  /// otherwise all remote issue links are returned. Where a global ID includes
+  /// reserved URL characters these must be escaped in the request. For example,
+  /// pass `system=http://www.mycompany.com/support&id=1` as
+  /// `system%3Dhttp%3A%2F%2Fwww.mycompany.com%2Fsupport%26id%3D1`.
   ///
-  /// This operation requires [issue linking to be active](https://confluence.atlassian.com/x/yoXKM).
+  /// This operation requires
+  /// [issue linking to be active](https://confluence.atlassian.com/x/yoXKM).
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<RemoteIssueLink> getRemoteIssueLinks(
       {required String issueIdOrKey, String? globalId}) async {
     return RemoteIssueLink.fromJson(await _client.send(
@@ -3515,16 +4442,22 @@ class IssueRemoteLinksApi {
 
   /// Creates or updates a remote issue link for an issue.
   ///
-  /// If a `globalId` is provided and a remote issue link with that global ID is found it is updated. Any fields without values in the request are set to null. Otherwise, the remote issue link is created.
+  /// If a `globalId` is provided and a remote issue link with that global ID is
+  /// found it is updated. Any fields without values in the request are set to
+  /// null. Otherwise, the remote issue link is created.
   ///
-  /// This operation requires [issue linking to be active](https://confluence.atlassian.com/x/yoXKM).
+  /// This operation requires
+  /// [issue linking to be active](https://confluence.atlassian.com/x/yoXKM).
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* and *Link issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects* and *Link issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<RemoteIssueLinkIdentifies> createOrUpdateRemoteIssueLink(
       {required String issueIdOrKey,
       required RemoteIssueLinkRequest body}) async {
@@ -3538,16 +4471,24 @@ class IssueRemoteLinksApi {
     ));
   }
 
-  /// Deletes the remote issue link from the issue using the link's global ID. Where the global ID includes reserved URL characters these must be escaped in the request. For example, pass `system=http://www.mycompany.com/support&id=1` as `system%3Dhttp%3A%2F%2Fwww.mycompany.com%2Fsupport%26id%3D1`.
+  /// Deletes the remote issue link from the issue using the link's global ID.
+  /// Where the global ID includes reserved URL characters these must be escaped
+  /// in the request. For example, pass
+  /// `system=http://www.mycompany.com/support&id=1` as
+  /// `system%3Dhttp%3A%2F%2Fwww.mycompany.com%2Fsupport%26id%3D1`.
   ///
-  /// This operation requires [issue linking to be active](https://confluence.atlassian.com/x/yoXKM).
+  /// This operation requires
+  /// [issue linking to be active](https://confluence.atlassian.com/x/yoXKM).
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* and *Link issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is implemented, issue-level security permission to view the issue.
+  ///  *  *Browse projects* and *Link issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is implemented, issue-level security permission to view the issue.
   Future<void> deleteRemoteIssueLinkByGlobalId(
       {required String issueIdOrKey, required String globalId}) async {
     await _client.send(
@@ -3564,14 +4505,18 @@ class IssueRemoteLinksApi {
 
   /// Returns a remote issue link for an issue.
   ///
-  /// This operation requires [issue linking to be active](https://confluence.atlassian.com/x/yoXKM).
+  /// This operation requires
+  /// [issue linking to be active](https://confluence.atlassian.com/x/yoXKM).
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<RemoteIssueLink> getRemoteIssueLinkById(
       {required String issueIdOrKey, required String linkId}) async {
     return RemoteIssueLink.fromJson(await _client.send(
@@ -3588,14 +4533,18 @@ class IssueRemoteLinksApi {
   ///
   /// Note: Fields without values in the request are set to null.
   ///
-  /// This operation requires [issue linking to be active](https://confluence.atlassian.com/x/yoXKM).
+  /// This operation requires
+  /// [issue linking to be active](https://confluence.atlassian.com/x/yoXKM).
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* and *Link issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects* and *Link issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<void> updateRemoteIssueLink(
       {required String issueIdOrKey,
       required String linkId,
@@ -3613,14 +4562,18 @@ class IssueRemoteLinksApi {
 
   /// Deletes a remote issue link from an issue.
   ///
-  /// This operation requires [issue linking to be active](https://confluence.atlassian.com/x/yoXKM).
+  /// This operation requires
+  /// [issue linking to be active](https://confluence.atlassian.com/x/yoXKM).
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects*, *Edit issues*, and *Link issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects*, *Edit issues*, and *Link issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<void> deleteRemoteIssueLinkById(
       {required String issueIdOrKey, required String linkId}) async {
     await _client.send(
@@ -3674,12 +4627,17 @@ class IssueSearchApi {
 
   IssueSearchApi._(this._client);
 
-  /// Returns lists of issues matching a query string. Use this resource to provide auto-completion suggestions when the user is looking for an issue using a word or string.
+  /// Returns lists of issues matching a query string. Use this resource to
+  /// provide auto-completion suggestions when the user is looking for an issue
+  /// using a word or string.
   ///
   /// This operation returns two lists:
   ///
-  ///  *  `History Search` which includes issues from the user's history of created, edited, or viewed issues that contain the string in the `query` parameter.
-  ///  *  `Current Search` which includes issues that match the JQL expression in `currentJQL` and contain the string in the `query` parameter.
+  ///  *  `History Search` which includes issues from the user's history of
+  /// created, edited, or viewed issues that contain the string in the `query`
+  /// parameter.
+  ///  *  `Current Search` which includes issues that match the JQL expression
+  /// in `currentJQL` and contain the string in the `query` parameter.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -3706,12 +4664,17 @@ class IssueSearchApi {
     ));
   }
 
-  /// Checks whether one or more issues would be returned by one or more JQL queries.
+  /// Checks whether one or more issues would be returned by one or more JQL
+  /// queries.
   ///
-  /// **[Permissions](#permissions) required:** None, however, issues are only matched against JQL queries where the user has:
+  /// **[Permissions](#permissions) required:** None, however, issues are only
+  /// matched against JQL queries where the user has:
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<IssueMatches> matchIssues({required IssuesAndJQLQueries body}) async {
     return IssueMatches.fromJson(await _client.send(
       'post',
@@ -3720,16 +4683,23 @@ class IssueSearchApi {
     ));
   }
 
-  /// Searches for issues using [JQL](https://confluence.atlassian.com/x/egORLQ).
+  /// Searches for issues using
+  /// [JQL](https://confluence.atlassian.com/x/egORLQ).
   ///
-  /// If the JQL query expression is too large to be encoded as a query parameter, use the [POST](#api-rest-api-3-search-post) version of this resource.
+  /// If the JQL query expression is too large to be encoded as a query
+  /// parameter, use the [POST](#api-rest-api-3-search-post) version of this
+  /// resource.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** Issues are included in the response where the user has:
+  /// **[Permissions](#permissions) required:** Issues are included in the
+  /// response where the user has:
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the issue.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<SearchResults> searchForIssuesUsingJql(
       {String? jql,
       int? startAt,
@@ -3755,16 +4725,22 @@ class IssueSearchApi {
     ));
   }
 
-  /// Searches for issues using [JQL](https://confluence.atlassian.com/x/egORLQ).
+  /// Searches for issues using
+  /// [JQL](https://confluence.atlassian.com/x/egORLQ).
   ///
-  /// There is a [GET](#api-rest-api-3-search-get) version of this resource that can be used for smaller JQL query expressions.
+  /// There is a [GET](#api-rest-api-3-search-get) version of this resource that
+  /// can be used for smaller JQL query expressions.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** Issues are included in the response where the user has:
+  /// **[Permissions](#permissions) required:** Issues are included in the
+  /// response where the user has:
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the issue.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<SearchResults> searchForIssuesUsingJqlPost(
       {required SearchRequestBean body}) async {
     return SearchResults.fromJson(await _client.send(
@@ -3784,9 +4760,11 @@ class IssueSecurityLevelApi {
 
   /// Returns issue security level members.
   ///
-  /// Only issue security level members in context of classic projects are returned.
+  /// Only issue security level members in context of classic projects are
+  /// returned.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanIssueSecurityLevelMember> getIssueSecurityLevelMembers(
       {required int issueSecuritySchemeId,
       int? startAt,
@@ -3811,7 +4789,10 @@ class IssueSecurityLevelApi {
 
   /// Returns details of an issue security level.
   ///
-  /// Use [Get issue security scheme](#api-rest-api-3-issuesecurityschemes-id-get) to obtain the IDs of issue security levels associated with the issue security scheme.
+  /// Use
+  /// [Get issue security scheme](#api-rest-api-3-issuesecurityschemes-id-get)
+  /// to obtain the IDs of issue security levels associated with the issue
+  /// security scheme.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -3834,9 +4815,11 @@ class IssueSecuritySchemesApi {
 
   IssueSecuritySchemesApi._(this._client);
 
-  /// Returns all [issue security schemes](https://confluence.atlassian.com/x/J4lKLg).
+  /// Returns all
+  /// [issue security schemes](https://confluence.atlassian.com/x/J4lKLg).
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<SecuritySchemes> getIssueSecuritySchemes() async {
     return SecuritySchemes.fromJson(await _client.send(
       'get',
@@ -3848,8 +4831,11 @@ class IssueSecuritySchemesApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  ///  *  *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for a project that uses the requested issue security scheme.
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  ///  *  *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for a
+  /// project that uses the requested issue security scheme.
   Future<SecurityScheme> getIssueSecurityScheme(int id) async {
     return SecurityScheme.fromJson(await _client.send(
       'get',
@@ -3872,10 +4858,16 @@ class IssueTypesApi {
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** Issue types are only returned as follows:
+  /// **[Permissions](#permissions) required:** Issue types are only returned as
+  /// follows:
   ///
-  ///  *  if the user has the *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), all issue types are returned.
-  ///  *  if the user has the *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for one or more projects, the issue types associated with the projects the user has permission to browse are returned.
+  ///  *  if the user has the *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg), all issue
+  /// types are returned.
+  ///  *  if the user has the *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for one or
+  /// more projects, the issue types associated with the projects the user has
+  /// permission to browse are returned.
   Future<List<IssueTypeDetails>> getIssueAllTypes() async {
     return (await _client.send(
       'get',
@@ -3888,7 +4880,8 @@ class IssueTypesApi {
 
   /// Creates an issue type and adds it to the default issue type scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<IssueTypeDetails> createIssueType(
       {required IssueTypeCreateBean body}) async {
     return IssueTypeDetails.fromJson(await _client.send(
@@ -3902,7 +4895,10 @@ class IssueTypesApi {
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) in a project the issue type is associated with or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) in a
+  /// project the issue type is associated with or *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<IssueTypeDetails> getIssueType(String id) async {
     return IssueTypeDetails.fromJson(await _client.send(
       'get',
@@ -3915,7 +4911,8 @@ class IssueTypesApi {
 
   /// Updates the issue type.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<IssueTypeDetails> updateIssueType(
       {required String id, required IssueTypeUpdateBean body}) async {
     return IssueTypeDetails.fromJson(await _client.send(
@@ -3928,9 +4925,14 @@ class IssueTypesApi {
     ));
   }
 
-  /// Deletes the issue type. If the issue type is in use, all uses are updated with the alternative issue type (`alternativeIssueTypeId`). A list of alternative issue types are obtained from the [Get alternative issue types](#api-rest-api-3-issuetype-id-alternatives-get) resource.
+  /// Deletes the issue type. If the issue type is in use, all uses are updated
+  /// with the alternative issue type (`alternativeIssueTypeId`). A list of
+  /// alternative issue types are obtained from the
+  /// [Get alternative issue types](#api-rest-api-3-issuetype-id-alternatives-get)
+  /// resource.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteIssueType(
       {required String id, String? alternativeIssueTypeId}) async {
     await _client.send(
@@ -3946,7 +4948,9 @@ class IssueTypesApi {
     );
   }
 
-  /// Returns a list of issue types that can be used to replace the issue type. The alternative issue types are those assigned to the same workflow scheme, field configuration scheme, and screen scheme.
+  /// Returns a list of issue types that can be used to replace the issue type.
+  /// The alternative issue types are those assigned to the same workflow
+  /// scheme, field configuration scheme, and screen scheme.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -3966,21 +4970,34 @@ class IssueTypesApi {
 
   /// Loads an avatar for the issue type.
   ///
-  /// Specify the avatar's local file location in the body of the request. Also, include the following headers:
+  /// Specify the avatar's local file location in the body of the request. Also,
+  /// include the following headers:
   ///
-  ///  *  `X-Atlassian-Token: no-check` To prevent XSRF protection blocking the request, for more information see [Special Headers](#special-request-headers).
-  ///  *  `Content-Type: image/image type` Valid image types are JPEG, GIF, or PNG.
+  ///  *  `X-Atlassian-Token: no-check` To prevent XSRF protection blocking the
+  /// request, for more information see
+  /// [Special Headers](#special-request-headers).
+  ///  *  `Content-Type: image/image type` Valid image types are JPEG, GIF, or
+  /// PNG.
   ///
   /// For example:
-  /// `curl --request POST \ --user email@example.com:<api_token> \ --header 'X-Atlassian-Token: no-check' \ --header 'Content-Type: image/< image_type>' \ --data-binary "<@/path/to/file/with/your/avatar>" \ --url 'https://your-domain.atlassian.net/rest/api/3/issuetype/{issueTypeId}'This`
+  /// `curl --request POST  --user email@example.com:<api_token>  --header
+  /// 'X-Atlassian-Token: no-check'  --header 'Content-Type: image/<
+  /// image_type>'  --data-binary "<@/path/to/file/with/your/avatar>"  --url
+  /// 'https://your-domain.atlassian.net/rest/api/3/issuetype/{issueTypeId}'This`
   ///
-  /// The avatar is cropped to a square. If no crop parameters are specified, the square originates at the top left of the image. The length of the square's sides is set to the smaller of the height or width of the image.
+  /// The avatar is cropped to a square. If no crop parameters are specified,
+  /// the square originates at the top left of the image. The length of the
+  /// square's sides is set to the smaller of the height or width of the image.
   ///
-  /// The cropped image is then used to create avatars of 16x16, 24x24, 32x32, and 48x48 in size.
+  /// The cropped image is then used to create avatars of 16x16, 24x24, 32x32,
+  /// and 48x48 in size.
   ///
-  /// After creating the avatar, use [ Update issue type](#api-rest-api-3-issuetype-id-put) to set it as the issue type's displayed avatar.
+  /// After creating the avatar, use
+  /// [ Update issue type](#api-rest-api-3-issuetype-id-put) to set it as the
+  /// issue type's displayed avatar.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<Avatar> createIssueTypeAvatar(
       {required String id,
       int? x,
@@ -4014,7 +5031,8 @@ class IssueTypeSchemesApi {
   ///
   /// Only issue type schemes used in classic projects are returned.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanIssueTypeScheme> getAllIssueTypeSchemes(
       {int? startAt, int? maxResults, List<int>? id}) async {
     return PageBeanIssueTypeScheme.fromJson(await _client.send(
@@ -4030,7 +5048,8 @@ class IssueTypeSchemesApi {
 
   /// Creates an issue type scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<IssueTypeSchemeID> createIssueTypeScheme(
       {required IssueTypeSchemeDetails body}) async {
     return IssueTypeSchemeID.fromJson(await _client.send(
@@ -4044,7 +5063,8 @@ class IssueTypeSchemesApi {
   ///
   /// Only issue type scheme items used in classic projects are returned.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanIssueTypeSchemeMapping> getIssueTypeSchemesMapping(
       {int? startAt, int? maxResults, List<int>? issueTypeSchemeId}) async {
     return PageBeanIssueTypeSchemeMapping.fromJson(await _client.send(
@@ -4059,11 +5079,13 @@ class IssueTypeSchemesApi {
     ));
   }
 
-  /// Returns a [paginated](#pagination) list of issue type schemes and, for each issue type scheme, a list of the projects that use it.
+  /// Returns a [paginated](#pagination) list of issue type schemes and, for
+  /// each issue type scheme, a list of the projects that use it.
   ///
   /// Only issue type schemes used in classic projects are returned.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanIssueTypeSchemeProjects> getIssueTypeSchemeForProjects(
       {int? startAt, int? maxResults, required List<int> projectId}) async {
     return PageBeanIssueTypeSchemeProjects.fromJson(await _client.send(
@@ -4079,11 +5101,14 @@ class IssueTypeSchemesApi {
 
   /// Assigns an issue type scheme to a project.
   ///
-  /// If any issues in the project are assigned issue types not present in the new scheme, the operation will fail. To complete the assignment those issues must be updated to use issue types in the new scheme.
+  /// If any issues in the project are assigned issue types not present in the
+  /// new scheme, the operation will fail. To complete the assignment those
+  /// issues must be updated to use issue types in the new scheme.
   ///
   /// Issue type schemes can only be assigned to classic projects.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> assignIssueTypeSchemeToProject(
       {required IssueTypeSchemeProjectAssociation body}) async {
     await _client.send(
@@ -4095,7 +5120,8 @@ class IssueTypeSchemesApi {
 
   /// Updates an issue type scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> updateIssueTypeScheme(
       {required int issueTypeSchemeId,
       required IssueTypeSchemeUpdateDetails body}) async {
@@ -4113,9 +5139,11 @@ class IssueTypeSchemesApi {
   ///
   /// Only issue type schemes used in classic projects can be deleted.
   ///
-  /// Any projects assigned to the scheme are reassigned to the default issue type scheme.
+  /// Any projects assigned to the scheme are reassigned to the default issue
+  /// type scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteIssueTypeScheme(int issueTypeSchemeId) async {
     await _client.send(
       'delete',
@@ -4130,9 +5158,11 @@ class IssueTypeSchemesApi {
   ///
   /// The added issue types are appended to the issue types list.
   ///
-  /// If any of the issue types exist in the issue type scheme, the operation fails and no issue types are added.
+  /// If any of the issue types exist in the issue type scheme, the operation
+  /// fails and no issue types are added.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> addIssueTypesToIssueTypeScheme(
       {required int issueTypeSchemeId, required IssueTypeIds body}) async {
     await _client.send(
@@ -4153,7 +5183,8 @@ class IssueTypeSchemesApi {
   ///  *  either `after` or `position` must be provided.
   ///  *  the issue type in `after` must not be in the issue type list.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> reorderIssueTypesInIssueTypeScheme(
       {required int issueTypeSchemeId, required OrderOfIssueTypes body}) async {
     await _client.send(
@@ -4174,7 +5205,8 @@ class IssueTypeSchemesApi {
   ///  *  any issue types from the default issue type scheme.
   ///  *  the last standard issue type from an issue type scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> removeIssueTypeFromIssueTypeScheme(
       {required int issueTypeSchemeId, required int issueTypeId}) async {
     await _client.send(
@@ -4199,7 +5231,8 @@ class IssueTypeScreenSchemesApi {
   ///
   /// Only issue type screen schemes used in classic projects are returned.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanIssueTypeScreenScheme> getIssueTypeScreenSchemes(
       {int? startAt, int? maxResults, List<int>? id}) async {
     return PageBeanIssueTypeScreenScheme.fromJson(await _client.send(
@@ -4215,7 +5248,8 @@ class IssueTypeScreenSchemesApi {
 
   /// Creates an issue type screen scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<IssueTypeScreenSchemeId> createIssueTypeScreenScheme(
       {required IssueTypeScreenSchemeDetails body}) async {
     return IssueTypeScreenSchemeId.fromJson(await _client.send(
@@ -4229,7 +5263,8 @@ class IssueTypeScreenSchemesApi {
   ///
   /// Only issue type screen schemes used in classic projects are returned.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanIssueTypeScreenSchemeItem> getIssueTypeScreenSchemeMappings(
       {int? startAt,
       int? maxResults,
@@ -4246,11 +5281,13 @@ class IssueTypeScreenSchemesApi {
     ));
   }
 
-  /// Returns a [paginated](#pagination) list of issue type screen schemes and, for each issue type screen scheme, a list of the projects that use it.
+  /// Returns a [paginated](#pagination) list of issue type screen schemes and,
+  /// for each issue type screen scheme, a list of the projects that use it.
   ///
   /// Only issue type screen schemes used in classic projects are returned.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanIssueTypeScreenSchemesProjects>
       getIssueTypeScreenSchemeProjectAssociations(
           {int? startAt, int? maxResults, required List<int> projectId}) async {
@@ -4269,7 +5306,8 @@ class IssueTypeScreenSchemesApi {
   ///
   /// Issue type screen schemes can only be assigned to classic projects.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> assignIssueTypeScreenSchemeToProject(
       {required IssueTypeScreenSchemeProjectAssociation body}) async {
     await _client.send(
@@ -4281,7 +5319,8 @@ class IssueTypeScreenSchemesApi {
 
   /// Updates an issue type screen scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> updateIssueTypeScreenScheme(
       {required String issueTypeScreenSchemeId,
       required IssueTypeScreenSchemeUpdateDetails body}) async {
@@ -4297,7 +5336,8 @@ class IssueTypeScreenSchemesApi {
 
   /// Deletes an issue type screen scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteIssueTypeScreenScheme(
       String issueTypeScreenSchemeId) async {
     await _client.send(
@@ -4309,9 +5349,11 @@ class IssueTypeScreenSchemesApi {
     );
   }
 
-  /// Appends issue type to screen scheme mappings to an issue type screen scheme.
+  /// Appends issue type to screen scheme mappings to an issue type screen
+  /// scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> appendMappingsForIssueTypeScreenScheme(
       {required String issueTypeScreenSchemeId,
       required IssueTypeScreenSchemeMappingDetails body}) async {
@@ -4325,9 +5367,11 @@ class IssueTypeScreenSchemesApi {
     );
   }
 
-  /// Updates the default screen scheme of an issue type screen scheme. The default screen scheme is used for all unmapped issue types.
+  /// Updates the default screen scheme of an issue type screen scheme. The
+  /// default screen scheme is used for all unmapped issue types.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> updateDefaultScreenScheme(
       {required String issueTypeScreenSchemeId,
       required UpdateDefaultScreenScheme body}) async {
@@ -4341,9 +5385,11 @@ class IssueTypeScreenSchemesApi {
     );
   }
 
-  /// Removes issue type to screen scheme mappings from an issue type screen scheme.
+  /// Removes issue type to screen scheme mappings from an issue type screen
+  /// scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> removeMappingsFromIssueTypeScreenScheme(
       {required String issueTypeScreenSchemeId,
       required IssueTypeIds body}) async {
@@ -4365,14 +5411,21 @@ class IssueTypePropertiesApi {
 
   IssueTypePropertiesApi._(this._client);
 
-  /// Returns all the [issue type property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties) keys of the issue type.
+  /// Returns all the
+  /// [issue type property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties)
+  /// keys of the issue type.
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) to get the property keys of any issue type.
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) to get the property keys of any issue types associated with the projects the user has permission to browse.
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) to get the
+  /// property keys of any issue type.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) to get the
+  /// property keys of any issue types associated with the projects the user has
+  /// permission to browse.
   Future<PropertyKeys> getIssueTypePropertyKeys(String issueTypeId) async {
     return PropertyKeys.fromJson(await _client.send(
       'get',
@@ -4383,14 +5436,20 @@ class IssueTypePropertiesApi {
     ));
   }
 
-  /// Returns the key and value of the [issue type property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties).
+  /// Returns the key and value of the
+  /// [issue type property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties).
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) to get the details of any issue type.
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) to get the details of any issue types associated with the projects the user has permission to browse.
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) to get the
+  /// details of any issue type.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) to get the
+  /// details of any issue types associated with the projects the user has
+  /// permission to browse.
   Future<EntityProperty> getIssueTypeProperty(
       {required String issueTypeId, required String propertyKey}) async {
     return EntityProperty.fromJson(await _client.send(
@@ -4403,11 +5462,16 @@ class IssueTypePropertiesApi {
     ));
   }
 
-  /// Creates or updates the value of the [issue type property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties). Use this resource to store and update data against an issue type.
+  /// Creates or updates the value of the
+  /// [issue type property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties).
+  /// Use this resource to store and update data against an issue type.
   ///
-  /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
+  /// The value of the request body must be a
+  /// [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The
+  /// maximum length is 32768 characters.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> setIssueTypeProperty(
       {required String issueTypeId,
       required String propertyKey,
@@ -4423,9 +5487,11 @@ class IssueTypePropertiesApi {
     );
   }
 
-  /// Deletes the [issue type property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties).
+  /// Deletes the
+  /// [issue type property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties).
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteIssueTypeProperty(
       {required String issueTypeId, required String propertyKey}) async {
     await _client.send(
@@ -4448,16 +5514,24 @@ class IssueVotesApi {
 
   /// Returns details about the votes on an issue.
   ///
-  /// This operation requires the **Allow users to vote on issues** option to be *ON*. This option is set in General configuration for Jira. See [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM) for details.
+  /// This operation requires the **Allow users to vote on issues** option to be
+  /// *ON*. This option is set in General configuration for Jira. See
+  /// [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM)
+  /// for details.
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is ini
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is ini
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   ///
-  /// Note that users with the necessary permissions for this operation but without the *View voters and watchers* project permissions are not returned details in the `voters` field.
+  /// Note that users with the necessary permissions for this operation but
+  /// without the *View voters and watchers* project permissions are not
+  /// returned details in the `voters` field.
   Future<Votes> getVotes(String issueIdOrKey) async {
     return Votes.fromJson(await _client.send(
       'get',
@@ -4468,14 +5542,21 @@ class IssueVotesApi {
     ));
   }
 
-  /// Adds the user's vote to an issue. This is the equivalent of the user clicking *Vote* on an issue in Jira.
+  /// Adds the user's vote to an issue. This is the equivalent of the user
+  /// clicking *Vote* on an issue in Jira.
   ///
-  /// This operation requires the **Allow users to vote on issues** option to be *ON*. This option is set in General configuration for Jira. See [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM) for details.
+  /// This operation requires the **Allow users to vote on issues** option to be
+  /// *ON*. This option is set in General configuration for Jira. See
+  /// [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM)
+  /// for details.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<void> addVote(String issueIdOrKey) async {
     await _client.send(
       'post',
@@ -4486,14 +5567,21 @@ class IssueVotesApi {
     );
   }
 
-  /// Deletes a user's vote from an issue. This is the equivalent of the user clicking *Unvote* on an issue in Jira.
+  /// Deletes a user's vote from an issue. This is the equivalent of the user
+  /// clicking *Unvote* on an issue in Jira.
   ///
-  /// This operation requires the **Allow users to vote on issues** option to be *ON*. This option is set in General configuration for Jira. See [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM) for details.
+  /// This operation requires the **Allow users to vote on issues** option to be
+  /// *ON*. This option is set in General configuration for Jira. See
+  /// [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM)
+  /// for details.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<void> removeVote(String issueIdOrKey) async {
     await _client.send(
       'delete',
@@ -4514,15 +5602,24 @@ class IssueWatchersApi {
 
   /// Returns the watchers for an issue.
   ///
-  /// This operation requires the **Allow users to watch issues** option to be *ON*. This option is set in General configuration for Jira. See [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM) for details.
+  /// This operation requires the **Allow users to watch issues** option to be
+  /// *ON*. This option is set in General configuration for Jira. See
+  /// [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM)
+  /// for details.
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is ini
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  To see details of users on the watchlist other than themselves, *View voters and watchers* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is ini
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  To see details of users on the watchlist other than themselves, *View
+  /// voters and watchers*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
   Future<Watchers> getIssueWatchers(String issueIdOrKey) async {
     return Watchers.fromJson(await _client.send(
       'get',
@@ -4533,15 +5630,25 @@ class IssueWatchersApi {
     ));
   }
 
-  /// Adds a user as a watcher of an issue by passing the account ID of the user. For example, `"5b10ac8d82e05b22cc7d4ef5"`. If no user is specified the calling user is added.
+  /// Adds a user as a watcher of an issue by passing the account ID of the
+  /// user. For example, `"5b10ac8d82e05b22cc7d4ef5"`. If no user is specified
+  /// the calling user is added.
   ///
-  /// This operation requires the **Allow users to watch issues** option to be *ON*. This option is set in General configuration for Jira. See [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM) for details.
+  /// This operation requires the **Allow users to watch issues** option to be
+  /// *ON*. This option is set in General configuration for Jira. See
+  /// [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM)
+  /// for details.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  To add users other than themselves to the watchlist, *Manage watcher list* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  To add users other than themselves to the watchlist, *Manage watcher
+  /// list* [project permission](https://confluence.atlassian.com/x/yodKLg) for
+  /// the project that the issue is in.
   Future<void> addWatcher(
       {required String issueIdOrKey, required String body}) async {
     await _client.send(
@@ -4556,13 +5663,22 @@ class IssueWatchersApi {
 
   /// Deletes a user as a watcher of an issue.
   ///
-  /// This operation requires the **Allow users to watch issues** option to be *ON*. This option is set in General configuration for Jira. See [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM) for details.
+  /// This operation requires the **Allow users to watch issues** option to be
+  /// *ON*. This option is set in General configuration for Jira. See
+  /// [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM)
+  /// for details.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  To remove users other than themselves from the watchlist, *Manage watcher list* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  To remove users other than themselves from the watchlist, *Manage
+  /// watcher list*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
   Future<void> removeWatcher(
       {required String issueIdOrKey,
       String? username,
@@ -4588,17 +5704,25 @@ class IssueWorklogsApi {
 
   IssueWorklogsApi._(this._client);
 
-  /// Returns worklogs for an issue, starting from the oldest worklog or from the worklog started on or after a date and time.
+  /// Returns worklogs for an issue, starting from the oldest worklog or from
+  /// the worklog started on or after a date and time.
   ///
-  /// Time tracking must be enabled in Jira, otherwise this operation returns an error. For more information, see [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+  /// Time tracking must be enabled in Jira, otherwise this operation returns an
+  /// error. For more information, see
+  /// [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** Workloads are only returned where the user has:
+  /// **[Permissions](#permissions) required:** Workloads are only returned
+  /// where the user has:
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  If the worklog has visibility restrictions, belongs to the group or
+  /// has the role visibility is restricted to.
   Future<PageOfWorklogs> getIssueWorklog(
       {required String issueIdOrKey,
       int? startAt,
@@ -4622,14 +5746,19 @@ class IssueWorklogsApi {
 
   /// Adds a worklog to an issue.
   ///
-  /// Time tracking must be enabled in Jira, otherwise this operation returns an error. For more information, see [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+  /// Time tracking must be enabled in Jira, otherwise this operation returns an
+  /// error. For more information, see
+  /// [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* and *Work on issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+  ///  *  *Browse projects* and *Work on issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
   Future<Worklog> addWorklog(
       {required String issueIdOrKey,
       bool? notifyUsers,
@@ -4660,15 +5789,21 @@ class IssueWorklogsApi {
 
   /// Returns a worklog.
   ///
-  /// Time tracking must be enabled in Jira, otherwise this operation returns an error. For more information, see [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+  /// Time tracking must be enabled in Jira, otherwise this operation returns an
+  /// error. For more information, see
+  /// [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  If the worklog has visibility restrictions, belongs to the group or
+  /// has the role visibility is restricted to.
   Future<Worklog> getWorklog(
       {required String issueIdOrKey,
       required String id,
@@ -4688,16 +5823,25 @@ class IssueWorklogsApi {
 
   /// Updates a worklog.
   ///
-  /// Time tracking must be enabled in Jira, otherwise this operation returns an error. For more information, see [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+  /// Time tracking must be enabled in Jira, otherwise this operation returns an
+  /// error. For more information, see
+  /// [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  *Edit all worklogs*[ project permission](https://confluence.atlassian.com/x/yodKLg) to update any worklog or *Edit own worklogs* to update worklogs created by the user.
-  ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  *Edit all
+  /// worklogs*[ project permission](https://confluence.atlassian.com/x/yodKLg)
+  /// to update any worklog or *Edit own worklogs* to update worklogs created by
+  /// the user.
+  ///  *  If the worklog has visibility restrictions, belongs to the group or
+  /// has the role visibility is restricted to.
   Future<Worklog> updateWorklog(
       {required String issueIdOrKey,
       required String id,
@@ -4728,16 +5872,25 @@ class IssueWorklogsApi {
 
   /// Deletes a worklog from an issue.
   ///
-  /// Time tracking must be enabled in Jira, otherwise this operation returns an error. For more information, see [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+  /// Time tracking must be enabled in Jira, otherwise this operation returns an
+  /// error. For more information, see
+  /// [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  *Delete all worklogs*[ project permission](https://confluence.atlassian.com/x/yodKLg) to delete any worklog or *Delete own worklogs* to delete worklogs created by the user,
-  ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  *Delete all
+  /// worklogs*[ project permission](https://confluence.atlassian.com/x/yodKLg)
+  /// to delete any worklog or *Delete own worklogs* to delete worklogs created
+  /// by the user,
+  ///  *  If the worklog has visibility restrictions, belongs to the group or
+  /// has the role visibility is restricted to.
   Future<void> deleteWorklog(
       {required String issueIdOrKey,
       required String id,
@@ -4764,11 +5917,18 @@ class IssueWorklogsApi {
     );
   }
 
-  /// Returns a list of IDs and delete timestamps for worklogs deleted after a date and time.
+  /// Returns a list of IDs and delete timestamps for worklogs deleted after a
+  /// date and time.
   ///
-  /// This resource is paginated, with a limit of 1000 worklogs per page. Each page lists worklogs from oldest to youngest. If the number of items in the date range exceeds 1000, `until` indicates the timestamp of the youngest item on the page. Also, `nextPage` provides the URL for the next page of worklogs. The `lastPage` parameter is set to true on the last page of worklogs.
+  /// This resource is paginated, with a limit of 1000 worklogs per page. Each
+  /// page lists worklogs from oldest to youngest. If the number of items in the
+  /// date range exceeds 1000, `until` indicates the timestamp of the youngest
+  /// item on the page. Also, `nextPage` provides the URL for the next page of
+  /// worklogs. The `lastPage` parameter is set to true on the last page of
+  /// worklogs.
   ///
-  /// This resource does not return worklogs deleted during the minute preceding the request.
+  /// This resource does not return worklogs deleted during the minute preceding
+  /// the request.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
   Future<ChangedWorklogs> getIdsOfWorklogsDeletedSince({int? since}) async {
@@ -4785,10 +5945,12 @@ class IssueWorklogsApi {
   ///
   /// The returned list of worklogs is limited to 1000 items.
   ///
-  /// **[Permissions](#permissions) required:** Permission to access Jira, however, worklogs are only returned where either of the following is true:
+  /// **[Permissions](#permissions) required:** Permission to access Jira,
+  /// however, worklogs are only returned where either of the following is true:
   ///
   ///  *  the worklog is set as *Viewable by All Users*.
-  ///  *  the user is a member of a project role or group with permission to view the worklog.
+  ///  *  the user is a member of a project role or group with permission to
+  /// view the worklog.
   Future<List<Worklog>> getWorklogsForIds(
       {String? expand, required WorklogIdsRequestBean body}) async {
     return (await _client.send(
@@ -4803,16 +5965,25 @@ class IssueWorklogsApi {
         .toList();
   }
 
-  /// Returns a list of IDs and update timestamps for worklogs updated after a date and time.
+  /// Returns a list of IDs and update timestamps for worklogs updated after a
+  /// date and time.
   ///
-  /// This resource is paginated, with a limit of 1000 worklogs per page. Each page lists worklogs from oldest to youngest. If the number of items in the date range exceeds 1000, `until` indicates the timestamp of the youngest item on the page. Also, `nextPage` provides the URL for the next page of worklogs. The `lastPage` parameter is set to true on the last page of worklogs.
+  /// This resource is paginated, with a limit of 1000 worklogs per page. Each
+  /// page lists worklogs from oldest to youngest. If the number of items in the
+  /// date range exceeds 1000, `until` indicates the timestamp of the youngest
+  /// item on the page. Also, `nextPage` provides the URL for the next page of
+  /// worklogs. The `lastPage` parameter is set to true on the last page of
+  /// worklogs.
   ///
-  /// This resource does not return worklogs updated during the minute preceding the request.
+  /// This resource does not return worklogs updated during the minute preceding
+  /// the request.
   ///
-  /// **[Permissions](#permissions) required:** Permission to access Jira, however, worklogs are only returned where either of the following is true:
+  /// **[Permissions](#permissions) required:** Permission to access Jira,
+  /// however, worklogs are only returned where either of the following is true:
   ///
   ///  *  the worklog is set as *Viewable by All Users*.
-  ///  *  the user is a member of a project role or group with permission to view the worklog.
+  ///  *  the user is a member of a project role or group with permission to
+  /// view the worklog.
   Future<ChangedWorklogs> getIdsOfWorklogsModifiedSince(
       {int? since, String? expand}) async {
     return ChangedWorklogs.fromJson(await _client.send(
@@ -4839,9 +6010,13 @@ class IssueWorklogPropertiesApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  If the worklog has visibility restrictions, belongs to the group or
+  /// has the role visibility is restricted to.
   Future<PropertyKeys> getWorklogPropertyKeys(
       {required String issueIdOrKey, required String worklogId}) async {
     return PropertyKeys.fromJson(await _client.send(
@@ -4860,9 +6035,13 @@ class IssueWorklogPropertiesApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  If the worklog has visibility restrictions, belongs to the group or
+  /// has the role visibility is restricted to.
   Future<EntityProperty> getWorklogProperty(
       {required String issueIdOrKey,
       required String worklogId,
@@ -4878,18 +6057,28 @@ class IssueWorklogPropertiesApi {
     ));
   }
 
-  /// Sets the value of a worklog property. Use this operation to store custom data against the worklog.
+  /// Sets the value of a worklog property. Use this operation to store custom
+  /// data against the worklog.
   ///
-  /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
+  /// The value of the request body must be a
+  /// [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The
+  /// maximum length is 32768 characters.
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  *Edit all worklogs*[ project permission](https://confluence.atlassian.com/x/yodKLg) to update any worklog or *Edit own worklogs* to update worklogs created by the user.
-  ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  *Edit all
+  /// worklogs*[ project permission](https://confluence.atlassian.com/x/yodKLg)
+  /// to update any worklog or *Edit own worklogs* to update worklogs created by
+  /// the user.
+  ///  *  If the worklog has visibility restrictions, belongs to the group or
+  /// has the role visibility is restricted to.
   Future<void> setWorklogProperty(
       {required String issueIdOrKey,
       required String worklogId,
@@ -4913,9 +6102,13 @@ class IssueWorklogPropertiesApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-  ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  If the worklog has visibility restrictions, belongs to the group or
+  /// has the role visibility is restricted to.
   Future<void> deleteWorklogProperty(
       {required String issueIdOrKey,
       required String worklogId,
@@ -4941,9 +6134,11 @@ class JiraExpressionsApi {
 
   /// Analyses and validates Jira expressions.
   ///
-  /// As an experimental feature, this operation can also attempt to type-check the expressions.
+  /// As an experimental feature, this operation can also attempt to type-check
+  /// the expressions.
   ///
-  /// Learn more about Jira expressions in the [documentation](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/).
+  /// Learn more about Jira expressions in the
+  /// [documentation](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/).
   ///
   /// **[Permissions](#permissions) required**: None.
   Future<JiraExpressionsAnalysis> analyseExpression(
@@ -4960,26 +6155,68 @@ class JiraExpressionsApi {
 
   /// Evaluates a Jira expression and returns its value.
   ///
-  /// This resource can be used to test Jira expressions that you plan to use elsewhere, or to fetch data in a flexible way. Consult the [Jira expressions documentation](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/) for more details.
+  /// This resource can be used to test Jira expressions that you plan to use
+  /// elsewhere, or to fetch data in a flexible way. Consult the
+  /// [Jira expressions documentation](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/)
+  /// for more details.
   ///
   /// #### Context variables ####
   ///
-  /// The following context variables are available to Jira expressions evaluated by this resource. Their presence depends on various factors; usually you need to manually request them in the context object sent in the payload, but some of them are added automatically under certain conditions.
+  /// The following context variables are available to Jira expressions
+  /// evaluated by this resource. Their presence depends on various factors;
+  /// usually you need to manually request them in the context object sent in
+  /// the payload, but some of them are added automatically under certain
+  /// conditions.
   ///
-  ///  *  `user` ([User](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#user)): The current user. Always available and equal to `null` if the request is anonymous.
-  ///  *  `app` ([App](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#app)): The Connect app that made the request. Available only for authenticated requests made by Connect Apps (read more here: [Authentication for Connect apps](https://developer.atlassian.com/cloud/jira/platform/security-for-connect-apps/)).
-  ///  *  `issue` ([Issue](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#issue)): The current issue. Available only when the issue is provided in the request context object.
-  ///  *  `issues` ([List](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#list) of [Issues](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#issue)): A collection of issues matching a JQL query. Available only when JQL is provided in the request context object.
-  ///  *  `project` ([Project](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#project)): The current project. Available only when the project is provided in the request context object.
-  ///  *  `sprint` ([Sprint](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#sprint)): The current sprint. Available only when the sprint is provided in the request context object.
-  ///  *  `board` ([Board](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#board)): The current board. Available only when the board is provided in the request context object.
-  ///  *  `serviceDesk` ([ServiceDesk](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#servicedesk)): The current service desk. Available only when the service desk is provided in the request context object.
-  ///  *  `customerRequest` ([CustomerRequest](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#customerrequest)): The current customer request. Available only when the customer request is provided in the request context object.
+  ///  *  `user`
+  /// ([User](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#user)):
+  /// The current user. Always available and equal to `null` if the request is
+  /// anonymous.
+  ///  *  `app`
+  /// ([App](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#app)):
+  /// The Connect app that made the request. Available only for authenticated
+  /// requests made by Connect Apps (read more here:
+  /// [Authentication for Connect apps](https://developer.atlassian.com/cloud/jira/platform/security-for-connect-apps/)).
+  ///  *  `issue`
+  /// ([Issue](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#issue)):
+  /// The current issue. Available only when the issue is provided in the
+  /// request context object.
+  ///  *  `issues`
+  /// ([List](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#list)
+  /// of
+  /// [Issues](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#issue)):
+  /// A collection of issues matching a JQL query. Available only when JQL is
+  /// provided in the request context object.
+  ///  *  `project`
+  /// ([Project](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#project)):
+  /// The current project. Available only when the project is provided in the
+  /// request context object.
+  ///  *  `sprint`
+  /// ([Sprint](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#sprint)):
+  /// The current sprint. Available only when the sprint is provided in the
+  /// request context object.
+  ///  *  `board`
+  /// ([Board](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#board)):
+  /// The current board. Available only when the board is provided in the
+  /// request context object.
+  ///  *  `serviceDesk`
+  /// ([ServiceDesk](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#servicedesk)):
+  /// The current service desk. Available only when the service desk is provided
+  /// in the request context object.
+  ///  *  `customerRequest`
+  /// ([CustomerRequest](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#customerrequest)):
+  /// The current customer request. Available only when the customer request is
+  /// provided in the request context object.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required**: None. However, an expression may return different results for different users depending on their permissions. For example, different users may see different comments on the same issue.
-  /// Permission to access Jira Software is required to access Jira Software context variables (`board` and `sprint`) or fields (for example, `issue.sprint`).
+  /// **[Permissions](#permissions) required**: None. However, an expression may
+  /// return different results for different users depending on their
+  /// permissions. For example, different users may see different comments on
+  /// the same issue.
+  /// Permission to access Jira Software is required to access Jira Software
+  /// context variables (`board` and `sprint`) or fields (for example,
+  /// `issue.sprint`).
   Future<JiraExpressionResult> evaluateJiraExpression(
       {String? expand, required JiraExpressionEvalRequestBean body}) async {
     return JiraExpressionResult.fromJson(await _client.send(
@@ -5002,9 +6239,14 @@ class JiraSettingsApi {
 
   /// Returns all application properties or an application property.
   ///
-  /// If you specify a value for the `key` parameter, then an application property is returned as an object (not in an array). Otherwise, an array of all editable application properties is returned. See [Set application property](#api-rest-api-3-application-properties-id-put) for descriptions of editable properties.
+  /// If you specify a value for the `key` parameter, then an application
+  /// property is returned as an object (not in an array). Otherwise, an array
+  /// of all editable application properties is returned. See
+  /// [Set application property](#api-rest-api-3-application-properties-id-put)
+  /// for descriptions of editable properties.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<List<ApplicationProperty>> getApplicationProperty(
       {String? key, String? permissionLevel, String? keyFilter}) async {
     return (await _client.send(
@@ -5021,9 +6263,13 @@ class JiraSettingsApi {
         .toList();
   }
 
-  /// Returns the application properties that are accessible on the *Advanced Settings* page. To navigate to the *Advanced Settings* page in Jira, choose the Jira icon > **Jira settings** > **System**, **General Configuration** and then click **Advanced Settings** (in the upper right).
+  /// Returns the application properties that are accessible on the *Advanced
+  /// Settings* page. To navigate to the *Advanced Settings* page in Jira,
+  /// choose the Jira icon > **Jira settings** > **System**, **General
+  /// Configuration** and then click **Advanced Settings** (in the upper right).
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<List<ApplicationProperty>> getAdvancedSettings() async {
     return (await _client.send(
       'get',
@@ -5034,59 +6280,105 @@ class JiraSettingsApi {
         .toList();
   }
 
-  /// Changes the value of an application property. For example, you can change the value of the `jira.clone.prefix` from its default value of *CLONE -* to *Clone -* if you prefer sentence case capitalization. Editable properties are described below along with their default values.
+  /// Changes the value of an application property. For example, you can change
+  /// the value of the `jira.clone.prefix` from its default value of *CLONE -*
+  /// to *Clone -* if you prefer sentence case capitalization. Editable
+  /// properties are described below along with their default values.
   ///
   /// #### Advanced settings ####
   ///
-  /// The advanced settings below are also accessible in [Jira](https://confluence.atlassian.com/x/vYXKM).
+  /// The advanced settings below are also accessible in
+  /// [Jira](https://confluence.atlassian.com/x/vYXKM).
   ///
   /// | Key | Description | Default value |
   /// | -- | -- | -- |
-  /// | `jira.clone.prefix` | The string of text prefixed to the title of a cloned issue. | `CLONE -` |
-  /// | `jira.date.picker.java.format` | The date format for the Java (server-side) generated dates. This must be the same as the `jira.date.picker.javascript.format` format setting. | `d/MMM/yy` |
-  /// | `jira.date.picker.javascript.format` | The date format for the JavaScript (client-side) generated dates. This must be the same as the `jira.date.picker.java.format` format setting. | `%e/%b/%y` |
-  /// | `jira.date.time.picker.java.format` | The date format for the Java (server-side) generated date times. This must be the same as the `jira.date.time.picker.javascript.format` format setting. | `dd/MMM/yy h:mm a` |
-  /// | `jira.date.time.picker.javascript.format` | The date format for the JavaScript (client-side) generated date times. This must be the same as the `jira.date.time.picker.java.format` format setting. | `%e/%b/%y %I:%M %p` |
-  /// | `jira.issue.actions.order` | The default order of actions (such as *Comments* or *Change history*) displayed on the issue view. | `asc` |
-  /// | `jira.table.cols.subtasks` | The columns to show while viewing subtask issues in a table. For example, a list of subtasks on an issue. | `issuetype, status, assignee, progress` |
-  /// | `jira.view.issue.links.sort.order` | The sort order of the list of issue links on the issue view. | `type, status, priority` |
-  /// | `jira.comment.collapsing.minimum.hidden` | The minimum number of comments required for comment collapsing to occur. A value of `0` disables comment collapsing. | `4` |
-  /// | `jira.newsletter.tip.delay.days` | The number of days before a prompt to sign up to the Jira Insiders newsletter is shown. A value of `-1` disables this feature. | `7` |
+  /// | `jira.clone.prefix` | The string of text prefixed to the title of a
+  /// cloned issue. | `CLONE -` |
+  /// | `jira.date.picker.java.format` | The date format for the Java
+  /// (server-side) generated dates. This must be the same as the
+  /// `jira.date.picker.javascript.format` format setting. | `d/MMM/yy` |
+  /// | `jira.date.picker.javascript.format` | The date format for the
+  /// JavaScript (client-side) generated dates. This must be the same as the
+  /// `jira.date.picker.java.format` format setting. | `%e/%b/%y` |
+  /// | `jira.date.time.picker.java.format` | The date format for the Java
+  /// (server-side) generated date times. This must be the same as the
+  /// `jira.date.time.picker.javascript.format` format setting. | `dd/MMM/yy
+  /// h:mm a` |
+  /// | `jira.date.time.picker.javascript.format` | The date format for the
+  /// JavaScript (client-side) generated date times. This must be the same as
+  /// the `jira.date.time.picker.java.format` format setting. | `%e/%b/%y %I:%M
+  /// %p` |
+  /// | `jira.issue.actions.order` | The default order of actions (such as
+  /// *Comments* or *Change history*) displayed on the issue view. | `asc` |
+  /// | `jira.table.cols.subtasks` | The columns to show while viewing subtask
+  /// issues in a table. For example, a list of subtasks on an issue. |
+  /// `issuetype, status, assignee, progress` |
+  /// | `jira.view.issue.links.sort.order` | The sort order of the list of issue
+  /// links on the issue view. | `type, status, priority` |
+  /// | `jira.comment.collapsing.minimum.hidden` | The minimum number of
+  /// comments required for comment collapsing to occur. A value of `0` disables
+  /// comment collapsing. | `4` |
+  /// | `jira.newsletter.tip.delay.days` | The number of days before a prompt to
+  /// sign up to the Jira Insiders newsletter is shown. A value of `-1` disables
+  /// this feature. | `7` |
   ///
   ///
   /// #### Look and feel ####
   ///
-  /// The settings listed below adjust the [look and feel](https://confluence.atlassian.com/x/VwCLLg).
+  /// The settings listed below adjust the
+  /// [look and feel](https://confluence.atlassian.com/x/VwCLLg).
   ///
   /// | Key | Description | Default value |
   /// | -- | -- | -- |
-  /// | `jira.lf.date.time` | The [ time format](https://docs.oracle.com/javase/6/docs/api/index.html?java/text/SimpleDateFormat.html). | `h:mm a` |
-  /// | `jira.lf.date.day` | The [ day format](https://docs.oracle.com/javase/6/docs/api/index.html?java/text/SimpleDateFormat.html). | `EEEE h:mm a` |
-  /// | `jira.lf.date.complete` | The [ date and time format](https://docs.oracle.com/javase/6/docs/api/index.html?java/text/SimpleDateFormat.html). | `dd/MMM/yy h:mm a` |
-  /// | `jira.lf.date.dmy` | The [ date format](https://docs.oracle.com/javase/6/docs/api/index.html?java/text/SimpleDateFormat.html). | `dd/MMM/yy` |
-  /// | `jira.date.time.picker.use.iso8061` | When enabled, sets Monday as the first day of the week in the date picker, as specified by the ISO8601 standard. | `false` |
-  /// | `jira.lf.logo.url` | The URL of the logo image file. | `/images/icon-jira-logo.png` |
-  /// | `jira.lf.logo.show.application.title` | Controls the visibility of the application title on the sidebar. | `false` |
+  /// | `jira.lf.date.time` | The
+  /// [ time format](https://docs.oracle.com/javase/6/docs/api/index.html?java/text/SimpleDateFormat.html).
+  /// | `h:mm a` |
+  /// | `jira.lf.date.day` | The
+  /// [ day format](https://docs.oracle.com/javase/6/docs/api/index.html?java/text/SimpleDateFormat.html).
+  /// | `EEEE h:mm a` |
+  /// | `jira.lf.date.complete` | The
+  /// [ date and time format](https://docs.oracle.com/javase/6/docs/api/index.html?java/text/SimpleDateFormat.html).
+  /// | `dd/MMM/yy h:mm a` |
+  /// | `jira.lf.date.dmy` | The
+  /// [ date format](https://docs.oracle.com/javase/6/docs/api/index.html?java/text/SimpleDateFormat.html).
+  /// | `dd/MMM/yy` |
+  /// | `jira.date.time.picker.use.iso8061` | When enabled, sets Monday as the
+  /// first day of the week in the date picker, as specified by the ISO8601
+  /// standard. | `false` |
+  /// | `jira.lf.logo.url` | The URL of the logo image file. |
+  /// `/images/icon-jira-logo.png` |
+  /// | `jira.lf.logo.show.application.title` | Controls the visibility of the
+  /// application title on the sidebar. | `false` |
   /// | `jira.lf.favicon.url` | The URL of the favicon. | `/favicon.ico` |
-  /// | `jira.lf.favicon.hires.url` | The URL of the high-resolution favicon. | `/images/64jira.png` |
-  /// | `jira.lf.top.adg3.bgcolour` | The background color of the sidebar. | `#0747A6` |
-  /// | `jira.lf.top.adg3.textcolour` | The color of the text and logo of the sidebar. | `#DEEBFF` |
-  /// | `jira.lf.hero.button.base.bg.colour` | The background color of the hero button. | `#3b7fc4` |
-  /// | `jira.title` | The text for the application title. The application title can also be set in *General settings*. | `Jira` |
-  /// | `jira.option.globalsharing` | Whether filters and dashboards can be shared with anyone signed into Jira. | `true` |
-  /// | `xflow.product.suggestions.enabled` | Whether to expose product suggestions for other Atlassian products within Jira. | `true` |
+  /// | `jira.lf.favicon.hires.url` | The URL of the high-resolution favicon. |
+  /// `/images/64jira.png` |
+  /// | `jira.lf.top.adg3.bgcolour` | The background color of the sidebar. |
+  /// `#0747A6` |
+  /// | `jira.lf.top.adg3.textcolour` | The color of the text and logo of the
+  /// sidebar. | `#DEEBFF` |
+  /// | `jira.lf.hero.button.base.bg.colour` | The background color of the hero
+  /// button. | `#3b7fc4` |
+  /// | `jira.title` | The text for the application title. The application title
+  /// can also be set in *General settings*. | `Jira` |
+  /// | `jira.option.globalsharing` | Whether filters and dashboards can be
+  /// shared with anyone signed into Jira. | `true` |
+  /// | `xflow.product.suggestions.enabled` | Whether to expose product
+  /// suggestions for other Atlassian products within Jira. | `true` |
   ///
   ///
   /// #### Other settings ####
   ///
   /// | Key | Description | Default value |
   /// | -- | -- | -- |
-  /// | `jira.issuenav.criteria.autoupdate` | Whether instant updates to search criteria is active. | `true` |
+  /// | `jira.issuenav.criteria.autoupdate` | Whether instant updates to search
+  /// criteria is active. | `true` |
   ///
   ///
-  /// *Note: Be careful when changing [application properties and advanced settings](https://confluence.atlassian.com/x/vYXKM).*
+  /// *Note: Be careful when changing
+  /// [application properties and advanced settings](https://confluence.atlassian.com/x/vYXKM).*
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ApplicationProperty> setApplicationProperty(
       {required String id, required SimpleApplicationPropertyBean body}) async {
     return ApplicationProperty.fromJson(await _client.send(
@@ -5099,7 +6391,10 @@ class JiraSettingsApi {
     ));
   }
 
-  /// Returns the [global settings](https://confluence.atlassian.com/x/qYXKM) in Jira. These settings determine whether optional features (for example, subtasks, time tracking, and others) are enabled. If time tracking is enabled, this operation also returns the time tracking configuration.
+  /// Returns the [global settings](https://confluence.atlassian.com/x/qYXKM) in
+  /// Jira. These settings determine whether optional features (for example,
+  /// subtasks, time tracking, and others) are enabled. If time tracking is
+  /// enabled, this operation also returns the time tracking configuration.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -5119,7 +6414,14 @@ class JQLApi {
 
   JQLApi._(this._client);
 
-  /// Returns reference data for JQL searches. This is a downloadable version of the documentation provided in [Advanced searching - fields reference](https://confluence.atlassian.com/x/gwORLQ) and [Advanced searching - functions reference](https://confluence.atlassian.com/x/hgORLQ), along with a list of JQL-reserved words. Use this information to assist with the programmatic creation of JQL queries or the validation of queries built in a custom query builder.
+  /// Returns reference data for JQL searches. This is a downloadable version of
+  /// the documentation provided in
+  /// [Advanced searching - fields reference](https://confluence.atlassian.com/x/gwORLQ)
+  /// and
+  /// [Advanced searching - functions reference](https://confluence.atlassian.com/x/hgORLQ),
+  /// along with a list of JQL-reserved words. Use this information to assist
+  /// with the programmatic creation of JQL queries or the validation of queries
+  /// built in a custom query builder.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -5136,9 +6438,12 @@ class JQLApi {
   /// Suggestions can be obtained by providing:
   ///
   ///  *  `fieldName` to get a list of all values for the field.
-  ///  *  `fieldName` and `fieldValue` to get a list of values containing the text in `fieldValue`.
-  ///  *  `fieldName` and `predicateName` to get a list of all predicate values for the field.
-  ///  *  `fieldName`, `predicateName`, and `predicateValue` to get a list of predicate values containing the text in `predicateValue`.
+  ///  *  `fieldName` and `fieldValue` to get a list of values containing the
+  /// text in `fieldValue`.
+  ///  *  `fieldName` and `predicateName` to get a list of all predicate values
+  /// for the field.
+  ///  *  `fieldName`, `predicateName`, and `predicateValue` to get a list of
+  /// predicate values containing the text in `predicateValue`.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -5179,9 +6484,13 @@ class JQLApi {
     ));
   }
 
-  /// Converts one or more JQL queries with user identifiers (username or user key) to equivalent JQL queries with account IDs.
+  /// Converts one or more JQL queries with user identifiers (username or user
+  /// key) to equivalent JQL queries with account IDs.
   ///
-  /// You may wish to use this operation if your system stores JQL queries and you want to make them GDPR-compliant. For more information about GDPR-related changes, see the [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/).
+  /// You may wish to use this operation if your system stores JQL queries and
+  /// you want to make them GDPR-compliant. For more information about
+  /// GDPR-related changes, see the
+  /// [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/).
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
   Future<ConvertedJQLQueries> migrateQueries(
@@ -5225,10 +6534,14 @@ class MyselfApi {
   ///
   /// Note that these keys are deprecated:
   ///
-  ///  *  *jira.user.locale* The locale of the user. By default this is not set and the user takes the locale of the instance.
-  ///  *  *jira.user.timezone* The time zone of the user. By default this is not set and the user takes the timezone of the instance.
+  ///  *  *jira.user.locale* The locale of the user. By default this is not set
+  /// and the user takes the locale of the instance.
+  ///  *  *jira.user.timezone* The time zone of the user. By default this is not
+  /// set and the user takes the timezone of the instance.
   ///
-  /// Use [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch) from the user management REST API to manage timezone and locale instead.
+  /// Use
+  /// [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch)
+  /// from the user management REST API to manage timezone and locale instead.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
   Future<String> getPreference(String key) async {
@@ -5241,20 +6554,35 @@ class MyselfApi {
     ) as String;
   }
 
-  /// Creates a preference for the user or updates a preference's value by sending a plain text string. For example, `false`. An arbitrary preference can be created with the value containing up to 255 characters. In addition, the following keys define system preferences that can be set or created:
+  /// Creates a preference for the user or updates a preference's value by
+  /// sending a plain text string. For example, `false`. An arbitrary preference
+  /// can be created with the value containing up to 255 characters. In
+  /// addition, the following keys define system preferences that can be set or
+  /// created:
   ///
-  ///  *  *user.notifications.mimetype* The mime type used in notifications sent to the user. Defaults to `html`.
-  ///  *  *user.notify.own.changes* Whether the user gets notified of their own changes. Defaults to `false`.
-  ///  *  *user.default.share.private* Whether new [ filters](https://confluence.atlassian.com/x/eQiiLQ) are set to private. Defaults to `true`.
-  ///  *  *user.keyboard.shortcuts.disabled* Whether keyboard shortcuts are disabled. Defaults to `false`.
-  ///  *  *user.autowatch.disabled* Whether the user automatically watches issues they create or add a comment to. By default, not set: the user takes the instance autowatch setting.
+  ///  *  *user.notifications.mimetype* The mime type used in notifications sent
+  /// to the user. Defaults to `html`.
+  ///  *  *user.notify.own.changes* Whether the user gets notified of their own
+  /// changes. Defaults to `false`.
+  ///  *  *user.default.share.private* Whether new
+  /// [ filters](https://confluence.atlassian.com/x/eQiiLQ) are set to private.
+  /// Defaults to `true`.
+  ///  *  *user.keyboard.shortcuts.disabled* Whether keyboard shortcuts are
+  /// disabled. Defaults to `false`.
+  ///  *  *user.autowatch.disabled* Whether the user automatically watches
+  /// issues they create or add a comment to. By default, not set: the user
+  /// takes the instance autowatch setting.
   ///
   /// Note that these keys are deprecated:
   ///
-  ///  *  *jira.user.locale* The locale of the user. By default, not set. The user takes the instance locale.
-  ///  *  *jira.user.timezone* The time zone of the user. By default, not set. The user takes the instance timezone.
+  ///  *  *jira.user.locale* The locale of the user. By default, not set. The
+  /// user takes the instance locale.
+  ///  *  *jira.user.timezone* The time zone of the user. By default, not set.
+  /// The user takes the instance timezone.
   ///
-  /// Use [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch) from the user management REST API to manage timezone and locale instead.
+  /// Use
+  /// [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch)
+  /// from the user management REST API to manage timezone and locale instead.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
   Future<void> setPreference(
@@ -5269,14 +6597,19 @@ class MyselfApi {
     );
   }
 
-  /// Deletes a preference of the user, which restores the default value of system defined settings.
+  /// Deletes a preference of the user, which restores the default value of
+  /// system defined settings.
   ///
   /// Note that these keys are deprecated:
   ///
-  ///  *  *jira.user.locale* The locale of the user. By default, not set. The user takes the instance locale.
-  ///  *  *jira.user.timezone* The time zone of the user. By default, not set. The user takes the instance timezone.
+  ///  *  *jira.user.locale* The locale of the user. By default, not set. The
+  /// user takes the instance locale.
+  ///  *  *jira.user.timezone* The time zone of the user. By default, not set.
+  /// The user takes the instance timezone.
   ///
-  /// Use [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch) from the user management REST API to manage timezone and locale instead.
+  /// Use
+  /// [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch)
+  /// from the user management REST API to manage timezone and locale instead.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
   Future<void> removePreference(String key) async {
@@ -5291,7 +6624,11 @@ class MyselfApi {
 
   /// Returns the locale for the user.
   ///
-  /// If the user has no language preference set (which is the default setting) or this resource is accessed anonymous, the browser locale detected by Jira is returned. Jira detects the browser locale using the *Accept-Language* header in the request. However, if this doesn't match a locale available Jira, the site default locale is returned.
+  /// If the user has no language preference set (which is the default setting)
+  /// or this resource is accessed anonymous, the browser locale detected by
+  /// Jira is returned. Jira detects the browser locale using the
+  /// *Accept-Language* header in the request. However, if this doesn't match a
+  /// locale available Jira, the site default locale is returned.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -5303,9 +6640,12 @@ class MyselfApi {
     ));
   }
 
-  /// Deprecated, use [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch) from the user management REST API instead.
+  /// Deprecated, use
+  /// [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch)
+  /// from the user management REST API instead.
   ///
-  /// Sets the locale of the user. The locale must be one supported by the instance of Jira.
+  /// Sets the locale of the user. The locale must be one supported by the
+  /// instance of Jira.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
   Future<void> setLocale({required Locale body}) async {
@@ -5316,7 +6656,9 @@ class MyselfApi {
     );
   }
 
-  /// Deprecated, use [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch) from the user management REST API instead.
+  /// Deprecated, use
+  /// [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch)
+  /// from the user management REST API instead.
   ///
   /// Deletes the locale of the user, which restores the default setting.
   ///
@@ -5349,15 +6691,28 @@ class PermissionsApi {
 
   PermissionsApi._(this._client);
 
-  /// Returns a list of permissions indicating which permissions the user has. Details of the user's permissions can be obtained in a global, project, or issue context.
+  /// Returns a list of permissions indicating which permissions the user has.
+  /// Details of the user's permissions can be obtained in a global, project, or
+  /// issue context.
   ///
   /// The user is reported as having a project permission:
   ///
-  ///  *  in the global context, if the user has the project permission in any project.
-  ///  *  for a project, where the project permission is determined using issue data, if the user meets the permission's criteria for any issue in the project. Otherwise, if the user has the project permission in the project.
-  ///  *  for an issue, where a project permission is determined using issue data, if the user has the permission in the issue. Otherwise, if the user has the project permission in the project containing the issue.
+  ///  *  in the global context, if the user has the project permission in any
+  /// project.
+  ///  *  for a project, where the project permission is determined using issue
+  /// data, if the user meets the permission's criteria for any issue in the
+  /// project. Otherwise, if the user has the project permission in the project.
+  ///  *  for an issue, where a project permission is determined using issue
+  /// data, if the user has the permission in the issue. Otherwise, if the user
+  /// has the project permission in the project containing the issue.
   ///
-  /// This means that users may be shown as having an issue permission (such as EDIT\_ISSUES) in the global context or a project context but may not have the permission for any or all issues. For example, if Reporters have the EDIT\_ISSUES permission a user would be shown as having this permission in the global context or the context of a project, because any user can be a reporter. However, if they are not the user who reported the issue queried they would not have EDIT\_ISSUES permission for that issue.
+  /// This means that users may be shown as having an issue permission (such as
+  /// EDIT_ISSUES) in the global context or a project context but may not have
+  /// the permission for any or all issues. For example, if Reporters have the
+  /// EDIT_ISSUES permission a user would be shown as having this permission in
+  /// the global context or the context of a project, because any user can be a
+  /// reporter. However, if they are not the user who reported the issue queried
+  /// they would not have EDIT_ISSUES permission for that issue.
   ///
   /// Global permissions are unaffected by context.
   ///
@@ -5394,7 +6749,8 @@ class PermissionsApi {
   ///  *  project permissions.
   ///  *  global permissions added by plugins.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<Permissions> getAllPermissions() async {
     return Permissions.fromJson(await _client.send(
       'get',
@@ -5404,21 +6760,32 @@ class PermissionsApi {
 
   /// Returns:
   ///
-  ///  *  for a list of global permissions, the global permissions granted to a user.
-  ///  *  for a list of project permissions and lists of projects and issues, for each project permission a list of the projects and issues a user can access or manipulate.
+  ///  *  for a list of global permissions, the global permissions granted to a
+  /// user.
+  ///  *  for a list of project permissions and lists of projects and issues,
+  /// for each project permission a list of the projects and issues a user can
+  /// access or manipulate.
   ///
-  /// If no account ID is provided, the operation returns details for the logged in user.
+  /// If no account ID is provided, the operation returns details for the logged
+  /// in user.
   ///
   /// Note that:
   ///
   ///  *  Invalid project and issue IDs are ignored.
   ///  *  A maximum of 1000 projects and 1000 issues can be checked.
-  ///  *  Null values in `globalPermissions`, `projectPermissions`, `projectPermissions.projects`, and `projectPermissions.issues` are ignored.
+  ///  *  Null values in `globalPermissions`, `projectPermissions`,
+  /// `projectPermissions.projects`, and `projectPermissions.issues` are
+  /// ignored.
   ///  *  Empty strings in `projectPermissions.permissions` are ignored.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) to check the permissions for other users, otherwise none. However, Connect apps can make a call from the app server to the product to obtain permission details for any user, without admin permission. This Connect app ability doesn't apply to calls made using AP.request() in a browser.
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) to check
+  /// the permissions for other users, otherwise none. However, Connect apps can
+  /// make a call from the app server to the product to obtain permission
+  /// details for any user, without admin permission. This Connect app ability
+  /// doesn't apply to calls made using AP.request() in a browser.
   Future<BulkPermissionGrants> getBulkPermissions(
       {required BulkPermissionsRequestBean body}) async {
     return BulkPermissionGrants.fromJson(await _client.send(
@@ -5428,7 +6795,8 @@ class PermissionsApi {
     ));
   }
 
-  /// Returns all the projects where the user is granted a list of project permissions.
+  /// Returns all the projects where the user is granted a list of project
+  /// permissions.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -5454,32 +6822,56 @@ class PermissionSchemesApi {
   ///
   /// ### About permission schemes and grants ###
   ///
-  /// A permission scheme is a collection of permission grants. A permission grant consists of a `holder` and a `permission`.
+  /// A permission scheme is a collection of permission grants. A permission
+  /// grant consists of a `holder` and a `permission`.
   ///
   /// #### Holder object ####
   ///
-  /// The `holder` object contains information about the user or group being granted the permission. For example, the *Administer projects* permission is granted to a group named *Teams in space administrators*. In this case, the type is `"type": "group"`, and the parameter is the group name, `"parameter": "Teams in space administrators"`. The `holder` object is defined by the following properties:
+  /// The `holder` object contains information about the user or group being
+  /// granted the permission. For example, the *Administer projects* permission
+  /// is granted to a group named *Teams in space administrators*. In this case,
+  /// the type is `"type": "group"`, and the parameter is the group name,
+  /// `"parameter": "Teams in space administrators"`. The `holder` object is
+  /// defined by the following properties:
   ///
   ///  *  `type` Identifies the user or group (see the list of types below).
-  ///  *  `parameter` The value of this property depends on the `type`. For example, if the `type` is a group, then you need to specify the group name.
+  ///  *  `parameter` The value of this property depends on the `type`. For
+  /// example, if the `type` is a group, then you need to specify the group
+  /// name.
   ///
-  /// The following `types` are available. The expected values for the `parameter` are given in parenthesis (some `types` may not have a `parameter`):
+  /// The following `types` are available. The expected values for the
+  /// `parameter` are given in parenthesis (some `types` may not have a
+  /// `parameter`):
   ///
   ///  *  `anyone` Grant for anonymous users.
-  ///  *  `applicationRole` Grant for users with access to the specified application (application name). See [Update product access settings](https://confluence.atlassian.com/x/3YxjL) for more information.
+  ///  *  `applicationRole` Grant for users with access to the specified
+  /// application (application name). See
+  /// [Update product access settings](https://confluence.atlassian.com/x/3YxjL)
+  /// for more information.
   ///  *  `assignee` Grant for the user currently assigned to an issue.
   ///  *  `group` Grant for the specified group (group name).
-  ///  *  `groupCustomField` Grant for a user in the group selected in the specified custom field (custom field ID).
+  ///  *  `groupCustomField` Grant for a user in the group selected in the
+  /// specified custom field (custom field ID).
   ///  *  `projectLead` Grant for a project lead.
   ///  *  `projectRole` Grant for the specified project role (project role ID).
   ///  *  `reporter` Grant for the user who reported the issue.
-  ///  *  `sd.customer.portal.only` Jira Service Desk only. Grants customers permission to access the customer portal but not Jira. See [Customizing Jira Service Desk permissions](https://confluence.atlassian.com/x/24dKLg) for more information.
-  ///  *  `user` Grant for the specified user (user ID - historically this was the userkey but that is deprecated and the account ID should be used).
-  ///  *  `userCustomField` Grant for a user selected in the specified custom field (custom field ID).
+  ///  *  `sd.customer.portal.only` Jira Service Desk only. Grants customers
+  /// permission to access the customer portal but not Jira. See
+  /// [Customizing Jira Service Desk permissions](https://confluence.atlassian.com/x/24dKLg)
+  /// for more information.
+  ///  *  `user` Grant for the specified user (user ID - historically this was
+  /// the userkey but that is deprecated and the account ID should be used).
+  ///  *  `userCustomField` Grant for a user selected in the specified custom
+  /// field (custom field ID).
   ///
   /// #### Built-in permissions ####
   ///
-  /// The [built-in Jira permissions](https://confluence.atlassian.com/x/yodKLg) are listed below. Apps can also define custom permissions. See the [project permission](https://developer.atlassian.com/cloud/jira/platform/modules/project-permission/) and [global permission](https://developer.atlassian.com/cloud/jira/platform/modules/global-permission/) module documentation for more information.
+  /// The [built-in Jira permissions](https://confluence.atlassian.com/x/yodKLg)
+  /// are listed below. Apps can also define custom permissions. See the
+  /// [project permission](https://developer.atlassian.com/cloud/jira/platform/modules/project-permission/)
+  /// and
+  /// [global permission](https://developer.atlassian.com/cloud/jira/platform/modules/global-permission/)
+  /// module documentation for more information.
   ///
   /// **Project permissions**
   ///
@@ -5544,9 +6936,11 @@ class PermissionSchemesApi {
     ));
   }
 
-  /// Creates a new permission scheme. You can create a permission scheme with or without defining a set of permission grants.
+  /// Creates a new permission scheme. You can create a permission scheme with
+  /// or without defining a set of permission grants.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PermissionScheme> createPermissionScheme(
       {String? expand, required PermissionScheme body}) async {
     return PermissionScheme.fromJson(await _client.send(
@@ -5576,17 +6970,27 @@ class PermissionSchemesApi {
     ));
   }
 
-  /// Updates a permission scheme. Below are some important things to note when using this resource:
+  /// Updates a permission scheme. Below are some important things to note when
+  /// using this resource:
   ///
-  ///  *  If a permissions list is present in the request, then it is set in the permission scheme, overwriting *all existing* grants.
-  ///  *  If you want to update only the name and description, then do not send a permissions list in the request.
-  ///  *  Sending an empty list will remove all permission grants from the permission scheme.
+  ///  *  If a permissions list is present in the request, then it is set in the
+  /// permission scheme, overwriting *all existing* grants.
+  ///  *  If you want to update only the name and description, then do not send
+  /// a permissions list in the request.
+  ///  *  Sending an empty list will remove all permission grants from the
+  /// permission scheme.
   ///
-  /// If you want to add or delete a permission grant instead of updating the whole list, see [Create permission grant](#api-rest-api-3-permissionscheme-schemeId-permission-post) or [Delete permission scheme entity](#api-rest-api-3-permissionscheme-schemeId-permission-permissionId-delete).
+  /// If you want to add or delete a permission grant instead of updating the
+  /// whole list, see
+  /// [Create permission grant](#api-rest-api-3-permissionscheme-schemeId-permission-post)
+  /// or
+  /// [Delete permission scheme entity](#api-rest-api-3-permissionscheme-schemeId-permission-permissionId-delete).
   ///
-  /// See [About permission schemes and grants](#about-permission-schemes) for more details.
+  /// See [About permission schemes and grants](#about-permission-schemes) for
+  /// more details.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PermissionScheme> updatePermissionScheme(
       {required int schemeId,
       String? expand,
@@ -5606,7 +7010,8 @@ class PermissionSchemesApi {
 
   /// Deletes a permission scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deletePermissionScheme(int schemeId) async {
     await _client.send(
       'delete',
@@ -5636,7 +7041,8 @@ class PermissionSchemesApi {
 
   /// Creates a permission grant in a permission scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PermissionGrant> createPermissionGrant(
       {required int schemeId,
       String? expand,
@@ -5674,9 +7080,12 @@ class PermissionSchemesApi {
     ));
   }
 
-  /// Deletes a permission grant from a permission scheme. See [About permission schemes and grants](#about-permission-schemes) for more details.
+  /// Deletes a permission grant from a permission scheme. See
+  /// [About permission schemes and grants](#about-permission-schemes) for more
+  /// details.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deletePermissionSchemeEntity(
       {required int schemeId, required int permissionId}) async {
     await _client.send(
@@ -5697,11 +7106,16 @@ class ProjectsApi {
 
   ProjectsApi._(this._client);
 
-  /// Returns all projects visible to the user. Deprecated, use [ Get projects paginated](#api-rest-api-3-project-search-get) that supports search and pagination.
+  /// Returns all projects visible to the user. Deprecated, use
+  /// [ Get projects paginated](#api-rest-api-3-project-search-get) that
+  /// supports search and pagination.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** Projects are returned only where the user has *Browse Projects* or *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+  /// **[Permissions](#permissions) required:** Projects are returned only where
+  /// the user has *Browse Projects* or *Administer projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
   Future<List<Project>> getAllProjects(
       {String? expand, int? recent, List<String>? properties}) async {
     return (await _client.send(
@@ -5717,22 +7131,44 @@ class ProjectsApi {
         .toList();
   }
 
-  /// Creates a project based on a project type template, as shown in the following table:
+  /// Creates a project based on a project type template, as shown in the
+  /// following table:
   ///
   /// | Project Type Key | Project Template Key |
   /// |--|--|
-  /// | `business` | `com.atlassian.jira-core-project-templates:jira-core-simplified-content-management`, `com.atlassian.jira-core-project-templates:jira-core-simplified-document-approval`, `com.atlassian.jira-core-project-templates:jira-core-simplified-lead-tracking`, `com.atlassian.jira-core-project-templates:jira-core-simplified-process-control`, `com.atlassian.jira-core-project-templates:jira-core-simplified-procurement`, `com.atlassian.jira-core-project-templates:jira-core-simplified-project-management`, `com.atlassian.jira-core-project-templates:jira-core-simplified-recruitment`, `com.atlassian.jira-core-project-templates:jira-core-simplified-task-tracking` |
-  /// | `service_desk` | `com.atlassian.servicedesk:simplified-it-service-desk`, `com.atlassian.servicedesk:simplified-internal-service-desk`, `com.atlassian.servicedesk:simplified-external-service-desk` |
-  /// | `software` | `com.pyxis.greenhopper.jira:gh-simplified-agility-kanban`, `com.pyxis.greenhopper.jira:gh-simplified-agility-scrum`, `com.pyxis.greenhopper.jira:gh-simplified-basic`, `com.pyxis.greenhopper.jira:gh-simplified-kanban-classic`, `com.pyxis.greenhopper.jira:gh-simplified-scrum-classic` |
-  /// The project types are available according to the installed Jira features as follows:
+  /// | `business` |
+  /// `com.atlassian.jira-core-project-templates:jira-core-simplified-content-management`,
+  /// `com.atlassian.jira-core-project-templates:jira-core-simplified-document-approval`,
+  /// `com.atlassian.jira-core-project-templates:jira-core-simplified-lead-tracking`,
+  /// `com.atlassian.jira-core-project-templates:jira-core-simplified-process-control`,
+  /// `com.atlassian.jira-core-project-templates:jira-core-simplified-procurement`,
+  /// `com.atlassian.jira-core-project-templates:jira-core-simplified-project-management`,
+  /// `com.atlassian.jira-core-project-templates:jira-core-simplified-recruitment`,
+  /// `com.atlassian.jira-core-project-templates:jira-core-simplified-task-tracking`
+  /// |
+  /// | `service_desk` | `com.atlassian.servicedesk:simplified-it-service-desk`,
+  /// `com.atlassian.servicedesk:simplified-internal-service-desk`,
+  /// `com.atlassian.servicedesk:simplified-external-service-desk` |
+  /// | `software` | `com.pyxis.greenhopper.jira:gh-simplified-agility-kanban`,
+  /// `com.pyxis.greenhopper.jira:gh-simplified-agility-scrum`,
+  /// `com.pyxis.greenhopper.jira:gh-simplified-basic`,
+  /// `com.pyxis.greenhopper.jira:gh-simplified-kanban-classic`,
+  /// `com.pyxis.greenhopper.jira:gh-simplified-scrum-classic` |
+  /// The project types are available according to the installed Jira features
+  /// as follows:
   ///
   ///  *  Jira Core, the default, enables `business` projects.
   ///  *  Jira Service Management enables `service_desk` projects.
   ///  *  Jira Software enables `software` projects.
   ///
-  /// To determine which features are installed, go to **Jira settings** > **Apps** > **Manage apps** and review the System Apps list. To add Jira Software or Jira Service Management into a JIRA instance, use **Jira settings** > **Apps** > **Finding new apps**. For more information, see [ Managing add-ons](https://confluence.atlassian.com/x/S31NLg).
+  /// To determine which features are installed, go to **Jira settings** >
+  /// **Apps** > **Manage apps** and review the System Apps list. To add Jira
+  /// Software or Jira Service Management into a JIRA instance, use **Jira
+  /// settings** > **Apps** > **Finding new apps**. For more information, see
+  /// [ Managing add-ons](https://confluence.atlassian.com/x/S31NLg).
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ProjectIdentifiers> createProject(
       {required ProjectInputBean body}) async {
     return ProjectIdentifiers.fromJson(await _client.send(
@@ -5746,11 +7182,17 @@ class ProjectsApi {
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** Projects are returned only where the user has one of:
+  /// **[Permissions](#permissions) required:** Projects are returned only where
+  /// the user has one of:
   ///
-  ///  *  *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
-  ///  *  *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
-  ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  ///  *  *Browse Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
+  ///  *  *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanProject> searchProjects(
       {int? startAt,
       int? maxResults,
@@ -5782,11 +7224,14 @@ class ProjectsApi {
     ));
   }
 
-  /// Returns the [project details](https://confluence.atlassian.com/x/ahLpNw) for a project.
+  /// Returns the [project details](https://confluence.atlassian.com/x/ahLpNw)
+  /// for a project.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+  /// **[Permissions](#permissions) required:** *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
   Future<Project> getProject(
       {required String projectIdOrKey,
       String? expand,
@@ -5804,11 +7249,13 @@ class ProjectsApi {
     ));
   }
 
-  /// Updates the [project details](https://confluence.atlassian.com/x/ahLpNw) of a project.
+  /// Updates the [project details](https://confluence.atlassian.com/x/ahLpNw)
+  /// of a project.
   ///
   /// All parameters are optional in the body of the request.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<Project> updateProject(
       {required String projectIdOrKey,
       String? expand,
@@ -5828,7 +7275,8 @@ class ProjectsApi {
 
   /// Deletes a project.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteProject(
       {required String projectIdOrKey, bool? enableUndo}) async {
     await _client.send(
@@ -5843,9 +7291,12 @@ class ProjectsApi {
     );
   }
 
-  /// Archives a project. Archived projects cannot be deleted. To delete an archived project, restore the project and then delete it. To restore a project, use the Jira UI.
+  /// Archives a project. Archived projects cannot be deleted. To delete an
+  /// archived project, restore the project and then delete it. To restore a
+  /// project, use the Jira UI.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> archiveProject(String projectIdOrKey) async {
     await _client.send(
       'post',
@@ -5860,10 +7311,14 @@ class ProjectsApi {
   ///
   /// This operation is:
   ///
-  ///  *  transactional, that is, if part of the delete fails the project is not deleted.
-  ///  *  [asynchronous](#async). Follow the `location` link in the response to determine the status of the task and use [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+  ///  *  transactional, that is, if part of the delete fails the project is not
+  /// deleted.
+  ///  *  [asynchronous](#async). Follow the `location` link in the response to
+  /// determine the status of the task and use
+  /// [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<TaskProgressBeanObject> deleteProjectAsynchronously(
       String projectIdOrKey) async {
     return TaskProgressBeanObject.fromJson(await _client.send(
@@ -5877,7 +7332,8 @@ class ProjectsApi {
 
   /// Restores a project from the Jira recycle bin.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<Project> restore(String projectIdOrKey) async {
     return Project.fromJson(await _client.send(
       'post',
@@ -5888,11 +7344,15 @@ class ProjectsApi {
     ));
   }
 
-  /// Returns the valid statuses for a project. The statuses are grouped by issue type, as each project has a set of valid issue types and each issue type has a set of valid statuses.
+  /// Returns the valid statuses for a project. The statuses are grouped by
+  /// issue type, as each project has a set of valid issue types and each issue
+  /// type has a set of valid statuses.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+  /// **[Permissions](#permissions) required:** *Browse Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
   Future<List<IssueTypeWithStatus>> getAllStatuses(
       String projectIdOrKey) async {
     return (await _client.send(
@@ -5907,9 +7367,15 @@ class ProjectsApi {
         .toList();
   }
 
-  /// Deprecated, this feature is no longer supported and no alternatives are available, see [Convert project to a different template or type](https://confluence.atlassian.com/x/yEKeOQ). Updates a [project type](https://confluence.atlassian.com/x/GwiiLQ). The project type can be updated for classic projects only, project type cannot be updated for next-gen projects.
+  /// Deprecated, this feature is no longer supported and no alternatives are
+  /// available, see
+  /// [Convert project to a different template or type](https://confluence.atlassian.com/x/yEKeOQ).
+  /// Updates a [project type](https://confluence.atlassian.com/x/GwiiLQ). The
+  /// project type can be updated for classic projects only, project type cannot
+  /// be updated for next-gen projects.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<Project> updateProjectType(
       {required String projectIdOrKey,
       required String newProjectTypeKey}) async {
@@ -5928,10 +7394,16 @@ class ProjectsApi {
   /// The issue type hierarchy for a project consists of:
   ///
   ///  *  *Epic* at level 1 (optional).
-  ///  *  One or more issue types at level 0 such as *Story*, *Task*, or *Bug*. Where the issue type *Epic* is defined, these issue types are used to break down the content of an epic.
-  ///  *  *Subtask* at level -1 (optional). This issue type enables level 0 issue types to be broken down into components. Issues based on a level -1 issue type must have a parent issue.
+  ///  *  One or more issue types at level 0 such as *Story*, *Task*, or *Bug*.
+  /// Where the issue type *Epic* is defined, these issue types are used to
+  /// break down the content of an epic.
+  ///  *  *Subtask* at level -1 (optional). This issue type enables level 0
+  /// issue types to be broken down into components. Issues based on a level -1
+  /// issue type must have a parent issue.
   ///
-  /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+  /// **[Permissions](#permissions) required:** *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
   Future<ProjectIssueTypeHierarchy> getHierarchy(int projectId) async {
     return ProjectIssueTypeHierarchy.fromJson(await _client.send(
       'get',
@@ -5942,9 +7414,15 @@ class ProjectsApi {
     ));
   }
 
-  /// Gets a [notification scheme](https://confluence.atlassian.com/x/8YdKLg) associated with the project. See the [Get notification scheme](#api-rest-api-3-notificationscheme-id-get) resource for more information about notification schemes.
+  /// Gets a [notification scheme](https://confluence.atlassian.com/x/8YdKLg)
+  /// associated with the project. See the
+  /// [Get notification scheme](#api-rest-api-3-notificationscheme-id-get)
+  /// resource for more information about notification schemes.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or
+  /// *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg).
   Future<NotificationScheme> getNotificationSchemeForProject(
       {required String projectKeyOrId, String? expand}) async {
     return NotificationScheme.fromJson(await _client.send(
@@ -5969,9 +7447,13 @@ class ProjectAvatarsApi {
 
   /// Sets the avatar displayed for a project.
   ///
-  /// Use [Load project avatar](#api-rest-api-3-project-projectIdOrKey-avatar2-post) to store avatars against the project, before using this operation to set the displayed avatar.
+  /// Use
+  /// [Load project avatar](#api-rest-api-3-project-projectIdOrKey-avatar2-post)
+  /// to store avatars against the project, before using this operation to set
+  /// the displayed avatar.
   ///
-  /// **[Permissions](#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+  /// **[Permissions](#permissions) required:** *Administer projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg).
   Future<void> updateProjectAvatar(
       {required String projectIdOrKey, required Avatar body}) async {
     await _client.send(
@@ -5984,9 +7466,11 @@ class ProjectAvatarsApi {
     );
   }
 
-  /// Deletes a custom avatar from a project. Note that system avatars cannot be deleted.
+  /// Deletes a custom avatar from a project. Note that system avatars cannot be
+  /// deleted.
   ///
-  /// **[Permissions](#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+  /// **[Permissions](#permissions) required:** *Administer projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg).
   Future<void> deleteProjectAvatar(
       {required String projectIdOrKey, required int id}) async {
     await _client.send(
@@ -6001,10 +7485,14 @@ class ProjectAvatarsApi {
 
   /// Loads an avatar for a project.
   ///
-  /// Specify the avatar's local file location in the body of the request. Also, include the following headers:
+  /// Specify the avatar's local file location in the body of the request. Also,
+  /// include the following headers:
   ///
-  ///  *  `X-Atlassian-Token: no-check` To prevent XSRF protection blocking the request, for more information see [Special Headers](#special-request-headers).
-  ///  *  `Content-Type: image/image type` Valid image types are JPEG, GIF, or PNG.
+  ///  *  `X-Atlassian-Token: no-check` To prevent XSRF protection blocking the
+  /// request, for more information see
+  /// [Special Headers](#special-request-headers).
+  ///  *  `Content-Type: image/image type` Valid image types are JPEG, GIF, or
+  /// PNG.
   ///
   /// For example:
   /// `curl --request POST `
@@ -6017,15 +7505,22 @@ class ProjectAvatarsApi {
   ///
   /// `--data-binary "<@/path/to/file/with/your/avatar>" `
   ///
-  /// `--url 'https://your-domain.atlassian.net/rest/api/3/project/{projectIdOrKey}/avatar2'`
+  /// `--url
+  /// 'https://your-domain.atlassian.net/rest/api/3/project/{projectIdOrKey}/avatar2'`
   ///
-  /// The avatar is cropped to a square. If no crop parameters are specified, the square originates at the top left of the image. The length of the square's sides is set to the smaller of the height or width of the image.
+  /// The avatar is cropped to a square. If no crop parameters are specified,
+  /// the square originates at the top left of the image. The length of the
+  /// square's sides is set to the smaller of the height or width of the image.
   ///
-  /// The cropped image is then used to create avatars of 16x16, 24x24, 32x32, and 48x48 in size.
+  /// The cropped image is then used to create avatars of 16x16, 24x24, 32x32,
+  /// and 48x48 in size.
   ///
-  /// After creating the avatar use [Set project avatar](#api-rest-api-3-project-projectIdOrKey-avatar-put) to set it as the project's displayed avatar.
+  /// After creating the avatar use
+  /// [Set project avatar](#api-rest-api-3-project-projectIdOrKey-avatar-put) to
+  /// set it as the project's displayed avatar.
   ///
-  /// **[Permissions](#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+  /// **[Permissions](#permissions) required:** *Administer projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg).
   Future<Avatar> createProjectAvatar(
       {required String projectIdOrKey,
       int? x,
@@ -6051,7 +7546,9 @@ class ProjectAvatarsApi {
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+  /// **[Permissions](#permissions) required:** *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
   Future<ProjectAvatars> getAllProjectAvatars(String projectIdOrKey) async {
     return ProjectAvatars.fromJson(await _client.send(
       'get',
@@ -6085,7 +7582,8 @@ class ProjectCategoriesApi {
 
   /// Creates a project category.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ProjectCategory> createProjectCategory(
       {required ProjectCategory body}) async {
     return ProjectCategory.fromJson(await _client.send(
@@ -6110,7 +7608,8 @@ class ProjectCategoriesApi {
 
   /// Updates a project category.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<UpdatedProjectCategory> updateProjectCategory(
       {required int id, required ProjectCategory body}) async {
     return UpdatedProjectCategory.fromJson(await _client.send(
@@ -6125,7 +7624,8 @@ class ProjectCategoriesApi {
 
   /// Deletes a project category.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> removeProjectCategory(int id) async {
     await _client.send(
       'delete',
@@ -6144,11 +7644,15 @@ class ProjectComponentsApi {
 
   ProjectComponentsApi._(this._client);
 
-  /// Creates a component. Use components to provide containers for issues within a project.
+  /// Creates a component. Use components to provide containers for issues
+  /// within a project.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project in which the component is created or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project in which the component is created or *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<Component> createComponent({required Component body}) async {
     return Component.fromJson(await _client.send(
       'post',
@@ -6161,7 +7665,9 @@ class ProjectComponentsApi {
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for project containing the component.
+  /// **[Permissions](#permissions) required:** *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for
+  /// project containing the component.
   Future<Component> getComponent(String id) async {
     return Component.fromJson(await _client.send(
       'get',
@@ -6172,11 +7678,15 @@ class ProjectComponentsApi {
     ));
   }
 
-  /// Updates a component. Any fields included in the request are overwritten. If `leadAccountId` is an empty string ("") the component lead is removed.
+  /// Updates a component. Any fields included in the request are overwritten.
+  /// If `leadAccountId` is an empty string ("") the component lead is removed.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the component or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the component or *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<Component> updateComponent(
       {required String id, required Component body}) async {
     return Component.fromJson(await _client.send(
@@ -6193,7 +7703,10 @@ class ProjectComponentsApi {
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the component or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the component or *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteComponent(
       {required String id, String? moveIssuesTo}) async {
     await _client.send(
@@ -6223,11 +7736,16 @@ class ProjectComponentsApi {
     ));
   }
 
-  /// Returns a [paginated](#pagination) list of all components in a project. See the [Get project components](#api-rest-api-3-project-projectIdOrKey-components-get) resource if you want to get a full list of versions without pagination.
+  /// Returns a [paginated](#pagination) list of all components in a project.
+  /// See the
+  /// [Get project components](#api-rest-api-3-project-projectIdOrKey-components-get)
+  /// resource if you want to get a full list of versions without pagination.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+  /// **[Permissions](#permissions) required:** *Browse Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
   Future<PageBeanComponentWithIssueCount> getProjectComponentsPaginated(
       {required String projectIdOrKey,
       int? startAt,
@@ -6249,11 +7767,15 @@ class ProjectComponentsApi {
     ));
   }
 
-  /// Returns all components in a project. See the [Get project components paginated](#api-rest-api-3-project-projectIdOrKey-component-get) resource if you want to get a full list of components with pagination.
+  /// Returns all components in a project. See the
+  /// [Get project components paginated](#api-rest-api-3-project-projectIdOrKey-component-get)
+  /// resource if you want to get a full list of components with pagination.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+  /// **[Permissions](#permissions) required:** *Browse Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
   Future<List<Component>> getProjectComponents(String projectIdOrKey) async {
     return (await _client.send(
       'get',
@@ -6274,9 +7796,12 @@ class ProjectEmailApi {
 
   ProjectEmailApi._(this._client);
 
-  /// Returns the [project's sender email address](https://confluence.atlassian.com/x/dolKLg).
+  /// Returns the
+  /// [project's sender email address](https://confluence.atlassian.com/x/dolKLg).
   ///
-  /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+  /// **[Permissions](#permissions) required:** *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
   Future<ProjectEmailAddress> getProjectEmail(int projectId) async {
     return ProjectEmailAddress.fromJson(await _client.send(
       'get',
@@ -6287,11 +7812,15 @@ class ProjectEmailApi {
     ));
   }
 
-  /// Sets the [project's sender email address](https://confluence.atlassian.com/x/dolKLg).
+  /// Sets the
+  /// [project's sender email address](https://confluence.atlassian.com/x/dolKLg).
   ///
-  /// If `emailAddress` is an empty string, the default email address is restored.
+  /// If `emailAddress` is an empty string, the default email address is
+  /// restored.
   ///
-  /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+  /// **[Permissions](#permissions) required:** *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
   Future<void> updateProjectEmail(
       {required int projectId, required ProjectEmailAddress body}) async {
     await _client.send(
@@ -6312,7 +7841,8 @@ class ProjectKeyAndNameValidationApi {
 
   ProjectKeyAndNameValidationApi._(this._client);
 
-  /// Validates a project key by confirming the key is a valid string and not in use.
+  /// Validates a project key by confirming the key is a valid string and not in
+  /// use.
   ///
   /// **[Permissions](#permissions) required:** None.
   Future<ErrorCollection> validateProjectKey({String? key}) async {
@@ -6325,7 +7855,8 @@ class ProjectKeyAndNameValidationApi {
     ));
   }
 
-  /// Validates a project key and, if the key is invalid or in use, generates a valid random string for the project key.
+  /// Validates a project key and, if the key is invalid or in use, generates a
+  /// valid random string for the project key.
   ///
   /// **[Permissions](#permissions) required:** None.
   Future<String> getValidProjectKey({String? key}) async {
@@ -6338,7 +7869,11 @@ class ProjectKeyAndNameValidationApi {
     ) as String;
   }
 
-  /// Checks that a project name isn't in use. If the name isn't in use, the passed string is returned. If the name is in use, this operation attempts to generate a valid project name based on the one supplied, usually by adding a sequence number. If a valid project name cannot be generated, a 404 response is returned.
+  /// Checks that a project name isn't in use. If the name isn't in use, the
+  /// passed string is returned. If the name is in use, this operation attempts
+  /// to generate a valid project name based on the one supplied, usually by
+  /// adding a sequence number. If a valid project name cannot be generated, a
+  /// 404 response is returned.
   ///
   /// **[Permissions](#permissions) required:** None.
   Future<String> getValidProjectName(String name) async {
@@ -6359,9 +7894,14 @@ class ProjectPermissionSchemesApi {
 
   ProjectPermissionSchemesApi._(this._client);
 
-  /// Returns the [issue security scheme](https://confluence.atlassian.com/x/J4lKLg) associated with the project.
+  /// Returns the
+  /// [issue security scheme](https://confluence.atlassian.com/x/J4lKLg)
+  /// associated with the project.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or the *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or the
+  /// *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg).
   Future<SecurityScheme> getProjectIssueSecurityScheme(
       String projectKeyOrId) async {
     return SecurityScheme.fromJson(await _client.send(
@@ -6373,9 +7913,13 @@ class ProjectPermissionSchemesApi {
     ));
   }
 
-  /// Gets the [permission scheme](https://confluence.atlassian.com/x/yodKLg) associated with the project.
+  /// Gets the [permission scheme](https://confluence.atlassian.com/x/yodKLg)
+  /// associated with the project.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or
+  /// *Administer projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg).
   Future<PermissionScheme> getAssignedPermissionScheme(
       {required String projectKeyOrId, String? expand}) async {
     return PermissionScheme.fromJson(await _client.send(
@@ -6390,9 +7934,12 @@ class ProjectPermissionSchemesApi {
     ));
   }
 
-  /// Assigns a permission scheme with a project. See [Managing project permissions](https://confluence.atlassian.com/x/yodKLg) for more information about permission schemes.
+  /// Assigns a permission scheme with a project. See
+  /// [Managing project permissions](https://confluence.atlassian.com/x/yodKLg)
+  /// for more information about permission schemes.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg)
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg)
   Future<PermissionScheme> assignPermissionScheme(
       {required String projectKeyOrId,
       String? expand,
@@ -6410,11 +7957,17 @@ class ProjectPermissionSchemesApi {
     ));
   }
 
-  /// Returns all [issue security](https://confluence.atlassian.com/x/J4lKLg) levels for the project that the user has access to.
+  /// Returns all [issue security](https://confluence.atlassian.com/x/J4lKLg)
+  /// levels for the project that the user has access to.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse projects* [global permission](https://confluence.atlassian.com/x/x4dKLg) for the project, however, issue security levels are only returned for authenticated user with *Set Issue Security* [global permission](https://confluence.atlassian.com/x/x4dKLg) for the project.
+  /// **[Permissions](#permissions) required:** *Browse projects*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) for the
+  /// project, however, issue security levels are only returned for
+  /// authenticated user with *Set Issue Security*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) for the
+  /// project.
   Future<ProjectIssueSecurityLevels> getSecurityLevelsForProject(
       String projectKeyOrId) async {
     return ProjectIssueSecurityLevels.fromJson(await _client.send(
@@ -6434,11 +7987,15 @@ class ProjectPropertiesApi {
 
   ProjectPropertiesApi._(this._client);
 
-  /// Returns all [project property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties) keys for the project.
+  /// Returns all
+  /// [project property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties)
+  /// keys for the project.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+  /// **[Permissions](#permissions) required:** *Browse Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
   Future<PropertyKeys> getProjectPropertyKeys(String projectIdOrKey) async {
     return PropertyKeys.fromJson(await _client.send(
       'get',
@@ -6449,11 +8006,14 @@ class ProjectPropertiesApi {
     ));
   }
 
-  /// Returns the value of a [project property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties).
+  /// Returns the value of a
+  /// [project property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties).
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the property.
+  /// **[Permissions](#permissions) required:** *Browse Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the property.
   Future<EntityProperty> getProjectProperty(
       {required String projectIdOrKey, required String propertyKey}) async {
     return EntityProperty.fromJson(await _client.send(
@@ -6466,13 +8026,21 @@ class ProjectPropertiesApi {
     ));
   }
 
-  /// Sets the value of the [project property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties). You can use project properties to store custom data against the project.
+  /// Sets the value of the
+  /// [project property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties).
+  /// You can use project properties to store custom data against the project.
   ///
-  /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
+  /// The value of the request body must be a
+  /// [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The
+  /// maximum length is 32768 characters.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project in which the property is created.
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or
+  /// *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project in which the property is created.
   Future<void> setProjectProperty(
       {required String projectIdOrKey,
       required String propertyKey,
@@ -6488,11 +8056,17 @@ class ProjectPropertiesApi {
     );
   }
 
-  /// Deletes the [property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties) from a project.
+  /// Deletes the
+  /// [property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties)
+  /// from a project.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the property.
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or
+  /// *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the property.
   Future<void> deleteProjectProperty(
       {required String projectIdOrKey, required String propertyKey}) async {
     await _client.send(
@@ -6513,13 +8087,20 @@ class ProjectRolesApi {
 
   ProjectRolesApi._(this._client);
 
-  /// Returns a list of [project roles](https://confluence.atlassian.com/x/3odKLg) for the project returning the name and self URL for each role.
+  /// Returns a list of
+  /// [project roles](https://confluence.atlassian.com/x/3odKLg) for the project
+  /// returning the name and self URL for each role.
   ///
-  /// Note that all project roles are shared with all projects in Jira Cloud. See [Get all project roles](#api-rest-api-3-role-get) for more information.
+  /// Note that all project roles are shared with all projects in Jira Cloud.
+  /// See [Get all project roles](#api-rest-api-3-role-get) for more
+  /// information.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for any project on the site or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for any
+  /// project on the site or *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<Map<String, dynamic>> getProjectRoles(String projectIdOrKey) async {
     return await _client.send(
       'get',
@@ -6530,13 +8111,20 @@ class ProjectRolesApi {
     ) as Map<String, Object?>;
   }
 
-  /// Returns a project role's details and actors associated with the project. The list of actors is sorted by display name.
+  /// Returns a project role's details and actors associated with the project.
+  /// The list of actors is sorted by display name.
   ///
-  /// To check whether a user belongs to a role based on their group memberships, use [Get user](#api-rest-api-3-user-get) with the `groups` expand parameter selected. Then check whether the user keys and groups match with the actors returned for the project.
+  /// To check whether a user belongs to a role based on their group
+  /// memberships, use [Get user](#api-rest-api-3-user-get) with the `groups`
+  /// expand parameter selected. Then check whether the user keys and groups
+  /// match with the actors returned for the project.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project or *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ProjectRole> getProjectRole(
       {required String projectIdOrKey, required int id}) async {
     return ProjectRole.fromJson(await _client.send(
@@ -6549,11 +8137,17 @@ class ProjectRolesApi {
     ));
   }
 
-  /// Returns all [project roles](https://confluence.atlassian.com/x/3odKLg) and the details for each role. Note that the list of project roles is common to all projects.
+  /// Returns all [project roles](https://confluence.atlassian.com/x/3odKLg) and
+  /// the details for each role. Note that the list of project roles is common
+  /// to all projects.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or
+  /// *Administer projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
   Future<List<ProjectRoleDetails>> getProjectRoleDetails(
       {required String projectIdOrKey,
       bool? currentMember,
@@ -6575,24 +8169,42 @@ class ProjectRolesApi {
         .toList();
   }
 
-  /// Gets a list of all project roles, complete with project role details and default actors.
+  /// Gets a list of all project roles, complete with project role details and
+  /// default actors.
   ///
   /// ### About project roles ###
   ///
-  /// [Project roles](https://confluence.atlassian.com/x/3odKLg) are a flexible way to to associate users and groups with projects. In Jira Cloud, the list of project roles is shared globally with all projects, but each project can have a different set of actors associated with it (unlike groups, which have the same membership throughout all Jira applications).
+  /// [Project roles](https://confluence.atlassian.com/x/3odKLg) are a flexible
+  /// way to to associate users and groups with projects. In Jira Cloud, the
+  /// list of project roles is shared globally with all projects, but each
+  /// project can have a different set of actors associated with it (unlike
+  /// groups, which have the same membership throughout all Jira applications).
   ///
-  /// Project roles are used in [permission schemes](#api-rest-api-3-permissionscheme-get), [email notification schemes](#api-rest-api-3-notificationscheme-get), [issue security levels](#api-rest-api-3-issuesecurityschemes-get), [comment visibility](#api-rest-api-3-comment-list-post), and workflow conditions.
+  /// Project roles are used in
+  /// [permission schemes](#api-rest-api-3-permissionscheme-get),
+  /// [email notification schemes](#api-rest-api-3-notificationscheme-get),
+  /// [issue security levels](#api-rest-api-3-issuesecurityschemes-get),
+  /// [comment visibility](#api-rest-api-3-comment-list-post), and workflow
+  /// conditions.
   ///
   /// #### Members and actors ####
   ///
-  /// In the Jira REST API, a member of a project role is called an *actor*. An *actor* is a group or user associated with a project role.
+  /// In the Jira REST API, a member of a project role is called an *actor*. An
+  /// *actor* is a group or user associated with a project role.
   ///
-  /// Actors may be set as [default members](https://confluence.atlassian.com/x/3odKLg#Managingprojectroles-Specifying'defaultmembers'foraprojectrole) of the project role or set at the project level:
+  /// Actors may be set as
+  /// [default members](https://confluence.atlassian.com/x/3odKLg#Managingprojectroles-Specifying'defaultmembers'foraprojectrole)
+  /// of the project role or set at the project level:
   ///
-  ///  *  Default actors: Users and groups that are assigned to the project role for all newly created projects. The default actors can be removed at the project level later if desired.
-  ///  *  Actors: Users and groups that are associated with a project role for a project, which may differ from the default actors. This enables you to assign a user to different roles in different projects.
+  ///  *  Default actors: Users and groups that are assigned to the project role
+  /// for all newly created projects. The default actors can be removed at the
+  /// project level later if desired.
+  ///  *  Actors: Users and groups that are associated with a project role for a
+  /// project, which may differ from the default actors. This enables you to
+  /// assign a user to different roles in different projects.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<List<ProjectRole>> getAllProjectRoles() async {
     return (await _client.send(
       'get',
@@ -6603,11 +8215,17 @@ class ProjectRolesApi {
         .toList();
   }
 
-  /// Creates a new project role with no [default actors](#api-rest-api-3-resolution-get). You can use the [Add default actors to project role](#api-rest-api-3-role-id-actors-post) operation to add default actors to the project role after creating it.
+  /// Creates a new project role with no
+  /// [default actors](#api-rest-api-3-resolution-get). You can use the
+  /// [Add default actors to project role](#api-rest-api-3-role-id-actors-post)
+  /// operation to add default actors to the project role after creating it.
   ///
-  /// *Note that although a new project role is available to all projects upon creation, any default actors that are associated with the project role are not added to projects that existed prior to the role being created.*<
+  /// *Note that although a new project role is available to all projects upon
+  /// creation, any default actors that are associated with the project role are
+  /// not added to projects that existed prior to the role being created.*<
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ProjectRole> createProjectRole(
       {required CreateUpdateRoleRequestBean body}) async {
     return ProjectRole.fromJson(await _client.send(
@@ -6617,9 +8235,11 @@ class ProjectRolesApi {
     ));
   }
 
-  /// Gets the project role details and the default actors associated with the role. The list of default actors is sorted by display name.
+  /// Gets the project role details and the default actors associated with the
+  /// role. The list of default actors is sorted by display name.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ProjectRole> getProjectRoleById(int id) async {
     return ProjectRole.fromJson(await _client.send(
       'get',
@@ -6630,9 +8250,11 @@ class ProjectRolesApi {
     ));
   }
 
-  /// Updates the project role's name and description. You must include both a name and a description in the request.
+  /// Updates the project role's name and description. You must include both a
+  /// name and a description in the request.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ProjectRole> fullyUpdateProjectRole(
       {required int id, required CreateUpdateRoleRequestBean body}) async {
     return ProjectRole.fromJson(await _client.send(
@@ -6647,9 +8269,12 @@ class ProjectRolesApi {
 
   /// Updates either the project role's name or its description.
   ///
-  /// You cannot update both the name and description at the same time using this operation. If you send a request with a name and a description only the name is updated.
+  /// You cannot update both the name and description at the same time using
+  /// this operation. If you send a request with a name and a description only
+  /// the name is updated.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ProjectRole> partialUpdateProjectRole(
       {required int id, required CreateUpdateRoleRequestBean body}) async {
     return ProjectRole.fromJson(await _client.send(
@@ -6662,9 +8287,11 @@ class ProjectRolesApi {
     ));
   }
 
-  /// Deletes a project role. You must specify a replacement project role if you wish to delete a project role that is in use.
+  /// Deletes a project role. You must specify a replacement project role if you
+  /// wish to delete a project role that is in use.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteProjectRole({required int id, int? swap}) async {
     await _client.send(
       'delete',
@@ -6686,11 +8313,16 @@ class ProjectRoleActorsApi {
 
   ProjectRoleActorsApi._(this._client);
 
-  /// Sets the actors for a project role for a project, replacing all existing actors.
+  /// Sets the actors for a project role for a project, replacing all existing
+  /// actors.
   ///
-  /// To add actors to the project without overwriting the existing list, use [Add actors to project role](#api-rest-api-3-project-projectIdOrKey-role-id-post).
+  /// To add actors to the project without overwriting the existing list, use
+  /// [Add actors to project role](#api-rest-api-3-project-projectIdOrKey-role-id-post).
   ///
-  /// **[Permissions](#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project or *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ProjectRole> setActors(
       {required String projectIdOrKey,
       required int id,
@@ -6708,11 +8340,15 @@ class ProjectRoleActorsApi {
 
   /// Adds actors to a project role for the project.
   ///
-  /// To replace all actors for the project, use [Set actors for project role](#api-rest-api-3-project-projectIdOrKey-role-id-put).
+  /// To replace all actors for the project, use
+  /// [Set actors for project role](#api-rest-api-3-project-projectIdOrKey-role-id-put).
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project or *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ProjectRole> addActorUsers(
       {required String projectIdOrKey,
       required int id,
@@ -6730,11 +8366,15 @@ class ProjectRoleActorsApi {
 
   /// Deletes actors from a project role for the project.
   ///
-  /// To remove default actors from the project role, use [Delete default actors from project role](#api-rest-api-3-role-id-actors-delete).
+  /// To remove default actors from the project role, use
+  /// [Delete default actors from project role](#api-rest-api-3-role-id-actors-delete).
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project or *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteActor(
       {required String projectIdOrKey,
       required int id,
@@ -6754,9 +8394,11 @@ class ProjectRoleActorsApi {
     );
   }
 
-  /// Returns the [default actors](#api-rest-api-3-resolution-get) for the project role.
+  /// Returns the [default actors](#api-rest-api-3-resolution-get) for the
+  /// project role.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ProjectRole> getProjectRoleActorsForRole(int id) async {
     return ProjectRole.fromJson(await _client.send(
       'get',
@@ -6767,11 +8409,15 @@ class ProjectRoleActorsApi {
     ));
   }
 
-  /// Adds [default actors](#api-rest-api-3-resolution-get) to a role. You may add groups or users, but you cannot add groups and users in the same request.
+  /// Adds [default actors](#api-rest-api-3-resolution-get) to a role. You may
+  /// add groups or users, but you cannot add groups and users in the same
+  /// request.
   ///
-  /// Changing a project role's default actors does not affect project role members for projects already created.
+  /// Changing a project role's default actors does not affect project role
+  /// members for projects already created.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ProjectRole> addProjectRoleActorsToRole(
       {required int id, required ActorInputBean body}) async {
     return ProjectRole.fromJson(await _client.send(
@@ -6784,11 +8430,15 @@ class ProjectRoleActorsApi {
     ));
   }
 
-  /// Deletes the [default actors](#api-rest-api-3-resolution-get) from a project role. You may delete a group or user, but you cannot delete a group and a user in the same request.
+  /// Deletes the [default actors](#api-rest-api-3-resolution-get) from a
+  /// project role. You may delete a group or user, but you cannot delete a
+  /// group and a user in the same request.
   ///
-  /// Changing a project role's default actors does not affect project role members for projects already created.
+  /// Changing a project role's default actors does not affect project role
+  /// members for projects already created.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ProjectRole> deleteProjectRoleActorsFromRole(
       {required int id, String? user, String? group}) async {
     return ProjectRole.fromJson(await _client.send(
@@ -6812,7 +8462,8 @@ class ProjectTypesApi {
 
   ProjectTypesApi._(this._client);
 
-  /// Returns all [project types](https://confluence.atlassian.com/x/Var1Nw), whether or not the instance has a valid license for each type.
+  /// Returns all [project types](https://confluence.atlassian.com/x/Var1Nw),
+  /// whether or not the instance has a valid license for each type.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -6827,7 +8478,8 @@ class ProjectTypesApi {
         .toList();
   }
 
-  /// Returns all [project types](https://confluence.atlassian.com/x/Var1Nw) with a valid license.
+  /// Returns all [project types](https://confluence.atlassian.com/x/Var1Nw)
+  /// with a valid license.
   Future<List<ProjectType>> getAllAccessibleProjectTypes() async {
     return (await _client.send(
       'get',
@@ -6853,7 +8505,8 @@ class ProjectTypesApi {
     ));
   }
 
-  /// Returns a [project type](https://confluence.atlassian.com/x/Var1Nw) if it is accessible to the user.
+  /// Returns a [project type](https://confluence.atlassian.com/x/Var1Nw) if it
+  /// is accessible to the user.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
   Future<ProjectType> getAccessibleProjectTypeByKey(
@@ -6875,11 +8528,16 @@ class ProjectVersionsApi {
 
   ProjectVersionsApi._(this._client);
 
-  /// Returns a [paginated](#pagination) list of all versions in a project. See the [Get project versions](#api-rest-api-3-project-projectIdOrKey-versions-get) resource if you want to get a full list of versions without pagination.
+  /// Returns a [paginated](#pagination) list of all versions in a project. See
+  /// the
+  /// [Get project versions](#api-rest-api-3-project-projectIdOrKey-versions-get)
+  /// resource if you want to get a full list of versions without pagination.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+  /// **[Permissions](#permissions) required:** *Browse Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
   Future<PageBeanVersion> getProjectVersionsPaginated(
       {required String projectIdOrKey,
       int? startAt,
@@ -6905,11 +8563,15 @@ class ProjectVersionsApi {
     ));
   }
 
-  /// Returns all versions in a project. The response is not paginated. Use [Get project versions paginated](#api-rest-api-3-project-projectIdOrKey-version-get) if you want to get the versions in a project with pagination.
+  /// Returns all versions in a project. The response is not paginated. Use
+  /// [Get project versions paginated](#api-rest-api-3-project-projectIdOrKey-version-get)
+  /// if you want to get the versions in a project with pagination.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+  /// **[Permissions](#permissions) required:** *Browse Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
   Future<List<Version>> getProjectVersions(
       {required String projectIdOrKey, String? expand}) async {
     return (await _client.send(
@@ -6930,7 +8592,11 @@ class ProjectVersionsApi {
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project the version is added to.
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or
+  /// *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project the version is added to.
   Future<Version> createVersion({required Version body}) async {
     return Version.fromJson(await _client.send(
       'post',
@@ -6943,7 +8609,9 @@ class ProjectVersionsApi {
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the version.
+  /// **[Permissions](#permissions) required:** *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the version.
   Future<Version> getVersion({required String id, String? expand}) async {
     return Version.fromJson(await _client.send(
       'get',
@@ -6961,7 +8629,11 @@ class ProjectVersionsApi {
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or
+  /// *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that contains the version.
   Future<Version> updateVersion(
       {required String id, required Version body}) async {
     return Version.fromJson(await _client.send(
@@ -6976,13 +8648,23 @@ class ProjectVersionsApi {
 
   /// Deletes a project version.
   ///
-  /// Deprecated, use [ Delete and replace version](#api-rest-api-3-version-id-removeAndSwap-post) that supports swapping version values in custom fields, in addition to the swapping for `fixVersion` and `affectedVersion` provided in this resource.
+  /// Deprecated, use
+  /// [ Delete and replace version](#api-rest-api-3-version-id-removeAndSwap-post)
+  /// that supports swapping version values in custom fields, in addition to the
+  /// swapping for `fixVersion` and `affectedVersion` provided in this resource.
   ///
-  /// Alternative versions can be provided to update issues that use the deleted version in `fixVersion` or `affectedVersion`. If alternatives are not provided, occurrences of `fixVersion` and `affectedVersion` that contain the deleted version are cleared.
+  /// Alternative versions can be provided to update issues that use the deleted
+  /// version in `fixVersion` or `affectedVersion`. If alternatives are not
+  /// provided, occurrences of `fixVersion` and `affectedVersion` that contain
+  /// the deleted version are cleared.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or
+  /// *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that contains the version.
   Future<void> deleteVersion(
       {required String id,
       String? moveFixIssuesTo,
@@ -7001,13 +8683,22 @@ class ProjectVersionsApi {
     );
   }
 
-  /// Merges two project versions. The merge is completed by deleting the version specified in `id` and replacing any occurrences of its ID in `fixVersion` with the version ID specified in `moveIssuesTo`.
+  /// Merges two project versions. The merge is completed by deleting the
+  /// version specified in `id` and replacing any occurrences of its ID in
+  /// `fixVersion` with the version ID specified in `moveIssuesTo`.
   ///
-  /// Consider using [ Delete and replace version](#api-rest-api-3-version-id-removeAndSwap-post) instead. This resource supports swapping version values in `fixVersion`, `affectedVersion`, and custom fields.
+  /// Consider using
+  /// [ Delete and replace version](#api-rest-api-3-version-id-removeAndSwap-post)
+  /// instead. This resource supports swapping version values in `fixVersion`,
+  /// `affectedVersion`, and custom fields.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or
+  /// *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that contains the version.
   Future<void> mergeVersions(
       {required String id, required String moveIssuesTo}) async {
     await _client.send(
@@ -7020,11 +8711,13 @@ class ProjectVersionsApi {
     );
   }
 
-  /// Modifies the version's sequence within the project, which affects the display order of the versions in Jira.
+  /// Modifies the version's sequence within the project, which affects the
+  /// display order of the versions in Jira.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse projects* project permission for the project that contains the version.
+  /// **[Permissions](#permissions) required:** *Browse projects* project
+  /// permission for the project that contains the version.
   Future<Version> moveVersion(
       {required String id, required VersionMoveBean body}) async {
     return Version.fromJson(await _client.send(
@@ -7045,7 +8738,8 @@ class ProjectVersionsApi {
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse projects* project permission for the project that contains the version.
+  /// **[Permissions](#permissions) required:** *Browse projects* project
+  /// permission for the project that contains the version.
   Future<VersionIssueCounts> getVersionRelatedIssues(String id) async {
     return VersionIssueCounts.fromJson(await _client.send(
       'get',
@@ -7058,11 +8752,21 @@ class ProjectVersionsApi {
 
   /// Deletes a project version.
   ///
-  /// Alternative versions can be provided to update issues that use the deleted version in `fixVersion`, `affectedVersion`, or any version picker custom fields. If alternatives are not provided, occurrences of `fixVersion`, `affectedVersion`, and any version picker custom field, that contain the deleted version, are cleared. Any replacement version must be in the same project as the version being deleted and cannot be the version being deleted.
+  /// Alternative versions can be provided to update issues that use the deleted
+  /// version in `fixVersion`, `affectedVersion`, or any version picker custom
+  /// fields. If alternatives are not provided, occurrences of `fixVersion`,
+  /// `affectedVersion`, and any version picker custom field, that contain the
+  /// deleted version, are cleared. Any replacement version must be in the same
+  /// project as the version being deleted and cannot be the version being
+  /// deleted.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or
+  /// *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that contains the version.
   Future<void> deleteAndReplaceVersion(
       {required String id, required DeleteAndReplaceVersionBean body}) async {
     await _client.send(
@@ -7075,11 +8779,13 @@ class ProjectVersionsApi {
     );
   }
 
-  /// Returns counts of the issues and unresolved issues for the project version.
+  /// Returns counts of the issues and unresolved issues for the project
+  /// version.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse projects* project permission for the project that contains the version.
+  /// **[Permissions](#permissions) required:** *Browse projects* project
+  /// permission for the project that contains the version.
   Future<VersionUnresolvedIssuesCount> getVersionUnresolvedIssues(
       String id) async {
     return VersionUnresolvedIssuesCount.fromJson(await _client.send(
@@ -7101,7 +8807,8 @@ class ScreensApi {
 
   /// Returns a [paginated](#pagination) list of the screens a field is used in.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanScreenWithTab> getScreensForField(
       {required String fieldId,
       int? startAt,
@@ -7121,9 +8828,11 @@ class ScreensApi {
     ));
   }
 
-  /// Returns a [paginated](#pagination) list of all screens or those specified by one or more screen IDs.
+  /// Returns a [paginated](#pagination) list of all screens or those specified
+  /// by one or more screen IDs.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanScreen> getScreens(
       {int? startAt, int? maxResults, List<int>? id}) async {
     return PageBeanScreen.fromJson(await _client.send(
@@ -7139,7 +8848,8 @@ class ScreensApi {
 
   /// Creates a screen with a default field tab.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<Screen> createScreen({required ScreenDetails body}) async {
     return Screen.fromJson(await _client.send(
       'post',
@@ -7150,7 +8860,8 @@ class ScreensApi {
 
   /// Adds a field to the default tab of the default screen.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> addFieldToDefaultScreen(String fieldId) async {
     await _client.send(
       'post',
@@ -7163,7 +8874,8 @@ class ScreensApi {
 
   /// Updates a screen. Only screens used in classic projects can be updated.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<Screen> updateScreen(
       {required int screenId, required UpdateScreenDetails body}) async {
     return Screen.fromJson(await _client.send(
@@ -7176,7 +8888,8 @@ class ScreensApi {
     ));
   }
 
-  /// Deletes a screen. A screen cannot be deleted if it is used in a screen scheme, workflow, or workflow draft.
+  /// Deletes a screen. A screen cannot be deleted if it is used in a screen
+  /// scheme, workflow, or workflow draft.
   ///
   /// Only screens used in classic projects can be deleted.
   Future<void> deleteScreen(int screenId) async {
@@ -7191,7 +8904,8 @@ class ScreensApi {
 
   /// Returns the fields that can be added to a tab on a screen.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<List<ScreenableField>> getAvailableScreenFields(int screenId) async {
     return (await _client.send(
       'get',
@@ -7217,8 +8931,12 @@ class ScreenTabsApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  ///  *  *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) when the project key is specified, providing that the screen is associated with the project through a Screen Scheme and Issue Type Screen Scheme.
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  ///  *  *Administer projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) when the
+  /// project key is specified, providing that the screen is associated with the
+  /// project through a Screen Scheme and Issue Type Screen Scheme.
   Future<List<ScreenableTab>> getAllScreenTabs(
       {required int screenId, String? projectKey}) async {
     return (await _client.send(
@@ -7238,7 +8956,8 @@ class ScreenTabsApi {
 
   /// Creates a tab for a screen.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ScreenableTab> addScreenTab(
       {required int screenId, required ScreenableTab body}) async {
     return ScreenableTab.fromJson(await _client.send(
@@ -7253,7 +8972,8 @@ class ScreenTabsApi {
 
   /// Updates the name of a screen tab.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ScreenableTab> renameScreenTab(
       {required int screenId,
       required int tabId,
@@ -7271,7 +8991,8 @@ class ScreenTabsApi {
 
   /// Deletes a screen tab.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteScreenTab(
       {required int screenId, required int tabId}) async {
     await _client.send(
@@ -7286,7 +9007,8 @@ class ScreenTabsApi {
 
   /// Moves a screen tab.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> moveScreenTab(
       {required int screenId, required int tabId, required int pos}) async {
     await _client.send(
@@ -7312,8 +9034,12 @@ class ScreenTabFieldsApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  ///  *  *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) when the project key is specified, providing that the screen is associated with the project through a Screen Scheme and Issue Type Screen Scheme.
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  ///  *  *Administer projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) when the
+  /// project key is specified, providing that the screen is associated with the
+  /// project through a Screen Scheme and Issue Type Screen Scheme.
   Future<List<ScreenableField>> getAllScreenTabFields(
       {required int screenId, required int tabId, String? projectKey}) async {
     return (await _client.send(
@@ -7334,7 +9060,8 @@ class ScreenTabFieldsApi {
 
   /// Adds a field to a screen tab.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ScreenableField> addScreenTabField(
       {required int screenId,
       required int tabId,
@@ -7352,7 +9079,8 @@ class ScreenTabFieldsApi {
 
   /// Removes a field from a screen tab.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> removeScreenTabField(
       {required int screenId, required int tabId, required String id}) async {
     await _client.send(
@@ -7368,9 +9096,11 @@ class ScreenTabFieldsApi {
 
   /// Moves a screen tab field.
   ///
-  /// If `after` and `position` are provided in the request, `position` is ignored.
+  /// If `after` and `position` are provided in the request, `position` is
+  /// ignored.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> moveScreenTabField(
       {required int screenId,
       required int tabId,
@@ -7400,7 +9130,8 @@ class ScreenSchemesApi {
   ///
   /// Only screen schemes used in classic projects are returned.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanScreenScheme> getScreenSchemes(
       {int? startAt, int? maxResults, List<int>? id}) async {
     return PageBeanScreenScheme.fromJson(await _client.send(
@@ -7416,7 +9147,8 @@ class ScreenSchemesApi {
 
   /// Creates a screen scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ScreenSchemeId> createScreenScheme(
       {required ScreenSchemeDetails body}) async {
     return ScreenSchemeId.fromJson(await _client.send(
@@ -7426,9 +9158,11 @@ class ScreenSchemesApi {
     ));
   }
 
-  /// Updates a screen scheme. Only screen schemes used in classic projects can be updated.
+  /// Updates a screen scheme. Only screen schemes used in classic projects can
+  /// be updated.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> updateScreenScheme(
       {required String screenSchemeId,
       required UpdateScreenSchemeDetails body}) async {
@@ -7442,11 +9176,13 @@ class ScreenSchemesApi {
     );
   }
 
-  /// Deletes a screen scheme. A screen scheme cannot be deleted if it is used in an issue type screen scheme.
+  /// Deletes a screen scheme. A screen scheme cannot be deleted if it is used
+  /// in an issue type screen scheme.
   ///
   /// Only screens schemes used in classic projects can be deleted.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteScreenScheme(String screenSchemeId) async {
     await _client.send(
       'delete',
@@ -7487,11 +9223,16 @@ class TasksApi {
 
   /// Returns the status of a [long-running asynchronous task](#async).
   ///
-  /// When a task has finished, this operation returns the JSON blob applicable to the task. See the documentation of the operation that created the task for details. Task details are not permanently retained. As of September 2019, details are retained for 14 days although this period may change without notice.
+  /// When a task has finished, this operation returns the JSON blob applicable
+  /// to the task. See the documentation of the operation that created the task
+  /// for details. Task details are not permanently retained. As of September
+  /// 2019, details are retained for 14 days although this period may change
+  /// without notice.
   ///
   /// **[Permissions](#permissions) required:** either of:
   ///
-  ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   ///  *  Creator of the task.
   Future<TaskProgressBeanObject> getTask(String taskId) async {
     return TaskProgressBeanObject.fromJson(await _client.send(
@@ -7507,7 +9248,8 @@ class TasksApi {
   ///
   /// **[Permissions](#permissions) required:** either of:
   ///
-  ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   ///  *  Creator of the task.
   Future<void> cancelTask(String taskId) async {
     await _client.send(
@@ -7527,9 +9269,12 @@ class TimeTrackingApi {
 
   TimeTrackingApi._(this._client);
 
-  /// Returns the time tracking provider that is currently selected. Note that if time tracking is disabled, then a successful but empty response is returned.
+  /// Returns the time tracking provider that is currently selected. Note that
+  /// if time tracking is disabled, then a successful but empty response is
+  /// returned.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<TimeTrackingProvider> getSelectedTimeTrackingImplementation() async {
     return TimeTrackingProvider.fromJson(await _client.send(
       'get',
@@ -7539,7 +9284,8 @@ class TimeTrackingApi {
 
   /// Selects a time tracking provider.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> selectTimeTrackingImplementation(
       {required TimeTrackingProvider body}) async {
     await _client.send(
@@ -7549,9 +9295,15 @@ class TimeTrackingApi {
     );
   }
 
-  /// Returns all time tracking providers. By default, Jira only has one time tracking provider: *JIRA provided time tracking*. However, you can install other time tracking providers via apps from the Atlassian Marketplace. For more information on time tracking providers, see the documentation for the [ Time Tracking Provider](https://developer.atlassian.com/cloud/jira/platform/modules/time-tracking-provider/) module.
+  /// Returns all time tracking providers. By default, Jira only has one time
+  /// tracking provider: *JIRA provided time tracking*. However, you can install
+  /// other time tracking providers via apps from the Atlassian Marketplace. For
+  /// more information on time tracking providers, see the documentation for the
+  /// [ Time Tracking Provider](https://developer.atlassian.com/cloud/jira/platform/modules/time-tracking-provider/)
+  /// module.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<List<TimeTrackingProvider>>
       getAvailableTimeTrackingImplementations() async {
     return (await _client.send(
@@ -7563,9 +9315,12 @@ class TimeTrackingApi {
         .toList();
   }
 
-  /// Returns the time tracking settings. This includes settings such as the time format, default time unit, and others. For more information, see [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+  /// Returns the time tracking settings. This includes settings such as the
+  /// time format, default time unit, and others. For more information, see
+  /// [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<TimeTrackingConfiguration> getSharedTimeTrackingConfiguration() async {
     return TimeTrackingConfiguration.fromJson(await _client.send(
       'get',
@@ -7575,7 +9330,8 @@ class TimeTrackingApi {
 
   /// Sets the time tracking settings.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<TimeTrackingConfiguration> setSharedTimeTrackingConfiguration(
       {required TimeTrackingConfiguration body}) async {
     return TimeTrackingConfiguration.fromJson(await _client.send(
@@ -7595,7 +9351,8 @@ class UsersApi {
 
   /// Returns a user.
   ///
-  /// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Browse users and groups*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<User> getUser(
       {String? accountId,
       String? username,
@@ -7613,13 +9370,24 @@ class UsersApi {
     ));
   }
 
-  /// Creates a user. This resource is retained for legacy compatibility. As soon as a more suitable alternative is available this resource will be deprecated.
+  /// Creates a user. This resource is retained for legacy compatibility. As
+  /// soon as a more suitable alternative is available this resource will be
+  /// deprecated.
   ///
-  /// The option is provided to set or generate a password for the user. When using the option to generate a password, by omitting `password` from the request, include `"notification": "true"` to ensure the user is sent an email advising them that their account is created. This email includes a link for the user to set their password. If the notification isn't sent for a generated password, the user will need to be sent a reset password request from Jira.
+  /// The option is provided to set or generate a password for the user. When
+  /// using the option to generate a password, by omitting `password` from the
+  /// request, include `"notification": "true"` to ensure the user is sent an
+  /// email advising them that their account is created. This email includes a
+  /// link for the user to set their password. If the notification isn't sent
+  /// for a generated password, the user will need to be sent a reset password
+  /// request from Jira.
   ///
-  /// If the user exists and has access to Jira, the operation returns a 201 status. If the user exists but does not have access to Jira, the operation returns a 400 status.
+  /// If the user exists and has access to Jira, the operation returns a 201
+  /// status. If the user exists but does not have access to Jira, the operation
+  /// returns a 400 status.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<User> createUser({required UserWriteBean body}) async {
     return User.fromJson(await _client.send(
       'post',
@@ -7630,7 +9398,9 @@ class UsersApi {
 
   /// Deletes a user.
   ///
-  /// **[Permissions](#permissions) required:** Site administration (that is, membership of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+  /// **[Permissions](#permissions) required:** Site administration (that is,
+  /// membership of the *site-admin*
+  /// [group](https://confluence.atlassian.com/x/24xjL)).
   Future<void> removeUser(
       {required String accountId, String? username, String? key}) async {
     await _client.send(
@@ -7644,7 +9414,8 @@ class UsersApi {
     );
   }
 
-  /// Returns a [paginated](#pagination) list of the users specified by one or more account IDs.
+  /// Returns a [paginated](#pagination) list of the users specified by one or
+  /// more account IDs.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
   Future<PageBeanUser> bulkGetUsers(
@@ -7666,7 +9437,9 @@ class UsersApi {
     ));
   }
 
-  /// Returns the account IDs for the users specified in the `key` or `username` parameters. Note that multiple `key` or `username` parameters can be specified.
+  /// Returns the account IDs for the users specified in the `key` or `username`
+  /// parameters. Note that multiple `key` or `username` parameters can be
+  /// specified.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
   Future<List<UserMigrationBean>> bulkGetUsersMigration(
@@ -7689,11 +9462,16 @@ class UsersApi {
         .toList();
   }
 
-  /// Returns the default [issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the user. If `accountId` is not passed in the request, the calling user's details are returned.
+  /// Returns the default
+  /// [issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the
+  /// user. If `accountId` is not passed in the request, the calling user's
+  /// details are returned.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLgl), to get the column details for any user.
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLgl), to get
+  /// the column details for any user.
   ///  *  Permission to access Jira, to get the calling user's column details.
   Future<List<ColumnItem>> getUserDefaultColumns(
       {String? accountId, String? username}) async {
@@ -7709,15 +9487,23 @@ class UsersApi {
         .toList();
   }
 
-  /// Sets the default [ issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the user. If an account ID is not passed, the calling user's default columns are set. If no column details are sent, then all default columns are removed.
+  /// Sets the default
+  /// [ issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the
+  /// user. If an account ID is not passed, the calling user's default columns
+  /// are set. If no column details are sent, then all default columns are
+  /// removed.
   ///
-  /// The parameters for this resource are expressed as HTML form data. For example, in curl:
+  /// The parameters for this resource are expressed as HTML form data. For
+  /// example, in curl:
   ///
-  /// `curl -X PUT -d columns=summary -d columns=description https://your-domain.atlassian.net/rest/api/3/user/columns?accountId=5b10ac8d82e05b22cc7d4ef5'`
+  /// `curl -X PUT -d columns=summary -d columns=description
+  /// https://your-domain.atlassian.net/rest/api/3/user/columns?accountId=5b10ac8d82e05b22cc7d4ef5'`
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the columns on any user.
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the
+  /// columns on any user.
   ///  *  Permission to access Jira, to set the calling user's columns.
   Future<void> setUserColumns({String? accountId, List<String>? body}) async {
     await _client.send(
@@ -7730,11 +9516,16 @@ class UsersApi {
     );
   }
 
-  /// Resets the default [ issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the user to the system default. If `accountId` is not passed, the calling user's default columns are reset.
+  /// Resets the default
+  /// [ issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the
+  /// user to the system default. If `accountId` is not passed, the calling
+  /// user's default columns are reset.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the columns on any user.
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the
+  /// columns on any user.
   ///  *  Permission to access Jira, to set the calling user's columns.
   Future<void> resetUserColumns({String? accountId, String? username}) async {
     await _client.send(
@@ -7747,7 +9538,9 @@ class UsersApi {
     );
   }
 
-  /// Returns a user's email address. This API is only available to apps approved by Atlassian, according to these [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603).
+  /// Returns a user's email address. This API is only available to apps
+  /// approved by Atlassian, according to these
+  /// [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603).
   Future<UnrestrictedUserEmail> getUserEmail(String accountId) async {
     return UnrestrictedUserEmail.fromJson(await _client.send(
       'get',
@@ -7758,7 +9551,9 @@ class UsersApi {
     ));
   }
 
-  /// Returns a user's email address. This API is only available to apps approved by Atlassian, according to these [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603).
+  /// Returns a user's email address. This API is only available to apps
+  /// approved by Atlassian, according to these
+  /// [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603).
   Future<UnrestrictedUserEmail> getUserEmailBulk(List<String> accountId) async {
     return UnrestrictedUserEmail.fromJson(await _client.send(
       'get',
@@ -7771,7 +9566,8 @@ class UsersApi {
 
   /// Returns the groups to which a user belongs.
   ///
-  /// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Browse users and groups*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<List<GroupName>> getUserGroups(
       {required String accountId, String? username, String? key}) async {
     return (await _client.send(
@@ -7789,7 +9585,8 @@ class UsersApi {
 
   /// Returns a list of all (active and inactive) users.
   ///
-  /// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Browse users and groups*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<List<User>> getAllUsersDefault({int? startAt, int? maxResults}) async {
     return (await _client.send(
       'get',
@@ -7805,7 +9602,8 @@ class UsersApi {
 
   /// Returns a list of all (active and inactive) users.
   ///
-  /// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Browse users and groups*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<List<User>> getAllUsers({int? startAt, int? maxResults}) async {
     return (await _client.send(
       'get',
@@ -7829,11 +9627,15 @@ class UserPropertiesApi {
 
   /// Returns the keys of all properties for a user.
   ///
-  /// Note: This operation does not access the [user properties](https://confluence.atlassian.com/x/8YxjL) created and maintained in Jira.
+  /// Note: This operation does not access the
+  /// [user properties](https://confluence.atlassian.com/x/8YxjL) created and
+  /// maintained in Jira.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to access the property keys on any user.
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg), to access
+  /// the property keys on any user.
   ///  *  Access to Jira, to access the calling user's property keys.
   Future<PropertyKeys> getUserPropertyKeys(
       {String? accountId, String? userKey, String? username}) async {
@@ -7848,13 +9650,18 @@ class UserPropertiesApi {
     ));
   }
 
-  /// Returns the value of a user's property. If no property key is provided [Get user property keys](#api-rest-api-3-user-properties-get) is called.
+  /// Returns the value of a user's property. If no property key is provided
+  /// [Get user property keys](#api-rest-api-3-user-properties-get) is called.
   ///
-  /// Note: This operation does not access the [user properties](https://confluence.atlassian.com/x/8YxjL) created and maintained in Jira.
+  /// Note: This operation does not access the
+  /// [user properties](https://confluence.atlassian.com/x/8YxjL) created and
+  /// maintained in Jira.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to get a property from any user.
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg), to get a
+  /// property from any user.
   ///  *  Access to Jira, to get a property from the calling user's record.
   Future<EntityProperty> getUserProperty(
       {String? accountId,
@@ -7875,13 +9682,18 @@ class UserPropertiesApi {
     ));
   }
 
-  /// Sets the value of a user's property. Use this resource to store custom data against a user.
+  /// Sets the value of a user's property. Use this resource to store custom
+  /// data against a user.
   ///
-  /// Note: This operation does not access the [user properties](https://confluence.atlassian.com/x/8YxjL) created and maintained in Jira.
+  /// Note: This operation does not access the
+  /// [user properties](https://confluence.atlassian.com/x/8YxjL) created and
+  /// maintained in Jira.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to set a property on any user.
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg), to set a
+  /// property on any user.
   ///  *  Access to Jira, to set a property on the calling user's record.
   Future<void> setUserProperty(
       {String? accountId,
@@ -7906,11 +9718,15 @@ class UserPropertiesApi {
 
   /// Deletes a property from a user.
   ///
-  /// Note: This operation does not access the [user properties](https://confluence.atlassian.com/x/8YxjL) created and maintained in Jira.
+  /// Note: This operation does not access the
+  /// [user properties](https://confluence.atlassian.com/x/8YxjL) created and
+  /// maintained in Jira.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to delete a property from any user.
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg), to delete
+  /// a property from any user.
   ///  *  Access to Jira, to delete a property from the calling user's record.
   Future<void> deleteUserProperty(
       {String? accountId,
@@ -7939,9 +9755,17 @@ class UserSearchApi {
 
   UserSearchApi._(this._client);
 
-  /// Returns a list of users who can be assigned issues in one or more projects. The list may be restricted to users whose attributes match a string.
+  /// Returns a list of users who can be assigned issues in one or more
+  /// projects. The list may be restricted to users whose attributes match a
+  /// string.
   ///
-  /// This operation takes the users in the range defined by `startAt` and `maxResults`, up to the thousandth user, and then returns only the users from that range that can be assigned issues in the projects. This means the operation usually returns fewer users than specified in `maxResults`. To get all the users who can be assigned issues in the projects, use [Get all users](#api-rest-api-3-users-search-get) and filter the records in your code.
+  /// This operation takes the users in the range defined by `startAt` and
+  /// `maxResults`, up to the thousandth user, and then returns only the users
+  /// from that range that can be assigned issues in the projects. This means
+  /// the operation usually returns fewer users than specified in `maxResults`.
+  /// To get all the users who can be assigned issues in the projects, use
+  /// [Get all users](#api-rest-api-3-users-search-get) and filter the records
+  /// in your code.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -7969,15 +9793,28 @@ class UserSearchApi {
         .toList();
   }
 
-  /// Returns a list of users that can be assigned to an issue. Use this operation to find the list of users who can be assigned to:
+  /// Returns a list of users that can be assigned to an issue. Use this
+  /// operation to find the list of users who can be assigned to:
   ///
   ///  *  a new issue, by providing the `projectKeyOrId`.
   ///  *  an updated issue, by providing the `issueKey`.
-  ///  *  to an issue during a transition (workflow action), by providing the `issueKey` and the transition id in `actionDescriptorId`. You can obtain the IDs of an issue's valid transitions using the `transitions` option in the `expand` parameter of [ Get issue](#api-rest-api-3-issue-issueIdOrKey-get).
+  ///  *  to an issue during a transition (workflow action), by providing the
+  /// `issueKey` and the transition id in `actionDescriptorId`. You can obtain
+  /// the IDs of an issue's valid transitions using the `transitions` option in
+  /// the `expand` parameter of
+  /// [ Get issue](#api-rest-api-3-issue-issueIdOrKey-get).
   ///
-  /// In all these cases, you can pass an account ID to determine if a user can be assigned to an issue. The user is returned in the response if they can be assigned to the issue or issue transition.
+  /// In all these cases, you can pass an account ID to determine if a user can
+  /// be assigned to an issue. The user is returned in the response if they can
+  /// be assigned to the issue or issue transition.
   ///
-  /// This operation takes the users in the range defined by `startAt` and `maxResults`, up to the thousandth user, and then returns only the users from that range that can be assigned the issue. This means the operation usually returns fewer users than specified in `maxResults`. To get all the users who can be assigned the issue, use [Get all users](#api-rest-api-3-users-search-get) and filter the records in your code.
+  /// This operation takes the users in the range defined by `startAt` and
+  /// `maxResults`, up to the thousandth user, and then returns only the users
+  /// from that range that can be assigned the issue. This means the operation
+  /// usually returns fewer users than specified in `maxResults`. To get all the
+  /// users who can be assigned the issue, use
+  /// [Get all users](#api-rest-api-3-users-search-get) and filter the records
+  /// in your code.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
   Future<List<User>> findAssignableUsers(
@@ -8017,16 +9854,28 @@ class UserSearchApi {
   ///  *  their user attributes match a search string.
   ///  *  they have a set of permissions for a project or issue.
   ///
-  /// If no search string is provided, a list of all users with the permissions is returned.
+  /// If no search string is provided, a list of all users with the permissions
+  /// is returned.
   ///
-  /// This operation takes the users in the range defined by `startAt` and `maxResults`, up to the thousandth user, and then returns only the users from that range that match the search string and have permission for the project or issue. This means the operation usually returns fewer users than specified in `maxResults`. To get all the users who match the search string and have permission for the project or issue, use [Get all users](#api-rest-api-3-users-search-get) and filter the records in your code.
+  /// This operation takes the users in the range defined by `startAt` and
+  /// `maxResults`, up to the thousandth user, and then returns only the users
+  /// from that range that match the search string and have permission for the
+  /// project or issue. This means the operation usually returns fewer users
+  /// than specified in `maxResults`. To get all the users who match the search
+  /// string and have permission for the project or issue, use
+  /// [Get all users](#api-rest-api-3-users-search-get) and filter the records
+  /// in your code.
   ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to get users for any project.
-  ///  *  *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for a project, to get users for that project.
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg), to get
+  /// users for any project.
+  ///  *  *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for a
+  /// project, to get users for that project.
   Future<List<User>> findUsersWithAllPermissions(
       {String? query,
       String? username,
@@ -8054,13 +9903,24 @@ class UserSearchApi {
         .toList();
   }
 
-  /// Returns a list of users whose attributes match the query term. The returned object includes the `html` field where the matched query term is highlighted with the HTML strong tag. A list of account IDs can be provided to exclude users from the results.
+  /// Returns a list of users whose attributes match the query term. The
+  /// returned object includes the `html` field where the matched query term is
+  /// highlighted with the HTML strong tag. A list of account IDs can be
+  /// provided to exclude users from the results.
   ///
-  /// This operation takes the users in the range defined by `maxResults`, up to the thousandth user, and then returns only the users from that range that match the query term. This means the operation usually returns fewer users than specified in `maxResults`. To get all the users who match the query term, use [Get all users](#api-rest-api-3-users-search-get) and filter the records in your code.
+  /// This operation takes the users in the range defined by `maxResults`, up to
+  /// the thousandth user, and then returns only the users from that range that
+  /// match the query term. This means the operation usually returns fewer users
+  /// than specified in `maxResults`. To get all the users who match the query
+  /// term, use [Get all users](#api-rest-api-3-users-search-get) and filter the
+  /// records in your code.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg). Anonymous calls and calls by users without the required permission return search results for an exact name match only.
+  /// **[Permissions](#permissions) required:** *Browse users and groups*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Anonymous
+  /// calls and calls by users without the required permission return search
+  /// results for an exact name match only.
   Future<FoundUsers> findUsersForPicker(
       {required String query,
       int? maxResults,
@@ -8088,11 +9948,20 @@ class UserSearchApi {
 
   /// Returns a list of users that match the search string and property.
   ///
-  /// This operation takes the users in the range defined by `startAt` and `maxResults`, up to the thousandth user, and then returns only the users from that range that match the search string and property. This means the operation usually returns fewer users than specified in `maxResults`. To get all the users who match the search string and property, use [Get all users](#api-rest-api-3-users-search-get) and filter the records in your code.
+  /// This operation takes the users in the range defined by `startAt` and
+  /// `maxResults`, up to the thousandth user, and then returns only the users
+  /// from that range that match the search string and property. This means the
+  /// operation usually returns fewer users than specified in `maxResults`. To
+  /// get all the users who match the search string and property, use
+  /// [Get all users](#api-rest-api-3-users-search-get) and filter the records
+  /// in your code.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg). Anonymous calls or calls by users without the required permission return empty search results.
+  /// **[Permissions](#permissions) required:** *Browse users and groups*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Anonymous
+  /// calls or calls by users without the required permission return empty
+  /// search results.
   Future<List<User>> findUsers(
       {String? query,
       String? username,
@@ -8116,26 +9985,45 @@ class UserSearchApi {
         .toList();
   }
 
-  /// Finds users with a structured query and returns a [paginated](#pagination) list of user details.
+  /// Finds users with a structured query and returns a [paginated](#pagination)
+  /// list of user details.
   ///
-  /// This operation takes the users in the range defined by `startAt` and `maxResults`, up to the thousandth user, and then returns only the users from that range that match the structured query. This means the operation usually returns fewer users than specified in `maxResults`. To get all the users who match the structured query, use [Get all users](#api-rest-api-3-users-search-get) and filter the records in your code.
+  /// This operation takes the users in the range defined by `startAt` and
+  /// `maxResults`, up to the thousandth user, and then returns only the users
+  /// from that range that match the structured query. This means the operation
+  /// usually returns fewer users than specified in `maxResults`. To get all the
+  /// users who match the structured query, use
+  /// [Get all users](#api-rest-api-3-users-search-get) and filter the records
+  /// in your code.
   ///
-  /// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Browse users and groups*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   ///
   /// The query statements are:
   ///
-  ///  *  `is assignee of PROJ` Returns the users that are assignees of at least one issue in project *PROJ*.
-  ///  *  `is assignee of (PROJ-1, PROJ-2)` Returns users that are assignees on the issues *PROJ-1* or *PROJ-2*.
-  ///  *  `is reporter of (PROJ-1, PROJ-2)` Returns users that are reporters on the issues *PROJ-1* or *PROJ-2*.
-  ///  *  `is watcher of (PROJ-1, PROJ-2)` Returns users that are watchers on the issues *PROJ-1* or *PROJ-2*.
-  ///  *  `is voter of (PROJ-1, PROJ-2)` Returns users that are voters on the issues *PROJ-1* or *PROJ-2*.
-  ///  *  `is commenter of (PROJ-1, PROJ-2)` Returns users that have posted a comment on the issues *PROJ-1* or *PROJ-2*.
-  ///  *  `is transitioner of (PROJ-1, PROJ-2)` Returns users that have performed a transition on issues *PROJ-1* or *PROJ-2*.
-  ///  *  `[propertyKey].entity.property.path is "property value"` Returns users with the entity property value.
+  ///  *  `is assignee of PROJ` Returns the users that are assignees of at least
+  /// one issue in project *PROJ*.
+  ///  *  `is assignee of (PROJ-1, PROJ-2)` Returns users that are assignees on
+  /// the issues *PROJ-1* or *PROJ-2*.
+  ///  *  `is reporter of (PROJ-1, PROJ-2)` Returns users that are reporters on
+  /// the issues *PROJ-1* or *PROJ-2*.
+  ///  *  `is watcher of (PROJ-1, PROJ-2)` Returns users that are watchers on
+  /// the issues *PROJ-1* or *PROJ-2*.
+  ///  *  `is voter of (PROJ-1, PROJ-2)` Returns users that are voters on the
+  /// issues *PROJ-1* or *PROJ-2*.
+  ///  *  `is commenter of (PROJ-1, PROJ-2)` Returns users that have posted a
+  /// comment on the issues *PROJ-1* or *PROJ-2*.
+  ///  *  `is transitioner of (PROJ-1, PROJ-2)` Returns users that have
+  /// performed a transition on issues *PROJ-1* or *PROJ-2*.
+  ///  *  `[propertyKey].entity.property.path is "property value"` Returns users
+  /// with the entity property value.
   ///
-  /// The list of issues can be extended as needed, as in *(PROJ-1, PROJ-2, ... PROJ-n)*. Statements can be combined using the `AND` and `OR` operators to form more complex queries. For example:
+  /// The list of issues can be extended as needed, as in *(PROJ-1, PROJ-2, ...
+  /// PROJ-n)*. Statements can be combined using the `AND` and `OR` operators to
+  /// form more complex queries. For example:
   ///
-  /// `is assignee of PROJ AND [propertyKey].entity.property.path is "property value"`
+  /// `is assignee of PROJ AND [propertyKey].entity.property.path is "property
+  /// value"`
   Future<PageBeanUser> findUsersByQuery(
       {required String query, int? startAt, int? maxResults}) async {
     return PageBeanUser.fromJson(await _client.send(
@@ -8149,26 +10037,45 @@ class UserSearchApi {
     ));
   }
 
-  /// Finds users with a structured query and returns a [paginated](#pagination) list of user keys.
+  /// Finds users with a structured query and returns a [paginated](#pagination)
+  /// list of user keys.
   ///
-  /// This operation takes the users in the range defined by `startAt` and `maxResults`, up to the thousandth user, and then returns only the users from that range that match the structured query. This means the operation usually returns fewer users than specified in `maxResults`. To get all the users who match the structured query, use [Get all users](#api-rest-api-3-users-search-get) and filter the records in your code.
+  /// This operation takes the users in the range defined by `startAt` and
+  /// `maxResults`, up to the thousandth user, and then returns only the users
+  /// from that range that match the structured query. This means the operation
+  /// usually returns fewer users than specified in `maxResults`. To get all the
+  /// users who match the structured query, use
+  /// [Get all users](#api-rest-api-3-users-search-get) and filter the records
+  /// in your code.
   ///
-  /// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Browse users and groups*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   ///
   /// The query statements are:
   ///
-  ///  *  `is assignee of PROJ` Returns the users that are assignees of at least one issue in project *PROJ*.
-  ///  *  `is assignee of (PROJ-1, PROJ-2)` Returns users that are assignees on the issues *PROJ-1* or *PROJ-2*.
-  ///  *  `is reporter of (PROJ-1, PROJ-2)` Returns users that are reporters on the issues *PROJ-1* or *PROJ-2*.
-  ///  *  `is watcher of (PROJ-1, PROJ-2)` Returns users that are watchers on the issues *PROJ-1* or *PROJ-2*.
-  ///  *  `is voter of (PROJ-1, PROJ-2)` Returns users that are voters on the issues *PROJ-1* or *PROJ-2*.
-  ///  *  `is commenter of (PROJ-1, PROJ-2)` Returns users that have posted a comment on the issues *PROJ-1* or *PROJ-2*.
-  ///  *  `is transitioner of (PROJ-1, PROJ-2)` Returns users that have performed a transition on issues *PROJ-1* or *PROJ-2*.
-  ///  *  `[propertyKey].entity.property.path is "property value"` Returns users with the entity property value.
+  ///  *  `is assignee of PROJ` Returns the users that are assignees of at least
+  /// one issue in project *PROJ*.
+  ///  *  `is assignee of (PROJ-1, PROJ-2)` Returns users that are assignees on
+  /// the issues *PROJ-1* or *PROJ-2*.
+  ///  *  `is reporter of (PROJ-1, PROJ-2)` Returns users that are reporters on
+  /// the issues *PROJ-1* or *PROJ-2*.
+  ///  *  `is watcher of (PROJ-1, PROJ-2)` Returns users that are watchers on
+  /// the issues *PROJ-1* or *PROJ-2*.
+  ///  *  `is voter of (PROJ-1, PROJ-2)` Returns users that are voters on the
+  /// issues *PROJ-1* or *PROJ-2*.
+  ///  *  `is commenter of (PROJ-1, PROJ-2)` Returns users that have posted a
+  /// comment on the issues *PROJ-1* or *PROJ-2*.
+  ///  *  `is transitioner of (PROJ-1, PROJ-2)` Returns users that have
+  /// performed a transition on issues *PROJ-1* or *PROJ-2*.
+  ///  *  `[propertyKey].entity.property.path is "property value"` Returns users
+  /// with the entity property value.
   ///
-  /// The list of issues can be extended as needed, as in *(PROJ-1, PROJ-2, ... PROJ-n)*. Statements can be combined using the `AND` and `OR` operators to form more complex queries. For example:
+  /// The list of issues can be extended as needed, as in *(PROJ-1, PROJ-2, ...
+  /// PROJ-n)*. Statements can be combined using the `AND` and `OR` operators to
+  /// form more complex queries. For example:
   ///
-  /// `is assignee of PROJ AND [propertyKey].entity.property.path is "property value"`
+  /// `is assignee of PROJ AND [propertyKey].entity.property.path is "property
+  /// value"`
   Future<PageBeanUserKey> findUserKeysByQuery(
       {required String query, int? startAt, int? maxResults}) async {
     return PageBeanUserKey.fromJson(await _client.send(
@@ -8192,11 +10099,21 @@ class UserSearchApi {
   ///  *  an issue, by providing the `issueKey`.
   ///  *  any issue in a project, by providing the `projectKey`.
   ///
-  /// This operation takes the users in the range defined by `startAt` and `maxResults`, up to the thousandth user, and then returns only the users from that range that match the search string and have permission to browse issues. This means the operation usually returns fewer users than specified in `maxResults`. To get all the users who match the search string and have permission to browse issues, use [Get all users](#api-rest-api-3-users-search-get) and filter the records in your code.
+  /// This operation takes the users in the range defined by `startAt` and
+  /// `maxResults`, up to the thousandth user, and then returns only the users
+  /// from that range that match the search string and have permission to browse
+  /// issues. This means the operation usually returns fewer users than
+  /// specified in `maxResults`. To get all the users who match the search
+  /// string and have permission to browse issues, use
+  /// [Get all users](#api-rest-api-3-users-search-get) and filter the records
+  /// in your code.
   ///
   /// This operation can be accessed anonymously.
   ///
-  /// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg). Anonymous calls and calls by users without the required permission return empty search results.
+  /// **[Permissions](#permissions) required:** *Browse users and groups*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Anonymous
+  /// calls and calls by users without the required permission return empty
+  /// search results.
   Future<List<User>> findUsersWithBrowsePermission(
       {String? query,
       String? username,
@@ -8230,9 +10147,12 @@ class WebhooksApi {
 
   WebhooksApi._(this._client);
 
-  /// Returns a [paginated](#pagination) list of the webhooks registered by the calling app.
+  /// Returns a [paginated](#pagination) list of the webhooks registered by the
+  /// calling app.
   ///
-  /// **[Permissions](#permissions) required:** Only [Connect apps](https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/#atlassian-connect) can use this operation.
+  /// **[Permissions](#permissions) required:** Only
+  /// [Connect apps](https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/#atlassian-connect)
+  /// can use this operation.
   Future<PageBeanWebhook> getDynamicWebhooksForApp(
       {int? startAt, int? maxResults}) async {
     return PageBeanWebhook.fromJson(await _client.send(
@@ -8247,7 +10167,9 @@ class WebhooksApi {
 
   /// Registers webhooks.
   ///
-  /// **[Permissions](#permissions) required:** Only [Connect apps](https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/#atlassian-connect) can use this operation.
+  /// **[Permissions](#permissions) required:** Only
+  /// [Connect apps](https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/#atlassian-connect)
+  /// can use this operation.
   Future<ContainerForRegisteredWebhooks> registerDynamicWebhooks(
       {required WebhookRegistrationDetails body}) async {
     return ContainerForRegisteredWebhooks.fromJson(await _client.send(
@@ -8257,9 +10179,13 @@ class WebhooksApi {
     ));
   }
 
-  /// Removes webhooks by ID. Only webhooks registered by the calling Connect app are removed. If webhooks created by other apps are specified, they are ignored.
+  /// Removes webhooks by ID. Only webhooks registered by the calling Connect
+  /// app are removed. If webhooks created by other apps are specified, they are
+  /// ignored.
   ///
-  /// **[Permissions](#permissions) required:** Only [Connect apps](https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/#atlassian-connect) can use this operation.
+  /// **[Permissions](#permissions) required:** Only
+  /// [Connect apps](https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/#atlassian-connect)
+  /// can use this operation.
   Future<void> deleteWebhookById({required ContainerForWebhookIDs body}) async {
     await _client.send(
       'delete',
@@ -8268,15 +10194,20 @@ class WebhooksApi {
     );
   }
 
-  /// Returns webhooks that have recently failed to be delivered to the requesting app after the maximum number of retries.
+  /// Returns webhooks that have recently failed to be delivered to the
+  /// requesting app after the maximum number of retries.
   ///
   /// After 72 hours the failure may no longer be returned by this operation.
   ///
   /// The oldest failure is returned first.
   ///
-  /// This method uses a cursor-based pagination. To request the next page use the failure time of the last webhook on the list as the `failedAfter` value or use the URL provided in `next`.
+  /// This method uses a cursor-based pagination. To request the next page use
+  /// the failure time of the last webhook on the list as the `failedAfter`
+  /// value or use the URL provided in `next`.
   ///
-  /// **[Permissions](#permissions) required:** Only [Connect apps](https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/#atlassian-connect) can use this operation.
+  /// **[Permissions](#permissions) required:** Only
+  /// [Connect apps](https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/#atlassian-connect)
+  /// can use this operation.
   Future<FailedWebhooks> getFailedWebhooks(
       {int? maxResults, int? after}) async {
     return FailedWebhooks.fromJson(await _client.send(
@@ -8289,11 +10220,15 @@ class WebhooksApi {
     ));
   }
 
-  /// Webhooks registered through the REST API expire after 30 days. Call this resource periodically to keep them alive.
+  /// Webhooks registered through the REST API expire after 30 days. Call this
+  /// resource periodically to keep them alive.
   ///
-  /// Unrecognized webhook IDs (nonexistent or belonging to other apps) are ignored.
+  /// Unrecognized webhook IDs (nonexistent or belonging to other apps) are
+  /// ignored.
   ///
-  /// **[Permissions](#permissions) required:** Only [Connect apps](https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/#atlassian-connect) can use this operation.
+  /// **[Permissions](#permissions) required:** Only
+  /// [Connect apps](https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/#atlassian-connect)
+  /// can use this operation.
   Future<WebhooksExpirationDate> refreshWebhooks(
       {required ContainerForWebhookIDs body}) async {
     return WebhooksExpirationDate.fromJson(await _client.send(
@@ -8311,11 +10246,15 @@ class WorkflowsApi {
 
   WorkflowsApi._(this._client);
 
-  /// Returns all workflows in Jira or a workflow. Deprecated, use [Get workflows paginated](#api-rest-api-3-workflow-search-get).
+  /// Returns all workflows in Jira or a workflow. Deprecated, use
+  /// [Get workflows paginated](#api-rest-api-3-workflow-search-get).
   ///
-  /// If the `workflowName` parameter is specified, the workflow is returned as an object (not in an array). Otherwise, an array of workflow objects is returned.
+  /// If the `workflowName` parameter is specified, the workflow is returned as
+  /// an object (not in an array). Otherwise, an array of workflow objects is
+  /// returned.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<List<DeprecatedWorkflow>> getAllWorkflows(
       {String? workflowName}) async {
     return (await _client.send(
@@ -8330,11 +10269,14 @@ class WorkflowsApi {
         .toList();
   }
 
-  /// Returns a [paginated](#pagination) list of published classic workflows. When workflow names are specified, details of those workflows are returned. Otherwise, all published classic workflows are returned.
+  /// Returns a [paginated](#pagination) list of published classic workflows.
+  /// When workflow names are specified, details of those workflows are
+  /// returned. Otherwise, all published classic workflows are returned.
   ///
   /// This operation does not return next-gen workflows.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanWorkflow> getWorkflowsPaginated(
       {int? startAt,
       int? maxResults,
@@ -8361,7 +10303,8 @@ class WorkflowsApi {
   ///  *  associated with any workflow scheme.
   ///  *  associated with any draft workflow scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteInactiveWorkflow(String entityId) async {
     await _client.send(
       'delete',
@@ -8380,16 +10323,23 @@ class WorkflowTransitionRulesApi {
 
   WorkflowTransitionRulesApi._(this._client);
 
-  /// Returns a [paginated](#pagination) list of workflows with transition rules. The workflows can be filtered to return only those containing workflow transition rules:
+  /// Returns a [paginated](#pagination) list of workflows with transition
+  /// rules. The workflows can be filtered to return only those containing
+  /// workflow transition rules:
   ///
-  ///  *  of one or more transition rule types, such as [workflow post functions](https://developer.atlassian.com/cloud/jira/platform/modules/workflow-post-function/).
+  ///  *  of one or more transition rule types, such as
+  /// [workflow post functions](https://developer.atlassian.com/cloud/jira/platform/modules/workflow-post-function/).
   ///  *  matching one or more transition rule keys.
   ///
-  /// Only workflows containing transition rules created by the calling Connect app are returned. However, if a workflow is returned all transition rules that match the filters are returned for that workflow.
+  /// Only workflows containing transition rules created by the calling Connect
+  /// app are returned. However, if a workflow is returned all transition rules
+  /// that match the filters are returned for that workflow.
   ///
-  /// Due to server-side optimizations, workflows with an empty list of rules may be returned; these workflows can be ignored.
+  /// Due to server-side optimizations, workflows with an empty list of rules
+  /// may be returned; these workflows can be ignored.
   ///
-  /// **[Permissions](#permissions) required:** Only Connect apps can use this operation.
+  /// **[Permissions](#permissions) required:** Only Connect apps can use this
+  /// operation.
   Future<PageBeanWorkflowTransitionRules>
       getWorkflowTransitionRuleConfigurations(
           {int? startAt,
@@ -8410,15 +10360,20 @@ class WorkflowTransitionRulesApi {
     ));
   }
 
-  /// Updates configuration of workflow transition rules. The following rule types are supported:
+  /// Updates configuration of workflow transition rules. The following rule
+  /// types are supported:
   ///
-  ///  *  [post functions](https://developer.atlassian.com/cloud/jira/platform/modules/workflow-post-function/)
-  ///  *  [conditions](https://developer.atlassian.com/cloud/jira/platform/modules/workflow-condition/)
-  ///  *  [validators](https://developer.atlassian.com/cloud/jira/platform/modules/workflow-validator/)
+  ///  *
+  /// [post functions](https://developer.atlassian.com/cloud/jira/platform/modules/workflow-post-function/)
+  ///  *
+  /// [conditions](https://developer.atlassian.com/cloud/jira/platform/modules/workflow-condition/)
+  ///  *
+  /// [validators](https://developer.atlassian.com/cloud/jira/platform/modules/workflow-validator/)
   ///
   /// Only rules created by the calling Connect app can be updated.
   ///
-  /// **[Permissions](#permissions) required:** Only Connect apps can use this operation.
+  /// **[Permissions](#permissions) required:** Only Connect apps can use this
+  /// operation.
   Future<WorkflowTransitionRulesUpdateErrors>
       updateWorkflowTransitionRuleConfigurations(
           {required WorkflowTransitionRulesUpdate body}) async {
@@ -8437,9 +10392,11 @@ class WorkflowSchemesApi {
 
   WorkflowSchemesApi._(this._client);
 
-  /// Returns a [paginated](#pagination) list of all workflow schemes, not including draft workflow schemes.
+  /// Returns a [paginated](#pagination) list of all workflow schemes, not
+  /// including draft workflow schemes.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanWorkflowScheme> getAllWorkflowSchemes(
       {int? startAt, int? maxResults}) async {
     return PageBeanWorkflowScheme.fromJson(await _client.send(
@@ -8454,7 +10411,8 @@ class WorkflowSchemesApi {
 
   /// Creates a workflow scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowScheme> createWorkflowScheme(
       {required WorkflowScheme body}) async {
     return WorkflowScheme.fromJson(await _client.send(
@@ -8466,7 +10424,8 @@ class WorkflowSchemesApi {
 
   /// Returns a workflow scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowScheme> getWorkflowScheme(
       {required int id, bool? returnDraftIfExists}) async {
     return WorkflowScheme.fromJson(await _client.send(
@@ -8482,9 +10441,14 @@ class WorkflowSchemesApi {
     ));
   }
 
-  /// Updates a workflow scheme, including the name, default workflow, issue type to project mappings, and more. If the workflow scheme is active (that is, being used by at least one project), then a draft workflow scheme is created or updated instead, provided that `updateDraftIfNeeded` is set to `true`.
+  /// Updates a workflow scheme, including the name, default workflow, issue
+  /// type to project mappings, and more. If the workflow scheme is active (that
+  /// is, being used by at least one project), then a draft workflow scheme is
+  /// created or updated instead, provided that `updateDraftIfNeeded` is set to
+  /// `true`.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowScheme> updateWorkflowScheme(
       {required int id, required WorkflowScheme body}) async {
     return WorkflowScheme.fromJson(await _client.send(
@@ -8497,9 +10461,11 @@ class WorkflowSchemesApi {
     ));
   }
 
-  /// Deletes a workflow scheme. Note that a workflow scheme cannot be deleted if it is active (that is, being used by at least one project).
+  /// Deletes a workflow scheme. Note that a workflow scheme cannot be deleted
+  /// if it is active (that is, being used by at least one project).
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteWorkflowScheme(int id) async {
     await _client.send(
       'delete',
@@ -8510,9 +10476,13 @@ class WorkflowSchemesApi {
     );
   }
 
-  /// Returns the default workflow for a workflow scheme. The default workflow is the workflow that is assigned any issue types that have not been mapped to any other workflow. The default workflow has *All Unassigned Issue Types* listed in its issue types for the workflow scheme in Jira.
+  /// Returns the default workflow for a workflow scheme. The default workflow
+  /// is the workflow that is assigned any issue types that have not been mapped
+  /// to any other workflow. The default workflow has *All Unassigned Issue
+  /// Types* listed in its issue types for the workflow scheme in Jira.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<DefaultWorkflow> getDefaultWorkflow(
       {required int id, bool? returnDraftIfExists}) async {
     return DefaultWorkflow.fromJson(await _client.send(
@@ -8530,9 +10500,13 @@ class WorkflowSchemesApi {
 
   /// Sets the default workflow for a workflow scheme.
   ///
-  /// Note that active workflow schemes cannot be edited. If the workflow scheme is active, set `updateDraftIfNeeded` to `true` in the request object and a draft workflow scheme is created or updated with the new default workflow. The draft workflow scheme can be published in Jira.
+  /// Note that active workflow schemes cannot be edited. If the workflow scheme
+  /// is active, set `updateDraftIfNeeded` to `true` in the request object and a
+  /// draft workflow scheme is created or updated with the new default workflow.
+  /// The draft workflow scheme can be published in Jira.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowScheme> updateDefaultWorkflow(
       {required int id, required DefaultWorkflow body}) async {
     return WorkflowScheme.fromJson(await _client.send(
@@ -8545,11 +10519,16 @@ class WorkflowSchemesApi {
     ));
   }
 
-  /// Resets the default workflow for a workflow scheme. That is, the default workflow is set to Jira's system workflow (the *jira* workflow).
+  /// Resets the default workflow for a workflow scheme. That is, the default
+  /// workflow is set to Jira's system workflow (the *jira* workflow).
   ///
-  /// Note that active workflow schemes cannot be edited. If the workflow scheme is active, set `updateDraftIfNeeded` to `true` and a draft workflow scheme is created or updated with the default workflow reset. The draft workflow scheme can be published in Jira.
+  /// Note that active workflow schemes cannot be edited. If the workflow scheme
+  /// is active, set `updateDraftIfNeeded` to `true` and a draft workflow scheme
+  /// is created or updated with the default workflow reset. The draft workflow
+  /// scheme can be published in Jira.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowScheme> deleteDefaultWorkflow(
       {required int id, bool? updateDraftIfNeeded}) async {
     return WorkflowScheme.fromJson(await _client.send(
@@ -8565,9 +10544,11 @@ class WorkflowSchemesApi {
     ));
   }
 
-  /// Returns the issue type-workflow mapping for an issue type in a workflow scheme.
+  /// Returns the issue type-workflow mapping for an issue type in a workflow
+  /// scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<IssueTypeWorkflowMapping> getWorkflowSchemeIssueType(
       {required int id,
       required String issueType,
@@ -8588,9 +10569,13 @@ class WorkflowSchemesApi {
 
   /// Sets the workflow for an issue type in a workflow scheme.
   ///
-  /// Note that active workflow schemes cannot be edited. If the workflow scheme is active, set `updateDraftIfNeeded` to `true` in the request body and a draft workflow scheme is created or updated with the new issue type-workflow mapping. The draft workflow scheme can be published in Jira.
+  /// Note that active workflow schemes cannot be edited. If the workflow scheme
+  /// is active, set `updateDraftIfNeeded` to `true` in the request body and a
+  /// draft workflow scheme is created or updated with the new issue
+  /// type-workflow mapping. The draft workflow scheme can be published in Jira.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowScheme> setWorkflowSchemeIssueType(
       {required int id,
       required String issueType,
@@ -8606,11 +10591,16 @@ class WorkflowSchemesApi {
     ));
   }
 
-  /// Deletes the issue type-workflow mapping for an issue type in a workflow scheme.
+  /// Deletes the issue type-workflow mapping for an issue type in a workflow
+  /// scheme.
   ///
-  /// Note that active workflow schemes cannot be edited. If the workflow scheme is active, set `updateDraftIfNeeded` to `true` and a draft workflow scheme is created or updated with the issue type-workflow mapping deleted. The draft workflow scheme can be published in Jira.
+  /// Note that active workflow schemes cannot be edited. If the workflow scheme
+  /// is active, set `updateDraftIfNeeded` to `true` and a draft workflow scheme
+  /// is created or updated with the issue type-workflow mapping deleted. The
+  /// draft workflow scheme can be published in Jira.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowScheme> deleteWorkflowSchemeIssueType(
       {required int id,
       required String issueType,
@@ -8631,7 +10621,8 @@ class WorkflowSchemesApi {
 
   /// Returns the workflow-issue type mappings for a workflow scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<IssueTypesWorkflowMapping> getWorkflow(
       {required int id,
       String? workflowName,
@@ -8650,11 +10641,17 @@ class WorkflowSchemesApi {
     ));
   }
 
-  /// Sets the issue types for a workflow in a workflow scheme. The workflow can also be set as the default workflow for the workflow scheme. Unmapped issues types are mapped to the default workflow.
+  /// Sets the issue types for a workflow in a workflow scheme. The workflow can
+  /// also be set as the default workflow for the workflow scheme. Unmapped
+  /// issues types are mapped to the default workflow.
   ///
-  /// Note that active workflow schemes cannot be edited. If the workflow scheme is active, set `updateDraftIfNeeded` to `true` in the request body and a draft workflow scheme is created or updated with the new workflow-issue types mappings. The draft workflow scheme can be published in Jira.
+  /// Note that active workflow schemes cannot be edited. If the workflow scheme
+  /// is active, set `updateDraftIfNeeded` to `true` in the request body and a
+  /// draft workflow scheme is created or updated with the new workflow-issue
+  /// types mappings. The draft workflow scheme can be published in Jira.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowScheme> updateWorkflowMapping(
       {required int id,
       required String workflowName,
@@ -8672,11 +10669,16 @@ class WorkflowSchemesApi {
     ));
   }
 
-  /// Deletes the workflow-issue type mapping for a workflow in a workflow scheme.
+  /// Deletes the workflow-issue type mapping for a workflow in a workflow
+  /// scheme.
   ///
-  /// Note that active workflow schemes cannot be edited. If the workflow scheme is active, set `updateDraftIfNeeded` to `true` and a draft workflow scheme is created or updated with the workflow-issue type mapping deleted. The draft workflow scheme can be published in Jira.
+  /// Note that active workflow schemes cannot be edited. If the workflow scheme
+  /// is active, set `updateDraftIfNeeded` to `true` and a draft workflow scheme
+  /// is created or updated with the workflow-issue type mapping deleted. The
+  /// draft workflow scheme can be published in Jira.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteWorkflowMapping(
       {required int id,
       required String workflowName,
@@ -8703,9 +10705,13 @@ class WorkflowSchemeProjectAssociationsApi {
 
   WorkflowSchemeProjectAssociationsApi._(this._client);
 
-  /// Returns a list of the workflow schemes associated with a list of projects. Each returned workflow scheme includes a list of the requested projects associated with it. Any next-gen or non-existent projects in the request are ignored and no errors are returned.
+  /// Returns a list of the workflow schemes associated with a list of projects.
+  /// Each returned workflow scheme includes a list of the requested projects
+  /// associated with it. Any next-gen or non-existent projects in the request
+  /// are ignored and no errors are returned.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ContainerOfWorkflowSchemeAssociations>
       getWorkflowSchemeProjectAssociations(List<int> projectId) async {
     return ContainerOfWorkflowSchemeAssociations.fromJson(await _client.send(
@@ -8717,11 +10723,13 @@ class WorkflowSchemeProjectAssociationsApi {
     ));
   }
 
-  /// Assigns a workflow scheme to a project. This operation is performed only when there are no issues in the project.
+  /// Assigns a workflow scheme to a project. This operation is performed only
+  /// when there are no issues in the project.
   ///
   /// Workflow schemes can only be assigned to classic projects.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> associateSchemeWithProject(
       {required WorkflowSchemeProjectAssociation body}) async {
     await _client.send(
@@ -8739,9 +10747,12 @@ class WorkflowSchemeDraftsApi {
 
   WorkflowSchemeDraftsApi._(this._client);
 
-  /// Create a draft workflow scheme from an active workflow scheme, by copying the active workflow scheme. Note that an active workflow scheme can only have one draft workflow scheme.
+  /// Create a draft workflow scheme from an active workflow scheme, by copying
+  /// the active workflow scheme. Note that an active workflow scheme can only
+  /// have one draft workflow scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowScheme> createWorkflowSchemeDraftFromParent(int id) async {
     return WorkflowScheme.fromJson(await _client.send(
       'post',
@@ -8752,13 +10763,20 @@ class WorkflowSchemeDraftsApi {
     ));
   }
 
-  /// Returns the draft workflow scheme for an active workflow scheme. Draft workflow schemes allow changes to be made to the active workflow schemes: When an active workflow scheme is updated, a draft copy is created. The draft is modified, then the changes in the draft are copied back to the active workflow scheme. See [Configuring workflow schemes](https://confluence.atlassian.com/x/tohKLg) for more information.
+  /// Returns the draft workflow scheme for an active workflow scheme. Draft
+  /// workflow schemes allow changes to be made to the active workflow schemes:
+  /// When an active workflow scheme is updated, a draft copy is created. The
+  /// draft is modified, then the changes in the draft are copied back to the
+  /// active workflow scheme. See
+  /// [Configuring workflow schemes](https://confluence.atlassian.com/x/tohKLg)
+  /// for more information.
   /// Note that:
   ///
   ///  *  Only active workflow schemes can have draft workflow schemes.
   ///  *  An active workflow scheme can only have one draft workflow scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowScheme> getWorkflowSchemeDraft(int id) async {
     return WorkflowScheme.fromJson(await _client.send(
       'get',
@@ -8769,9 +10787,12 @@ class WorkflowSchemeDraftsApi {
     ));
   }
 
-  /// Updates a draft workflow scheme. If a draft workflow scheme does not exist for the active workflow scheme, then a draft is created. Note that an active workflow scheme can only have one draft workflow scheme.
+  /// Updates a draft workflow scheme. If a draft workflow scheme does not exist
+  /// for the active workflow scheme, then a draft is created. Note that an
+  /// active workflow scheme can only have one draft workflow scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowScheme> updateWorkflowSchemeDraft(
       {required int id, required WorkflowScheme body}) async {
     return WorkflowScheme.fromJson(await _client.send(
@@ -8786,7 +10807,8 @@ class WorkflowSchemeDraftsApi {
 
   /// Deletes a draft workflow scheme.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteWorkflowSchemeDraft(int id) async {
     await _client.send(
       'delete',
@@ -8797,9 +10819,14 @@ class WorkflowSchemeDraftsApi {
     );
   }
 
-  /// Returns the default workflow for a workflow scheme's draft. The default workflow is the workflow that is assigned any issue types that have not been mapped to any other workflow. The default workflow has *All Unassigned Issue Types* listed in its issue types for the workflow scheme in Jira.
+  /// Returns the default workflow for a workflow scheme's draft. The default
+  /// workflow is the workflow that is assigned any issue types that have not
+  /// been mapped to any other workflow. The default workflow has *All
+  /// Unassigned Issue Types* listed in its issue types for the workflow scheme
+  /// in Jira.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<DefaultWorkflow> getDraftDefaultWorkflow(int id) async {
     return DefaultWorkflow.fromJson(await _client.send(
       'get',
@@ -8812,7 +10839,8 @@ class WorkflowSchemeDraftsApi {
 
   /// Sets the default workflow for a workflow scheme's draft.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowScheme> updateDraftDefaultWorkflow(
       {required int id, required DefaultWorkflow body}) async {
     return WorkflowScheme.fromJson(await _client.send(
@@ -8825,9 +10853,11 @@ class WorkflowSchemeDraftsApi {
     ));
   }
 
-  /// Resets the default workflow for a workflow scheme's draft. That is, the default workflow is set to Jira's system workflow (the *jira* workflow).
+  /// Resets the default workflow for a workflow scheme's draft. That is, the
+  /// default workflow is set to Jira's system workflow (the *jira* workflow).
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowScheme> deleteDraftDefaultWorkflow(int id) async {
     return WorkflowScheme.fromJson(await _client.send(
       'delete',
@@ -8838,9 +10868,11 @@ class WorkflowSchemeDraftsApi {
     ));
   }
 
-  /// Returns the issue type-workflow mapping for an issue type in a workflow scheme's draft.
+  /// Returns the issue type-workflow mapping for an issue type in a workflow
+  /// scheme's draft.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<IssueTypeWorkflowMapping> getWorkflowSchemeDraftIssueType(
       {required int id, required String issueType}) async {
     return IssueTypeWorkflowMapping.fromJson(await _client.send(
@@ -8855,7 +10887,8 @@ class WorkflowSchemeDraftsApi {
 
   /// Sets the workflow for an issue type in a workflow scheme's draft.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowScheme> setWorkflowSchemeDraftIssueType(
       {required int id,
       required String issueType,
@@ -8871,9 +10904,11 @@ class WorkflowSchemeDraftsApi {
     ));
   }
 
-  /// Deletes the issue type-workflow mapping for an issue type in a workflow scheme's draft.
+  /// Deletes the issue type-workflow mapping for an issue type in a workflow
+  /// scheme's draft.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowScheme> deleteWorkflowSchemeDraftIssueType(
       {required int id, required String issueType}) async {
     return WorkflowScheme.fromJson(await _client.send(
@@ -8888,7 +10923,8 @@ class WorkflowSchemeDraftsApi {
 
   /// Returns the workflow-issue type mappings for a workflow scheme's draft.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<IssueTypesWorkflowMapping> getDraftWorkflow(
       {required int id, String? workflowName}) async {
     return IssueTypesWorkflowMapping.fromJson(await _client.send(
@@ -8903,9 +10939,12 @@ class WorkflowSchemeDraftsApi {
     ));
   }
 
-  /// Sets the issue types for a workflow in a workflow scheme's draft. The workflow can also be set as the default workflow for the draft workflow scheme. Unmapped issues types are mapped to the default workflow.
+  /// Sets the issue types for a workflow in a workflow scheme's draft. The
+  /// workflow can also be set as the default workflow for the draft workflow
+  /// scheme. Unmapped issues types are mapped to the default workflow.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowScheme> updateDraftWorkflowMapping(
       {required int id,
       required String workflowName,
@@ -8923,9 +10962,11 @@ class WorkflowSchemeDraftsApi {
     ));
   }
 
-  /// Deletes the workflow-issue type mapping for a workflow in a workflow scheme's draft.
+  /// Deletes the workflow-issue type mapping for a workflow in a workflow
+  /// scheme's draft.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteDraftWorkflowMapping(
       {required int id, required String workflowName}) async {
     await _client.send(
@@ -8963,9 +11004,11 @@ class WorkflowStatusesApi {
         .toList();
   }
 
-  /// Returns a status. The status must be associated with a workflow to be returned.
+  /// Returns a status. The status must be associated with a workflow to be
+  /// returned.
   ///
-  /// If a name is used on more than one status, only the status found first is returned. Therefore, identifying the status by its ID may be preferable.
+  /// If a name is used on more than one status, only the status found first is
+  /// returned. Therefore, identifying the status by its ID may be preferable.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -9001,7 +11044,8 @@ class WorkflowStatusCategoriesApi {
         .toList();
   }
 
-  /// Returns a status category. Status categories provided a mechanism for categorizing [statuses](#api-rest-api-3-status-idOrName-get).
+  /// Returns a status category. Status categories provided a mechanism for
+  /// categorizing [statuses](#api-rest-api-3-status-idOrName-get).
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
   Future<StatusCategory> getStatusCategory(String idOrKey) async {
@@ -9022,9 +11066,13 @@ class WorkflowTransitionPropertiesApi {
 
   WorkflowTransitionPropertiesApi._(this._client);
 
-  /// Returns the properties on a workflow transition. Transition properties are used to change the behavior of a transition. For more information, see [Transition properties](https://confluence.atlassian.com/x/zIhKLg#Advancedworkflowconfiguration-transitionproperties) and [Workflow properties](https://confluence.atlassian.com/x/JYlKLg).
+  /// Returns the properties on a workflow transition. Transition properties are
+  /// used to change the behavior of a transition. For more information, see
+  /// [Transition properties](https://confluence.atlassian.com/x/zIhKLg#Advancedworkflowconfiguration-transitionproperties)
+  /// and [Workflow properties](https://confluence.atlassian.com/x/JYlKLg).
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowTransitionProperty> getWorkflowTransitionProperties(
       {required int transitionId,
       bool? includeReservedKeys,
@@ -9047,9 +11095,15 @@ class WorkflowTransitionPropertiesApi {
     ));
   }
 
-  /// Updates a workflow transition by changing the property value. Trying to update a property that does not exist results in a new property being added to the transition. Transition properties are used to change the behavior of a transition. For more information, see [Transition properties](https://confluence.atlassian.com/x/zIhKLg#Advancedworkflowconfiguration-transitionproperties) and [Workflow properties](https://confluence.atlassian.com/x/JYlKLg).
+  /// Updates a workflow transition by changing the property value. Trying to
+  /// update a property that does not exist results in a new property being
+  /// added to the transition. Transition properties are used to change the
+  /// behavior of a transition. For more information, see
+  /// [Transition properties](https://confluence.atlassian.com/x/zIhKLg#Advancedworkflowconfiguration-transitionproperties)
+  /// and [Workflow properties](https://confluence.atlassian.com/x/JYlKLg).
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowTransitionProperty> updateWorkflowTransitionProperty(
       {required int transitionId,
       required String key,
@@ -9071,9 +11125,13 @@ class WorkflowTransitionPropertiesApi {
     ));
   }
 
-  /// Adds a property to a workflow transition. Transition properties are used to change the behavior of a transition. For more information, see [Transition properties](https://confluence.atlassian.com/x/zIhKLg#Advancedworkflowconfiguration-transitionproperties) and [Workflow properties](https://confluence.atlassian.com/x/JYlKLg).
+  /// Adds a property to a workflow transition. Transition properties are used
+  /// to change the behavior of a transition. For more information, see
+  /// [Transition properties](https://confluence.atlassian.com/x/zIhKLg#Advancedworkflowconfiguration-transitionproperties)
+  /// and [Workflow properties](https://confluence.atlassian.com/x/JYlKLg).
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowTransitionProperty> createWorkflowTransitionProperty(
       {required int transitionId,
       required String key,
@@ -9095,9 +11153,13 @@ class WorkflowTransitionPropertiesApi {
     ));
   }
 
-  /// Deletes a property from a workflow transition. Transition properties are used to change the behavior of a transition. For more information, see [Transition properties](https://confluence.atlassian.com/x/zIhKLg#Advancedworkflowconfiguration-transitionproperties) and [Workflow properties](https://confluence.atlassian.com/x/JYlKLg).
+  /// Deletes a property from a workflow transition. Transition properties are
+  /// used to change the behavior of a transition. For more information, see
+  /// [Transition properties](https://confluence.atlassian.com/x/zIhKLg#Advancedworkflowconfiguration-transitionproperties)
+  /// and [Workflow properties](https://confluence.atlassian.com/x/JYlKLg).
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteWorkflowTransitionProperty(
       {required int transitionId,
       required String key,
@@ -9127,7 +11189,8 @@ class AppPropertiesApi {
 
   /// Gets all the properties of an app.
   ///
-  /// **[Permissions](#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
+  /// **[Permissions](#permissions) required:** Only a Connect app whose key
+  /// matches `addonKey` can make this request.
   Future<PropertyKeys> getAddonProperties(String addonKey) async {
     return PropertyKeys.fromJson(await _client.send(
       'get',
@@ -9140,7 +11203,8 @@ class AppPropertiesApi {
 
   /// Returns the key and value of an app's property.
   ///
-  /// **[Permissions](#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
+  /// **[Permissions](#permissions) required:** Only a Connect app whose key
+  /// matches `addonKey` can make this request.
   Future<EntityProperty> getAddonProperty(
       {required String addonKey, required String propertyKey}) async {
     return EntityProperty.fromJson(await _client.send(
@@ -9153,11 +11217,15 @@ class AppPropertiesApi {
     ));
   }
 
-  /// Sets the value of an app's property. Use this resource to store custom data for your app.
+  /// Sets the value of an app's property. Use this resource to store custom
+  /// data for your app.
   ///
-  /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
+  /// The value of the request body must be a
+  /// [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The
+  /// maximum length is 32768 characters.
   ///
-  /// **[Permissions](#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
+  /// **[Permissions](#permissions) required:** Only a Connect app whose key
+  /// matches `addonKey` can make this request.
   Future<OperationMessage> putAddonProperty(
       {required String addonKey,
       required String propertyKey,
@@ -9175,7 +11243,8 @@ class AppPropertiesApi {
 
   /// Deletes an app's property.
   ///
-  /// **[Permissions](#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
+  /// **[Permissions](#permissions) required:** Only a Connect app whose key
+  /// matches `addonKey` can make this request.
   Future<void> deleteAddonProperty(
       {required String addonKey, required String propertyKey}) async {
     await _client.send(
@@ -9198,7 +11267,8 @@ class DynamicModulesApi {
 
   /// Returns all modules registered dynamically by the calling app.
   ///
-  /// **[Permissions](#permissions) required:** Only Connect apps can make this request.
+  /// **[Permissions](#permissions) required:** Only Connect apps can make this
+  /// request.
   Future<ConnectModules> getModules() async {
     return ConnectModules.fromJson(await _client.send(
       'get',
@@ -9208,7 +11278,8 @@ class DynamicModulesApi {
 
   /// Registers a list of modules.
   ///
-  /// **[Permissions](#permissions) required:** Only Connect apps can make this request.
+  /// **[Permissions](#permissions) required:** Only Connect apps can make this
+  /// request.
   Future<void> registerModules({required ConnectModules body}) async {
     await _client.send(
       'post',
@@ -9219,7 +11290,8 @@ class DynamicModulesApi {
 
   /// Remove all or a list of modules registered by the calling app.
   ///
-  /// **[Permissions](#permissions) required:** Only Connect apps can make this request.
+  /// **[Permissions](#permissions) required:** Only Connect apps can make this
+  /// request.
   Future<void> removeModules({List<String>? moduleKey}) async {
     await _client.send(
       'delete',
@@ -9351,7 +11423,8 @@ class ApplicationRole {
   /// The groups that are granted default access for this application role.
   final List<String> defaultGroups;
 
-  /// Determines whether this application role should be selected by default on user creation.
+  /// Determines whether this application role should be selected by default on
+  /// user creation.
   final bool selectedByDefault;
 
   /// Deprecated.
@@ -9366,7 +11439,8 @@ class ApplicationRole {
   /// The number of users counting against your license.
   final int? userCount;
 
-  /// The [type of users](https://confluence.atlassian.com/x/lRW3Ng) being counted against your license.
+  /// The [type of users](https://confluence.atlassian.com/x/lRW3Ng) being
+  /// counted against your license.
   final String? userCountDescription;
   final bool hasUnlimitedSeats;
 
@@ -9553,50 +11627,80 @@ class Component {
   /// The unique identifier for the component.
   final String? id;
 
-  /// The unique name for the component in the project. Required when creating a component. Optional when updating a component. The maximum length is 255 characters.
+  /// The unique name for the component in the project. Required when creating a
+  /// component. Optional when updating a component. The maximum length is 255
+  /// characters.
   final String? name;
 
-  /// The description for the component. Optional when creating or updating a component.
+  /// The description for the component. Optional when creating or updating a
+  /// component.
   final String? description;
 
   /// The user details for the component's lead user.
   final User? lead;
 
-  /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? leadUserName;
 
-  /// The accountId of the component's lead user. The accountId uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
+  /// The accountId of the component's lead user. The accountId uniquely
+  /// identifies the user across all Atlassian products. For example,
+  /// *5b10ac8d82e05b22cc7d4ef5*.
   final String? leadAccountId;
 
-  /// The nominal user type used to determine the assignee for issues created with this component. See `realAssigneeType` for details on how the type of the user, and hence the user, assigned to issues is determined. Can take the following values:
+  /// The nominal user type used to determine the assignee for issues created
+  /// with this component. See `realAssigneeType` for details on how the type of
+  /// the user, and hence the user, assigned to issues is determined. Can take
+  /// the following values:
   ///
-  ///  *  `PROJECT_LEAD` the assignee to any issues created with this component is nominally the lead for the project the component is in.
-  ///  *  `COMPONENT_LEAD` the assignee to any issues created with this component is nominally the lead for the component.
-  ///  *  `UNASSIGNED` an assignee is not set for issues created with this component.
-  ///  *  `PROJECT_DEFAULT` the assignee to any issues created with this component is nominally the default assignee for the project that the component is in.
+  ///  *  `PROJECT_LEAD` the assignee to any issues created with this component
+  /// is nominally the lead for the project the component is in.
+  ///  *  `COMPONENT_LEAD` the assignee to any issues created with this
+  /// component is nominally the lead for the component.
+  ///  *  `UNASSIGNED` an assignee is not set for issues created with this
+  /// component.
+  ///  *  `PROJECT_DEFAULT` the assignee to any issues created with this
+  /// component is nominally the default assignee for the project that the
+  /// component is in.
   ///
   /// Default value: `PROJECT_DEFAULT`.
   /// Optional when creating or updating a component.
   final ComponentAssigneeType? assigneeType;
 
-  /// The details of the user associated with `assigneeType`, if any. See `realAssignee` for details of the user assigned to issues created with this component.
+  /// The details of the user associated with `assigneeType`, if any. See
+  /// `realAssignee` for details of the user assigned to issues created with
+  /// this component.
   final User? assignee;
 
-  /// The type of the assignee that is assigned to issues created with this component, when an assignee cannot be set from the `assigneeType`. For example, `assigneeType` is set to `COMPONENT_LEAD` but no component lead is set. This property is set to one of the following values:
+  /// The type of the assignee that is assigned to issues created with this
+  /// component, when an assignee cannot be set from the `assigneeType`. For
+  /// example, `assigneeType` is set to `COMPONENT_LEAD` but no component lead
+  /// is set. This property is set to one of the following values:
   ///
-  ///  *  `PROJECT_LEAD` when `assigneeType` is `PROJECT_LEAD` and the project lead has permission to be assigned issues in the project that the component is in.
-  ///  *  `COMPONENT_LEAD` when `assignee`Type is `COMPONENT_LEAD` and the component lead has permission to be assigned issues in the project that the component is in.
-  ///  *  `UNASSIGNED` when `assigneeType` is `UNASSIGNED` and Jira is configured to allow unassigned issues.
+  ///  *  `PROJECT_LEAD` when `assigneeType` is `PROJECT_LEAD` and the project
+  /// lead has permission to be assigned issues in the project that the
+  /// component is in.
+  ///  *  `COMPONENT_LEAD` when `assignee`Type is `COMPONENT_LEAD` and the
+  /// component lead has permission to be assigned issues in the project that
+  /// the component is in.
+  ///  *  `UNASSIGNED` when `assigneeType` is `UNASSIGNED` and Jira is
+  /// configured to allow unassigned issues.
   ///  *  `PROJECT_DEFAULT` when none of the preceding cases are true.
   final ComponentRealAssigneeType? realAssigneeType;
 
-  /// The user assigned to issues created with this component, when `assigneeType` does not identify a valid assignee.
+  /// The user assigned to issues created with this component, when
+  /// `assigneeType` does not identify a valid assignee.
   final User? realAssignee;
 
-  /// Whether a user is associated with `assigneeType`. For example, if the `assigneeType` is set to `COMPONENT_LEAD` but the component lead is not set, then `false` is returned.
+  /// Whether a user is associated with `assigneeType`. For example, if the
+  /// `assigneeType` is set to `COMPONENT_LEAD` but the component lead is not
+  /// set, then `false` is returned.
   final bool isAssigneeTypeValid;
 
-  /// The key of the project the component is assigned to. Required when creating a component. Can't be updated.
+  /// The key of the project the component is assigned to. Required when
+  /// creating a component. Can't be updated.
   final String? project;
 
   /// The ID of the project the component is assigned to.
@@ -9972,7 +12076,8 @@ class GroupName {
 
 /// The project issue type hierarchy.
 class Hierarchy {
-  /// The ID of the base level. This property is deprecated, see [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
+  /// The ID of the base level. This property is deprecated, see
+  /// [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
   final int? baseLevelId;
 
   /// Details about the hierarchy level.
@@ -10013,19 +12118,25 @@ class Hierarchy {
 }
 
 class HierarchyLevel {
-  /// The ID of the hierarchy level. This property is deprecated, see [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
+  /// The ID of the hierarchy level. This property is deprecated, see
+  /// [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
   final int? id;
 
   /// The name of this hierarchy level.
   final String? name;
 
-  /// The ID of the level above this one in the hierarchy. This property is deprecated, see [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
+  /// The ID of the level above this one in the hierarchy. This property is
+  /// deprecated, see
+  /// [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
   final int? aboveLevelId;
 
-  /// The ID of the level below this one in the hierarchy. This property is deprecated, see [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
+  /// The ID of the level below this one in the hierarchy. This property is
+  /// deprecated, see
+  /// [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
   final int? belowLevelId;
 
-  /// The ID of the project configuration. This property is deprecated, see [Change oticen: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
+  /// The ID of the project configuration. This property is deprecated, see
+  /// [Change oticen: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
   final int? projectConfigurationId;
 
   /// The level of this item in the hierarchy.
@@ -10034,7 +12145,8 @@ class HierarchyLevel {
   /// The issue types available in this hierarchy level.
   final List<int> issueTypeIds;
 
-  /// The external UUID of the hierarchy level. This property is deprecated, see [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
+  /// The external UUID of the hierarchy level. This property is deprecated, see
+  /// [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
   final String? externalUuid;
   final HierarchyLevelGlobalHierarchyLevel? globalHierarchyLevel;
 
@@ -10444,13 +12556,15 @@ class Project {
   /// The default assignee when creating issues for this project.
   final ProjectAssigneeType? assigneeType;
 
-  /// The versions defined in the project. For more information, see [Create version](#api-rest-api-3-version-post).
+  /// The versions defined in the project. For more information, see
+  /// [Create version](#api-rest-api-3-version-post).
   final List<Version> versions;
 
   /// The name of the project.
   final String? name;
 
-  /// The name and self URL for each role defined in the project. For more information, see [Create project role](#api-rest-api-3-role-post).
+  /// The name and self URL for each role defined in the project. For more
+  /// information, see [Create project role](#api-rest-api-3-role-post).
   final Map<String, dynamic>? roles;
 
   /// The URLs of the project's avatars.
@@ -10459,7 +12573,9 @@ class Project {
   /// The category the project belongs to.
   final ProjectCategory? projectCategory;
 
-  /// The [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes) of the project.
+  /// The
+  /// [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes)
+  /// of the project.
   final ProjectProjectTypeKey? projectTypeKey;
 
   /// Whether the project is simplified.
@@ -10904,7 +13020,8 @@ class ProjectCategory {
   /// The name of the project category. Required on create, optional on update.
   final String? name;
 
-  /// The description of the project category. Required on create, optional on update.
+  /// The description of the project category. Required on create, optional on
+  /// update.
   final String? description;
 
   ProjectCategory({this.self, this.id, this.name, this.description});
@@ -10965,7 +13082,9 @@ class ProjectForScope {
   /// The name of the project.
   final String? name;
 
-  /// The [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes) of the project.
+  /// The
+  /// [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes)
+  /// of the project.
   final ProjectForScopeProjectTypeKey? projectTypeKey;
 
   /// Whether or not the project is simplified.
@@ -11178,7 +13297,8 @@ class ProjectRole {
   /// The list of users who act in this role.
   final List<RoleActor> actors;
 
-  /// The scope of the role. Indicated for roles associated with [next-gen projects](https://confluence.atlassian.com/x/loMyO).
+  /// The scope of the role. Indicated for roles associated with
+  /// [next-gen projects](https://confluence.atlassian.com/x/loMyO).
   final Scope? scope;
 
   /// The translated name of the project role.
@@ -11345,7 +13465,10 @@ class ProjectRoleGroup {
 
 /// Details of the user associated with the role.
 class ProjectRoleUser {
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*. Returns *unknown* if the record is deleted and corrupted, for example, as the result of a server import.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*. Returns
+  /// *unknown* if the record is deleted and corrupted, for example, as the
+  /// result of a server import.
   final String? accountId;
 
   ProjectRoleUser({this.accountId});
@@ -11378,13 +13501,17 @@ class RoleActor {
   /// The ID of the role actor.
   final int? id;
 
-  /// The display name of the role actor. For users, depending on the user’s privacy setting, this may return an alternative value for the user's name.
+  /// The display name of the role actor. For users, depending on the user’s
+  /// privacy setting, this may return an alternative value for the user's name.
   final String? displayName;
 
   /// The type of role actor.
   final RoleActorType? type;
 
-  /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? name;
 
   /// The avatar of the role actor.
@@ -11499,7 +13626,8 @@ class RoleActorType {
   String toString() => value;
 }
 
-/// The projects the item is associated with. Indicated for items associated with [next-gen projects](https://confluence.atlassian.com/x/loMyO).
+/// The projects the item is associated with. Indicated for items associated
+/// with [next-gen projects](https://confluence.atlassian.com/x/loMyO).
 class Scope {
   /// The type of scope.
   final ScopeType? type;
@@ -11571,23 +13699,37 @@ class SharePermission {
 
   /// The type of share permission:
   ///
-  ///  *  `group` Shared with a group. If set in a request, then specify `sharePermission.group` as well.
-  ///  *  `project` Shared with a project. If set in a request, then specify `sharePermission.project` as well.
-  ///  *  `projectRole` Share with a project role in a project. This value is not returned in responses. It is used in requests, where it needs to be specify with `projectId` and `projectRoleId`.
-  ///  *  `global` Shared globally. If set in a request, no other `sharePermission` properties need to be specified.
-  ///  *  `loggedin` Shared with all logged-in users. Note: This value is set in a request by specifying `authenticated` as the `type`.
-  ///  *  `project-unknown` Shared with a project that the user does not have access to. Cannot be set in a request.
+  ///  *  `group` Shared with a group. If set in a request, then specify
+  /// `sharePermission.group` as well.
+  ///  *  `project` Shared with a project. If set in a request, then specify
+  /// `sharePermission.project` as well.
+  ///  *  `projectRole` Share with a project role in a project. This value is
+  /// not returned in responses. It is used in requests, where it needs to be
+  /// specify with `projectId` and `projectRoleId`.
+  ///  *  `global` Shared globally. If set in a request, no other
+  /// `sharePermission` properties need to be specified.
+  ///  *  `loggedin` Shared with all logged-in users. Note: This value is set in
+  /// a request by specifying `authenticated` as the `type`.
+  ///  *  `project-unknown` Shared with a project that the user does not have
+  /// access to. Cannot be set in a request.
   final SharePermissionType type;
 
-  /// The project that the filter is shared with. This is similar to the project object returned by [Get project](#api-rest-api-3-project-projectIdOrKey-get) but it contains a subset of the properties, which are: `self`, `id`, `key`, `assigneeType`, `name`, `roles`, `avatarUrls`, `projectType`, `simplified`.
+  /// The project that the filter is shared with. This is similar to the project
+  /// object returned by
+  /// [Get project](#api-rest-api-3-project-projectIdOrKey-get) but it contains
+  /// a subset of the properties, which are: `self`, `id`, `key`,
+  /// `assigneeType`, `name`, `roles`, `avatarUrls`, `projectType`,
+  /// `simplified`.
   /// For a request, specify the `id` for the project.
   final Project? project;
 
   /// The project role that the filter is shared with.
-  /// For a request, specify the `id` for the role. You must also specify the `project` object and `id` for the project that the role is in.
+  /// For a request, specify the `id` for the role. You must also specify the
+  /// `project` object and `id` for the project that the role is in.
   final ProjectRole? role;
 
-  /// The group that the filter is shared with. For a request, specify the `name` property for the group.
+  /// The group that the filter is shared with. For a request, specify the
+  /// `name` property for the group.
   final GroupName? group;
 
   SharePermission(
@@ -11975,47 +14117,68 @@ class UpdatedProjectCategory {
   }
 }
 
-/// A user with details as permitted by the user's Atlassian Account privacy settings. However, be aware of these exceptions:
+/// A user with details as permitted by the user's Atlassian Account privacy
+/// settings. However, be aware of these exceptions:
 ///
-///  *  User record deleted from Atlassian: This occurs as the result of a right to be forgotten request. In this case, `displayName` provides an indication and other parameters have default values or are blank (for example, email is blank).
-///  *  User record corrupted: This occurs as a results of events such as a server import and can only happen to deleted users. In this case, `accountId` returns *unknown* and all other parameters have fallback values.
-///  *  User record unavailable: This usually occurs due to an internal service outage. In this case, all parameters have fallback values.
+///  *  User record deleted from Atlassian: This occurs as the result of a right
+/// to be forgotten request. In this case, `displayName` provides an indication
+/// and other parameters have default values or are blank (for example, email is
+/// blank).
+///  *  User record corrupted: This occurs as a results of events such as a
+/// server import and can only happen to deleted users. In this case,
+/// `accountId` returns *unknown* and all other parameters have fallback values.
+///  *  User record unavailable: This usually occurs due to an internal service
+/// outage. In this case, all parameters have fallback values.
 class User {
   /// The URL of the user.
   final String? self;
 
-  /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? key;
 
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*. Required in requests.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*. Required in
+  /// requests.
   final String? accountId;
 
   /// The user account type. Can take the following values:
   ///
   ///  *  `atlassian` regular Atlassian user account
-  ///  *  `app` system account used for Connect applications and OAuth to represent external systems
-  ///  *  `customer` Jira Service Desk account representing an external service desk
+  ///  *  `app` system account used for Connect applications and OAuth to
+  /// represent external systems
+  ///  *  `customer` Jira Service Desk account representing an external service
+  /// desk
   final UserAccountType? accountType;
 
-  /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? name;
 
-  /// The email address of the user. Depending on the user’s privacy setting, this may be returned as null.
+  /// The email address of the user. Depending on the user’s privacy setting,
+  /// this may be returned as null.
   final String? emailAddress;
 
   /// The avatars of the user.
   final AvatarUrlsBean? avatarUrls;
 
-  /// The display name of the user. Depending on the user’s privacy setting, this may return an alternative value.
+  /// The display name of the user. Depending on the user’s privacy setting,
+  /// this may return an alternative value.
   final String? displayName;
 
   /// Whether the user is active.
   final bool active;
 
-  /// The time zone specified in the user's profile. Depending on the user’s privacy setting, this may be returned as null.
+  /// The time zone specified in the user's profile. Depending on the user’s
+  /// privacy setting, this may be returned as null.
   final String? timeZone;
 
-  /// The locale of the user. Depending on the user’s privacy setting, this may be returned as null.
+  /// The locale of the user. Depending on the user’s privacy setting, this may
+  /// be returned as null.
   final String? locale;
 
   /// The groups that the user belongs to.
@@ -12195,24 +14358,32 @@ class UserAccountType {
 }
 
 class UserBean {
-  /// This property is deprecated in favor of `accountId` because of privacy changes. See the [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// This property is deprecated in favor of `accountId` because of privacy
+  /// changes. See the
+  /// [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   /// The key of the user.
   final String? key;
 
   /// The URL of the user.
   final String? self;
 
-  /// This property is deprecated in favor of `accountId` because of privacy changes. See the [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// This property is deprecated in favor of `accountId` because of privacy
+  /// changes. See the
+  /// [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   /// The username of the user.
   final String? name;
 
-  /// The display name of the user. Depending on the user’s privacy setting, this may return an alternative value.
+  /// The display name of the user. Depending on the user’s privacy setting,
+  /// this may return an alternative value.
   final String? displayName;
 
   /// Whether the user is active.
   final bool active;
 
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
   final String? accountId;
 
   /// The avatars of the user.
@@ -12354,10 +14525,16 @@ class UserBeanAvatarUrls {
 
 /// Details about a project version.
 class Version {
-  /// Use [expand](em>#expansion) to include additional information about version in the response. This parameter accepts a comma-separated list. Expand options include:
+  /// Use [expand](em>#expansion) to include additional information about
+  /// version in the response. This parameter accepts a comma-separated list.
+  /// Expand options include:
   ///
-  ///  *  `operations` Returns the list of operations available for this version.
-  ///  *  `issuesstatus` Returns the count of issues in this version for each of the status categories *to do*, *in progress*, *done*, and *unmapped*. The *unmapped* property contains a count of issues with a status other than *to do*, *in progress*, and *done*.
+  ///  *  `operations` Returns the list of operations available for this
+  /// version.
+  ///  *  `issuesstatus` Returns the count of issues in this version for each of
+  /// the status categories *to do*, *in progress*, *done*, and *unmapped*. The
+  /// *unmapped* property contains a count of issues with a status other than
+  /// *to do*, *in progress*, and *done*.
   ///
   /// Optional for create and update.
   final String? expand;
@@ -12368,46 +14545,62 @@ class Version {
   /// The ID of the version.
   final String? id;
 
-  /// The description of the version. Optional when creating or updating a version.
+  /// The description of the version. Optional when creating or updating a
+  /// version.
   final String? description;
 
-  /// The unique name of the version. Required when creating a version. Optional when updating a version. The maximum length is 255 characters.
+  /// The unique name of the version. Required when creating a version. Optional
+  /// when updating a version. The maximum length is 255 characters.
   final String? name;
 
-  /// Indicates that the version is archived. Optional when creating or updating a version.
+  /// Indicates that the version is archived. Optional when creating or updating
+  /// a version.
   final bool archived;
 
-  /// Indicates that the version is released. If the version is released a request to release again is ignored. Not applicable when creating a version. Optional when updating a version.
+  /// Indicates that the version is released. If the version is released a
+  /// request to release again is ignored. Not applicable when creating a
+  /// version. Optional when updating a version.
   final bool released;
 
-  /// The start date of the version. Expressed in ISO 8601 format (yyyy-mm-dd). Optional when creating or updating a version.
+  /// The start date of the version. Expressed in ISO 8601 format (yyyy-mm-dd).
+  /// Optional when creating or updating a version.
   final String? startDate;
 
-  /// The release date of the version. Expressed in ISO 8601 format (yyyy-mm-dd). Optional when creating or updating a version.
+  /// The release date of the version. Expressed in ISO 8601 format
+  /// (yyyy-mm-dd). Optional when creating or updating a version.
   final String? releaseDate;
 
   /// Indicates that the version is overdue.
   final bool overdue;
 
-  /// The date on which work on this version is expected to start, expressed in the instance's *Day/Month/Year Format* date format.
+  /// The date on which work on this version is expected to start, expressed in
+  /// the instance's *Day/Month/Year Format* date format.
   final String? userStartDate;
 
-  /// The date on which work on this version is expected to finish, expressed in the instance's *Day/Month/Year Format* date format.
+  /// The date on which work on this version is expected to finish, expressed in
+  /// the instance's *Day/Month/Year Format* date format.
   final String? userReleaseDate;
 
   /// Deprecated. Use `projectId`.
   final String? project;
 
-  /// The ID of the project to which this version is attached. Required when creating a version. Not applicable when updating a version.
+  /// The ID of the project to which this version is attached. Required when
+  /// creating a version. Not applicable when updating a version.
   final int? projectId;
 
-  /// The URL of the self link to the version to which all unfixed issues are moved when a version is released. Not applicable when creating a version. Optional when updating a version.
+  /// The URL of the self link to the version to which all unfixed issues are
+  /// moved when a version is released. Not applicable when creating a version.
+  /// Optional when updating a version.
   final String? moveUnfixedIssuesTo;
 
-  /// If the expand option `operations` is used, returns the list of operations available for this version.
+  /// If the expand option `operations` is used, returns the list of operations
+  /// available for this version.
   final List<SimpleLink> operations;
 
-  /// If the expand option `issuesstatus` is used, returns the count of issues in this version for each of the status categories *to do*, *in progress*, *done*, and *unmapped*. The *unmapped* property contains a count of issues with a status other than *to do*, *in progress*, and *done*.
+  /// If the expand option `issuesstatus` is used, returns the count of issues
+  /// in this version for each of the status categories *to do*, *in progress*,
+  /// *done*, and *unmapped*. The *unmapped* property contains a count of issues
+  /// with a status other than *to do*, *in progress*, and *done*.
   final VersionIssuesStatus? issuesStatusForFixVersion;
 
   Version(
@@ -12571,7 +14764,8 @@ class Version {
 
 /// Counts of the number of issues in various statuses.
 class VersionIssuesStatus {
-  /// Count of issues with a status other than *to do*, *in progress*, and *done*.
+  /// Count of issues with a status other than *to do*, *in progress*, and
+  /// *done*.
   final int? unmapped;
 
   /// Count of issues with status *to do*.
@@ -12629,10 +14823,13 @@ class VersionIssuesStatus {
 
 /// Error messages from an operation.
 class ErrorCollection {
-  /// The list of error messages produced by this operation. For example, "input parameter 'key' must be provided"
+  /// The list of error messages produced by this operation. For example, "input
+  /// parameter 'key' must be provided"
   final List<String> errorMessages;
 
-  /// The list of errors by parameter returned by the operation. For example,"projectKey": "Project keys must start with an uppercase letter, followed by one or more uppercase alphanumeric characters."
+  /// The list of errors by parameter returned by the operation. For
+  /// example,"projectKey": "Project keys must start with an uppercase letter,
+  /// followed by one or more uppercase alphanumeric characters."
   final Map<String, dynamic>? errors;
   final int? status;
 
@@ -12901,7 +15098,8 @@ class PropertyKeys {
   }
 }
 
-/// An entity property, for more information see [Entity properties](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
+/// An entity property, for more information see
+/// [Entity properties](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
 class EntityProperty {
   /// The key of the property. Required on create and update.
   final String? key;
@@ -12942,10 +15140,17 @@ class EntityProperty {
 
 /// Bulk issue property update request details.
 class BulkIssuePropertyUpdateRequest {
-  /// The value of the property. The value must be a [valid](https://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
+  /// The value of the property. The value must be a
+  /// [valid](https://tools.ietf.org/html/rfc4627), non-empty JSON blob. The
+  /// maximum length is 32768 characters.
   final Map<String, dynamic>? value;
 
-  /// EXPERIMENTAL. The Jira expression to calculate the value of the property. The value of the expression must be an object that can be converted to JSON, such as a number, boolean, string, list, or map. The context variables available to the expression are `issue` and `user`. Issues for which the expression returns a value whose JSON representation is longer than 32768 characters are ignored.
+  /// EXPERIMENTAL. The Jira expression to calculate the value of the property.
+  /// The value of the expression must be an object that can be converted to
+  /// JSON, such as a number, boolean, string, list, or map. The context
+  /// variables available to the expression are `issue` and `user`. Issues for
+  /// which the expression returns a value whose JSON representation is longer
+  /// than 32768 characters are ignored.
   final String? expression;
 
   /// The bulk operation filter.
@@ -13002,7 +15207,8 @@ class IssueFilterForBulkPropertySet {
   /// The value of properties to perform the bulk operation on.
   final Map<String, dynamic>? currentValue;
 
-  /// Whether the bulk operation occurs only when the property is present on or absent from an issue.
+  /// Whether the bulk operation occurs only when the property is present on or
+  /// absent from an issue.
   final bool hasProperty;
 
   IssueFilterForBulkPropertySet(
@@ -13089,7 +15295,9 @@ class IssueFilterForBulkPropertyDelete {
   }
 }
 
-/// Lists of issues and entity properties. See [Entity properties](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/) for more information.
+/// Lists of issues and entity properties. See
+/// [Entity properties](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/)
+/// for more information.
 class IssueEntityProperties {
   /// A list of entity property IDs.
   final List<int> entitiesIds;
@@ -13858,7 +16066,10 @@ class UnrestrictedUserEmail {
 
 /// Details of a locale.
 class Locale {
-  /// The locale code. The Java the locale format is used: a two character language code (ISO 639), an underscore, and two letter country code (ISO 3166). For example, en\_US represents a locale of English (United States). Required on create.
+  /// The locale code. The Java the locale format is used: a two character
+  /// language code (ISO 639), an underscore, and two letter country code (ISO
+  /// 3166). For example, en_US represents a locale of English (United States).
+  /// Required on create.
   final String? locale;
 
   Locale({this.locale});
@@ -13927,7 +16138,8 @@ class IssuesAndJQLQueries {
   }
 }
 
-/// A list of matched issues or errors for each JQL query, in the order the JQL queries were passed.
+/// A list of matched issues or errors for each JQL query, in the order the JQL
+/// queries were passed.
 class IssueMatches {
   final List<IssueMatchesForJQL> matches;
 
@@ -13958,7 +16170,8 @@ class IssueMatches {
   }
 }
 
-/// A list of the issues matched to a JQL query or details of errors encountered during matching.
+/// A list of the issues matched to a JQL query or details of errors encountered
+/// during matching.
 class IssueMatchesForJQL {
   /// A list of issue IDs.
   final List<int> matchedIssues;
@@ -14005,7 +16218,9 @@ class GroupDetails {
   /// The name of the group.
   final String? name;
 
-  /// The ID of the group, if available, which uniquely identifies the group across all Atlassian products. For example, *952d12c3-5b5b-4d04-bb32-44d383afc4b2*.
+  /// The ID of the group, if available, which uniquely identifies the group
+  /// across all Atlassian products. For example,
+  /// *952d12c3-5b5b-4d04-bb32-44d383afc4b2*.
   final String? groupId;
 
   GroupDetails({this.name, this.groupId});
@@ -14170,7 +16385,12 @@ class JqlQueriesToParse {
   }
 }
 
-/// A JQL query clause that consists of nested clauses. For example, `(labels in (urgent, blocker) OR lastCommentedBy = currentUser()). Note that, where nesting is not defined, the parser nests JQL clauses based on the operator precedence. For example, "A OR B AND C" is parsed as "(A OR B) AND C". See Setting the precedence of operators for more information about precedence in JQL queries.`
+/// A JQL query clause that consists of nested clauses. For example, `(labels in
+/// (urgent, blocker) OR lastCommentedBy = currentUser()). Note that, where
+/// nesting is not defined, the parser nests JQL clauses based on the operator
+/// precedence. For example, "A OR B AND C" is parsed as "(A OR B) AND C". See
+/// Setting the precedence of operators for more information about precedence in
+/// JQL queries.`
 class CompoundClause {
   /// The list of nested clauses.
   final List<JqlQueryClause> clauses;
@@ -14236,7 +16456,10 @@ class CompoundClauseOperator {
   String toString() => value;
 }
 
-/// A clause that asserts whether a field was changed. For example, `status CHANGED AFTER startOfMonth(-1M)`.See [CHANGED](https://confluence.atlassian.com/x/dgiiLQ#Advancedsearching-operatorsreference-CHANGEDCHANGED) for more information about the CHANGED operator.
+/// A clause that asserts whether a field was changed. For example, `status
+/// CHANGED AFTER startOfMonth(-1M)`.See
+/// [CHANGED](https://confluence.atlassian.com/x/dgiiLQ#Advancedsearching-operatorsreference-CHANGEDCHANGED)
+/// for more information about the CHANGED operator.
 class FieldChangedClause {
   final JqlQueryField field;
 
@@ -14308,7 +16531,8 @@ class FieldChangedClauseOperator {
   String toString() => value;
 }
 
-/// A clause that asserts the current value of a field. For example, `summary ~ test`.
+/// A clause that asserts the current value of a field. For example, `summary ~
+/// test`.
 class FieldValueClause {
   final JqlQueryField field;
 
@@ -14397,7 +16621,10 @@ class FieldValueClauseOperator {
   String toString() => value;
 }
 
-/// A clause that asserts a previous value of a field. For example, `status WAS "Resolved" BY currentUser() BEFORE "2019/02/02"`. See [WAS](https://confluence.atlassian.com/x/dgiiLQ#Advancedsearching-operatorsreference-WASWAS) for more information about the WAS operator.
+/// A clause that asserts a previous value of a field. For example, `status WAS
+/// "Resolved" BY currentUser() BEFORE "2019/02/02"`. See
+/// [WAS](https://confluence.atlassian.com/x/dgiiLQ#Advancedsearching-operatorsreference-WASWAS)
+/// for more information about the WAS operator.
 class FieldWasClause {
   final JqlQueryField field;
 
@@ -14485,7 +16712,9 @@ class FieldWasClauseOperator {
   String toString() => value;
 }
 
-/// An operand that is a function. See [Advanced searching - functions reference](https://confluence.atlassian.com/x/dwiiLQ) for more information about JQL functions.
+/// An operand that is a function. See
+/// [Advanced searching - functions reference](https://confluence.atlassian.com/x/dwiiLQ)
+/// for more information about JQL functions.
 class FunctionOperand {
   /// The name of the function.
   final String function;
@@ -14662,12 +16891,15 @@ class JqlQueryClauseTimePredicateOperator {
   String toString() => value;
 }
 
-/// A field used in a JQL query. See [Advanced searching - fields reference](https://confluence.atlassian.com/x/dAiiLQ) for more information about fields in JQL queries.
+/// A field used in a JQL query. See
+/// [Advanced searching - fields reference](https://confluence.atlassian.com/x/dAiiLQ)
+/// for more information about fields in JQL queries.
 class JqlQueryField {
   /// The name of the field.
   final String name;
 
-  /// When the field refers to a value in an entity property, details of the entity property value.
+  /// When the field refers to a value in an entity property, details of the
+  /// entity property value.
   final List<JqlQueryFieldEntityProperty> property;
 
   JqlQueryField(
@@ -14715,7 +16947,10 @@ class JqlQueryFieldEntityProperty {
   /// The path in the property value to query.
   final String path;
 
-  /// The type of the property value extraction. Not available if the extraction for the property is not registered on the instance with the [Entity property](https://developer.atlassian.com/cloud/jira/platform/modules/entity-property/) module.
+  /// The type of the property value extraction. Not available if the extraction
+  /// for the property is not registered on the instance with the
+  /// [Entity property](https://developer.atlassian.com/cloud/jira/platform/modules/entity-property/)
+  /// module.
   final JqlQueryFieldEntityPropertyType? type;
 
   JqlQueryFieldEntityProperty(
@@ -14902,7 +17137,9 @@ class JqlQueryUnitaryOperand {
   }
 }
 
-/// An operand that is a JQL keyword. See [Advanced searching - keywords reference](https://confluence.atlassian.com/jiracorecloud/advanced-searching-keywords-reference-765593717.html#Advancedsearching-keywordsreference-EMPTYEMPTY) for more information about operand keywords.
+/// An operand that is a JQL keyword. See
+/// [Advanced searching - keywords reference](https://confluence.atlassian.com/jiracorecloud/advanced-searching-keywords-reference-765593717.html#Advancedsearching-keywordsreference-EMPTYEMPTY)
+/// for more information about operand keywords.
 class KeywordOperand {
   /// The keyword that is the operand value.
   final KeywordOperandKeyword keyword;
@@ -15189,7 +17426,8 @@ class ProjectIssueTypeHierarchy {
 
 /// Details of an issue type hierarchy level.
 class ProjectIssueTypesHierarchyLevel {
-  /// The ID of the issue type hierarchy level. This property is deprecated, see [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
+  /// The ID of the issue type hierarchy level. This property is deprecated, see
+  /// [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
   final String? entityId;
 
   /// The level of the issue type hierarchy level.
@@ -15254,7 +17492,8 @@ class ProjectIssueTypesHierarchyLevel {
 
 /// Details about a notification associated with an event.
 class EventNotification {
-  /// Expand options that include additional event notification details in the response.
+  /// Expand options that include additional event notification details in the
+  /// response.
   final String? expand;
 
   /// The ID of the notification.
@@ -15460,7 +17699,9 @@ class FieldDetails {
   /// Whether the content of the field can be searched.
   final bool searchable;
 
-  /// The names that can be used to reference the field in an advanced search. For more information, see [Advanced searching - fields reference](https://confluence.atlassian.com/x/gwORLQ).
+  /// The names that can be used to reference the field in an advanced search.
+  /// For more information, see
+  /// [Advanced searching - fields reference](https://confluence.atlassian.com/x/gwORLQ).
   final List<String> clauseNames;
 
   /// The scope of the field.
@@ -15575,7 +17816,8 @@ class JsonTypeBean {
   /// The data type of the field.
   final String type;
 
-  /// When the data type is an array, the name of the field items within the array.
+  /// When the data type is an array, the name of the field items within the
+  /// array.
   final String? items;
 
   /// If the field is a system field, the name of the field.
@@ -15657,7 +17899,9 @@ class JsonTypeBean {
 
 /// Details about a notification event.
 class NotificationEvent {
-  /// The ID of the event. The event can be a [Jira system event](https://confluence.atlassian.com/x/8YdKLg#Creatinganotificationscheme-eventsEvents) or a [custom event](https://confluence.atlassian.com/x/AIlKLg).
+  /// The ID of the event. The event can be a
+  /// [Jira system event](https://confluence.atlassian.com/x/8YdKLg#Creatinganotificationscheme-eventsEvents)
+  /// or a [custom event](https://confluence.atlassian.com/x/AIlKLg).
   final int? id;
 
   /// The name of the event.
@@ -15666,7 +17910,8 @@ class NotificationEvent {
   /// The description of the event.
   final String? description;
 
-  /// The template of the event. Only custom events configured by Jira administrators have template.
+  /// The template of the event. Only custom events configured by Jira
+  /// administrators have template.
   final NotificationEvent? templateEvent;
 
   NotificationEvent({this.id, this.name, this.description, this.templateEvent});
@@ -15721,7 +17966,8 @@ class NotificationEvent {
 
 /// Details about a notification scheme.
 class NotificationScheme {
-  /// Expand options that include additional notification scheme details in the response.
+  /// Expand options that include additional notification scheme details in the
+  /// response.
   final String? expand;
 
   /// The ID of the notification scheme.
@@ -15865,40 +18111,59 @@ class NotificationSchemeEvent {
   }
 }
 
-/// User details permitted by the user's Atlassian Account privacy settings. However, be aware of these exceptions:
+/// User details permitted by the user's Atlassian Account privacy settings.
+/// However, be aware of these exceptions:
 ///
-///  *  User record deleted from Atlassian: This occurs as the result of a right to be forgotten request. In this case, `displayName` provides an indication and other parameters have default values or are blank (for example, email is blank).
-///  *  User record corrupted: This occurs as a results of events such as a server import and can only happen to deleted users. In this case, `accountId` returns *unknown* and all other parameters have fallback values.
-///  *  User record unavailable: This usually occurs due to an internal service outage. In this case, all parameters have fallback values.
+///  *  User record deleted from Atlassian: This occurs as the result of a right
+/// to be forgotten request. In this case, `displayName` provides an indication
+/// and other parameters have default values or are blank (for example, email is
+/// blank).
+///  *  User record corrupted: This occurs as a results of events such as a
+/// server import and can only happen to deleted users. In this case,
+/// `accountId` returns *unknown* and all other parameters have fallback values.
+///  *  User record unavailable: This usually occurs due to an internal service
+/// outage. In this case, all parameters have fallback values.
 class UserDetails {
   /// The URL of the user.
   final String? self;
 
-  /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? name;
 
-  /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? key;
 
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
   final String? accountId;
 
-  /// The email address of the user. Depending on the user’s privacy settings, this may be returned as null.
+  /// The email address of the user. Depending on the user’s privacy settings,
+  /// this may be returned as null.
   final String? emailAddress;
 
   /// The avatars of the user.
   final AvatarUrlsBean? avatarUrls;
 
-  /// The display name of the user. Depending on the user’s privacy settings, this may return an alternative value.
+  /// The display name of the user. Depending on the user’s privacy settings,
+  /// this may return an alternative value.
   final String? displayName;
 
   /// Whether the user is active.
   final bool active;
 
-  /// The time zone specified in the user's profile. Depending on the user’s privacy settings, this may be returned as null.
+  /// The time zone specified in the user's profile. Depending on the user’s
+  /// privacy settings, this may be returned as null.
   final String? timeZone;
 
-  /// The type of account represented by this user. This will be one of 'atlassian' (normal users), 'app' (application user) or 'customer' (Jira Service Desk customer user)
+  /// The type of account represented by this user. This will be one of
+  /// 'atlassian' (normal users), 'app' (application user) or 'customer' (Jira
+  /// Service Desk customer user)
   final String? accountType;
 
   UserDetails(
@@ -16322,9 +18587,11 @@ class IdOrKeyBean {
   }
 }
 
-/// The JQL specifying the issues available in the evaluated Jira expression under the `issues` context variable.
+/// The JQL specifying the issues available in the evaluated Jira expression
+/// under the `issues` context variable.
 class JexpIssues {
-  /// The JQL query that specifies the set of issues available in the Jira expression.
+  /// The JQL query that specifies the set of issues available in the Jira
+  /// expression.
   final JexpJqlIssues? jql;
 
   JexpIssues({this.jql});
@@ -16354,7 +18621,12 @@ class JexpIssues {
   }
 }
 
-/// The JQL specifying the issues available in the evaluated Jira expression under the `issues` context variable. Not all issues returned by the JQL query are loaded, only those described by the `startAt` and `maxResults` properties. To determine whether it is necessary to iterate to ensure all the issues returned by the JQL query are evaluated, inspect `meta.issues.jql.count` in the response.
+/// The JQL specifying the issues available in the evaluated Jira expression
+/// under the `issues` context variable. Not all issues returned by the JQL
+/// query are loaded, only those described by the `startAt` and `maxResults`
+/// properties. To determine whether it is necessary to iterate to ensure all
+/// the issues returned by the JQL query are evaluated, inspect
+/// `meta.issues.jql.count` in the response.
 class JexpJqlIssues {
   /// The JQL query.
   final String? query;
@@ -16362,7 +18634,9 @@ class JexpJqlIssues {
   /// The index of the first issue to return from the JQL query.
   final int? startAt;
 
-  /// The maximum number of issues to return from the JQL query. Inspect `meta.issues.jql.maxResults` in the response to ensure the maximum value has not been exceeded.
+  /// The maximum number of issues to return from the JQL query. Inspect
+  /// `meta.issues.jql.maxResults` in the response to ensure the maximum value
+  /// has not been exceeded.
   final int? maxResults;
 
   /// Determines how to validate the JQL query and treat the validation results.
@@ -16443,25 +18717,34 @@ class JexpJqlIssuesValidation {
 }
 
 class JiraExpressionEvalContextBean {
-  /// The issue that is available under the `issue` variable when evaluating the expression.
+  /// The issue that is available under the `issue` variable when evaluating the
+  /// expression.
   final IdOrKeyBean? issue;
 
-  /// The collection of issues that is available under the `issues` variable when evaluating the expression.
+  /// The collection of issues that is available under the `issues` variable
+  /// when evaluating the expression.
   final JexpIssues? issues;
 
-  /// The project that is available under the `project` variable when evaluating the expression.
+  /// The project that is available under the `project` variable when evaluating
+  /// the expression.
   final IdOrKeyBean? project;
 
-  /// The ID of the sprint that is available under the `sprint` variable when evaluating the expression.
+  /// The ID of the sprint that is available under the `sprint` variable when
+  /// evaluating the expression.
   final int? sprint;
 
-  /// The ID of the board that is available under the `board` variable when evaluating the expression.
+  /// The ID of the board that is available under the `board` variable when
+  /// evaluating the expression.
   final int? board;
 
-  /// The ID of the service desk that is available under the `serviceDesk` variable when evaluating the expression.
+  /// The ID of the service desk that is available under the `serviceDesk`
+  /// variable when evaluating the expression.
   final int? serviceDesk;
 
-  /// The ID of the customer request that is available under the `customerRequest` variable when evaluating the expression. This is the same as the ID of the underlying Jira issue, but the customer request context variable will have a different type.
+  /// The ID of the customer request that is available under the
+  /// `customerRequest` variable when evaluating the expression. This is the
+  /// same as the ID of the underlying Jira issue, but the customer request
+  /// context variable will have a different type.
   final int? customerRequest;
 
   JiraExpressionEvalContextBean(
@@ -16599,7 +18882,8 @@ class IssuesJqlMetaDataBean {
   /// The total number of issues the JQL returned.
   final int totalCount;
 
-  /// Any warnings related to the JQL query. Present only if the validation mode was set to `warn`.
+  /// Any warnings related to the JQL query. Present only if the validation mode
+  /// was set to `warn`.
   final List<String> validationWarnings;
 
   IssuesJqlMetaDataBean(
@@ -16687,10 +18971,13 @@ class IssuesMetaBean {
 }
 
 class JiraExpressionEvaluationMetaDataBean {
-  /// Contains information about the expression complexity. For example, the number of steps it took to evaluate the expression.
+  /// Contains information about the expression complexity. For example, the
+  /// number of steps it took to evaluate the expression.
   final JiraExpressionsComplexityBean? complexity;
 
-  /// Contains information about the `issues` variable in the context. For example, is the issues were loaded with JQL, information about the page will be included here.
+  /// Contains information about the `issues` variable in the context. For
+  /// example, is the issues were loaded with JQL, information about the page
+  /// will be included here.
   final IssuesMetaBean? issues;
 
   JiraExpressionEvaluationMetaDataBean({this.complexity, this.issues});
@@ -16733,7 +19020,11 @@ class JiraExpressionEvaluationMetaDataBean {
 
 /// The result of evaluating a Jira expression.
 class JiraExpressionResult {
-  /// The value of the evaluated expression. It may be a primitive JSON value or a Jira REST API object. (Some expressions do not produce any meaningful results—for example, an expression that returns a lambda function—if that's the case a simple string representation is returned. These string representations should not be relied upon and may change without notice.)
+  /// The value of the evaluated expression. It may be a primitive JSON value or
+  /// a Jira REST API object. (Some expressions do not produce any meaningful
+  /// results—for example, an expression that returns a lambda function—if
+  /// that's the case a simple string representation is returned. These string
+  /// representations should not be relied upon and may change without notice.)
   final Map<String, dynamic> value;
 
   /// Contains various characteristics of the performed expression evaluation.
@@ -16774,10 +19065,15 @@ class JiraExpressionResult {
 }
 
 class JiraExpressionsComplexityBean {
-  /// The number of steps it took to evaluate the expression, where a step is a high-level operation performed by the expression. A step is an operation such as arithmetic, accessing a property, accessing a context variable, or calling a function.
+  /// The number of steps it took to evaluate the expression, where a step is a
+  /// high-level operation performed by the expression. A step is an operation
+  /// such as arithmetic, accessing a property, accessing a context variable, or
+  /// calling a function.
   final JiraExpressionsComplexityValueBean steps;
 
-  /// The number of expensive operations executed while evaluating the expression. Expensive operations are those that load additional data, such as entity properties, comments, or custom fields.
+  /// The number of expensive operations executed while evaluating the
+  /// expression. Expensive operations are those that load additional data, such
+  /// as entity properties, comments, or custom fields.
   final JiraExpressionsComplexityValueBean expensiveOperations;
 
   /// The number of Jira REST API beans returned in the response.
@@ -16837,7 +19133,8 @@ class JiraExpressionsComplexityValueBean {
   /// The complexity value of the current expression.
   final int value;
 
-  /// The maximum allowed complexity. The evaluation will fail if this value is exceeded.
+  /// The maximum allowed complexity. The evaluation will fail if this value is
+  /// exceeded.
   final int limit;
 
   JiraExpressionsComplexityValueBean(
@@ -16874,7 +19171,11 @@ class JiraExpressionForAnalysis {
   /// The list of Jira expressions to analyse.
   final List<String> expressions;
 
-  /// Context variables and their types. The type checker assumes that [common context variables](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/#context-variables), such as `issue` or `project`, are available in context and sets their type. Use this property to override the default types or provide details of new variables.
+  /// Context variables and their types. The type checker assumes that
+  /// [common context variables](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/#context-variables),
+  /// such as `issue` or `project`, are available in context and sets their
+  /// type. Use this property to override the default types or provide details
+  /// of new variables.
   final Map<String, dynamic>? contextVariables;
 
   JiraExpressionForAnalysis({required this.expressions, this.contextVariables});
@@ -16918,7 +19219,9 @@ class JiraExpressionAnalysis {
   /// A list of validation errors. Not included if the expression is valid.
   final List<JiraExpressionValidationError> errors;
 
-  /// Whether the expression is valid and the interpreter will evaluate it. Note that the expression may fail at runtime (for example, if it executes too many expensive operations).
+  /// Whether the expression is valid and the interpreter will evaluate it. Note
+  /// that the expression may fail at runtime (for example, if it executes too
+  /// many expensive operations).
   final bool valid;
 
   /// EXPERIMENTAL. The inferred type of the expression.
@@ -16988,13 +19291,21 @@ class JiraExpressionAnalysis {
 
 /// Details about the complexity of the analysed Jira expression.
 class JiraExpressionComplexity {
-  /// Information that can be used to determine how many [expensive operations](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/#expensive-operations) the evaluation of the expression will perform. This information may be a formula or number. For example:
+  /// Information that can be used to determine how many
+  /// [expensive operations](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/#expensive-operations)
+  /// the evaluation of the expression will perform. This information may be a
+  /// formula or number. For example:
   ///
-  ///  *  `issues.map(i => i.comments)` performs as many expensive operations as there are issues on the issues list. So this parameter returns `N`, where `N` is the size of issue list.
-  ///  *  `new Issue(10010).comments` gets comments for one issue, so its complexity is `2` (`1` to retrieve issue 10010 from the database plus `1` to get its comments).
+  ///  *  `issues.map(i => i.comments)` performs as many expensive operations as
+  /// there are issues on the issues list. So this parameter returns `N`, where
+  /// `N` is the size of issue list.
+  ///  *  `new Issue(10010).comments` gets comments for one issue, so its
+  /// complexity is `2` (`1` to retrieve issue 10010 from the database plus `1`
+  /// to get its comments).
   final String expensiveOperations;
 
-  /// Variables used in the formula, mapped to the parts of the expression they refer to.
+  /// Variables used in the formula, mapped to the parts of the expression they
+  /// refer to.
   final Map<String, dynamic>? variables;
 
   JiraExpressionComplexity({required this.expensiveOperations, this.variables});
@@ -17027,7 +19338,8 @@ class JiraExpressionComplexity {
   }
 }
 
-/// Details about syntax and type errors. The error details apply to the entire expression, unless the object includes:
+/// Details about syntax and type errors. The error details apply to the entire
+/// expression, unless the object includes:
 ///
 ///  *  `line` and `column`
 ///  *  `expression`
@@ -17379,13 +19691,16 @@ class ScreenTypes {
 
 /// Details of a screen scheme.
 class ScreenSchemeDetails {
-  /// The name of the screen scheme. The name must be unique. The maximum length is 255 characters.
+  /// The name of the screen scheme. The name must be unique. The maximum length
+  /// is 255 characters.
   final String name;
 
-  /// The description of the screen scheme. The maximum length is 255 characters.
+  /// The description of the screen scheme. The maximum length is 255
+  /// characters.
   final String? description;
 
-  /// The IDs of the screens for the screen types of the screen scheme. Only screens used in classic projects are accepted.
+  /// The IDs of the screens for the screen types of the screen scheme. Only
+  /// screens used in classic projects are accepted.
   final ScreenTypes screens;
 
   ScreenSchemeDetails(
@@ -17454,13 +19769,16 @@ class ScreenSchemeId {
 
 /// Details of a screen scheme.
 class UpdateScreenSchemeDetails {
-  /// The name of the screen scheme. The name must be unique. The maximum length is 255 characters.
+  /// The name of the screen scheme. The name must be unique. The maximum length
+  /// is 255 characters.
   final String? name;
 
-  /// The description of the screen scheme. The maximum length is 255 characters.
+  /// The description of the screen scheme. The maximum length is 255
+  /// characters.
   final String? description;
 
-  /// The IDs of the screens for the screen types of the screen scheme. Only screens used in classic projects are accepted.
+  /// The IDs of the screens for the screen types of the screen scheme. Only
+  /// screens used in classic projects are accepted.
   final UpdateScreenTypes? screens;
 
   UpdateScreenSchemeDetails({this.name, this.description, this.screens});
@@ -17508,13 +19826,15 @@ class UpdateScreenTypes {
   /// The ID of the edit screen. To remove the screen association, pass a null.
   final String? edit;
 
-  /// The ID of the create screen. To remove the screen association, pass a null.
+  /// The ID of the create screen. To remove the screen association, pass a
+  /// null.
   final String? create;
 
   /// The ID of the view screen. To remove the screen association, pass a null.
   final String? view;
 
-  /// The ID of the default screen. When specified, must include a screen ID as a default screen is required.
+  /// The ID of the default screen. When specified, must include a screen ID as
+  /// a default screen is required.
   final String? default$;
 
   UpdateScreenTypes({this.edit, this.create, this.view, this.default$});
@@ -17601,13 +19921,16 @@ class CustomFieldReplacement {
 }
 
 class DeleteAndReplaceVersionBean {
-  /// The ID of the version to update `fixVersion` to when the field contains the deleted version.
+  /// The ID of the version to update `fixVersion` to when the field contains
+  /// the deleted version.
   final int? moveFixIssuesTo;
 
-  /// The ID of the version to update `affectedVersion` to when the field contains the deleted version.
+  /// The ID of the version to update `affectedVersion` to when the field
+  /// contains the deleted version.
   final int? moveAffectedIssuesTo;
 
-  /// An array of custom field IDs (`customFieldId`) and version IDs (`moveTo`) to update when the fields contain the deleted version.
+  /// An array of custom field IDs (`customFieldId`) and version IDs (`moveTo`)
+  /// to update when the fields contain the deleted version.
   final List<CustomFieldReplacement> customFieldReplacementList;
 
   DeleteAndReplaceVersionBean(
@@ -17853,10 +20176,12 @@ class VersionUnresolvedIssuesCount {
 }
 
 class VersionMoveBean {
-  /// The URL (self link) of the version after which to place the moved version. Cannot be used with `position`.
+  /// The URL (self link) of the version after which to place the moved version.
+  /// Cannot be used with `position`.
   final String? after;
 
-  /// An absolute position in which to place the moved version. Cannot be used with `after`.
+  /// An absolute position in which to place the moved version. Cannot be used
+  /// with `after`.
   final VersionMoveBeanPosition? position;
 
   VersionMoveBean({this.after, this.position});
@@ -17919,14 +20244,16 @@ class VersionMoveBeanPosition {
   String toString() => value;
 }
 
-/// The list of users found in a search, including header text (Showing X of Y matching users) and total of matched users.
+/// The list of users found in a search, including header text (Showing X of Y
+/// matching users) and total of matched users.
 class FoundUsers {
   final List<UserPickerUser> users;
 
   /// The total number of users found in the search.
   final int? total;
 
-  /// Header text indicating the number of users in the response and the total number of users found in the search.
+  /// Header text indicating the number of users in the response and the total
+  /// number of users found in the search.
   final String? header;
 
   FoundUsers({List<UserPickerUser>? users, this.total, this.header})
@@ -17972,19 +20299,28 @@ class FoundUsers {
 
 /// A user found in a search.
 class UserPickerUser {
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
   final String? accountId;
 
-  /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? name;
 
-  /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? key;
 
-  /// The display name, email address, and key of the user with the matched query string highlighted with the HTML bold tag.
+  /// The display name, email address, and key of the user with the matched
+  /// query string highlighted with the HTML bold tag.
   final String? html;
 
-  /// The display name of the user. Depending on the user’s privacy setting, this may be returned as null.
+  /// The display name of the user. Depending on the user’s privacy setting,
+  /// this may be returned as null.
   final String? displayName;
 
   /// The avatar URL of the user.
@@ -18061,13 +20397,21 @@ class UserWriteBean {
   /// The URL of the user.
   final String? self;
 
-  /// The key for the user. When provided with `name`, overrides the value in `name` to set both `name` and `key`. This property is deprecated because of privacy changes. See the [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// The key for the user. When provided with `name`, overrides the value in
+  /// `name` to set both `name` and `key`. This property is deprecated because
+  /// of privacy changes. See the
+  /// [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? key;
 
-  /// The username for the user. This property is deprecated because of privacy changes. See the [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// The username for the user. This property is deprecated because of privacy
+  /// changes. See the
+  /// [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? name;
 
-  /// A password for the user. If a password is not set, a random password is generated.
+  /// A password for the user. If a password is not set, a random password is
+  /// generated.
   final String? password;
 
   /// The email address for the user.
@@ -18076,7 +20420,8 @@ class UserWriteBean {
   /// The display name for the user.
   final String displayName;
 
-  /// Sends the user an email confirmation that they have been added to Jira. Default is `false`.
+  /// Sends the user an email confirmation that they have been added to Jira.
+  /// Default is `false`.
   final String? notification;
 
   /// Deprecated, do not use.
@@ -18207,13 +20552,16 @@ class Avatar {
   /// The ID of the avatar.
   final String id;
 
-  /// The owner of the avatar. For a system avatar the owner is null (and nothing is returned). For non-system avatars this is the appropriate identifier, such as the ID for a project or the account ID for a user.
+  /// The owner of the avatar. For a system avatar the owner is null (and
+  /// nothing is returned). For non-system avatars this is the appropriate
+  /// identifier, such as the ID for a project or the account ID for a user.
   final String? owner;
 
   /// Whether the avatar is a system avatar.
   final bool isSystemAvatar;
 
-  /// Whether the avatar is used in Jira. For example, shown as a project's avatar.
+  /// Whether the avatar is used in Jira. For example, shown as a project's
+  /// avatar.
   final bool isSelected;
 
   /// Whether the avatar can be deleted.
@@ -18698,7 +21046,8 @@ class ScreenableField {
   /// The ID of the screen tab field.
   final String? id;
 
-  /// The name of the screen tab field. Required on create and update. The maximum length is 255 characters.
+  /// The name of the screen tab field. Required on create and update. The
+  /// maximum length is 255 characters.
   final String? name;
 
   ScreenableField({this.id, this.name});
@@ -18733,10 +21082,12 @@ class ScreenableField {
 }
 
 class MoveFieldBean {
-  /// The ID of the screen tab field after which to place the moved screen tab field. Required if `position` isn't provided.
+  /// The ID of the screen tab field after which to place the moved screen tab
+  /// field. Required if `position` isn't provided.
   final String? after;
 
-  /// The named position to which the screen tab field should be moved. Required if `after` isn't provided.
+  /// The named position to which the screen tab field should be moved. Required
+  /// if `after` isn't provided.
   final MoveFieldBeanPosition? position;
 
   MoveFieldBean({this.after, this.position});
@@ -18828,7 +21179,8 @@ class AddFieldBean {
 
 /// Details of a screen.
 class ScreenDetails {
-  /// The name of the screen. The name must be unique. The maximum length is 255 characters.
+  /// The name of the screen. The name must be unique. The maximum length is 255
+  /// characters.
   final String name;
 
   /// The description of the screen. The maximum length is 255 characters.
@@ -18865,7 +21217,8 @@ class ScreenDetails {
 
 /// Details of a screen.
 class UpdateScreenDetails {
-  /// The name of the screen. The name must be unique. The maximum length is 255 characters.
+  /// The name of the screen. The name must be unique. The maximum length is 255
+  /// characters.
   final String? name;
 
   /// The description of the screen. The maximum length is 255 characters.
@@ -18961,25 +21314,42 @@ class Resolution {
 }
 
 class ProjectInputBean {
-  /// Project keys must be unique and start with an uppercase letter followed by one or more uppercase alphanumeric characters. The maximum length is 10 characters. Required when creating a project. Optional when updating a project.
+  /// Project keys must be unique and start with an uppercase letter followed by
+  /// one or more uppercase alphanumeric characters. The maximum length is 10
+  /// characters. Required when creating a project. Optional when updating a
+  /// project.
   final String? key;
 
-  /// The name of the project. Required when creating a project. Optional when updating a project.
+  /// The name of the project. Required when creating a project. Optional when
+  /// updating a project.
   final String? name;
 
-  /// The [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes), which dictates the application-specific feature set. Required when creating a project. Not applicable for the Update project resource.
+  /// The
+  /// [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes),
+  /// which dictates the application-specific feature set. Required when
+  /// creating a project. Not applicable for the Update project resource.
   final ProjectInputBeanProjectTypeKey? projectTypeKey;
 
-  /// A prebuilt configuration for a project. The type of the `projectTemplateKey` must match with the type of the `projectTypeKey`. Required when creating a project. Not applicable for the Update project resource.
+  /// A prebuilt configuration for a project. The type of the
+  /// `projectTemplateKey` must match with the type of the `projectTypeKey`.
+  /// Required when creating a project. Not applicable for the Update project
+  /// resource.
   final ProjectInputBeanProjectTemplateKey? projectTemplateKey;
 
   /// A brief description of the project.
   final String? description;
 
-  /// This parameter is deprecated because of privacy changes. Use `leadAccountId` instead. See the [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details. The user name of the project lead. Either `lead` or `leadAccountId` must be set when creating a project. Optional when updating a project. Cannot be provided with `leadAccountId`.
+  /// This parameter is deprecated because of privacy changes. Use
+  /// `leadAccountId` instead. See the
+  /// [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details. The user name of the project lead. Either `lead` or
+  /// `leadAccountId` must be set when creating a project. Optional when
+  /// updating a project. Cannot be provided with `leadAccountId`.
   final String? lead;
 
-  /// The account ID of the project lead. Either `lead` or `leadAccountId` must be set when creating a project. Optional when updating a project. Cannot be provided with `lead`.
+  /// The account ID of the project lead. Either `lead` or `leadAccountId` must
+  /// be set when creating a project. Optional when updating a project. Cannot
+  /// be provided with `lead`.
   final String? leadAccountId;
 
   /// A link to information about this project, such as project documentation
@@ -18991,16 +21361,26 @@ class ProjectInputBean {
   /// An integer value for the project's avatar.
   final int? avatarId;
 
-  /// The ID of the issue security scheme for the project, which enables you to control who can and cannot view issues. Use the [Get issue security schemes](#api-rest-api-3-issuesecurityschemes-get) resource to get all issue security scheme IDs.
+  /// The ID of the issue security scheme for the project, which enables you to
+  /// control who can and cannot view issues. Use the
+  /// [Get issue security schemes](#api-rest-api-3-issuesecurityschemes-get)
+  /// resource to get all issue security scheme IDs.
   final int? issueSecurityScheme;
 
-  /// The ID of the permission scheme for the project. Use the [Get all permission schemes](#api-rest-api-3-permissionscheme-get) resource to see a list of all permission scheme IDs.
+  /// The ID of the permission scheme for the project. Use the
+  /// [Get all permission schemes](#api-rest-api-3-permissionscheme-get)
+  /// resource to see a list of all permission scheme IDs.
   final int? permissionScheme;
 
-  /// The ID of the notification scheme for the project. Use the [Get notification schemes](#api-rest-api-3-notificationscheme-get) resource to get a list of notification scheme IDs.
+  /// The ID of the notification scheme for the project. Use the
+  /// [Get notification schemes](#api-rest-api-3-notificationscheme-get)
+  /// resource to get a list of notification scheme IDs.
   final int? notificationScheme;
 
-  /// The ID of the project's category. A complete list of category IDs is found using the [Get all project categories](#api-rest-api-3-projectCategory-get) operation.
+  /// The ID of the project's category. A complete list of category IDs is found
+  /// using the
+  /// [Get all project categories](#api-rest-api-3-projectCategory-get)
+  /// operation.
   final int? categoryId;
 
   ProjectInputBean(
@@ -19441,31 +21821,52 @@ class ComponentWithIssueCount {
   /// The URL for this count of the issues contained in the component.
   final String? self;
 
-  /// The nominal user type used to determine the assignee for issues created with this component. See `realAssigneeType` for details on how the type of the user, and hence the user, assigned to issues is determined. Takes the following values:
+  /// The nominal user type used to determine the assignee for issues created
+  /// with this component. See `realAssigneeType` for details on how the type of
+  /// the user, and hence the user, assigned to issues is determined. Takes the
+  /// following values:
   ///
-  ///  *  `PROJECT_LEAD` the assignee to any issues created with this component is nominally the lead for the project the component is in.
-  ///  *  `COMPONENT_LEAD` the assignee to any issues created with this component is nominally the lead for the component.
-  ///  *  `UNASSIGNED` an assignee is not set for issues created with this component.
-  ///  *  `PROJECT_DEFAULT` the assignee to any issues created with this component is nominally the default assignee for the project that the component is in.
+  ///  *  `PROJECT_LEAD` the assignee to any issues created with this component
+  /// is nominally the lead for the project the component is in.
+  ///  *  `COMPONENT_LEAD` the assignee to any issues created with this
+  /// component is nominally the lead for the component.
+  ///  *  `UNASSIGNED` an assignee is not set for issues created with this
+  /// component.
+  ///  *  `PROJECT_DEFAULT` the assignee to any issues created with this
+  /// component is nominally the default assignee for the project that the
+  /// component is in.
   final ComponentWithIssueCountAssigneeType? assigneeType;
 
   /// The user details for the component's lead user.
   final User? lead;
 
-  /// The user assigned to issues created with this component, when `assigneeType` does not identify a valid assignee.
+  /// The user assigned to issues created with this component, when
+  /// `assigneeType` does not identify a valid assignee.
   final User? realAssignee;
 
-  /// Whether a user is associated with `assigneeType`. For example, if the `assigneeType` is set to `COMPONENT_LEAD` but the component lead is not set, then `false` is returned.
+  /// Whether a user is associated with `assigneeType`. For example, if the
+  /// `assigneeType` is set to `COMPONENT_LEAD` but the component lead is not
+  /// set, then `false` is returned.
   final bool isAssigneeTypeValid;
 
-  /// The details of the user associated with `assigneeType`, if any. See `realAssignee` for details of the user assigned to issues created with this component.
+  /// The details of the user associated with `assigneeType`, if any. See
+  /// `realAssignee` for details of the user assigned to issues created with
+  /// this component.
   final User? assignee;
 
-  /// The type of the assignee that is assigned to issues created with this component, when an assignee cannot be set from the `assigneeType`. For example, `assigneeType` is set to `COMPONENT_LEAD` but no component lead is set. This property is set to one of the following values:
+  /// The type of the assignee that is assigned to issues created with this
+  /// component, when an assignee cannot be set from the `assigneeType`. For
+  /// example, `assigneeType` is set to `COMPONENT_LEAD` but no component lead
+  /// is set. This property is set to one of the following values:
   ///
-  ///  *  `PROJECT_LEAD` when `assigneeType` is `PROJECT_LEAD` and the project lead has permission to be assigned issues in the project that the component is in.
-  ///  *  `COMPONENT_LEAD` when `assignee`Type is `COMPONENT_LEAD` and the component lead has permission to be assigned issues in the project that the component is in.
-  ///  *  `UNASSIGNED` when `assigneeType` is `UNASSIGNED` and Jira is configured to allow unassigned issues.
+  ///  *  `PROJECT_LEAD` when `assigneeType` is `PROJECT_LEAD` and the project
+  /// lead has permission to be assigned issues in the project that the
+  /// component is in.
+  ///  *  `COMPONENT_LEAD` when `assignee`Type is `COMPONENT_LEAD` and the
+  /// component lead has permission to be assigned issues in the project that
+  /// the component is in.
+  ///  *  `UNASSIGNED` when `assigneeType` is `UNASSIGNED` and Jira is
+  /// configured to allow unassigned issues.
   ///  *  `PROJECT_DEFAULT` when none of the preceding cases are true.
   final ComponentWithIssueCountRealAssigneeType? realAssigneeType;
 
@@ -20243,7 +22644,8 @@ class Comment {
   /// The ID of the user who created the comment.
   final UserDetails? author;
 
-  /// The comment text in [Atlassian Document Format](https://developer.atlassian.com/cloud/jira/platform/apis/document/structure/).
+  /// The comment text in
+  /// [Atlassian Document Format](https://developer.atlassian.com/cloud/jira/platform/apis/document/structure/).
   final Map<String, dynamic>? body;
 
   /// The rendered version of the comment.
@@ -20258,10 +22660,18 @@ class Comment {
   /// The date and time at which the comment was updated last.
   final DateTime? updated;
 
-  /// The group or role to which this comment is visible. Optional on create and update.
+  /// The group or role to which this comment is visible. Optional on create and
+  /// update.
   final Visibility? visibility;
 
-  /// Whether the comment is visible in Jira Service Desk. Defaults to true when comments are created in the Jira Cloud Platform. This includes when the site doesn't use Jira Service Desk or the project isn't a Jira Service Desk project and, therefore, there is no Jira Service Desk for the issue to be visible on. To create a comment with its visibility in Jira Service Desk set to false, use the Jira Service Desk REST API [Create request comment](https://developer.atlassian.com/cloud/jira/service-desk/rest/#api-rest-servicedeskapi-request-issueIdOrKey-comment-post) operation.
+  /// Whether the comment is visible in Jira Service Desk. Defaults to true when
+  /// comments are created in the Jira Cloud Platform. This includes when the
+  /// site doesn't use Jira Service Desk or the project isn't a Jira Service
+  /// Desk project and, therefore, there is no Jira Service Desk for the issue
+  /// to be visible on. To create a comment with its visibility in Jira Service
+  /// Desk set to false, use the Jira Service Desk REST API
+  /// [Create request comment](https://developer.atlassian.com/cloud/jira/service-desk/rest/#api-rest-servicedeskapi-request-issueIdOrKey-comment-post)
+  /// operation.
   final bool jsdPublic;
 
   /// A list of comment properties. Optional on create and update.
@@ -20497,31 +22907,45 @@ class Fields {
 
 /// This object is used as follows:
 ///
-///  *  In the [ issueLink](#api-rest-api-3-issueLink-post) resource it defines and reports on the type of link between the issues. Find a list of issue link types with [Get issue link types](#api-rest-api-3-issueLinkType-get).
-///  *  In the [ issueLinkType](#api-rest-api-3-issueLinkType-post) resource it defines and reports on issue link types.
+///  *  In the [ issueLink](#api-rest-api-3-issueLink-post) resource it defines
+/// and reports on the type of link between the issues. Find a list of issue
+/// link types with [Get issue link types](#api-rest-api-3-issueLinkType-get).
+///  *  In the [ issueLinkType](#api-rest-api-3-issueLinkType-post) resource it
+/// defines and reports on issue link types.
 class IssueLinkType {
   /// The ID of the issue link type and is used as follows:
   ///
-  ///  *  In the [ issueLink](#api-rest-api-3-issueLink-post) resource it is the type of issue link. Required on create when `name` isn't provided. Otherwise, read only.
-  ///  *  In the [ issueLinkType](#api-rest-api-3-issueLinkType-post) resource it is read only.
+  ///  *  In the [ issueLink](#api-rest-api-3-issueLink-post) resource it is the
+  /// type of issue link. Required on create when `name` isn't provided.
+  /// Otherwise, read only.
+  ///  *  In the [ issueLinkType](#api-rest-api-3-issueLinkType-post) resource
+  /// it is read only.
   final String? id;
 
   /// The name of the issue link type and is used as follows:
   ///
-  ///  *  In the [ issueLink](#api-rest-api-3-issueLink-post) resource it is the type of issue link. Required on create when `id` isn't provided. Otherwise, read only.
-  ///  *  In the [ issueLinkType](#api-rest-api-3-issueLinkType-post) resource it is required on create and optional on update. Otherwise, read only.
+  ///  *  In the [ issueLink](#api-rest-api-3-issueLink-post) resource it is the
+  /// type of issue link. Required on create when `id` isn't provided.
+  /// Otherwise, read only.
+  ///  *  In the [ issueLinkType](#api-rest-api-3-issueLinkType-post) resource
+  /// it is required on create and optional on update. Otherwise, read only.
   final String? name;
 
   /// The description of the issue link type inward link and is used as follows:
   ///
-  ///  *  In the [ issueLink](#api-rest-api-3-issueLink-post) resource it is read only.
-  ///  *  In the [ issueLinkType](#api-rest-api-3-issueLinkType-post) resource it is required on create and optional on update. Otherwise, read only.
+  ///  *  In the [ issueLink](#api-rest-api-3-issueLink-post) resource it is
+  /// read only.
+  ///  *  In the [ issueLinkType](#api-rest-api-3-issueLinkType-post) resource
+  /// it is required on create and optional on update. Otherwise, read only.
   final String? inward;
 
-  /// The description of the issue link type outward link and is used as follows:
+  /// The description of the issue link type outward link and is used as
+  /// follows:
   ///
-  ///  *  In the [ issueLink](#api-rest-api-3-issueLink-post) resource it is read only.
-  ///  *  In the [ issueLinkType](#api-rest-api-3-issueLinkType-post) resource it is required on create and optional on update. Otherwise, read only.
+  ///  *  In the [ issueLink](#api-rest-api-3-issueLink-post) resource it is
+  /// read only.
+  ///  *  In the [ issueLinkType](#api-rest-api-3-issueLinkType-post) resource
+  /// it is required on create and optional on update. Otherwise, read only.
   final String? outward;
 
   /// The URL of the issue link type. Read only.
@@ -20832,7 +23256,8 @@ class Visibility {
   /// Whether visibility of this item is restricted to a group or role.
   final VisibilityType? type;
 
-  /// The name of the group or role to which visibility of this item is restricted.
+  /// The name of the group or role to which visibility of this item is
+  /// restricted.
   final String? value;
 
   Visibility({this.type, this.value});
@@ -21037,7 +23462,9 @@ class Worklog {
   /// Details of the user who last updated the worklog.
   final UserDetails? updateAuthor;
 
-  /// A comment about the worklog in [Atlassian Document Format](https://developer.atlassian.com/cloud/jira/platform/apis/document/structure/). Optional when creating or updating a worklog.
+  /// A comment about the worklog in
+  /// [Atlassian Document Format](https://developer.atlassian.com/cloud/jira/platform/apis/document/structure/).
+  /// Optional when creating or updating a worklog.
   final Map<String, dynamic>? comment;
 
   /// The datetime on which the worklog was created.
@@ -21046,16 +23473,23 @@ class Worklog {
   /// The datetime on which the worklog was last updated.
   final DateTime? updated;
 
-  /// Details about any restrictions in the visibility of the worklog. Optional when creating or updating a worklog.
+  /// Details about any restrictions in the visibility of the worklog. Optional
+  /// when creating or updating a worklog.
   final Visibility? visibility;
 
-  /// The datetime on which the worklog effort was started. Required when creating a worklog. Optional when updating a worklog.
+  /// The datetime on which the worklog effort was started. Required when
+  /// creating a worklog. Optional when updating a worklog.
   final DateTime? started;
 
-  /// The time spent working on the issue as days (\#d), hours (\#h), or minutes (\#m or \#). Required when creating a worklog if `timeSpentSeconds` isn't provided. Optional when updating a worklog. Cannot be provided if `timeSpentSecond` is provided.
+  /// The time spent working on the issue as days (#d), hours (#h), or minutes
+  /// (#m or #). Required when creating a worklog if `timeSpentSeconds` isn't
+  /// provided. Optional when updating a worklog. Cannot be provided if
+  /// `timeSpentSecond` is provided.
   final String? timeSpent;
 
-  /// The time in seconds spent working on the issue. Required when creating a worklog if `timeSpent` isn't provided. Optional when updating a worklog. Cannot be provided if `timeSpent` is provided.
+  /// The time in seconds spent working on the issue. Required when creating a
+  /// worklog if `timeSpent` isn't provided. Optional when updating a worklog.
+  /// Cannot be provided if `timeSpent` is provided.
   final int? timeSpentSeconds;
 
   /// The ID of the worklog record.
@@ -21064,7 +23498,8 @@ class Worklog {
   /// The ID of the issue this worklog is for.
   final String? issueId;
 
-  /// Details of properties for the worklog. Optional when creating or updating a worklog.
+  /// Details of properties for the worklog. Optional when creating or updating
+  /// a worklog.
   final List<EntityProperty> properties;
 
   Worklog(
@@ -21360,7 +23795,9 @@ class IssueSecurityLevelMember {
   /// The ID of the issue security level.
   final int issueSecurityLevelId;
 
-  /// The user or group being granted the permission. It consists of a `type` and a type-dependent `parameter`. See [Holder object](#holder-object) in *Get all permission schemes* for more information.
+  /// The user or group being granted the permission. It consists of a `type`
+  /// and a type-dependent `parameter`. See [Holder object](#holder-object) in
+  /// *Get all permission schemes* for more information.
   final PermissionHolder holder;
 
   IssueSecurityLevelMember(
@@ -21500,7 +23937,9 @@ class PageBeanIssueSecurityLevelMember {
   }
 }
 
-/// Details of a user, group, field, or project role that holds a permission. See [Holder object](#holder-object) in *Get all permission schemes* for more information.
+/// Details of a user, group, field, or project role that holds a permission.
+/// See [Holder object](#holder-object) in *Get all permission schemes* for more
+/// information.
 class PermissionHolder {
   /// The type of permission holder.
   final String type;
@@ -21508,7 +23947,8 @@ class PermissionHolder {
   /// The identifier of permission holder.
   final String? parameter;
 
-  /// Expand options that include additional permission holder details in the response.
+  /// Expand options that include additional permission holder details in the
+  /// response.
   final String? expand;
 
   PermissionHolder({required this.type, this.parameter, this.expand});
@@ -21663,7 +24103,8 @@ class FieldMetadata {
 
 /// Details of an issue transition.
 class IssueTransition {
-  /// The ID of the issue transition. Required when specifying a transition to undertake.
+  /// The ID of the issue transition. Required when specifying a transition to
+  /// undertake.
   final String? id;
 
   /// The name of the issue transition.
@@ -21675,7 +24116,8 @@ class IssueTransition {
   /// Whether there is a screen associated with the issue transition.
   final bool hasScreen;
 
-  /// Whether the issue transition is global, that is, the transition is applied to issues regardless of their status.
+  /// Whether the issue transition is global, that is, the transition is applied
+  /// to issues regardless of their status.
   final bool isGlobal;
 
   /// Whether this is the initial issue transition for the workflow.
@@ -21684,10 +24126,13 @@ class IssueTransition {
   /// Whether the transition is available to be performed.
   final bool isAvailable;
 
-  /// Whether the issue has to meet criteria before the issue transition is applied.
+  /// Whether the issue has to meet criteria before the issue transition is
+  /// applied.
   final bool isConditional;
 
-  /// Details of the fields associated with the issue transition screen. Use this information to populate `fields` and `update` in a transition request.
+  /// Details of the fields associated with the issue transition screen. Use
+  /// this information to populate `fields` and `update` in a transition
+  /// request.
   final Map<String, dynamic>? fields;
 
   /// Expand options that include additional transition details in the response.
@@ -21799,7 +24244,8 @@ class IssueTransition {
 
 /// List of issue transitions.
 class Transitions {
-  /// Expand options that include additional transitions details in the response.
+  /// Expand options that include additional transitions details in the
+  /// response.
   final String? expand;
 
   /// List of issue transitions.
@@ -21878,13 +24324,15 @@ class IssuePickerSuggestionsIssueType {
   /// The label of the type of issues suggested for use in auto-completion.
   final String? label;
 
-  /// If issue suggestions are found, returns a message indicating the number of issues suggestions found and returned.
+  /// If issue suggestions are found, returns a message indicating the number of
+  /// issues suggestions found and returned.
   final String? sub;
 
   /// The ID of the type of issues suggested for use in auto-completion.
   final String? id;
 
-  /// If no issue suggestions are found, returns a message indicating no suggestions were found,
+  /// If no issue suggestions are found, returns a message indicating no
+  /// suggestions were found,
   final String? msg;
 
   /// A list of issues suggested for use in auto-completion.
@@ -21962,7 +24410,8 @@ class SuggestedIssue {
   /// The URL of the issue type's avatar.
   final String? img;
 
-  /// The phrase containing the query string in HTML format, with the string highlighted with HTML bold tags.
+  /// The phrase containing the query string in HTML format, with the string
+  /// highlighted with HTML bold tags.
   final String? summary;
 
   /// The phrase containing the query string, as plain text.
@@ -22256,13 +24705,15 @@ class HistoryMetadataParticipant {
   /// The display name of the user or system associated with a history record.
   final String? displayName;
 
-  /// The key of the display name of the user or system associated with a history record.
+  /// The key of the display name of the user or system associated with a
+  /// history record.
   final String? displayNameKey;
 
   /// The type of the user or system associated with a history record.
   final String? type;
 
-  /// The URL to an avatar for the user or system associated with a history record.
+  /// The URL to an avatar for the user or system associated with a history
+  /// record.
   final String? avatarUrl;
 
   /// The URL of the user or system associated with a history record.
@@ -22337,13 +24788,19 @@ class HistoryMetadataParticipant {
 
 /// Details of an issue update request.
 class IssueUpdateDetails {
-  /// Details of a transition. Required when performing a transition, optional when creating or editing an issue.
+  /// Details of a transition. Required when performing a transition, optional
+  /// when creating or editing an issue.
   final IssueTransition? transition;
 
-  /// List of issue screen fields to update, specifying the sub-field to update and its value for each field. This field provides a straightforward option when setting a sub-field. When multiple sub-fields or other operations are required, use `update`. Fields included in here cannot be included in `update`.
+  /// List of issue screen fields to update, specifying the sub-field to update
+  /// and its value for each field. This field provides a straightforward option
+  /// when setting a sub-field. When multiple sub-fields or other operations are
+  /// required, use `update`. Fields included in here cannot be included in
+  /// `update`.
   final Map<String, dynamic>? fields;
 
-  /// List of operations to perform on issue screen fields. Note that fields included in here cannot be included in `fields`.
+  /// List of operations to perform on issue screen fields. Note that fields
+  /// included in here cannot be included in `fields`.
   final Map<String, dynamic>? update;
 
   /// Additional issue history details.
@@ -22431,7 +24888,9 @@ class Votes {
   /// Whether the user making this request has voted on the issue.
   final bool hasVoted;
 
-  /// List of the users who have voted on this issue. An empty list is returned when the calling user doesn't have the *View voters and watchers* project permission.
+  /// List of the users who have voted on this issue. An empty list is returned
+  /// when the calling user doesn't have the *View voters and watchers* project
+  /// permission.
   final List<User> voters;
 
   Votes({this.self, this.votes, bool? hasVoted, List<User>? voters})
@@ -23485,7 +25944,8 @@ class IssueTypeIssueCreateMetadata {
   /// Details of the next-gen projects the issue type is available in.
   final Scope? scope;
 
-  /// Expand options that include additional issue type metadata details in the response.
+  /// Expand options that include additional issue type metadata details in the
+  /// response.
   final String? expand;
 
   /// List of the fields available when creating an issue for the issue type.
@@ -23609,7 +26069,8 @@ class IssueTypeIssueCreateMetadata {
 
 /// Details of the issue creation metadata for a project.
 class ProjectIssueCreateMetadata {
-  /// Expand options that include additional project issue create metadata details in the response.
+  /// Expand options that include additional project issue create metadata
+  /// details in the response.
   final String? expand;
 
   /// The URL of the project.
@@ -23624,7 +26085,8 @@ class ProjectIssueCreateMetadata {
   /// The name of the project.
   final String? name;
 
-  /// List of the project's avatars, returning the avatar size and associated URL.
+  /// List of the project's avatars, returning the avatar size and associated
+  /// URL.
   final AvatarUrlsBean? avatarUrls;
 
   /// List of the issue types supported by the project.
@@ -23712,10 +26174,16 @@ class ProjectIssueCreateMetadata {
 
 /// The application the linked item is in.
 class Application {
-  /// The name-spaced type of the application, used by registered rendering apps.
+  /// The name-spaced type of the application, used by registered rendering
+  /// apps.
   final String? type;
 
-  /// The name of the application. Used in conjunction with the (remote) object icon title to display a tooltip for the link's icon. The tooltip takes the format "\[application name\] icon title". Blank items are excluded from the tooltip title. If both items are blank, the icon tooltop displays as "Web Link". Grouping and sorting of links may place links without an application name last.
+  /// The name of the application. Used in conjunction with the (remote) object
+  /// icon title to display a tooltip for the link's icon. The tooltip takes the
+  /// format "[application name] icon title". Blank items are excluded from the
+  /// tooltip title. If both items are blank, the icon tooltop displays as "Web
+  /// Link". Grouping and sorting of links may place links without an
+  /// application name last.
   final String? name;
 
   Application({this.type, this.name});
@@ -23805,7 +26273,8 @@ class RemoteIssueLink {
   /// The URL of the link.
   final String? self;
 
-  /// The global ID of the link, such as the ID of the item on the remote system.
+  /// The global ID of the link, such as the ID of the item on the remote
+  /// system.
   final String? globalId;
 
   /// Details of the remote application the linked item is in.
@@ -23899,7 +26368,8 @@ class RemoteObject {
   /// The summary details of the item.
   final String? summary;
 
-  /// Details of the icon for the item. If no icon is defined, the default link icon is used in Jira.
+  /// Details of the icon for the item. If no icon is defined, the default link
+  /// icon is used in Jira.
   final Icon? icon;
 
   /// The status of the item.
@@ -23966,10 +26436,13 @@ class RemoteObject {
 
 /// The status of the item.
 class Status {
-  /// Whether the item is resolved. If set to "true", the link to the issue is displayed in a strikethrough font, otherwise the link displays in normal font.
+  /// Whether the item is resolved. If set to "true", the link to the issue is
+  /// displayed in a strikethrough font, otherwise the link displays in normal
+  /// font.
   final bool resolved;
 
-  /// Details of the icon representing the status. If not provided, no status icon displays in Jira.
+  /// Details of the icon representing the status. If not provided, no status
+  /// icon displays in Jira.
   final Icon? icon;
 
   Status({bool? resolved, this.icon}) : resolved = resolved ?? false;
@@ -24013,11 +26486,17 @@ class Icon {
 
   /// The title of the icon. This is used as follows:
   ///
-  ///  *  For a status icon it is used as a tooltip on the icon. If not set, the status icon doesn't display a tooltip in Jira.
-  ///  *  For the remote object icon it is used in conjunction with the application name to display a tooltip for the link's icon. The tooltip takes the format "\[application name\] icon title". Blank itemsare excluded from the tooltip title. If both items are blank, the icon tooltop displays as "Web Link".
+  ///  *  For a status icon it is used as a tooltip on the icon. If not set, the
+  /// status icon doesn't display a tooltip in Jira.
+  ///  *  For the remote object icon it is used in conjunction with the
+  /// application name to display a tooltip for the link's icon. The tooltip
+  /// takes the format "[application name] icon title". Blank itemsare excluded
+  /// from the tooltip title. If both items are blank, the icon tooltop displays
+  /// as "Web Link".
   final String? title;
 
-  /// The URL of the tooltip, used only for a status icon. If not set, the status icon in Jira is not clickable.
+  /// The URL of the tooltip, used only for a status icon. If not set, the
+  /// status icon in Jira is not clickable.
   final String? link;
 
   Icon({this.url16X16, this.title, this.link});
@@ -24059,17 +26538,23 @@ class Icon {
 
 /// Details of a remote issue link.
 class RemoteIssueLinkRequest {
-  /// An identifier for the remote item in the remote system. For example, the global ID for a remote item in Confluence would consist of the app ID and page ID, like this: `appId=456&pageId=123`.
+  /// An identifier for the remote item in the remote system. For example, the
+  /// global ID for a remote item in Confluence would consist of the app ID and
+  /// page ID, like this: `appId=456&pageId=123`.
   ///
-  /// Setting this field enables the remote issue link details to be updated or deleted using remote system and item details as the record identifier, rather than using the record's Jira ID.
+  /// Setting this field enables the remote issue link details to be updated or
+  /// deleted using remote system and item details as the record identifier,
+  /// rather than using the record's Jira ID.
   ///
   /// The maximum length is 255 characters.
   final String? globalId;
 
-  /// Details of the remote application the linked item is in. For example, trello.
+  /// Details of the remote application the linked item is in. For example,
+  /// trello.
   final Application? application;
 
-  /// Description of the relationship between the issue and the linked item. If not set, the relationship description "links to" is used in Jira.
+  /// Description of the relationship between the issue and the linked item. If
+  /// not set, the relationship description "links to" is used in Jira.
   final String? relationship;
 
   /// Details of the item linked to.
@@ -24129,7 +26614,8 @@ class RemoteIssueLinkRequest {
 
 /// Details of the identifiers for a created or updated remote issue link.
 class RemoteIssueLinkIdentifies {
-  /// The ID of the remote issue link, such as the ID of the item on the remote system.
+  /// The ID of the remote issue link, such as the ID of the item on the remote
+  /// system.
   final int? id;
 
   /// The URL of the remote issue link.
@@ -24168,7 +26654,8 @@ class RemoteIssueLinkIdentifies {
 
 /// Details about a notification.
 class Notification {
-  /// The subject of the email notification for the issue. If this is not specified, then the subject is set to the issue key and summary.
+  /// The subject of the email notification for the issue. If this is not
+  /// specified, then the subject is set to the issue key and summary.
   final String? subject;
 
   /// The plain text body of the email notification for the issue.
@@ -24332,7 +26819,8 @@ class NotificationRecipients {
   }
 }
 
-/// Details of the group membership or permissions needed to receive the notification.
+/// Details of the group membership or permissions needed to receive the
+/// notification.
 class NotificationRecipientsRestrictions {
   /// List of group memberships required to receive the notification.
   final List<GroupName> groups;
@@ -24382,10 +26870,14 @@ class NotificationRecipientsRestrictions {
 
 /// Details of the permission.
 class RestrictedPermission {
-  /// The ID of the permission. Either `id` or `key` must be specified. Use [Get all permissions](#api-rest-api-3-permissions-get) to get the list of permissions.
+  /// The ID of the permission. Either `id` or `key` must be specified. Use
+  /// [Get all permissions](#api-rest-api-3-permissions-get) to get the list of
+  /// permissions.
   final String? id;
 
-  /// The key of the permission. Either `id` or `key` must be specified. Use [Get all permissions](#api-rest-api-3-permissions-get) to get the list of permissions.
+  /// The key of the permission. Either `id` or `key` must be specified. Use
+  /// [Get all permissions](#api-rest-api-3-permissions-get) to get the list of
+  /// permissions.
   final String? key;
 
   RestrictedPermission({this.id, this.key});
@@ -24927,7 +27419,10 @@ class Group {
   /// The URL for these group details.
   final String? self;
 
-  /// A paginated list of the users that are members of the group. A maximum of 50 users is returned in the list, to access additional users append `[start-index:end-index]` to the expand request. For example, to access the next 50 users, use`?expand=users[51:100]`.
+  /// A paginated list of the users that are members of the group. A maximum of
+  /// 50 users is returned in the list, to access additional users append
+  /// `[start-index:end-index]` to the expand request. For example, to access
+  /// the next 50 users, use`?expand=users[51:100]`.
   final PagedListUserDetailsApplicationUser? users;
 
   /// Expand options that include additional group details in the response.
@@ -24983,7 +27478,9 @@ class Group {
   }
 }
 
-/// A paged list. To access additional details append `[start-index:end-index]` to the expand request. For example, `?expand=sharedUsers[10:40]` returns a list starting at item 10 and finishing at item 40.
+/// A paged list. To access additional details append `[start-index:end-index]`
+/// to the expand request. For example, `?expand=sharedUsers[10:40]` returns a
+/// list starting at item 10 and finishing at item 40.
 class PagedListUserDetailsApplicationUser {
   /// The number of items on the page.
   final int? size;
@@ -25191,10 +27688,14 @@ class AddGroupBean {
 }
 
 class UpdateUserToGroupBean {
-  /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? name;
 
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
   final String? accountId;
 
   UpdateUserToGroupBean({this.name, this.accountId});
@@ -25233,11 +27734,14 @@ class FoundGroup {
   /// The name of the group.
   final String? name;
 
-  /// The group name with the matched query string highlighted with the HTML bold tag.
+  /// The group name with the matched query string highlighted with the HTML
+  /// bold tag.
   final String? html;
   final List<GroupLabel> labels;
 
-  /// The ID of the group, if available, which uniquely identifies the group across all Atlassian products. For example, *952d12c3-5b5b-4d04-bb32-44d383afc4b2*.
+  /// The ID of the group, if available, which uniquely identifies the group
+  /// across all Atlassian products. For example,
+  /// *952d12c3-5b5b-4d04-bb32-44d383afc4b2*.
   final String? groupId;
 
   FoundGroup({this.name, this.html, List<GroupLabel>? labels, this.groupId})
@@ -25287,9 +27791,11 @@ class FoundGroup {
   }
 }
 
-/// The list of groups found in a search, including header text (Showing X of Y matching groups) and total of matched groups.
+/// The list of groups found in a search, including header text (Showing X of Y
+/// matching groups) and total of matched groups.
 class FoundGroups {
-  /// Header text indicating the number of groups in the response and the total number of groups found in the search.
+  /// Header text indicating the number of groups in the response and the total
+  /// number of groups found in the search.
   final String? header;
 
   /// The total number of groups found in the search.
@@ -25452,29 +27958,36 @@ class FoundUsersAndGroups {
 }
 
 class CustomFieldDefinitionJsonBean {
-  /// The name of the custom field, which is displayed in Jira. This is not the unique identifier.
+  /// The name of the custom field, which is displayed in Jira. This is not the
+  /// unique identifier.
   final String name;
 
   /// The description of the custom field, which is displayed in Jira.
   final String? description;
 
-  /// The type of the custom field. For example, *com.atlassian.jira.plugin.system.customfieldtypes:grouppicker*.
+  /// The type of the custom field. For example,
+  /// *com.atlassian.jira.plugin.system.customfieldtypes:grouppicker*.
   ///
-  ///  *  `cascadingselect`: Allows multiple values to be selected using two select lists
+  ///  *  `cascadingselect`: Allows multiple values to be selected using two
+  /// select lists
   ///  *  `datepicker`: Stores a date using a picker control
   ///  *  `datetime`: Stores a date with a time component
   ///  *  `float`: Stores and validates a numeric (floating point) input
   ///  *  `grouppicker`: Stores a user group using a picker control
-  ///  *  `importid`: A read-only field that stores the previous ID of the issue from the system that it was imported from
+  ///  *  `importid`: A read-only field that stores the previous ID of the issue
+  /// from the system that it was imported from
   ///  *  `labels`: Stores labels
   ///  *  `multicheckboxes`: Stores multiple values using checkboxes
   ///  *  `multigrouppicker`: Stores multiple user groups using a picker control
   ///  *  `multiselect`: Stores multiple values using a select list
   ///  *  `multiuserpicker`: Stores multiple users using a picker control
-  ///  *  `multiversion`: Stores multiple versions from the versions available in a project using a picker control
-  ///  *  `project`: Stores a project from a list of projects that the user is permitted to view
+  ///  *  `multiversion`: Stores multiple versions from the versions available
+  /// in a project using a picker control
+  ///  *  `project`: Stores a project from a list of projects that the user is
+  /// permitted to view
   ///  *  `radiobuttons`: Stores a value using radio buttons
-  ///  *  `readonlyfield`: Stores a read-only text value, which can only be populated via the API
+  ///  *  `readonlyfield`: Stores a read-only text value, which can only be
+  /// populated via the API
   ///  *  `select`: Stores a value from a configurable list of options
   ///  *  `textarea`: Stores a long text string using a multiline text area
   ///  *  `textfield`: Stores a text string using a single-line text box
@@ -25483,8 +27996,12 @@ class CustomFieldDefinitionJsonBean {
   ///  *  `version`: Stores a version using a picker control
   final CustomFieldDefinitionJsonBeanType type;
 
-  /// The searcher defines the way the field is searched in Jira. For example, *com.atlassian.jira.plugin.system.customfieldtypes:grouppickersearcher*.
-  /// The search UI (basic search and JQL search) will display different operations and values for the field, based on the field searcher. You must specify a searcher that is valid for the field type, as listed below (abbreviated values shown):
+  /// The searcher defines the way the field is searched in Jira. For example,
+  /// *com.atlassian.jira.plugin.system.customfieldtypes:grouppickersearcher*.
+  /// The search UI (basic search and JQL search) will display different
+  /// operations and values for the field, based on the field searcher. You must
+  /// specify a searcher that is valid for the field type, as listed below
+  /// (abbreviated values shown):
   ///
   ///  *  `cascadingselect`: `cascadingselectsearcher`
   ///  *  `datepicker`: `daterange`
@@ -25732,13 +28249,17 @@ class CustomFieldDefinitionJsonBeanSearcherKey {
 
 /// Details of a custom field.
 class UpdateCustomFieldDetails {
-  /// The name of the custom field. It doesn't have to be unique. The maximum length is 255 characters.
+  /// The name of the custom field. It doesn't have to be unique. The maximum
+  /// length is 255 characters.
   final String? name;
 
-  /// The description of the custom field. The maximum length is 40000 characters.
+  /// The description of the custom field. The maximum length is 40000
+  /// characters.
   final String? description;
 
-  /// The searcher that defines the way the field is searched in Jira. It can be set to `null`, otherwise you must specify the valid searcher for the field type, as listed below (abbreviated values shown):
+  /// The searcher that defines the way the field is searched in Jira. It can be
+  /// set to `null`, otherwise you must specify the valid searcher for the field
+  /// type, as listed below (abbreviated values shown):
   ///
   ///  *  `cascadingselect`: `cascadingselectsearcher`
   ///  *  `datepicker`: `daterange`
@@ -26210,7 +28731,8 @@ class CustomFieldContextOption {
   /// The value of the custom field option.
   final String value;
 
-  /// For cascading options, the ID of the custom field option containing the cascading option.
+  /// For cascading options, the ID of the custom field option containing the
+  /// cascading option.
   final String? optionId;
 
   /// Whether the option is disabled.
@@ -26398,7 +28920,8 @@ class CustomFieldOptionCreate {
   /// The value of the custom field option.
   final String value;
 
-  /// For cascading options, the ID of the custom field object containing the cascading option.
+  /// For cascading options, the ID of the custom field object containing the
+  /// cascading option.
   final String? optionId;
 
   /// Whether the option is disabled.
@@ -26475,15 +28998,21 @@ class CustomFieldCreatedContextOptionsList {
   }
 }
 
-/// An ordered list of custom field option IDs and information on where to move them.
+/// An ordered list of custom field option IDs and information on where to move
+/// them.
 class OrderOfCustomFieldOptions {
-  /// A list of IDs of custom field options to move. The order of the custom field option IDs in the list is the order they are given after the move. The list must contain custom field options or cascading options, but not both.
+  /// A list of IDs of custom field options to move. The order of the custom
+  /// field option IDs in the list is the order they are given after the move.
+  /// The list must contain custom field options or cascading options, but not
+  /// both.
   final List<String> customFieldOptionIds;
 
-  /// The ID of the custom field option or cascading option to place the moved options after. Required if `position` isn't provided.
+  /// The ID of the custom field option or cascading option to place the moved
+  /// options after. Required if `position` isn't provided.
   final String? after;
 
-  /// The position the custom field options should be moved to. Required if `after` isn't provided.
+  /// The position the custom field options should be moved to. Required if
+  /// `after` isn't provided.
   final OrderOfCustomFieldOptionsPosition? position;
 
   OrderOfCustomFieldOptions(
@@ -26827,7 +29356,8 @@ class RenamedOption {
   /// The new value of the option.
   final String newValue;
 
-  /// The new values for the cascading options of this option. Only used for Select List (cascading) fields.
+  /// The new values for the cascading options of this option. Only used for
+  /// Select List (cascading) fields.
   final List<RenamedCascadingOption> cascadingOptions;
 
   RenamedOption(
@@ -27090,10 +29620,13 @@ class SystemAvatars {
 }
 
 class CreateUpdateRoleRequestBean {
-  /// The name of the project role. Must be unique. Cannot begin or end with whitespace. The maximum length is 255 characters. Required when creating a project role. Optional when partially updating a project role.
+  /// The name of the project role. Must be unique. Cannot begin or end with
+  /// whitespace. The maximum length is 255 characters. Required when creating a
+  /// project role. Optional when partially updating a project role.
   final String? name;
 
-  /// A description of the project role. Required when fully updating a project role. Optional when creating or partially updating a project role.
+  /// A description of the project role. Required when fully updating a project
+  /// role. Optional when creating or partially updating a project role.
   final String? description;
 
   CreateUpdateRoleRequestBean({this.name, this.description});
@@ -27128,10 +29661,14 @@ class CreateUpdateRoleRequestBean {
 }
 
 class ActorInputBean {
-  /// The account IDs of the users to add as default actors. This parameter accepts a comma-separated list. For example, `"user":["5b10a2844c20165700ede21g", "5b109f2e9729b51b54dc274d"]`.
+  /// The account IDs of the users to add as default actors. This parameter
+  /// accepts a comma-separated list. For example,
+  /// `"user":["5b10a2844c20165700ede21g", "5b109f2e9729b51b54dc274d"]`.
   final List<String> user;
 
-  /// The name of the group to add as a default actor. This parameter accepts a comma-separated list. For example, `"group":["project-admin", "jira-developers"]`.
+  /// The name of the group to add as a default actor. This parameter accepts a
+  /// comma-separated list. For example,
+  /// `"group":["project-admin", "jira-developers"]`.
   final List<String> group;
 
   ActorInputBean({List<String>? user, List<String>? group})
@@ -27170,10 +29707,16 @@ class ActorInputBean {
 }
 
 class ProjectRoleActorsUpdateBean {
-  /// The ID of the project role. Use [Get all project roles](#api-rest-api-3-role-get) to get a list of project role IDs.
+  /// The ID of the project role. Use
+  /// [Get all project roles](#api-rest-api-3-role-get) to get a list of project
+  /// role IDs.
   final int? id;
 
-  /// The actors to add to the project role. Add groups using `atlassian-group-role-actor` and a list of group names. For example, `"atlassian-group-role-actor":["another","administrators"]}`. Add users using `atlassian-user-role-actor` and a list of account IDs. For example, `"atlassian-user-role-actor":["12345678-9abc-def1-2345-6789abcdef12", "abcdef12-3456-789a-bcde-f123456789ab"]`.
+  /// The actors to add to the project role. Add groups using
+  /// `atlassian-group-role-actor` and a list of group names. For example,
+  /// `"atlassian-group-role-actor":["another","administrators"]}`. Add users
+  /// using `atlassian-user-role-actor` and a list of account IDs. For example,
+  /// `"atlassian-user-role-actor":["12345678-9abc-def1-2345-6789abcdef12", "abcdef12-3456-789a-bcde-f123456789ab"]`.
   final Map<String, dynamic>? categorisedActors;
 
   ProjectRoleActorsUpdateBean({this.id, this.categorisedActors});
@@ -27267,7 +29810,8 @@ class ProjectRoleDetails {
   /// Whether this role is the admin role for the project.
   final bool admin;
 
-  /// The scope of the role. Indicated for roles associated with [next-gen projects](https://confluence.atlassian.com/x/loMyO).
+  /// The scope of the role. Indicated for roles associated with
+  /// [next-gen projects](https://confluence.atlassian.com/x/loMyO).
   final Scope? scope;
 
   /// Whether the roles are configurable for this project.
@@ -27374,7 +29918,10 @@ class IssueTypeScreenSchemeItem {
   /// The ID of the issue type screen scheme.
   final String issueTypeScreenSchemeId;
 
-  /// The ID of the issue type or *default*. Only issue types used in classic projects are accepted. When creating an issue screen scheme, an entry for *default* must be provided and defines the mapping for all issue types without a screen scheme. Otherwise, a *default* entry can't be provided.
+  /// The ID of the issue type or *default*. Only issue types used in classic
+  /// projects are accepted. When creating an issue screen scheme, an entry for
+  /// *default* must be provided and defines the mapping for all issue types
+  /// without a screen scheme. Otherwise, a *default* entry can't be provided.
   final String issueTypeId;
 
   /// The ID of the screen scheme.
@@ -27854,13 +30401,17 @@ class IssueTypeScreenSchemeProjectAssociation {
 
 /// The details of an issue type screen scheme.
 class IssueTypeScreenSchemeDetails {
-  /// The name of the issue type screen scheme. The name must be unique. The maximum length is 255 characters.
+  /// The name of the issue type screen scheme. The name must be unique. The
+  /// maximum length is 255 characters.
   final String name;
 
-  /// The description of the issue type screen scheme. The maximum length is 255 characters.
+  /// The description of the issue type screen scheme. The maximum length is 255
+  /// characters.
   final String? description;
 
-  /// The IDs of the screen schemes for the issue type IDs and *default*. A *default* entry is required to create an issue type screen scheme, it defines the mapping for all issue types without a screen scheme.
+  /// The IDs of the screen schemes for the issue type IDs and *default*. A
+  /// *default* entry is required to create an issue type screen scheme, it
+  /// defines the mapping for all issue types without a screen scheme.
   final List<IssueTypeScreenSchemeMapping> issueTypeMappings;
 
   IssueTypeScreenSchemeDetails(
@@ -27907,10 +30458,13 @@ class IssueTypeScreenSchemeDetails {
 
 /// The IDs of the screen schemes for the issue type IDs.
 class IssueTypeScreenSchemeMapping {
-  /// The ID of the issue type or *default*. Only issue types used in classic projects are accepted. An entry for *default* must be provided and defines the mapping for all issue types without a screen scheme.
+  /// The ID of the issue type or *default*. Only issue types used in classic
+  /// projects are accepted. An entry for *default* must be provided and defines
+  /// the mapping for all issue types without a screen scheme.
   final String issueTypeId;
 
-  /// The ID of the screen scheme. Only screen schemes used in classic projects are accepted.
+  /// The ID of the screen scheme. Only screen schemes used in classic projects
+  /// are accepted.
   final String screenSchemeId;
 
   IssueTypeScreenSchemeMapping(
@@ -27972,10 +30526,12 @@ class IssueTypeScreenSchemeId {
 
 /// Details of an issue type screen scheme.
 class IssueTypeScreenSchemeUpdateDetails {
-  /// The name of the issue type screen scheme. The name must be unique. The maximum length is 255 characters.
+  /// The name of the issue type screen scheme. The name must be unique. The
+  /// maximum length is 255 characters.
   final String? name;
 
-  /// The description of the issue type screen scheme. The maximum length is 255 characters.
+  /// The description of the issue type screen scheme. The maximum length is 255
+  /// characters.
   final String? description;
 
   IssueTypeScreenSchemeUpdateDetails({this.name, this.description});
@@ -28013,7 +30569,9 @@ class IssueTypeScreenSchemeUpdateDetails {
 
 /// A list of issue type screen scheme mappings.
 class IssueTypeScreenSchemeMappingDetails {
-  /// The list of issue type to screen scheme mappings. A *default* entry cannot be specified because a default entry is added when an issue type screen scheme is created.
+  /// The list of issue type to screen scheme mappings. A *default* entry cannot
+  /// be specified because a default entry is added when an issue type screen
+  /// scheme is created.
   final List<IssueTypeScreenSchemeMapping> issueTypeMappings;
 
   IssueTypeScreenSchemeMappingDetails({required this.issueTypeMappings});
@@ -29087,16 +31645,20 @@ class IssueTypeSchemeProjectAssociation {
 
 /// Details of an issue type scheme and its associated issue types.
 class IssueTypeSchemeDetails {
-  /// The name of the issue type scheme. The name must be unique. The maximum length is 255 characters.
+  /// The name of the issue type scheme. The name must be unique. The maximum
+  /// length is 255 characters.
   final String name;
 
-  /// The description of the issue type scheme. The maximum length is 4000 characters.
+  /// The description of the issue type scheme. The maximum length is 4000
+  /// characters.
   final String? description;
 
-  /// The ID of the default issue type of the issue type scheme. This ID must be included in `issueTypeIds`.
+  /// The ID of the default issue type of the issue type scheme. This ID must be
+  /// included in `issueTypeIds`.
   final String? defaultIssueTypeId;
 
-  /// The list of issue types IDs of the issue type scheme. At least one standard issue type ID is required.
+  /// The list of issue types IDs of the issue type scheme. At least one
+  /// standard issue type ID is required.
   final List<String> issueTypeIds;
 
   IssueTypeSchemeDetails(
@@ -29177,12 +31739,15 @@ class IssueTypeSchemeID {
   }
 }
 
-/// Details of the name, description, and default issue type for an issue type scheme.
+/// Details of the name, description, and default issue type for an issue type
+/// scheme.
 class IssueTypeSchemeUpdateDetails {
-  /// The name of the issue type scheme. The name must be unique. The maximum length is 255 characters.
+  /// The name of the issue type scheme. The name must be unique. The maximum
+  /// length is 255 characters.
   final String? name;
 
-  /// The description of the issue type scheme. The maximum length is 4000 characters.
+  /// The description of the issue type scheme. The maximum length is 4000
+  /// characters.
   final String? description;
 
   /// The ID of the default issue type of the issue type scheme.
@@ -29229,13 +31794,16 @@ class IssueTypeSchemeUpdateDetails {
 
 /// An ordered list of issue type IDs and information about where to move them.
 class OrderOfIssueTypes {
-  /// A list of the issue type IDs to move. The order of the issue type IDs in the list is the order they are given after the move.
+  /// A list of the issue type IDs to move. The order of the issue type IDs in
+  /// the list is the order they are given after the move.
   final List<String> issueTypeIds;
 
-  /// The ID of the issue type to place the moved issue types after. Required if `position` isn't provided.
+  /// The ID of the issue type to place the moved issue types after. Required if
+  /// `position` isn't provided.
   final String? after;
 
-  /// The position the issue types should be moved to. Required if `after` isn't provided.
+  /// The position the issue types should be moved to. Required if `after` isn't
+  /// provided.
   final OrderOfIssueTypesPosition? position;
 
   OrderOfIssueTypes({required this.issueTypeIds, this.after, this.position});
@@ -29475,7 +32043,10 @@ class WorklogIdsRequestBean {
 }
 
 class GlobalScopeBean {
-  /// Defines the behavior of the option in the global context.If notSelectable is set, the option cannot be set as the field's value. This is useful for archiving an option that has previously been selected but shouldn't be used anymore.If defaultValue is set, the option is selected by default.
+  /// Defines the behavior of the option in the global context.If notSelectable
+  /// is set, the option cannot be set as the field's value. This is useful for
+  /// archiving an option that has previously been selected but shouldn't be
+  /// used anymore.If defaultValue is set, the option is selected by default.
   final List<GlobalScopeBeanAttributes> attributes;
 
   GlobalScopeBean({List<GlobalScopeBeanAttributes>? attributes})
@@ -29531,13 +32102,17 @@ class GlobalScopeBeanAttributes {
 
 /// Details of the options for a select list issue field.
 class IssueFieldOption {
-  /// The unique identifier for the option. This is only unique within the select field's set of options.
+  /// The unique identifier for the option. This is only unique within the
+  /// select field's set of options.
   final int id;
 
   /// The option's name, which is displayed in Jira.
   final String value;
 
-  /// The properties of the object, as arbitrary key-value pairs. These properties can be searched using JQL, if the extractions (see [Issue Field Option Property Index](https://developer.atlassian.com/cloud/jira/platform/modules/issue-field-option-property-index/)) are defined in the descriptor for the issue field module.
+  /// The properties of the object, as arbitrary key-value pairs. These
+  /// properties can be searched using JQL, if the extractions (see
+  /// [Issue Field Option Property Index](https://developer.atlassian.com/cloud/jira/platform/modules/issue-field-option-property-index/))
+  /// are defined in the descriptor for the issue field module.
   final Map<String, dynamic>? properties;
   final IssueFieldOptionConfiguration? config;
 
@@ -29590,7 +32165,8 @@ class IssueFieldOption {
 
 /// Details of the projects the option is available in.
 class IssueFieldOptionConfiguration {
-  /// Defines the projects that the option is available in. If the scope is not defined, then the option is available in all projects.
+  /// Defines the projects that the option is available in. If the scope is not
+  /// defined, then the option is available in all projects.
   final IssueFieldOptionScopeBean? scope;
 
   /// DEPRECATED
@@ -29665,10 +32241,15 @@ class IssueFieldOptionScopeBean {
   /// DEPRECATED
   final List<int> projects;
 
-  /// Defines the projects in which the option is available and the behavior of the option within each project. Specify one object per project. The behavior of the option in a project context overrides the behavior in the global context.
+  /// Defines the projects in which the option is available and the behavior of
+  /// the option within each project. Specify one object per project. The
+  /// behavior of the option in a project context overrides the behavior in the
+  /// global context.
   final List<ProjectScopeBean> projects2;
 
-  /// Defines the behavior of the option within the global context. If this property is set, even if set to an empty object, then the option is available in all projects.
+  /// Defines the behavior of the option within the global context. If this
+  /// property is set, even if set to an empty object, then the option is
+  /// available in all projects.
   final GlobalScopeBean? global;
 
   IssueFieldOptionScopeBean(
@@ -29823,7 +32404,10 @@ class ProjectScopeBean {
   /// The ID of the project that the option's behavior applies to.
   final int? id;
 
-  /// Defines the behavior of the option in the project.If notSelectable is set, the option cannot be set as the field's value. This is useful for archiving an option that has previously been selected but shouldn't be used anymore.If defaultValue is set, the option is selected by default.
+  /// Defines the behavior of the option in the project.If notSelectable is set,
+  /// the option cannot be set as the field's value. This is useful for
+  /// archiving an option that has previously been selected but shouldn't be
+  /// used anymore.If defaultValue is set, the option is selected by default.
   final List<ProjectScopeBeanAttributes> attributes;
 
   ProjectScopeBean({this.id, List<ProjectScopeBeanAttributes>? attributes})
@@ -29888,7 +32472,10 @@ class IssueFieldOptionCreateBean {
   /// The option's name, which is displayed in Jira.
   final String value;
 
-  /// The properties of the option as arbitrary key-value pairs. These properties can be searched using JQL, if the extractions (see https://developer.atlassian.com/cloud/jira/platform/modules/issue-field-option-property-index/) are defined in the descriptor for the issue field module.
+  /// The properties of the option as arbitrary key-value pairs. These
+  /// properties can be searched using JQL, if the extractions (see
+  /// https://developer.atlassian.com/cloud/jira/platform/modules/issue-field-option-property-index/)
+  /// are defined in the descriptor for the issue field module.
   final Map<String, dynamic>? properties;
   final IssueFieldOptionConfiguration? config;
 
@@ -29938,10 +32525,12 @@ class RemoveOptionFromIssuesResult {
   /// The IDs of the modified issues.
   final List<int> modifiedIssues;
 
-  /// The IDs of the unchanged issues, those issues where errors prevent modification.
+  /// The IDs of the unchanged issues, those issues where errors prevent
+  /// modification.
   final List<int> unmodifiedIssues;
 
-  /// A collection of errors related to unchanged issues. The collection size is limited, which means not all errors may be returned.
+  /// A collection of errors related to unchanged issues. The collection size is
+  /// limited, which means not all errors may be returned.
   final SimpleErrorCollection? errors;
 
   RemoveOptionFromIssuesResult(
@@ -29993,10 +32582,13 @@ class RemoveOptionFromIssuesResult {
 }
 
 class SimpleErrorCollection {
-  /// The list of errors by parameter returned by the operation. For example,"projectKey": "Project keys must start with an uppercase letter, followed by one or more uppercase alphanumeric characters."
+  /// The list of errors by parameter returned by the operation. For
+  /// example,"projectKey": "Project keys must start with an uppercase letter,
+  /// followed by one or more uppercase alphanumeric characters."
   final Map<String, dynamic>? errors;
 
-  /// The list of error messages produced by this operation. For example, "input parameter 'key' must be provided"
+  /// The list of error messages produced by this operation. For example, "input
+  /// parameter 'key' must be provided"
   final List<String> errorMessages;
   final int? httpStatusCode;
 
@@ -30366,8 +32958,9 @@ class FieldLastUsed {
   /// Last used value type:
   ///
   ///  *  *TRACKED*: field is tracked and a last used date is available.
-  ///  *  *NOT\_TRACKED*: field is not tracked, last used date is not available.
-  ///  *  *NO\_INFORMATION*: field is tracked, but no last used date is available.
+  ///  *  *NOT_TRACKED*: field is not tracked, last used date is not available.
+  ///  *  *NO_INFORMATION*: field is tracked, but no last used date is
+  /// available.
   final FieldLastUsedType? type;
 
   /// The date when the value of the field last changed.
@@ -30682,7 +33275,9 @@ class FieldConfigurationIssueTypeItem {
   /// The ID of the field configuration scheme.
   final String fieldConfigurationSchemeId;
 
-  /// The ID of the issue type or *default*. When set to *default* this field configuration issue type item applies to all issue types without a field configuration.
+  /// The ID of the issue type or *default*. When set to *default* this field
+  /// configuration issue type item applies to all issue types without a field
+  /// configuration.
   final String issueTypeId;
 
   /// The ID of the field configuration.
@@ -30977,7 +33572,9 @@ class PageBeanFieldConfigurationSchemeProjects {
 
 /// Associated field configuration scheme and project.
 class FieldConfigurationSchemeProjectAssociation {
-  /// The ID of the field configuration scheme. If the field configuration scheme ID is `null`, the operation assigns the default field configuration scheme.
+  /// The ID of the field configuration scheme. If the field configuration
+  /// scheme ID is `null`, the operation assigns the default field configuration
+  /// scheme.
   final String? fieldConfigurationSchemeId;
 
   /// The ID of the project.
@@ -31951,10 +34548,12 @@ class CreateCustomFieldContext {
   /// The description of the context.
   final String? description;
 
-  /// The list of project IDs associated with the context. If the list is empty, the context is global.
+  /// The list of project IDs associated with the context. If the list is empty,
+  /// the context is global.
   final List<String> projectIds;
 
-  /// The list of issue types IDs for the context. If the list is empty, the context refers to all issue types.
+  /// The list of issue types IDs for the context. If the list is empty, the
+  /// context refers to all issue types.
   final List<String> issueTypeIds;
 
   CreateCustomFieldContext(
@@ -32051,10 +34650,12 @@ class ProjectIds {
 
 /// Details of a custom field context.
 class CustomFieldContextUpdateDetails {
-  /// The name of the custom field context. The name must be unique. The maximum length is 255 characters.
+  /// The name of the custom field context. The name must be unique. The maximum
+  /// length is 255 characters.
   final String? name;
 
-  /// The description of the custom field context. The maximum length is 255 characters.
+  /// The description of the custom field context. The maximum length is 255
+  /// characters.
   final String? description;
 
   CustomFieldContextUpdateDetails({this.name, this.description});
@@ -32487,7 +35088,9 @@ class PageBeanIssueTypeToContextMapping {
 }
 
 class IdBean {
-  /// The ID of the permission scheme to associate with the project. Use the [Get all permission schemes](#api-rest-api-3-permissionscheme-get) resource to get a list of permission scheme IDs.
+  /// The ID of the permission scheme to associate with the project. Use the
+  /// [Get all permission schemes](#api-rest-api-3-permissionscheme-get)
+  /// resource to get a list of permission scheme IDs.
   final int id;
 
   IdBean({required this.id});
@@ -32521,10 +35124,19 @@ class PermissionGrant {
   /// The URL of the permission granted details.
   final String? self;
 
-  /// The user or group being granted the permission. It consists of a `type` and a type-dependent `parameter`. See [Holder object](#holder-object) in *Get all permission schemes* for more information.
+  /// The user or group being granted the permission. It consists of a `type`
+  /// and a type-dependent `parameter`. See [Holder object](#holder-object) in
+  /// *Get all permission schemes* for more information.
   final PermissionHolder? holder;
 
-  /// The permission to grant. This permission can be one of the built-in permissions or a custom permission added by an app. See [Built-in permissions](#built-in-permissions) in *Get all permission schemes* for more information about the built-in permissions. See the [project permission](https://developer.atlassian.com/cloud/jira/platform/modules/project-permission/) and [global permission](https://developer.atlassian.com/cloud/jira/platform/modules/global-permission/) module documentation for more information about custom permissions.
+  /// The permission to grant. This permission can be one of the built-in
+  /// permissions or a custom permission added by an app. See
+  /// [Built-in permissions](#built-in-permissions) in *Get all permission
+  /// schemes* for more information about the built-in permissions. See the
+  /// [project permission](https://developer.atlassian.com/cloud/jira/platform/modules/project-permission/)
+  /// and
+  /// [global permission](https://developer.atlassian.com/cloud/jira/platform/modules/global-permission/)
+  /// module documentation for more information about custom permissions.
   final String? permission;
 
   PermissionGrant({this.id, this.self, this.holder, this.permission});
@@ -32593,7 +35205,9 @@ class PermissionScheme {
   /// The scope of the permission scheme.
   final Scope? scope;
 
-  /// The permission scheme to create or update. See [About permission schemes and grants](#about-permission-schemes-and-grants) for more information.
+  /// The permission scheme to create or update. See
+  /// [About permission schemes and grants](#about-permission-schemes-and-grants)
+  /// for more information.
   final List<PermissionGrant> permissions;
 
   PermissionScheme(
@@ -32706,10 +35320,14 @@ class Permissions {
 
 /// Details of a permission and its availability to a user.
 class UserPermission {
-  /// The ID of the permission. Either `id` or `key` must be specified. Use [Get all permissions](#api-rest-api-3-permissions-get) to get the list of permissions.
+  /// The ID of the permission. Either `id` or `key` must be specified. Use
+  /// [Get all permissions](#api-rest-api-3-permissions-get) to get the list of
+  /// permissions.
   final String? id;
 
-  /// The key of the permission. Either `id` or `key` must be specified. Use [Get all permissions](#api-rest-api-3-permissions-get) to get the list of permissions.
+  /// The key of the permission. Either `id` or `key` must be specified. Use
+  /// [Get all permissions](#api-rest-api-3-permissions-get) to get the list of
+  /// permissions.
   final String? key;
 
   /// The name of the permission.
@@ -32724,7 +35342,9 @@ class UserPermission {
   /// Whether the permission is available to the user in the queried context.
   final bool havePermission;
 
-  /// Indicate whether the permission key is deprecated. Note that deprecated keys cannot be used in the `permissions parameter of Get my permissions. Deprecated keys are not returned by Get all permissions.`
+  /// Indicate whether the permission key is deprecated. Note that deprecated
+  /// keys cannot be used in the `permissions parameter of Get my permissions.
+  /// Deprecated keys are not returned by Get all permissions.`
   final bool deprecatedKey;
 
   UserPermission(
@@ -32825,7 +35445,8 @@ class UserPermissionType {
   String toString() => value;
 }
 
-/// Details of global permissions to look up and project permissions with associated projects and issues to look up.
+/// Details of global permissions to look up and project permissions with
+/// associated projects and issues to look up.
 class BulkPermissionsRequestBean {
   /// Project permissions with associated projects and issues to look up.
   final List<BulkProjectPermissions> projectPermissions;
@@ -32885,7 +35506,8 @@ class BulkPermissionsRequestBean {
   }
 }
 
-/// Details of project permissions and associated issues and projects to look up.
+/// Details of project permissions and associated issues and projects to look
+/// up.
 class BulkProjectPermissions {
   /// List of issue IDs.
   final List<int> issues;
@@ -32942,7 +35564,8 @@ class BulkProjectPermissions {
 
 /// Details of global and project permissions granted to the user.
 class BulkPermissionGrants {
-  /// List of project permissions and the projects and issues those permissions provide access to.
+  /// List of project permissions and the projects and issues those permissions
+  /// provide access to.
   final List<BulkProjectPermissionGrants> projectPermissions;
 
   /// List of permissions granted to the user.
@@ -32986,7 +35609,8 @@ class BulkPermissionGrants {
   }
 }
 
-/// List of project permissions and the projects and issues those permissions grant access to.
+/// List of project permissions and the projects and issues those permissions
+/// grant access to.
 class BulkProjectPermissionGrants {
   /// A project permission,
   final String permission;
@@ -33140,7 +35764,8 @@ class ProjectIdentifierBean {
 
 /// Details about a failed webhook.
 class FailedWebhook {
-  /// The webhook ID, as sent in the `X-Atlassian-Webhook-Identifier` header with the webhook.
+  /// The webhook ID, as sent in the `X-Atlassian-Webhook-Identifier` header
+  /// with the webhook.
   final String id;
 
   /// The webhook body.
@@ -33149,7 +35774,8 @@ class FailedWebhook {
   /// The original webhook destination.
   final String url;
 
-  /// The time the webhook was added to the list of failed webhooks (that is, the time of the last failed retry).
+  /// The time the webhook was added to the list of failed webhooks (that is,
+  /// the time of the last failed retry).
   final int failureTime;
 
   FailedWebhook(
@@ -33199,10 +35825,15 @@ class FailedWebhooks {
   /// The list of webhooks.
   final List<FailedWebhook> values;
 
-  /// The maximum number of items on the page. If the list of values is shorter than this number, then there are no more pages.
+  /// The maximum number of items on the page. If the list of values is shorter
+  /// than this number, then there are no more pages.
   final int maxResults;
 
-  /// The URL to the next page of results. Present only if the request returned at least one result.The next page may be empty at the time of receiving the response, but new failed webhooks may appear in time. You can save the URL to the next page and query for new results periodically (for example, every hour).
+  /// The URL to the next page of results. Present only if the request returned
+  /// at least one result.The next page may be empty at the time of receiving
+  /// the response, but new failed webhooks may appear in time. You can save the
+  /// URL to the next page and query for new results periodically (for example,
+  /// every hour).
   final String? next;
 
   FailedWebhooks({required this.values, required this.maxResults, this.next});
@@ -33245,9 +35876,12 @@ class FailedWebhooks {
 
 /// A list of webhooks.
 class WebhookDetails {
-  /// The JQL filter that specifies which issues the webhook is sent for. Only a subset of JQL can be used. The supported elements are:
+  /// The JQL filter that specifies which issues the webhook is sent for. Only a
+  /// subset of JQL can be used. The supported elements are:
   ///
-  ///  *  Fields: `issueKey`, `project`, `issuetype`, `status`, `assignee`, `reporter`, `issue.property`, and `cf[id]` (for custom fields—only the epic label custom field is supported).
+  ///  *  Fields: `issueKey`, `project`, `issuetype`, `status`, `assignee`,
+  /// `reporter`, `issue.property`, and `cf[id]` (for custom fields—only the
+  /// epic label custom field is supported).
   ///  *  Operators: `=`, `!=`, `IN`, and `NOT IN`.
   final String jqlFilter;
 
@@ -33326,7 +35960,8 @@ class WebhookRegistrationDetails {
   /// A list of webhooks.
   final List<WebhookDetails> webhooks;
 
-  /// The URL that specifies where to send the webhooks. This URL must use the same base URL as the Connect app.
+  /// The URL that specifies where to send the webhooks. This URL must use the
+  /// same base URL as the Connect app.
   final String url;
 
   WebhookRegistrationDetails({required this.webhooks, required this.url});
@@ -33361,7 +35996,8 @@ class WebhookRegistrationDetails {
   }
 }
 
-/// Container for a list of registered webhooks. Webhook details are returned in the same order as the request.
+/// Container for a list of registered webhooks. Webhook details are returned in
+/// the same order as the request.
 class ContainerForRegisteredWebhooks {
   /// A list of registered webhooks.
   final List<RegisteredWebhook> webhookRegistrationResult;
@@ -33399,7 +36035,8 @@ class ContainerForRegisteredWebhooks {
   }
 }
 
-/// ID of a registered webhook or error messages explaining why a webhook wasn't registered.
+/// ID of a registered webhook or error messages explaining why a webhook wasn't
+/// registered.
 class RegisteredWebhook {
   /// The ID of the webhook. Returned if the webhook is created.
   final int? createdWebhookId;
@@ -33825,10 +36462,16 @@ class PageBeanUserKey {
 
 /// List of user account IDs.
 class UserKey {
-  /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? key;
 
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*. Returns *unknown* if the record is deleted and corrupted, for example, as the result of a server import.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*. Returns
+  /// *unknown* if the record is deleted and corrupted, for example, as the
+  /// result of a server import.
   final String? accountId;
 
   UserKey({this.key, this.accountId});
@@ -33864,7 +36507,8 @@ class UserKey {
 
 /// The result of a JQL search.
 class SearchResults {
-  /// Expand options that include additional search result details in the response.
+  /// Expand options that include additional search result details in the
+  /// response.
   final String? expand;
 
   /// The index of the first item returned on the page.
@@ -33980,13 +36624,16 @@ class SearchRequestBean {
   /// A [JQL](https://confluence.atlassian.com/x/egORLQ) expression.
   final String? jql;
 
-  /// The index of the first item to return in the page of results (page offset). The base index is `0`.
+  /// The index of the first item to return in the page of results (page
+  /// offset). The base index is `0`.
   final int? startAt;
 
   /// The maximum number of items to return per page.
   final int? maxResults;
 
-  /// A list of fields to return for each issue, use it to retrieve a subset of fields. This parameter accepts a comma-separated list. Expand options include:
+  /// A list of fields to return for each issue, use it to retrieve a subset of
+  /// fields. This parameter accepts a comma-separated list. Expand options
+  /// include:
   ///
   ///  *  `*all` Returns all fields.
   ///  *  `*navigable` Returns navigable fields.
@@ -33997,17 +36644,22 @@ class SearchRequestBean {
   /// Examples:
   ///
   ///  *  `summary,comment` Returns the summary and comments fields only.
-  ///  *  `-description` Returns all navigable (default) fields except description.
+  ///  *  `-description` Returns all navigable (default) fields except
+  /// description.
   ///  *  `*all,-comment` Returns all fields except comments.
   ///
   /// Multiple `fields` parameters can be included in a request.
   ///
-  /// Note: All navigable fields are returned by default. This differs from [GET issue](#api-rest-api-3-issue-issueIdOrKey-get) where the default is all fields.
+  /// Note: All navigable fields are returned by default. This differs from
+  /// [GET issue](#api-rest-api-3-issue-issueIdOrKey-get) where the default is
+  /// all fields.
   final List<String> fields;
 
-  /// Determines how to validate the JQL query and treat the validation results. Supported values:
+  /// Determines how to validate the JQL query and treat the validation results.
+  /// Supported values:
   ///
-  ///  *  `strict` Returns a 400 response code if any errors are found, along with a list of all errors (and warnings).
+  ///  *  `strict` Returns a 400 response code if any errors are found, along
+  /// with a list of all errors (and warnings).
   ///  *  `warn` Returns all errors as warnings.
   ///  *  `none` No validation is performed.
   ///  *  `true` *Deprecated* A legacy synonym for `strict`.
@@ -34015,10 +36667,14 @@ class SearchRequestBean {
   ///
   /// The default is `strict`.
   ///
-  /// Note: If the JQL is not correctly formed a 400 response code is returned, regardless of the `validateQuery` value.
+  /// Note: If the JQL is not correctly formed a 400 response code is returned,
+  /// regardless of the `validateQuery` value.
   final SearchRequestBeanValidateQuery? validateQuery;
 
-  /// Use [expand](em>#expansion) to include additional information about issues in the response. Note that, unlike the majority of instances where `expand` is specified, `expand` is defined as a list of values. The expand options are:
+  /// Use [expand](em>#expansion) to include additional information about issues
+  /// in the response. Note that, unlike the majority of instances where
+  /// `expand` is specified, `expand` is defined as a list of values. The expand
+  /// options are:
   ///
   ///  *  `renderedFields` Returns field values rendered in HTML format.
   ///  *  `names` Returns the display name of each field.
@@ -34026,11 +36682,16 @@ class SearchRequestBean {
   ///  *  `transitions` Returns all possible transitions for the issue.
   ///  *  `operations` Returns all possible operations for the issue.
   ///  *  `editmeta` Returns information about how each field can be edited.
-  ///  *  `changelog` Returns a list of recent updates to an issue, sorted by date, starting from the most recent.
-  ///  *  `versionedRepresentations` Instead of `fields`, returns `versionedRepresentations` a JSON array containing each version of a field's value, with the highest numbered item representing the most recent version.
+  ///  *  `changelog` Returns a list of recent updates to an issue, sorted by
+  /// date, starting from the most recent.
+  ///  *  `versionedRepresentations` Instead of `fields`, returns
+  /// `versionedRepresentations` a JSON array containing each version of a
+  /// field's value, with the highest numbered item representing the most recent
+  /// version.
   final List<String> expand;
 
-  /// A list of up to 5 issue properties to include in the results. This parameter accepts a comma-separated list.
+  /// A list of up to 5 issue properties to include in the results. This
+  /// parameter accepts a comma-separated list.
   final List<String> properties;
 
   /// Reference fields by their key (rather than ID). The default is `false`.
@@ -34503,7 +37164,8 @@ class AutoCompleteSuggestion {
   /// The value of a suggested item.
   final String? value;
 
-  /// The display name of a suggested item. If `fieldValue` or `predicateValue` are provided, the matching text is highlighted with the HTML bold tag.
+  /// The display name of a suggested item. If `fieldValue` or `predicateValue`
+  /// are provided, the matching text is highlighted with the HTML bold tag.
   final String? displayName;
 
   AutoCompleteSuggestion({this.value, this.displayName});
@@ -34604,10 +37266,12 @@ class JQLPersonalDataMigrationRequest {
 
 /// The converted JQL queries.
 class ConvertedJQLQueries {
-  /// The list of converted query strings with account IDs in place of user identifiers.
+  /// The list of converted query strings with account IDs in place of user
+  /// identifiers.
   final List<String> queryStrings;
 
-  /// List of queries containing user information that could not be mapped to an existing user
+  /// List of queries containing user information that could not be mapped to an
+  /// existing user
   final List<JQLQueryWithUnknownUsers> queriesWithUnknownUsers;
 
   ConvertedJQLQueries(
@@ -34658,7 +37322,8 @@ class JQLQueryWithUnknownUsers {
   /// The original query, for reference
   final String? originalQuery;
 
-  /// The converted query, with accountIDs instead of user identifiers, or 'unknown' for users that could not be found
+  /// The converted query, with accountIDs instead of user identifiers, or
+  /// 'unknown' for users that could not be found
   final String? convertedQuery;
 
   JQLQueryWithUnknownUsers({this.originalQuery, this.convertedQuery});
@@ -34707,28 +37372,38 @@ class Filter {
   /// A description of the filter.
   final String? description;
 
-  /// The user who owns the filter. This is defaulted to the creator of the filter, however Jira administrators can change the owner of a shared filter in the admin settings.
+  /// The user who owns the filter. This is defaulted to the creator of the
+  /// filter, however Jira administrators can change the owner of a shared
+  /// filter in the admin settings.
   final User? owner;
 
-  /// The JQL query for the filter. For example, *project = SSP AND issuetype = Bug*.
+  /// The JQL query for the filter. For example, *project = SSP AND issuetype =
+  /// Bug*.
   final String? jql;
 
-  /// A URL to view the filter results in Jira, using the ID of the filter. For example, *https://your-domain.atlassian.net/issues/?filter=10100*.
+  /// A URL to view the filter results in Jira, using the ID of the filter. For
+  /// example, *https://your-domain.atlassian.net/issues/?filter=10100*.
   final String? viewUrl;
 
-  /// A URL to view the filter results in Jira, using the [Search for issues using JQL](#api-rest-api-3-filter-search-get) operation with the filter's JQL string to return the filter results. For example, *https://your-domain.atlassian.net/rest/api/3/search?jql=project+%3D+SSP+AND+issuetype+%3D+Bug*.
+  /// A URL to view the filter results in Jira, using the
+  /// [Search for issues using JQL](#api-rest-api-3-filter-search-get) operation
+  /// with the filter's JQL string to return the filter results. For example,
+  /// *https://your-domain.atlassian.net/rest/api/3/search?jql=project+%3D+SSP+AND+issuetype+%3D+Bug*.
   final String? searchUrl;
 
   /// Whether the filter is selected as a favorite.
   final bool favourite;
 
-  /// The count of how many users have selected this filter as a favorite, including the filter owner.
+  /// The count of how many users have selected this filter as a favorite,
+  /// including the filter owner.
   final int? favouritedCount;
 
   /// The groups and projects that the filter is shared with.
   final List<SharePermission> sharePermissions;
 
-  /// A paginated list of the users that the filter is shared with. This includes users that are members of the groups or can browse the projects that the filter is shared with.
+  /// A paginated list of the users that the filter is shared with. This
+  /// includes users that are members of the groups or can browse the projects
+  /// that the filter is shared with.
   final UserList? sharedUsers;
 
   /// A paginated list of the users that are subscribed to the filter.
@@ -34995,7 +37670,9 @@ class FilterSubscriptionsList {
   }
 }
 
-/// A paginated list of users sharing the filter. This includes users that are members of the groups or can browse the projects that the filter is shared with.
+/// A paginated list of users sharing the filter. This includes users that are
+/// members of the groups or can browse the projects that the filter is shared
+/// with.
 class UserList {
   /// The number of items on the page.
   final int? size;
@@ -35088,25 +37765,35 @@ class FilterDetails {
   /// A description of the filter.
   final String? description;
 
-  /// The user who owns the filter. This is defaulted to the creator of the filter, however Jira administrators can change the owner of a shared filter in the admin settings.
+  /// The user who owns the filter. This is defaulted to the creator of the
+  /// filter, however Jira administrators can change the owner of a shared
+  /// filter in the admin settings.
   final User? owner;
 
-  /// The JQL query for the filter. For example, *project = SSP AND issuetype = Bug*.
+  /// The JQL query for the filter. For example, *project = SSP AND issuetype =
+  /// Bug*.
   final String? jql;
 
-  /// A URL to view the filter results in Jira, using the ID of the filter. For example, *https://your-domain.atlassian.net/issues/?filter=10100*.
+  /// A URL to view the filter results in Jira, using the ID of the filter. For
+  /// example, *https://your-domain.atlassian.net/issues/?filter=10100*.
   final String? viewUrl;
 
-  /// A URL to view the filter results in Jira, using the [Search for issues using JQL](#api-rest-api-3-filter-search-get) operation with the filter's JQL string to return the filter results. For example, *https://your-domain.atlassian.net/rest/api/3/search?jql=project+%3D+SSP+AND+issuetype+%3D+Bug*.
+  /// A URL to view the filter results in Jira, using the
+  /// [Search for issues using JQL](#api-rest-api-3-filter-search-get) operation
+  /// with the filter's JQL string to return the filter results. For example,
+  /// *https://your-domain.atlassian.net/rest/api/3/search?jql=project+%3D+SSP+AND+issuetype+%3D+Bug*.
   final String? searchUrl;
 
-  /// Whether the filter is selected as a favorite by any users, not including the filter owner.
+  /// Whether the filter is selected as a favorite by any users, not including
+  /// the filter owner.
   final bool favourite;
 
-  /// The count of how many users have selected this filter as a favorite, including the filter owner.
+  /// The count of how many users have selected this filter as a favorite,
+  /// including the filter owner.
   final int? favouritedCount;
 
-  /// The groups and projects that the filter is shared with. This can be specified when updating a filter, but not when creating a filter.
+  /// The groups and projects that the filter is shared with. This can be
+  /// specified when updating a filter, but not when creating a filter.
   final List<SharePermission> sharePermissions;
 
   /// The users that are subscribed to the filter.
@@ -35337,7 +38024,8 @@ class DefaultShareScope {
   /// The scope of the default sharing for new filters and dashboards:
   ///
   ///  *  `AUTHENTICATED` Shared with all logged-in users.
-  ///  *  `GLOBAL` Shared with all logged-in users. This shows as `AUTHENTICATED` in the response.
+  ///  *  `GLOBAL` Shared with all logged-in users. This shows as
+  /// `AUTHENTICATED` in the response.
   ///  *  `PRIVATE` Not shared with any users.
   final DefaultShareScopeScope scope;
 
@@ -35394,9 +38082,15 @@ class SharePermissionInputBean {
   ///
   ///  *  `group` Share with a group. Specify `groupname` as well.
   ///  *  `project` Share with a project. Specify `projectId` as well.
-  ///  *  `projectRole` Share with a project role in a project. Specify `projectId` and `projectRoleId` as well.
-  ///  *  `global` Share globally, including anonymous users. If set, this type overrides all existing share permissions and must be deleted before any non-global share permissions is set.
-  ///  *  `authenticated` Share with all logged-in users. This shows as `loggedin` in the response. If set, this type overrides all existing share permissions and must be deleted before any non-global share permissions is set.
+  ///  *  `projectRole` Share with a project role in a project. Specify
+  /// `projectId` and `projectRoleId` as well.
+  ///  *  `global` Share globally, including anonymous users. If set, this type
+  /// overrides all existing share permissions and must be deleted before any
+  /// non-global share permissions is set.
+  ///  *  `authenticated` Share with all logged-in users. This shows as
+  /// `loggedin` in the response. If set, this type overrides all existing share
+  /// permissions and must be deleted before any non-global share permissions is
+  /// set.
   final SharePermissionInputBeanType type;
 
   /// The ID of the project to share the filter with. Set `type` to `project`.
@@ -35405,7 +38099,8 @@ class SharePermissionInputBean {
   /// The name of the group to share the filter with. Set `type` to `group`.
   final String? groupname;
 
-  /// The ID of the project role to share the filter with. Set `type` to `projectRole` and the `projectId` for the project that the role is in.
+  /// The ID of the project role to share the filter with. Set `type` to
+  /// `projectRole` and the `projectId` for the project that the role is in.
   final String? projectRoleId;
 
   SharePermissionInputBean(
@@ -35594,7 +38289,10 @@ class DeprecatedWorkflow {
   /// The datetime the workflow was last modified.
   final String? lastModifiedDate;
 
-  /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? lastModifiedUser;
 
   /// The account ID of the user that last modified the workflow.
@@ -35694,7 +38392,8 @@ class DeprecatedWorkflow {
 
 /// Details about the server Jira is running on.
 class WorkflowTransitionProperty {
-  /// The key of the transition property. Also known as the name of the transition property.
+  /// The key of the transition property. Also known as the name of the
+  /// transition property.
   final String? key;
 
   /// The value of the transition property.
@@ -35741,13 +38440,19 @@ class WorkflowTransitionProperty {
 
 /// Details about the configuration of Jira.
 class Configuration {
-  /// Whether the ability for users to vote on issues is enabled. See [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM) for details.
+  /// Whether the ability for users to vote on issues is enabled. See
+  /// [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM)
+  /// for details.
   final bool votingEnabled;
 
-  /// Whether the ability for users to watch issues is enabled. See [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM) for details.
+  /// Whether the ability for users to watch issues is enabled. See
+  /// [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM)
+  /// for details.
   final bool watchingEnabled;
 
-  /// Whether the ability to create unassigned issues is enabled. See [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM) for details.
+  /// Whether the ability to create unassigned issues is enabled. See
+  /// [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM)
+  /// for details.
   final bool unassignedIssuesAllowed;
 
   /// Whether the ability to create subtasks for issues is enabled.
@@ -36121,10 +38826,14 @@ class TimeTrackingProvider {
   /// The key for the time tracking provider. For example, *JIRA*.
   final String key;
 
-  /// The name of the time tracking provider. For example, *JIRA provided time tracking*.
+  /// The name of the time tracking provider. For example, *JIRA provided time
+  /// tracking*.
   final String? name;
 
-  /// The URL of the configuration page for the time tracking provider app. For example, */example/config/url*. This property is only returned if the `adminPageKey` property is set in the module descriptor of the time tracking provider app.
+  /// The URL of the configuration page for the time tracking provider app. For
+  /// example, */example/config/url*. This property is only returned if the
+  /// `adminPageKey` property is set in the module descriptor of the time
+  /// tracking provider app.
   final String? url;
 
   TimeTrackingProvider({required this.key, this.name, this.url});
@@ -36267,39 +38976,63 @@ class WorkflowScheme {
   /// The ID of the workflow scheme.
   final int? id;
 
-  /// The name of the workflow scheme. The name must be unique. The maximum length is 255 characters. Required when creating a workflow scheme.
+  /// The name of the workflow scheme. The name must be unique. The maximum
+  /// length is 255 characters. Required when creating a workflow scheme.
   final String? name;
 
   /// The description of the workflow scheme.
   final String? description;
 
-  /// The name of the default workflow for the workflow scheme. The default workflow has *All Unassigned Issue Types* assigned to it in Jira. If `defaultWorkflow` is not specified when creating a workflow scheme, it is set to *Jira Workflow (jira)*.
+  /// The name of the default workflow for the workflow scheme. The default
+  /// workflow has *All Unassigned Issue Types* assigned to it in Jira. If
+  /// `defaultWorkflow` is not specified when creating a workflow scheme, it is
+  /// set to *Jira Workflow (jira)*.
   final String? defaultWorkflow;
 
-  /// The issue type to workflow mappings, where each mapping is an issue type ID and workflow name pair. Note that an issue type can only be mapped to one workflow in a workflow scheme.
+  /// The issue type to workflow mappings, where each mapping is an issue type
+  /// ID and workflow name pair. Note that an issue type can only be mapped to
+  /// one workflow in a workflow scheme.
   final Map<String, dynamic>? issueTypeMappings;
 
-  /// For draft workflow schemes, this property is the name of the default workflow for the original workflow scheme. The default workflow has *All Unassigned Issue Types* assigned to it in Jira.
+  /// For draft workflow schemes, this property is the name of the default
+  /// workflow for the original workflow scheme. The default workflow has *All
+  /// Unassigned Issue Types* assigned to it in Jira.
   final String? originalDefaultWorkflow;
 
-  /// For draft workflow schemes, this property is the issue type to workflow mappings for the original workflow scheme, where each mapping is an issue type ID and workflow name pair. Note that an issue type can only be mapped to one workflow in a workflow scheme.
+  /// For draft workflow schemes, this property is the issue type to workflow
+  /// mappings for the original workflow scheme, where each mapping is an issue
+  /// type ID and workflow name pair. Note that an issue type can only be mapped
+  /// to one workflow in a workflow scheme.
   final Map<String, dynamic>? originalIssueTypeMappings;
 
   /// Whether the workflow scheme is a draft or not.
   final bool draft;
 
-  /// The user that last modified the draft workflow scheme. A modification is a change to the issue type-project mappings only. This property does not apply to non-draft workflows.
+  /// The user that last modified the draft workflow scheme. A modification is a
+  /// change to the issue type-project mappings only. This property does not
+  /// apply to non-draft workflows.
   final User? lastModifiedUser;
 
-  /// The date-time that the draft workflow scheme was last modified. A modification is a change to the issue type-project mappings only. This property does not apply to non-draft workflows.
+  /// The date-time that the draft workflow scheme was last modified. A
+  /// modification is a change to the issue type-project mappings only. This
+  /// property does not apply to non-draft workflows.
   final String? lastModified;
   final String? self;
 
-  /// Whether to create or update a draft workflow scheme when updating an active workflow scheme. An active workflow scheme is a workflow scheme that is used by at least one project. The following examples show how this property works:
+  /// Whether to create or update a draft workflow scheme when updating an
+  /// active workflow scheme. An active workflow scheme is a workflow scheme
+  /// that is used by at least one project. The following examples show how this
+  /// property works:
   ///
-  ///  *  Update an active workflow scheme with `updateDraftIfNeeded` set to `true`: If a draft workflow scheme exists, it is updated. Otherwise, a draft workflow scheme is created.
-  ///  *  Update an active workflow scheme with `updateDraftIfNeeded` set to `false`: An error is returned, as active workflow schemes cannot be updated.
-  ///  *  Update an inactive workflow scheme with `updateDraftIfNeeded` set to `true`: The workflow scheme is updated, as inactive workflow schemes do not require drafts to update.
+  ///  *  Update an active workflow scheme with `updateDraftIfNeeded` set to
+  /// `true`: If a draft workflow scheme exists, it is updated. Otherwise, a
+  /// draft workflow scheme is created.
+  ///  *  Update an active workflow scheme with `updateDraftIfNeeded` set to
+  /// `false`: An error is returned, as active workflow schemes cannot be
+  /// updated.
+  ///  *  Update an inactive workflow scheme with `updateDraftIfNeeded` set to
+  /// `true`: The workflow scheme is updated, as inactive workflow schemes do
+  /// not require drafts to update.
   ///
   /// Defaults to `false`.
   final bool updateDraftIfNeeded;
@@ -36435,7 +39168,8 @@ class WorkflowScheme {
 
 /// Details about the mapping between issue types and a workflow.
 class IssueTypesWorkflowMapping {
-  /// The name of the workflow. Optional if updating the workflow-issue types mapping.
+  /// The name of the workflow. Optional if updating the workflow-issue types
+  /// mapping.
   final String? workflow;
 
   /// The list of issue type IDs.
@@ -36444,7 +39178,9 @@ class IssueTypesWorkflowMapping {
   /// Whether the workflow is the default workflow for the workflow scheme.
   final bool defaultMapping;
 
-  /// Whether a draft workflow scheme is created or updated when updating an active workflow scheme. The draft is updated with the new workflow-issue types mapping. Defaults to `false`.
+  /// Whether a draft workflow scheme is created or updated when updating an
+  /// active workflow scheme. The draft is updated with the new workflow-issue
+  /// types mapping. Defaults to `false`.
   final bool updateDraftIfNeeded;
 
   IssueTypesWorkflowMapping(
@@ -36500,13 +39236,17 @@ class IssueTypesWorkflowMapping {
 
 /// Details about the mapping between an issue type and a workflow.
 class IssueTypeWorkflowMapping {
-  /// The ID of the issue type. Not required if updating the issue type-workflow mapping.
+  /// The ID of the issue type. Not required if updating the issue type-workflow
+  /// mapping.
   final String? issueType;
 
   /// The name of the workflow.
   final String? workflow;
 
-  /// Set to true to create or update the draft of a workflow scheme and update the mapping in the draft, when the workflow scheme cannot be edited. Defaults to `false`. Only applicable when updating the workflow-issue types mapping.
+  /// Set to true to create or update the draft of a workflow scheme and update
+  /// the mapping in the draft, when the workflow scheme cannot be edited.
+  /// Defaults to `false`. Only applicable when updating the workflow-issue
+  /// types mapping.
   final bool updateDraftIfNeeded;
 
   IssueTypeWorkflowMapping(
@@ -36552,7 +39292,9 @@ class DefaultWorkflow {
   /// The name of the workflow to set as the default workflow.
   final String workflow;
 
-  /// Whether a draft workflow scheme is created or updated when updating an active workflow scheme. The draft is updated with the new default workflow. Defaults to `false`.
+  /// Whether a draft workflow scheme is created or updated when updating an
+  /// active workflow scheme. The draft is updated with the new default
+  /// workflow. Defaults to `false`.
   final bool updateDraftIfNeeded;
 
   DefaultWorkflow({required this.workflow, bool? updateDraftIfNeeded})
@@ -36583,9 +39325,11 @@ class DefaultWorkflow {
   }
 }
 
-/// A container for a list of workflow schemes together with the projects they are associated with.
+/// A container for a list of workflow schemes together with the projects they
+/// are associated with.
 class ContainerOfWorkflowSchemeAssociations {
-  /// A list of workflow schemes together with projects they are associated with.
+  /// A list of workflow schemes together with projects they are associated
+  /// with.
   final List<WorkflowSchemeAssociations> values;
 
   ContainerOfWorkflowSchemeAssociations({required this.values});
@@ -36775,16 +39519,20 @@ class AuditRecordBean {
   /// The summary of the audit record.
   final String? summary;
 
-  /// The URL of the computer where the creation of the audit record was initiated.
+  /// The URL of the computer where the creation of the audit record was
+  /// initiated.
   final String? remoteAddress;
 
-  /// Deprecated, use `authorAccountId` instead. The key of the user who created the audit record.
+  /// Deprecated, use `authorAccountId` instead. The key of the user who created
+  /// the audit record.
   final String? authorKey;
 
   /// The date and time on which the audit record was created.
   final DateTime? created;
 
-  /// The category of the audit record. For a list of these categories, see the help article [Auditing in Jira applications](https://confluence.atlassian.com/x/noXKM).
+  /// The category of the audit record. For a list of these categories, see the
+  /// help article
+  /// [Auditing in Jira applications](https://confluence.atlassian.com/x/noXKM).
   final String? category;
 
   /// The event the audit record originated from.
@@ -36921,7 +39669,8 @@ class AuditRecords {
   /// The number of audit items skipped before the first item in this list.
   final int? offset;
 
-  /// The requested or default limit on the number of audit items to be returned.
+  /// The requested or default limit on the number of audit items to be
+  /// returned.
   final int? limit;
 
   /// The total number of audit items returned.
@@ -37066,7 +39815,8 @@ class PermissionGrants {
   /// Permission grants list.
   final List<PermissionGrant> permissions;
 
-  /// Expand options that include additional permission grant details in the response.
+  /// Expand options that include additional permission grant details in the
+  /// response.
   final String? expand;
 
   PermissionGrants({List<PermissionGrant>? permissions, this.expand})
@@ -37636,7 +40386,9 @@ class WorkflowSimpleCondition {
   /// The type of the transition rule.
   final String type;
 
-  /// The configuration of the transition rule. This is currently returned only for some of the rule types. Availability of this property is subject to change.
+  /// The configuration of the transition rule. This is currently returned only
+  /// for some of the rule types. Availability of this property is subject to
+  /// change.
   final Map<String, dynamic>? configuration;
   final String nodeType;
 
@@ -37754,7 +40506,9 @@ class WorkflowTransitionRule {
   /// The type of the transition rule.
   final String type;
 
-  /// The configuration of the transition rule. This is currently returned only for some of the rule types. Availability of this property is subject to change.
+  /// The configuration of the transition rule. This is currently returned only
+  /// for some of the rule types. Availability of this property is subject to
+  /// change.
   final Map<String, dynamic>? configuration;
 
   WorkflowTransitionRule({required this.type, this.configuration});
@@ -37948,7 +40702,8 @@ class PageBeanWorkflowTransitionRules {
 
 /// A rule configuration.
 class RuleConfiguration {
-  /// Configuration of the rule, as it is stored by the Connect app on the rule configuration page.
+  /// Configuration of the rule, as it is stored by the Connect app on the rule
+  /// configuration page.
   final String value;
 
   RuleConfiguration({required this.value});
@@ -38146,14 +40901,17 @@ class WorkflowTransitionRulesUpdate {
   }
 }
 
-/// Details of any errors encountered while updating workflow transition rules for a workflow.
+/// Details of any errors encountered while updating workflow transition rules
+/// for a workflow.
 class WorkflowTransitionRulesUpdateErrorDetails {
   final WorkflowId workflowId;
 
-  /// A list of transition rule update errors, indexed by the transition rule ID. Any transition rule that appears here wasn't updated.
+  /// A list of transition rule update errors, indexed by the transition rule
+  /// ID. Any transition rule that appears here wasn't updated.
   final Map<String, dynamic> ruleUpdateErrors;
 
-  /// The list of errors that specify why the workflow update failed. The workflow was not updated if the list contains any entries.
+  /// The list of errors that specify why the workflow update failed. The
+  /// workflow was not updated if the list contains any entries.
   final List<String> updateErrors;
 
   WorkflowTransitionRulesUpdateErrorDetails(
@@ -38325,7 +41083,9 @@ class ConnectModules {
   }
 }
 
-/// A [Connect module](https://developer.atlassian.com/cloud/jira/platform/about-jira-modules/) in the same format as in the
+/// A
+/// [Connect module](https://developer.atlassian.com/cloud/jira/platform/about-jira-modules/)
+/// in the same format as in the
 /// [app descriptor](https://developer.atlassian.com/cloud/jira/platform/app-descriptor/).
 class ConnectModule {
   ConnectModule();

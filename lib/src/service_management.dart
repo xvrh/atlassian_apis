@@ -36,9 +36,13 @@ class CustomerApi {
 
   CustomerApi._(this._client);
 
-  /// This method adds a customer to the Jira Service Management instance by passing a JSON file including an email address and display name. The display name does not need to be unique. The record's identifiers, `name` and `key`, are automatically generated from the request details.
+  /// This method adds a customer to the Jira Service Management instance by
+  /// passing a JSON file including an email address and display name. The
+  /// display name does not need to be unique. The record's identifiers, `name`
+  /// and `key`, are automatically generated from the request details.
   ///
-  /// **[Permissions](#permissions) required**: Jira Administrator Global permission
+  /// **[Permissions](#permissions) required**: Jira Administrator Global
+  /// permission
   Future<UserDTO> createCustomer({required CustomerCreateDTO body}) async {
     return UserDTO.fromJson(await _client.send(
       'post',
@@ -55,9 +59,11 @@ class InfoApi {
 
   InfoApi._(this._client);
 
-  /// This method retrieves information about the Jira Service Management instance such as software version, builds, and related links.
+  /// This method retrieves information about the Jira Service Management
+  /// instance such as software version, builds, and related links.
   ///
-  /// **[Permissions](#permissions) required**: None, the user does not need to be logged in.
+  /// **[Permissions](#permissions) required**: None, the user does not need to
+  /// be logged in.
   Future<SoftwareInfoDTO> getInfo() async {
     return SoftwareInfoDTO.fromJson(await _client.send(
       'get',
@@ -73,9 +79,11 @@ class KnowledgebaseApi {
 
   KnowledgebaseApi._(this._client);
 
-  /// Returns articles which match the given query string across all service desks.
+  /// Returns articles which match the given query string across all service
+  /// desks.
   ///
-  /// **[Permissions](#permissions) required**: Permission to access the [customer portal](https://confluence.atlassian.com/servicedeskcloud/configuring-the-customer-portal-732528918.html).
+  /// **[Permissions](#permissions) required**: Permission to access the
+  /// [customer portal](https://confluence.atlassian.com/servicedeskcloud/configuring-the-customer-portal-732528918.html).
   Future<PagedDTOArticleDTO> getArticles(
       {String? query, bool? highlight, int? start, int? limit}) async {
     return PagedDTOArticleDTO.fromJson(await _client.send(
@@ -98,11 +106,16 @@ class OrganizationApi {
 
   OrganizationApi._(this._client);
 
-  /// This method returns a list of organizations in the Jira Service Management instance. Use this method when you want to present a list of organizations or want to locate an organization by name.
+  /// This method returns a list of organizations in the Jira Service Management
+  /// instance. Use this method when you want to present a list of organizations
+  /// or want to locate an organization by name.
   ///
-  /// **[Permissions](#permissions) required**: Any. However, to fetch organizations based on `accountId` the user must have a Service Desk agent license.
+  /// **[Permissions](#permissions) required**: Any. However, to fetch
+  /// organizations based on `accountId` the user must have a Service Desk agent
+  /// license.
   ///
-  /// **Response limitations**: If the user is a customer, only those organizations of which the customer is a member are listed.
+  /// **Response limitations**: If the user is a customer, only those
+  /// organizations of which the customer is a member are listed.
   Future<PagedDTOOrganizationDTO> getOrganizations(
       {int? start, int? limit, String? accountId}) async {
     return PagedDTOOrganizationDTO.fromJson(await _client.send(
@@ -116,9 +129,14 @@ class OrganizationApi {
     ));
   }
 
-  /// This method creates an organization by passing the name of the organization.
+  /// This method creates an organization by passing the name of the
+  /// organization.
   ///
-  /// **[Permissions](#permissions) required**: Service desk administrator or agent. Note: Permission to create organizations can be switched to users with the Jira administrator permission, using the **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)** feature.
+  /// **[Permissions](#permissions) required**: Service desk administrator or
+  /// agent. Note: Permission to create organizations can be switched to users
+  /// with the Jira administrator permission, using the
+  /// **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)**
+  /// feature.
   Future<OrganizationDTO> createOrganization(
       {required OrganizationCreateDTO body}) async {
     return OrganizationDTO.fromJson(await _client.send(
@@ -128,11 +146,14 @@ class OrganizationApi {
     ));
   }
 
-  /// This method returns details of an organization. Use this method to get organization details whenever your application component is passed an organization ID but needs to display other organization details.
+  /// This method returns details of an organization. Use this method to get
+  /// organization details whenever your application component is passed an
+  /// organization ID but needs to display other organization details.
   ///
   /// **[Permissions](#permissions) required**: Any
   ///
-  /// **Response limitations**: Customers can only retrieve organization of which they are members.
+  /// **Response limitations**: Customers can only retrieve organization of
+  /// which they are members.
   Future<OrganizationDTO> getOrganization(int organizationId) async {
     return OrganizationDTO.fromJson(await _client.send(
       'get',
@@ -143,7 +164,9 @@ class OrganizationApi {
     ));
   }
 
-  /// This method deletes an organization. Note that the organization is deleted regardless of other associations it may have. For example, associations with service desks.
+  /// This method deletes an organization. Note that the organization is deleted
+  /// regardless of other associations it may have. For example, associations
+  /// with service desks.
   ///
   /// **[Permissions](#permissions) required**: Jira administrator.
   Future<void> deleteOrganization(int organizationId) async {
@@ -156,11 +179,14 @@ class OrganizationApi {
     );
   }
 
-  /// Returns the keys of all properties for an organization. Use this resource when you need to find out what additional properties items have been added to an organization.
+  /// Returns the keys of all properties for an organization. Use this resource
+  /// when you need to find out what additional properties items have been added
+  /// to an organization.
   ///
   /// **[Permissions](#permissions) required**: Any
   ///
-  /// **Response limitations**: Customers can only access properties of organizations of which they are members.
+  /// **Response limitations**: Customers can only access properties of
+  /// organizations of which they are members.
   Future<PropertyKeys> getPropertiesKeys(String organizationId) async {
     return PropertyKeys.fromJson(await _client.send(
       'get',
@@ -171,11 +197,13 @@ class OrganizationApi {
     ));
   }
 
-  /// Returns the value of a property from an organization. Use this method to obtain the JSON content for an organization's property.
+  /// Returns the value of a property from an organization. Use this method to
+  /// obtain the JSON content for an organization's property.
   ///
   /// **[Permissions](#permissions) required**: Any
   ///
-  /// **Response limitations**: Customers can only access properties of organizations of which they are members.
+  /// **Response limitations**: Customers can only access properties of
+  /// organizations of which they are members.
   Future<EntityProperty> getProperty(
       {required String organizationId, required String propertyKey}) async {
     return EntityProperty.fromJson(await _client.send(
@@ -188,11 +216,16 @@ class OrganizationApi {
     ));
   }
 
-  /// Sets the value of a property for an organization. Use this resource to store custom data against an organization.
+  /// Sets the value of a property for an organization. Use this resource to
+  /// store custom data against an organization.
   ///
-  /// **[Permissions](#permissions) required**: Service Desk Administrator or Agent.
+  /// **[Permissions](#permissions) required**: Service Desk Administrator or
+  /// Agent.
   ///
-  /// Note: Permission to manage organizations can be switched to users with the Jira administrator permission, using the **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)** feature.
+  /// Note: Permission to manage organizations can be switched to users with the
+  /// Jira administrator permission, using the
+  /// **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)**
+  /// feature.
   Future<void> setProperty(
       {required String organizationId, required String propertyKey}) async {
     await _client.send(
@@ -207,9 +240,13 @@ class OrganizationApi {
 
   /// Removes a property from an organization.
   ///
-  /// **[Permissions](#permissions) required**: Service Desk Administrator or Agent.
+  /// **[Permissions](#permissions) required**: Service Desk Administrator or
+  /// Agent.
   ///
-  /// Note: Permission to manage organizations can be switched to users with the Jira administrator permission, using the **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)** feature.
+  /// Note: Permission to manage organizations can be switched to users with the
+  /// Jira administrator permission, using the
+  /// **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)**
+  /// feature.
   Future<void> deleteProperty(
       {required String organizationId, required String propertyKey}) async {
     await _client.send(
@@ -222,9 +259,12 @@ class OrganizationApi {
     );
   }
 
-  /// This method returns all the users associated with an organization. Use this method where you want to provide a list of users for an organization or determine if a user is associated with an organization.
+  /// This method returns all the users associated with an organization. Use
+  /// this method where you want to provide a list of users for an organization
+  /// or determine if a user is associated with an organization.
   ///
-  /// **[Permissions](#permissions) required**: Service desk administrator or agent.
+  /// **[Permissions](#permissions) required**: Service desk administrator or
+  /// agent.
   Future<PagedDTOUserDTO> getUsersInOrganization(
       {required int organizationId, int? start, int? limit}) async {
     return PagedDTOUserDTO.fromJson(await _client.send(
@@ -242,7 +282,11 @@ class OrganizationApi {
 
   /// This method adds users to an organization.
   ///
-  /// **[Permissions](#permissions) required**: Service desk administrator or agent. Note: Permission to add users to an organization can be switched to users with the Jira administrator permission, using the **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)** feature.
+  /// **[Permissions](#permissions) required**: Service desk administrator or
+  /// agent. Note: Permission to add users to an organization can be switched to
+  /// users with the Jira administrator permission, using the
+  /// **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)**
+  /// feature.
   Future<void> addUsersToOrganization(
       {required int organizationId,
       required UsersOrganizationUpdateDTO body}) async {
@@ -258,7 +302,11 @@ class OrganizationApi {
 
   /// This method removes users from an organization.
   ///
-  /// **[Permissions](#permissions) required**: Service desk administrator or agent. Note: Permission to delete users from an organization can be switched to users with the Jira administrator permission, using the **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)** feature.
+  /// **[Permissions](#permissions) required**: Service desk administrator or
+  /// agent. Note: Permission to delete users from an organization can be
+  /// switched to users with the Jira administrator permission, using the
+  /// **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)**
+  /// feature.
   Future<void> removeUsersFromOrganization(
       {required int organizationId,
       required UsersOrganizationUpdateDTO body}) async {
@@ -272,7 +320,8 @@ class OrganizationApi {
     );
   }
 
-  /// This method returns a list of all organizations associated with a service desk.
+  /// This method returns a list of all organizations associated with a service
+  /// desk.
   ///
   /// **[Permissions](#permissions) required**: Service desk's agent.
   Future<PagedDTOOrganizationDTO> getOrganizations2(
@@ -294,7 +343,9 @@ class OrganizationApi {
     ));
   }
 
-  /// This method adds an organization to a service desk. If the organization ID is already associated with the service desk, no change is made and the resource returns a 204 success code.
+  /// This method adds an organization to a service desk. If the organization ID
+  /// is already associated with the service desk, no change is made and the
+  /// resource returns a 204 success code.
   ///
   /// **[Permissions](#permissions) required**: Service desk's agent.
   Future<void> addOrganization(
@@ -310,7 +361,9 @@ class OrganizationApi {
     );
   }
 
-  /// This method removes an organization from a service desk. If the organization ID does not match an organization associated with the service desk, no change is made and the resource returns a 204 success code.
+  /// This method removes an organization from a service desk. If the
+  /// organization ID does not match an organization associated with the service
+  /// desk, no change is made and the resource returns a 204 success code.
   ///
   /// **[Permissions](#permissions) required**: Service desk's agent.
   Future<void> removeOrganization(
@@ -334,13 +387,19 @@ class RequestApi {
 
   RequestApi._(this._client);
 
-  /// This method returns all customer requests for the user executing the query.
+  /// This method returns all customer requests for the user executing the
+  /// query.
   ///
-  /// The returned customer requests are ordered chronologically by the latest activity on each request. For example, the latest status transition or comment.
+  /// The returned customer requests are ordered chronologically by the latest
+  /// activity on each request. For example, the latest status transition or
+  /// comment.
   ///
-  /// **[Permissions](#permissions) required**: Permission to access the specified service desk.
+  /// **[Permissions](#permissions) required**: Permission to access the
+  /// specified service desk.
   ///
-  /// **Response limitations**: For customers, the list returned will include request they created (or were created on their behalf) or are participating in only.
+  /// **Response limitations**: For customers, the list returned will include
+  /// request they created (or were created on their behalf) or are
+  /// participating in only.
   Future<PagedDTOCustomerRequestDTO> getCustomerRequests(
       {String? searchTerm,
       List<String>? requestOwnership,
@@ -372,16 +431,25 @@ class RequestApi {
 
   /// This method creates a customer request in a service desk.
   ///
-  /// The JSON request must include the service desk and customer request type, as well as any fields that are required for the request type. A list of the fields required by a customer request type can be obtained using [servicedesk/\{serviceDeskId\}/requesttype/\{requestTypeId\}/field](#api-servicedesk-serviceDeskId-requesttype-requestTypeId-field-get).
+  /// The JSON request must include the service desk and customer request type,
+  /// as well as any fields that are required for the request type. A list of
+  /// the fields required by a customer request type can be obtained using
+  /// [servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/field](#api-servicedesk-serviceDeskId-requesttype-requestTypeId-field-get).
   ///
-  /// The fields required for a customer request type depend on the user's permissions:
+  /// The fields required for a customer request type depend on the user's
+  /// permissions:
   ///
-  ///  *  `raiseOnBehalfOf` is not available to Users who have the customer permission only.
-  ///  *  `requestParticipants` is not available to Users who have the customer permission only or if the feature is turned off for customers.
+  ///  *  `raiseOnBehalfOf` is not available to Users who have the customer
+  /// permission only.
+  ///  *  `requestParticipants` is not available to Users who have the customer
+  /// permission only or if the feature is turned off for customers.
   ///
-  /// `requestFieldValues` is a map of Jira field IDs and their values. See [Field input formats](#fieldformats), for details of each field's JSON semantics and the values they can take.
+  /// `requestFieldValues` is a map of Jira field IDs and their values. See
+  /// [Field input formats](#fieldformats), for details of each field's JSON
+  /// semantics and the values they can take.
   ///
-  /// **[Permissions](#permissions) required**: Permission to create requests in the specified service desk.
+  /// **[Permissions](#permissions) required**: Permission to create requests in
+  /// the specified service desk.
   Future<CustomerRequestDTO> createCustomerRequest(
       {required RequestCreateDTO body}) async {
     return CustomerRequestDTO.fromJson(await _client.send(
@@ -393,9 +461,11 @@ class RequestApi {
 
   /// This method returns a customer request.
   ///
-  /// **[Permissions](#permissions) required**: Permission to access the specified service desk.
+  /// **[Permissions](#permissions) required**: Permission to access the
+  /// specified service desk.
   ///
-  /// **Response limitations**: For customers, only a request they created, was created on their behalf, or they are participating in will be returned.
+  /// **Response limitations**: For customers, only a request they created, was
+  /// created on their behalf, or they are participating in will be returned.
   Future<CustomerRequestDTO> getCustomerRequestByIdOrKey(
       {required String issueIdOrKey, List<String>? expand}) async {
     return CustomerRequestDTO.fromJson(await _client.send(
@@ -412,7 +482,8 @@ class RequestApi {
 
   /// This method returns all approvals on a customer request.
   ///
-  /// **[Permissions](#permissions) required**: Permission to view the customer request.
+  /// **[Permissions](#permissions) required**: Permission to view the customer
+  /// request.
   Future<PagedDTOApprovalDTO> getApprovals(
       {int? start, int? limit, required String issueIdOrKey}) async {
     return PagedDTOApprovalDTO.fromJson(await _client.send(
@@ -428,9 +499,11 @@ class RequestApi {
     ));
   }
 
-  /// This method returns an approval. Use this method to determine the status of an approval and the list of approvers.
+  /// This method returns an approval. Use this method to determine the status
+  /// of an approval and the list of approvers.
   ///
-  /// **[Permissions](#permissions) required**: Permission to view the customer request.
+  /// **[Permissions](#permissions) required**: Permission to view the customer
+  /// request.
   Future<ApprovalDTO> getApprovalById(
       {required String issueIdOrKey, required int approvalId}) async {
     return ApprovalDTO.fromJson(await _client.send(
@@ -443,9 +516,12 @@ class RequestApi {
     ));
   }
 
-  /// This method enables a user to **Approve** or **Decline** an approval on a customer request. The approval is assumed to be owned by the user making the call.
+  /// This method enables a user to **Approve** or **Decline** an approval on a
+  /// customer request. The approval is assumed to be owned by the user making
+  /// the call.
   ///
-  /// **[Permissions](#permissions) required**: User is assigned to the approval request.
+  /// **[Permissions](#permissions) required**: User is assigned to the approval
+  /// request.
   Future<ApprovalDTO> answerApproval(
       {required String issueIdOrKey,
       required int approvalId,
@@ -463,9 +539,11 @@ class RequestApi {
 
   /// This method returns all the attachments for a customer requests.
   ///
-  /// **[Permissions](#permissions) required**: Permission to view the customer request.
+  /// **[Permissions](#permissions) required**: Permission to view the customer
+  /// request.
   ///
-  /// **Response limitations**: Customers will only get a list of public attachments.
+  /// **Response limitations**: Customers will only get a list of public
+  /// attachments.
   Future<PagedDTOAttachmentDTO> getAttachmentsForRequest(
       {required String issueIdOrKey, int? start, int? limit}) async {
     return PagedDTOAttachmentDTO.fromJson(await _client.send(
@@ -481,13 +559,20 @@ class RequestApi {
     ));
   }
 
-  /// This method adds one or more temporary files (attached to the request's service desk using [servicedesk/\{serviceDeskId\}/attachTemporaryFile](#api-servicedesk-serviceDeskId-attachTemporaryFile-post)) as attachments to a customer request and set the attachment visibility using the `public` flag. Also, it is possible to include a comment with the attachments.
+  /// This method adds one or more temporary files (attached to the request's
+  /// service desk using
+  /// [servicedesk/{serviceDeskId}/attachTemporaryFile](#api-servicedesk-serviceDeskId-attachTemporaryFile-post))
+  /// as attachments to a customer request and set the attachment visibility
+  /// using the `public` flag. Also, it is possible to include a comment with
+  /// the attachments.
   ///
-  /// To get a list of attachments for a comment on the request use [servicedeskapi/request/\{issueIdOrKey\}/comment/\{commentId\}/attachment](#api-request-issueIdOrKey-comment-commentId-attachment-get).
+  /// To get a list of attachments for a comment on the request use
+  /// [servicedeskapi/request/{issueIdOrKey}/comment/{commentId}/attachment](#api-request-issueIdOrKey-comment-commentId-attachment-get).
   ///
   /// **[Permissions](#permissions) required**: Permission to add an attachment.
   ///
-  /// **Request limitations**: Customers can set attachments to public visibility only.
+  /// **Request limitations**: Customers can set attachments to public
+  /// visibility only.
   Future<AttachmentCreateResultDTO> createAttachment(
       {required String issueIdOrKey, required AttachmentCreateDTO body}) async {
     return AttachmentCreateResultDTO.fromJson(await _client.send(
@@ -500,9 +585,12 @@ class RequestApi {
     ));
   }
 
-  /// This method returns all comments on a customer request. No permissions error is provided if, for example, the user doesn't have access to the service desk or request, the method simply returns an empty response.
+  /// This method returns all comments on a customer request. No permissions
+  /// error is provided if, for example, the user doesn't have access to the
+  /// service desk or request, the method simply returns an empty response.
   ///
-  /// **[Permissions](#permissions) required**: Permission to view the customer request.
+  /// **[Permissions](#permissions) required**: Permission to view the customer
+  /// request.
   ///
   /// **Response limitations**: Customers are returned public comments only.
   Future<PagedDTOCommentDTO> getRequestComments(
@@ -528,11 +616,15 @@ class RequestApi {
     ));
   }
 
-  /// This method creates a public or private (internal) comment on a customer request, with the comment visibility set by `public`. The user recorded as the author of the comment.
+  /// This method creates a public or private (internal) comment on a customer
+  /// request, with the comment visibility set by `public`. The user recorded as
+  /// the author of the comment.
   ///
-  /// **[Permissions](#permissions) required**: User has Add Comments permission.
+  /// **[Permissions](#permissions) required**: User has Add Comments
+  /// permission.
   ///
-  /// **Request limitations**: Customers can set comments to public visibility only.
+  /// **Request limitations**: Customers can set comments to public visibility
+  /// only.
   Future<CommentDTO> createRequestComment(
       {required String issueIdOrKey, required CommentCreateDTO body}) async {
     return CommentDTO.fromJson(await _client.send(
@@ -547,9 +639,12 @@ class RequestApi {
 
   /// This method returns details of a customer request's comment.
   ///
-  /// **[Permissions](#permissions) required**: Permission to view the customer request.
+  /// **[Permissions](#permissions) required**: Permission to view the customer
+  /// request.
   ///
-  /// **Response limitations**: Customers can only view public comments on requests where they are the reporter or a participant whereas agents can see both internal and public comments.
+  /// **Response limitations**: Customers can only view public comments on
+  /// requests where they are the reporter or a participant whereas agents can
+  /// see both internal and public comments.
   Future<CommentDTO> getRequestCommentById(
       {required String issueIdOrKey,
       required int commentId,
@@ -569,9 +664,12 @@ class RequestApi {
 
   /// This method returns the attachments referenced in a comment.
   ///
-  /// **[Permissions](#permissions) required**: Permission to view the customer request.
+  /// **[Permissions](#permissions) required**: Permission to view the customer
+  /// request.
   ///
-  /// **Response limitations**: Customers can only view public comments, and retrieve their attachments, on requests where they are the reporter or a participant whereas agents can see both internal and public comments.
+  /// **Response limitations**: Customers can only view public comments, and
+  /// retrieve their attachments, on requests where they are the reporter or a
+  /// participant whereas agents can see both internal and public comments.
   Future<PagedDTOAttachmentDTO> getCommentAttachments(
       {required String issueIdOrKey,
       required int commentId,
@@ -591,9 +689,12 @@ class RequestApi {
     ));
   }
 
-  /// This method returns the notification subscription status of the user making the request. Use this method to determine if the user is subscribed to a customer request's notifications.
+  /// This method returns the notification subscription status of the user
+  /// making the request. Use this method to determine if the user is subscribed
+  /// to a customer request's notifications.
   ///
-  /// **[Permissions](#permissions) required**: Permission to view the customer request.
+  /// **[Permissions](#permissions) required**: Permission to view the customer
+  /// request.
   Future<RequestNotificationSubscriptionDTO> getSubscriptionStatus(
       String issueIdOrKey) async {
     return RequestNotificationSubscriptionDTO.fromJson(await _client.send(
@@ -605,9 +706,11 @@ class RequestApi {
     ));
   }
 
-  /// This method subscribes the user to receiving notifications from a customer request.
+  /// This method subscribes the user to receiving notifications from a customer
+  /// request.
   ///
-  /// **[Permissions](#permissions) required**: Permission to view the customer request.
+  /// **[Permissions](#permissions) required**: Permission to view the customer
+  /// request.
   Future<void> subscribe(String issueIdOrKey) async {
     await _client.send(
       'put',
@@ -618,9 +721,11 @@ class RequestApi {
     );
   }
 
-  /// This method unsubscribes the user from notifications from a customer request.
+  /// This method unsubscribes the user from notifications from a customer
+  /// request.
   ///
-  /// **[Permissions](#permissions) required**: Permission to view the customer request.
+  /// **[Permissions](#permissions) required**: Permission to view the customer
+  /// request.
   Future<void> unsubscribe(String issueIdOrKey) async {
     await _client.send(
       'delete',
@@ -633,7 +738,8 @@ class RequestApi {
 
   /// This method returns a list of all the participants on a customer request.
   ///
-  /// **[Permissions](#permissions) required**: Permission to view the customer request.
+  /// **[Permissions](#permissions) required**: Permission to view the customer
+  /// request.
   Future<PagedDTOUserDTO> getRequestParticipants(
       {required String issueIdOrKey, int? start, int? limit}) async {
     return PagedDTOUserDTO.fromJson(await _client.send(
@@ -651,9 +757,12 @@ class RequestApi {
 
   /// This method adds participants to a customer request.
   ///
-  /// **[Permissions](#permissions) required**: Permission to manage participants on the customer request.
+  /// **[Permissions](#permissions) required**: Permission to manage
+  /// participants on the customer request.
   ///
-  /// Note, participants can be added when creating a customer request using the [request](#api-request-post) resource, by defining the participants in the `requestParticipants` field.
+  /// Note, participants can be added when creating a customer request using the
+  /// [request](#api-request-post) resource, by defining the participants in the
+  /// `requestParticipants` field.
   Future<PagedDTOUserDTO> addRequestParticipants(
       {required String issueIdOrKey,
       required RequestParticipantUpdateDTO body}) async {
@@ -669,7 +778,8 @@ class RequestApi {
 
   /// This method removes participants from a customer request.
   ///
-  /// **[Permissions](#permissions) required**: Permission to manage participants on the customer request.
+  /// **[Permissions](#permissions) required**: Permission to manage
+  /// participants on the customer request.
   Future<PagedDTOUserDTO> removeRequestParticipants(
       {required String issueIdOrKey,
       required RequestParticipantUpdateDTO body}) async {
@@ -683,9 +793,14 @@ class RequestApi {
     ));
   }
 
-  /// This method returns all the SLA records on a customer request. A customer request can have zero or more SLAs. Each SLA can have recordings for zero or more "completed cycles" and zero or 1 "ongoing cycle". Each cycle includes information on when it started and stopped, and whether it breached the SLA goal.
+  /// This method returns all the SLA records on a customer request. A customer
+  /// request can have zero or more SLAs. Each SLA can have recordings for zero
+  /// or more "completed cycles" and zero or 1 "ongoing cycle". Each cycle
+  /// includes information on when it started and stopped, and whether it
+  /// breached the SLA goal.
   ///
-  /// **[Permissions](#permissions) required**: Agent for the Service Desk containing the queried customer request.
+  /// **[Permissions](#permissions) required**: Agent for the Service Desk
+  /// containing the queried customer request.
   Future<PagedDTOSlaInformationDTO> getSlaInformation(
       {required String issueIdOrKey, int? start, int? limit}) async {
     return PagedDTOSlaInformationDTO.fromJson(await _client.send(
@@ -703,7 +818,8 @@ class RequestApi {
 
   /// This method returns the details for an SLA on a customer request.
   ///
-  /// **[Permissions](#permissions) required**: Agent for the Service Desk containing the queried customer request.
+  /// **[Permissions](#permissions) required**: Agent for the Service Desk
+  /// containing the queried customer request.
   Future<SlaInformationDTO> getSlaInformationById(
       {required String issueIdOrKey, required int slaMetricId}) async {
     return SlaInformationDTO.fromJson(await _client.send(
@@ -716,9 +832,13 @@ class RequestApi {
     ));
   }
 
-  /// This method returns a list of all the statuses a customer Request has achieved. A status represents the state of an issue in its workflow. An issue can have one active status only. The list returns the status history in chronological order, most recent (current) status first.
+  /// This method returns a list of all the statuses a customer Request has
+  /// achieved. A status represents the state of an issue in its workflow. An
+  /// issue can have one active status only. The list returns the status history
+  /// in chronological order, most recent (current) status first.
   ///
-  /// **[Permissions](#permissions) required**: Permission to view the customer request.
+  /// **[Permissions](#permissions) required**: Permission to view the customer
+  /// request.
   Future<PagedDTOCustomerRequestStatusDTO> getCustomerRequestStatus(
       {required String issueIdOrKey, int? start, int? limit}) async {
     return PagedDTOCustomerRequestStatusDTO.fromJson(await _client.send(
@@ -734,9 +854,13 @@ class RequestApi {
     ));
   }
 
-  /// This method returns a list of transitions, the workflow processes that moves a customer request from one status to another, that the user can perform on a request. Use this method to provide a user with a list if the actions they can take on a customer request.
+  /// This method returns a list of transitions, the workflow processes that
+  /// moves a customer request from one status to another, that the user can
+  /// perform on a request. Use this method to provide a user with a list if the
+  /// actions they can take on a customer request.
   ///
-  /// **[Permissions](#permissions) required**: Permission to view the customer request.
+  /// **[Permissions](#permissions) required**: Permission to view the customer
+  /// request.
   Future<PagedDTOCustomerTransitionDTO> getCustomerTransitions(
       {required String issueIdOrKey, int? start, int? limit}) async {
     return PagedDTOCustomerTransitionDTO.fromJson(await _client.send(
@@ -752,9 +876,13 @@ class RequestApi {
     ));
   }
 
-  /// This method performs a customer transition for a given request and transition. An optional comment can be included to provide a reason for the transition.
+  /// This method performs a customer transition for a given request and
+  /// transition. An optional comment can be included to provide a reason for
+  /// the transition.
   ///
-  /// **[Permissions](#permissions) required**: The user must be able to view the request and have the Transition Issues permission. If a comment is passed the user must have the Add Comments permission.
+  /// **[Permissions](#permissions) required**: The user must be able to view
+  /// the request and have the Transition Issues permission. If a comment is
+  /// passed the user must have the Add Comments permission.
   Future<void> performCustomerTransition(
       {required String issueIdOrKey,
       required CustomerTransitionExecutionDTO body}) async {
@@ -768,9 +896,11 @@ class RequestApi {
     );
   }
 
-  /// This method retrieves a feedback of a request using it's `requestKey` or `requestId`
+  /// This method retrieves a feedback of a request using it's `requestKey` or
+  /// `requestId`
   ///
-  /// **[Permissions](#permissions) required**: User has view request permissions.
+  /// **[Permissions](#permissions) required**: User has view request
+  /// permissions.
   Future<CSATFeedbackFullDTO> getFeedback(String requestIdOrKey) async {
     return CSATFeedbackFullDTO.fromJson(await _client.send(
       'get',
@@ -781,9 +911,11 @@ class RequestApi {
     ));
   }
 
-  /// This method adds a feedback on an request using it's `requestKey` or `requestId`
+  /// This method adds a feedback on an request using it's `requestKey` or
+  /// `requestId`
   ///
-  /// **[Permissions](#permissions) required**: User must be the reporter or an Atlassian Connect app.
+  /// **[Permissions](#permissions) required**: User must be the reporter or an
+  /// Atlassian Connect app.
   Future<CSATFeedbackFullDTO> postFeedback(
       {required String requestIdOrKey,
       required CSATFeedbackFullDTO body}) async {
@@ -797,9 +929,11 @@ class RequestApi {
     ));
   }
 
-  /// This method deletes the feedback of request using it's `requestKey` or `requestId`
+  /// This method deletes the feedback of request using it's `requestKey` or
+  /// `requestId`
   ///
-  /// **[Permissions](#permissions) required**: User must be the reporter or an Atlassian Connect app.
+  /// **[Permissions](#permissions) required**: User must be the reporter or an
+  /// Atlassian Connect app.
   Future<void> deleteFeedback(String requestIdOrKey) async {
     await _client.send(
       'delete',
@@ -818,11 +952,18 @@ class RequesttypeApi {
 
   RequesttypeApi._(this._client);
 
-  /// This method returns all customer request types used in the Jira Service Management instance, optionally filtered by a query string.
+  /// This method returns all customer request types used in the Jira Service
+  /// Management instance, optionally filtered by a query string.
   ///
-  /// Use [servicedeskapi/servicedesk/\{serviceDeskId\}/requesttype](#api-servicedesk-serviceDeskId-requesttype-get) to find the customer request types supported by a specific service desk.
+  /// Use
+  /// [servicedeskapi/servicedesk/{serviceDeskId}/requesttype](#api-servicedesk-serviceDeskId-requesttype-get)
+  /// to find the customer request types supported by a specific service desk.
   ///
-  /// The returned list of customer request types can be filtered using the `query` parameter. The parameter is matched against the customer request types' `name` or `description`. For example, searching for "Install", "Inst", "Equi", or "Equipment" will match a customer request type with the *name* "Equipment Installation Request".
+  /// The returned list of customer request types can be filtered using the
+  /// `query` parameter. The parameter is matched against the customer request
+  /// types' `name` or `description`. For example, searching for "Install",
+  /// "Inst", "Equi", or "Equipment" will match a customer request type with the
+  /// *name* "Equipment Installation Request".
   ///
   /// **[Permissions](#permissions) required**: Any
   Future<PagedDTORequestTypeDTO> getAllRequestTypes(
@@ -852,7 +993,10 @@ class ServicedeskApi {
 
   ServicedeskApi._(this._client);
 
-  /// This method returns all the service desks in the Jira Service Management instance that the user has permission to access. Use this method where you need a list of service desks or need to locate a service desk by name or keyword.
+  /// This method returns all the service desks in the Jira Service Management
+  /// instance that the user has permission to access. Use this method where you
+  /// need a list of service desks or need to locate a service desk by name or
+  /// keyword.
   ///
   /// **[Permissions](#permissions) required**: Any
   Future<PagedDTOServiceDeskDTO> getServiceDesks(
@@ -867,9 +1011,13 @@ class ServicedeskApi {
     ));
   }
 
-  /// This method returns a service desk. Use this method to get service desk details whenever your application component is passed a service desk ID but needs to display other service desk details.
+  /// This method returns a service desk. Use this method to get service desk
+  /// details whenever your application component is passed a service desk ID
+  /// but needs to display other service desk details.
   ///
-  /// **[Permissions](#permissions) required**: Permission to access the Service Desk. For example, being the Service Desk's Administrator or one of its Agents or Users.
+  /// **[Permissions](#permissions) required**: Permission to access the Service
+  /// Desk. For example, being the Service Desk's Administrator or one of its
+  /// Agents or Users.
   Future<ServiceDeskDTO> getServiceDeskById(int serviceDeskId) async {
     return ServiceDeskDTO.fromJson(await _client.send(
       'get',
@@ -880,21 +1028,35 @@ class ServicedeskApi {
     ));
   }
 
-  /// This method adds one or more temporary attachments to a service desk, which can then be permanently attached to a customer request using [servicedeskapi/request/\{issueIdOrKey\}/attachment](#api-request-issueIdOrKey-attachment-post).
+  /// This method adds one or more temporary attachments to a service desk,
+  /// which can then be permanently attached to a customer request using
+  /// [servicedeskapi/request/{issueIdOrKey}/attachment](#api-request-issueIdOrKey-attachment-post).
   ///
-  /// **Note**: It is possible for a service desk administrator to turn off the ability to add attachments to a service desk.
+  /// **Note**: It is possible for a service desk administrator to turn off the
+  /// ability to add attachments to a service desk.
   ///
-  /// This method expects a multipart request. The media-type multipart/form-data is defined in RFC 1867. Most client libraries have classes that make dealing with multipart posts simple. For instance, in Java the Apache HTTP Components library provides [MultiPartEntity](http://hc.apache.org/httpcomponents-client-ga/httpmime/apidocs/org/apache/http/entity/mime/MultipartEntity.html).
+  /// This method expects a multipart request. The media-type
+  /// multipart/form-data is defined in RFC 1867. Most client libraries have
+  /// classes that make dealing with multipart posts simple. For instance, in
+  /// Java the Apache HTTP Components library provides
+  /// [MultiPartEntity](http://hc.apache.org/httpcomponents-client-ga/httpmime/apidocs/org/apache/http/entity/mime/MultipartEntity.html).
   ///
-  /// Because this method accepts multipart/form-data, it has XSRF protection on it. This means you must submit a header of X-Atlassian-Token: no-check with the request or it will be blocked.
+  /// Because this method accepts multipart/form-data, it has XSRF protection on
+  /// it. This means you must submit a header of X-Atlassian-Token: no-check
+  /// with the request or it will be blocked.
   ///
-  /// The name of the multipart/form-data parameter that contains the attachments must be `file`.
+  /// The name of the multipart/form-data parameter that contains the
+  /// attachments must be `file`.
   ///
-  /// For example, to upload a file called `myfile.txt` in the Service Desk with ID 10001 use
+  /// For example, to upload a file called `myfile.txt` in the Service Desk with
+  /// ID 10001 use
   ///
-  ///     curl -D- -u customer:customer -X POST -H "X-ExperimentalApi: opt-in" -H "X-Atlassian-Token: no-check" -F "file=@myfile.txt" https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10001/attachTemporaryFile
+  ///     curl -D- -u customer:customer -X POST -H "X-ExperimentalApi: opt-in"
+  /// -H "X-Atlassian-Token: no-check" -F "file=@myfile.txt"
+  /// https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10001/attachTemporaryFile
   ///
-  /// **[Permissions](#permissions) required**: Permission to add attachments in this Service Desk.
+  /// **[Permissions](#permissions) required**: Permission to add attachments in
+  /// this Service Desk.
   Future<void> attachTemporaryFile(
       {required int serviceDeskId, File? file}) async {
     await _client.send(
@@ -909,9 +1071,13 @@ class ServicedeskApi {
 
   /// This method returns a list of the customers on a service desk.
   ///
-  /// The returned list of customers can be filtered using the `query` parameter. The parameter is matched against customers' `displayName`, `name`, or `email`. For example, searching for "John", "Jo", "Smi", or "Smith" will match a user with display name "John Smith".
+  /// The returned list of customers can be filtered using the `query`
+  /// parameter. The parameter is matched against customers' `displayName`,
+  /// `name`, or `email`. For example, searching for "John", "Jo", "Smi", or
+  /// "Smith" will match a user with display name "John Smith".
   ///
-  /// **[Permissions](#permissions) required**: Permission to view this Service Desk's customers.
+  /// **[Permissions](#permissions) required**: Permission to view this Service
+  /// Desk's customers.
   Future<PagedDTOUserDTO> getCustomers(
       {required int serviceDeskId,
       String? query,
@@ -931,7 +1097,9 @@ class ServicedeskApi {
     ));
   }
 
-  /// Adds one or more customers to a service desk. If any of the passed customers are associated with the service desk, no changes will be made for those customers and the resource returns a 204 success code.
+  /// Adds one or more customers to a service desk. If any of the passed
+  /// customers are associated with the service desk, no changes will be made
+  /// for those customers and the resource returns a 204 success code.
   ///
   /// **[Permissions](#permissions) required**: Service desk administrator
   Future<void> addCustomers(
@@ -947,7 +1115,10 @@ class ServicedeskApi {
     );
   }
 
-  /// This method removes one or more customers from a service desk. The service desk must have closed access. If any of the passed customers are not associated with the service desk, no changes will be made for those customers and the resource returns a 204 success code.
+  /// This method removes one or more customers from a service desk. The service
+  /// desk must have closed access. If any of the passed customers are not
+  /// associated with the service desk, no changes will be made for those
+  /// customers and the resource returns a 204 success code.
   ///
   /// **[Permissions](#permissions) required**: Services desk administrator
   Future<void> removeCustomers(
@@ -963,9 +1134,11 @@ class ServicedeskApi {
     );
   }
 
-  /// Returns articles which match the given query and belong to the knowledge base linked to the service desk.
+  /// Returns articles which match the given query and belong to the knowledge
+  /// base linked to the service desk.
   ///
-  /// **[Permissions](#permissions) required**: Permission to access the service desk.
+  /// **[Permissions](#permissions) required**: Permission to access the service
+  /// desk.
   Future<PagedDTOArticleDTO> getArticles(
       {required int serviceDeskId,
       String? query,
@@ -987,7 +1160,9 @@ class ServicedeskApi {
     ));
   }
 
-  /// This method returns the queues in a service desk. To include a customer request count for each queue (in the `issueCount` field) in the response, set the query parameter `includeCount` to true (its default is false).
+  /// This method returns the queues in a service desk. To include a customer
+  /// request count for each queue (in the `issueCount` field) in the response,
+  /// set the query parameter `includeCount` to true (its default is false).
   ///
   /// **[Permissions](#permissions) required**: service desk's Agent.
   Future<PagedDTOQueueDTO> getQueues(
@@ -1009,7 +1184,10 @@ class ServicedeskApi {
     ));
   }
 
-  /// This method returns a specific queues in a service desk. To include a customer request count for the queue (in the `issueCount` field) in the response, set the query parameter `includeCount` to true (its default is false).
+  /// This method returns a specific queues in a service desk. To include a
+  /// customer request count for the queue (in the `issueCount` field) in the
+  /// response, set the query parameter `includeCount` to true (its default is
+  /// false).
   ///
   /// **[Permissions](#permissions) required**: service desk's Agent.
   Future<QueueDTO> getQueue(
@@ -1029,7 +1207,10 @@ class ServicedeskApi {
     ));
   }
 
-  /// This method returns the customer requests in a queue. Only fields that the queue is configured to show are returned. For example, if a queue is configured to show description and due date, then only those two fields are returned for each customer request in the queue.
+  /// This method returns the customer requests in a queue. Only fields that the
+  /// queue is configured to show are returned. For example, if a queue is
+  /// configured to show description and due date, then only those two fields
+  /// are returned for each customer request in the queue.
   ///
   /// **[Permissions](#permissions) required**: Service desk's agent.
   Future<PagedDTOIssueBean> getIssuesInQueue(
@@ -1051,12 +1232,18 @@ class ServicedeskApi {
     ));
   }
 
-  /// This method returns all customer request types from a service desk. There are two parameters for filtering the returned list:
+  /// This method returns all customer request types from a service desk. There
+  /// are two parameters for filtering the returned list:
   ///
-  ///  *  `groupId` which filters the results to items in the customer request type group.
-  ///  *  `searchQuery` which is matched against request types' `name` or `description`. For example, the strings "Install", "Inst", "Equi", or "Equipment" will match a request type with the *name* "Equipment Installation Request".
+  ///  *  `groupId` which filters the results to items in the customer request
+  /// type group.
+  ///  *  `searchQuery` which is matched against request types' `name` or
+  /// `description`. For example, the strings "Install", "Inst", "Equi", or
+  /// "Equipment" will match a request type with the *name* "Equipment
+  /// Installation Request".
   ///
-  /// **[Permissions](#permissions) required**: Permission to access the service desk.
+  /// **[Permissions](#permissions) required**: Permission to access the service
+  /// desk.
   Future<PagedDTORequestTypeDTO> getRequestTypes(
       {required int serviceDeskId,
       int? groupId,
@@ -1080,16 +1267,26 @@ class ServicedeskApi {
     ));
   }
 
-  /// This method enables a customer request type to be added to a service desk based on an issue type. Note that not all customer request type fields can be specified in the request and these fields are given the following default values:
+  /// This method enables a customer request type to be added to a service desk
+  /// based on an issue type. Note that not all customer request type fields can
+  /// be specified in the request and these fields are given the following
+  /// default values:
   ///
   ///  *  Request type icon is given the headset icon.
-  ///  *  Request type groups is left empty, which means this customer request type will not be visible on the [customer portal](https://confluence.atlassian.com/servicedeskcloud/configuring-the-customer-portal-732528918.html).
-  ///  *  Request type status mapping is left empty, so the request type has no custom status mapping but inherits the status map from the issue type upon which it is based.
-  ///  *  Request type field mapping is set to show the required fields as specified by the issue type used to create the customer request type.
+  ///  *  Request type groups is left empty, which means this customer request
+  /// type will not be visible on the
+  /// [customer portal](https://confluence.atlassian.com/servicedeskcloud/configuring-the-customer-portal-732528918.html).
+  ///  *  Request type status mapping is left empty, so the request type has no
+  /// custom status mapping but inherits the status map from the issue type upon
+  /// which it is based.
+  ///  *  Request type field mapping is set to show the required fields as
+  /// specified by the issue type used to create the customer request type.
   ///
   ///
-  /// These fields can be updated by a service desk administrator using the **Request types** option in **Project settings**.
-  /// Request Types are created in next-gen projects by creating Issue Types. Please use the Jira Cloud Platform Create issue type endpoint instead.
+  /// These fields can be updated by a service desk administrator using the
+  /// **Request types** option in **Project settings**.
+  /// Request Types are created in next-gen projects by creating Issue Types.
+  /// Please use the Jira Cloud Platform Create issue type endpoint instead.
   ///
   /// **[Permissions](#permissions) required**: Service desk's administrator
   Future<RequestTypeDTO> createRequestType(
@@ -1106,7 +1303,8 @@ class ServicedeskApi {
 
   /// This method returns a customer request type from a service desk.
   ///
-  /// **[Permissions](#permissions) required**: Permission to access the service desk.
+  /// **[Permissions](#permissions) required**: Permission to access the service
+  /// desk.
   Future<RequestTypeDTO> getRequestTypeById(
       {required int serviceDeskId,
       required int requestTypeId,
@@ -1124,7 +1322,8 @@ class ServicedeskApi {
     ));
   }
 
-  /// This method deletes a customer request type from a service desk, and removes it from all customer requests.
+  /// This method deletes a customer request type from a service desk, and
+  /// removes it from all customer requests.
   /// This only supports classic projects.
   ///
   /// **[Permissions](#permissions) required**: Service desk administrator.
@@ -1142,12 +1341,18 @@ class ServicedeskApi {
 
   /// This method returns the fields for a service desk's customer request type.
   ///
-  /// Also, the following information about the user's permissions for the request type is returned:
+  /// Also, the following information about the user's permissions for the
+  /// request type is returned:
   ///
-  ///  *  `canRaiseOnBehalfOf` returns `true` if the user has permission to raise customer requests on behalf of other customers. Otherwise, returns `false`.
-  ///  *  `canAddRequestParticipants` returns `true` if the user can add customer request participants. Otherwise, returns `false`.
+  ///  *  `canRaiseOnBehalfOf` returns `true` if the user has permission to
+  /// raise customer requests on behalf of other customers. Otherwise, returns
+  /// `false`.
+  ///  *  `canAddRequestParticipants` returns `true` if the user can add
+  /// customer request participants. Otherwise, returns `false`.
   ///
-  /// **[Permissions](#permissions) required**: Permission to view the Service Desk. However, hidden fields would be visible to only Service desk's Administrator.
+  /// **[Permissions](#permissions) required**: Permission to view the Service
+  /// Desk. However, hidden fields would be visible to only Service desk's
+  /// Administrator.
   Future<CustomerRequestCreateMetaDTO> getRequestTypeFields(
       {required int serviceDeskId,
       required int requestTypeId,
@@ -1167,9 +1372,14 @@ class ServicedeskApi {
 
   /// Returns the keys of all properties for a request type.
   ///
-  /// Properties for a Request Type in next-gen are stored as Issue Type properties and therefore the keys of all properties for a request type are also available by calling the Jira Cloud Platform [Get issue type property keys](https://developer.atlassian.com/cloud/jira/platform/rest/v3/#api-rest-api-3-issuetype-issueTypeId-properties-get) endpoint.
+  /// Properties for a Request Type in next-gen are stored as Issue Type
+  /// properties and therefore the keys of all properties for a request type are
+  /// also available by calling the Jira Cloud Platform
+  /// [Get issue type property keys](https://developer.atlassian.com/cloud/jira/platform/rest/v3/#api-rest-api-3-issuetype-issueTypeId-properties-get)
+  /// endpoint.
   ///
-  /// **[Permissions](#permissions) required**: The user must have permission to view the request type.
+  /// **[Permissions](#permissions) required**: The user must have permission to
+  /// view the request type.
   Future<PropertyKeys> getPropertiesKeys(
       {required int requestTypeId, required int serviceDeskId}) async {
     return PropertyKeys.fromJson(await _client.send(
@@ -1184,9 +1394,13 @@ class ServicedeskApi {
 
   /// Returns the value of the property from a request type.
   ///
-  /// Properties for a Request Type in next-gen are stored as Issue Type properties and therefore also available by calling the Jira Cloud Platform [Get issue type property](https://developer.atlassian.com/cloud/jira/platform/rest/v3/#api-rest-api-3-issuetype-issueTypeId-properties-propertyKey-get) endpoint.
+  /// Properties for a Request Type in next-gen are stored as Issue Type
+  /// properties and therefore also available by calling the Jira Cloud Platform
+  /// [Get issue type property](https://developer.atlassian.com/cloud/jira/platform/rest/v3/#api-rest-api-3-issuetype-issueTypeId-properties-propertyKey-get)
+  /// endpoint.
   ///
-  /// **[Permissions](#permissions) required**: User must have permission to view the request type.
+  /// **[Permissions](#permissions) required**: User must have permission to
+  /// view the request type.
   Future<EntityProperty> getProperty(
       {required int serviceDeskId,
       required int requestTypeId,
@@ -1202,11 +1416,17 @@ class ServicedeskApi {
     ));
   }
 
-  /// Sets the value of a request type property. Use this resource to store custom data against a request type.
+  /// Sets the value of a request type property. Use this resource to store
+  /// custom data against a request type.
   ///
-  /// Properties for a Request Type in next-gen are stored as Issue Type properties and therefore can also be set by calling the Jira Cloud Platform [Set issue type property](https://developer.atlassian.com/cloud/jira/platform/rest/v3/#api-rest-api-3-issuetype-issueTypeId-properties-propertyKey-put) endpoint.
+  /// Properties for a Request Type in next-gen are stored as Issue Type
+  /// properties and therefore can also be set by calling the Jira Cloud
+  /// Platform
+  /// [Set issue type property](https://developer.atlassian.com/cloud/jira/platform/rest/v3/#api-rest-api-3-issuetype-issueTypeId-properties-propertyKey-put)
+  /// endpoint.
   ///
-  /// **[Permissions](#permissions) required**: Jira project administrator with a Jira Service Management agent license.
+  /// **[Permissions](#permissions) required**: Jira project administrator with
+  /// a Jira Service Management agent license.
   Future<void> setProperty(
       {required int serviceDeskId,
       required int requestTypeId,
@@ -1224,9 +1444,14 @@ class ServicedeskApi {
 
   /// Removes a property from a request type.
   ///
-  /// Properties for a Request Type in next-gen are stored as Issue Type properties and therefore can also be deleted by calling the Jira Cloud Platform [Delete issue type property](https://developer.atlassian.com/cloud/jira/platform/rest/v3/#api-rest-api-3-issuetype-issueTypeId-properties-propertyKey-delete) endpoint.
+  /// Properties for a Request Type in next-gen are stored as Issue Type
+  /// properties and therefore can also be deleted by calling the Jira Cloud
+  /// Platform
+  /// [Delete issue type property](https://developer.atlassian.com/cloud/jira/platform/rest/v3/#api-rest-api-3-issuetype-issueTypeId-properties-propertyKey-delete)
+  /// endpoint.
   ///
-  /// **[Permissions](#permissions) required**: Jira project administrator with a Jira Service Management agent license.
+  /// **[Permissions](#permissions) required**: Jira project administrator with
+  /// a Jira Service Management agent license.
   Future<void> deleteProperty(
       {required int serviceDeskId,
       required int requestTypeId,
@@ -1242,9 +1467,13 @@ class ServicedeskApi {
     );
   }
 
-  /// This method returns a service desk's customer request type groups. Jira Service Management administrators can arrange the customer request type groups in an arbitrary order for display on the customer portal; the groups are returned in this order.
+  /// This method returns a service desk's customer request type groups. Jira
+  /// Service Management administrators can arrange the customer request type
+  /// groups in an arbitrary order for display on the customer portal; the
+  /// groups are returned in this order.
   ///
-  /// **[Permissions](#permissions) required**: Permission to view the service desk.
+  /// **[Permissions](#permissions) required**: Permission to view the service
+  /// desk.
   Future<PagedDTORequestTypeGroupDTO> getRequestTypeGroups(
       {required int serviceDeskId, int? start, int? limit}) async {
     return PagedDTORequestTypeGroupDTO.fromJson(await _client.send(
@@ -1349,13 +1578,15 @@ class DateDTO {
   /// Date in ISO8601 format.
   final String? iso8601;
 
-  /// Date in the format used in the Jira REST APIs, which is ISO8601 format but extended with milliseconds. For example, 2016-09-28T23:08:32.097+1000.
+  /// Date in the format used in the Jira REST APIs, which is ISO8601 format but
+  /// extended with milliseconds. For example, 2016-09-28T23:08:32.097+1000.
   final String? jira;
 
   /// Date in a user-friendly text format.
   final String? friendly;
 
-  /// Date as the number of milliseconds that have elapsed since 00:00:00 Coordinated Universal Time (UTC), 1 January 1970.
+  /// Date as the number of milliseconds that have elapsed since 00:00:00
+  /// Coordinated Universal Time (UTC), 1 January 1970.
   final int? epochMillis;
 
   DateDTO({this.iso8601, this.jira, this.friendly, this.epochMillis});
@@ -1409,7 +1640,8 @@ class PagedDTOCustomerRequestStatusDTO {
   /// Index of the first item returned in the page.
   final int? start;
 
-  /// Number of items to be returned per page, up to the maximum set for these objects in the current implementation.
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
   final int? limit;
 
   /// Indicates if this is the last page of records (true) or not (false).
@@ -1654,7 +1886,8 @@ class PagedDTORequestTypeGroupDTO {
   /// Index of the first item returned in the page.
   final int? start;
 
-  /// Number of items to be returned per page, up to the maximum set for these objects in the current implementation.
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
   final int? limit;
 
   /// Indicates if this is the last page of records (true) or not (false).
@@ -1857,7 +2090,8 @@ class PropertyKeys {
   }
 }
 
-/// An entity property, for more information see [Entity properties](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
+/// An entity property, for more information see
+/// [Entity properties](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
 class EntityProperty {
   /// The key of the property. Required on create and update.
   final String? key;
@@ -1959,7 +2193,8 @@ class ArticleDTO {
 }
 
 class ContentDTO {
-  /// Url containing the body of the article (without title), suitable for rendering in an iframe
+  /// Url containing the body of the article (without title), suitable for
+  /// rendering in an iframe
   final String? iframeSrc;
 
   ContentDTO({this.iframeSrc});
@@ -1994,7 +2229,8 @@ class PagedDTOArticleDTO {
   /// Index of the first item returned in the page.
   final int? start;
 
-  /// Number of items to be returned per page, up to the maximum set for these objects in the current implementation.
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
   final int? limit;
 
   /// Indicates if this is the last page of records (true) or not (false).
@@ -2189,25 +2425,35 @@ class CustomerCreateDTO {
 }
 
 class UserDTO {
-  /// The accountId of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
+  /// The accountId of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
   final String? accountId;
 
-  /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? name;
 
-  /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? key;
 
-  /// Customer's email address. Depending on the customer’s privacy settings, this may be returned as null.
+  /// Customer's email address. Depending on the customer’s privacy settings,
+  /// this may be returned as null.
   final String? emailAddress;
 
-  /// Customer's name for display in a UI. Depending on the customer’s privacy settings, this may return an alternative value.
+  /// Customer's name for display in a UI. Depending on the customer’s privacy
+  /// settings, this may return an alternative value.
   final String? displayName;
 
   /// Indicates if the customer is active (true) or inactive (false)
   final bool active;
 
-  /// Customer time zone. Depending on the customer’s privacy settings, this may be returned as null.
+  /// Customer time zone. Depending on the customer’s privacy settings, this may
+  /// be returned as null.
   final String? timeZone;
 
   /// URLs for the customer record and related items.
@@ -2303,7 +2549,8 @@ class UserLinkDTO {
   /// REST API URL for the customer.
   final String? jiraRest;
 
-  /// Links to the various sizes of the customer's avatar. Note that this property is deprecated, and will be removed in future versions.
+  /// Links to the various sizes of the customer's avatar. Note that this
+  /// property is deprecated, and will be removed in future versions.
   final Map<String, dynamic>? avatarUrls;
 
   UserLinkDTO({this.self, this.jiraRest, this.avatarUrls});
@@ -2378,7 +2625,8 @@ class CommentCreateDTO {
   /// Content of the comment.
   final String? body;
 
-  /// Indicates whether the comment is public (true) or private/internal (false).
+  /// Indicates whether the comment is public (true) or private/internal
+  /// (false).
   final bool public;
 
   CommentCreateDTO({this.body, bool? public}) : public = public ?? false;
@@ -2577,10 +2825,12 @@ class CommentDTO {
   /// List of the attachments included in the comment.
   final PagedDTOAttachmentDTO? attachments;
 
-  /// List of items that can be expanded in the response by specifying the expand query parameter.
+  /// List of items that can be expanded in the response by specifying the
+  /// expand query parameter.
   final List<String> expands;
 
-  /// Indicates whether the comment is public (true) or private/internal (false).
+  /// Indicates whether the comment is public (true) or private/internal
+  /// (false).
   final bool public;
 
   /// REST API URL link to the comment.
@@ -2697,7 +2947,8 @@ class PagedDTOAttachmentDTO {
   /// Index of the first item returned in the page.
   final int? start;
 
-  /// Number of items to be returned per page, up to the maximum set for these objects in the current implementation.
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
   final int? limit;
 
   /// Indicates if this is the last page of records (true) or not (false).
@@ -2913,7 +3164,8 @@ class PagedDTOCommentDTO {
   /// Index of the first item returned in the page.
   final int? start;
 
-  /// Number of items to be returned per page, up to the maximum set for these objects in the current implementation.
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
   final int? limit;
 
   /// Indicates if this is the last page of records (true) or not (false).
@@ -3093,7 +3345,8 @@ class PagedDTOOrganizationDTO {
   /// Index of the first item returned in the page.
   final int? start;
 
-  /// Number of items to be returned per page, up to the maximum set for these objects in the current implementation.
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
   final int? limit;
 
   /// Indicates if this is the last page of records (true) or not (false).
@@ -3223,7 +3476,8 @@ class PagedDTOUserDTO {
   /// Index of the first item returned in the page.
   final int? start;
 
-  /// Number of items to be returned per page, up to the maximum set for these objects in the current implementation.
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
   final int? limit;
 
   /// Indicates if this is the last page of records (true) or not (false).
@@ -3318,10 +3572,14 @@ class PagedDTOUserDTO {
 }
 
 class UsersOrganizationUpdateDTO {
-  /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details. Use `accountIds` instead.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details. Use `accountIds` instead.
   final List<String> usernames;
 
-  /// List of customers, specific by account IDs, to add to or remove from the organization.
+  /// List of customers, specific by account IDs, to add to or remove from the
+  /// organization.
   final List<String> accountIds;
 
   UsersOrganizationUpdateDTO(
@@ -3406,7 +3664,8 @@ class PagedDTOCustomerTransitionDTO {
   /// Index of the first item returned in the page.
   final int? start;
 
-  /// Number of items to be returned per page, up to the maximum set for these objects in the current implementation.
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
   final int? limit;
 
   /// Indicates if this is the last page of records (true) or not (false).
@@ -3575,7 +3834,8 @@ class CustomerRequestCreateMetaDTO {
   /// List of the fields included in this request.
   final List<RequestTypeFieldDTO> requestTypeFields;
 
-  /// Flag indicating if a request can be raised on behalf of another user (true) or not.
+  /// Flag indicating if a request can be raised on behalf of another user
+  /// (true) or not.
   final bool canRaiseOnBehalfOf;
 
   /// Flag indicating if participants can be added to a request (true) or not.
@@ -3633,7 +3893,8 @@ class JsonTypeBean {
   /// The data type of the field.
   final String type;
 
-  /// When the data type is an array, the name of the field items within the array.
+  /// When the data type is an array, the name of the field items within the
+  /// array.
   final String? items;
 
   /// If the field is a system field, the name of the field.
@@ -3720,7 +3981,8 @@ class PagedDTORequestTypeDTO {
   /// Index of the first item returned in the page.
   final int? start;
 
-  /// Number of items to be returned per page, up to the maximum set for these objects in the current implementation.
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
   final int? limit;
 
   /// Indicates if this is the last page of records (true) or not (false).
@@ -3839,10 +4101,12 @@ class RequestTypeDTO {
   /// Links to the request type's icons.
   final RequestTypeIconDTO? icon;
 
-  /// Fields and additional metadata for creating a request that uses the request type
+  /// Fields and additional metadata for creating a request that uses the
+  /// request type
   final CustomerRequestCreateMetaDTO? fields;
 
-  /// List of items that can be expanded in the response by specifying the expand query parameter.
+  /// List of items that can be expanded in the response by specifying the
+  /// expand query parameter.
   final List<String> expands;
 
   /// REST API URL for the request type.
@@ -4209,7 +4473,8 @@ class PagedDTOQueueDTO {
   /// Index of the first item returned in the page.
   final int? start;
 
-  /// Number of items to be returned per page, up to the maximum set for these objects in the current implementation.
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
   final int? limit;
 
   /// Indicates if this is the last page of records (true) or not (false).
@@ -4907,13 +5172,15 @@ class HistoryMetadataParticipant {
   /// The display name of the user or system associated with a history record.
   final String? displayName;
 
-  /// The key of the display name of the user or system associated with a history record.
+  /// The key of the display name of the user or system associated with a
+  /// history record.
   final String? displayNameKey;
 
   /// The type of the user or system associated with a history record.
   final String? type;
 
-  /// The URL to an avatar for the user or system associated with a history record.
+  /// The URL to an avatar for the user or system associated with a history
+  /// record.
   final String? avatarUrl;
 
   /// The URL of the user or system associated with a history record.
@@ -5239,7 +5506,8 @@ class IssueBean {
 
 /// Details of an issue transition.
 class IssueTransition {
-  /// The ID of the issue transition. Required when specifying a transition to undertake.
+  /// The ID of the issue transition. Required when specifying a transition to
+  /// undertake.
   final String? id;
 
   /// The name of the issue transition.
@@ -5251,7 +5519,8 @@ class IssueTransition {
   /// Whether there is a screen associated with the issue transition.
   final bool hasScreen;
 
-  /// Whether the issue transition is global, that is, the transition is applied to issues regardless of their status.
+  /// Whether the issue transition is global, that is, the transition is applied
+  /// to issues regardless of their status.
   final bool isGlobal;
 
   /// Whether this is the initial issue transition for the workflow.
@@ -5260,10 +5529,13 @@ class IssueTransition {
   /// Whether the transition is available to be performed.
   final bool isAvailable;
 
-  /// Whether the issue has to meet criteria before the issue transition is applied.
+  /// Whether the issue has to meet criteria before the issue transition is
+  /// applied.
   final bool isConditional;
 
-  /// Details of the fields associated with the issue transition screen. Use this information to populate `fields` and `update` in a transition request.
+  /// Details of the fields associated with the issue transition screen. Use
+  /// this information to populate `fields` and `update` in a transition
+  /// request.
   final Map<String, dynamic>? fields;
 
   /// Expand options that include additional transition details in the response.
@@ -5587,7 +5859,8 @@ class PagedDTOIssueBean {
   /// Index of the first item returned in the page.
   final int? start;
 
-  /// Number of items to be returned per page, up to the maximum set for these objects in the current implementation.
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
   final int? limit;
 
   /// Indicates if this is the last page of records (true) or not (false).
@@ -5923,40 +6196,59 @@ class StatusDetails {
   }
 }
 
-/// User details permitted by the user's Atlassian Account privacy settings. However, be aware of these exceptions:
+/// User details permitted by the user's Atlassian Account privacy settings.
+/// However, be aware of these exceptions:
 ///
-///  *  User record deleted from Atlassian: This occurs as the result of a right to be forgotten request. In this case, `displayName` provides an indication and other parameters have default values or are blank (for example, email is blank).
-///  *  User record corrupted: This occurs as a results of events such as a server import and can only happen to deleted users. In this case, `accountId` returns *unknown* and all other parameters have fallback values.
-///  *  User record unavailable: This usually occurs due to an internal service outage. In this case, all parameters have fallback values.
+///  *  User record deleted from Atlassian: This occurs as the result of a right
+/// to be forgotten request. In this case, `displayName` provides an indication
+/// and other parameters have default values or are blank (for example, email is
+/// blank).
+///  *  User record corrupted: This occurs as a results of events such as a
+/// server import and can only happen to deleted users. In this case,
+/// `accountId` returns *unknown* and all other parameters have fallback values.
+///  *  User record unavailable: This usually occurs due to an internal service
+/// outage. In this case, all parameters have fallback values.
 class UserDetails {
   /// The URL of the user.
   final String? self;
 
-  /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? name;
 
-  /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
   final String? key;
 
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
   final String? accountId;
 
-  /// The email address of the user. Depending on the user’s privacy settings, this may be returned as null.
+  /// The email address of the user. Depending on the user’s privacy settings,
+  /// this may be returned as null.
   final String? emailAddress;
 
   /// The avatars of the user.
   final AvatarUrlsBean? avatarUrls;
 
-  /// The display name of the user. Depending on the user’s privacy settings, this may return an alternative value.
+  /// The display name of the user. Depending on the user’s privacy settings,
+  /// this may return an alternative value.
   final String? displayName;
 
   /// Whether the user is active.
   final bool active;
 
-  /// The time zone specified in the user's profile. Depending on the user’s privacy settings, this may be returned as null.
+  /// The time zone specified in the user's profile. Depending on the user’s
+  /// privacy settings, this may be returned as null.
   final String? timeZone;
 
-  /// The type of account represented by this user. This will be one of 'atlassian' (normal users), 'app' (application user) or 'customer' (Jira Service Desk customer user)
+  /// The type of account represented by this user. This will be one of
+  /// 'atlassian' (normal users), 'app' (application user) or 'customer' (Jira
+  /// Service Desk customer user)
   final String? accountType;
 
   UserDetails(
@@ -6060,10 +6352,14 @@ class UserDetails {
 }
 
 class RequestParticipantUpdateDTO {
-  /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details. Use `accountIds` instead.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details. Use `accountIds` instead.
   final List<String> usernames;
 
-  /// List of users, specified by account IDs, to add to or remove as participants in the request.
+  /// List of users, specified by account IDs, to add to or remove as
+  /// participants in the request.
   final List<String> accountIds;
 
   RequestParticipantUpdateDTO(
@@ -6104,7 +6400,8 @@ class RequestParticipantUpdateDTO {
 }
 
 class RequestNotificationSubscriptionDTO {
-  /// Indicates whether the user is subscribed (true) or not (false) to the request's notifications.
+  /// Indicates whether the user is subscribed (true) or not (false) to the
+  /// request's notifications.
   final bool subscribed;
 
   RequestNotificationSubscriptionDTO({bool? subscribed})
@@ -6133,10 +6430,14 @@ class RequestNotificationSubscriptionDTO {
 }
 
 class ServiceDeskCustomerDTO {
-  /// This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details. Use `accountIds` instead.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details. Use `accountIds` instead.
   final List<String> usernames;
 
-  /// List of users, specified by account IDs, to add to or remove from a service desk.
+  /// List of users, specified by account IDs, to add to or remove from a
+  /// service desk.
   final List<String> accountIds;
 
   ServiceDeskCustomerDTO({List<String>? usernames, List<String>? accountIds})
@@ -6179,7 +6480,8 @@ class CSATFeedbackFullDTO {
   /// Indicates the type of feedback, supported values: `csat`.
   final String? type;
 
-  /// A numeric representation of the rating, this must be an integer value between 1 and 5.
+  /// A numeric representation of the rating, this must be an integer value
+  /// between 1 and 5.
   final int? rating;
 
   /// (Optional) The comment provided with this feedback.
@@ -6288,13 +6590,15 @@ class RequestTypeCreateDTO {
 }
 
 class AttachmentCreateDTO {
-  /// List of IDs for the temporary attachments to be added to the customer request.
+  /// List of IDs for the temporary attachments to be added to the customer
+  /// request.
   final List<String> temporaryAttachmentIds;
 
   /// Comment about the attachments.
   final AdditionalCommentDTO? additionalComment;
 
-  /// Indicates whether the attachments are to be public (true) or private/internal (false).
+  /// Indicates whether the attachments are to be public (true) or
+  /// private/internal (false).
   final bool public;
 
   AttachmentCreateDTO(
@@ -6399,7 +6703,8 @@ class ApprovalDTO {
   /// Outcome of the approval, based on the approvals provided by all approvers.
   final ApprovalDTOFinalDecision? finalDecision;
 
-  /// Indicates whether the user making the request is one of the approvers and can respond to the approval (true) or not (false).
+  /// Indicates whether the user making the request is one of the approvers and
+  /// can respond to the approval (true) or not (false).
   final bool canAnswerApproval;
 
   /// Detailed list of the users who must provide a response to the approval.
@@ -6664,7 +6969,8 @@ class PagedDTOApprovalDTO {
   /// Index of the first item returned in the page.
   final int? start;
 
-  /// Number of items to be returned per page, up to the maximum set for these objects in the current implementation.
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
   final int? limit;
 
   /// Indicates if this is the last page of records (true) or not (false).
@@ -6854,7 +7160,8 @@ class PagedDTOServiceDeskDTO {
   /// Index of the first item returned in the page.
   final int? start;
 
-  /// Number of items to be returned per page, up to the maximum set for these objects in the current implementation.
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
   final int? limit;
 
   /// Indicates if this is the last page of records (true) or not (false).
@@ -7022,7 +7329,8 @@ class ServiceDeskDTO {
 }
 
 class OrganizationServiceDeskUpdateDTO {
-  /// List of organizations, specified by 'ID' field values, to add to or remove from the service desk.
+  /// List of organizations, specified by 'ID' field values, to add to or remove
+  /// from the service desk.
   final int? organizationId;
 
   OrganizationServiceDeskUpdateDTO({this.organizationId});
@@ -7057,13 +7365,16 @@ class RequestCreateDTO {
   /// ID of the request type for the request.
   final String? requestTypeId;
 
-  /// JSON map of Jira field IDs and their values representing the content of the request.
+  /// JSON map of Jira field IDs and their values representing the content of
+  /// the request.
   final Map<String, dynamic>? requestFieldValues;
 
-  /// List of customers to participate in the request, as a list of `accountId` values.
+  /// List of customers to participate in the request, as a list of `accountId`
+  /// values.
   final List<String> requestParticipants;
 
-  /// The `accountId` of the customer that the request is being raised on behalf of.
+  /// The `accountId` of the customer that the request is being raised on behalf
+  /// of.
   final String? raiseOnBehalfOf;
 
   /// (Experimental) Shows extra information for the request channel.
@@ -7266,7 +7577,8 @@ class CustomerRequestDTO {
   /// Details of the customer reporting the request.
   final UserDTO? reporter;
 
-  /// JSON map of Jira field IDs and their values representing the content of the request.
+  /// JSON map of Jira field IDs and their values representing the content of
+  /// the request.
   final List<CustomerRequestFieldValueDTO> requestFieldValues;
 
   /// Status of the request.
@@ -7290,7 +7602,8 @@ class CustomerRequestDTO {
   /// List of actions that the user can take on the request.
   final CustomerRequestActionsDTO? actions;
 
-  /// List of items that can be expanded in the response by specifying the expand query parameter.
+  /// List of items that can be expanded in the response by specifying the
+  /// expand query parameter.
   final List<String> expands;
 
   /// List of links associated with the request.
@@ -7661,7 +7974,8 @@ class PagedDTOSlaInformationDTO {
   /// Index of the first item returned in the page.
   final int? start;
 
-  /// Number of items to be returned per page, up to the maximum set for these objects in the current implementation.
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
   final int? limit;
 
   /// Indicates if this is the last page of records (true) or not (false).
@@ -7946,7 +8260,8 @@ class SlaInformationOngoingCycleDTO {
   /// Indicates whether the SLA is paused (true) or not (false).
   final bool paused;
 
-  /// Indicates whether the SLA it timed during calendared working hours only (true) or not (false).
+  /// Indicates whether the SLA it timed during calendared working hours only
+  /// (true) or not (false).
   final bool withinCalendarHours;
 
   /// Duration within which the service should be completed.
@@ -8086,7 +8401,8 @@ class PagedDTOCustomerRequestDTO {
   /// Index of the first item returned in the page.
   final int? start;
 
-  /// Number of items to be returned per page, up to the maximum set for these objects in the current implementation.
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
   final int? limit;
 
   /// Indicates if this is the last page of records (true) or not (false).

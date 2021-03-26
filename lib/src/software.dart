@@ -26,44 +26,69 @@ class SoftwareApi {
   /// Apis related to sprints
   late final sprint = SprintApi._(_client);
 
-  /// APIs related to integrating development information (commits, branches and pull requests) with Jira. These APIs are available to Atlassian Connect apps and on-premise integrations using OAuth. Connect apps using these APIs must have the Development Tool module in the app descriptor, see https://developer.atlassian.com/cloud/jira/software/modules/development-tool/. For more details on integrating Jira Software Cloud with on-premises tools using OAuth 2.0 credentials, see https://developer.atlassian.com/cloud/jira/software/integrate-jsw-cloud-with-onpremises-tools/.
+  /// APIs related to integrating development information (commits, branches and
+  /// pull requests) with Jira. These APIs are available to Atlassian Connect
+  /// apps and on-premise integrations using OAuth. Connect apps using these
+  /// APIs must have the Development Tool module in the app descriptor, see
+  /// https://developer.atlassian.com/cloud/jira/software/modules/development-tool/.
+  /// For more details on integrating Jira Software Cloud with on-premises tools
+  /// using OAuth 2.0 credentials, see
+  /// https://developer.atlassian.com/cloud/jira/software/integrate-jsw-cloud-with-onpremises-tools/.
   late final developmentInformation = DevelopmentInformationApi._(_client);
 
-  /// Apis related to integrating Feature Flags with Jira Software. These apis are only available to Atlassian Connect apps. To use these apis you must have the Feature Flag module (see https://developer.atlassian.com/cloud/jira/software/modules/feature-flag/) in your app's descriptor
+  /// Apis related to integrating Feature Flags with Jira Software. These apis
+  /// are only available to Atlassian Connect apps. To use these apis you must
+  /// have the Feature Flag module (see
+  /// https://developer.atlassian.com/cloud/jira/software/modules/feature-flag/)
+  /// in your app's descriptor
   late final featureFlags = FeatureFlagsApi._(_client);
 
-  /// APIs related to integrating deployments data with Jira Software. These APIs
+  /// APIs related to integrating deployments data with Jira Software. These
+  /// APIs
   /// are available to Atlassian Connect apps. To use these APIs you must
-  /// have the Deployment module see https://developer.atlassian.com/cloud/jira/software/modules/deployment/
+  /// have the Deployment module see
+  /// https://developer.atlassian.com/cloud/jira/software/modules/deployment/
   /// in your app's descriptor. They are also related to integrating Jira
   /// Software Cloud with on-premises tools using
-  /// OAuth 2.0 credentials, see https://developer.atlassian.com/cloud/jira/software/integrate-jsw-cloud-with-onpremises-tools/.
+  /// OAuth 2.0 credentials, see
+  /// https://developer.atlassian.com/cloud/jira/software/integrate-jsw-cloud-with-onpremises-tools/.
   late final deployments = DeploymentsApi._(_client);
 
   /// APIs related to integrating builds data with Jira Software. These APIs
   /// are available to Atlassian Connect apps. To use these APIs you must
-  /// have the Build module see https://developer.atlassian.com/cloud/jira/software/modules/build/
+  /// have the Build module see
+  /// https://developer.atlassian.com/cloud/jira/software/modules/build/
   /// in your app's descriptor. They are also related to integrating Jira
   /// Software Cloud with on-premises tools using
-  /// OAuth 2.0 credentials, see https://developer.atlassian.com/cloud/jira/software/integrate-jsw-cloud-with-onpremises-tools/.
+  /// OAuth 2.0 credentials, see
+  /// https://developer.atlassian.com/cloud/jira/software/integrate-jsw-cloud-with-onpremises-tools/.
   late final builds = BuildsApi._(_client);
 
-  /// APIs related to integrating Remote Links data with Jira Software. These APIs are available to Atlassian Connect
-  /// apps. To use these APIs you must have the Remote Link module in your app's descriptor. Read more about Jira Software modules [here](https://developer.atlassian.com/cloud/jira/software/about-jira-modules/).
+  /// APIs related to integrating Remote Links data with Jira Software. These
+  /// APIs are available to Atlassian Connect
+  /// apps. To use these APIs you must have the Remote Link module in your app's
+  /// descriptor. Read more about Jira Software modules
+  /// [here](https://developer.atlassian.com/cloud/jira/software/about-jira-modules/).
   ///
   /// # Module
   ///
-  /// The Remote Link module allows third-party providers to add a generic link through a public REST API and associate it with Jira issues or services.
+  /// The Remote Link module allows third-party providers to add a generic link
+  /// through a public REST API and associate it with Jira issues or services.
   ///
-  /// Supplied remote link information will be presented in the right sidebar of the new Jira issue view under Releases.
+  /// Supplied remote link information will be presented in the right sidebar of
+  /// the new Jira issue view under Releases.
   ///
-  /// This module also provides actions, which allows users to perform an action on the remote link.
+  /// This module also provides actions, which allows users to perform an action
+  /// on the remote link.
   ///
-  /// Note that the module key and name are not private and should therefore not contain any sensitive or personally identifiable information.
+  /// Note that the module key and name are not private and should therefore not
+  /// contain any sensitive or personally identifiable information.
   ///
   /// ## Example Module
   ///
-  /// An example can also be found at [jira-data-provider-sample-addon](https://bitbucket.org/atlassianlabs/jira-data-provider-sample-addon/src/master/), which has an `atlassian-connect.json`.
+  /// An example can also be found at
+  /// [jira-data-provider-sample-addon](https://bitbucket.org/atlassianlabs/jira-data-provider-sample-addon/src/master/),
+  /// which has an `atlassian-connect.json`.
   ///
   /// ```
   /// {
@@ -71,7 +96,8 @@ class SoftwareApi {
   ///     "jiraRemoteLinkInfoProvider": {
   ///       "homeUrl": "https://my-remotelink-provider.com",
   ///       "logoUrl": "https://my-remotelink-provider.com/images/logo.svg",
-  ///       "documentationUrl": "https://my-remotelink-provider.com/docs/jira-integration",
+  ///       "documentationUrl":
+  /// "https://my-remotelink-provider.com/docs/jira-integration",
   ///       "actions": [
   ///         {
   ///           "actionId": "action-1",
@@ -94,28 +120,59 @@ class SoftwareApi {
   ///
   /// ### Properties
   ///
-  /// | Property         | type          | Description                                                                                                                                     | Required |
+  /// | Property         | type          | Description
+  ///
+  ///                                | Required |
   /// |------------------|---------------|-------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-  /// | key              | string        | A key to identify this module.  Must match `^[a-zA-Z0-9-]+$` pattern, with a max length of 100                                                  | Yes      |
-  /// | name             | object (i18N) | A human readable name. This object supports  [internationalization](https://developer.atlassian.com/cloud/jira/software/internationalization/). | Yes      |
-  /// | homeUrl          | string        | URL to the provider’s homepage                                                                                                                  | Yes      |
-  /// | logoUrl          | string        | Optional URL to the provider’s logo, which will be displayed in the UI                                                                          |          |
-  /// | documentationUrl | string        | Optional URL to documentation about the provider’s Jira integration                                                                             |          |
-  /// | actions          | object        | Optional actions that can be performed by Jira users on the remote link
+  /// | key              | string        | A key to identify this module.  Must
+  /// match `^[a-zA-Z0-9-]+$` pattern, with a max length of 100
+  ///                                 | Yes      |
+  /// | name             | object (i18N) | A human readable name. This object
+  /// supports
+  /// [internationalization](https://developer.atlassian.com/cloud/jira/software/internationalization/).
+  /// | Yes      |
+  /// | homeUrl          | string        | URL to the provider’s homepage
+  ///
+  ///                                | Yes      |
+  /// | logoUrl          | string        | Optional URL to the provider’s logo,
+  /// which will be displayed in the UI
+  ///                                 |          |
+  /// | documentationUrl | string        | Optional URL to documentation about
+  /// the provider’s Jira integration
+  ///                                  |          |
+  /// | actions          | object        | Optional actions that can be
+  /// performed by Jira users on the remote link
   ///
   /// ### Actions object
   ///
-  /// | Property    | type   | Description                                                                                                                                                                                                                                  | Required |
+  /// | Property    | type   | Description
+  ///
+  ///
+  ///                                      | Required |
   /// |-------------|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-  /// | actionId    | string | A key to identify a specific action. Used for associating a specific Remote link to an action of this ID.  <br> The actionId of an action must be unique across all actions.                                                                     | Yes      |
-  /// | actionLabel | object | The actionLabel of an Action is shown visibly to the User alongside the Remote Link.                                                                                                                                                         | Yes      |
-  /// | templateUrl | string | The templateUrl of an Action is a template where strings can be substituted into the URL for a specific Remote Link. <br>  Strings used in the templateUrl must be passed in via an attribute map when associating an action with a remote link. | Yes      |
+  /// | actionId    | string | A key to identify a specific action. Used for
+  /// associating a specific Remote link to an action of this ID.
+  ///  The actionId of an action must be unique across all actions.
+  ///                                                        | Yes      |
+  /// | actionLabel | object | The actionLabel of an Action is shown visibly to
+  /// the User alongside the Remote Link.
+  ///
+  ///                                       | Yes      |
+  /// | templateUrl | string | The templateUrl of an Action is a template where
+  /// strings can be substituted into the URL for a specific Remote Link.
+  ///   Strings used in the templateUrl must be passed in via an attribute map
+  /// when associating an action with a remote link. | Yes      |
   ///
   /// ### ActionLabel Object
   ///
-  /// | Property | type          | Description                                                                                                                                         | Required |
+  /// | Property | type          | Description
+  ///
+  ///                            | Required |
   /// |----------|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-  /// | value    | object (i18n) | The label shown on the UI. This object supports  [internationalization](https://developer.atlassian.com/cloud/jira/software/internationalization/). | Yes      |
+  /// | value    | object (i18n) | The label shown on the UI. This object
+  /// supports
+  /// [internationalization](https://developer.atlassian.com/cloud/jira/software/internationalization/).
+  /// | Yes      |
   late final remoteLinks = RemoteLinksApi._(_client);
 
   void close() => _client.close();
@@ -129,8 +186,10 @@ class BacklogApi {
   BacklogApi._(this._client);
 
   /// Move issues to the backlog.
-  ///  <br />
-  ///  This operation is equivalent to remove future and active sprints from a given set of issues.
+  ///
+  ///
+  ///  This operation is equivalent to remove future and active sprints from a
+  /// given set of issues.
   ///  At most 50 issues may be moved at once.
   Future<void> moveIssuesToBacklog({required Map<String, dynamic> body}) async {
     await _client.send(
@@ -140,10 +199,14 @@ class BacklogApi {
     );
   }
 
-  /// Move issues to the backlog of a particular board (if they are already on that board).
-  ///  <br />
-  ///  This operation is equivalent to remove future and active sprints from a given set of issues if the board has sprints
-  ///  If the board does not have sprints this will put the issues back into the backlog from the board.
+  /// Move issues to the backlog of a particular board (if they are already on
+  /// that board).
+  ///
+  ///
+  ///  This operation is equivalent to remove future and active sprints from a
+  /// given set of issues if the board has sprints
+  ///  If the board does not have sprints this will put the issues back into the
+  /// backlog from the board.
   ///  At most 50 issues may be moved at once.
   Future<void> moveIssuesToBacklogForBoard(
       {required int boardId, required Map<String, dynamic> body}) async {
@@ -165,7 +228,8 @@ class BoardApi {
 
   BoardApi._(this._client);
 
-  /// Returns all boards. This only includes boards that the user has permission to view.
+  /// Returns all boards. This only includes boards that the user has permission
+  /// to view.
   Future<Map<String, dynamic>> getAllBoards(
       {int? startAt,
       int? maxResults,
@@ -204,28 +268,42 @@ class BoardApi {
   ///  <ul>
   ///  <li>`name` - Must be less than 255 characters.</li>
   ///  <li>`type` - Valid values: scrum, kanban</li>
-  ///  <li>`filterId` - ID of a filter that the user has permissions to view. Note, if the user does not have the 'Create shared objects'
-  ///  permission and tries to create a shared board, a private board will be created instead (remember that board sharing depends on the filter sharing).</li>
-  ///  <li>`location` - The container that the board will be located in. `location` must include the `type` property (Valid values: project, user).
-  ///  If choosing 'project', then a project must be specified by a `projectKeyOrId` property in `location`.
-  ///  If choosing 'user', the current user is chosen by default. The `projectKeyOrId` property should not be provided.
+  ///  <li>`filterId` - ID of a filter that the user has permissions to view.
+  /// Note, if the user does not have the 'Create shared objects'
+  ///  permission and tries to create a shared board, a private board will be
+  /// created instead (remember that board sharing depends on the filter
+  /// sharing).</li>
+  ///  <li>`location` - The container that the board will be located in.
+  /// `location` must include the `type` property (Valid values: project, user).
+  ///  If choosing 'project', then a project must be specified by a
+  /// `projectKeyOrId` property in `location`.
+  ///  If choosing 'user', the current user is chosen by default. The
+  /// `projectKeyOrId` property should not be provided.
   ///  </li>
   ///  </ul>
   ///  <p>
   ///  Note:
   ///  <ul>
   ///  <li>
-  ///  If you want to create a new project with an associated board, use the <a href="https://docs.atlassian.com/jira/REST/latest">Jira platform REST API</a>.
-  ///  For more information, see the <a href="#api-rest-api-<ver>-project-post">Create project</a> method.
-  ///  The `projectTypeKey` for software boards must be 'software' and the `projectTemplateKey` must be either
-  ///  `com.pyxis.greenhopper.jira:gh-kanban-template` or `com.pyxis.greenhopper.jira:gh-scrum-template`.
+  ///  If you want to create a new project with an associated board, use the <a
+  /// href="https://docs.atlassian.com/jira/REST/latest">Jira platform REST
+  /// API</a>.
+  ///  For more information, see the <a
+  /// href="#api-rest-api-<ver>-project-post">Create project</a> method.
+  ///  The `projectTypeKey` for software boards must be 'software' and the
+  /// `projectTemplateKey` must be either
+  ///  `com.pyxis.greenhopper.jira:gh-kanban-template` or
+  /// `com.pyxis.greenhopper.jira:gh-scrum-template`.
   ///  </li>
   ///  <li>
-  ///  You can create a filter using the <a href="https://docs.atlassian.com/jira/REST/latest">Jira REST API</a>.
-  ///  For more information, see the <a href="#api-rest-api-<ver>-filter-post">Create filter</a> method.
+  ///  You can create a filter using the <a
+  /// href="https://docs.atlassian.com/jira/REST/latest">Jira REST API</a>.
+  ///  For more information, see the <a
+  /// href="#api-rest-api-<ver>-filter-post">Create filter</a> method.
   ///  </li>
   ///  <li>
-  ///  If you do not ORDER BY the Rank field for the filter of your board, you will not be able to reorder issues on the board.
+  ///  If you do not ORDER BY the Rank field for the filter of your board, you
+  /// will not be able to reorder issues on the board.
   ///  </li>
   ///  </ul>
   Future<Map<String, dynamic>> createBoard(
@@ -237,8 +315,10 @@ class BoardApi {
     ) as Map<String, Object?>;
   }
 
-  /// Returns any boards which use the provided filter id.  This method can be executed by users without a valid
-  ///  software license in order to find which boards are using a particular filter.
+  /// Returns any boards which use the provided filter id.  This method can be
+  /// executed by users without a valid
+  ///  software license in order to find which boards are using a particular
+  /// filter.
   Future<Map<String, dynamic>> getBoardByFilterId(
       {required int filterId, int? startAt, int? maxResults}) async {
     return await _client.send(
@@ -254,8 +334,10 @@ class BoardApi {
     ) as Map<String, Object?>;
   }
 
-  /// Returns the board for the given board ID. This board will only be returned if the user has permission to view it.
-  ///  Admins without the view permission will see the board as a private one, so will see only a subset of the board's
+  /// Returns the board for the given board ID. This board will only be returned
+  /// if the user has permission to view it.
+  ///  Admins without the view permission will see the board as a private one,
+  /// so will see only a subset of the board's
   ///  data (board location for instance).
   Future<Map<String, dynamic>> getBoard(int boardId) async {
     return await _client.send(
@@ -267,7 +349,8 @@ class BoardApi {
     ) as Map<String, Object?>;
   }
 
-  /// Deletes the board. Admin without the view permission can still remove the board.
+  /// Deletes the board. Admin without the view permission can still remove the
+  /// board.
   Future<void> deleteBoard(int boardId) async {
     await _client.send(
       'delete',
@@ -278,10 +361,14 @@ class BoardApi {
     );
   }
 
-  /// Returns all issues from the board's backlog, for the given board ID. This only includes issues that the user has permission to view.
-  ///  The backlog contains incomplete issues that are not assigned to any future or active sprint.
-  ///  Note, if the user does not have permission to view the board, no issues will be returned at all.
-  ///  Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
+  /// Returns all issues from the board's backlog, for the given board ID. This
+  /// only includes issues that the user has permission to view.
+  ///  The backlog contains incomplete issues that are not assigned to any
+  /// future or active sprint.
+  ///  Note, if the user does not have permission to view the board, no issues
+  /// will be returned at all.
+  ///  Issues returned from this resource include Agile fields, like sprint,
+  /// closedSprints, flagged, and epic.
   ///  By default, the returned issues are ordered by rank.
   Future<SearchResultsBean> getIssuesForBacklog(
       {required int boardId,
@@ -318,17 +405,27 @@ class BoardApi {
   ///  Includes the container type (Valid values: project, user).
   ///  </li>
   ///  <li>`subQuery` (Kanban only) - JQL subquery used by the given board.</li>
-  ///  <li>`columnConfig` - The column configuration lists the columns for the board, in the order defined in the column configuration.
+  ///  <li>`columnConfig` - The column configuration lists the columns for the
+  /// board, in the order defined in the column configuration.
   ///  For each column, it shows the issue status mapping
-  ///  as well as the constraint type (Valid values: none, issueCount, issueCountExclSubs) for the min/max number of issues.
-  ///  Note, the last column with statuses mapped to it is treated as the "Done" column,
-  ///  which means that issues in that column will be marked as already completed.</li>
-  ///  <li>`estimation` (Scrum only) - Contains information about type of estimation used for the board. Valid values: none, issueCount, field.
-  ///  If the estimation type is "field", the ID and display name of the field used for estimation is also returned.
-  ///  Note, estimates for an issue can be updated by a PUT /rest/api/~ver~/issue/{issueIdOrKey} request, however the fields must be on the screen.
-  ///  "timeoriginalestimate" field will never be on the screen, so in order to update it "originalEstimate" in "timetracking" field should be updated.
+  ///  as well as the constraint type (Valid values: none, issueCount,
+  /// issueCountExclSubs) for the min/max number of issues.
+  ///  Note, the last column with statuses mapped to it is treated as the "Done"
+  /// column,
+  ///  which means that issues in that column will be marked as already
+  /// completed.</li>
+  ///  <li>`estimation` (Scrum only) - Contains information about type of
+  /// estimation used for the board. Valid values: none, issueCount, field.
+  ///  If the estimation type is "field", the ID and display name of the field
+  /// used for estimation is also returned.
+  ///  Note, estimates for an issue can be updated by a PUT
+  /// /rest/api/~ver~/issue/{issueIdOrKey} request, however the fields must be
+  /// on the screen.
+  ///  "timeoriginalestimate" field will never be on the screen, so in order to
+  /// update it "originalEstimate" in "timetracking" field should be updated.
   ///  </li>
-  ///  <li>`ranking` - Contains information about custom field used for ranking in the given board.</li>
+  ///  <li>`ranking` - Contains information about custom field used for ranking
+  /// in the given board.</li>
   ///  </ul>
   Future<Map<String, dynamic>> getConfiguration(int boardId) async {
     return await _client.send(
@@ -340,8 +437,10 @@ class BoardApi {
     ) as Map<String, Object?>;
   }
 
-  /// Returns all epics from the board, for the given board ID. This only includes epics that the user has permission to view.
-  ///  Note, if the user does not have permission to view the board, no epics will be returned at all.
+  /// Returns all epics from the board, for the given board ID. This only
+  /// includes epics that the user has permission to view.
+  ///  Note, if the user does not have permission to view the board, no epics
+  /// will be returned at all.
   Future<void> getEpics(
       {required int boardId,
       int? startAt,
@@ -361,9 +460,11 @@ class BoardApi {
     );
   }
 
-  /// Returns all issues that do not belong to any epic on a board, for a given board ID.
+  /// Returns all issues that do not belong to any epic on a board, for a given
+  /// board ID.
   ///  This only includes issues that the user has permission to view.
-  ///  Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
+  ///  Issues returned from this resource include Agile fields, like sprint,
+  /// closedSprints, flagged, and epic.
   ///  By default, the returned issues are ordered by rank.
   Future<void> getIssuesWithoutEpicForBoard(
       {required int boardId,
@@ -390,9 +491,11 @@ class BoardApi {
     );
   }
 
-  /// Returns all issues that belong to an epic on the board, for the given epic ID and the board ID.
+  /// Returns all issues that belong to an epic on the board, for the given epic
+  /// ID and the board ID.
   ///  This only includes issues that the user has permission to view.
-  ///  Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
+  ///  Issues returned from this resource include Agile fields, like sprint,
+  /// closedSprints, flagged, and epic.
   ///  By default, the returned issues are ordered by rank.
   Future<void> getBoardIssuesForEpic(
       {required int boardId,
@@ -445,11 +548,15 @@ class BoardApi {
     ) as Map<String, Object?>;
   }
 
-  /// Returns all issues from a board, for a given board ID. This only includes issues that the user has permission to view.
-  ///  An issue belongs to the board if its status is mapped to the board's column.
+  /// Returns all issues from a board, for a given board ID. This only includes
+  /// issues that the user has permission to view.
+  ///  An issue belongs to the board if its status is mapped to the board's
+  /// column.
   ///  Epic issues do not belongs to the scrum boards.
-  ///  Note, if the user does not have permission to view the board, no issues will be returned at all.
-  ///  Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
+  ///  Note, if the user does not have permission to view the board, no issues
+  /// will be returned at all.
+  ///  Issues returned from this resource include Agile fields, like sprint,
+  /// closedSprints, flagged, and epic.
   ///  By default, the returned issues are ordered by rank.
   Future<SearchResultsBean> getIssuesForBoard(
       {required int boardId,
@@ -476,10 +583,14 @@ class BoardApi {
     ));
   }
 
-  /// Move issues from the backog to the board (if they are already in the backlog of that board).
-  ///  <br />
-  ///  This operation either moves an issue(s) onto a board from the backlog (by adding it to the issueList for the board)
-  ///  Or transitions the issue(s) to the first column for a kanban board with backlog.
+  /// Move issues from the backog to the board (if they are already in the
+  /// backlog of that board).
+  ///
+  ///
+  ///  This operation either moves an issue(s) onto a board from the backlog (by
+  /// adding it to the issueList for the board)
+  ///  Or transitions the issue(s) to the first column for a kanban board with
+  /// backlog.
   ///  At most 50 issues may be moved at once.
   Future<void> moveIssuesToBoard(
       {required int boardId, required Map<String, dynamic> body}) async {
@@ -493,19 +604,26 @@ class BoardApi {
     );
   }
 
-  /// Returns all projects that are associated with the board, for the given board ID.
-  ///  If the user does not have permission to view the board, no projects will be returned at all.
+  /// Returns all projects that are associated with the board, for the given
+  /// board ID.
+  ///  If the user does not have permission to view the board, no projects will
+  /// be returned at all.
   ///  Returned projects are ordered by the name.
   ///  </p>
-  ///  A project is associated with a board if the board filter contains reference the project
+  ///  A project is associated with a board if the board filter contains
+  /// reference the project
   ///  or there is an issue from the project that belongs to the board.
   ///  </p>
-  ///  The board filter contains reference the project only if JQL query guarantees that returned issues
+  ///  The board filter contains reference the project only if JQL query
+  /// guarantees that returned issues
   ///  will be returned from the project set defined in JQL.
-  ///  For instance the query `project in (ABC, BCD) AND reporter = admin` have reference to ABC and BCD projects
-  ///  but query `project in (ABC, BCD) OR reporter = admin` doesn't have reference to any project.
+  ///  For instance the query `project in (ABC, BCD) AND reporter = admin` have
+  /// reference to ABC and BCD projects
+  ///  but query `project in (ABC, BCD) OR reporter = admin` doesn't have
+  /// reference to any project.
   ///  </p>
-  ///  An issue belongs to the board if its status is mapped to the board's column.
+  ///  An issue belongs to the board if its status is mapped to the board's
+  /// column.
   ///  Epic issues do not belongs to the scrum boards.
   ///  </p>
   Future<void> getProjects(
@@ -523,15 +641,20 @@ class BoardApi {
     );
   }
 
-  /// Returns all projects that are statically associated with the board, for the given board ID.
+  /// Returns all projects that are statically associated with the board, for
+  /// the given board ID.
   ///  Returned projects are ordered by the name.
   ///  </p>
-  ///  A project is associated with a board if the board filter contains reference the project.
+  ///  A project is associated with a board if the board filter contains
+  /// reference the project.
   ///  </p>
-  ///  The board filter contains reference the project only if JQL query guarantees that returned issues
+  ///  The board filter contains reference the project only if JQL query
+  /// guarantees that returned issues
   ///  will be returned from the project set defined in JQL.
-  ///  For instance the query `project in (ABC, BCD) AND reporter = admin` have reference to ABC and BCD projects
-  ///  but query `project in (ABC, BCD) OR reporter = admin` doesn't have reference to any project.
+  ///  For instance the query `project in (ABC, BCD) AND reporter = admin` have
+  /// reference to ABC and BCD projects
+  ///  but query `project in (ABC, BCD) OR reporter = admin` doesn't have
+  /// reference to any project.
   ///  </p>
   Future<void> getProjectsFull(int boardId) async {
     await _client.send(
@@ -544,7 +667,8 @@ class BoardApi {
   }
 
   /// Returns the keys of all properties for the board identified by the id.
-  ///  The user who retrieves the property keys is required to have permissions to view the board.
+  ///  The user who retrieves the property keys is required to have permissions
+  /// to view the board.
   Future<void> getBoardPropertyKeys(String boardId) async {
     await _client.send(
       'get',
@@ -555,8 +679,10 @@ class BoardApi {
     );
   }
 
-  /// Returns the value of the property with a given key from the board identified by the provided id.
-  ///  The user who retrieves the property is required to have permissions to view the board.
+  /// Returns the value of the property with a given key from the board
+  /// identified by the provided id.
+  ///  The user who retrieves the property is required to have permissions to
+  /// view the board.
   Future<void> getBoardProperty(
       {required String boardId, required String propertyKey}) async {
     await _client.send(
@@ -571,8 +697,10 @@ class BoardApi {
 
   /// Sets the value of the specified board's property.
   ///  <p>
-  ///      You can use this resource to store a custom data against the board identified by the id. The user
-  ///      who stores the data is required to have permissions to modify the board.
+  ///      You can use this resource to store a custom data against the board
+  /// identified by the id. The user
+  ///      who stores the data is required to have permissions to modify the
+  /// board.
   ///  </p>
   Future<void> setBoardProperty(
       {required String boardId, required String propertyKey}) async {
@@ -586,7 +714,8 @@ class BoardApi {
     );
   }
 
-  /// Removes the property from the board identified by the id. Ths user removing the property is required
+  /// Removes the property from the board identified by the id. Ths user
+  /// removing the property is required
   ///  to have permissions to modify the board.
   Future<void> deleteBoardProperty(
       {required String boardId, required String propertyKey}) async {
@@ -616,7 +745,8 @@ class BoardApi {
     ) as Map<String, Object?>;
   }
 
-  /// Returns the quick filter for a given quick filter ID. The quick filter will only be returned if the user can view the board
+  /// Returns the quick filter for a given quick filter ID. The quick filter
+  /// will only be returned if the user can view the board
   ///  that the quick filter belongs to.
   Future<Map<String, dynamic>> getQuickFilter(
       {required int boardId, required int quickFilterId}) async {
@@ -641,7 +771,8 @@ class BoardApi {
     ) as Map<String, Object?>;
   }
 
-  /// Returns all sprints from a board, for a given board ID. This only includes sprints that the user has permission to view.
+  /// Returns all sprints from a board, for a given board ID. This only includes
+  /// sprints that the user has permission to view.
   Future<void> getAllSprints(
       {required int boardId,
       int? startAt,
@@ -661,9 +792,12 @@ class BoardApi {
     );
   }
 
-  /// Get all issues you have access to that belong to the sprint from the board.
-  ///  Issue returned from this resource contains additional fields like: sprint, closedSprints, flagged and epic.
-  ///  Issues are returned ordered by rank. JQL order has higher priority than default rank.
+  /// Get all issues you have access to that belong to the sprint from the
+  /// board.
+  ///  Issue returned from this resource contains additional fields like:
+  /// sprint, closedSprints, flagged and epic.
+  ///  Issues are returned ordered by rank. JQL order has higher priority than
+  /// default rank.
   Future<void> getBoardIssuesForSprint(
       {required int boardId,
       required int sprintId,
@@ -691,9 +825,12 @@ class BoardApi {
     );
   }
 
-  /// Returns all versions from a board, for a given board ID. This only includes versions that the user has permission to view.
-  ///  Note, if the user does not have permission to view the board, no versions will be returned at all.
-  ///  Returned versions are ordered by the name of the project from which they belong and then by sequence defined by user.
+  /// Returns all versions from a board, for a given board ID. This only
+  /// includes versions that the user has permission to view.
+  ///  Note, if the user does not have permission to view the board, no versions
+  /// will be returned at all.
+  ///  Returned versions are ordered by the name of the project from which they
+  /// belong and then by sequence defined by user.
   Future<void> getAllVersions(
       {required int boardId,
       int? startAt,
@@ -723,14 +860,21 @@ class EpicApi {
 
   /// Returns all issues that do not belong to any epic.
   ///  This only includes issues that the user has permission to view.
-  ///  Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
+  ///  Issues returned from this resource include Agile fields, like sprint,
+  /// closedSprints, flagged, and epic.
   ///  By default, the returned issues are ordered by rank.
   ///
-  ///  <b>Note:</b> If you are querying a next-gen project, do not use this operation.
+  ///  <b>Note:</b> If you are querying a next-gen project, do not use this
+  /// operation.
   ///  Instead, search for issues that don't belong to an epic by using the
-  ///  <a href="https://developer.atlassian.com/cloud/jira/platform/rest/v2/#api-rest-api-2-search-get">Search for issues using JQL</a>
-  ///  operation in the Jira platform REST API. Build your JQL query using the `parent is empty` clause.
-  ///  For more information on the `parent` JQL field, see <a href="https://confluence.atlassian.com/x/dAiiLQ#Advancedsearching-fieldsreference-Parent">Advanced searching</a>.
+  ///  <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/rest/v2/#api-rest-api-2-search-get">Search
+  /// for issues using JQL</a>
+  ///  operation in the Jira platform REST API. Build your JQL query using the
+  /// `parent is empty` clause.
+  ///  For more information on the `parent` JQL field, see <a
+  /// href="https://confluence.atlassian.com/x/dAiiLQ#Advancedsearching-fieldsreference-Parent">Advanced
+  /// searching</a>.
   Future<void> getIssuesWithoutEpic(
       {int? startAt,
       int? maxResults,
@@ -753,7 +897,8 @@ class EpicApi {
   }
 
   /// Removes issues from epics.
-  ///  The user needs to have the edit issue permission for all issue they want to remove from epics.
+  ///  The user needs to have the edit issue permission for all issue they want
+  /// to remove from epics.
   ///  The maximum number of issues that can be moved in one operation is 50.
   ///
   ///  <b>Note:</b> This operation does not work for epics in next-gen projects.
@@ -785,9 +930,11 @@ class EpicApi {
     );
   }
 
-  /// Returns the epic for a given epic ID. This epic will only be returned if the user has permission to view it.
+  /// Returns the epic for a given epic ID. This epic will only be returned if
+  /// the user has permission to view it.
   ///
   ///  <b>Note:</b> This operation does not work for epics in next-gen projects.
+  ///
   Future<void> getEpic(String epicIdOrKey) async {
     await _client.send(
       'get',
@@ -799,10 +946,12 @@ class EpicApi {
   }
 
   /// Performs a partial update of the epic.
-  ///  A partial update means that fields not present in the request JSON will not be updated.
+  ///  A partial update means that fields not present in the request JSON will
+  /// not be updated.
   ///  Valid values for color are `color_1` to `color_9`.
   ///
   ///  <b>Note:</b> This operation does not work for epics in next-gen projects.
+  ///
   Future<void> partiallyUpdateEpic(
       {required String epicIdOrKey, required Map<String, dynamic> body}) async {
     await _client.send(
@@ -817,14 +966,21 @@ class EpicApi {
 
   /// Returns all issues that belong to the epic, for the given epic ID.
   ///  This only includes issues that the user has permission to view.
-  ///  Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
+  ///  Issues returned from this resource include Agile fields, like sprint,
+  /// closedSprints, flagged, and epic.
   ///  By default, the returned issues are ordered by rank.
   ///
-  ///  <b>Note:</b> If you are querying a next-gen project, do not use this operation.
+  ///  <b>Note:</b> If you are querying a next-gen project, do not use this
+  /// operation.
   ///  Instead, search for issues that belong to an epic by using the
-  ///  <a href="https://developer.atlassian.com/cloud/jira/platform/rest/v2/#api-rest-api-2-search-get">Search for issues using JQL</a>
-  ///  operation in the Jira platform REST API. Build your JQL query using the `parent` clause.
-  ///  For more information on the `parent` JQL field, see <a href="https://confluence.atlassian.com/x/dAiiLQ#Advancedsearching-fieldsreference-Parent">Advanced searching</a>.
+  ///  <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/rest/v2/#api-rest-api-2-search-get">Search
+  /// for issues using JQL</a>
+  ///  operation in the Jira platform REST API. Build your JQL query using the
+  /// `parent` clause.
+  ///  For more information on the `parent` JQL field, see <a
+  /// href="https://confluence.atlassian.com/x/dAiiLQ#Advancedsearching-fieldsreference-Parent">Advanced
+  /// searching</a>.
   Future<void> getIssuesForEpic(
       {required String epicIdOrKey,
       int? startAt,
@@ -852,11 +1008,14 @@ class EpicApi {
 
   /// Moves issues to an epic, for a given epic id.
   ///  Issues can be only in a single epic at the same time.
-  ///  That means that already assigned issues to an epic, will not be assigned to the previous epic anymore.
-  ///  The user needs to have the edit issue permission for all issue they want to move and to the epic.
+  ///  That means that already assigned issues to an epic, will not be assigned
+  /// to the previous epic anymore.
+  ///  The user needs to have the edit issue permission for all issue they want
+  /// to move and to the epic.
   ///  The maximum number of issues that can be moved in one operation is 50.
   ///
   ///  <b>Note:</b> This operation does not work for epics in next-gen projects.
+  ///
   Future<void> moveIssuesToEpic(
       {required String epicIdOrKey, required Map<String, dynamic> body}) async {
     await _client.send(
@@ -876,6 +1035,7 @@ class EpicApi {
   ///  </p>
   ///
   ///  <b>Note:</b> This operation does not work for epics in next-gen projects.
+  ///
   Future<void> rankEpics(
       {required String epicIdOrKey, required Map<String, dynamic> body}) async {
     await _client.send(
@@ -896,12 +1056,14 @@ class IssueApi {
 
   IssueApi._(this._client);
 
-  /// Moves (ranks) issues before or after a given issue. At most 50 issues may be ranked at once.
+  /// Moves (ranks) issues before or after a given issue. At most 50 issues may
+  /// be ranked at once.
   ///
   ///  <p>
   ///  This operation may fail for some issues, although this will be rare.
   ///  In that case the 207 status code is returned for the whole response and
-  ///  detailed information regarding each issue is available in the response body.
+  ///  detailed information regarding each issue is available in the response
+  /// body.
   ///  </p>
   ///  <p>
   ///  If rankCustomFieldId is not defined, the default rank field will be used.
@@ -915,7 +1077,8 @@ class IssueApi {
   }
 
   /// Returns a single issue, for a given issue ID or issue key.
-  ///  Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
+  ///  Issues returned from this resource include Agile fields, like sprint,
+  /// closedSprints, flagged, and epic.
   Future<void> getIssue(
       {required String issueIdOrKey,
       List<String>? fields,
@@ -935,15 +1098,20 @@ class IssueApi {
     );
   }
 
-  /// Returns the estimation of the issue and a fieldId of the field that is used for it.
-  ///  `boardId` param is required. This param determines which field will be updated on a issue.
+  /// Returns the estimation of the issue and a fieldId of the field that is
+  /// used for it.
+  ///  `boardId` param is required. This param determines which field will be
+  /// updated on a issue.
   ///  <p>
-  ///  Original time internally stores and returns the estimation as a number of seconds.
+  ///  Original time internally stores and returns the estimation as a number of
+  /// seconds.
   ///  </p>
   ///  <p>
-  ///  The field used for estimation on the given board can be obtained from <a href="#agile/1.0/board-getConfiguration">board configuration resource</a>.
+  ///  The field used for estimation on the given board can be obtained from <a
+  /// href="#agile/1.0/board-getConfiguration">board configuration resource</a>.
   ///  More information about the field are returned by
-  ///  <a href="#api-rest-api-<ver>-issue-getEditIssueMeta">edit meta resource</a>
+  ///  <a href="#api-rest-api-<ver>-issue-getEditIssueMeta">edit meta
+  /// resource</a>
   ///  or <a href="#api-rest-api-<ver>-field-get">field resource</a>.
   ///  </p>
   Future<void> getIssueEstimationForBoard(
@@ -961,18 +1129,24 @@ class IssueApi {
   }
 
   /// Updates the estimation of the issue.
-  ///  boardId param is required. This param determines which field will be updated on a issue.
+  ///  boardId param is required. This param determines which field will be
+  /// updated on a issue.
   ///  <p>
-  ///  Note that this resource changes the estimation field of the issue regardless of appearance the field on the screen.
+  ///  Note that this resource changes the estimation field of the issue
+  /// regardless of appearance the field on the screen.
   ///  </p>
   ///  <p>
-  ///  Original time tracking estimation field accepts estimation in formats like "1w", "2d", "3h", "20m" or number which represent number of minutes.
-  ///  However, internally the field stores and returns the estimation as a number of seconds.
+  ///  Original time tracking estimation field accepts estimation in formats
+  /// like "1w", "2d", "3h", "20m" or number which represent number of minutes.
+  ///  However, internally the field stores and returns the estimation as a
+  /// number of seconds.
   ///  </p>
   ///  <p>
-  ///  The field used for estimation on the given board can be obtained from <a href="#agile/1.0/board-getConfiguration">board configuration resource</a>.
+  ///  The field used for estimation on the given board can be obtained from <a
+  /// href="#agile/1.0/board-getConfiguration">board configuration resource</a>.
   ///  More information about the field are returned by
-  ///  <a href="#api-rest-api-<ver>-issue-issueIdOrKey-editmeta-get">edit meta resource</a>
+  ///  <a href="#api-rest-api-<ver>-issue-issueIdOrKey-editmeta-get">edit meta
+  /// resource</a>
   ///  or <a href="#api-rest-api-<ver>-field-get">field resource</a>.
   ///  </p>
   Future<void> estimateIssueForBoard(
@@ -1012,11 +1186,14 @@ class SprintApi {
 
   SprintApi._(this._client);
 
-  /// Creates a future sprint. Sprint name and origin board id are required. Start date, end date, and goal are optional.
+  /// Creates a future sprint. Sprint name and origin board id are required.
+  /// Start date, end date, and goal are optional.
   ///
   ///  <p>
-  ///  Note that the sprint name is trimmed. Also, when starting sprints from the UI, the "endDate" set through this
-  ///  call is ignored and instead the last sprint's duration is used to fill the form.
+  ///  Note that the sprint name is trimmed. Also, when starting sprints from
+  /// the UI, the "endDate" set through this
+  ///  call is ignored and instead the last sprint's duration is used to fill
+  /// the form.
   ///  </p>
   Future<void> createSprint({required Map<String, dynamic> body}) async {
     await _client.send(
@@ -1026,8 +1203,10 @@ class SprintApi {
     );
   }
 
-  /// Returns the sprint for a given sprint ID. The sprint will only be returned if the user can view the board
-  ///  that the sprint was created on, or view at least one of the issues in the sprint.
+  /// Returns the sprint for a given sprint ID. The sprint will only be returned
+  /// if the user can view the board
+  ///  that the sprint was created on, or view at least one of the issues in the
+  /// sprint.
   Future<void> getSprint(int sprintId) async {
     await _client.send(
       'get',
@@ -1039,13 +1218,16 @@ class SprintApi {
   }
 
   /// Performs a partial update of a sprint.
-  ///  A partial update means that fields not present in the request JSON will not be updated.
+  ///  A partial update means that fields not present in the request JSON will
+  /// not be updated.
   ///  <p>Notes:</p>
   ///  <ul>
   ///  <li>Sprints that are in a closed state cannot be updated.</li>
-  ///  <li>A sprint can be started by updating the state to 'active'. This requires the sprint to
+  ///  <li>A sprint can be started by updating the state to 'active'. This
+  /// requires the sprint to
   ///  be in the 'future' state and have a startDate and endDate set.</li>
-  ///  <li>A sprint can be completed by updating the state to 'closed'. This action requires the sprint to be in the 'active' state.
+  ///  <li>A sprint can be completed by updating the state to 'closed'. This
+  /// action requires the sprint to be in the 'active' state.
   ///  This sets the completeDate to the time of the request.</li>
   ///  <li>Other changes to state are not allowed.</li>
   ///  <li>The completeDate field cannot be updated manually.</li>
@@ -1063,14 +1245,17 @@ class SprintApi {
   }
 
   /// Performs a full update of a sprint.
-  ///  A full update means that the result will be exactly the same as the request body.
+  ///  A full update means that the result will be exactly the same as the
+  /// request body.
   ///  Any fields not present in the request JSON will be set to null.
   ///  <p>Notes:</p>
   ///  <ul>
   ///  <li>Sprints that are in a closed state cannot be updated.</li>
-  ///  <li>A sprint can be started by updating the state to 'active'. This requires the sprint to
+  ///  <li>A sprint can be started by updating the state to 'active'. This
+  /// requires the sprint to
   ///  be in the 'future' state and have a startDate and endDate set.</li>
-  ///  <li>A sprint can be completed by updating the state to 'closed'. This action requires the sprint to be in the 'active' state.
+  ///  <li>A sprint can be completed by updating the state to 'closed'. This
+  /// action requires the sprint to be in the 'active' state.
   ///  This sets the completeDate to the time of the request.</li>
   ///  <li>Other changes to state are not allowed.</li>
   ///  <li>The completeDate field cannot be updated manually.</li>
@@ -1087,7 +1272,8 @@ class SprintApi {
     );
   }
 
-  /// Deletes a sprint. Once a sprint is deleted, all open issues in the sprint will be moved to the backlog.
+  /// Deletes a sprint. Once a sprint is deleted, all open issues in the sprint
+  /// will be moved to the backlog.
   Future<void> deleteSprint(int sprintId) async {
     await _client.send(
       'delete',
@@ -1098,7 +1284,8 @@ class SprintApi {
     );
   }
 
-  /// Returns all issues in a sprint, for a given sprint ID. This only includes issues that the user has permission to view.
+  /// Returns all issues in a sprint, for a given sprint ID. This only includes
+  /// issues that the user has permission to view.
   ///  By default, the returned issues are ordered by rank.
   Future<void> getIssuesForSprint(
       {required int sprintId,
@@ -1141,7 +1328,8 @@ class SprintApi {
   }
 
   /// Returns the keys of all properties for the sprint identified by the id.
-  ///  The user who retrieves the property keys is required to have permissions to view the sprint.
+  ///  The user who retrieves the property keys is required to have permissions
+  /// to view the sprint.
   Future<void> getPropertiesKeys(String sprintId) async {
     await _client.send(
       'get',
@@ -1152,8 +1340,10 @@ class SprintApi {
     );
   }
 
-  /// Returns the value of the property with a given key from the sprint identified by the provided id.
-  ///  The user who retrieves the property is required to have permissions to view the sprint.
+  /// Returns the value of the property with a given key from the sprint
+  /// identified by the provided id.
+  ///  The user who retrieves the property is required to have permissions to
+  /// view the sprint.
   Future<void> getProperty(
       {required String sprintId, required String propertyKey}) async {
     await _client.send(
@@ -1168,8 +1358,10 @@ class SprintApi {
 
   /// Sets the value of the specified sprint's property.
   ///  <p>
-  ///      You can use this resource to store a custom data against the sprint identified by the id. The user
-  ///      who stores the data is required to have permissions to modify the sprint.
+  ///      You can use this resource to store a custom data against the sprint
+  /// identified by the id. The user
+  ///      who stores the data is required to have permissions to modify the
+  /// sprint.
   ///  </p>
   Future<void> setProperty(
       {required String sprintId, required String propertyKey}) async {
@@ -1183,7 +1375,8 @@ class SprintApi {
     );
   }
 
-  /// Removes the property from the sprint identified by the id. Ths user removing the property is required
+  /// Removes the property from the sprint identified by the id. Ths user
+  /// removing the property is required
   ///  to have permissions to modify the sprint.
   Future<void> deleteProperty(
       {required String sprintId, required String propertyKey}) async {
@@ -1218,7 +1411,13 @@ class DevelopmentInformationApi {
 
   DevelopmentInformationApi._(this._client);
 
-  /// Stores development information provided in the request to make it available when viewing issues in Jira. Existing repository and entity data for the same ID will be replaced if the updateSequenceId of existing data is less than the incoming data. Submissions are performed asynchronously. Submitted data will eventually be available in Jira; most updates are available within a short period of time, but may take some time during peak load and/or maintenance times.
+  /// Stores development information provided in the request to make it
+  /// available when viewing issues in Jira. Existing repository and entity data
+  /// for the same ID will be replaced if the updateSequenceId of existing data
+  /// is less than the incoming data. Submissions are performed asynchronously.
+  /// Submitted data will eventually be available in Jira; most updates are
+  /// available within a short period of time, but may take some time during
+  /// peak load and/or maintenance times.
   Future<Map<String, dynamic>> storeDevelopmentInformation(
       {required String authorization,
       required Map<String, dynamic> body}) async {
@@ -1229,7 +1428,9 @@ class DevelopmentInformationApi {
     ) as Map<String, Object?>;
   }
 
-  /// For the specified repository ID, retrieves the repository and the most recent 400 development information entities. The result will be what is currently stored, ignoring any pending updates or deletes.
+  /// For the specified repository ID, retrieves the repository and the most
+  /// recent 400 development information entities. The result will be what is
+  /// currently stored, ignoring any pending updates or deletes.
   Future<Map<String, dynamic>> getRepository(
       {required String repositoryId, required String authorization}) async {
     return await _client.send(
@@ -1241,7 +1442,8 @@ class DevelopmentInformationApi {
     ) as Map<String, Object?>;
   }
 
-  /// Deletes the repository data stored by the given ID and all related development information entities. Deletion is performed asynchronously.
+  /// Deletes the repository data stored by the given ID and all related
+  /// development information entities. Deletion is performed asynchronously.
   Future<void> deleteRepository(
       {required String repositoryId,
       int? updateSequenceId,
@@ -1258,7 +1460,16 @@ class DevelopmentInformationApi {
     );
   }
 
-  /// Deletes development information entities which have all the provided properties. Entities will be deleted that match ALL of the properties (i.e. treated as an AND). For example if request is `DELETE bulk?accountId=123&projectId=ABC` entities which have properties `accountId=123` and `projectId=ABC` will be deleted. Special property `_updateSequenceId` can be used to delete all entities with updateSequenceId less or equal than the value specified. In addition to the optional `_updateSequenceId`, one or more query params must be supplied to specify properties to delete by. Deletion is performed asynchronously: specified entities will eventually be removed from Jira.
+  /// Deletes development information entities which have all the provided
+  /// properties. Entities will be deleted that match ALL of the properties
+  /// (i.e. treated as an AND). For example if request is `DELETE
+  /// bulk?accountId=123&projectId=ABC` entities which have properties
+  /// `accountId=123` and `projectId=ABC` will be deleted. Special property
+  /// `_updateSequenceId` can be used to delete all entities with
+  /// updateSequenceId less or equal than the value specified. In addition to
+  /// the optional `_updateSequenceId`, one or more query params must be
+  /// supplied to specify properties to delete by. Deletion is performed
+  /// asynchronously: specified entities will eventually be removed from Jira.
   Future<void> deleteByProperties(
       {required String authorization, int? updateSequenceId}) async {
     await _client.send(
@@ -1270,7 +1481,15 @@ class DevelopmentInformationApi {
     );
   }
 
-  /// Checks if development information which have all the provided properties exists. For example, if request is `GET existsByProperties?accountId=123&projectId=ABC` then result will be positive only if there is at least one entity or repository with both properties `accountId=123` and `projectId=ABC`. Special property `_updateSequenceId` can be used to filter all entities with updateSequenceId less or equal than the value specified. In addition to the optional `_updateSequenceId`, one or more query params must be supplied to specify properties to search by.
+  /// Checks if development information which have all the provided properties
+  /// exists. For example, if request is `GET
+  /// existsByProperties?accountId=123&projectId=ABC` then result will be
+  /// positive only if there is at least one entity or repository with both
+  /// properties `accountId=123` and `projectId=ABC`. Special property
+  /// `_updateSequenceId` can be used to filter all entities with
+  /// updateSequenceId less or equal than the value specified. In addition to
+  /// the optional `_updateSequenceId`, one or more query params must be
+  /// supplied to specify properties to search by.
   Future<Map<String, dynamic>> existsByProperties(
       {required String authorization, int? updateSequenceId}) async {
     return await _client.send(
@@ -1282,7 +1501,8 @@ class DevelopmentInformationApi {
     ) as Map<String, Object?>;
   }
 
-  /// Deletes particular development information entity. Deletion is performed asynchronously.
+  /// Deletes particular development information entity. Deletion is performed
+  /// asynchronously.
   Future<void> deleteEntity(
       {required String repositoryId,
       required String entityType,
@@ -1313,13 +1533,22 @@ class FeatureFlagsApi {
 
   /// Update / insert Feature Flag data.
   ///
-  /// Feature Flags are identified by their ID, and existing Feature Flag data for the same ID will be replaced if it exists and the updateSequenceId of existing data is less than the incoming data.
+  /// Feature Flags are identified by their ID, and existing Feature Flag data
+  /// for the same ID will be replaced if it exists and the updateSequenceId of
+  /// existing data is less than the incoming data.
   ///
-  /// Submissions are performed asynchronously. Submitted data will eventually be available in Jira; most updates are available within a short period of time, but may take some time during peak load and/or maintenance times. The getFeatureFlagById operation can be used to confirm that data has been stored successfully (if needed).
+  /// Submissions are performed asynchronously. Submitted data will eventually
+  /// be available in Jira; most updates are available within a short period of
+  /// time, but may take some time during peak load and/or maintenance times.
+  /// The getFeatureFlagById operation can be used to confirm that data has been
+  /// stored successfully (if needed).
   ///
-  /// In the case of multiple Feature Flags being submitted in one request, each is validated individually prior to submission. Details of which Feature Flags failed submission (if any) are available in the response object.
+  /// In the case of multiple Feature Flags being submitted in one request, each
+  /// is validated individually prior to submission. Details of which Feature
+  /// Flags failed submission (if any) are available in the response object.
   ///
-  /// Only apps that define the Feature Flags module can access this resource. This resource requires the 'WRITE' scope.
+  /// Only apps that define the Feature Flags module can access this resource.
+  /// This resource requires the 'WRITE' scope.
   Future<void> submitFeatureFlags({required Map<String, dynamic> body}) async {
     await _client.send(
       'post',
@@ -1330,15 +1559,20 @@ class FeatureFlagsApi {
 
   /// Bulk delete all Feature Flags that match the given request.
   ///
-  /// One or more query params must be supplied to specify Properties to delete by. Optional param `_updateSequenceId` is no longer supported.
-  /// If more than one Property is provided, data will be deleted that matches ALL of the Properties (e.g. treated as an AND).
-  /// See the documentation for the submitFeatureFlags operation for more details.
+  /// One or more query params must be supplied to specify Properties to delete
+  /// by. Optional param `_updateSequenceId` is no longer supported.
+  /// If more than one Property is provided, data will be deleted that matches
+  /// ALL of the Properties (e.g. treated as an AND).
+  /// See the documentation for the submitFeatureFlags operation for more
+  /// details.
   ///
   /// e.g. DELETE /bulkByProperties?accountId=account-123&createdBy=user-456
   ///
-  /// Deletion is performed asynchronously. The getFeatureFlagById operation can be used to confirm that data has been deleted successfully (if needed).
+  /// Deletion is performed asynchronously. The getFeatureFlagById operation can
+  /// be used to confirm that data has been deleted successfully (if needed).
   ///
-  /// Only apps that define the Feature Flags module can access this resource. This resource requires the 'DELETE' scope.
+  /// Only apps that define the Feature Flags module can access this resource.
+  /// This resource requires the 'DELETE' scope.
   Future<void> deleteFeatureFlagsByProperty({int? updateSequenceId}) async {
     await _client.send(
       'delete',
@@ -1351,9 +1585,11 @@ class FeatureFlagsApi {
 
   /// Retrieve the currently stored Feature Flag data for the given ID.
   ///
-  /// The result will be what is currently stored, ignoring any pending updates or deletes.
+  /// The result will be what is currently stored, ignoring any pending updates
+  /// or deletes.
   ///
-  /// Only apps that define the Feature Flags module can access this resource. This resource requires the 'READ' scope.
+  /// Only apps that define the Feature Flags module can access this resource.
+  /// This resource requires the 'READ' scope.
   Future<void> getFeatureFlagById(String featureFlagId) async {
     await _client.send(
       'get',
@@ -1366,9 +1602,11 @@ class FeatureFlagsApi {
 
   /// Delete the Feature Flag data currently stored for the given ID.
   ///
-  /// Deletion is performed asynchronously. The getFeatureFlagById operation can be used to confirm that data has been deleted successfully (if needed).
+  /// Deletion is performed asynchronously. The getFeatureFlagById operation can
+  /// be used to confirm that data has been deleted successfully (if needed).
   ///
-  /// Only apps that define the Feature Flags module can access this resource. This resource requires the 'DELETE' scope.
+  /// Only apps that define the Feature Flags module can access this resource.
+  /// This resource requires the 'DELETE' scope.
   Future<void> deleteFeatureFlagById(
       {required String featureFlagId, int? updateSequenceId}) async {
     await _client.send(
@@ -1393,13 +1631,24 @@ class DeploymentsApi {
 
   /// Update / insert deployment data.
   ///
-  /// Deployments are identified by the combination of `pipelineId`, `environmentId` and `deploymentSequenceNumber`, and existing deployment data for the same deployment will be replaced if it exists and the `updateSequenceNumber` of existing data is less than the incoming data.
+  /// Deployments are identified by the combination of `pipelineId`,
+  /// `environmentId` and `deploymentSequenceNumber`, and existing deployment
+  /// data for the same deployment will be replaced if it exists and the
+  /// `updateSequenceNumber` of existing data is less than the incoming data.
   ///
-  /// Submissions are processed asynchronously. Submitted data will eventually be available in Jira. Most updates are available within a short period of time, but may take some time during peak load and/or maintenance times. The `getDeploymentByKey` operation can be used to confirm that data has been stored successfully (if needed).
+  /// Submissions are processed asynchronously. Submitted data will eventually
+  /// be available in Jira. Most updates are available within a short period of
+  /// time, but may take some time during peak load and/or maintenance times.
+  /// The `getDeploymentByKey` operation can be used to confirm that data has
+  /// been stored successfully (if needed).
   ///
-  /// In the case of multiple deployments being submitted in one request, each is validated individually prior to submission. Details of which deployments failed submission (if any) are available in the response object.
+  /// In the case of multiple deployments being submitted in one request, each
+  /// is validated individually prior to submission. Details of which
+  /// deployments failed submission (if any) are available in the response
+  /// object.
   ///
-  /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and on-premise integrations, can access this resource.
+  /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
   /// This resource requires the 'WRITE' scope for Connect apps.
   Future<void> submitDeployments({required Map<String, dynamic> body}) async {
     await _client.send(
@@ -1411,15 +1660,22 @@ class DeploymentsApi {
 
   /// Bulk delete all deployments that match the given request.
   ///
-  /// One or more query params must be supplied to specify the Properties to delete by. Optional param `_updateSequenceNumber` is no longer supported.
-  /// If more than one Property is provided, data will be deleted that matches ALL of the Properties (i.e. treated as AND).
-  /// See the documentation for the `submitDeployments` operation for more details.
+  /// One or more query params must be supplied to specify the Properties to
+  /// delete by. Optional param `_updateSequenceNumber` is no longer supported.
+  /// If more than one Property is provided, data will be deleted that matches
+  /// ALL of the Properties (i.e. treated as AND).
+  /// See the documentation for the `submitDeployments` operation for more
+  /// details.
   ///
-  /// Example operation: DELETE /bulkByProperties?accountId=account-123&createdBy=user-456
+  /// Example operation: DELETE
+  /// /bulkByProperties?accountId=account-123&createdBy=user-456
   ///
-  /// Deletion is performed asynchronously. The `getDeploymentByKey` operation can be used to confirm that data has been deleted successfully (if needed).
+  /// Deletion is performed asynchronously. The `getDeploymentByKey` operation
+  /// can be used to confirm that data has been deleted successfully (if
+  /// needed).
   ///
-  /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and on-premise integrations, can access this resource.
+  /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
   /// This resource requires the 'DELETE' scope for Connect apps.
   Future<void> deleteDeploymentsByProperty({int? updateSequenceNumber}) async {
     await _client.send(
@@ -1432,11 +1688,14 @@ class DeploymentsApi {
     );
   }
 
-  /// Retrieve the currently stored deployment data for the given `pipelineId`, `environmentId` and `deploymentSequenceNumber` combination.
+  /// Retrieve the currently stored deployment data for the given `pipelineId`,
+  /// `environmentId` and `deploymentSequenceNumber` combination.
   ///
-  /// The result will be what is currently stored, ignoring any pending updates or deletes.
+  /// The result will be what is currently stored, ignoring any pending updates
+  /// or deletes.
   ///
-  /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and on-premise integrations, can access this resource.
+  /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
   /// This resource requires the 'READ' scope for Connect apps.
   Future<void> getDeploymentByKey(
       {required String pipelineId,
@@ -1453,11 +1712,15 @@ class DeploymentsApi {
     );
   }
 
-  /// Delete the currently stored deployment data for the given `pipelineId`, `environmentId` and `deploymentSequenceNumber` combination.
+  /// Delete the currently stored deployment data for the given `pipelineId`,
+  /// `environmentId` and `deploymentSequenceNumber` combination.
   ///
-  /// Deletion is performed asynchronously. The `getDeploymentByKey` operation can be used to confirm that data has been deleted successfully (if needed).
+  /// Deletion is performed asynchronously. The `getDeploymentByKey` operation
+  /// can be used to confirm that data has been deleted successfully (if
+  /// needed).
   ///
-  /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and on-premise integrations, can access this resource.
+  /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
   /// This resource requires the 'DELETE' scope for Connect apps.
   Future<void> deleteDeploymentByKey(
       {required String pipelineId,
@@ -1479,7 +1742,10 @@ class DeploymentsApi {
     );
   }
 
-  /// Retrieve the  Deployment gating status for the given `pipelineId + environmentId + deploymentSequenceNumber` combination. Only apps that define the `jiraDeploymentInfoProvider` module can access this resource. This resource requires the 'READ' scope.
+  /// Retrieve the  Deployment gating status for the given `pipelineId +
+  /// environmentId + deploymentSequenceNumber` combination. Only apps that
+  /// define the `jiraDeploymentInfoProvider` module can access this resource.
+  /// This resource requires the 'READ' scope.
   Future<void> getDeploymentGatingStatusByKey(
       {required String pipelineId,
       required String environmentId,
@@ -1505,18 +1771,26 @@ class BuildsApi {
 
   /// Update / insert builds data.
   ///
-  /// Builds are identified by the combination of `pipelineId` and `buildNumber`, and existing build data for the same
-  /// build will be replaced if it exists and the `updateSequenceNumber` of the existing data is less than the
+  /// Builds are identified by the combination of `pipelineId` and
+  /// `buildNumber`, and existing build data for the same
+  /// build will be replaced if it exists and the `updateSequenceNumber` of the
+  /// existing data is less than the
   /// incoming data.
   ///
-  /// Submissions are performed asynchronously. Submitted data will eventually be available in Jira; most updates are
-  /// available within a short period of time, but may take some time during peak load and/or maintenance times.
-  /// The `getBuildByKey` operation can be used to confirm that data has been stored successfully (if needed).
+  /// Submissions are performed asynchronously. Submitted data will eventually
+  /// be available in Jira; most updates are
+  /// available within a short period of time, but may take some time during
+  /// peak load and/or maintenance times.
+  /// The `getBuildByKey` operation can be used to confirm that data has been
+  /// stored successfully (if needed).
   ///
-  /// In the case of multiple builds being submitted in one request, each is validated individually prior to
-  /// submission. Details of which build failed submission (if any) are available in the response object.
+  /// In the case of multiple builds being submitted in one request, each is
+  /// validated individually prior to
+  /// submission. Details of which build failed submission (if any) are
+  /// available in the response object.
   ///
-  /// Only Connect apps that define the `jiraBuildInfoProvider` module, and on-premise integrations, can access this resource.
+  /// Only Connect apps that define the `jiraBuildInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
   /// This resource requires the 'WRITE' scope for Connect apps.
   Future<Map<String, dynamic>> submitBuilds(
       {required Map<String, dynamic> body}) async {
@@ -1529,19 +1803,23 @@ class BuildsApi {
 
   /// Bulk delete all builds data that match the given request.
   ///
-  /// One or more query params must be supplied to specify Properties to delete by.
+  /// One or more query params must be supplied to specify Properties to delete
+  /// by.
   /// Optional param `_updateSequenceNumber` is no longer supported.
-  /// If more than one Property is provided, data will be deleted that matches ALL of the
+  /// If more than one Property is provided, data will be deleted that matches
+  /// ALL of the
   /// Properties (e.g. treated as an AND).
   ///
   /// See the documentation for the `submitBuilds` operation for more details.
   ///
   /// e.g. DELETE /bulkByProperties?accountId=account-123&repoId=repo-345
   ///
-  /// Deletion is performed asynchronously. The `getBuildByKey` operation can be used to confirm that data has been
+  /// Deletion is performed asynchronously. The `getBuildByKey` operation can be
+  /// used to confirm that data has been
   /// deleted successfully (if needed).
   ///
-  /// Only Connect apps that define the `jiraBuildInfoProvider` module, and on-premise integrations, can access this resource.
+  /// Only Connect apps that define the `jiraBuildInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
   /// This resource requires the 'WRITE' scope for Connect apps.
   Future<void> deleteBuildsByProperty({int? updateSequenceNumber}) async {
     await _client.send(
@@ -1554,11 +1832,14 @@ class BuildsApi {
     );
   }
 
-  /// Retrieve the currently stored build data for the given `pipelineId` and `buildNumber` combination.
+  /// Retrieve the currently stored build data for the given `pipelineId` and
+  /// `buildNumber` combination.
   ///
-  /// The result will be what is currently stored, ignoring any pending updates or deletes.
+  /// The result will be what is currently stored, ignoring any pending updates
+  /// or deletes.
   ///
-  /// Only Connect apps that define the `jiraBuildInfoProvider` module, and on-premise integrations, can access this resource.
+  /// Only Connect apps that define the `jiraBuildInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
   /// This resource requires the 'WRITE' scope for Connect apps.
   Future<void> getBuildByKey(
       {required String pipelineId, required int buildNumber}) async {
@@ -1572,12 +1853,15 @@ class BuildsApi {
     );
   }
 
-  /// Delete the build data currently stored for the given `pipelineId` and `buildNumber` combination.
+  /// Delete the build data currently stored for the given `pipelineId` and
+  /// `buildNumber` combination.
   ///
-  /// Deletion is performed asynchronously. The `getBuildByKey` operation can be used to confirm that data has been
+  /// Deletion is performed asynchronously. The `getBuildByKey` operation can be
+  /// used to confirm that data has been
   /// deleted successfully (if needed).
   ///
-  /// Only Connect apps that define the `jiraBuildInfoProvider` module, and on-premise integrations, can access this resource.
+  /// Only Connect apps that define the `jiraBuildInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
   /// This resource requires the 'WRITE' scope for Connect apps.
   Future<void> deleteBuildByKey(
       {required String pipelineId,
@@ -1607,17 +1891,25 @@ class RemoteLinksApi {
 
   /// Update / insert Remote Link data.
   ///
-  /// Remote Links are identified by their ID, existing Remote Link data for the same ID will be replaced if it
-  /// exists and the updateSequenceId of existing data is less than the incoming data.
+  /// Remote Links are identified by their ID, existing Remote Link data for the
+  /// same ID will be replaced if it
+  /// exists and the updateSequenceId of existing data is less than the incoming
+  /// data.
   ///
-  /// Submissions are performed asynchronously. Submitted data will eventually be available in Jira; most updates are
-  /// available within a short period of time, but may take some time during peak load and/or maintenance times.
-  /// The `getRemoteLinkById` operation can be used to confirm that data has been stored successfully (if needed).
+  /// Submissions are performed asynchronously. Submitted data will eventually
+  /// be available in Jira; most updates are
+  /// available within a short period of time, but may take some time during
+  /// peak load and/or maintenance times.
+  /// The `getRemoteLinkById` operation can be used to confirm that data has
+  /// been stored successfully (if needed).
   ///
-  /// In the case of multiple Remote Links being submitted in one request, each is validated individually prior to
-  /// submission. Details of which Remote LInk failed submission (if any) are available in the response object.
+  /// In the case of multiple Remote Links being submitted in one request, each
+  /// is validated individually prior to
+  /// submission. Details of which Remote LInk failed submission (if any) are
+  /// available in the response object.
   ///
-  /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module can access this resource. This resource
+  /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module can
+  /// access this resource. This resource
   /// requires the 'WRITE' scope for Connect apps.
   Future<Map<String, dynamic>> submitRemoteLinks(
       {required Map<String, dynamic> body}) async {
@@ -1630,18 +1922,24 @@ class RemoteLinksApi {
 
   /// Bulk delete all Remote Links data that match the given request.
   ///
-  /// One or more query params must be supplied to specify Properties to delete by.
-  /// Optional param `_updateSequenceNumber` is no longer supported. If more than one Property is provided,
-  /// data will be deleted that matches ALL of the Properties (e.g. treated as an AND).
+  /// One or more query params must be supplied to specify Properties to delete
+  /// by.
+  /// Optional param `_updateSequenceNumber` is no longer supported. If more
+  /// than one Property is provided,
+  /// data will be deleted that matches ALL of the Properties (e.g. treated as
+  /// an AND).
   ///
-  /// See the documentation for the `submitRemoteLinks` operation for more details.
+  /// See the documentation for the `submitRemoteLinks` operation for more
+  /// details.
   ///
   /// e.g. DELETE /bulkByProperties?accountId=account-123&repoId=repo-345
   ///
-  /// Deletion is performed asynchronously. The `getRemoteLinkById` operation can be used to confirm that data has been
+  /// Deletion is performed asynchronously. The `getRemoteLinkById` operation
+  /// can be used to confirm that data has been
   /// deleted successfully (if needed).
   ///
-  /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module, and on-premise integrations, can access this resource.
+  /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
   /// This resource requires the 'WRITE' scope for Connect apps.
   Future<void> deleteRemoteLinksByProperty(
       {int? updateSequenceNumber, Map<String, dynamic>? params}) async {
@@ -1658,9 +1956,11 @@ class RemoteLinksApi {
 
   /// Retrieve the currently stored Remote Link data for the given ID.
   ///
-  /// The result will be what is currently stored, ignoring any pending updates or deletes.
+  /// The result will be what is currently stored, ignoring any pending updates
+  /// or deletes.
   ///
-  /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module, and on-premise integrations, can access this resource.
+  /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
   /// This resource requires the 'WRITE' scope for Connect apps.
   Future<void> getRemoteLinkById(String remoteLinkId) async {
     await _client.send(
@@ -1674,10 +1974,12 @@ class RemoteLinksApi {
 
   /// Delete the Remote Link data currently stored for the given ID.
   ///
-  /// Deletion is performed asynchronously. The `getRemoteLinkById` operation can be used to confirm that data has been
+  /// Deletion is performed asynchronously. The `getRemoteLinkById` operation
+  /// can be used to confirm that data has been
   /// deleted successfully (if needed).
   ///
-  /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module, and on-premise integrations, can access this resource.
+  /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
   /// This resource requires the 'WRITE' scope for Connect apps.
   Future<void> deleteRemoteLinkById(
       {required String remoteLinkId, int? updateSequenceNumber}) async {
@@ -2813,24 +3115,44 @@ class QuickFilterBean {
   }
 }
 
-/// Details of a user's active status, identifiers, name, and avatars as permitted by the user's Atlassian Account privacy settings. However, be aware of these exceptions:<ul><li>User record deleted from Atlassian: This occurs as the result of a right to be forgotten request. In this case, `displayName` provides an indication and other parameters have default values or are blank (for example, email is blank).</li><li>User record corrupted: This occurs as a results of events such as a server import and can only happen to deleted users. In this case, `accountId` returns <em>unknown</em> and all other parameters have fallback values.</li><li>User record unavailable: This usually occurs due to an internal service outage. In this case, all parameters have fallback values.</li></ul>
+/// Details of a user's active status, identifiers, name, and avatars as
+/// permitted by the user's Atlassian Account privacy settings. However, be
+/// aware of these exceptions:<ul><li>User record deleted from Atlassian: This
+/// occurs as the result of a right to be forgotten request. In this case,
+/// `displayName` provides an indication and other parameters have default
+/// values or are blank (for example, email is blank).</li><li>User record
+/// corrupted: This occurs as a results of events such as a server import and
+/// can only happen to deleted users. In this case, `accountId` returns
+/// <em>unknown</em> and all other parameters have fallback values.</li><li>User
+/// record unavailable: This usually occurs due to an internal service outage.
+/// In this case, all parameters have fallback values.</li></ul>
 class PageBeanBoardBeanValuesItemAdminsUsersItem {
-  /// This property is deprecated in favor of `accountId` because of privacy changes. See the <a href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration guide</a> for details. <br>The key of the user.
+  /// This property is deprecated in favor of `accountId` because of privacy
+  /// changes. See the <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
+  /// guide</a> for details.
+  /// The key of the user.
   final String? key;
 
   /// The URL of the user.
   final String? self;
 
-  /// This property is deprecated in favor of `accountId` because of privacy changes. See the <a href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration guide</a> for details. <br>The username of the user.
+  /// This property is deprecated in favor of `accountId` because of privacy
+  /// changes. See the <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
+  /// guide</a> for details.
+  /// The username of the user.
   final String? name;
 
-  /// The display name of the user. Depending on the user’s privacy setting, this may return an alternative value.
+  /// The display name of the user. Depending on the user’s privacy setting,
+  /// this may return an alternative value.
   final String? displayName;
 
   /// Whether the user is active.
   final bool active;
 
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, <em>5b10ac8d82e05b22cc7d4ef5</em>.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, <em>5b10ac8d82e05b22cc7d4ef5</em>.
   final String? accountId;
 
   /// The avatars of the user.
@@ -3270,24 +3592,44 @@ class PageBeanBoardBean {
   }
 }
 
-/// Details of a user's active status, identifiers, name, and avatars as permitted by the user's Atlassian Account privacy settings. However, be aware of these exceptions:<ul><li>User record deleted from Atlassian: This occurs as the result of a right to be forgotten request. In this case, `displayName` provides an indication and other parameters have default values or are blank (for example, email is blank).</li><li>User record corrupted: This occurs as a results of events such as a server import and can only happen to deleted users. In this case, `accountId` returns <em>unknown</em> and all other parameters have fallback values.</li><li>User record unavailable: This usually occurs due to an internal service outage. In this case, all parameters have fallback values.</li></ul>
+/// Details of a user's active status, identifiers, name, and avatars as
+/// permitted by the user's Atlassian Account privacy settings. However, be
+/// aware of these exceptions:<ul><li>User record deleted from Atlassian: This
+/// occurs as the result of a right to be forgotten request. In this case,
+/// `displayName` provides an indication and other parameters have default
+/// values or are blank (for example, email is blank).</li><li>User record
+/// corrupted: This occurs as a results of events such as a server import and
+/// can only happen to deleted users. In this case, `accountId` returns
+/// <em>unknown</em> and all other parameters have fallback values.</li><li>User
+/// record unavailable: This usually occurs due to an internal service outage.
+/// In this case, all parameters have fallback values.</li></ul>
 class BasicUser {
-  /// This property is deprecated in favor of `accountId` because of privacy changes. See the <a href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration guide</a> for details. <br>The key of the user.
+  /// This property is deprecated in favor of `accountId` because of privacy
+  /// changes. See the <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
+  /// guide</a> for details.
+  /// The key of the user.
   final String? key;
 
   /// The URL of the user.
   final String? self;
 
-  /// This property is deprecated in favor of `accountId` because of privacy changes. See the <a href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration guide</a> for details. <br>The username of the user.
+  /// This property is deprecated in favor of `accountId` because of privacy
+  /// changes. See the <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
+  /// guide</a> for details.
+  /// The username of the user.
   final String? name;
 
-  /// The display name of the user. Depending on the user’s privacy setting, this may return an alternative value.
+  /// The display name of the user. Depending on the user’s privacy setting,
+  /// this may return an alternative value.
   final String? displayName;
 
   /// Whether the user is active.
   final bool active;
 
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, <em>5b10ac8d82e05b22cc7d4ef5</em>.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, <em>5b10ac8d82e05b22cc7d4ef5</em>.
   final String? accountId;
 
   /// The avatars of the user.
@@ -3367,24 +3709,44 @@ class BasicUser {
   }
 }
 
-/// Details of a user's active status, identifiers, name, and avatars as permitted by the user's Atlassian Account privacy settings. However, be aware of these exceptions:<ul><li>User record deleted from Atlassian: This occurs as the result of a right to be forgotten request. In this case, `displayName` provides an indication and other parameters have default values or are blank (for example, email is blank).</li><li>User record corrupted: This occurs as a results of events such as a server import and can only happen to deleted users. In this case, `accountId` returns <em>unknown</em> and all other parameters have fallback values.</li><li>User record unavailable: This usually occurs due to an internal service outage. In this case, all parameters have fallback values.</li></ul>
+/// Details of a user's active status, identifiers, name, and avatars as
+/// permitted by the user's Atlassian Account privacy settings. However, be
+/// aware of these exceptions:<ul><li>User record deleted from Atlassian: This
+/// occurs as the result of a right to be forgotten request. In this case,
+/// `displayName` provides an indication and other parameters have default
+/// values or are blank (for example, email is blank).</li><li>User record
+/// corrupted: This occurs as a results of events such as a server import and
+/// can only happen to deleted users. In this case, `accountId` returns
+/// <em>unknown</em> and all other parameters have fallback values.</li><li>User
+/// record unavailable: This usually occurs due to an internal service outage.
+/// In this case, all parameters have fallback values.</li></ul>
 class BoardAdminsBeanUsersItem {
-  /// This property is deprecated in favor of `accountId` because of privacy changes. See the <a href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration guide</a> for details. <br>The key of the user.
+  /// This property is deprecated in favor of `accountId` because of privacy
+  /// changes. See the <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
+  /// guide</a> for details.
+  /// The key of the user.
   final String? key;
 
   /// The URL of the user.
   final String? self;
 
-  /// This property is deprecated in favor of `accountId` because of privacy changes. See the <a href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration guide</a> for details. <br>The username of the user.
+  /// This property is deprecated in favor of `accountId` because of privacy
+  /// changes. See the <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
+  /// guide</a> for details.
+  /// The username of the user.
   final String? name;
 
-  /// The display name of the user. Depending on the user’s privacy setting, this may return an alternative value.
+  /// The display name of the user. Depending on the user’s privacy setting,
+  /// this may return an alternative value.
   final String? displayName;
 
   /// Whether the user is active.
   final bool active;
 
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, <em>5b10ac8d82e05b22cc7d4ef5</em>.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, <em>5b10ac8d82e05b22cc7d4ef5</em>.
   final String? accountId;
 
   /// The avatars of the user.
@@ -3544,24 +3906,44 @@ class BoardAdminsBean {
   }
 }
 
-/// Details of a user's active status, identifiers, name, and avatars as permitted by the user's Atlassian Account privacy settings. However, be aware of these exceptions:<ul><li>User record deleted from Atlassian: This occurs as the result of a right to be forgotten request. In this case, `displayName` provides an indication and other parameters have default values or are blank (for example, email is blank).</li><li>User record corrupted: This occurs as a results of events such as a server import and can only happen to deleted users. In this case, `accountId` returns <em>unknown</em> and all other parameters have fallback values.</li><li>User record unavailable: This usually occurs due to an internal service outage. In this case, all parameters have fallback values.</li></ul>
+/// Details of a user's active status, identifiers, name, and avatars as
+/// permitted by the user's Atlassian Account privacy settings. However, be
+/// aware of these exceptions:<ul><li>User record deleted from Atlassian: This
+/// occurs as the result of a right to be forgotten request. In this case,
+/// `displayName` provides an indication and other parameters have default
+/// values or are blank (for example, email is blank).</li><li>User record
+/// corrupted: This occurs as a results of events such as a server import and
+/// can only happen to deleted users. In this case, `accountId` returns
+/// <em>unknown</em> and all other parameters have fallback values.</li><li>User
+/// record unavailable: This usually occurs due to an internal service outage.
+/// In this case, all parameters have fallback values.</li></ul>
 class BoardBeanAdminsUsersItem {
-  /// This property is deprecated in favor of `accountId` because of privacy changes. See the <a href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration guide</a> for details. <br>The key of the user.
+  /// This property is deprecated in favor of `accountId` because of privacy
+  /// changes. See the <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
+  /// guide</a> for details.
+  /// The key of the user.
   final String? key;
 
   /// The URL of the user.
   final String? self;
 
-  /// This property is deprecated in favor of `accountId` because of privacy changes. See the <a href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration guide</a> for details. <br>The username of the user.
+  /// This property is deprecated in favor of `accountId` because of privacy
+  /// changes. See the <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
+  /// guide</a> for details.
+  /// The username of the user.
   final String? name;
 
-  /// The display name of the user. Depending on the user’s privacy setting, this may return an alternative value.
+  /// The display name of the user. Depending on the user’s privacy setting,
+  /// this may return an alternative value.
   final String? displayName;
 
   /// Whether the user is active.
   final bool active;
 
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, <em>5b10ac8d82e05b22cc7d4ef5</em>.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, <em>5b10ac8d82e05b22cc7d4ef5</em>.
   final String? accountId;
 
   /// The avatars of the user.
@@ -4277,7 +4659,8 @@ class BoardFilterBean {
 }
 
 class SearchResultsBean {
-  /// Expand options that include additional search result details in the response.
+  /// Expand options that include additional search result details in the
+  /// response.
   final String? expand;
 
   /// The index of the first item returned on the page.
@@ -5252,13 +5635,15 @@ class HistoryMetadataParticipant {
   /// The display name of the user or system associated with a history record.
   final String? displayName;
 
-  /// The key of the display name of the user or system associated with a history record.
+  /// The key of the display name of the user or system associated with a
+  /// history record.
   final String? displayNameKey;
 
   /// The type of the user or system associated with a history record.
   final String? type;
 
-  /// The URL to an avatar for the user or system associated with a history record.
+  /// The URL to an avatar for the user or system associated with a history
+  /// record.
   final String? avatarUrl;
 
   /// The URL of the user or system associated with a history record.
@@ -5332,7 +5717,8 @@ class HistoryMetadataParticipant {
 }
 
 class IssueBeanTransitionsItem {
-  /// The ID of the issue transition. Required when specifying a transition to undertake.
+  /// The ID of the issue transition. Required when specifying a transition to
+  /// undertake.
   final String? id;
 
   /// The name of the issue transition.
@@ -5344,7 +5730,8 @@ class IssueBeanTransitionsItem {
   /// Whether there is a screen associated with the issue transition.
   final bool hasScreen;
 
-  /// Whether the issue transition is global, that is, the transition is applied to issues regardless of their status.
+  /// Whether the issue transition is global, that is, the transition is applied
+  /// to issues regardless of their status.
   final bool isGlobal;
 
   /// Whether this is the initial issue transition for the workflow.
@@ -5353,10 +5740,13 @@ class IssueBeanTransitionsItem {
   /// Whether the transition is available to be performed.
   final bool isAvailable;
 
-  /// Whether the issue has to meet criteria before the issue transition is applied.
+  /// Whether the issue has to meet criteria before the issue transition is
+  /// applied.
   final bool isConditional;
 
-  /// Details of the fields associated with the issue transition screen. Use this information to populate `fields` and `update` in a transition request.
+  /// Details of the fields associated with the issue transition screen. Use
+  /// this information to populate `fields` and `update` in a transition
+  /// request.
   final Map<String, dynamic>? fields;
 
   /// Expand options that include additional transition details in the response.
@@ -5642,7 +6032,8 @@ class IssueBean {
 }
 
 class IssueTransitionBean {
-  /// The ID of the issue transition. Required when specifying a transition to undertake.
+  /// The ID of the issue transition. Required when specifying a transition to
+  /// undertake.
   final String? id;
 
   /// The name of the issue transition.
@@ -5654,7 +6045,8 @@ class IssueTransitionBean {
   /// Whether there is a screen associated with the issue transition.
   final bool hasScreen;
 
-  /// Whether the issue transition is global, that is, the transition is applied to issues regardless of their status.
+  /// Whether the issue transition is global, that is, the transition is applied
+  /// to issues regardless of their status.
   final bool isGlobal;
 
   /// Whether this is the initial issue transition for the workflow.
@@ -5663,10 +6055,13 @@ class IssueTransitionBean {
   /// Whether the transition is available to be performed.
   final bool isAvailable;
 
-  /// Whether the issue has to meet criteria before the issue transition is applied.
+  /// Whether the issue has to meet criteria before the issue transition is
+  /// applied.
   final bool isConditional;
 
-  /// Details of the fields associated with the issue transition screen. Use this information to populate `fields` and `update` in a transition request.
+  /// Details of the fields associated with the issue transition screen. Use
+  /// this information to populate `fields` and `update` in a transition
+  /// request.
   final Map<String, dynamic>? fields;
 
   /// Expand options that include additional transition details in the response.
@@ -5778,7 +6173,8 @@ class JsonTypeBean {
   /// The data type of the field.
   final String? type;
 
-  /// When the data type is an array, the name of the field items within the array.
+  /// When the data type is an array, the name of the field items within the
+  /// array.
   final String? items;
 
   /// If the field is a system field, the name of the field.
@@ -6393,31 +6789,43 @@ class UserJsonBean {
   /// The URL of the user.
   final String? self;
 
-  /// This property is no longer available and will be removed from the documentation soon. See the <a href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">deprecation notice</a> for details.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">deprecation
+  /// notice</a> for details.
   final String? name;
 
-  /// This property is no longer available and will be removed from the documentation soon. See the <a href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">deprecation notice</a> for details.
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">deprecation
+  /// notice</a> for details.
   final String? key;
 
-  /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, <em>5b10ac8d82e05b22cc7d4ef5</em>.
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, <em>5b10ac8d82e05b22cc7d4ef5</em>.
   final String? accountId;
 
-  /// The email address of the user. Depending on the user’s privacy settings, this may be returned as null.
+  /// The email address of the user. Depending on the user’s privacy settings,
+  /// this may be returned as null.
   final String? emailAddress;
 
   /// The avatars of the user.
   final Map<String, dynamic>? avatarUrls;
 
-  /// The display name of the user. Depending on the user’s privacy settings, this may return an alternative value.
+  /// The display name of the user. Depending on the user’s privacy settings,
+  /// this may return an alternative value.
   final String? displayName;
 
   /// Whether the user is active.
   final bool active;
 
-  /// The time zone specified in the user's profile. Depending on the user’s privacy settings, this may be returned as null.
+  /// The time zone specified in the user's profile. Depending on the user’s
+  /// privacy settings, this may be returned as null.
   final String? timeZone;
 
-  /// The type of account represented by this user. This will be one of 'atlassian' (normal users), 'app' (application user) or 'customer' (Jira Service Desk customer user)
+  /// The type of account represented by this user. This will be one of
+  /// 'atlassian' (normal users), 'app' (application user) or 'customer' (Jira
+  /// Service Desk customer user)
   final String? accountType;
 
   UserJsonBean(

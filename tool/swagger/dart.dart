@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:collection/collection.dart';
 import '../utils/string.dart';
+import 'comment.dart';
 import 'dart_keywords.dart';
 import 'swagger_spec.dart' as sw;
 
@@ -84,8 +85,7 @@ class Api {
     } else if (type == 'array') {
       return ListDartType(this, typeFromSchema(schema.items!));
     } else if (type == 'object') {
-      return MapDartType.withTypes(
-          this, DartType(this, 'String'), DartType(this, 'dynamic'));
+      return MapDartType.withDynamic(this);
     } else {
       if (type == 'string' && schema.format == 'date-time') {
         return DateTimeType(this);
@@ -95,13 +95,9 @@ class Api {
           if (allOf != null && allOf.isNotEmpty) {
             return typeFromSchema(allOf.first);
           }
+          //TODO(xha): support oneOf (with discriminator) & anyOf (with sub types)
 
-          //throw Exception('Type is null for schema $schema');
-          // TODO(xha): support allOf
-          "";
-
-          return MapDartType.withTypes(
-              this, DartType(this, 'String'), DartType(this, 'dynamic'));
+          return MapDartType.withDynamic(this);
         }
         return parseDartType(type);
       }
@@ -166,7 +162,7 @@ class $className {
       var tag = service.tag;
       var description = tag.description;
       if (description.isNotEmpty) {
-        buffer.writeln(_toComment(description, indent: 2));
+        buffer.writeln(documentationComment(description, indent: 2));
       }
       buffer.writeln(
           'late final ${tag.name.words.toLowerCamel()} = ${service.className}._(_client);');
@@ -357,7 +353,7 @@ class Operation {
       }
     }
 
-    buffer.writeln(_toComment(path.description));
+    buffer.writeln(documentationComment(path.description, indent: 2));
     buffer.writeln('Future<$returnTypeName> $methodName($parameters) async {');
 
     var parametersCode = '';
@@ -536,7 +532,7 @@ class ComplexType extends DartType {
     final buffer = StringBuffer();
 
     if (_description.isNotEmpty) {
-      buffer.writeln(_toComment(_description));
+      buffer.writeln(documentationComment(_description, indent: 0));
       if (_isObsolete(_description)) {
         buffer.writeln('@deprecated');
       }
@@ -546,7 +542,8 @@ class ComplexType extends DartType {
       var typeName = property.type.toDeclarationString({});
 
       if (property.schema.description.isNotEmpty) {
-        buffer.writeln(_toComment(property.schema.description));
+        buffer.writeln(
+            documentationComment(property.schema.description, indent: 2));
         if (_isObsolete(property.schema.description)) {
           buffer.writeln('@deprecated');
         }
@@ -892,6 +889,9 @@ class MapDartType extends DartType {
     _itemType = value;
   }
 
+  factory MapDartType.withDynamic(Api api) => MapDartType.withTypes(
+      api, DartType(api, 'String'), DartType(api, 'dynamic'));
+
   @override
   String get defaultValue => simpleType?.defaultValue ?? '{}';
 
@@ -1048,22 +1048,6 @@ class PropertyName {
 String _normalizeOperationId(String id) {
   var name = id.split('.').last.split('_').first;
   return name.words.toLowerCamel();
-}
-
-String _toComment(String? comment, {int indent = 0}) {
-  if (comment != null && comment.isNotEmpty) {
-    comment = comment.replaceAll('<code>', '`').replaceAll('</code>', '`');
-
-    const docStarter = '/// ';
-
-    var commentLines = LineSplitter.split(comment).toList();
-
-    return commentLines
-        .map((line) => '${' ' * indent}$docStarter$line')
-        .join('\n');
-  } else {
-    return '';
-  }
 }
 
 bool _isObsolete(String? comment) =>
