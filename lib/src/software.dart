@@ -5,11 +5,9 @@ import 'api_utils.dart';
 // ignore_for_file: deprecated_member_use_from_same_package
 
 class SoftwareApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
-  SoftwareApi._(this._client);
-
-  factory SoftwareApi(Client client) => SoftwareApi._(ApiClient(client));
+  SoftwareApi(this._client);
 
   /// Apis related to the backlog
   late final backlog = BacklogApi._(_client);
@@ -181,7 +179,7 @@ class SoftwareApi {
 /// Jira Software Cloud REST API documentation
 
 class BacklogApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   BacklogApi._(this._client);
 
@@ -224,7 +222,7 @@ class BacklogApi {
 /// Jira Software Cloud REST API documentation
 
 class BoardApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   BoardApi._(this._client);
 
@@ -854,7 +852,7 @@ class BoardApi {
 /// Jira Software Cloud REST API documentation
 
 class EpicApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   EpicApi._(this._client);
 
@@ -1052,7 +1050,7 @@ class EpicApi {
 /// Jira Software Cloud REST API documentation
 
 class IssueApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   IssueApi._(this._client);
 
@@ -1182,7 +1180,7 @@ class IssueApi {
 /// Jira Software Cloud REST API documentation
 
 class SprintApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   SprintApi._(this._client);
 
@@ -1407,7 +1405,7 @@ class SprintApi {
 /// Jira Software Cloud REST API documentation
 
 class DevelopmentInformationApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   DevelopmentInformationApi._(this._client);
 
@@ -1527,7 +1525,7 @@ class DevelopmentInformationApi {
 /// Jira Software Cloud REST API documentation
 
 class FeatureFlagsApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   FeatureFlagsApi._(this._client);
 
@@ -1625,7 +1623,7 @@ class FeatureFlagsApi {
 /// Jira Software Cloud REST API documentation
 
 class DeploymentsApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   DeploymentsApi._(this._client);
 
@@ -1765,7 +1763,7 @@ class DeploymentsApi {
 /// Jira Software Cloud REST API documentation
 
 class BuildsApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   BuildsApi._(this._client);
 
@@ -1885,7 +1883,7 @@ class BuildsApi {
 /// Jira Software Cloud REST API documentation
 
 class RemoteLinksApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   RemoteLinksApi._(this._client);
 

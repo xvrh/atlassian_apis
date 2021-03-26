@@ -1,12 +1,15 @@
-import 'package:http/http.dart';
+import 'dart:convert';
 import 'package:jira/service_management.dart';
 
-void main() {
-  var client = Client();
+void main() async {
+  var user = '<user>';
+  var apiToken = '<token>';
+  var client = JiraClient.basicAuthentication('<host>.atlassian.net',
+      user: user, apiToken: apiToken);
   var serviceManagement = ServiceManagementApi(client);
 
-  serviceManagement.organization.getOrganizations2(serviceDeskId: 1);
-  serviceManagement.request.createCustomerRequest(body: RequestCreateDTO());
+  var info = await serviceManagement.info.getInfo();
+  print(jsonEncode(info.toJson()));
 
   client.close();
 }

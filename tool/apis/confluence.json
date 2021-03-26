@@ -13909,7 +13909,7 @@
           },
           "permissions": {
             "type": "array",
-            "description": "The permissions for the new space. If no permissions are provided, the\n[Confluence default space permissions](https://confluence.atlassian.com/x/UAgzKw#CreateaSpace-Spacepermissions)\nare applied. Note, for security reasons, permissions cannot be changed\nvia the API after the space has been created, and must be changed via\nthe user interface instead.",
+            "description": "The permissions for the new space. If no permissions are provided, the\n[Confluence default space permissions](https://confluence.atlassian.com/x/UAgzKw#CreateaSpace-Spacepermissions)\nare applied. Note that if permissions are provided, the space is \ncreated with only the provided set of permissions, not \nincluding the default space permissions. Space permissions \ncan be modified after creation using the space permissions \nendpoints, and a private space can be created using the \ncreate private space endpoint.",
             "items": {
               "$ref": "#/components/schemas/SpacePermission"
             }

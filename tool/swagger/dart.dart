@@ -151,11 +151,9 @@ import 'api_utils.dart';
 // ignore_for_file: deprecated_member_use_from_same_package
 
 class $className {
-  final ApiClient _client;
+  final JiraClient _client;
   
-  $className._(this._client);
-  
-  factory $className(Client client) => $className._(ApiClient(client));
+  $className(this._client);
 ''');
 
     for (var service in _services) {
@@ -244,7 +242,7 @@ class Service {
     buffer.writeln('''
 
 class $_className {
-    final ApiClient _client;
+    final JiraClient _client;
   
   $_className._(this._client);
 ''');

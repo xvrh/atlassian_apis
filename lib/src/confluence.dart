@@ -5,11 +5,9 @@ import 'api_utils.dart';
 // ignore_for_file: deprecated_member_use_from_same_package
 
 class ConfluenceApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
-  ConfluenceApi._(this._client);
-
-  factory ConfluenceApi(Client client) => ConfluenceApi._(ApiClient(client));
+  ConfluenceApi(this._client);
 
   late final audit = AuditApi._(_client);
 
@@ -74,7 +72,7 @@ class ConfluenceApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class AuditApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   AuditApi._(this._client);
 
@@ -204,7 +202,7 @@ class AuditApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   ContentApi._(this._client);
 
@@ -502,7 +500,7 @@ class ContentApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentAttachmentsApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   ContentAttachmentsApi._(this._client);
 
@@ -729,7 +727,7 @@ class ContentAttachmentsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentBodyApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   ContentBodyApi._(this._client);
 
@@ -774,7 +772,7 @@ class ContentBodyApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentChildrenAndDescendantsApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   ContentChildrenAndDescendantsApi._(this._client);
 
@@ -1031,7 +1029,7 @@ class ContentChildrenAndDescendantsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentMacroBodyApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   ContentMacroBodyApi._(this._client);
 
@@ -1073,7 +1071,7 @@ class ContentMacroBodyApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentCommentsApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   ContentCommentsApi._(this._client);
 
@@ -1111,7 +1109,7 @@ class ContentCommentsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentLabelsApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   ContentLabelsApi._(this._client);
 
@@ -1219,7 +1217,7 @@ class ContentLabelsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentPermissionsApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   ContentPermissionsApi._(this._client);
 
@@ -1255,7 +1253,7 @@ class ContentPermissionsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentPropertiesApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   ContentPropertiesApi._(this._client);
 
@@ -1407,7 +1405,7 @@ class ContentPropertiesApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentRestrictionsApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   ContentRestrictionsApi._(this._client);
 
@@ -1780,7 +1778,7 @@ class ContentRestrictionsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentVersionsApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   ContentVersionsApi._(this._client);
 
@@ -1878,7 +1876,7 @@ class ContentVersionsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentWatchesApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   ContentWatchesApi._(this._client);
 
@@ -2250,7 +2248,7 @@ class ContentWatchesApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class DynamicModulesApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   DynamicModulesApi._(this._client);
 
@@ -2297,7 +2295,7 @@ class DynamicModulesApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class GroupApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   GroupApi._(this._client);
 
@@ -2524,7 +2522,7 @@ class GroupApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class InlineTasksApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   InlineTasksApi._(this._client);
 
@@ -2575,7 +2573,7 @@ class InlineTasksApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class LabelInfoApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   LabelInfoApi._(this._client);
 
@@ -2604,7 +2602,7 @@ class LabelInfoApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class LongRunningTaskApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   LongRunningTaskApi._(this._client);
 
@@ -2647,7 +2645,7 @@ class LongRunningTaskApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class RelationApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   RelationApi._(this._client);
 
@@ -2862,7 +2860,7 @@ class RelationApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class SearchApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   SearchApi._(this._client);
 
@@ -2953,7 +2951,7 @@ class SearchApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class SettingsApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   SettingsApi._(this._client);
 
@@ -3048,7 +3046,7 @@ class SettingsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class SpaceApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   SpaceApi._(this._client);
 
@@ -3232,7 +3230,7 @@ class SpaceApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class SpacePermissionsApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   SpacePermissionsApi._(this._client);
 
@@ -3278,7 +3276,7 @@ class SpacePermissionsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class SpacePropertiesApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   SpacePropertiesApi._(this._client);
 
@@ -3405,7 +3403,7 @@ class SpacePropertiesApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class SpaceSettingsApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   SpaceSettingsApi._(this._client);
 
@@ -3445,7 +3443,7 @@ class SpaceSettingsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class TemplateApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   TemplateApi._(this._client);
 
@@ -3565,7 +3563,7 @@ class TemplateApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ThemesApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   ThemesApi._(this._client);
 
@@ -3663,7 +3661,7 @@ class ThemesApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class UsersApi {
-  final ApiClient _client;
+  final JiraClient _client;
 
   UsersApi._(this._client);
 
@@ -12714,9 +12712,12 @@ class SpaceCreate {
 
   /// The permissions for the new space. If no permissions are provided, the
   /// [Confluence default space permissions](https://confluence.atlassian.com/x/UAgzKw#CreateaSpace-Spacepermissions)
-  /// are applied. Note, for security reasons, permissions cannot be changed
-  /// via the API after the space has been created, and must be changed via
-  /// the user interface instead.
+  /// are applied. Note that if permissions are provided, the space is
+  /// created with only the provided set of permissions, not
+  /// including the default space permissions. Space permissions
+  /// can be modified after creation using the space permissions
+  /// endpoints, and a private space can be created using the
+  /// create private space endpoint.
   final List<SpacePermission> permissions;
 
   SpaceCreate(

@@ -1,3 +1,1 @@
-export 'src/service_management.dart';
-
-class JiraPlatform {}
+export 'src/api_utils.dart' show JiraClient, JiraException;
