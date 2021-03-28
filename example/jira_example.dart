@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:jira/service_management.dart';
+import 'package:atlassian_apis/service_management.dart';
 
 void main() async {
   var user = '<user>';
   var apiToken = '<token>';
-  var client = JiraClient.basicAuthentication('<host>.atlassian.net',
+  var client = ApiClient.basicAuthentication('<host>.atlassian.net',
       user: user, apiToken: apiToken);
   var serviceManagement = ServiceManagementApi(client);
 

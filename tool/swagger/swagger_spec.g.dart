@@ -9,8 +9,8 @@ part of 'swagger_spec.dart';
 Spec _$SpecFromJson(Map<String, dynamic> json) {
   return Spec(
     Info.fromJson(json['info'] as Map<String, dynamic>),
-    (json['tags'] as List<dynamic>)
-        .map((e) => Tag.fromJson(e as Map<String, dynamic>))
+    (json['tags'] as List<dynamic>?)
+        ?.map((e) => Tag.fromJson(e as Map<String, dynamic>))
         .toList(),
     Components.fromJson(json['components'] as Map<String, dynamic>),
     (json['paths'] as Map<String, dynamic>).map(
@@ -39,7 +39,8 @@ Components _$ComponentsFromJson(Map<String, dynamic> json) {
     'schemas',
     'securitySchemes',
     'requestBodies',
-    'parameters'
+    'parameters',
+    'responses'
   ]);
   return Components(
     (json['schemas'] as Map<String, dynamic>).map(
@@ -54,13 +55,16 @@ Components _$ComponentsFromJson(Map<String, dynamic> json) {
     parameters: (json['parameters'] as Map<String, dynamic>?)?.map(
       (k, e) => MapEntry(k, Parameter.fromJson(e as Map<String, dynamic>)),
     ),
+    responses: (json['responses'] as Map<String, dynamic>?)?.map(
+      (k, e) => MapEntry(k, Response.fromJson(e as Map<String, dynamic>)),
+    ),
   );
 }
 
 Path _$PathFromJson(Map<String, dynamic> json) {
   return Path(
     description: json['description'] as String,
-    operationId: json['operationId'] as String,
+    operationId: json['operationId'] as String?,
     tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
     summary: json['summary'] as String?,
     deprecated: json['deprecated'] as bool?,
@@ -129,6 +133,7 @@ Parameter _$ParameterFromJson(Map<String, dynamic> json) {
     'explode',
     'deprecated',
     'x-showInExample',
+    'example',
     'x-changes',
     r'$ref'
   ]);
@@ -151,6 +156,7 @@ Parameter _$ParameterFromJson(Map<String, dynamic> json) {
     json['deprecated'] as bool? ?? false,
   )
     ..showInExample = json['x-showInExample']
+    ..example = json['example']
     ..changes = json['x-changes'];
 }
 
@@ -216,6 +222,7 @@ Schema _$SchemaFromJson(Map<String, dynamic> json) {
     'uniqueItems',
     'readOnly',
     'writeOnly',
+    'nullable',
     'xml',
     'maxLength',
     'minLength',
@@ -258,6 +265,7 @@ Schema _$SchemaFromJson(Map<String, dynamic> json) {
     json['uniqueItems'] as bool? ?? false,
     json['readOnly'] as bool? ?? false,
     json['writeOnly'] as bool? ?? false,
+    json['nullable'] as bool? ?? false,
     json['xml'] as Map<String, dynamic>?,
     json['maxLength'] as int?,
     json['minLength'] as int?,

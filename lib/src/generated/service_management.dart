@@ -1,11 +1,11 @@
 // Generated code - Do not edit manually
 
-import 'api_utils.dart';
+import '../api_utils.dart';
 
 // ignore_for_file: deprecated_member_use_from_same_package
 
 class ServiceManagementApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   ServiceManagementApi(this._client);
 
@@ -29,7 +29,7 @@ class ServiceManagementApi {
 /// Public REST API for Jira Service Management
 
 class CustomerApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   CustomerApi._(this._client);
 
@@ -52,7 +52,7 @@ class CustomerApi {
 /// Public REST API for Jira Service Management
 
 class InfoApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   InfoApi._(this._client);
 
@@ -72,7 +72,7 @@ class InfoApi {
 /// Public REST API for Jira Service Management
 
 class KnowledgebaseApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   KnowledgebaseApi._(this._client);
 
@@ -99,7 +99,7 @@ class KnowledgebaseApi {
 /// Public REST API for Jira Service Management
 
 class OrganizationApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   OrganizationApi._(this._client);
 
@@ -380,7 +380,7 @@ class OrganizationApi {
 /// Public REST API for Jira Service Management
 
 class RequestApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   RequestApi._(this._client);
 
@@ -945,7 +945,7 @@ class RequestApi {
 /// Public REST API for Jira Service Management
 
 class RequesttypeApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   RequesttypeApi._(this._client);
 
@@ -986,7 +986,7 @@ class RequesttypeApi {
 /// Public REST API for Jira Service Management
 
 class ServicedeskApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   ServicedeskApi._(this._client);
 
@@ -1495,10 +1495,10 @@ class ErrorResponse {
 
   factory ErrorResponse.fromJson(Map<String, Object?> json) {
     return ErrorResponse(
-      errorMessage: json['errorMessage'] as String?,
-      i18nErrorMessage: json['i18nErrorMessage'] != null
+      errorMessage: json[r'errorMessage'] as String?,
+      i18nErrorMessage: json[r'i18nErrorMessage'] != null
           ? I18nErrorMessage.fromJson(
-              json['i18nErrorMessage']! as Map<String, Object?>)
+              json[r'i18nErrorMessage']! as Map<String, Object?>)
           : null,
     );
   }
@@ -1509,10 +1509,10 @@ class ErrorResponse {
 
     final json = <String, Object?>{};
     if (errorMessage != null) {
-      json['errorMessage'] = errorMessage;
+      json[r'errorMessage'] = errorMessage;
     }
     if (i18nErrorMessage != null) {
-      json['i18nErrorMessage'] = i18nErrorMessage.toJson();
+      json[r'i18nErrorMessage'] = i18nErrorMessage.toJson();
     }
     return json;
   }
@@ -1535,8 +1535,8 @@ class I18nErrorMessage {
 
   factory I18nErrorMessage.fromJson(Map<String, Object?> json) {
     return I18nErrorMessage(
-      i18nKey: json['i18nKey'] as String?,
-      parameters: (json['parameters'] as List<Object?>?)
+      i18nKey: json[r'i18nKey'] as String?,
+      parameters: (json[r'parameters'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -1549,9 +1549,9 @@ class I18nErrorMessage {
 
     final json = <String, Object?>{};
     if (i18nKey != null) {
-      json['i18nKey'] = i18nKey;
+      json[r'i18nKey'] = i18nKey;
     }
-    json['parameters'] = parameters;
+    json[r'parameters'] = parameters;
     return json;
   }
 
@@ -1578,13 +1578,13 @@ class ArticleDTO {
 
   factory ArticleDTO.fromJson(Map<String, Object?> json) {
     return ArticleDTO(
-      title: json['title'] as String?,
-      excerpt: json['excerpt'] as String?,
-      source: json['source'] != null
-          ? SourceDTO.fromJson(json['source']! as Map<String, Object?>)
+      title: json[r'title'] as String?,
+      excerpt: json[r'excerpt'] as String?,
+      source: json[r'source'] != null
+          ? SourceDTO.fromJson(json[r'source']! as Map<String, Object?>)
           : null,
-      content: json['content'] != null
-          ? ContentDTO.fromJson(json['content']! as Map<String, Object?>)
+      content: json[r'content'] != null
+          ? ContentDTO.fromJson(json[r'content']! as Map<String, Object?>)
           : null,
     );
   }
@@ -1597,16 +1597,16 @@ class ArticleDTO {
 
     final json = <String, Object?>{};
     if (title != null) {
-      json['title'] = title;
+      json[r'title'] = title;
     }
     if (excerpt != null) {
-      json['excerpt'] = excerpt;
+      json[r'excerpt'] = excerpt;
     }
     if (source != null) {
-      json['source'] = source.toJson();
+      json[r'source'] = source.toJson();
     }
     if (content != null) {
-      json['content'] = content.toJson();
+      json[r'content'] = content.toJson();
     }
     return json;
   }
@@ -1634,7 +1634,7 @@ class ContentDTO {
 
   factory ContentDTO.fromJson(Map<String, Object?> json) {
     return ContentDTO(
-      iframeSrc: json['iframeSrc'] as String?,
+      iframeSrc: json[r'iframeSrc'] as String?,
     );
   }
 
@@ -1643,7 +1643,7 @@ class ContentDTO {
 
     final json = <String, Object?>{};
     if (iframeSrc != null) {
-      json['iframeSrc'] = iframeSrc;
+      json[r'iframeSrc'] = iframeSrc;
     }
     return json;
   }
@@ -1690,21 +1690,21 @@ class PagedDTOArticleDTO {
 
   factory PagedDTOArticleDTO.fromJson(Map<String, Object?> json) {
     return PagedDTOArticleDTO(
-      size: (json['size'] as num?)?.toInt(),
-      start: (json['start'] as num?)?.toInt(),
-      limit: (json['limit'] as num?)?.toInt(),
-      isLastPage: json['isLastPage'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) =>
                   ArticleDTO.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: json['_links'] != null
-          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -1720,19 +1720,19 @@ class PagedDTOArticleDTO {
 
     final json = <String, Object?>{};
     if (size != null) {
-      json['size'] = size;
+      json[r'size'] = size;
     }
     if (start != null) {
-      json['start'] = start;
+      json[r'start'] = start;
     }
     if (limit != null) {
-      json['limit'] = limit;
+      json[r'limit'] = limit;
     }
-    json['isLastPage'] = isLastPage;
-    json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands;
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -1775,11 +1775,11 @@ class PagedLinkDTO {
 
   factory PagedLinkDTO.fromJson(Map<String, Object?> json) {
     return PagedLinkDTO(
-      self: json['self'] as String?,
-      base: json['base'] as String?,
-      context: json['context'] as String?,
-      next: json['next'] as String?,
-      prev: json['prev'] as String?,
+      self: json[r'self'] as String?,
+      base: json[r'base'] as String?,
+      context: json[r'context'] as String?,
+      next: json[r'next'] as String?,
+      prev: json[r'prev'] as String?,
     );
   }
 
@@ -1792,19 +1792,19 @@ class PagedLinkDTO {
 
     final json = <String, Object?>{};
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (base != null) {
-      json['base'] = base;
+      json[r'base'] = base;
     }
     if (context != null) {
-      json['context'] = context;
+      json[r'context'] = context;
     }
     if (next != null) {
-      json['next'] = next;
+      json[r'next'] = next;
     }
     if (prev != null) {
-      json['prev'] = prev;
+      json[r'prev'] = prev;
     }
     return json;
   }
@@ -1833,8 +1833,8 @@ class SourceDTO {
 
   factory SourceDTO.fromJson(Map<String, Object?> json) {
     return SourceDTO(
-      type: json['type'] != null
-          ? SourceDTOType.fromValue(json['type']! as String)
+      type: json[r'type'] != null
+          ? SourceDTOType.fromValue(json[r'type']! as String)
           : null,
     );
   }
@@ -1844,7 +1844,7 @@ class SourceDTO {
 
     final json = <String, Object?>{};
     if (type != null) {
-      json['type'] = type.value;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -1888,7 +1888,7 @@ class RequestNotificationSubscriptionDTO {
   factory RequestNotificationSubscriptionDTO.fromJson(
       Map<String, Object?> json) {
     return RequestNotificationSubscriptionDTO(
-      subscribed: json['subscribed'] as bool? ?? false,
+      subscribed: json[r'subscribed'] as bool? ?? false,
     );
   }
 
@@ -1896,7 +1896,7 @@ class RequestNotificationSubscriptionDTO {
     var subscribed = this.subscribed;
 
     final json = <String, Object?>{};
-    json['subscribed'] = subscribed;
+    json[r'subscribed'] = subscribed;
     return json;
   }
 
@@ -1942,21 +1942,21 @@ class PagedDTORequestTypeGroupDTO {
 
   factory PagedDTORequestTypeGroupDTO.fromJson(Map<String, Object?> json) {
     return PagedDTORequestTypeGroupDTO(
-      size: (json['size'] as num?)?.toInt(),
-      start: (json['start'] as num?)?.toInt(),
-      limit: (json['limit'] as num?)?.toInt(),
-      isLastPage: json['isLastPage'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) => RequestTypeGroupDTO.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: json['_links'] != null
-          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -1972,19 +1972,19 @@ class PagedDTORequestTypeGroupDTO {
 
     final json = <String, Object?>{};
     if (size != null) {
-      json['size'] = size;
+      json[r'size'] = size;
     }
     if (start != null) {
-      json['start'] = start;
+      json[r'start'] = start;
     }
     if (limit != null) {
-      json['limit'] = limit;
+      json[r'limit'] = limit;
     }
-    json['isLastPage'] = isLastPage;
-    json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands;
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -2020,8 +2020,8 @@ class RequestTypeGroupDTO {
 
   factory RequestTypeGroupDTO.fromJson(Map<String, Object?> json) {
     return RequestTypeGroupDTO(
-      id: json['id'] as String?,
-      name: json['name'] as String?,
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
     );
   }
 
@@ -2031,10 +2031,10 @@ class RequestTypeGroupDTO {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     return json;
   }
@@ -2068,14 +2068,14 @@ class CustomerRequestCreateMetaDTO {
 
   factory CustomerRequestCreateMetaDTO.fromJson(Map<String, Object?> json) {
     return CustomerRequestCreateMetaDTO(
-      requestTypeFields: (json['requestTypeFields'] as List<Object?>?)
+      requestTypeFields: (json[r'requestTypeFields'] as List<Object?>?)
               ?.map((i) => RequestTypeFieldDTO.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      canRaiseOnBehalfOf: json['canRaiseOnBehalfOf'] as bool? ?? false,
+      canRaiseOnBehalfOf: json[r'canRaiseOnBehalfOf'] as bool? ?? false,
       canAddRequestParticipants:
-          json['canAddRequestParticipants'] as bool? ?? false,
+          json[r'canAddRequestParticipants'] as bool? ?? false,
     );
   }
 
@@ -2085,10 +2085,10 @@ class CustomerRequestCreateMetaDTO {
     var canAddRequestParticipants = this.canAddRequestParticipants;
 
     final json = <String, Object?>{};
-    json['requestTypeFields'] =
+    json[r'requestTypeFields'] =
         requestTypeFields.map((i) => i.toJson()).toList();
-    json['canRaiseOnBehalfOf'] = canRaiseOnBehalfOf;
-    json['canAddRequestParticipants'] = canAddRequestParticipants;
+    json[r'canRaiseOnBehalfOf'] = canRaiseOnBehalfOf;
+    json[r'canAddRequestParticipants'] = canAddRequestParticipants;
     return json;
   }
 
@@ -2136,12 +2136,12 @@ class JsonTypeBean {
 
   factory JsonTypeBean.fromJson(Map<String, Object?> json) {
     return JsonTypeBean(
-      type: json['type'] as String? ?? '',
-      items: json['items'] as String?,
-      system: json['system'] as String?,
-      custom: json['custom'] as String?,
-      customId: (json['customId'] as num?)?.toInt(),
-      configuration: json['configuration'] as Map<String, Object?>?,
+      type: json[r'type'] as String? ?? '',
+      items: json[r'items'] as String?,
+      system: json[r'system'] as String?,
+      custom: json[r'custom'] as String?,
+      customId: (json[r'customId'] as num?)?.toInt(),
+      configuration: json[r'configuration'] as Map<String, Object?>?,
     );
   }
 
@@ -2154,21 +2154,21 @@ class JsonTypeBean {
     var configuration = this.configuration;
 
     final json = <String, Object?>{};
-    json['type'] = type;
+    json[r'type'] = type;
     if (items != null) {
-      json['items'] = items;
+      json[r'items'] = items;
     }
     if (system != null) {
-      json['system'] = system;
+      json[r'system'] = system;
     }
     if (custom != null) {
-      json['custom'] = custom;
+      json[r'custom'] = custom;
     }
     if (customId != null) {
-      json['customId'] = customId;
+      json[r'customId'] = customId;
     }
     if (configuration != null) {
-      json['configuration'] = configuration;
+      json[r'configuration'] = configuration;
     }
     return json;
   }
@@ -2226,21 +2226,21 @@ class PagedDTORequestTypeDTO {
 
   factory PagedDTORequestTypeDTO.fromJson(Map<String, Object?> json) {
     return PagedDTORequestTypeDTO(
-      size: (json['size'] as num?)?.toInt(),
-      start: (json['start'] as num?)?.toInt(),
-      limit: (json['limit'] as num?)?.toInt(),
-      isLastPage: json['isLastPage'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) => RequestTypeDTO.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: json['_links'] != null
-          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -2256,19 +2256,19 @@ class PagedDTORequestTypeDTO {
 
     final json = <String, Object?>{};
     if (size != null) {
-      json['size'] = size;
+      json[r'size'] = size;
     }
     if (start != null) {
-      json['start'] = start;
+      json[r'start'] = start;
     }
     if (limit != null) {
-      json['limit'] = limit;
+      json[r'limit'] = limit;
     }
-    json['isLastPage'] = isLastPage;
-    json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands;
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -2346,29 +2346,29 @@ class RequestTypeDTO {
 
   factory RequestTypeDTO.fromJson(Map<String, Object?> json) {
     return RequestTypeDTO(
-      id: json['id'] as String?,
-      name: json['name'] as String?,
-      description: json['description'] as String?,
-      helpText: json['helpText'] as String?,
-      issueTypeId: json['issueTypeId'] as String?,
-      serviceDeskId: json['serviceDeskId'] as String?,
-      groupIds: (json['groupIds'] as List<Object?>?)
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      description: json[r'description'] as String?,
+      helpText: json[r'helpText'] as String?,
+      issueTypeId: json[r'issueTypeId'] as String?,
+      serviceDeskId: json[r'serviceDeskId'] as String?,
+      groupIds: (json[r'groupIds'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      icon: json['icon'] != null
-          ? RequestTypeIconDTO.fromJson(json['icon']! as Map<String, Object?>)
+      icon: json[r'icon'] != null
+          ? RequestTypeIconDTO.fromJson(json[r'icon']! as Map<String, Object?>)
           : null,
-      fields: json['fields'] != null
+      fields: json[r'fields'] != null
           ? CustomerRequestCreateMetaDTO.fromJson(
-              json['fields']! as Map<String, Object?>)
+              json[r'fields']! as Map<String, Object?>)
           : null,
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: json['_links'] != null
-          ? SelfLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -2388,33 +2388,33 @@ class RequestTypeDTO {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (description != null) {
-      json['description'] = description;
+      json[r'description'] = description;
     }
     if (helpText != null) {
-      json['helpText'] = helpText;
+      json[r'helpText'] = helpText;
     }
     if (issueTypeId != null) {
-      json['issueTypeId'] = issueTypeId;
+      json[r'issueTypeId'] = issueTypeId;
     }
     if (serviceDeskId != null) {
-      json['serviceDeskId'] = serviceDeskId;
+      json[r'serviceDeskId'] = serviceDeskId;
     }
-    json['groupIds'] = groupIds;
+    json[r'groupIds'] = groupIds;
     if (icon != null) {
-      json['icon'] = icon.toJson();
+      json[r'icon'] = icon.toJson();
     }
     if (fields != null) {
-      json['fields'] = fields.toJson();
+      json[r'fields'] = fields.toJson();
     }
-    json['_expands'] = expands;
+    json[r'_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -2486,24 +2486,24 @@ class RequestTypeFieldDTO {
 
   factory RequestTypeFieldDTO.fromJson(Map<String, Object?> json) {
     return RequestTypeFieldDTO(
-      fieldId: json['fieldId'] as String?,
-      name: json['name'] as String?,
-      description: json['description'] as String?,
-      required: json['required'] as bool? ?? false,
-      defaultValues: (json['defaultValues'] as List<Object?>?)
+      fieldId: json[r'fieldId'] as String?,
+      name: json[r'name'] as String?,
+      description: json[r'description'] as String?,
+      required: json[r'required'] as bool? ?? false,
+      defaultValues: (json[r'defaultValues'] as List<Object?>?)
               ?.map((i) => RequestTypeFieldValueDTO.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      validValues: (json['validValues'] as List<Object?>?)
+      validValues: (json[r'validValues'] as List<Object?>?)
               ?.map((i) => RequestTypeFieldValueDTO.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      jiraSchema: json['jiraSchema'] != null
-          ? JsonTypeBean.fromJson(json['jiraSchema']! as Map<String, Object?>)
+      jiraSchema: json[r'jiraSchema'] != null
+          ? JsonTypeBean.fromJson(json[r'jiraSchema']! as Map<String, Object?>)
           : null,
-      visible: json['visible'] as bool? ?? false,
+      visible: json[r'visible'] as bool? ?? false,
     );
   }
 
@@ -2519,21 +2519,21 @@ class RequestTypeFieldDTO {
 
     final json = <String, Object?>{};
     if (fieldId != null) {
-      json['fieldId'] = fieldId;
+      json[r'fieldId'] = fieldId;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (description != null) {
-      json['description'] = description;
+      json[r'description'] = description;
     }
-    json['required'] = required;
-    json['defaultValues'] = defaultValues.map((i) => i.toJson()).toList();
-    json['validValues'] = validValues.map((i) => i.toJson()).toList();
+    json[r'required'] = required;
+    json[r'defaultValues'] = defaultValues.map((i) => i.toJson()).toList();
+    json[r'validValues'] = validValues.map((i) => i.toJson()).toList();
     if (jiraSchema != null) {
-      json['jiraSchema'] = jiraSchema.toJson();
+      json[r'jiraSchema'] = jiraSchema.toJson();
     }
-    json['visible'] = visible;
+    json[r'visible'] = visible;
     return json;
   }
 
@@ -2575,9 +2575,9 @@ class RequestTypeFieldValueDTO {
 
   factory RequestTypeFieldValueDTO.fromJson(Map<String, Object?> json) {
     return RequestTypeFieldValueDTO(
-      value: json['value'] as String?,
-      label: json['label'] as String?,
-      children: (json['children'] as List<Object?>?)
+      value: json[r'value'] as String?,
+      label: json[r'label'] as String?,
+      children: (json[r'children'] as List<Object?>?)
               ?.map((i) => RequestTypeFieldValueDTO.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -2592,12 +2592,12 @@ class RequestTypeFieldValueDTO {
 
     final json = <String, Object?>{};
     if (value != null) {
-      json['value'] = value;
+      json[r'value'] = value;
     }
     if (label != null) {
-      json['label'] = label;
+      json[r'label'] = label;
     }
-    json['children'] = children.map((i) => i.toJson()).toList();
+    json[r'children'] = children.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -2624,10 +2624,10 @@ class RequestTypeIconDTO {
 
   factory RequestTypeIconDTO.fromJson(Map<String, Object?> json) {
     return RequestTypeIconDTO(
-      id: json['id'] as String?,
-      links: json['_links'] != null
+      id: json[r'id'] as String?,
+      links: json[r'_links'] != null
           ? RequestTypeIconLinkDTO.fromJson(
-              json['_links']! as Map<String, Object?>)
+              json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -2638,10 +2638,10 @@ class RequestTypeIconDTO {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -2662,7 +2662,7 @@ class RequestTypeIconLinkDTO {
 
   factory RequestTypeIconLinkDTO.fromJson(Map<String, Object?> json) {
     return RequestTypeIconLinkDTO(
-      iconUrls: json['iconUrls'] as Map<String, Object?>?,
+      iconUrls: json[r'iconUrls'] as Map<String, Object?>?,
     );
   }
 
@@ -2671,7 +2671,7 @@ class RequestTypeIconLinkDTO {
 
     final json = <String, Object?>{};
     if (iconUrls != null) {
-      json['iconUrls'] = iconUrls;
+      json[r'iconUrls'] = iconUrls;
     }
     return json;
   }
@@ -2690,7 +2690,7 @@ class SelfLinkDTO {
 
   factory SelfLinkDTO.fromJson(Map<String, Object?> json) {
     return SelfLinkDTO(
-      self: json['self'] as String?,
+      self: json[r'self'] as String?,
     );
   }
 
@@ -2699,7 +2699,7 @@ class SelfLinkDTO {
 
     final json = <String, Object?>{};
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     return json;
   }
@@ -2718,8 +2718,8 @@ class Linkable {
 
   factory Linkable.fromJson(Map<String, Object?> json) {
     return Linkable(
-      links: json['_links'] != null
-          ? SelfLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -2729,7 +2729,7 @@ class Linkable {
 
     final json = <String, Object?>{};
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -2748,7 +2748,7 @@ class Expandable {
 
   factory Expandable.fromJson(Map<String, Object?> json) {
     return Expandable(
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -2759,7 +2759,7 @@ class Expandable {
     var expands = this.expands;
 
     final json = <String, Object?>{};
-    json['_expands'] = expands;
+    json[r'_expands'] = expands;
     return json;
   }
 
@@ -2788,10 +2788,10 @@ class RequestTypeCreateDTO {
 
   factory RequestTypeCreateDTO.fromJson(Map<String, Object?> json) {
     return RequestTypeCreateDTO(
-      issueTypeId: json['issueTypeId'] as String?,
-      name: json['name'] as String?,
-      description: json['description'] as String?,
-      helpText: json['helpText'] as String?,
+      issueTypeId: json[r'issueTypeId'] as String?,
+      name: json[r'name'] as String?,
+      description: json[r'description'] as String?,
+      helpText: json[r'helpText'] as String?,
     );
   }
 
@@ -2803,16 +2803,16 @@ class RequestTypeCreateDTO {
 
     final json = <String, Object?>{};
     if (issueTypeId != null) {
-      json['issueTypeId'] = issueTypeId;
+      json[r'issueTypeId'] = issueTypeId;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (description != null) {
-      json['description'] = description;
+      json[r'description'] = description;
     }
     if (helpText != null) {
-      json['helpText'] = helpText;
+      json[r'helpText'] = helpText;
     }
     return json;
   }
@@ -2839,7 +2839,7 @@ class AdditionalCommentDTO {
 
   factory AdditionalCommentDTO.fromJson(Map<String, Object?> json) {
     return AdditionalCommentDTO(
-      body: json['body'] as String?,
+      body: json[r'body'] as String?,
     );
   }
 
@@ -2848,7 +2848,7 @@ class AdditionalCommentDTO {
 
     final json = <String, Object?>{};
     if (body != null) {
-      json['body'] = body;
+      json[r'body'] = body;
     }
     return json;
   }
@@ -2875,11 +2875,11 @@ class CSATFeedbackFullDTO {
 
   factory CSATFeedbackFullDTO.fromJson(Map<String, Object?> json) {
     return CSATFeedbackFullDTO(
-      type: json['type'] as String?,
-      rating: (json['rating'] as num?)?.toInt(),
-      comment: json['comment'] != null
+      type: json[r'type'] as String?,
+      rating: (json[r'rating'] as num?)?.toInt(),
+      comment: json[r'comment'] != null
           ? AdditionalCommentDTO.fromJson(
-              json['comment']! as Map<String, Object?>)
+              json[r'comment']! as Map<String, Object?>)
           : null,
     );
   }
@@ -2891,13 +2891,13 @@ class CSATFeedbackFullDTO {
 
     final json = <String, Object?>{};
     if (type != null) {
-      json['type'] = type;
+      json[r'type'] = type;
     }
     if (rating != null) {
-      json['rating'] = rating;
+      json[r'rating'] = rating;
     }
     if (comment != null) {
-      json['comment'] = comment.toJson();
+      json[r'comment'] = comment.toJson();
     }
     return json;
   }
@@ -2931,10 +2931,10 @@ class DateDTO {
 
   factory DateDTO.fromJson(Map<String, Object?> json) {
     return DateDTO(
-      iso8601: json['iso8601'] as String?,
-      jira: json['jira'] as String?,
-      friendly: json['friendly'] as String?,
-      epochMillis: (json['epochMillis'] as num?)?.toInt(),
+      iso8601: json[r'iso8601'] as String?,
+      jira: json[r'jira'] as String?,
+      friendly: json[r'friendly'] as String?,
+      epochMillis: (json[r'epochMillis'] as num?)?.toInt(),
     );
   }
 
@@ -2946,16 +2946,16 @@ class DateDTO {
 
     final json = <String, Object?>{};
     if (iso8601 != null) {
-      json['iso8601'] = iso8601;
+      json[r'iso8601'] = iso8601;
     }
     if (jira != null) {
-      json['jira'] = jira;
+      json[r'jira'] = jira;
     }
     if (friendly != null) {
-      json['friendly'] = friendly;
+      json[r'friendly'] = friendly;
     }
     if (epochMillis != null) {
-      json['epochMillis'] = epochMillis;
+      json[r'epochMillis'] = epochMillis;
     }
     return json;
   }
@@ -2982,8 +2982,8 @@ class DurationDTO {
 
   factory DurationDTO.fromJson(Map<String, Object?> json) {
     return DurationDTO(
-      millis: (json['millis'] as num?)?.toInt(),
-      friendly: json['friendly'] as String?,
+      millis: (json[r'millis'] as num?)?.toInt(),
+      friendly: json[r'friendly'] as String?,
     );
   }
 
@@ -2993,10 +2993,10 @@ class DurationDTO {
 
     final json = <String, Object?>{};
     if (millis != null) {
-      json['millis'] = millis;
+      json[r'millis'] = millis;
     }
     if (friendly != null) {
-      json['friendly'] = friendly;
+      json[r'friendly'] = friendly;
     }
     return json;
   }
@@ -3044,21 +3044,21 @@ class PagedDTOSlaInformationDTO {
 
   factory PagedDTOSlaInformationDTO.fromJson(Map<String, Object?> json) {
     return PagedDTOSlaInformationDTO(
-      size: (json['size'] as num?)?.toInt(),
-      start: (json['start'] as num?)?.toInt(),
-      limit: (json['limit'] as num?)?.toInt(),
-      isLastPage: json['isLastPage'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) => SlaInformationDTO.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: json['_links'] != null
-          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -3074,19 +3074,19 @@ class PagedDTOSlaInformationDTO {
 
     final json = <String, Object?>{};
     if (size != null) {
-      json['size'] = size;
+      json[r'size'] = size;
     }
     if (start != null) {
-      json['start'] = start;
+      json[r'start'] = start;
     }
     if (limit != null) {
-      json['limit'] = limit;
+      json[r'limit'] = limit;
     }
-    json['isLastPage'] = isLastPage;
-    json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands;
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -3141,21 +3141,22 @@ class SlaInformationCompletedCycleDTO {
 
   factory SlaInformationCompletedCycleDTO.fromJson(Map<String, Object?> json) {
     return SlaInformationCompletedCycleDTO(
-      startTime: json['startTime'] != null
-          ? DateDTO.fromJson(json['startTime']! as Map<String, Object?>)
+      startTime: json[r'startTime'] != null
+          ? DateDTO.fromJson(json[r'startTime']! as Map<String, Object?>)
           : null,
-      stopTime: json['stopTime'] != null
-          ? DateDTO.fromJson(json['stopTime']! as Map<String, Object?>)
+      stopTime: json[r'stopTime'] != null
+          ? DateDTO.fromJson(json[r'stopTime']! as Map<String, Object?>)
           : null,
-      breached: json['breached'] as bool? ?? false,
-      goalDuration: json['goalDuration'] != null
-          ? DurationDTO.fromJson(json['goalDuration']! as Map<String, Object?>)
+      breached: json[r'breached'] as bool? ?? false,
+      goalDuration: json[r'goalDuration'] != null
+          ? DurationDTO.fromJson(json[r'goalDuration']! as Map<String, Object?>)
           : null,
-      elapsedTime: json['elapsedTime'] != null
-          ? DurationDTO.fromJson(json['elapsedTime']! as Map<String, Object?>)
+      elapsedTime: json[r'elapsedTime'] != null
+          ? DurationDTO.fromJson(json[r'elapsedTime']! as Map<String, Object?>)
           : null,
-      remainingTime: json['remainingTime'] != null
-          ? DurationDTO.fromJson(json['remainingTime']! as Map<String, Object?>)
+      remainingTime: json[r'remainingTime'] != null
+          ? DurationDTO.fromJson(
+              json[r'remainingTime']! as Map<String, Object?>)
           : null,
     );
   }
@@ -3170,20 +3171,20 @@ class SlaInformationCompletedCycleDTO {
 
     final json = <String, Object?>{};
     if (startTime != null) {
-      json['startTime'] = startTime.toJson();
+      json[r'startTime'] = startTime.toJson();
     }
     if (stopTime != null) {
-      json['stopTime'] = stopTime.toJson();
+      json[r'stopTime'] = stopTime.toJson();
     }
-    json['breached'] = breached;
+    json[r'breached'] = breached;
     if (goalDuration != null) {
-      json['goalDuration'] = goalDuration.toJson();
+      json[r'goalDuration'] = goalDuration.toJson();
     }
     if (elapsedTime != null) {
-      json['elapsedTime'] = elapsedTime.toJson();
+      json[r'elapsedTime'] = elapsedTime.toJson();
     }
     if (remainingTime != null) {
-      json['remainingTime'] = remainingTime.toJson();
+      json[r'remainingTime'] = remainingTime.toJson();
     }
     return json;
   }
@@ -3232,19 +3233,19 @@ class SlaInformationDTO {
 
   factory SlaInformationDTO.fromJson(Map<String, Object?> json) {
     return SlaInformationDTO(
-      id: json['id'] as String?,
-      name: json['name'] as String?,
-      completedCycles: (json['completedCycles'] as List<Object?>?)
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      completedCycles: (json[r'completedCycles'] as List<Object?>?)
               ?.map((i) => SlaInformationCompletedCycleDTO.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      ongoingCycle: json['ongoingCycle'] != null
+      ongoingCycle: json[r'ongoingCycle'] != null
           ? SlaInformationOngoingCycleDTO.fromJson(
-              json['ongoingCycle']! as Map<String, Object?>)
+              json[r'ongoingCycle']! as Map<String, Object?>)
           : null,
-      links: json['_links'] != null
-          ? SelfLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -3258,17 +3259,17 @@ class SlaInformationDTO {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
-    json['completedCycles'] = completedCycles.map((i) => i.toJson()).toList();
+    json[r'completedCycles'] = completedCycles.map((i) => i.toJson()).toList();
     if (ongoingCycle != null) {
-      json['ongoingCycle'] = ongoingCycle.toJson();
+      json[r'ongoingCycle'] = ongoingCycle.toJson();
     }
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -3330,23 +3331,24 @@ class SlaInformationOngoingCycleDTO {
 
   factory SlaInformationOngoingCycleDTO.fromJson(Map<String, Object?> json) {
     return SlaInformationOngoingCycleDTO(
-      startTime: json['startTime'] != null
-          ? DateDTO.fromJson(json['startTime']! as Map<String, Object?>)
+      startTime: json[r'startTime'] != null
+          ? DateDTO.fromJson(json[r'startTime']! as Map<String, Object?>)
           : null,
-      breachTime: json['breachTime'] != null
-          ? DateDTO.fromJson(json['breachTime']! as Map<String, Object?>)
+      breachTime: json[r'breachTime'] != null
+          ? DateDTO.fromJson(json[r'breachTime']! as Map<String, Object?>)
           : null,
-      breached: json['breached'] as bool? ?? false,
-      paused: json['paused'] as bool? ?? false,
-      withinCalendarHours: json['withinCalendarHours'] as bool? ?? false,
-      goalDuration: json['goalDuration'] != null
-          ? DurationDTO.fromJson(json['goalDuration']! as Map<String, Object?>)
+      breached: json[r'breached'] as bool? ?? false,
+      paused: json[r'paused'] as bool? ?? false,
+      withinCalendarHours: json[r'withinCalendarHours'] as bool? ?? false,
+      goalDuration: json[r'goalDuration'] != null
+          ? DurationDTO.fromJson(json[r'goalDuration']! as Map<String, Object?>)
           : null,
-      elapsedTime: json['elapsedTime'] != null
-          ? DurationDTO.fromJson(json['elapsedTime']! as Map<String, Object?>)
+      elapsedTime: json[r'elapsedTime'] != null
+          ? DurationDTO.fromJson(json[r'elapsedTime']! as Map<String, Object?>)
           : null,
-      remainingTime: json['remainingTime'] != null
-          ? DurationDTO.fromJson(json['remainingTime']! as Map<String, Object?>)
+      remainingTime: json[r'remainingTime'] != null
+          ? DurationDTO.fromJson(
+              json[r'remainingTime']! as Map<String, Object?>)
           : null,
     );
   }
@@ -3363,22 +3365,22 @@ class SlaInformationOngoingCycleDTO {
 
     final json = <String, Object?>{};
     if (startTime != null) {
-      json['startTime'] = startTime.toJson();
+      json[r'startTime'] = startTime.toJson();
     }
     if (breachTime != null) {
-      json['breachTime'] = breachTime.toJson();
+      json[r'breachTime'] = breachTime.toJson();
     }
-    json['breached'] = breached;
-    json['paused'] = paused;
-    json['withinCalendarHours'] = withinCalendarHours;
+    json[r'breached'] = breached;
+    json[r'paused'] = paused;
+    json[r'withinCalendarHours'] = withinCalendarHours;
     if (goalDuration != null) {
-      json['goalDuration'] = goalDuration.toJson();
+      json[r'goalDuration'] = goalDuration.toJson();
     }
     if (elapsedTime != null) {
-      json['elapsedTime'] = elapsedTime.toJson();
+      json[r'elapsedTime'] = elapsedTime.toJson();
     }
     if (remainingTime != null) {
-      json['remainingTime'] = remainingTime.toJson();
+      json[r'remainingTime'] = remainingTime.toJson();
     }
     return json;
   }
@@ -3419,10 +3421,10 @@ class OrganizationDTO {
 
   factory OrganizationDTO.fromJson(Map<String, Object?> json) {
     return OrganizationDTO(
-      id: json['id'] as String?,
-      name: json['name'] as String?,
-      links: json['_links'] != null
-          ? SelfLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      links: json[r'_links'] != null
+          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -3434,13 +3436,13 @@ class OrganizationDTO {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -3489,21 +3491,21 @@ class PagedDTOOrganizationDTO {
 
   factory PagedDTOOrganizationDTO.fromJson(Map<String, Object?> json) {
     return PagedDTOOrganizationDTO(
-      size: (json['size'] as num?)?.toInt(),
-      start: (json['start'] as num?)?.toInt(),
-      limit: (json['limit'] as num?)?.toInt(),
-      isLastPage: json['isLastPage'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) => OrganizationDTO.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: json['_links'] != null
-          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -3519,19 +3521,19 @@ class PagedDTOOrganizationDTO {
 
     final json = <String, Object?>{};
     if (size != null) {
-      json['size'] = size;
+      json[r'size'] = size;
     }
     if (start != null) {
-      json['start'] = start;
+      json[r'start'] = start;
     }
     if (limit != null) {
-      json['limit'] = limit;
+      json[r'limit'] = limit;
     }
-    json['isLastPage'] = isLastPage;
-    json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands;
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -3564,7 +3566,7 @@ class OrganizationCreateDTO {
 
   factory OrganizationCreateDTO.fromJson(Map<String, Object?> json) {
     return OrganizationCreateDTO(
-      name: json['name'] as String?,
+      name: json[r'name'] as String?,
     );
   }
 
@@ -3573,7 +3575,7 @@ class OrganizationCreateDTO {
 
     final json = <String, Object?>{};
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     return json;
   }
@@ -3620,21 +3622,21 @@ class PagedDTOUserDTO {
 
   factory PagedDTOUserDTO.fromJson(Map<String, Object?> json) {
     return PagedDTOUserDTO(
-      size: (json['size'] as num?)?.toInt(),
-      start: (json['start'] as num?)?.toInt(),
-      limit: (json['limit'] as num?)?.toInt(),
-      isLastPage: json['isLastPage'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) =>
                   UserDTO.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: json['_links'] != null
-          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -3650,19 +3652,19 @@ class PagedDTOUserDTO {
 
     final json = <String, Object?>{};
     if (size != null) {
-      json['size'] = size;
+      json[r'size'] = size;
     }
     if (start != null) {
-      json['start'] = start;
+      json[r'start'] = start;
     }
     if (limit != null) {
-      json['limit'] = limit;
+      json[r'limit'] = limit;
     }
-    json['isLastPage'] = isLastPage;
-    json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands;
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -3735,15 +3737,15 @@ class UserDTO {
 
   factory UserDTO.fromJson(Map<String, Object?> json) {
     return UserDTO(
-      accountId: json['accountId'] as String?,
-      name: json['name'] as String?,
-      key: json['key'] as String?,
-      emailAddress: json['emailAddress'] as String?,
-      displayName: json['displayName'] as String?,
-      active: json['active'] as bool? ?? false,
-      timeZone: json['timeZone'] as String?,
-      links: json['_links'] != null
-          ? UserLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      accountId: json[r'accountId'] as String?,
+      name: json[r'name'] as String?,
+      key: json[r'key'] as String?,
+      emailAddress: json[r'emailAddress'] as String?,
+      displayName: json[r'displayName'] as String?,
+      active: json[r'active'] as bool? ?? false,
+      timeZone: json[r'timeZone'] as String?,
+      links: json[r'_links'] != null
+          ? UserLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -3760,26 +3762,26 @@ class UserDTO {
 
     final json = <String, Object?>{};
     if (accountId != null) {
-      json['accountId'] = accountId;
+      json[r'accountId'] = accountId;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (key != null) {
-      json['key'] = key;
+      json[r'key'] = key;
     }
     if (emailAddress != null) {
-      json['emailAddress'] = emailAddress;
+      json[r'emailAddress'] = emailAddress;
     }
     if (displayName != null) {
-      json['displayName'] = displayName;
+      json[r'displayName'] = displayName;
     }
-    json['active'] = active;
+    json[r'active'] = active;
     if (timeZone != null) {
-      json['timeZone'] = timeZone;
+      json[r'timeZone'] = timeZone;
     }
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -3820,9 +3822,9 @@ class UserLinkDTO {
 
   factory UserLinkDTO.fromJson(Map<String, Object?> json) {
     return UserLinkDTO(
-      self: json['self'] as String?,
-      jiraRest: json['jiraRest'] as String?,
-      avatarUrls: json['avatarUrls'] as Map<String, Object?>?,
+      self: json[r'self'] as String?,
+      jiraRest: json[r'jiraRest'] as String?,
+      avatarUrls: json[r'avatarUrls'] as Map<String, Object?>?,
     );
   }
 
@@ -3833,13 +3835,13 @@ class UserLinkDTO {
 
     final json = <String, Object?>{};
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (jiraRest != null) {
-      json['jiraRest'] = jiraRest;
+      json[r'jiraRest'] = jiraRest;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls;
+      json[r'avatarUrls'] = avatarUrls;
     }
     return json;
   }
@@ -3861,8 +3863,8 @@ class LinkableUserLinkDTO {
 
   factory LinkableUserLinkDTO.fromJson(Map<String, Object?> json) {
     return LinkableUserLinkDTO(
-      links: json['_links'] != null
-          ? UserLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? UserLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -3872,7 +3874,7 @@ class LinkableUserLinkDTO {
 
     final json = <String, Object?>{};
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -3902,11 +3904,11 @@ class UsersOrganizationUpdateDTO {
 
   factory UsersOrganizationUpdateDTO.fromJson(Map<String, Object?> json) {
     return UsersOrganizationUpdateDTO(
-      usernames: (json['usernames'] as List<Object?>?)
+      usernames: (json[r'usernames'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      accountIds: (json['accountIds'] as List<Object?>?)
+      accountIds: (json[r'accountIds'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -3918,8 +3920,8 @@ class UsersOrganizationUpdateDTO {
     var accountIds = this.accountIds;
 
     final json = <String, Object?>{};
-    json['usernames'] = usernames;
-    json['accountIds'] = accountIds;
+    json[r'usernames'] = usernames;
+    json[r'accountIds'] = accountIds;
     return json;
   }
 
@@ -3967,21 +3969,21 @@ class PagedDTOQueueDTO {
 
   factory PagedDTOQueueDTO.fromJson(Map<String, Object?> json) {
     return PagedDTOQueueDTO(
-      size: (json['size'] as num?)?.toInt(),
-      start: (json['start'] as num?)?.toInt(),
-      limit: (json['limit'] as num?)?.toInt(),
-      isLastPage: json['isLastPage'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) =>
                   QueueDTO.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: json['_links'] != null
-          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -3997,19 +3999,19 @@ class PagedDTOQueueDTO {
 
     final json = <String, Object?>{};
     if (size != null) {
-      json['size'] = size;
+      json[r'size'] = size;
     }
     if (start != null) {
-      json['start'] = start;
+      json[r'start'] = start;
     }
     if (limit != null) {
-      json['limit'] = limit;
+      json[r'limit'] = limit;
     }
-    json['isLastPage'] = isLastPage;
-    json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands;
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -4064,16 +4066,16 @@ class QueueDTO {
 
   factory QueueDTO.fromJson(Map<String, Object?> json) {
     return QueueDTO(
-      id: json['id'] as String?,
-      name: json['name'] as String?,
-      jql: json['jql'] as String?,
-      fields: (json['fields'] as List<Object?>?)
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      jql: json[r'jql'] as String?,
+      fields: (json[r'fields'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      issueCount: (json['issueCount'] as num?)?.toInt(),
-      links: json['_links'] != null
-          ? SelfLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      issueCount: (json[r'issueCount'] as num?)?.toInt(),
+      links: json[r'_links'] != null
+          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -4088,20 +4090,20 @@ class QueueDTO {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (jql != null) {
-      json['jql'] = jql;
+      json[r'jql'] = jql;
     }
-    json['fields'] = fields;
+    json[r'fields'] = fields;
     if (issueCount != null) {
-      json['issueCount'] = issueCount;
+      json[r'issueCount'] = issueCount;
     }
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -4141,10 +4143,10 @@ class AvatarUrlsBean {
 
   factory AvatarUrlsBean.fromJson(Map<String, Object?> json) {
     return AvatarUrlsBean(
-      $16X16: json['16x16'] as String?,
-      $24X24: json['24x24'] as String?,
-      $32X32: json['32x32'] as String?,
-      $48X48: json['48x48'] as String?,
+      $16X16: json[r'16x16'] as String?,
+      $24X24: json[r'24x24'] as String?,
+      $32X32: json[r'32x32'] as String?,
+      $48X48: json[r'48x48'] as String?,
     );
   }
 
@@ -4156,16 +4158,16 @@ class AvatarUrlsBean {
 
     final json = <String, Object?>{};
     if ($16X16 != null) {
-      json['16x16'] = $16X16;
+      json[r'16x16'] = $16X16;
     }
     if ($24X24 != null) {
-      json['24x24'] = $24X24;
+      json[r'24x24'] = $24X24;
     }
     if ($32X32 != null) {
-      json['32x32'] = $32X32;
+      json[r'32x32'] = $32X32;
     }
     if ($48X48 != null) {
-      json['48x48'] = $48X48;
+      json[r'48x48'] = $48X48;
     }
     return json;
   }
@@ -4215,13 +4217,13 @@ class ChangeDetails {
 
   factory ChangeDetails.fromJson(Map<String, Object?> json) {
     return ChangeDetails(
-      field: json['field'] as String?,
-      fieldtype: json['fieldtype'] as String?,
-      fieldId: json['fieldId'] as String?,
-      from: json['from'] as String?,
-      fromString: json['fromString'] as String?,
-      to: json['to'] as String?,
-      toString$: json['toString'] as String?,
+      field: json[r'field'] as String?,
+      fieldtype: json[r'fieldtype'] as String?,
+      fieldId: json[r'fieldId'] as String?,
+      from: json[r'from'] as String?,
+      fromString: json[r'fromString'] as String?,
+      to: json[r'to'] as String?,
+      toString$: json[r'toString'] as String?,
     );
   }
 
@@ -4236,25 +4238,25 @@ class ChangeDetails {
 
     final json = <String, Object?>{};
     if (field != null) {
-      json['field'] = field;
+      json[r'field'] = field;
     }
     if (fieldtype != null) {
-      json['fieldtype'] = fieldtype;
+      json[r'fieldtype'] = fieldtype;
     }
     if (fieldId != null) {
-      json['fieldId'] = fieldId;
+      json[r'fieldId'] = fieldId;
     }
     if (from != null) {
-      json['from'] = from;
+      json[r'from'] = from;
     }
     if (fromString != null) {
-      json['fromString'] = fromString;
+      json[r'fromString'] = fromString;
     }
     if (to != null) {
-      json['to'] = to;
+      json[r'to'] = to;
     }
     if (toString$ != null) {
-      json['toString'] = toString$;
+      json[r'toString'] = toString$;
     }
     return json;
   }
@@ -4306,19 +4308,19 @@ class Changelog {
 
   factory Changelog.fromJson(Map<String, Object?> json) {
     return Changelog(
-      id: json['id'] as String?,
-      author: json['author'] != null
-          ? UserDetails.fromJson(json['author']! as Map<String, Object?>)
+      id: json[r'id'] as String?,
+      author: json[r'author'] != null
+          ? UserDetails.fromJson(json[r'author']! as Map<String, Object?>)
           : null,
-      created: DateTime.tryParse(json['created'] as String? ?? ''),
-      items: (json['items'] as List<Object?>?)
+      created: DateTime.tryParse(json[r'created'] as String? ?? ''),
+      items: (json[r'items'] as List<Object?>?)
               ?.map((i) => ChangeDetails.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      historyMetadata: json['historyMetadata'] != null
+      historyMetadata: json[r'historyMetadata'] != null
           ? HistoryMetadata.fromJson(
-              json['historyMetadata']! as Map<String, Object?>)
+              json[r'historyMetadata']! as Map<String, Object?>)
           : null,
     );
   }
@@ -4332,17 +4334,17 @@ class Changelog {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (author != null) {
-      json['author'] = author.toJson();
+      json[r'author'] = author.toJson();
     }
     if (created != null) {
-      json['created'] = created.toIso8601String();
+      json[r'created'] = created.toIso8601String();
     }
-    json['items'] = items.map((i) => i.toJson()).toList();
+    json[r'items'] = items.map((i) => i.toJson()).toList();
     if (historyMetadata != null) {
-      json['historyMetadata'] = historyMetadata.toJson();
+      json[r'historyMetadata'] = historyMetadata.toJson();
     }
     return json;
   }
@@ -4407,22 +4409,22 @@ class FieldMetadata {
 
   factory FieldMetadata.fromJson(Map<String, Object?> json) {
     return FieldMetadata(
-      required: json['required'] as bool? ?? false,
+      required: json[r'required'] as bool? ?? false,
       schema: JsonTypeBean.fromJson(
-          json['schema'] as Map<String, Object?>? ?? const {}),
-      name: json['name'] as String? ?? '',
-      key: json['key'] as String? ?? '',
-      autoCompleteUrl: json['autoCompleteUrl'] as String?,
-      hasDefaultValue: json['hasDefaultValue'] as bool? ?? false,
-      operations: (json['operations'] as List<Object?>?)
+          json[r'schema'] as Map<String, Object?>? ?? const {}),
+      name: json[r'name'] as String? ?? '',
+      key: json[r'key'] as String? ?? '',
+      autoCompleteUrl: json[r'autoCompleteUrl'] as String?,
+      hasDefaultValue: json[r'hasDefaultValue'] as bool? ?? false,
+      operations: (json[r'operations'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      allowedValues: (json['allowedValues'] as List<Object?>?)
+      allowedValues: (json[r'allowedValues'] as List<Object?>?)
               ?.map((i) => i as Map<String, Object?>? ?? {})
               .toList() ??
           [],
-      defaultValue: json['defaultValue'] as Map<String, Object?>?,
+      defaultValue: json[r'defaultValue'] as Map<String, Object?>?,
     );
   }
 
@@ -4438,18 +4440,18 @@ class FieldMetadata {
     var defaultValue = this.defaultValue;
 
     final json = <String, Object?>{};
-    json['required'] = required;
-    json['schema'] = schema.toJson();
-    json['name'] = name;
-    json['key'] = key;
+    json[r'required'] = required;
+    json[r'schema'] = schema.toJson();
+    json[r'name'] = name;
+    json[r'key'] = key;
     if (autoCompleteUrl != null) {
-      json['autoCompleteUrl'] = autoCompleteUrl;
+      json[r'autoCompleteUrl'] = autoCompleteUrl;
     }
-    json['hasDefaultValue'] = hasDefaultValue;
-    json['operations'] = operations;
-    json['allowedValues'] = allowedValues;
+    json[r'hasDefaultValue'] = hasDefaultValue;
+    json[r'operations'] = operations;
+    json[r'allowedValues'] = allowedValues;
     if (defaultValue != null) {
-      json['defaultValue'] = defaultValue;
+      json[r'defaultValue'] = defaultValue;
     }
     return json;
   }
@@ -4528,26 +4530,26 @@ class HistoryMetadata {
 
   factory HistoryMetadata.fromJson(Map<String, Object?> json) {
     return HistoryMetadata(
-      type: json['type'] as String?,
-      description: json['description'] as String?,
-      descriptionKey: json['descriptionKey'] as String?,
-      activityDescription: json['activityDescription'] as String?,
-      activityDescriptionKey: json['activityDescriptionKey'] as String?,
-      emailDescription: json['emailDescription'] as String?,
-      emailDescriptionKey: json['emailDescriptionKey'] as String?,
-      actor: json['actor'] != null
+      type: json[r'type'] as String?,
+      description: json[r'description'] as String?,
+      descriptionKey: json[r'descriptionKey'] as String?,
+      activityDescription: json[r'activityDescription'] as String?,
+      activityDescriptionKey: json[r'activityDescriptionKey'] as String?,
+      emailDescription: json[r'emailDescription'] as String?,
+      emailDescriptionKey: json[r'emailDescriptionKey'] as String?,
+      actor: json[r'actor'] != null
           ? HistoryMetadataParticipant.fromJson(
-              json['actor']! as Map<String, Object?>)
+              json[r'actor']! as Map<String, Object?>)
           : null,
-      generator: json['generator'] != null
+      generator: json[r'generator'] != null
           ? HistoryMetadataParticipant.fromJson(
-              json['generator']! as Map<String, Object?>)
+              json[r'generator']! as Map<String, Object?>)
           : null,
-      cause: json['cause'] != null
+      cause: json[r'cause'] != null
           ? HistoryMetadataParticipant.fromJson(
-              json['cause']! as Map<String, Object?>)
+              json[r'cause']! as Map<String, Object?>)
           : null,
-      extraData: json['extraData'] as Map<String, Object?>?,
+      extraData: json[r'extraData'] as Map<String, Object?>?,
     );
   }
 
@@ -4566,37 +4568,37 @@ class HistoryMetadata {
 
     final json = <String, Object?>{};
     if (type != null) {
-      json['type'] = type;
+      json[r'type'] = type;
     }
     if (description != null) {
-      json['description'] = description;
+      json[r'description'] = description;
     }
     if (descriptionKey != null) {
-      json['descriptionKey'] = descriptionKey;
+      json[r'descriptionKey'] = descriptionKey;
     }
     if (activityDescription != null) {
-      json['activityDescription'] = activityDescription;
+      json[r'activityDescription'] = activityDescription;
     }
     if (activityDescriptionKey != null) {
-      json['activityDescriptionKey'] = activityDescriptionKey;
+      json[r'activityDescriptionKey'] = activityDescriptionKey;
     }
     if (emailDescription != null) {
-      json['emailDescription'] = emailDescription;
+      json[r'emailDescription'] = emailDescription;
     }
     if (emailDescriptionKey != null) {
-      json['emailDescriptionKey'] = emailDescriptionKey;
+      json[r'emailDescriptionKey'] = emailDescriptionKey;
     }
     if (actor != null) {
-      json['actor'] = actor.toJson();
+      json[r'actor'] = actor.toJson();
     }
     if (generator != null) {
-      json['generator'] = generator.toJson();
+      json[r'generator'] = generator.toJson();
     }
     if (cause != null) {
-      json['cause'] = cause.toJson();
+      json[r'cause'] = cause.toJson();
     }
     if (extraData != null) {
-      json['extraData'] = extraData;
+      json[r'extraData'] = extraData;
     }
     return json;
   }
@@ -4662,12 +4664,12 @@ class HistoryMetadataParticipant {
 
   factory HistoryMetadataParticipant.fromJson(Map<String, Object?> json) {
     return HistoryMetadataParticipant(
-      id: json['id'] as String?,
-      displayName: json['displayName'] as String?,
-      displayNameKey: json['displayNameKey'] as String?,
-      type: json['type'] as String?,
-      avatarUrl: json['avatarUrl'] as String?,
-      url: json['url'] as String?,
+      id: json[r'id'] as String?,
+      displayName: json[r'displayName'] as String?,
+      displayNameKey: json[r'displayNameKey'] as String?,
+      type: json[r'type'] as String?,
+      avatarUrl: json[r'avatarUrl'] as String?,
+      url: json[r'url'] as String?,
     );
   }
 
@@ -4681,22 +4683,22 @@ class HistoryMetadataParticipant {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (displayName != null) {
-      json['displayName'] = displayName;
+      json[r'displayName'] = displayName;
     }
     if (displayNameKey != null) {
-      json['displayNameKey'] = displayNameKey;
+      json[r'displayNameKey'] = displayNameKey;
     }
     if (type != null) {
-      json['type'] = type;
+      json[r'type'] = type;
     }
     if (avatarUrl != null) {
-      json['avatarUrl'] = avatarUrl;
+      json[r'avatarUrl'] = avatarUrl;
     }
     if (url != null) {
-      json['url'] = url;
+      json[r'url'] = url;
     }
     return json;
   }
@@ -4734,15 +4736,15 @@ class IncludedFields {
 
   factory IncludedFields.fromJson(Map<String, Object?> json) {
     return IncludedFields(
-      actuallyIncluded: (json['actuallyIncluded'] as List<Object?>?)
+      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      excluded: (json['excluded'] as List<Object?>?)
+      excluded: (json[r'excluded'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      included: (json['included'] as List<Object?>?)
+      included: (json[r'included'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -4755,9 +4757,9 @@ class IncludedFields {
     var included = this.included;
 
     final json = <String, Object?>{};
-    json['actuallyIncluded'] = actuallyIncluded;
-    json['excluded'] = excluded;
-    json['included'] = included;
+    json[r'actuallyIncluded'] = actuallyIncluded;
+    json[r'excluded'] = excluded;
+    json[r'included'] = included;
     return json;
   }
 
@@ -4835,37 +4837,37 @@ class IssueBean {
 
   factory IssueBean.fromJson(Map<String, Object?> json) {
     return IssueBean(
-      expand: json['expand'] as String?,
-      id: json['id'] as String?,
-      self: json['self'] as String?,
-      key: json['key'] as String?,
-      renderedFields: json['renderedFields'] as Map<String, Object?>?,
-      properties: json['properties'] as Map<String, Object?>?,
-      names: json['names'] as Map<String, Object?>?,
-      schema: json['schema'] as Map<String, Object?>?,
-      transitions: (json['transitions'] as List<Object?>?)
+      expand: json[r'expand'] as String?,
+      id: json[r'id'] as String?,
+      self: json[r'self'] as String?,
+      key: json[r'key'] as String?,
+      renderedFields: json[r'renderedFields'] as Map<String, Object?>?,
+      properties: json[r'properties'] as Map<String, Object?>?,
+      names: json[r'names'] as Map<String, Object?>?,
+      schema: json[r'schema'] as Map<String, Object?>?,
+      transitions: (json[r'transitions'] as List<Object?>?)
               ?.map((i) => IssueTransition.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      operations: json['operations'] != null
-          ? Operations.fromJson(json['operations']! as Map<String, Object?>)
+      operations: json[r'operations'] != null
+          ? Operations.fromJson(json[r'operations']! as Map<String, Object?>)
           : null,
-      editmeta: json['editmeta'] != null
+      editmeta: json[r'editmeta'] != null
           ? IssueUpdateMetadata.fromJson(
-              json['editmeta']! as Map<String, Object?>)
+              json[r'editmeta']! as Map<String, Object?>)
           : null,
-      changelog: json['changelog'] != null
+      changelog: json[r'changelog'] != null
           ? PageOfChangelogs.fromJson(
-              json['changelog']! as Map<String, Object?>)
+              json[r'changelog']! as Map<String, Object?>)
           : null,
       versionedRepresentations:
-          json['versionedRepresentations'] as Map<String, Object?>?,
-      fieldsToInclude: json['fieldsToInclude'] != null
+          json[r'versionedRepresentations'] as Map<String, Object?>?,
+      fieldsToInclude: json[r'fieldsToInclude'] != null
           ? IncludedFields.fromJson(
-              json['fieldsToInclude']! as Map<String, Object?>)
+              json[r'fieldsToInclude']! as Map<String, Object?>)
           : null,
-      fields: json['fields'] as Map<String, Object?>?,
+      fields: json[r'fields'] as Map<String, Object?>?,
     );
   }
 
@@ -4888,47 +4890,47 @@ class IssueBean {
 
     final json = <String, Object?>{};
     if (expand != null) {
-      json['expand'] = expand;
+      json[r'expand'] = expand;
     }
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (key != null) {
-      json['key'] = key;
+      json[r'key'] = key;
     }
     if (renderedFields != null) {
-      json['renderedFields'] = renderedFields;
+      json[r'renderedFields'] = renderedFields;
     }
     if (properties != null) {
-      json['properties'] = properties;
+      json[r'properties'] = properties;
     }
     if (names != null) {
-      json['names'] = names;
+      json[r'names'] = names;
     }
     if (schema != null) {
-      json['schema'] = schema;
+      json[r'schema'] = schema;
     }
-    json['transitions'] = transitions.map((i) => i.toJson()).toList();
+    json[r'transitions'] = transitions.map((i) => i.toJson()).toList();
     if (operations != null) {
-      json['operations'] = operations.toJson();
+      json[r'operations'] = operations.toJson();
     }
     if (editmeta != null) {
-      json['editmeta'] = editmeta.toJson();
+      json[r'editmeta'] = editmeta.toJson();
     }
     if (changelog != null) {
-      json['changelog'] = changelog.toJson();
+      json[r'changelog'] = changelog.toJson();
     }
     if (versionedRepresentations != null) {
-      json['versionedRepresentations'] = versionedRepresentations;
+      json[r'versionedRepresentations'] = versionedRepresentations;
     }
     if (fieldsToInclude != null) {
-      json['fieldsToInclude'] = fieldsToInclude.toJson();
+      json[r'fieldsToInclude'] = fieldsToInclude.toJson();
     }
     if (fields != null) {
-      json['fields'] = fields;
+      json[r'fields'] = fields;
     }
     return json;
   }
@@ -5029,19 +5031,19 @@ class IssueTransition {
 
   factory IssueTransition.fromJson(Map<String, Object?> json) {
     return IssueTransition(
-      id: json['id'] as String?,
-      name: json['name'] as String?,
-      to: json['to'] != null
-          ? StatusDetails.fromJson(json['to']! as Map<String, Object?>)
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      to: json[r'to'] != null
+          ? StatusDetails.fromJson(json[r'to']! as Map<String, Object?>)
           : null,
-      hasScreen: json['hasScreen'] as bool? ?? false,
-      isGlobal: json['isGlobal'] as bool? ?? false,
-      isInitial: json['isInitial'] as bool? ?? false,
-      isAvailable: json['isAvailable'] as bool? ?? false,
-      isConditional: json['isConditional'] as bool? ?? false,
-      fields: json['fields'] as Map<String, Object?>?,
-      expand: json['expand'] as String?,
-      looped: json['looped'] as bool? ?? false,
+      hasScreen: json[r'hasScreen'] as bool? ?? false,
+      isGlobal: json[r'isGlobal'] as bool? ?? false,
+      isInitial: json[r'isInitial'] as bool? ?? false,
+      isAvailable: json[r'isAvailable'] as bool? ?? false,
+      isConditional: json[r'isConditional'] as bool? ?? false,
+      fields: json[r'fields'] as Map<String, Object?>?,
+      expand: json[r'expand'] as String?,
+      looped: json[r'looped'] as bool? ?? false,
     );
   }
 
@@ -5060,26 +5062,26 @@ class IssueTransition {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (to != null) {
-      json['to'] = to.toJson();
+      json[r'to'] = to.toJson();
     }
-    json['hasScreen'] = hasScreen;
-    json['isGlobal'] = isGlobal;
-    json['isInitial'] = isInitial;
-    json['isAvailable'] = isAvailable;
-    json['isConditional'] = isConditional;
+    json[r'hasScreen'] = hasScreen;
+    json[r'isGlobal'] = isGlobal;
+    json[r'isInitial'] = isInitial;
+    json[r'isAvailable'] = isAvailable;
+    json[r'isConditional'] = isConditional;
     if (fields != null) {
-      json['fields'] = fields;
+      json[r'fields'] = fields;
     }
     if (expand != null) {
-      json['expand'] = expand;
+      json[r'expand'] = expand;
     }
-    json['looped'] = looped;
+    json[r'looped'] = looped;
     return json;
   }
 
@@ -5119,7 +5121,7 @@ class IssueUpdateMetadata {
 
   factory IssueUpdateMetadata.fromJson(Map<String, Object?> json) {
     return IssueUpdateMetadata(
-      fields: json['fields'] as Map<String, Object?>?,
+      fields: json[r'fields'] as Map<String, Object?>?,
     );
   }
 
@@ -5128,7 +5130,7 @@ class IssueUpdateMetadata {
 
     final json = <String, Object?>{};
     if (fields != null) {
-      json['fields'] = fields;
+      json[r'fields'] = fields;
     }
     return json;
   }
@@ -5161,18 +5163,18 @@ class LinkGroup {
 
   factory LinkGroup.fromJson(Map<String, Object?> json) {
     return LinkGroup(
-      id: json['id'] as String?,
-      styleClass: json['styleClass'] as String?,
-      header: json['header'] != null
-          ? SimpleLink.fromJson(json['header']! as Map<String, Object?>)
+      id: json[r'id'] as String?,
+      styleClass: json[r'styleClass'] as String?,
+      header: json[r'header'] != null
+          ? SimpleLink.fromJson(json[r'header']! as Map<String, Object?>)
           : null,
-      weight: (json['weight'] as num?)?.toInt(),
-      links: (json['links'] as List<Object?>?)
+      weight: (json[r'weight'] as num?)?.toInt(),
+      links: (json[r'links'] as List<Object?>?)
               ?.map((i) =>
                   SimpleLink.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      groups: (json['groups'] as List<Object?>?)
+      groups: (json[r'groups'] as List<Object?>?)
               ?.map((i) =>
                   LinkGroup.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -5190,19 +5192,19 @@ class LinkGroup {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (styleClass != null) {
-      json['styleClass'] = styleClass;
+      json[r'styleClass'] = styleClass;
     }
     if (header != null) {
-      json['header'] = header.toJson();
+      json[r'header'] = header.toJson();
     }
     if (weight != null) {
-      json['weight'] = weight;
+      json[r'weight'] = weight;
     }
-    json['links'] = links.map((i) => i.toJson()).toList();
-    json['groups'] = groups.map((i) => i.toJson()).toList();
+    json[r'links'] = links.map((i) => i.toJson()).toList();
+    json[r'groups'] = groups.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -5233,7 +5235,7 @@ class Operations {
 
   factory Operations.fromJson(Map<String, Object?> json) {
     return Operations(
-      linkGroups: (json['linkGroups'] as List<Object?>?)
+      linkGroups: (json[r'linkGroups'] as List<Object?>?)
               ?.map((i) =>
                   LinkGroup.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -5245,7 +5247,7 @@ class Operations {
     var linkGroups = this.linkGroups;
 
     final json = <String, Object?>{};
-    json['linkGroups'] = linkGroups.map((i) => i.toJson()).toList();
+    json[r'linkGroups'] = linkGroups.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -5276,10 +5278,10 @@ class PageOfChangelogs {
 
   factory PageOfChangelogs.fromJson(Map<String, Object?> json) {
     return PageOfChangelogs(
-      startAt: (json['startAt'] as num?)?.toInt(),
-      maxResults: (json['maxResults'] as num?)?.toInt(),
-      total: (json['total'] as num?)?.toInt(),
-      histories: (json['histories'] as List<Object?>?)
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      histories: (json[r'histories'] as List<Object?>?)
               ?.map((i) =>
                   Changelog.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -5295,15 +5297,15 @@ class PageOfChangelogs {
 
     final json = <String, Object?>{};
     if (startAt != null) {
-      json['startAt'] = startAt;
+      json[r'startAt'] = startAt;
     }
     if (maxResults != null) {
-      json['maxResults'] = maxResults;
+      json[r'maxResults'] = maxResults;
     }
     if (total != null) {
-      json['total'] = total;
+      json[r'total'] = total;
     }
-    json['histories'] = histories.map((i) => i.toJson()).toList();
+    json[r'histories'] = histories.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -5353,21 +5355,21 @@ class PagedDTOIssueBean {
 
   factory PagedDTOIssueBean.fromJson(Map<String, Object?> json) {
     return PagedDTOIssueBean(
-      size: (json['size'] as num?)?.toInt(),
-      start: (json['start'] as num?)?.toInt(),
-      limit: (json['limit'] as num?)?.toInt(),
-      isLastPage: json['isLastPage'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) =>
                   IssueBean.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: json['_links'] != null
-          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -5383,19 +5385,19 @@ class PagedDTOIssueBean {
 
     final json = <String, Object?>{};
     if (size != null) {
-      json['size'] = size;
+      json[r'size'] = size;
     }
     if (start != null) {
-      json['start'] = start;
+      json[r'start'] = start;
     }
     if (limit != null) {
-      json['limit'] = limit;
+      json[r'limit'] = limit;
     }
-    json['isLastPage'] = isLastPage;
-    json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands;
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -5441,13 +5443,13 @@ class SimpleLink {
 
   factory SimpleLink.fromJson(Map<String, Object?> json) {
     return SimpleLink(
-      id: json['id'] as String?,
-      styleClass: json['styleClass'] as String?,
-      iconClass: json['iconClass'] as String?,
-      label: json['label'] as String?,
-      title: json['title'] as String?,
-      href: json['href'] as String?,
-      weight: (json['weight'] as num?)?.toInt(),
+      id: json[r'id'] as String?,
+      styleClass: json[r'styleClass'] as String?,
+      iconClass: json[r'iconClass'] as String?,
+      label: json[r'label'] as String?,
+      title: json[r'title'] as String?,
+      href: json[r'href'] as String?,
+      weight: (json[r'weight'] as num?)?.toInt(),
     );
   }
 
@@ -5462,25 +5464,25 @@ class SimpleLink {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (styleClass != null) {
-      json['styleClass'] = styleClass;
+      json[r'styleClass'] = styleClass;
     }
     if (iconClass != null) {
-      json['iconClass'] = iconClass;
+      json[r'iconClass'] = iconClass;
     }
     if (label != null) {
-      json['label'] = label;
+      json[r'label'] = label;
     }
     if (title != null) {
-      json['title'] = title;
+      json[r'title'] = title;
     }
     if (href != null) {
-      json['href'] = href;
+      json[r'href'] = href;
     }
     if (weight != null) {
-      json['weight'] = weight;
+      json[r'weight'] = weight;
     }
     return json;
   }
@@ -5526,11 +5528,11 @@ class StatusCategory {
 
   factory StatusCategory.fromJson(Map<String, Object?> json) {
     return StatusCategory(
-      self: json['self'] as String?,
-      id: (json['id'] as num?)?.toInt(),
-      key: json['key'] as String?,
-      colorName: json['colorName'] as String?,
-      name: json['name'] as String?,
+      self: json[r'self'] as String?,
+      id: (json[r'id'] as num?)?.toInt(),
+      key: json[r'key'] as String?,
+      colorName: json[r'colorName'] as String?,
+      name: json[r'name'] as String?,
     );
   }
 
@@ -5543,19 +5545,19 @@ class StatusCategory {
 
     final json = <String, Object?>{};
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (key != null) {
-      json['key'] = key;
+      json[r'key'] = key;
     }
     if (colorName != null) {
-      json['colorName'] = colorName;
+      json[r'colorName'] = colorName;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     return json;
   }
@@ -5602,14 +5604,14 @@ class StatusDetails {
 
   factory StatusDetails.fromJson(Map<String, Object?> json) {
     return StatusDetails(
-      self: json['self'] as String?,
-      description: json['description'] as String?,
-      iconUrl: json['iconUrl'] as String?,
-      name: json['name'] as String?,
-      id: json['id'] as String?,
-      statusCategory: json['statusCategory'] != null
+      self: json[r'self'] as String?,
+      description: json[r'description'] as String?,
+      iconUrl: json[r'iconUrl'] as String?,
+      name: json[r'name'] as String?,
+      id: json[r'id'] as String?,
+      statusCategory: json[r'statusCategory'] != null
           ? StatusCategory.fromJson(
-              json['statusCategory']! as Map<String, Object?>)
+              json[r'statusCategory']! as Map<String, Object?>)
           : null,
     );
   }
@@ -5624,22 +5626,22 @@ class StatusDetails {
 
     final json = <String, Object?>{};
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (description != null) {
-      json['description'] = description;
+      json[r'description'] = description;
     }
     if (iconUrl != null) {
-      json['iconUrl'] = iconUrl;
+      json[r'iconUrl'] = iconUrl;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (statusCategory != null) {
-      json['statusCategory'] = statusCategory.toJson();
+      json[r'statusCategory'] = statusCategory.toJson();
     }
     return json;
   }
@@ -5732,18 +5734,19 @@ class UserDetails {
 
   factory UserDetails.fromJson(Map<String, Object?> json) {
     return UserDetails(
-      self: json['self'] as String?,
-      name: json['name'] as String?,
-      key: json['key'] as String?,
-      accountId: json['accountId'] as String?,
-      emailAddress: json['emailAddress'] as String?,
-      avatarUrls: json['avatarUrls'] != null
-          ? AvatarUrlsBean.fromJson(json['avatarUrls']! as Map<String, Object?>)
+      self: json[r'self'] as String?,
+      name: json[r'name'] as String?,
+      key: json[r'key'] as String?,
+      accountId: json[r'accountId'] as String?,
+      emailAddress: json[r'emailAddress'] as String?,
+      avatarUrls: json[r'avatarUrls'] != null
+          ? AvatarUrlsBean.fromJson(
+              json[r'avatarUrls']! as Map<String, Object?>)
           : null,
-      displayName: json['displayName'] as String?,
-      active: json['active'] as bool? ?? false,
-      timeZone: json['timeZone'] as String?,
-      accountType: json['accountType'] as String?,
+      displayName: json[r'displayName'] as String?,
+      active: json[r'active'] as bool? ?? false,
+      timeZone: json[r'timeZone'] as String?,
+      accountType: json[r'accountType'] as String?,
     );
   }
 
@@ -5761,32 +5764,32 @@ class UserDetails {
 
     final json = <String, Object?>{};
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (key != null) {
-      json['key'] = key;
+      json[r'key'] = key;
     }
     if (accountId != null) {
-      json['accountId'] = accountId;
+      json[r'accountId'] = accountId;
     }
     if (emailAddress != null) {
-      json['emailAddress'] = emailAddress;
+      json[r'emailAddress'] = emailAddress;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls.toJson();
+      json[r'avatarUrls'] = avatarUrls.toJson();
     }
     if (displayName != null) {
-      json['displayName'] = displayName;
+      json[r'displayName'] = displayName;
     }
-    json['active'] = active;
+    json[r'active'] = active;
     if (timeZone != null) {
-      json['timeZone'] = timeZone;
+      json[r'timeZone'] = timeZone;
     }
     if (accountType != null) {
-      json['accountType'] = accountType;
+      json[r'accountType'] = accountType;
     }
     return json;
   }
@@ -5828,8 +5831,8 @@ class CustomerTransitionDTO {
 
   factory CustomerTransitionDTO.fromJson(Map<String, Object?> json) {
     return CustomerTransitionDTO(
-      id: json['id'] as String?,
-      name: json['name'] as String?,
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
     );
   }
 
@@ -5839,10 +5842,10 @@ class CustomerTransitionDTO {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     return json;
   }
@@ -5890,21 +5893,21 @@ class PagedDTOCustomerTransitionDTO {
 
   factory PagedDTOCustomerTransitionDTO.fromJson(Map<String, Object?> json) {
     return PagedDTOCustomerTransitionDTO(
-      size: (json['size'] as num?)?.toInt(),
-      start: (json['start'] as num?)?.toInt(),
-      limit: (json['limit'] as num?)?.toInt(),
-      isLastPage: json['isLastPage'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) => CustomerTransitionDTO.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: json['_links'] != null
-          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -5920,19 +5923,19 @@ class PagedDTOCustomerTransitionDTO {
 
     final json = <String, Object?>{};
     if (size != null) {
-      json['size'] = size;
+      json[r'size'] = size;
     }
     if (start != null) {
-      json['start'] = start;
+      json[r'start'] = start;
     }
     if (limit != null) {
-      json['limit'] = limit;
+      json[r'limit'] = limit;
     }
-    json['isLastPage'] = isLastPage;
-    json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands;
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -5968,10 +5971,10 @@ class CustomerTransitionExecutionDTO {
 
   factory CustomerTransitionExecutionDTO.fromJson(Map<String, Object?> json) {
     return CustomerTransitionExecutionDTO(
-      id: json['id'] as String?,
-      additionalComment: json['additionalComment'] != null
+      id: json[r'id'] as String?,
+      additionalComment: json[r'additionalComment'] != null
           ? AdditionalCommentDTO.fromJson(
-              json['additionalComment']! as Map<String, Object?>)
+              json[r'additionalComment']! as Map<String, Object?>)
           : null,
     );
   }
@@ -5982,10 +5985,10 @@ class CustomerTransitionExecutionDTO {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (additionalComment != null) {
-      json['additionalComment'] = additionalComment.toJson();
+      json[r'additionalComment'] = additionalComment.toJson();
     }
     return json;
   }
@@ -6011,8 +6014,8 @@ class PropertyKey {
 
   factory PropertyKey.fromJson(Map<String, Object?> json) {
     return PropertyKey(
-      self: json['self'] as String?,
-      key: json['key'] as String?,
+      self: json[r'self'] as String?,
+      key: json[r'key'] as String?,
     );
   }
 
@@ -6022,10 +6025,10 @@ class PropertyKey {
 
     final json = <String, Object?>{};
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (key != null) {
-      json['key'] = key;
+      json[r'key'] = key;
     }
     return json;
   }
@@ -6047,7 +6050,7 @@ class PropertyKeys {
 
   factory PropertyKeys.fromJson(Map<String, Object?> json) {
     return PropertyKeys(
-      keys: (json['keys'] as List<Object?>?)
+      keys: (json[r'keys'] as List<Object?>?)
               ?.map((i) =>
                   PropertyKey.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -6059,7 +6062,7 @@ class PropertyKeys {
     var keys = this.keys;
 
     final json = <String, Object?>{};
-    json['keys'] = keys.map((i) => i.toJson()).toList();
+    json[r'keys'] = keys.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -6083,8 +6086,8 @@ class EntityProperty {
 
   factory EntityProperty.fromJson(Map<String, Object?> json) {
     return EntityProperty(
-      key: json['key'] as String?,
-      value: json['value'] as Map<String, Object?>?,
+      key: json[r'key'] as String?,
+      value: json[r'value'] as Map<String, Object?>?,
     );
   }
 
@@ -6094,10 +6097,10 @@ class EntityProperty {
 
     final json = <String, Object?>{};
     if (key != null) {
-      json['key'] = key;
+      json[r'key'] = key;
     }
     if (value != null) {
-      json['value'] = value;
+      json[r'value'] = value;
     }
     return json;
   }
@@ -6127,11 +6130,11 @@ class ServiceDeskCustomerDTO {
 
   factory ServiceDeskCustomerDTO.fromJson(Map<String, Object?> json) {
     return ServiceDeskCustomerDTO(
-      usernames: (json['usernames'] as List<Object?>?)
+      usernames: (json[r'usernames'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      accountIds: (json['accountIds'] as List<Object?>?)
+      accountIds: (json[r'accountIds'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -6143,8 +6146,8 @@ class ServiceDeskCustomerDTO {
     var accountIds = this.accountIds;
 
     final json = <String, Object?>{};
-    json['usernames'] = usernames;
-    json['accountIds'] = accountIds;
+    json[r'usernames'] = usernames;
+    json[r'accountIds'] = accountIds;
     return json;
   }
 
@@ -6197,25 +6200,26 @@ class ApprovalDTO {
 
   factory ApprovalDTO.fromJson(Map<String, Object?> json) {
     return ApprovalDTO(
-      id: json['id'] as String?,
-      name: json['name'] as String?,
-      finalDecision: json['finalDecision'] != null
-          ? ApprovalDTOFinalDecision.fromValue(json['finalDecision']! as String)
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      finalDecision: json[r'finalDecision'] != null
+          ? ApprovalDTOFinalDecision.fromValue(
+              json[r'finalDecision']! as String)
           : null,
-      canAnswerApproval: json['canAnswerApproval'] as bool? ?? false,
-      approvers: (json['approvers'] as List<Object?>?)
+      canAnswerApproval: json[r'canAnswerApproval'] as bool? ?? false,
+      approvers: (json[r'approvers'] as List<Object?>?)
               ?.map((i) =>
                   ApproverDTO.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      createdDate: json['createdDate'] != null
-          ? DateDTO.fromJson(json['createdDate']! as Map<String, Object?>)
+      createdDate: json[r'createdDate'] != null
+          ? DateDTO.fromJson(json[r'createdDate']! as Map<String, Object?>)
           : null,
-      completedDate: json['completedDate'] != null
-          ? DateDTO.fromJson(json['completedDate']! as Map<String, Object?>)
+      completedDate: json[r'completedDate'] != null
+          ? DateDTO.fromJson(json[r'completedDate']! as Map<String, Object?>)
           : null,
-      links: json['_links'] != null
-          ? SelfLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -6232,24 +6236,24 @@ class ApprovalDTO {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (finalDecision != null) {
-      json['finalDecision'] = finalDecision.value;
+      json[r'finalDecision'] = finalDecision.value;
     }
-    json['canAnswerApproval'] = canAnswerApproval;
-    json['approvers'] = approvers.map((i) => i.toJson()).toList();
+    json[r'canAnswerApproval'] = canAnswerApproval;
+    json[r'approvers'] = approvers.map((i) => i.toJson()).toList();
     if (createdDate != null) {
-      json['createdDate'] = createdDate.toJson();
+      json[r'createdDate'] = createdDate.toJson();
     }
     if (completedDate != null) {
-      json['completedDate'] = completedDate.toJson();
+      json[r'completedDate'] = completedDate.toJson();
     }
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -6312,12 +6316,12 @@ class ApproverDTO {
 
   factory ApproverDTO.fromJson(Map<String, Object?> json) {
     return ApproverDTO(
-      approver: json['approver'] != null
-          ? UserDTO.fromJson(json['approver']! as Map<String, Object?>)
+      approver: json[r'approver'] != null
+          ? UserDTO.fromJson(json[r'approver']! as Map<String, Object?>)
           : null,
-      approverDecision: json['approverDecision'] != null
+      approverDecision: json[r'approverDecision'] != null
           ? ApproverDTOApproverDecision.fromValue(
-              json['approverDecision']! as String)
+              json[r'approverDecision']! as String)
           : null,
     );
   }
@@ -6328,10 +6332,10 @@ class ApproverDTO {
 
     final json = <String, Object?>{};
     if (approver != null) {
-      json['approver'] = approver.toJson();
+      json[r'approver'] = approver.toJson();
     }
     if (approverDecision != null) {
-      json['approverDecision'] = approverDecision.value;
+      json[r'approverDecision'] = approverDecision.value;
     }
     return json;
   }
@@ -6378,9 +6382,9 @@ class ApprovalDecisionRequestDTO {
 
   factory ApprovalDecisionRequestDTO.fromJson(Map<String, Object?> json) {
     return ApprovalDecisionRequestDTO(
-      decision: json['decision'] != null
+      decision: json[r'decision'] != null
           ? ApprovalDecisionRequestDTODecision.fromValue(
-              json['decision']! as String)
+              json[r'decision']! as String)
           : null,
     );
   }
@@ -6390,7 +6394,7 @@ class ApprovalDecisionRequestDTO {
 
     final json = <String, Object?>{};
     if (decision != null) {
-      json['decision'] = decision.value;
+      json[r'decision'] = decision.value;
     }
     return json;
   }
@@ -6461,21 +6465,21 @@ class PagedDTOApprovalDTO {
 
   factory PagedDTOApprovalDTO.fromJson(Map<String, Object?> json) {
     return PagedDTOApprovalDTO(
-      size: (json['size'] as num?)?.toInt(),
-      start: (json['start'] as num?)?.toInt(),
-      limit: (json['limit'] as num?)?.toInt(),
-      isLastPage: json['isLastPage'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) =>
                   ApprovalDTO.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: json['_links'] != null
-          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -6491,19 +6495,19 @@ class PagedDTOApprovalDTO {
 
     final json = <String, Object?>{};
     if (size != null) {
-      json['size'] = size;
+      json[r'size'] = size;
     }
     if (start != null) {
-      json['start'] = start;
+      json[r'start'] = start;
     }
     if (limit != null) {
-      json['limit'] = limit;
+      json[r'limit'] = limit;
     }
-    json['isLastPage'] = isLastPage;
-    json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands;
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -6537,7 +6541,7 @@ class OrganizationServiceDeskUpdateDTO {
 
   factory OrganizationServiceDeskUpdateDTO.fromJson(Map<String, Object?> json) {
     return OrganizationServiceDeskUpdateDTO(
-      organizationId: (json['organizationId'] as num?)?.toInt(),
+      organizationId: (json[r'organizationId'] as num?)?.toInt(),
     );
   }
 
@@ -6546,7 +6550,7 @@ class OrganizationServiceDeskUpdateDTO {
 
     final json = <String, Object?>{};
     if (organizationId != null) {
-      json['organizationId'] = organizationId;
+      json[r'organizationId'] = organizationId;
     }
     return json;
   }
@@ -6579,15 +6583,16 @@ class AttachmentCreateDTO {
 
   factory AttachmentCreateDTO.fromJson(Map<String, Object?> json) {
     return AttachmentCreateDTO(
-      temporaryAttachmentIds: (json['temporaryAttachmentIds'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      additionalComment: json['additionalComment'] != null
+      temporaryAttachmentIds:
+          (json[r'temporaryAttachmentIds'] as List<Object?>?)
+                  ?.map((i) => i as String? ?? '')
+                  .toList() ??
+              [],
+      additionalComment: json[r'additionalComment'] != null
           ? AdditionalCommentDTO.fromJson(
-              json['additionalComment']! as Map<String, Object?>)
+              json[r'additionalComment']! as Map<String, Object?>)
           : null,
-      public: json['public'] as bool? ?? false,
+      public: json[r'public'] as bool? ?? false,
     );
   }
 
@@ -6597,11 +6602,11 @@ class AttachmentCreateDTO {
     var public = this.public;
 
     final json = <String, Object?>{};
-    json['temporaryAttachmentIds'] = temporaryAttachmentIds;
+    json[r'temporaryAttachmentIds'] = temporaryAttachmentIds;
     if (additionalComment != null) {
-      json['additionalComment'] = additionalComment.toJson();
+      json[r'additionalComment'] = additionalComment.toJson();
     }
-    json['public'] = public;
+    json[r'public'] = public;
     return json;
   }
 
@@ -6629,12 +6634,12 @@ class AttachmentCreateResultDTO {
 
   factory AttachmentCreateResultDTO.fromJson(Map<String, Object?> json) {
     return AttachmentCreateResultDTO(
-      comment: json['comment'] != null
-          ? CommentDTO.fromJson(json['comment']! as Map<String, Object?>)
+      comment: json[r'comment'] != null
+          ? CommentDTO.fromJson(json[r'comment']! as Map<String, Object?>)
           : null,
-      attachments: json['attachments'] != null
+      attachments: json[r'attachments'] != null
           ? PagedDTOAttachmentDTO.fromJson(
-              json['attachments']! as Map<String, Object?>)
+              json[r'attachments']! as Map<String, Object?>)
           : null,
     );
   }
@@ -6645,10 +6650,10 @@ class AttachmentCreateResultDTO {
 
     final json = <String, Object?>{};
     if (comment != null) {
-      json['comment'] = comment.toJson();
+      json[r'comment'] = comment.toJson();
     }
     if (attachments != null) {
-      json['attachments'] = attachments.toJson();
+      json[r'attachments'] = attachments.toJson();
     }
     return json;
   }
@@ -6691,17 +6696,17 @@ class AttachmentDTO {
 
   factory AttachmentDTO.fromJson(Map<String, Object?> json) {
     return AttachmentDTO(
-      filename: json['filename'] as String?,
-      author: json['author'] != null
-          ? UserDTO.fromJson(json['author']! as Map<String, Object?>)
+      filename: json[r'filename'] as String?,
+      author: json[r'author'] != null
+          ? UserDTO.fromJson(json[r'author']! as Map<String, Object?>)
           : null,
-      created: json['created'] != null
-          ? DateDTO.fromJson(json['created']! as Map<String, Object?>)
+      created: json[r'created'] != null
+          ? DateDTO.fromJson(json[r'created']! as Map<String, Object?>)
           : null,
-      size: (json['size'] as num?)?.toInt(),
-      mimeType: json['mimeType'] as String?,
-      links: json['_links'] != null
-          ? AttachmentLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      size: (json[r'size'] as num?)?.toInt(),
+      mimeType: json[r'mimeType'] as String?,
+      links: json[r'_links'] != null
+          ? AttachmentLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -6716,22 +6721,22 @@ class AttachmentDTO {
 
     final json = <String, Object?>{};
     if (filename != null) {
-      json['filename'] = filename;
+      json[r'filename'] = filename;
     }
     if (author != null) {
-      json['author'] = author.toJson();
+      json[r'author'] = author.toJson();
     }
     if (created != null) {
-      json['created'] = created.toJson();
+      json[r'created'] = created.toJson();
     }
     if (size != null) {
-      json['size'] = size;
+      json[r'size'] = size;
     }
     if (mimeType != null) {
-      json['mimeType'] = mimeType;
+      json[r'mimeType'] = mimeType;
     }
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -6770,10 +6775,10 @@ class AttachmentLinkDTO {
 
   factory AttachmentLinkDTO.fromJson(Map<String, Object?> json) {
     return AttachmentLinkDTO(
-      self: json['self'] as String?,
-      jiraRest: json['jiraRest'] as String?,
-      content: json['content'] as String?,
-      thumbnail: json['thumbnail'] as String?,
+      self: json[r'self'] as String?,
+      jiraRest: json[r'jiraRest'] as String?,
+      content: json[r'content'] as String?,
+      thumbnail: json[r'thumbnail'] as String?,
     );
   }
 
@@ -6785,16 +6790,16 @@ class AttachmentLinkDTO {
 
     final json = <String, Object?>{};
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (jiraRest != null) {
-      json['jiraRest'] = jiraRest;
+      json[r'jiraRest'] = jiraRest;
     }
     if (content != null) {
-      json['content'] = content;
+      json[r'content'] = content;
     }
     if (thumbnail != null) {
-      json['thumbnail'] = thumbnail;
+      json[r'thumbnail'] = thumbnail;
     }
     return json;
   }
@@ -6855,29 +6860,29 @@ class CommentDTO {
 
   factory CommentDTO.fromJson(Map<String, Object?> json) {
     return CommentDTO(
-      id: json['id'] as String?,
-      body: json['body'] as String?,
-      renderedBody: json['renderedBody'] != null
+      id: json[r'id'] as String?,
+      body: json[r'body'] as String?,
+      renderedBody: json[r'renderedBody'] != null
           ? RenderedValueDTO.fromJson(
-              json['renderedBody']! as Map<String, Object?>)
+              json[r'renderedBody']! as Map<String, Object?>)
           : null,
-      author: json['author'] != null
-          ? UserDTO.fromJson(json['author']! as Map<String, Object?>)
+      author: json[r'author'] != null
+          ? UserDTO.fromJson(json[r'author']! as Map<String, Object?>)
           : null,
-      created: json['created'] != null
-          ? DateDTO.fromJson(json['created']! as Map<String, Object?>)
+      created: json[r'created'] != null
+          ? DateDTO.fromJson(json[r'created']! as Map<String, Object?>)
           : null,
-      attachments: json['attachments'] != null
+      attachments: json[r'attachments'] != null
           ? PagedDTOAttachmentDTO.fromJson(
-              json['attachments']! as Map<String, Object?>)
+              json[r'attachments']! as Map<String, Object?>)
           : null,
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      public: json['public'] as bool? ?? false,
-      links: json['_links'] != null
-          ? SelfLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      public: json[r'public'] as bool? ?? false,
+      links: json[r'_links'] != null
+          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -6895,27 +6900,27 @@ class CommentDTO {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (body != null) {
-      json['body'] = body;
+      json[r'body'] = body;
     }
     if (renderedBody != null) {
-      json['renderedBody'] = renderedBody.toJson();
+      json[r'renderedBody'] = renderedBody.toJson();
     }
     if (author != null) {
-      json['author'] = author.toJson();
+      json[r'author'] = author.toJson();
     }
     if (created != null) {
-      json['created'] = created.toJson();
+      json[r'created'] = created.toJson();
     }
     if (attachments != null) {
-      json['attachments'] = attachments.toJson();
+      json[r'attachments'] = attachments.toJson();
     }
-    json['_expands'] = expands;
-    json['public'] = public;
+    json[r'_expands'] = expands;
+    json[r'public'] = public;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -6979,21 +6984,21 @@ class PagedDTOAttachmentDTO {
 
   factory PagedDTOAttachmentDTO.fromJson(Map<String, Object?> json) {
     return PagedDTOAttachmentDTO(
-      size: (json['size'] as num?)?.toInt(),
-      start: (json['start'] as num?)?.toInt(),
-      limit: (json['limit'] as num?)?.toInt(),
-      isLastPage: json['isLastPage'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) => AttachmentDTO.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: json['_links'] != null
-          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -7009,19 +7014,19 @@ class PagedDTOAttachmentDTO {
 
     final json = <String, Object?>{};
     if (size != null) {
-      json['size'] = size;
+      json[r'size'] = size;
     }
     if (start != null) {
-      json['start'] = start;
+      json[r'start'] = start;
     }
     if (limit != null) {
-      json['limit'] = limit;
+      json[r'limit'] = limit;
     }
-    json['isLastPage'] = isLastPage;
-    json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands;
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -7053,7 +7058,7 @@ class RenderedValueDTO {
 
   factory RenderedValueDTO.fromJson(Map<String, Object?> json) {
     return RenderedValueDTO(
-      html: json['html'] as String?,
+      html: json[r'html'] as String?,
     );
   }
 
@@ -7062,7 +7067,7 @@ class RenderedValueDTO {
 
     final json = <String, Object?>{};
     if (html != null) {
-      json['html'] = html;
+      json[r'html'] = html;
     }
     return json;
   }
@@ -7081,8 +7086,8 @@ class LinkableAttachmentLinkDTO {
 
   factory LinkableAttachmentLinkDTO.fromJson(Map<String, Object?> json) {
     return LinkableAttachmentLinkDTO(
-      links: json['_links'] != null
-          ? AttachmentLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? AttachmentLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -7092,7 +7097,7 @@ class LinkableAttachmentLinkDTO {
 
     final json = <String, Object?>{};
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -7118,9 +7123,9 @@ class CustomerCreateDTO {
 
   factory CustomerCreateDTO.fromJson(Map<String, Object?> json) {
     return CustomerCreateDTO(
-      email: json['email'] as String?,
-      fullName: json['fullName'] as String?,
-      displayName: json['displayName'] as String?,
+      email: json[r'email'] as String?,
+      fullName: json[r'fullName'] as String?,
+      displayName: json[r'displayName'] as String?,
     );
   }
 
@@ -7131,13 +7136,13 @@ class CustomerCreateDTO {
 
     final json = <String, Object?>{};
     if (email != null) {
-      json['email'] = email;
+      json[r'email'] = email;
     }
     if (fullName != null) {
-      json['fullName'] = fullName;
+      json[r'fullName'] = fullName;
     }
     if (displayName != null) {
-      json['displayName'] = displayName;
+      json[r'displayName'] = displayName;
     }
     return json;
   }
@@ -7185,15 +7190,15 @@ class RequestCreateDTO {
 
   factory RequestCreateDTO.fromJson(Map<String, Object?> json) {
     return RequestCreateDTO(
-      serviceDeskId: json['serviceDeskId'] as String?,
-      requestTypeId: json['requestTypeId'] as String?,
-      requestFieldValues: json['requestFieldValues'] as Map<String, Object?>?,
-      requestParticipants: (json['requestParticipants'] as List<Object?>?)
+      serviceDeskId: json[r'serviceDeskId'] as String?,
+      requestTypeId: json[r'requestTypeId'] as String?,
+      requestFieldValues: json[r'requestFieldValues'] as Map<String, Object?>?,
+      requestParticipants: (json[r'requestParticipants'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      raiseOnBehalfOf: json['raiseOnBehalfOf'] as String?,
-      channel: json['channel'] as String?,
+      raiseOnBehalfOf: json[r'raiseOnBehalfOf'] as String?,
+      channel: json[r'channel'] as String?,
     );
   }
 
@@ -7207,20 +7212,20 @@ class RequestCreateDTO {
 
     final json = <String, Object?>{};
     if (serviceDeskId != null) {
-      json['serviceDeskId'] = serviceDeskId;
+      json[r'serviceDeskId'] = serviceDeskId;
     }
     if (requestTypeId != null) {
-      json['requestTypeId'] = requestTypeId;
+      json[r'requestTypeId'] = requestTypeId;
     }
     if (requestFieldValues != null) {
-      json['requestFieldValues'] = requestFieldValues;
+      json[r'requestFieldValues'] = requestFieldValues;
     }
-    json['requestParticipants'] = requestParticipants;
+    json[r'requestParticipants'] = requestParticipants;
     if (raiseOnBehalfOf != null) {
-      json['raiseOnBehalfOf'] = raiseOnBehalfOf;
+      json[r'raiseOnBehalfOf'] = raiseOnBehalfOf;
     }
     if (channel != null) {
-      json['channel'] = channel;
+      json[r'channel'] = channel;
     }
     return json;
   }
@@ -7251,7 +7256,7 @@ class CustomerRequestActionDTO {
 
   factory CustomerRequestActionDTO.fromJson(Map<String, Object?> json) {
     return CustomerRequestActionDTO(
-      allowed: json['allowed'] as bool? ?? false,
+      allowed: json[r'allowed'] as bool? ?? false,
     );
   }
 
@@ -7259,7 +7264,7 @@ class CustomerRequestActionDTO {
     var allowed = this.allowed;
 
     final json = <String, Object?>{};
-    json['allowed'] = allowed;
+    json[r'allowed'] = allowed;
     return json;
   }
 
@@ -7291,21 +7296,21 @@ class CustomerRequestActionsDTO {
 
   factory CustomerRequestActionsDTO.fromJson(Map<String, Object?> json) {
     return CustomerRequestActionsDTO(
-      addAttachment: json['addAttachment'] != null
+      addAttachment: json[r'addAttachment'] != null
           ? CustomerRequestActionDTO.fromJson(
-              json['addAttachment']! as Map<String, Object?>)
+              json[r'addAttachment']! as Map<String, Object?>)
           : null,
-      addComment: json['addComment'] != null
+      addComment: json[r'addComment'] != null
           ? CustomerRequestActionDTO.fromJson(
-              json['addComment']! as Map<String, Object?>)
+              json[r'addComment']! as Map<String, Object?>)
           : null,
-      addParticipant: json['addParticipant'] != null
+      addParticipant: json[r'addParticipant'] != null
           ? CustomerRequestActionDTO.fromJson(
-              json['addParticipant']! as Map<String, Object?>)
+              json[r'addParticipant']! as Map<String, Object?>)
           : null,
-      removeParticipant: json['removeParticipant'] != null
+      removeParticipant: json[r'removeParticipant'] != null
           ? CustomerRequestActionDTO.fromJson(
-              json['removeParticipant']! as Map<String, Object?>)
+              json[r'removeParticipant']! as Map<String, Object?>)
           : null,
     );
   }
@@ -7318,16 +7323,16 @@ class CustomerRequestActionsDTO {
 
     final json = <String, Object?>{};
     if (addAttachment != null) {
-      json['addAttachment'] = addAttachment.toJson();
+      json[r'addAttachment'] = addAttachment.toJson();
     }
     if (addComment != null) {
-      json['addComment'] = addComment.toJson();
+      json[r'addComment'] = addComment.toJson();
     }
     if (addParticipant != null) {
-      json['addParticipant'] = addParticipant.toJson();
+      json[r'addParticipant'] = addParticipant.toJson();
     }
     if (removeParticipant != null) {
-      json['removeParticipant'] = removeParticipant.toJson();
+      json[r'removeParticipant'] = removeParticipant.toJson();
     }
     return json;
   }
@@ -7427,64 +7432,64 @@ class CustomerRequestDTO {
 
   factory CustomerRequestDTO.fromJson(Map<String, Object?> json) {
     return CustomerRequestDTO(
-      issueId: json['issueId'] as String?,
-      issueKey: json['issueKey'] as String?,
-      requestTypeId: json['requestTypeId'] as String?,
-      requestType: json['requestType'] != null
+      issueId: json[r'issueId'] as String?,
+      issueKey: json[r'issueKey'] as String?,
+      requestTypeId: json[r'requestTypeId'] as String?,
+      requestType: json[r'requestType'] != null
           ? RequestTypeDTO.fromJson(
-              json['requestType']! as Map<String, Object?>)
+              json[r'requestType']! as Map<String, Object?>)
           : null,
-      serviceDeskId: json['serviceDeskId'] as String?,
-      serviceDesk: json['serviceDesk'] != null
+      serviceDeskId: json[r'serviceDeskId'] as String?,
+      serviceDesk: json[r'serviceDesk'] != null
           ? ServiceDeskDTO.fromJson(
-              json['serviceDesk']! as Map<String, Object?>)
+              json[r'serviceDesk']! as Map<String, Object?>)
           : null,
-      createdDate: json['createdDate'] != null
-          ? DateDTO.fromJson(json['createdDate']! as Map<String, Object?>)
+      createdDate: json[r'createdDate'] != null
+          ? DateDTO.fromJson(json[r'createdDate']! as Map<String, Object?>)
           : null,
-      reporter: json['reporter'] != null
-          ? UserDTO.fromJson(json['reporter']! as Map<String, Object?>)
+      reporter: json[r'reporter'] != null
+          ? UserDTO.fromJson(json[r'reporter']! as Map<String, Object?>)
           : null,
-      requestFieldValues: (json['requestFieldValues'] as List<Object?>?)
+      requestFieldValues: (json[r'requestFieldValues'] as List<Object?>?)
               ?.map((i) => CustomerRequestFieldValueDTO.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      currentStatus: json['currentStatus'] != null
+      currentStatus: json[r'currentStatus'] != null
           ? CustomerRequestStatusDTO.fromJson(
-              json['currentStatus']! as Map<String, Object?>)
+              json[r'currentStatus']! as Map<String, Object?>)
           : null,
-      status: json['status'] != null
+      status: json[r'status'] != null
           ? PagedDTOCustomerRequestStatusDTO.fromJson(
-              json['status']! as Map<String, Object?>)
+              json[r'status']! as Map<String, Object?>)
           : null,
-      participants: json['participants'] != null
+      participants: json[r'participants'] != null
           ? PagedDTOUserDTO.fromJson(
-              json['participants']! as Map<String, Object?>)
+              json[r'participants']! as Map<String, Object?>)
           : null,
-      sla: json['sla'] != null
+      sla: json[r'sla'] != null
           ? PagedDTOSlaInformationDTO.fromJson(
-              json['sla']! as Map<String, Object?>)
+              json[r'sla']! as Map<String, Object?>)
           : null,
-      attachments: json['attachments'] != null
+      attachments: json[r'attachments'] != null
           ? PagedDTOAttachmentDTO.fromJson(
-              json['attachments']! as Map<String, Object?>)
+              json[r'attachments']! as Map<String, Object?>)
           : null,
-      comments: json['comments'] != null
+      comments: json[r'comments'] != null
           ? PagedDTOCommentDTO.fromJson(
-              json['comments']! as Map<String, Object?>)
+              json[r'comments']! as Map<String, Object?>)
           : null,
-      actions: json['actions'] != null
+      actions: json[r'actions'] != null
           ? CustomerRequestActionsDTO.fromJson(
-              json['actions']! as Map<String, Object?>)
+              json[r'actions']! as Map<String, Object?>)
           : null,
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: json['_links'] != null
+      links: json[r'_links'] != null
           ? CustomerRequestLinkDTO.fromJson(
-              json['_links']! as Map<String, Object?>)
+              json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -7511,55 +7516,55 @@ class CustomerRequestDTO {
 
     final json = <String, Object?>{};
     if (issueId != null) {
-      json['issueId'] = issueId;
+      json[r'issueId'] = issueId;
     }
     if (issueKey != null) {
-      json['issueKey'] = issueKey;
+      json[r'issueKey'] = issueKey;
     }
     if (requestTypeId != null) {
-      json['requestTypeId'] = requestTypeId;
+      json[r'requestTypeId'] = requestTypeId;
     }
     if (requestType != null) {
-      json['requestType'] = requestType.toJson();
+      json[r'requestType'] = requestType.toJson();
     }
     if (serviceDeskId != null) {
-      json['serviceDeskId'] = serviceDeskId;
+      json[r'serviceDeskId'] = serviceDeskId;
     }
     if (serviceDesk != null) {
-      json['serviceDesk'] = serviceDesk.toJson();
+      json[r'serviceDesk'] = serviceDesk.toJson();
     }
     if (createdDate != null) {
-      json['createdDate'] = createdDate.toJson();
+      json[r'createdDate'] = createdDate.toJson();
     }
     if (reporter != null) {
-      json['reporter'] = reporter.toJson();
+      json[r'reporter'] = reporter.toJson();
     }
-    json['requestFieldValues'] =
+    json[r'requestFieldValues'] =
         requestFieldValues.map((i) => i.toJson()).toList();
     if (currentStatus != null) {
-      json['currentStatus'] = currentStatus.toJson();
+      json[r'currentStatus'] = currentStatus.toJson();
     }
     if (status != null) {
-      json['status'] = status.toJson();
+      json[r'status'] = status.toJson();
     }
     if (participants != null) {
-      json['participants'] = participants.toJson();
+      json[r'participants'] = participants.toJson();
     }
     if (sla != null) {
-      json['sla'] = sla.toJson();
+      json[r'sla'] = sla.toJson();
     }
     if (attachments != null) {
-      json['attachments'] = attachments.toJson();
+      json[r'attachments'] = attachments.toJson();
     }
     if (comments != null) {
-      json['comments'] = comments.toJson();
+      json[r'comments'] = comments.toJson();
     }
     if (actions != null) {
-      json['actions'] = actions.toJson();
+      json[r'actions'] = actions.toJson();
     }
-    json['_expands'] = expands;
+    json[r'_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -7624,10 +7629,10 @@ class CustomerRequestFieldValueDTO {
 
   factory CustomerRequestFieldValueDTO.fromJson(Map<String, Object?> json) {
     return CustomerRequestFieldValueDTO(
-      fieldId: json['fieldId'] as String?,
-      label: json['label'] as String?,
-      value: json['value'] as Map<String, Object?>?,
-      renderedValue: json['renderedValue'] as Map<String, Object?>?,
+      fieldId: json[r'fieldId'] as String?,
+      label: json[r'label'] as String?,
+      value: json[r'value'] as Map<String, Object?>?,
+      renderedValue: json[r'renderedValue'] as Map<String, Object?>?,
     );
   }
 
@@ -7639,16 +7644,16 @@ class CustomerRequestFieldValueDTO {
 
     final json = <String, Object?>{};
     if (fieldId != null) {
-      json['fieldId'] = fieldId;
+      json[r'fieldId'] = fieldId;
     }
     if (label != null) {
-      json['label'] = label;
+      json[r'label'] = label;
     }
     if (value != null) {
-      json['value'] = value;
+      json[r'value'] = value;
     }
     if (renderedValue != null) {
-      json['renderedValue'] = renderedValue;
+      json[r'renderedValue'] = renderedValue;
     }
     return json;
   }
@@ -7683,10 +7688,10 @@ class CustomerRequestLinkDTO {
 
   factory CustomerRequestLinkDTO.fromJson(Map<String, Object?> json) {
     return CustomerRequestLinkDTO(
-      self: json['self'] as String?,
-      jiraRest: json['jiraRest'] as String?,
-      web: json['web'] as String?,
-      agent: json['agent'] as String?,
+      self: json[r'self'] as String?,
+      jiraRest: json[r'jiraRest'] as String?,
+      web: json[r'web'] as String?,
+      agent: json[r'agent'] as String?,
     );
   }
 
@@ -7698,16 +7703,16 @@ class CustomerRequestLinkDTO {
 
     final json = <String, Object?>{};
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (jiraRest != null) {
-      json['jiraRest'] = jiraRest;
+      json[r'jiraRest'] = jiraRest;
     }
     if (web != null) {
-      json['web'] = web;
+      json[r'web'] = web;
     }
     if (agent != null) {
-      json['agent'] = agent;
+      json[r'agent'] = agent;
     }
     return json;
   }
@@ -7737,13 +7742,13 @@ class CustomerRequestStatusDTO {
 
   factory CustomerRequestStatusDTO.fromJson(Map<String, Object?> json) {
     return CustomerRequestStatusDTO(
-      status: json['status'] as String?,
-      statusCategory: json['statusCategory'] != null
+      status: json[r'status'] as String?,
+      statusCategory: json[r'statusCategory'] != null
           ? CustomerRequestStatusDTOStatusCategory.fromValue(
-              json['statusCategory']! as String)
+              json[r'statusCategory']! as String)
           : null,
-      statusDate: json['statusDate'] != null
-          ? DateDTO.fromJson(json['statusDate']! as Map<String, Object?>)
+      statusDate: json[r'statusDate'] != null
+          ? DateDTO.fromJson(json[r'statusDate']! as Map<String, Object?>)
           : null,
     );
   }
@@ -7755,13 +7760,13 @@ class CustomerRequestStatusDTO {
 
     final json = <String, Object?>{};
     if (status != null) {
-      json['status'] = status;
+      json[r'status'] = status;
     }
     if (statusCategory != null) {
-      json['statusCategory'] = statusCategory.value;
+      json[r'statusCategory'] = statusCategory.value;
     }
     if (statusDate != null) {
-      json['statusDate'] = statusDate.toJson();
+      json[r'statusDate'] = statusDate.toJson();
     }
     return json;
   }
@@ -7842,21 +7847,21 @@ class PagedDTOCommentDTO {
 
   factory PagedDTOCommentDTO.fromJson(Map<String, Object?> json) {
     return PagedDTOCommentDTO(
-      size: (json['size'] as num?)?.toInt(),
-      start: (json['start'] as num?)?.toInt(),
-      limit: (json['limit'] as num?)?.toInt(),
-      isLastPage: json['isLastPage'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) =>
                   CommentDTO.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: json['_links'] != null
-          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -7872,19 +7877,19 @@ class PagedDTOCommentDTO {
 
     final json = <String, Object?>{};
     if (size != null) {
-      json['size'] = size;
+      json[r'size'] = size;
     }
     if (start != null) {
-      json['start'] = start;
+      json[r'start'] = start;
     }
     if (limit != null) {
-      json['limit'] = limit;
+      json[r'limit'] = limit;
     }
-    json['isLastPage'] = isLastPage;
-    json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands;
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -7944,21 +7949,21 @@ class PagedDTOCustomerRequestStatusDTO {
 
   factory PagedDTOCustomerRequestStatusDTO.fromJson(Map<String, Object?> json) {
     return PagedDTOCustomerRequestStatusDTO(
-      size: (json['size'] as num?)?.toInt(),
-      start: (json['start'] as num?)?.toInt(),
-      limit: (json['limit'] as num?)?.toInt(),
-      isLastPage: json['isLastPage'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) => CustomerRequestStatusDTO.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: json['_links'] != null
-          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -7974,19 +7979,19 @@ class PagedDTOCustomerRequestStatusDTO {
 
     final json = <String, Object?>{};
     if (size != null) {
-      json['size'] = size;
+      json[r'size'] = size;
     }
     if (start != null) {
-      json['start'] = start;
+      json[r'start'] = start;
     }
     if (limit != null) {
-      json['limit'] = limit;
+      json[r'limit'] = limit;
     }
-    json['isLastPage'] = isLastPage;
-    json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands;
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -8032,12 +8037,12 @@ class ServiceDeskDTO {
 
   factory ServiceDeskDTO.fromJson(Map<String, Object?> json) {
     return ServiceDeskDTO(
-      id: json['id'] as String?,
-      projectId: json['projectId'] as String?,
-      projectName: json['projectName'] as String?,
-      projectKey: json['projectKey'] as String?,
-      links: json['_links'] != null
-          ? SelfLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      id: json[r'id'] as String?,
+      projectId: json[r'projectId'] as String?,
+      projectName: json[r'projectName'] as String?,
+      projectKey: json[r'projectKey'] as String?,
+      links: json[r'_links'] != null
+          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -8051,19 +8056,19 @@ class ServiceDeskDTO {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (projectId != null) {
-      json['projectId'] = projectId;
+      json[r'projectId'] = projectId;
     }
     if (projectName != null) {
-      json['projectName'] = projectName;
+      json[r'projectName'] = projectName;
     }
     if (projectKey != null) {
-      json['projectKey'] = projectKey;
+      json[r'projectKey'] = projectKey;
     }
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -8091,9 +8096,9 @@ class LinkableCustomerRequestLinkDTO {
 
   factory LinkableCustomerRequestLinkDTO.fromJson(Map<String, Object?> json) {
     return LinkableCustomerRequestLinkDTO(
-      links: json['_links'] != null
+      links: json[r'_links'] != null
           ? CustomerRequestLinkDTO.fromJson(
-              json['_links']! as Map<String, Object?>)
+              json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -8103,7 +8108,7 @@ class LinkableCustomerRequestLinkDTO {
 
     final json = <String, Object?>{};
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -8150,21 +8155,21 @@ class PagedDTOCustomerRequestDTO {
 
   factory PagedDTOCustomerRequestDTO.fromJson(Map<String, Object?> json) {
     return PagedDTOCustomerRequestDTO(
-      size: (json['size'] as num?)?.toInt(),
-      start: (json['start'] as num?)?.toInt(),
-      limit: (json['limit'] as num?)?.toInt(),
-      isLastPage: json['isLastPage'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) => CustomerRequestDTO.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: json['_links'] != null
-          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -8180,19 +8185,19 @@ class PagedDTOCustomerRequestDTO {
 
     final json = <String, Object?>{};
     if (size != null) {
-      json['size'] = size;
+      json[r'size'] = size;
     }
     if (start != null) {
-      json['start'] = start;
+      json[r'start'] = start;
     }
     if (limit != null) {
-      json['limit'] = limit;
+      json[r'limit'] = limit;
     }
-    json['isLastPage'] = isLastPage;
-    json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands;
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -8229,8 +8234,8 @@ class CommentCreateDTO {
 
   factory CommentCreateDTO.fromJson(Map<String, Object?> json) {
     return CommentCreateDTO(
-      body: json['body'] as String?,
-      public: json['public'] as bool? ?? false,
+      body: json[r'body'] as String?,
+      public: json[r'public'] as bool? ?? false,
     );
   }
 
@@ -8240,9 +8245,9 @@ class CommentCreateDTO {
 
     final json = <String, Object?>{};
     if (body != null) {
-      json['body'] = body;
+      json[r'body'] = body;
     }
-    json['public'] = public;
+    json[r'public'] = public;
     return json;
   }
 
@@ -8289,21 +8294,21 @@ class PagedDTOServiceDeskDTO {
 
   factory PagedDTOServiceDeskDTO.fromJson(Map<String, Object?> json) {
     return PagedDTOServiceDeskDTO(
-      size: (json['size'] as num?)?.toInt(),
-      start: (json['start'] as num?)?.toInt(),
-      limit: (json['limit'] as num?)?.toInt(),
-      isLastPage: json['isLastPage'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) => ServiceDeskDTO.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      expands: (json['_expands'] as List<Object?>?)
+      expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: json['_links'] != null
-          ? PagedLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -8319,19 +8324,19 @@ class PagedDTOServiceDeskDTO {
 
     final json = <String, Object?>{};
     if (size != null) {
-      json['size'] = size;
+      json[r'size'] = size;
     }
     if (start != null) {
-      json['start'] = start;
+      json[r'start'] = start;
     }
     if (limit != null) {
-      json['limit'] = limit;
+      json[r'limit'] = limit;
     }
-    json['isLastPage'] = isLastPage;
-    json['values'] = values.map((i) => i.toJson()).toList();
-    json['_expands'] = expands;
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -8374,11 +8379,11 @@ class RequestParticipantUpdateDTO {
 
   factory RequestParticipantUpdateDTO.fromJson(Map<String, Object?> json) {
     return RequestParticipantUpdateDTO(
-      usernames: (json['usernames'] as List<Object?>?)
+      usernames: (json[r'usernames'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      accountIds: (json['accountIds'] as List<Object?>?)
+      accountIds: (json[r'accountIds'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -8390,8 +8395,8 @@ class RequestParticipantUpdateDTO {
     var accountIds = this.accountIds;
 
     final json = <String, Object?>{};
-    json['usernames'] = usernames;
-    json['accountIds'] = accountIds;
+    json[r'usernames'] = usernames;
+    json[r'accountIds'] = accountIds;
     return json;
   }
 
@@ -8434,15 +8439,15 @@ class SoftwareInfoDTO {
 
   factory SoftwareInfoDTO.fromJson(Map<String, Object?> json) {
     return SoftwareInfoDTO(
-      version: json['version'] as String?,
-      platformVersion: json['platformVersion'] as String?,
-      buildDate: json['buildDate'] != null
-          ? DateDTO.fromJson(json['buildDate']! as Map<String, Object?>)
+      version: json[r'version'] as String?,
+      platformVersion: json[r'platformVersion'] as String?,
+      buildDate: json[r'buildDate'] != null
+          ? DateDTO.fromJson(json[r'buildDate']! as Map<String, Object?>)
           : null,
-      buildChangeSet: json['buildChangeSet'] as String?,
-      isLicensedForUse: json['isLicensedForUse'] as bool? ?? false,
-      links: json['_links'] != null
-          ? SelfLinkDTO.fromJson(json['_links']! as Map<String, Object?>)
+      buildChangeSet: json[r'buildChangeSet'] as String?,
+      isLicensedForUse: json[r'isLicensedForUse'] as bool? ?? false,
+      links: json[r'_links'] != null
+          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -8457,20 +8462,20 @@ class SoftwareInfoDTO {
 
     final json = <String, Object?>{};
     if (version != null) {
-      json['version'] = version;
+      json[r'version'] = version;
     }
     if (platformVersion != null) {
-      json['platformVersion'] = platformVersion;
+      json[r'platformVersion'] = platformVersion;
     }
     if (buildDate != null) {
-      json['buildDate'] = buildDate.toJson();
+      json[r'buildDate'] = buildDate.toJson();
     }
     if (buildChangeSet != null) {
-      json['buildChangeSet'] = buildChangeSet;
+      json[r'buildChangeSet'] = buildChangeSet;
     }
-    json['isLicensedForUse'] = isLicensedForUse;
+    json[r'isLicensedForUse'] = isLicensedForUse;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }

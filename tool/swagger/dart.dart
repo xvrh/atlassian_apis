@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:collection/collection.dart';
 import '../utils/string.dart';
 import 'comment.dart';
@@ -11,13 +10,19 @@ class Api {
   final _complexTypes = <ComplexType>[];
   final _topLevelEnums = <String, EnumDartType>{};
   final TypeAliases typeAliases;
-  final _services = <Service>[];
+  final _taggedServices = <Service>[];
+  Service? _untaggedService;
 
   Api(this.name, this._spec, {Map<String, String>? typeAliases})
       : typeAliases = TypeAliases(typeAliases) {
-    for (var tag in _spec.tags) {
-      var service = Service(_spec.info, tag, this.typeAliases);
-      _services.add(service);
+    var tags = _spec.tags;
+    if (tags != null && tags.isNotEmpty) {
+      for (var tag in tags) {
+        var service = Service(_spec.info, tag.name, tag, this.typeAliases);
+        _taggedServices.add(service);
+      }
+    } else {
+      _untaggedService = Service(_spec.info, name, null, this.typeAliases);
     }
 
     for (final pathEntry in _spec.paths.entries) {
@@ -35,10 +40,11 @@ class Api {
         if (httpMethod != null) {
           var path =
               sw.Path.fromJson(methodEntry.value! as Map<String, Object?>);
-          var service = _services.firstWhere(
-              (s) => path.tags.any((t) => t == s.tag.name),
-              orElse: () =>
-                  throw Exception('Unknown tag ${path.tags} ${pathEntry.key}'));
+          var service = _untaggedService ??
+              _taggedServices.firstWhere(
+                  (s) => path.tags.any((t) => t == s.tag!.name),
+                  orElse: () => throw Exception(
+                      'Unknown tag ${path.tags} ${pathEntry.key}'));
 
           var initialMethodName = _normalizeOperationId(path.operationId);
           var methodName = initialMethodName;
@@ -132,7 +138,7 @@ class Api {
           'dynamic': 'dynamic',
         }[type] ??
         typeAliases[type] ??
-        type.toCapitalized();
+        type.words.toUpperCamel();
   }
 
   ComplexType? _findComplexType(DartType type) =>
@@ -146,33 +152,37 @@ class Api {
     buffer.writeln('''
 // Generated code - Do not edit manually
 
-import 'api_utils.dart';
+import '../api_utils.dart';
 
 // ignore_for_file: deprecated_member_use_from_same_package
+''');
 
+    if (_untaggedService == null) {
+      buffer.writeln('''
 class $className {
-  final JiraClient _client;
+  final ApiClient _client;
   
   $className(this._client);
 ''');
 
-    for (var service in _services) {
-      var tag = service.tag;
-      var description = tag.description;
-      if (description.isNotEmpty) {
-        buffer.writeln(documentationComment(description, indent: 2));
+      for (var service in _taggedServices) {
+        var tag = service.tag!;
+        var description = tag.description;
+        if (description.isNotEmpty) {
+          buffer.writeln(documentationComment(description, indent: 2));
+        }
+        buffer.writeln(
+            'late final ${tag.name.words.toLowerCamel()} = ${service.className}._(_client);');
+        buffer.writeln();
       }
-      buffer.writeln(
-          'late final ${tag.name.words.toLowerCamel()} = ${service.className}._(_client);');
-      buffer.writeln();
-    }
 
-    buffer.writeln('''
+      buffer.writeln('''
   void close() => _client.close();
 }
 ''');
+    }
 
-    for (var service in _services) {
+    for (var service in _taggedServices) {
       buffer.writeln(service.toCode());
       buffer.writeln();
     }
@@ -222,12 +232,12 @@ class TypeAliases {
 
 class Service {
   final sw.Info info;
-  final sw.Tag tag;
+  final sw.Tag? tag;
   final List<Operation> operations = [];
   late final String _className;
 
-  Service(this.info, this.tag, TypeAliases aliases) {
-    var name = '${tag.name.words.toUpperCamel()}Api';
+  Service(this.info, String serviceName, this.tag, TypeAliases aliases) {
+    var name = '${serviceName.words.toUpperCamel()}Api';
     _className = aliases[name] ?? name;
   }
 
@@ -242,7 +252,7 @@ class Service {
     buffer.writeln('''
 
 class $_className {
-    final JiraClient _client;
+    final ApiClient _client;
   
   $_className._(this._client);
 ''');
@@ -483,7 +493,8 @@ class ComplexType extends DartType {
   final sw.Schema definition;
   late final List<Property> _properties;
 
-  ComplexType(Api api, String name, this.definition) : super(api, name) {
+  ComplexType(Api api, String name, this.definition)
+      : super(api, _toClassName(name)) {
     _properties = definition.properties.entries.map((e) {
       DartType dartType;
 
@@ -516,6 +527,10 @@ class ComplexType extends DartType {
 
   String get className => name;
 
+  static String _toClassName(String name) {
+    return name.replaceAll(RegExp(r'[^a-z0-9_\$]', caseSensitive: false), '');
+  }
+
   bool _isPropertyRequired(Property property) {
     return _definitionRequireProperty(property) ||
         property.type is ListDartType ||
@@ -535,7 +550,7 @@ class ComplexType extends DartType {
         buffer.writeln('@deprecated');
       }
     }
-    buffer.writeln('class $name {');
+    buffer.writeln('class $className {');
     for (final property in _properties) {
       var typeName = property.type.toDeclarationString({});
 
@@ -588,7 +603,7 @@ class ComplexType extends DartType {
     buffer.writeln('return $className(');
     for (final property in _properties) {
       var fromJsonCode = property.type.fromJsonCode(
-          "json['${property.name.original}']", {},
+          "json[r'${property.name.original}']", {},
           accessorIsNullable: true,
           targetIsNullable: !_isPropertyRequired(property));
       buffer.writeln('${property.name.camelCased}: $fromJsonCode,');
@@ -614,7 +629,7 @@ class ComplexType extends DartType {
       if (!isRequired) {
         buffer.writeln('if (${property.name.camelCased} != null) {');
       }
-      buffer.writeln("json['${property.name.original}'] = $toJsonCode;");
+      buffer.writeln("json[r'${property.name.original}'] = $toJsonCode;");
       if (!isRequired) {
         buffer.writeln('}');
       }
@@ -693,7 +708,7 @@ class DartType {
   final List<DartType> genericParameters = [];
   final String name;
 
-  DartType(this.api, this.name);
+  DartType(this.api, this.name) : assert(!name.contains('.'));
 
   SimpleType? get simpleType => SimpleType.all[name];
 
@@ -1030,11 +1045,13 @@ class PropertyName {
   late final String _camelCased;
 
   PropertyName(this.original) {
-    if (!original.contains('.')) {
+    _camelCased = dartIdentifier(dartIdentifier(original));
+
+    /*if (!original.contains('.')) {
       _camelCased = dartIdentifier(dartIdentifier(original));
     } else {
       _camelCased = original;
-    }
+    }*/
   }
 
   String get camelCased => _camelCased;

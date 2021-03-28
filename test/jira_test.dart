@@ -1,4 +1,3 @@
-import 'package:jira/jira.dart';
 import 'package:test/test.dart';
 
 void main() {

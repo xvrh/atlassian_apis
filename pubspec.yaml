@@ -1,5 +1,5 @@
-name: jira
-description: A client to access the Jira Cloud platform using the REST API v3
+name: atlassian_apis
+description: A client to access the Atlassian REST APIs (Jira Cloud platform, Service Desk, Confluence)
 version: 0.1.0
 # homepage: https://www.example.com
 

@@ -3,20 +3,21 @@ import 'dart:io';
 
 import 'package:http/http.dart';
 export 'package:http/http.dart' show Client;
-
 export 'dart:io' show File;
 
-class JiraClient {
+class ApiClient {
   static const _headerAtlassianToken = 'X-Atlassian-Token';
+  static const _headerExperimental = 'X-ExperimentalApi';
+
   final Client _client;
-  final String host;
+  final String _host;
 
-  JiraClient(this.host, this._client) : assert(!host.contains('/'));
+  ApiClient(this._host, this._client) : assert(!_host.contains('/'));
 
-  factory JiraClient.basicAuthentication(String host,
+  factory ApiClient.basicAuthentication(String host,
       {required String user, required String apiToken, Client? client}) {
     client ??= Client();
-    return JiraClient(host,
+    return ApiClient(host,
         BasicAuthenticationClient(client, user: user, apiToken: apiToken));
   }
 
@@ -39,7 +40,7 @@ class JiraClient {
     }
     assert(!path.contains('{'));
 
-    var uri = Uri.https(host, path);
+    var uri = Uri.https(_host, path);
     if (queryParameters != null) {
       uri = uri.replace(queryParameters: {
         ...uri.queryParameters,
@@ -59,10 +60,10 @@ class JiraClient {
     if (file != null) {
       request.headers[_headerAtlassianToken] ??= 'no-check';
     }
-    request.headers['X-ExperimentalApi'] = 'opt-in';
+    request.headers[_headerExperimental] = 'opt-in';
 
     var response = await Response.fromStream(await _client.send(request));
-    JiraException.checkResponse(response);
+    ApiException.checkResponse(response);
 
     var decoded = _decode(response);
     return decoded as T;
@@ -79,28 +80,34 @@ class JiraClient {
   void close() => _client.close();
 }
 
-class JiraException implements Exception {
+class ApiException implements Exception {
   final Uri? url;
   final int statusCode;
   final String? reasonPhrase;
   final String? errorMessage;
 
-  JiraException(this.url, this.statusCode, this.reasonPhrase,
+  ApiException(this.url, this.statusCode, this.reasonPhrase,
       {this.errorMessage});
 
-  factory JiraException.fromResponse(Response response) {
+  factory ApiException.fromResponse(Response response) {
     String? errorMessage;
     if (response.body.isNotEmpty) {
-      print(
-          'error ${response.statusCode} ${response.reasonPhrase} body ${response.body}');
-      var decodedBody = jsonDecode(response.body) as Map<String, Object?>;
+      try {
+        var decodedBody = jsonDecode(response.body);
+        if (decodedBody is Map<String, dynamic>) {
+          // TODO(xha): find out the format
+          errorMessage = decodedBody['message'] as String? ??
+              decodedBody['errorMessage'] as String?;
+        } else {
+          decodedBody = '$decodedBody';
+        }
+      } catch (e) {
+        // Fail to parse as Json
 
-      // TODO(xha): find out the format
-      errorMessage = decodedBody['message'] as String? ??
-          decodedBody['errorMessage'] as String? ??
-          '';
+      }
+      errorMessage ??= response.body;
     }
-    return JiraException(
+    return ApiException(
         response.request?.url, response.statusCode, response.reasonPhrase,
         errorMessage: errorMessage);
   }
@@ -111,7 +118,7 @@ class JiraException implements Exception {
 
   static void checkResponse(Response response) {
     if (response.statusCode >= 200 && response.statusCode < 400) return;
-    throw JiraException.fromResponse(response);
+    throw ApiException.fromResponse(response);
   }
 }
 

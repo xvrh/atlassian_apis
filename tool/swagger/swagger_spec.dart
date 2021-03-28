@@ -17,7 +17,7 @@ class HttpMethod {
 @JsonSerializable(createToJson: false)
 class Spec {
   final Info info;
-  final List<Tag> tags;
+  final List<Tag>? tags;
   final Components components;
   final Map<String, Map<String, Object?>> paths;
 
@@ -60,11 +60,15 @@ class Components {
   final Map<String, Object> securitySchemes;
   final Map<String, Request> requestBodies;
   final Map<String, Parameter> parameters;
+  final Map<String, Response> responses;
 
   Components(this.schemas, this.securitySchemes,
-      {Map<String, Request>? requestBodies, Map<String, Parameter>? parameters})
+      {Map<String, Request>? requestBodies,
+      Map<String, Parameter>? parameters,
+      Map<String, Response>? responses})
       : requestBodies = requestBodies ?? {},
-        parameters = parameters ?? {};
+        parameters = parameters ?? {},
+        responses = responses ?? {};
 
   factory Components.fromJson(Map<String, dynamic> json) =>
       _$ComponentsFromJson(json);
@@ -83,7 +87,7 @@ class Path {
 
   Path(
       {required this.description,
-      required this.operationId,
+      String? operationId,
       List<String>? tags,
       String? summary,
       bool? deprecated,
@@ -94,7 +98,8 @@ class Path {
         tags = tags ?? const [],
         deprecated = deprecated ?? false,
         parameters = parameters ?? const [],
-        responses = responses ?? const {};
+        responses = responses ?? const {},
+        operationId = operationId ?? '';
 
   factory Path.fromJson(Map<String, dynamic> json) => _$PathFromJson(json);
 }
@@ -171,6 +176,8 @@ class Parameter {
   @JsonKey(name: 'x-showInExample')
   Object? showInExample;
 
+  Object? example;
+
   @JsonKey(name: 'x-changes')
   Object? changes;
 
@@ -222,6 +229,9 @@ class Schema {
   @JsonKey(defaultValue: false)
   final bool writeOnly;
 
+  @JsonKey(defaultValue: false)
+  final bool nullable;
+
   final Map<String, Object?>? xml;
 
   final int? maxLength,
@@ -262,6 +272,7 @@ class Schema {
     this.uniqueItems,
     this.readOnly,
     this.writeOnly,
+    this.nullable,
     this.xml,
     this.maxLength,
     this.minLength,

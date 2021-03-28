@@ -1,13 +1,13 @@
 // Generated code - Do not edit manually
 
-import 'api_utils.dart';
+import '../api_utils.dart';
 
 // ignore_for_file: deprecated_member_use_from_same_package
 
-class SoftwareApi {
-  final JiraClient _client;
+class JiraSoftwareApi {
+  final ApiClient _client;
 
-  SoftwareApi(this._client);
+  JiraSoftwareApi(this._client);
 
   /// Apis related to the backlog
   late final backlog = BacklogApi._(_client);
@@ -179,7 +179,7 @@ class SoftwareApi {
 /// Jira Software Cloud REST API documentation
 
 class BacklogApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   BacklogApi._(this._client);
 
@@ -222,7 +222,7 @@ class BacklogApi {
 /// Jira Software Cloud REST API documentation
 
 class BoardApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   BoardApi._(this._client);
 
@@ -852,7 +852,7 @@ class BoardApi {
 /// Jira Software Cloud REST API documentation
 
 class EpicApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   EpicApi._(this._client);
 
@@ -1050,7 +1050,7 @@ class EpicApi {
 /// Jira Software Cloud REST API documentation
 
 class IssueApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   IssueApi._(this._client);
 
@@ -1180,7 +1180,7 @@ class IssueApi {
 /// Jira Software Cloud REST API documentation
 
 class SprintApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   SprintApi._(this._client);
 
@@ -1405,7 +1405,7 @@ class SprintApi {
 /// Jira Software Cloud REST API documentation
 
 class DevelopmentInformationApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   DevelopmentInformationApi._(this._client);
 
@@ -1525,7 +1525,7 @@ class DevelopmentInformationApi {
 /// Jira Software Cloud REST API documentation
 
 class FeatureFlagsApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   FeatureFlagsApi._(this._client);
 
@@ -1623,7 +1623,7 @@ class FeatureFlagsApi {
 /// Jira Software Cloud REST API documentation
 
 class DeploymentsApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   DeploymentsApi._(this._client);
 
@@ -1763,7 +1763,7 @@ class DeploymentsApi {
 /// Jira Software Cloud REST API documentation
 
 class BuildsApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   BuildsApi._(this._client);
 
@@ -1883,7 +1883,7 @@ class BuildsApi {
 /// Jira Software Cloud REST API documentation
 
 class RemoteLinksApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   RemoteLinksApi._(this._client);
 
@@ -2003,7 +2003,7 @@ class ReportsResponseBean {
 
   factory ReportsResponseBean.fromJson(Map<String, Object?> json) {
     return ReportsResponseBean(
-      reports: (json['reports'] as List<Object?>?)
+      reports: (json[r'reports'] as List<Object?>?)
               ?.map((i) => i as Map<String, Object?>? ?? {})
               .toList() ??
           [],
@@ -2014,7 +2014,7 @@ class ReportsResponseBean {
     var reports = this.reports;
 
     final json = <String, Object?>{};
-    json['reports'] = reports;
+    json[r'reports'] = reports;
     return json;
   }
 
@@ -2053,13 +2053,13 @@ class IssueRankRequestBean {
 
   factory IssueRankRequestBean.fromJson(Map<String, Object?> json) {
     return IssueRankRequestBean(
-      issues: (json['issues'] as List<Object?>?)
+      issues: (json[r'issues'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      rankBeforeIssue: json['rankBeforeIssue'] as String?,
-      rankAfterIssue: json['rankAfterIssue'] as String?,
-      rankCustomFieldId: (json['rankCustomFieldId'] as num?)?.toInt(),
+      rankBeforeIssue: json[r'rankBeforeIssue'] as String?,
+      rankAfterIssue: json[r'rankAfterIssue'] as String?,
+      rankCustomFieldId: (json[r'rankCustomFieldId'] as num?)?.toInt(),
     );
   }
 
@@ -2070,15 +2070,15 @@ class IssueRankRequestBean {
     var rankCustomFieldId = this.rankCustomFieldId;
 
     final json = <String, Object?>{};
-    json['issues'] = issues;
+    json[r'issues'] = issues;
     if (rankBeforeIssue != null) {
-      json['rankBeforeIssue'] = rankBeforeIssue;
+      json[r'rankBeforeIssue'] = rankBeforeIssue;
     }
     if (rankAfterIssue != null) {
-      json['rankAfterIssue'] = rankAfterIssue;
+      json[r'rankAfterIssue'] = rankAfterIssue;
     }
     if (rankCustomFieldId != null) {
-      json['rankCustomFieldId'] = rankCustomFieldId;
+      json[r'rankCustomFieldId'] = rankCustomFieldId;
     }
     return json;
   }
@@ -2104,7 +2104,7 @@ class FieldEditBean {
 
   factory FieldEditBean.fromJson(Map<String, Object?> json) {
     return FieldEditBean(
-      value: json['value'] as String?,
+      value: json[r'value'] as String?,
     );
   }
 
@@ -2113,7 +2113,7 @@ class FieldEditBean {
 
     final json = <String, Object?>{};
     if (value != null) {
-      json['value'] = value;
+      json[r'value'] = value;
     }
     return json;
   }
@@ -2132,7 +2132,7 @@ class IssueAssignRequestBean {
 
   factory IssueAssignRequestBean.fromJson(Map<String, Object?> json) {
     return IssueAssignRequestBean(
-      issues: (json['issues'] as List<Object?>?)
+      issues: (json[r'issues'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -2143,7 +2143,7 @@ class IssueAssignRequestBean {
     var issues = this.issues;
 
     final json = <String, Object?>{};
-    json['issues'] = issues;
+    json[r'issues'] = issues;
     return json;
   }
 
@@ -2164,9 +2164,9 @@ class EpicRankRequestBean {
 
   factory EpicRankRequestBean.fromJson(Map<String, Object?> json) {
     return EpicRankRequestBean(
-      rankBeforeEpic: json['rankBeforeEpic'] as String?,
-      rankAfterEpic: json['rankAfterEpic'] as String?,
-      rankCustomFieldId: (json['rankCustomFieldId'] as num?)?.toInt(),
+      rankBeforeEpic: json[r'rankBeforeEpic'] as String?,
+      rankAfterEpic: json[r'rankAfterEpic'] as String?,
+      rankCustomFieldId: (json[r'rankCustomFieldId'] as num?)?.toInt(),
     );
   }
 
@@ -2177,13 +2177,13 @@ class EpicRankRequestBean {
 
     final json = <String, Object?>{};
     if (rankBeforeEpic != null) {
-      json['rankBeforeEpic'] = rankBeforeEpic;
+      json[r'rankBeforeEpic'] = rankBeforeEpic;
     }
     if (rankAfterEpic != null) {
-      json['rankAfterEpic'] = rankAfterEpic;
+      json[r'rankAfterEpic'] = rankAfterEpic;
     }
     if (rankCustomFieldId != null) {
-      json['rankCustomFieldId'] = rankCustomFieldId;
+      json[r'rankCustomFieldId'] = rankCustomFieldId;
     }
     return json;
   }
@@ -2205,8 +2205,8 @@ class ColorBean {
 
   factory ColorBean.fromJson(Map<String, Object?> json) {
     return ColorBean(
-      key: json['key'] != null
-          ? ColorBeanKey.fromValue(json['key']! as String)
+      key: json[r'key'] != null
+          ? ColorBeanKey.fromValue(json[r'key']! as String)
           : null,
     );
   }
@@ -2216,7 +2216,7 @@ class ColorBean {
 
     final json = <String, Object?>{};
     if (key != null) {
-      json['key'] = key.value;
+      json[r'key'] = key.value;
     }
     return json;
   }
@@ -2281,8 +2281,8 @@ class EpicUpdateBeanColor {
 
   factory EpicUpdateBeanColor.fromJson(Map<String, Object?> json) {
     return EpicUpdateBeanColor(
-      key: json['key'] != null
-          ? EpicUpdateBeanColorKey.fromValue(json['key']! as String)
+      key: json[r'key'] != null
+          ? EpicUpdateBeanColorKey.fromValue(json[r'key']! as String)
           : null,
     );
   }
@@ -2292,7 +2292,7 @@ class EpicUpdateBeanColor {
 
     final json = <String, Object?>{};
     if (key != null) {
-      json['key'] = key.value;
+      json[r'key'] = key.value;
     }
     return json;
   }
@@ -2362,12 +2362,13 @@ class EpicUpdateBean {
 
   factory EpicUpdateBean.fromJson(Map<String, Object?> json) {
     return EpicUpdateBean(
-      name: json['name'] as String?,
-      summary: json['summary'] as String?,
-      color: json['color'] != null
-          ? EpicUpdateBeanColor.fromJson(json['color']! as Map<String, Object?>)
+      name: json[r'name'] as String?,
+      summary: json[r'summary'] as String?,
+      color: json[r'color'] != null
+          ? EpicUpdateBeanColor.fromJson(
+              json[r'color']! as Map<String, Object?>)
           : null,
-      done: json['done'] as bool? ?? false,
+      done: json[r'done'] as bool? ?? false,
     );
   }
 
@@ -2379,15 +2380,15 @@ class EpicUpdateBean {
 
     final json = <String, Object?>{};
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (summary != null) {
-      json['summary'] = summary;
+      json[r'summary'] = summary;
     }
     if (color != null) {
-      json['color'] = color.toJson();
+      json[r'color'] = color.toJson();
     }
-    json['done'] = done;
+    json[r'done'] = done;
     return json;
   }
 
@@ -2426,20 +2427,20 @@ class BoardFeatureResponseBeanFeaturesItem {
   factory BoardFeatureResponseBeanFeaturesItem.fromJson(
       Map<String, Object?> json) {
     return BoardFeatureResponseBeanFeaturesItem(
-      boardFeature: json['boardFeature'] != null
+      boardFeature: json[r'boardFeature'] != null
           ? BoardFeatureResponseBeanFeaturesItemBoardFeature.fromValue(
-              json['boardFeature']! as String)
+              json[r'boardFeature']! as String)
           : null,
-      boardId: (json['boardId'] as num?)?.toInt(),
-      state: json['state'] != null
+      boardId: (json[r'boardId'] as num?)?.toInt(),
+      state: json[r'state'] != null
           ? BoardFeatureResponseBeanFeaturesItemState.fromValue(
-              json['state']! as String)
+              json[r'state']! as String)
           : null,
-      localisedName: json['localisedName'] as String?,
-      localisedDescription: json['localisedDescription'] as String?,
-      learnMoreLink: json['learnMoreLink'] as String?,
-      imageUri: json['imageUri'] as String?,
-      toggleLocked: json['toggleLocked'] as bool? ?? false,
+      localisedName: json[r'localisedName'] as String?,
+      localisedDescription: json[r'localisedDescription'] as String?,
+      learnMoreLink: json[r'learnMoreLink'] as String?,
+      imageUri: json[r'imageUri'] as String?,
+      toggleLocked: json[r'toggleLocked'] as bool? ?? false,
     );
   }
 
@@ -2455,27 +2456,27 @@ class BoardFeatureResponseBeanFeaturesItem {
 
     final json = <String, Object?>{};
     if (boardFeature != null) {
-      json['boardFeature'] = boardFeature.value;
+      json[r'boardFeature'] = boardFeature.value;
     }
     if (boardId != null) {
-      json['boardId'] = boardId;
+      json[r'boardId'] = boardId;
     }
     if (state != null) {
-      json['state'] = state.value;
+      json[r'state'] = state.value;
     }
     if (localisedName != null) {
-      json['localisedName'] = localisedName;
+      json[r'localisedName'] = localisedName;
     }
     if (localisedDescription != null) {
-      json['localisedDescription'] = localisedDescription;
+      json[r'localisedDescription'] = localisedDescription;
     }
     if (learnMoreLink != null) {
-      json['learnMoreLink'] = learnMoreLink;
+      json[r'learnMoreLink'] = learnMoreLink;
     }
     if (imageUri != null) {
-      json['imageUri'] = imageUri;
+      json[r'imageUri'] = imageUri;
     }
-    json['toggleLocked'] = toggleLocked;
+    json[r'toggleLocked'] = toggleLocked;
     return json;
   }
 
@@ -2594,7 +2595,7 @@ class BoardFeatureResponseBean {
 
   factory BoardFeatureResponseBean.fromJson(Map<String, Object?> json) {
     return BoardFeatureResponseBean(
-      features: (json['features'] as List<Object?>?)
+      features: (json[r'features'] as List<Object?>?)
               ?.map((i) => BoardFeatureResponseBeanFeaturesItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -2606,7 +2607,7 @@ class BoardFeatureResponseBean {
     var features = this.features;
 
     final json = <String, Object?>{};
-    json['features'] = features.map((i) => i.toJson()).toList();
+    json[r'features'] = features.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -2641,19 +2642,19 @@ class BoardFeatureBean {
 
   factory BoardFeatureBean.fromJson(Map<String, Object?> json) {
     return BoardFeatureBean(
-      boardFeature: json['boardFeature'] != null
+      boardFeature: json[r'boardFeature'] != null
           ? BoardFeatureBeanBoardFeature.fromValue(
-              json['boardFeature']! as String)
+              json[r'boardFeature']! as String)
           : null,
-      boardId: (json['boardId'] as num?)?.toInt(),
-      state: json['state'] != null
-          ? BoardFeatureBeanState.fromValue(json['state']! as String)
+      boardId: (json[r'boardId'] as num?)?.toInt(),
+      state: json[r'state'] != null
+          ? BoardFeatureBeanState.fromValue(json[r'state']! as String)
           : null,
-      localisedName: json['localisedName'] as String?,
-      localisedDescription: json['localisedDescription'] as String?,
-      learnMoreLink: json['learnMoreLink'] as String?,
-      imageUri: json['imageUri'] as String?,
-      toggleLocked: json['toggleLocked'] as bool? ?? false,
+      localisedName: json[r'localisedName'] as String?,
+      localisedDescription: json[r'localisedDescription'] as String?,
+      learnMoreLink: json[r'learnMoreLink'] as String?,
+      imageUri: json[r'imageUri'] as String?,
+      toggleLocked: json[r'toggleLocked'] as bool? ?? false,
     );
   }
 
@@ -2669,27 +2670,27 @@ class BoardFeatureBean {
 
     final json = <String, Object?>{};
     if (boardFeature != null) {
-      json['boardFeature'] = boardFeature.value;
+      json[r'boardFeature'] = boardFeature.value;
     }
     if (boardId != null) {
-      json['boardId'] = boardId;
+      json[r'boardId'] = boardId;
     }
     if (state != null) {
-      json['state'] = state.value;
+      json[r'state'] = state.value;
     }
     if (localisedName != null) {
-      json['localisedName'] = localisedName;
+      json[r'localisedName'] = localisedName;
     }
     if (localisedDescription != null) {
-      json['localisedDescription'] = localisedDescription;
+      json[r'localisedDescription'] = localisedDescription;
     }
     if (learnMoreLink != null) {
-      json['learnMoreLink'] = learnMoreLink;
+      json[r'learnMoreLink'] = learnMoreLink;
     }
     if (imageUri != null) {
-      json['imageUri'] = imageUri;
+      json[r'imageUri'] = imageUri;
     }
-    json['toggleLocked'] = toggleLocked;
+    json[r'toggleLocked'] = toggleLocked;
     return json;
   }
 
@@ -2795,9 +2796,9 @@ class BoardFeatureToggleRequestBean {
 
   factory BoardFeatureToggleRequestBean.fromJson(Map<String, Object?> json) {
     return BoardFeatureToggleRequestBean(
-      boardId: (json['boardId'] as num?)?.toInt(),
-      feature: json['feature'] as String?,
-      enabling: json['enabling'] as bool? ?? false,
+      boardId: (json[r'boardId'] as num?)?.toInt(),
+      feature: json[r'feature'] as String?,
+      enabling: json[r'enabling'] as bool? ?? false,
     );
   }
 
@@ -2808,12 +2809,12 @@ class BoardFeatureToggleRequestBean {
 
     final json = <String, Object?>{};
     if (boardId != null) {
-      json['boardId'] = boardId;
+      json[r'boardId'] = boardId;
     }
     if (feature != null) {
-      json['feature'] = feature;
+      json[r'feature'] = feature;
     }
-    json['enabling'] = enabling;
+    json[r'enabling'] = enabling;
     return json;
   }
 
@@ -2846,12 +2847,12 @@ class PageBeanQuickFilterBeanValuesItem {
   factory PageBeanQuickFilterBeanValuesItem.fromJson(
       Map<String, Object?> json) {
     return PageBeanQuickFilterBeanValuesItem(
-      id: (json['id'] as num?)?.toInt(),
-      boardId: (json['boardId'] as num?)?.toInt(),
-      name: json['name'] as String?,
-      jql: json['jql'] as String?,
-      description: json['description'] as String?,
-      position: (json['position'] as num?)?.toInt(),
+      id: (json[r'id'] as num?)?.toInt(),
+      boardId: (json[r'boardId'] as num?)?.toInt(),
+      name: json[r'name'] as String?,
+      jql: json[r'jql'] as String?,
+      description: json[r'description'] as String?,
+      position: (json[r'position'] as num?)?.toInt(),
     );
   }
 
@@ -2865,22 +2866,22 @@ class PageBeanQuickFilterBeanValuesItem {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (boardId != null) {
-      json['boardId'] = boardId;
+      json[r'boardId'] = boardId;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (jql != null) {
-      json['jql'] = jql;
+      json[r'jql'] = jql;
     }
     if (description != null) {
-      json['description'] = description;
+      json[r'description'] = description;
     }
     if (position != null) {
-      json['position'] = position;
+      json[r'position'] = position;
     }
     return json;
   }
@@ -2921,11 +2922,11 @@ class PageBeanQuickFilterBean {
 
   factory PageBeanQuickFilterBean.fromJson(Map<String, Object?> json) {
     return PageBeanQuickFilterBean(
-      maxResults: (json['maxResults'] as num?)?.toInt(),
-      startAt: (json['startAt'] as num?)?.toInt(),
-      total: (json['total'] as num?)?.toInt(),
-      isLast: json['isLast'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      isLast: json[r'isLast'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) => PageBeanQuickFilterBeanValuesItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -2942,16 +2943,16 @@ class PageBeanQuickFilterBean {
 
     final json = <String, Object?>{};
     if (maxResults != null) {
-      json['maxResults'] = maxResults;
+      json[r'maxResults'] = maxResults;
     }
     if (startAt != null) {
-      json['startAt'] = startAt;
+      json[r'startAt'] = startAt;
     }
     if (total != null) {
-      json['total'] = total;
+      json[r'total'] = total;
     }
-    json['isLast'] = isLast;
-    json['values'] = values.map((i) => i.toJson()).toList();
+    json[r'isLast'] = isLast;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -2989,11 +2990,11 @@ class PageBean {
 
   factory PageBean.fromJson(Map<String, Object?> json) {
     return PageBean(
-      maxResults: (json['maxResults'] as num?)?.toInt(),
-      startAt: (json['startAt'] as num?)?.toInt(),
-      total: (json['total'] as num?)?.toInt(),
-      isLast: json['isLast'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      isLast: json[r'isLast'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) => i as Map<String, Object?>? ?? {})
               .toList() ??
           [],
@@ -3009,16 +3010,16 @@ class PageBean {
 
     final json = <String, Object?>{};
     if (maxResults != null) {
-      json['maxResults'] = maxResults;
+      json[r'maxResults'] = maxResults;
     }
     if (startAt != null) {
-      json['startAt'] = startAt;
+      json[r'startAt'] = startAt;
     }
     if (total != null) {
-      json['total'] = total;
+      json[r'total'] = total;
     }
-    json['isLast'] = isLast;
-    json['values'] = values;
+    json[r'isLast'] = isLast;
+    json[r'values'] = values;
     return json;
   }
 
@@ -3056,12 +3057,12 @@ class QuickFilterBean {
 
   factory QuickFilterBean.fromJson(Map<String, Object?> json) {
     return QuickFilterBean(
-      id: (json['id'] as num?)?.toInt(),
-      boardId: (json['boardId'] as num?)?.toInt(),
-      name: json['name'] as String?,
-      jql: json['jql'] as String?,
-      description: json['description'] as String?,
-      position: (json['position'] as num?)?.toInt(),
+      id: (json[r'id'] as num?)?.toInt(),
+      boardId: (json[r'boardId'] as num?)?.toInt(),
+      name: json[r'name'] as String?,
+      jql: json[r'jql'] as String?,
+      description: json[r'description'] as String?,
+      position: (json[r'position'] as num?)?.toInt(),
     );
   }
 
@@ -3075,22 +3076,22 @@ class QuickFilterBean {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (boardId != null) {
-      json['boardId'] = boardId;
+      json[r'boardId'] = boardId;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (jql != null) {
-      json['jql'] = jql;
+      json[r'jql'] = jql;
     }
     if (description != null) {
-      json['description'] = description;
+      json[r'description'] = description;
     }
     if (position != null) {
-      json['position'] = position;
+      json[r'position'] = position;
     }
     return json;
   }
@@ -3169,13 +3170,13 @@ class PageBeanBoardBeanValuesItemAdminsUsersItem {
   factory PageBeanBoardBeanValuesItemAdminsUsersItem.fromJson(
       Map<String, Object?> json) {
     return PageBeanBoardBeanValuesItemAdminsUsersItem(
-      key: json['key'] as String?,
-      self: json['self'] as String?,
-      name: json['name'] as String?,
-      displayName: json['displayName'] as String?,
-      active: json['active'] as bool? ?? false,
-      accountId: json['accountId'] as String?,
-      avatarUrls: json['avatarUrls'] as Map<String, Object?>?,
+      key: json[r'key'] as String?,
+      self: json[r'self'] as String?,
+      name: json[r'name'] as String?,
+      displayName: json[r'displayName'] as String?,
+      active: json[r'active'] as bool? ?? false,
+      accountId: json[r'accountId'] as String?,
+      avatarUrls: json[r'avatarUrls'] as Map<String, Object?>?,
     );
   }
 
@@ -3190,23 +3191,23 @@ class PageBeanBoardBeanValuesItemAdminsUsersItem {
 
     final json = <String, Object?>{};
     if (key != null) {
-      json['key'] = key;
+      json[r'key'] = key;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (displayName != null) {
-      json['displayName'] = displayName;
+      json[r'displayName'] = displayName;
     }
-    json['active'] = active;
+    json[r'active'] = active;
     if (accountId != null) {
-      json['accountId'] = accountId;
+      json[r'accountId'] = accountId;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls;
+      json[r'avatarUrls'] = avatarUrls;
     }
     return json;
   }
@@ -3240,8 +3241,8 @@ class PageBeanBoardBeanValuesItemAdminsGroupsItem {
   factory PageBeanBoardBeanValuesItemAdminsGroupsItem.fromJson(
       Map<String, Object?> json) {
     return PageBeanBoardBeanValuesItemAdminsGroupsItem(
-      name: json['name'] as String?,
-      self: json['self'] as String?,
+      name: json[r'name'] as String?,
+      self: json[r'self'] as String?,
     );
   }
 
@@ -3251,10 +3252,10 @@ class PageBeanBoardBeanValuesItemAdminsGroupsItem {
 
     final json = <String, Object?>{};
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     return json;
   }
@@ -3281,12 +3282,12 @@ class PageBeanBoardBeanValuesItemAdmins {
   factory PageBeanBoardBeanValuesItemAdmins.fromJson(
       Map<String, Object?> json) {
     return PageBeanBoardBeanValuesItemAdmins(
-      users: (json['users'] as List<Object?>?)
+      users: (json[r'users'] as List<Object?>?)
               ?.map((i) => PageBeanBoardBeanValuesItemAdminsUsersItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      groups: (json['groups'] as List<Object?>?)
+      groups: (json[r'groups'] as List<Object?>?)
               ?.map((i) => PageBeanBoardBeanValuesItemAdminsGroupsItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -3299,8 +3300,8 @@ class PageBeanBoardBeanValuesItemAdmins {
     var groups = this.groups;
 
     final json = <String, Object?>{};
-    json['users'] = users.map((i) => i.toJson()).toList();
-    json['groups'] = groups.map((i) => i.toJson()).toList();
+    json[r'users'] = users.map((i) => i.toJson()).toList();
+    json[r'groups'] = groups.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -3339,15 +3340,15 @@ class PageBeanBoardBeanValuesItemLocation {
   factory PageBeanBoardBeanValuesItemLocation.fromJson(
       Map<String, Object?> json) {
     return PageBeanBoardBeanValuesItemLocation(
-      projectId: (json['projectId'] as num?)?.toInt(),
-      userId: (json['userId'] as num?)?.toInt(),
-      userAccountId: json['userAccountId'] as String?,
-      displayName: json['displayName'] as String?,
-      projectName: json['projectName'] as String?,
-      projectKey: json['projectKey'] as String?,
-      projectTypeKey: json['projectTypeKey'] as String?,
-      avatarUri: json['avatarURI'] as String?,
-      name: json['name'] as String?,
+      projectId: (json[r'projectId'] as num?)?.toInt(),
+      userId: (json[r'userId'] as num?)?.toInt(),
+      userAccountId: json[r'userAccountId'] as String?,
+      displayName: json[r'displayName'] as String?,
+      projectName: json[r'projectName'] as String?,
+      projectKey: json[r'projectKey'] as String?,
+      projectTypeKey: json[r'projectTypeKey'] as String?,
+      avatarUri: json[r'avatarURI'] as String?,
+      name: json[r'name'] as String?,
     );
   }
 
@@ -3364,31 +3365,31 @@ class PageBeanBoardBeanValuesItemLocation {
 
     final json = <String, Object?>{};
     if (projectId != null) {
-      json['projectId'] = projectId;
+      json[r'projectId'] = projectId;
     }
     if (userId != null) {
-      json['userId'] = userId;
+      json[r'userId'] = userId;
     }
     if (userAccountId != null) {
-      json['userAccountId'] = userAccountId;
+      json[r'userAccountId'] = userAccountId;
     }
     if (displayName != null) {
-      json['displayName'] = displayName;
+      json[r'displayName'] = displayName;
     }
     if (projectName != null) {
-      json['projectName'] = projectName;
+      json[r'projectName'] = projectName;
     }
     if (projectKey != null) {
-      json['projectKey'] = projectKey;
+      json[r'projectKey'] = projectKey;
     }
     if (projectTypeKey != null) {
-      json['projectTypeKey'] = projectTypeKey;
+      json[r'projectTypeKey'] = projectTypeKey;
     }
     if (avatarUri != null) {
-      json['avatarURI'] = avatarUri;
+      json[r'avatarURI'] = avatarUri;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     return json;
   }
@@ -3444,21 +3445,21 @@ class PageBeanBoardBeanValuesItem {
 
   factory PageBeanBoardBeanValuesItem.fromJson(Map<String, Object?> json) {
     return PageBeanBoardBeanValuesItem(
-      id: (json['id'] as num?)?.toInt(),
-      self: json['self'] as String?,
-      name: json['name'] as String?,
-      type: json['type'] as String?,
-      admins: json['admins'] != null
+      id: (json[r'id'] as num?)?.toInt(),
+      self: json[r'self'] as String?,
+      name: json[r'name'] as String?,
+      type: json[r'type'] as String?,
+      admins: json[r'admins'] != null
           ? PageBeanBoardBeanValuesItemAdmins.fromJson(
-              json['admins']! as Map<String, Object?>)
+              json[r'admins']! as Map<String, Object?>)
           : null,
-      location: json['location'] != null
+      location: json[r'location'] != null
           ? PageBeanBoardBeanValuesItemLocation.fromJson(
-              json['location']! as Map<String, Object?>)
+              json[r'location']! as Map<String, Object?>)
           : null,
-      canEdit: json['canEdit'] as bool? ?? false,
-      isPrivate: json['isPrivate'] as bool? ?? false,
-      favourite: json['favourite'] as bool? ?? false,
+      canEdit: json[r'canEdit'] as bool? ?? false,
+      isPrivate: json[r'isPrivate'] as bool? ?? false,
+      favourite: json[r'favourite'] as bool? ?? false,
     );
   }
 
@@ -3475,26 +3476,26 @@ class PageBeanBoardBeanValuesItem {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (type != null) {
-      json['type'] = type;
+      json[r'type'] = type;
     }
     if (admins != null) {
-      json['admins'] = admins.toJson();
+      json[r'admins'] = admins.toJson();
     }
     if (location != null) {
-      json['location'] = location.toJson();
+      json[r'location'] = location.toJson();
     }
-    json['canEdit'] = canEdit;
-    json['isPrivate'] = isPrivate;
-    json['favourite'] = favourite;
+    json[r'canEdit'] = canEdit;
+    json[r'isPrivate'] = isPrivate;
+    json[r'favourite'] = favourite;
     return json;
   }
 
@@ -3540,11 +3541,11 @@ class PageBeanBoardBean {
 
   factory PageBeanBoardBean.fromJson(Map<String, Object?> json) {
     return PageBeanBoardBean(
-      maxResults: (json['maxResults'] as num?)?.toInt(),
-      startAt: (json['startAt'] as num?)?.toInt(),
-      total: (json['total'] as num?)?.toInt(),
-      isLast: json['isLast'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      isLast: json[r'isLast'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) => PageBeanBoardBeanValuesItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -3561,16 +3562,16 @@ class PageBeanBoardBean {
 
     final json = <String, Object?>{};
     if (maxResults != null) {
-      json['maxResults'] = maxResults;
+      json[r'maxResults'] = maxResults;
     }
     if (startAt != null) {
-      json['startAt'] = startAt;
+      json[r'startAt'] = startAt;
     }
     if (total != null) {
-      json['total'] = total;
+      json[r'total'] = total;
     }
-    json['isLast'] = isLast;
-    json['values'] = values.map((i) => i.toJson()).toList();
+    json[r'isLast'] = isLast;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -3645,13 +3646,13 @@ class BasicUser {
 
   factory BasicUser.fromJson(Map<String, Object?> json) {
     return BasicUser(
-      key: json['key'] as String?,
-      self: json['self'] as String?,
-      name: json['name'] as String?,
-      displayName: json['displayName'] as String?,
-      active: json['active'] as bool? ?? false,
-      accountId: json['accountId'] as String?,
-      avatarUrls: json['avatarUrls'] as Map<String, Object?>?,
+      key: json[r'key'] as String?,
+      self: json[r'self'] as String?,
+      name: json[r'name'] as String?,
+      displayName: json[r'displayName'] as String?,
+      active: json[r'active'] as bool? ?? false,
+      accountId: json[r'accountId'] as String?,
+      avatarUrls: json[r'avatarUrls'] as Map<String, Object?>?,
     );
   }
 
@@ -3666,23 +3667,23 @@ class BasicUser {
 
     final json = <String, Object?>{};
     if (key != null) {
-      json['key'] = key;
+      json[r'key'] = key;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (displayName != null) {
-      json['displayName'] = displayName;
+      json[r'displayName'] = displayName;
     }
-    json['active'] = active;
+    json[r'active'] = active;
     if (accountId != null) {
-      json['accountId'] = accountId;
+      json[r'accountId'] = accountId;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls;
+      json[r'avatarUrls'] = avatarUrls;
     }
     return json;
   }
@@ -3762,13 +3763,13 @@ class BoardAdminsBeanUsersItem {
 
   factory BoardAdminsBeanUsersItem.fromJson(Map<String, Object?> json) {
     return BoardAdminsBeanUsersItem(
-      key: json['key'] as String?,
-      self: json['self'] as String?,
-      name: json['name'] as String?,
-      displayName: json['displayName'] as String?,
-      active: json['active'] as bool? ?? false,
-      accountId: json['accountId'] as String?,
-      avatarUrls: json['avatarUrls'] as Map<String, Object?>?,
+      key: json[r'key'] as String?,
+      self: json[r'self'] as String?,
+      name: json[r'name'] as String?,
+      displayName: json[r'displayName'] as String?,
+      active: json[r'active'] as bool? ?? false,
+      accountId: json[r'accountId'] as String?,
+      avatarUrls: json[r'avatarUrls'] as Map<String, Object?>?,
     );
   }
 
@@ -3783,23 +3784,23 @@ class BoardAdminsBeanUsersItem {
 
     final json = <String, Object?>{};
     if (key != null) {
-      json['key'] = key;
+      json[r'key'] = key;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (displayName != null) {
-      json['displayName'] = displayName;
+      json[r'displayName'] = displayName;
     }
-    json['active'] = active;
+    json[r'active'] = active;
     if (accountId != null) {
-      json['accountId'] = accountId;
+      json[r'accountId'] = accountId;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls;
+      json[r'avatarUrls'] = avatarUrls;
     }
     return json;
   }
@@ -3832,8 +3833,8 @@ class BoardAdminsBeanGroupsItem {
 
   factory BoardAdminsBeanGroupsItem.fromJson(Map<String, Object?> json) {
     return BoardAdminsBeanGroupsItem(
-      name: json['name'] as String?,
-      self: json['self'] as String?,
+      name: json[r'name'] as String?,
+      self: json[r'self'] as String?,
     );
   }
 
@@ -3843,10 +3844,10 @@ class BoardAdminsBeanGroupsItem {
 
     final json = <String, Object?>{};
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     return json;
   }
@@ -3871,12 +3872,12 @@ class BoardAdminsBean {
 
   factory BoardAdminsBean.fromJson(Map<String, Object?> json) {
     return BoardAdminsBean(
-      users: (json['users'] as List<Object?>?)
+      users: (json[r'users'] as List<Object?>?)
               ?.map((i) => BoardAdminsBeanUsersItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      groups: (json['groups'] as List<Object?>?)
+      groups: (json[r'groups'] as List<Object?>?)
               ?.map((i) => BoardAdminsBeanGroupsItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -3889,8 +3890,8 @@ class BoardAdminsBean {
     var groups = this.groups;
 
     final json = <String, Object?>{};
-    json['users'] = users.map((i) => i.toJson()).toList();
-    json['groups'] = groups.map((i) => i.toJson()).toList();
+    json[r'users'] = users.map((i) => i.toJson()).toList();
+    json[r'groups'] = groups.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -3959,13 +3960,13 @@ class BoardBeanAdminsUsersItem {
 
   factory BoardBeanAdminsUsersItem.fromJson(Map<String, Object?> json) {
     return BoardBeanAdminsUsersItem(
-      key: json['key'] as String?,
-      self: json['self'] as String?,
-      name: json['name'] as String?,
-      displayName: json['displayName'] as String?,
-      active: json['active'] as bool? ?? false,
-      accountId: json['accountId'] as String?,
-      avatarUrls: json['avatarUrls'] as Map<String, Object?>?,
+      key: json[r'key'] as String?,
+      self: json[r'self'] as String?,
+      name: json[r'name'] as String?,
+      displayName: json[r'displayName'] as String?,
+      active: json[r'active'] as bool? ?? false,
+      accountId: json[r'accountId'] as String?,
+      avatarUrls: json[r'avatarUrls'] as Map<String, Object?>?,
     );
   }
 
@@ -3980,23 +3981,23 @@ class BoardBeanAdminsUsersItem {
 
     final json = <String, Object?>{};
     if (key != null) {
-      json['key'] = key;
+      json[r'key'] = key;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (displayName != null) {
-      json['displayName'] = displayName;
+      json[r'displayName'] = displayName;
     }
-    json['active'] = active;
+    json[r'active'] = active;
     if (accountId != null) {
-      json['accountId'] = accountId;
+      json[r'accountId'] = accountId;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls;
+      json[r'avatarUrls'] = avatarUrls;
     }
     return json;
   }
@@ -4029,8 +4030,8 @@ class BoardBeanAdminsGroupsItem {
 
   factory BoardBeanAdminsGroupsItem.fromJson(Map<String, Object?> json) {
     return BoardBeanAdminsGroupsItem(
-      name: json['name'] as String?,
-      self: json['self'] as String?,
+      name: json[r'name'] as String?,
+      self: json[r'self'] as String?,
     );
   }
 
@@ -4040,10 +4041,10 @@ class BoardBeanAdminsGroupsItem {
 
     final json = <String, Object?>{};
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     return json;
   }
@@ -4068,12 +4069,12 @@ class BoardBeanAdmins {
 
   factory BoardBeanAdmins.fromJson(Map<String, Object?> json) {
     return BoardBeanAdmins(
-      users: (json['users'] as List<Object?>?)
+      users: (json[r'users'] as List<Object?>?)
               ?.map((i) => BoardBeanAdminsUsersItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      groups: (json['groups'] as List<Object?>?)
+      groups: (json[r'groups'] as List<Object?>?)
               ?.map((i) => BoardBeanAdminsGroupsItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -4086,8 +4087,8 @@ class BoardBeanAdmins {
     var groups = this.groups;
 
     final json = <String, Object?>{};
-    json['users'] = users.map((i) => i.toJson()).toList();
-    json['groups'] = groups.map((i) => i.toJson()).toList();
+    json[r'users'] = users.map((i) => i.toJson()).toList();
+    json[r'groups'] = groups.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -4125,15 +4126,15 @@ class BoardBeanLocation {
 
   factory BoardBeanLocation.fromJson(Map<String, Object?> json) {
     return BoardBeanLocation(
-      projectId: (json['projectId'] as num?)?.toInt(),
-      userId: (json['userId'] as num?)?.toInt(),
-      userAccountId: json['userAccountId'] as String?,
-      displayName: json['displayName'] as String?,
-      projectName: json['projectName'] as String?,
-      projectKey: json['projectKey'] as String?,
-      projectTypeKey: json['projectTypeKey'] as String?,
-      avatarUri: json['avatarURI'] as String?,
-      name: json['name'] as String?,
+      projectId: (json[r'projectId'] as num?)?.toInt(),
+      userId: (json[r'userId'] as num?)?.toInt(),
+      userAccountId: json[r'userAccountId'] as String?,
+      displayName: json[r'displayName'] as String?,
+      projectName: json[r'projectName'] as String?,
+      projectKey: json[r'projectKey'] as String?,
+      projectTypeKey: json[r'projectTypeKey'] as String?,
+      avatarUri: json[r'avatarURI'] as String?,
+      name: json[r'name'] as String?,
     );
   }
 
@@ -4150,31 +4151,31 @@ class BoardBeanLocation {
 
     final json = <String, Object?>{};
     if (projectId != null) {
-      json['projectId'] = projectId;
+      json[r'projectId'] = projectId;
     }
     if (userId != null) {
-      json['userId'] = userId;
+      json[r'userId'] = userId;
     }
     if (userAccountId != null) {
-      json['userAccountId'] = userAccountId;
+      json[r'userAccountId'] = userAccountId;
     }
     if (displayName != null) {
-      json['displayName'] = displayName;
+      json[r'displayName'] = displayName;
     }
     if (projectName != null) {
-      json['projectName'] = projectName;
+      json[r'projectName'] = projectName;
     }
     if (projectKey != null) {
-      json['projectKey'] = projectKey;
+      json[r'projectKey'] = projectKey;
     }
     if (projectTypeKey != null) {
-      json['projectTypeKey'] = projectTypeKey;
+      json[r'projectTypeKey'] = projectTypeKey;
     }
     if (avatarUri != null) {
-      json['avatarURI'] = avatarUri;
+      json[r'avatarURI'] = avatarUri;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     return json;
   }
@@ -4230,20 +4231,20 @@ class BoardBean {
 
   factory BoardBean.fromJson(Map<String, Object?> json) {
     return BoardBean(
-      id: (json['id'] as num?)?.toInt(),
-      self: json['self'] as String?,
-      name: json['name'] as String?,
-      type: json['type'] as String?,
-      admins: json['admins'] != null
-          ? BoardBeanAdmins.fromJson(json['admins']! as Map<String, Object?>)
+      id: (json[r'id'] as num?)?.toInt(),
+      self: json[r'self'] as String?,
+      name: json[r'name'] as String?,
+      type: json[r'type'] as String?,
+      admins: json[r'admins'] != null
+          ? BoardBeanAdmins.fromJson(json[r'admins']! as Map<String, Object?>)
           : null,
-      location: json['location'] != null
+      location: json[r'location'] != null
           ? BoardBeanLocation.fromJson(
-              json['location']! as Map<String, Object?>)
+              json[r'location']! as Map<String, Object?>)
           : null,
-      canEdit: json['canEdit'] as bool? ?? false,
-      isPrivate: json['isPrivate'] as bool? ?? false,
-      favourite: json['favourite'] as bool? ?? false,
+      canEdit: json[r'canEdit'] as bool? ?? false,
+      isPrivate: json[r'isPrivate'] as bool? ?? false,
+      favourite: json[r'favourite'] as bool? ?? false,
     );
   }
 
@@ -4260,26 +4261,26 @@ class BoardBean {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (type != null) {
-      json['type'] = type;
+      json[r'type'] = type;
     }
     if (admins != null) {
-      json['admins'] = admins.toJson();
+      json[r'admins'] = admins.toJson();
     }
     if (location != null) {
-      json['location'] = location.toJson();
+      json[r'location'] = location.toJson();
     }
-    json['canEdit'] = canEdit;
-    json['isPrivate'] = isPrivate;
-    json['favourite'] = favourite;
+    json[r'canEdit'] = canEdit;
+    json[r'isPrivate'] = isPrivate;
+    json[r'favourite'] = favourite;
     return json;
   }
 
@@ -4331,15 +4332,15 @@ class BoardLocationBean {
 
   factory BoardLocationBean.fromJson(Map<String, Object?> json) {
     return BoardLocationBean(
-      projectId: (json['projectId'] as num?)?.toInt(),
-      userId: (json['userId'] as num?)?.toInt(),
-      userAccountId: json['userAccountId'] as String?,
-      displayName: json['displayName'] as String?,
-      projectName: json['projectName'] as String?,
-      projectKey: json['projectKey'] as String?,
-      projectTypeKey: json['projectTypeKey'] as String?,
-      avatarUri: json['avatarURI'] as String?,
-      name: json['name'] as String?,
+      projectId: (json[r'projectId'] as num?)?.toInt(),
+      userId: (json[r'userId'] as num?)?.toInt(),
+      userAccountId: json[r'userAccountId'] as String?,
+      displayName: json[r'displayName'] as String?,
+      projectName: json[r'projectName'] as String?,
+      projectKey: json[r'projectKey'] as String?,
+      projectTypeKey: json[r'projectTypeKey'] as String?,
+      avatarUri: json[r'avatarURI'] as String?,
+      name: json[r'name'] as String?,
     );
   }
 
@@ -4356,31 +4357,31 @@ class BoardLocationBean {
 
     final json = <String, Object?>{};
     if (projectId != null) {
-      json['projectId'] = projectId;
+      json[r'projectId'] = projectId;
     }
     if (userId != null) {
-      json['userId'] = userId;
+      json[r'userId'] = userId;
     }
     if (userAccountId != null) {
-      json['userAccountId'] = userAccountId;
+      json[r'userAccountId'] = userAccountId;
     }
     if (displayName != null) {
-      json['displayName'] = displayName;
+      json[r'displayName'] = displayName;
     }
     if (projectName != null) {
-      json['projectName'] = projectName;
+      json[r'projectName'] = projectName;
     }
     if (projectKey != null) {
-      json['projectKey'] = projectKey;
+      json[r'projectKey'] = projectKey;
     }
     if (projectTypeKey != null) {
-      json['projectTypeKey'] = projectTypeKey;
+      json[r'projectTypeKey'] = projectTypeKey;
     }
     if (avatarUri != null) {
-      json['avatarURI'] = avatarUri;
+      json[r'avatarURI'] = avatarUri;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     return json;
   }
@@ -4417,8 +4418,8 @@ class GroupBean {
 
   factory GroupBean.fromJson(Map<String, Object?> json) {
     return GroupBean(
-      name: json['name'] as String?,
-      self: json['self'] as String?,
+      name: json[r'name'] as String?,
+      self: json[r'self'] as String?,
     );
   }
 
@@ -4428,10 +4429,10 @@ class GroupBean {
 
     final json = <String, Object?>{};
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     return json;
   }
@@ -4462,10 +4463,10 @@ class UserAvatarUrls {
 
   factory UserAvatarUrls.fromJson(Map<String, Object?> json) {
     return UserAvatarUrls(
-      $24X24: json['24x24'] as String?,
-      $16X16: json['16x16'] as String?,
-      $32X32: json['32x32'] as String?,
-      $48X48: json['48x48'] as String?,
+      $24X24: json[r'24x24'] as String?,
+      $16X16: json[r'16x16'] as String?,
+      $32X32: json[r'32x32'] as String?,
+      $48X48: json[r'48x48'] as String?,
     );
   }
 
@@ -4477,16 +4478,16 @@ class UserAvatarUrls {
 
     final json = <String, Object?>{};
     if ($24X24 != null) {
-      json['24x24'] = $24X24;
+      json[r'24x24'] = $24X24;
     }
     if ($16X16 != null) {
-      json['16x16'] = $16X16;
+      json[r'16x16'] = $16X16;
     }
     if ($32X32 != null) {
-      json['32x32'] = $32X32;
+      json[r'32x32'] = $32X32;
     }
     if ($48X48 != null) {
-      json['48x48'] = $48X48;
+      json[r'48x48'] = $48X48;
     }
     return json;
   }
@@ -4512,9 +4513,9 @@ class PageBeanBoardFilterBeanValuesItem {
   factory PageBeanBoardFilterBeanValuesItem.fromJson(
       Map<String, Object?> json) {
     return PageBeanBoardFilterBeanValuesItem(
-      id: (json['id'] as num?)?.toInt(),
-      self: json['self'] as String?,
-      name: json['name'] as String?,
+      id: (json[r'id'] as num?)?.toInt(),
+      self: json[r'self'] as String?,
+      name: json[r'name'] as String?,
     );
   }
 
@@ -4525,13 +4526,13 @@ class PageBeanBoardFilterBeanValuesItem {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     return json;
   }
@@ -4564,11 +4565,11 @@ class PageBeanBoardFilterBean {
 
   factory PageBeanBoardFilterBean.fromJson(Map<String, Object?> json) {
     return PageBeanBoardFilterBean(
-      maxResults: (json['maxResults'] as num?)?.toInt(),
-      startAt: (json['startAt'] as num?)?.toInt(),
-      total: (json['total'] as num?)?.toInt(),
-      isLast: json['isLast'] as bool? ?? false,
-      values: (json['values'] as List<Object?>?)
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      isLast: json[r'isLast'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
               ?.map((i) => PageBeanBoardFilterBeanValuesItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -4585,16 +4586,16 @@ class PageBeanBoardFilterBean {
 
     final json = <String, Object?>{};
     if (maxResults != null) {
-      json['maxResults'] = maxResults;
+      json[r'maxResults'] = maxResults;
     }
     if (startAt != null) {
-      json['startAt'] = startAt;
+      json[r'startAt'] = startAt;
     }
     if (total != null) {
-      json['total'] = total;
+      json[r'total'] = total;
     }
-    json['isLast'] = isLast;
-    json['values'] = values.map((i) => i.toJson()).toList();
+    json[r'isLast'] = isLast;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -4623,9 +4624,9 @@ class BoardFilterBean {
 
   factory BoardFilterBean.fromJson(Map<String, Object?> json) {
     return BoardFilterBean(
-      id: (json['id'] as num?)?.toInt(),
-      self: json['self'] as String?,
-      name: json['name'] as String?,
+      id: (json[r'id'] as num?)?.toInt(),
+      self: json[r'self'] as String?,
+      name: json[r'name'] as String?,
     );
   }
 
@@ -4636,13 +4637,13 @@ class BoardFilterBean {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     return json;
   }
@@ -4696,21 +4697,21 @@ class SearchResultsBean {
 
   factory SearchResultsBean.fromJson(Map<String, Object?> json) {
     return SearchResultsBean(
-      expand: json['expand'] as String?,
-      startAt: (json['startAt'] as num?)?.toInt(),
-      maxResults: (json['maxResults'] as num?)?.toInt(),
-      total: (json['total'] as num?)?.toInt(),
-      issues: (json['issues'] as List<Object?>?)
+      expand: json[r'expand'] as String?,
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      issues: (json[r'issues'] as List<Object?>?)
               ?.map((i) =>
                   IssueBean.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      warningMessages: (json['warningMessages'] as List<Object?>?)
+      warningMessages: (json[r'warningMessages'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      names: json['names'] as Map<String, Object?>?,
-      schema: json['schema'] as Map<String, Object?>?,
+      names: json[r'names'] as Map<String, Object?>?,
+      schema: json[r'schema'] as Map<String, Object?>?,
     );
   }
 
@@ -4726,24 +4727,24 @@ class SearchResultsBean {
 
     final json = <String, Object?>{};
     if (expand != null) {
-      json['expand'] = expand;
+      json[r'expand'] = expand;
     }
     if (startAt != null) {
-      json['startAt'] = startAt;
+      json[r'startAt'] = startAt;
     }
     if (maxResults != null) {
-      json['maxResults'] = maxResults;
+      json[r'maxResults'] = maxResults;
     }
     if (total != null) {
-      json['total'] = total;
+      json[r'total'] = total;
     }
-    json['issues'] = issues.map((i) => i.toJson()).toList();
-    json['warningMessages'] = warningMessages;
+    json[r'issues'] = issues.map((i) => i.toJson()).toList();
+    json[r'warningMessages'] = warningMessages;
     if (names != null) {
-      json['names'] = names;
+      json[r'names'] = names;
     }
     if (schema != null) {
-      json['schema'] = schema;
+      json[r'schema'] = schema;
     }
     return json;
   }
@@ -4788,10 +4789,10 @@ class AvatarUrls {
 
   factory AvatarUrls.fromJson(Map<String, Object?> json) {
     return AvatarUrls(
-      $16X16: json['16x16'] as String?,
-      $24X24: json['24x24'] as String?,
-      $32X32: json['32x32'] as String?,
-      $48X48: json['48x48'] as String?,
+      $16X16: json[r'16x16'] as String?,
+      $24X24: json[r'24x24'] as String?,
+      $32X32: json[r'32x32'] as String?,
+      $48X48: json[r'48x48'] as String?,
     );
   }
 
@@ -4803,16 +4804,16 @@ class AvatarUrls {
 
     final json = <String, Object?>{};
     if ($16X16 != null) {
-      json['16x16'] = $16X16;
+      json[r'16x16'] = $16X16;
     }
     if ($24X24 != null) {
-      json['24x24'] = $24X24;
+      json[r'24x24'] = $24X24;
     }
     if ($32X32 != null) {
-      json['32x32'] = $32X32;
+      json[r'32x32'] = $32X32;
     }
     if ($48X48 != null) {
-      json['48x48'] = $48X48;
+      json[r'48x48'] = $48X48;
     }
     return json;
   }
@@ -4861,13 +4862,13 @@ class ChangeHistoryBeanItemsItem {
 
   factory ChangeHistoryBeanItemsItem.fromJson(Map<String, Object?> json) {
     return ChangeHistoryBeanItemsItem(
-      field: json['field'] as String?,
-      fieldtype: json['fieldtype'] as String?,
-      fieldId: json['fieldId'] as String?,
-      from: json['from'] as String?,
-      fromString: json['fromString'] as String?,
-      to: json['to'] as String?,
-      toString$: json['toString'] as String?,
+      field: json[r'field'] as String?,
+      fieldtype: json[r'fieldtype'] as String?,
+      fieldId: json[r'fieldId'] as String?,
+      from: json[r'from'] as String?,
+      fromString: json[r'fromString'] as String?,
+      to: json[r'to'] as String?,
+      toString$: json[r'toString'] as String?,
     );
   }
 
@@ -4882,25 +4883,25 @@ class ChangeHistoryBeanItemsItem {
 
     final json = <String, Object?>{};
     if (field != null) {
-      json['field'] = field;
+      json[r'field'] = field;
     }
     if (fieldtype != null) {
-      json['fieldtype'] = fieldtype;
+      json[r'fieldtype'] = fieldtype;
     }
     if (fieldId != null) {
-      json['fieldId'] = fieldId;
+      json[r'fieldId'] = fieldId;
     }
     if (from != null) {
-      json['from'] = from;
+      json[r'from'] = from;
     }
     if (fromString != null) {
-      json['fromString'] = fromString;
+      json[r'fromString'] = fromString;
     }
     if (to != null) {
-      json['to'] = to;
+      json[r'to'] = to;
     }
     if (toString$ != null) {
-      json['toString'] = toString$;
+      json[r'toString'] = toString$;
     }
     return json;
   }
@@ -4951,15 +4952,15 @@ class ChangeHistoryBean {
 
   factory ChangeHistoryBean.fromJson(Map<String, Object?> json) {
     return ChangeHistoryBean(
-      id: json['id'] as String?,
-      author: json['author'] as Map<String, Object?>?,
-      created: DateTime.tryParse(json['created'] as String? ?? ''),
-      items: (json['items'] as List<Object?>?)
+      id: json[r'id'] as String?,
+      author: json[r'author'] as Map<String, Object?>?,
+      created: DateTime.tryParse(json[r'created'] as String? ?? ''),
+      items: (json[r'items'] as List<Object?>?)
               ?.map((i) => ChangeHistoryBeanItemsItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      historyMetadata: json['historyMetadata'] as Map<String, Object?>?,
+      historyMetadata: json[r'historyMetadata'] as Map<String, Object?>?,
     );
   }
 
@@ -4972,17 +4973,17 @@ class ChangeHistoryBean {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (author != null) {
-      json['author'] = author;
+      json[r'author'] = author;
     }
     if (created != null) {
-      json['created'] = created.toIso8601String();
+      json[r'created'] = created.toIso8601String();
     }
-    json['items'] = items.map((i) => i.toJson()).toList();
+    json[r'items'] = items.map((i) => i.toJson()).toList();
     if (historyMetadata != null) {
-      json['historyMetadata'] = historyMetadata;
+      json[r'historyMetadata'] = historyMetadata;
     }
     return json;
   }
@@ -5036,13 +5037,13 @@ class ChangeItemBean {
 
   factory ChangeItemBean.fromJson(Map<String, Object?> json) {
     return ChangeItemBean(
-      field: json['field'] as String?,
-      fieldtype: json['fieldtype'] as String?,
-      fieldId: json['fieldId'] as String?,
-      from: json['from'] as String?,
-      fromString: json['fromString'] as String?,
-      to: json['to'] as String?,
-      toString$: json['toString'] as String?,
+      field: json[r'field'] as String?,
+      fieldtype: json[r'fieldtype'] as String?,
+      fieldId: json[r'fieldId'] as String?,
+      from: json[r'from'] as String?,
+      fromString: json[r'fromString'] as String?,
+      to: json[r'to'] as String?,
+      toString$: json[r'toString'] as String?,
     );
   }
 
@@ -5057,25 +5058,25 @@ class ChangeItemBean {
 
     final json = <String, Object?>{};
     if (field != null) {
-      json['field'] = field;
+      json[r'field'] = field;
     }
     if (fieldtype != null) {
-      json['fieldtype'] = fieldtype;
+      json[r'fieldtype'] = fieldtype;
     }
     if (fieldId != null) {
-      json['fieldId'] = fieldId;
+      json[r'fieldId'] = fieldId;
     }
     if (from != null) {
-      json['from'] = from;
+      json[r'from'] = from;
     }
     if (fromString != null) {
-      json['fromString'] = fromString;
+      json[r'fromString'] = fromString;
     }
     if (to != null) {
-      json['to'] = to;
+      json[r'to'] = to;
     }
     if (toString$ != null) {
-      json['toString'] = toString$;
+      json[r'toString'] = toString$;
     }
     return json;
   }
@@ -5134,13 +5135,13 @@ class ChangelogBeanHistoriesItemItemsItem {
   factory ChangelogBeanHistoriesItemItemsItem.fromJson(
       Map<String, Object?> json) {
     return ChangelogBeanHistoriesItemItemsItem(
-      field: json['field'] as String?,
-      fieldtype: json['fieldtype'] as String?,
-      fieldId: json['fieldId'] as String?,
-      from: json['from'] as String?,
-      fromString: json['fromString'] as String?,
-      to: json['to'] as String?,
-      toString$: json['toString'] as String?,
+      field: json[r'field'] as String?,
+      fieldtype: json[r'fieldtype'] as String?,
+      fieldId: json[r'fieldId'] as String?,
+      from: json[r'from'] as String?,
+      fromString: json[r'fromString'] as String?,
+      to: json[r'to'] as String?,
+      toString$: json[r'toString'] as String?,
     );
   }
 
@@ -5155,25 +5156,25 @@ class ChangelogBeanHistoriesItemItemsItem {
 
     final json = <String, Object?>{};
     if (field != null) {
-      json['field'] = field;
+      json[r'field'] = field;
     }
     if (fieldtype != null) {
-      json['fieldtype'] = fieldtype;
+      json[r'fieldtype'] = fieldtype;
     }
     if (fieldId != null) {
-      json['fieldId'] = fieldId;
+      json[r'fieldId'] = fieldId;
     }
     if (from != null) {
-      json['from'] = from;
+      json[r'from'] = from;
     }
     if (fromString != null) {
-      json['fromString'] = fromString;
+      json[r'fromString'] = fromString;
     }
     if (to != null) {
-      json['to'] = to;
+      json[r'to'] = to;
     }
     if (toString$ != null) {
-      json['toString'] = toString$;
+      json[r'toString'] = toString$;
     }
     return json;
   }
@@ -5224,15 +5225,15 @@ class ChangelogBeanHistoriesItem {
 
   factory ChangelogBeanHistoriesItem.fromJson(Map<String, Object?> json) {
     return ChangelogBeanHistoriesItem(
-      id: json['id'] as String?,
-      author: json['author'] as Map<String, Object?>?,
-      created: DateTime.tryParse(json['created'] as String? ?? ''),
-      items: (json['items'] as List<Object?>?)
+      id: json[r'id'] as String?,
+      author: json[r'author'] as Map<String, Object?>?,
+      created: DateTime.tryParse(json[r'created'] as String? ?? ''),
+      items: (json[r'items'] as List<Object?>?)
               ?.map((i) => ChangelogBeanHistoriesItemItemsItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      historyMetadata: json['historyMetadata'] as Map<String, Object?>?,
+      historyMetadata: json[r'historyMetadata'] as Map<String, Object?>?,
     );
   }
 
@@ -5245,17 +5246,17 @@ class ChangelogBeanHistoriesItem {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (author != null) {
-      json['author'] = author;
+      json[r'author'] = author;
     }
     if (created != null) {
-      json['created'] = created.toIso8601String();
+      json[r'created'] = created.toIso8601String();
     }
-    json['items'] = items.map((i) => i.toJson()).toList();
+    json[r'items'] = items.map((i) => i.toJson()).toList();
     if (historyMetadata != null) {
-      json['historyMetadata'] = historyMetadata;
+      json[r'historyMetadata'] = historyMetadata;
     }
     return json;
   }
@@ -5298,10 +5299,10 @@ class ChangelogBean {
 
   factory ChangelogBean.fromJson(Map<String, Object?> json) {
     return ChangelogBean(
-      startAt: (json['startAt'] as num?)?.toInt(),
-      maxResults: (json['maxResults'] as num?)?.toInt(),
-      total: (json['total'] as num?)?.toInt(),
-      histories: (json['histories'] as List<Object?>?)
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      histories: (json[r'histories'] as List<Object?>?)
               ?.map((i) => ChangelogBeanHistoriesItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -5317,15 +5318,15 @@ class ChangelogBean {
 
     final json = <String, Object?>{};
     if (startAt != null) {
-      json['startAt'] = startAt;
+      json[r'startAt'] = startAt;
     }
     if (maxResults != null) {
-      json['maxResults'] = maxResults;
+      json[r'maxResults'] = maxResults;
     }
     if (total != null) {
-      json['total'] = total;
+      json[r'total'] = total;
     }
-    json['histories'] = histories.map((i) => i.toJson()).toList();
+    json[r'histories'] = histories.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -5351,7 +5352,7 @@ class EditMetaBean {
 
   factory EditMetaBean.fromJson(Map<String, Object?> json) {
     return EditMetaBean(
-      fields: json['fields'] as Map<String, Object?>?,
+      fields: json[r'fields'] as Map<String, Object?>?,
     );
   }
 
@@ -5360,7 +5361,7 @@ class EditMetaBean {
 
     final json = <String, Object?>{};
     if (fields != null) {
-      json['fields'] = fields;
+      json[r'fields'] = fields;
     }
     return json;
   }
@@ -5417,21 +5418,21 @@ class FieldMetaBean {
 
   factory FieldMetaBean.fromJson(Map<String, Object?> json) {
     return FieldMetaBean(
-      required: json['required'] as bool? ?? false,
-      schema: json['schema'] as Map<String, Object?>?,
-      name: json['name'] as String?,
-      key: json['key'] as String?,
-      autoCompleteUrl: json['autoCompleteUrl'] as String?,
-      hasDefaultValue: json['hasDefaultValue'] as bool? ?? false,
-      operations: (json['operations'] as List<Object?>?)
+      required: json[r'required'] as bool? ?? false,
+      schema: json[r'schema'] as Map<String, Object?>?,
+      name: json[r'name'] as String?,
+      key: json[r'key'] as String?,
+      autoCompleteUrl: json[r'autoCompleteUrl'] as String?,
+      hasDefaultValue: json[r'hasDefaultValue'] as bool? ?? false,
+      operations: (json[r'operations'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      allowedValues: (json['allowedValues'] as List<Object?>?)
+      allowedValues: (json[r'allowedValues'] as List<Object?>?)
               ?.map((i) => i as Map<String, Object?>? ?? {})
               .toList() ??
           [],
-      defaultValue: json['defaultValue'] as Map<String, Object?>?,
+      defaultValue: json[r'defaultValue'] as Map<String, Object?>?,
     );
   }
 
@@ -5447,24 +5448,24 @@ class FieldMetaBean {
     var defaultValue = this.defaultValue;
 
     final json = <String, Object?>{};
-    json['required'] = required;
+    json[r'required'] = required;
     if (schema != null) {
-      json['schema'] = schema;
+      json[r'schema'] = schema;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (key != null) {
-      json['key'] = key;
+      json[r'key'] = key;
     }
     if (autoCompleteUrl != null) {
-      json['autoCompleteUrl'] = autoCompleteUrl;
+      json[r'autoCompleteUrl'] = autoCompleteUrl;
     }
-    json['hasDefaultValue'] = hasDefaultValue;
-    json['operations'] = operations;
-    json['allowedValues'] = allowedValues;
+    json[r'hasDefaultValue'] = hasDefaultValue;
+    json[r'operations'] = operations;
+    json[r'allowedValues'] = allowedValues;
     if (defaultValue != null) {
-      json['defaultValue'] = defaultValue;
+      json[r'defaultValue'] = defaultValue;
     }
     return json;
   }
@@ -5539,16 +5540,16 @@ class HistoryMetadata {
 
   factory HistoryMetadata.fromJson(Map<String, Object?> json) {
     return HistoryMetadata(
-      type: json['type'] as String?,
-      description: json['description'] as String?,
-      activityDescription: json['activityDescription'] as String?,
-      activityDescriptionKey: json['activityDescriptionKey'] as String?,
-      emailDescription: json['emailDescription'] as String?,
-      emailDescriptionKey: json['emailDescriptionKey'] as String?,
-      actor: json['actor'] as Map<String, Object?>?,
-      generator: json['generator'] as Map<String, Object?>?,
-      cause: json['cause'] as Map<String, Object?>?,
-      extraData: json['extraData'] as Map<String, Object?>?,
+      type: json[r'type'] as String?,
+      description: json[r'description'] as String?,
+      activityDescription: json[r'activityDescription'] as String?,
+      activityDescriptionKey: json[r'activityDescriptionKey'] as String?,
+      emailDescription: json[r'emailDescription'] as String?,
+      emailDescriptionKey: json[r'emailDescriptionKey'] as String?,
+      actor: json[r'actor'] as Map<String, Object?>?,
+      generator: json[r'generator'] as Map<String, Object?>?,
+      cause: json[r'cause'] as Map<String, Object?>?,
+      extraData: json[r'extraData'] as Map<String, Object?>?,
     );
   }
 
@@ -5566,34 +5567,34 @@ class HistoryMetadata {
 
     final json = <String, Object?>{};
     if (type != null) {
-      json['type'] = type;
+      json[r'type'] = type;
     }
     if (description != null) {
-      json['description'] = description;
+      json[r'description'] = description;
     }
     if (activityDescription != null) {
-      json['activityDescription'] = activityDescription;
+      json[r'activityDescription'] = activityDescription;
     }
     if (activityDescriptionKey != null) {
-      json['activityDescriptionKey'] = activityDescriptionKey;
+      json[r'activityDescriptionKey'] = activityDescriptionKey;
     }
     if (emailDescription != null) {
-      json['emailDescription'] = emailDescription;
+      json[r'emailDescription'] = emailDescription;
     }
     if (emailDescriptionKey != null) {
-      json['emailDescriptionKey'] = emailDescriptionKey;
+      json[r'emailDescriptionKey'] = emailDescriptionKey;
     }
     if (actor != null) {
-      json['actor'] = actor;
+      json[r'actor'] = actor;
     }
     if (generator != null) {
-      json['generator'] = generator;
+      json[r'generator'] = generator;
     }
     if (cause != null) {
-      json['cause'] = cause;
+      json[r'cause'] = cause;
     }
     if (extraData != null) {
-      json['extraData'] = extraData;
+      json[r'extraData'] = extraData;
     }
     return json;
   }
@@ -5657,12 +5658,12 @@ class HistoryMetadataParticipant {
 
   factory HistoryMetadataParticipant.fromJson(Map<String, Object?> json) {
     return HistoryMetadataParticipant(
-      id: json['id'] as String?,
-      displayName: json['displayName'] as String?,
-      displayNameKey: json['displayNameKey'] as String?,
-      type: json['type'] as String?,
-      avatarUrl: json['avatarUrl'] as String?,
-      url: json['url'] as String?,
+      id: json[r'id'] as String?,
+      displayName: json[r'displayName'] as String?,
+      displayNameKey: json[r'displayNameKey'] as String?,
+      type: json[r'type'] as String?,
+      avatarUrl: json[r'avatarUrl'] as String?,
+      url: json[r'url'] as String?,
     );
   }
 
@@ -5676,22 +5677,22 @@ class HistoryMetadataParticipant {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (displayName != null) {
-      json['displayName'] = displayName;
+      json[r'displayName'] = displayName;
     }
     if (displayNameKey != null) {
-      json['displayNameKey'] = displayNameKey;
+      json[r'displayNameKey'] = displayNameKey;
     }
     if (type != null) {
-      json['type'] = type;
+      json[r'type'] = type;
     }
     if (avatarUrl != null) {
-      json['avatarUrl'] = avatarUrl;
+      json[r'avatarUrl'] = avatarUrl;
     }
     if (url != null) {
-      json['url'] = url;
+      json[r'url'] = url;
     }
     return json;
   }
@@ -5772,17 +5773,17 @@ class IssueBeanTransitionsItem {
 
   factory IssueBeanTransitionsItem.fromJson(Map<String, Object?> json) {
     return IssueBeanTransitionsItem(
-      id: json['id'] as String?,
-      name: json['name'] as String?,
-      to: json['to'] as Map<String, Object?>?,
-      hasScreen: json['hasScreen'] as bool? ?? false,
-      isGlobal: json['isGlobal'] as bool? ?? false,
-      isInitial: json['isInitial'] as bool? ?? false,
-      isAvailable: json['isAvailable'] as bool? ?? false,
-      isConditional: json['isConditional'] as bool? ?? false,
-      fields: json['fields'] as Map<String, Object?>?,
-      expand: json['expand'] as String?,
-      looped: json['looped'] as bool? ?? false,
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      to: json[r'to'] as Map<String, Object?>?,
+      hasScreen: json[r'hasScreen'] as bool? ?? false,
+      isGlobal: json[r'isGlobal'] as bool? ?? false,
+      isInitial: json[r'isInitial'] as bool? ?? false,
+      isAvailable: json[r'isAvailable'] as bool? ?? false,
+      isConditional: json[r'isConditional'] as bool? ?? false,
+      fields: json[r'fields'] as Map<String, Object?>?,
+      expand: json[r'expand'] as String?,
+      looped: json[r'looped'] as bool? ?? false,
     );
   }
 
@@ -5801,26 +5802,26 @@ class IssueBeanTransitionsItem {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (to != null) {
-      json['to'] = to;
+      json[r'to'] = to;
     }
-    json['hasScreen'] = hasScreen;
-    json['isGlobal'] = isGlobal;
-    json['isInitial'] = isInitial;
-    json['isAvailable'] = isAvailable;
-    json['isConditional'] = isConditional;
+    json[r'hasScreen'] = hasScreen;
+    json[r'isGlobal'] = isGlobal;
+    json[r'isInitial'] = isInitial;
+    json[r'isAvailable'] = isAvailable;
+    json[r'isConditional'] = isConditional;
     if (fields != null) {
-      json['fields'] = fields;
+      json[r'fields'] = fields;
     }
     if (expand != null) {
-      json['expand'] = expand;
+      json[r'expand'] = expand;
     }
-    json['looped'] = looped;
+    json[r'looped'] = looped;
     return json;
   }
 
@@ -5912,25 +5913,25 @@ class IssueBean {
 
   factory IssueBean.fromJson(Map<String, Object?> json) {
     return IssueBean(
-      expand: json['expand'] as String?,
-      id: json['id'] as String?,
-      self: json['self'] as String?,
-      key: json['key'] as String?,
-      renderedFields: json['renderedFields'] as Map<String, Object?>?,
-      properties: json['properties'] as Map<String, Object?>?,
-      names: json['names'] as Map<String, Object?>?,
-      schema: json['schema'] as Map<String, Object?>?,
-      transitions: (json['transitions'] as List<Object?>?)
+      expand: json[r'expand'] as String?,
+      id: json[r'id'] as String?,
+      self: json[r'self'] as String?,
+      key: json[r'key'] as String?,
+      renderedFields: json[r'renderedFields'] as Map<String, Object?>?,
+      properties: json[r'properties'] as Map<String, Object?>?,
+      names: json[r'names'] as Map<String, Object?>?,
+      schema: json[r'schema'] as Map<String, Object?>?,
+      transitions: (json[r'transitions'] as List<Object?>?)
               ?.map((i) => IssueBeanTransitionsItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      operations: json['operations'] as Map<String, Object?>?,
-      editmeta: json['editmeta'] as Map<String, Object?>?,
-      changelog: json['changelog'] as Map<String, Object?>?,
+      operations: json[r'operations'] as Map<String, Object?>?,
+      editmeta: json[r'editmeta'] as Map<String, Object?>?,
+      changelog: json[r'changelog'] as Map<String, Object?>?,
       versionedRepresentations:
-          json['versionedRepresentations'] as Map<String, Object?>?,
-      fields: json['fields'] as Map<String, Object?>?,
+          json[r'versionedRepresentations'] as Map<String, Object?>?,
+      fields: json[r'fields'] as Map<String, Object?>?,
     );
   }
 
@@ -5952,44 +5953,44 @@ class IssueBean {
 
     final json = <String, Object?>{};
     if (expand != null) {
-      json['expand'] = expand;
+      json[r'expand'] = expand;
     }
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (key != null) {
-      json['key'] = key;
+      json[r'key'] = key;
     }
     if (renderedFields != null) {
-      json['renderedFields'] = renderedFields;
+      json[r'renderedFields'] = renderedFields;
     }
     if (properties != null) {
-      json['properties'] = properties;
+      json[r'properties'] = properties;
     }
     if (names != null) {
-      json['names'] = names;
+      json[r'names'] = names;
     }
     if (schema != null) {
-      json['schema'] = schema;
+      json[r'schema'] = schema;
     }
-    json['transitions'] = transitions.map((i) => i.toJson()).toList();
+    json[r'transitions'] = transitions.map((i) => i.toJson()).toList();
     if (operations != null) {
-      json['operations'] = operations;
+      json[r'operations'] = operations;
     }
     if (editmeta != null) {
-      json['editmeta'] = editmeta;
+      json[r'editmeta'] = editmeta;
     }
     if (changelog != null) {
-      json['changelog'] = changelog;
+      json[r'changelog'] = changelog;
     }
     if (versionedRepresentations != null) {
-      json['versionedRepresentations'] = versionedRepresentations;
+      json[r'versionedRepresentations'] = versionedRepresentations;
     }
     if (fields != null) {
-      json['fields'] = fields;
+      json[r'fields'] = fields;
     }
     return json;
   }
@@ -6087,17 +6088,17 @@ class IssueTransitionBean {
 
   factory IssueTransitionBean.fromJson(Map<String, Object?> json) {
     return IssueTransitionBean(
-      id: json['id'] as String?,
-      name: json['name'] as String?,
-      to: json['to'] as Map<String, Object?>?,
-      hasScreen: json['hasScreen'] as bool? ?? false,
-      isGlobal: json['isGlobal'] as bool? ?? false,
-      isInitial: json['isInitial'] as bool? ?? false,
-      isAvailable: json['isAvailable'] as bool? ?? false,
-      isConditional: json['isConditional'] as bool? ?? false,
-      fields: json['fields'] as Map<String, Object?>?,
-      expand: json['expand'] as String?,
-      looped: json['looped'] as bool? ?? false,
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      to: json[r'to'] as Map<String, Object?>?,
+      hasScreen: json[r'hasScreen'] as bool? ?? false,
+      isGlobal: json[r'isGlobal'] as bool? ?? false,
+      isInitial: json[r'isInitial'] as bool? ?? false,
+      isAvailable: json[r'isAvailable'] as bool? ?? false,
+      isConditional: json[r'isConditional'] as bool? ?? false,
+      fields: json[r'fields'] as Map<String, Object?>?,
+      expand: json[r'expand'] as String?,
+      looped: json[r'looped'] as bool? ?? false,
     );
   }
 
@@ -6116,26 +6117,26 @@ class IssueTransitionBean {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (to != null) {
-      json['to'] = to;
+      json[r'to'] = to;
     }
-    json['hasScreen'] = hasScreen;
-    json['isGlobal'] = isGlobal;
-    json['isInitial'] = isInitial;
-    json['isAvailable'] = isAvailable;
-    json['isConditional'] = isConditional;
+    json[r'hasScreen'] = hasScreen;
+    json[r'isGlobal'] = isGlobal;
+    json[r'isInitial'] = isInitial;
+    json[r'isAvailable'] = isAvailable;
+    json[r'isConditional'] = isConditional;
     if (fields != null) {
-      json['fields'] = fields;
+      json[r'fields'] = fields;
     }
     if (expand != null) {
-      json['expand'] = expand;
+      json[r'expand'] = expand;
     }
-    json['looped'] = looped;
+    json[r'looped'] = looped;
     return json;
   }
 
@@ -6197,12 +6198,12 @@ class JsonTypeBean {
 
   factory JsonTypeBean.fromJson(Map<String, Object?> json) {
     return JsonTypeBean(
-      type: json['type'] as String?,
-      items: json['items'] as String?,
-      system: json['system'] as String?,
-      custom: json['custom'] as String?,
-      customId: (json['customId'] as num?)?.toInt(),
-      configuration: json['configuration'] as Map<String, Object?>?,
+      type: json[r'type'] as String?,
+      items: json[r'items'] as String?,
+      system: json[r'system'] as String?,
+      custom: json[r'custom'] as String?,
+      customId: (json[r'customId'] as num?)?.toInt(),
+      configuration: json[r'configuration'] as Map<String, Object?>?,
     );
   }
 
@@ -6216,22 +6217,22 @@ class JsonTypeBean {
 
     final json = <String, Object?>{};
     if (type != null) {
-      json['type'] = type;
+      json[r'type'] = type;
     }
     if (items != null) {
-      json['items'] = items;
+      json[r'items'] = items;
     }
     if (system != null) {
-      json['system'] = system;
+      json[r'system'] = system;
     }
     if (custom != null) {
-      json['custom'] = custom;
+      json[r'custom'] = custom;
     }
     if (customId != null) {
-      json['customId'] = customId;
+      json[r'customId'] = customId;
     }
     if (configuration != null) {
-      json['configuration'] = configuration;
+      json[r'configuration'] = configuration;
     }
     return json;
   }
@@ -6274,13 +6275,13 @@ class LinkGroupBeanHeader {
 
   factory LinkGroupBeanHeader.fromJson(Map<String, Object?> json) {
     return LinkGroupBeanHeader(
-      id: json['id'] as String?,
-      styleClass: json['styleClass'] as String?,
-      iconClass: json['iconClass'] as String?,
-      label: json['label'] as String?,
-      title: json['title'] as String?,
-      href: json['href'] as String?,
-      weight: (json['weight'] as num?)?.toInt(),
+      id: json[r'id'] as String?,
+      styleClass: json[r'styleClass'] as String?,
+      iconClass: json[r'iconClass'] as String?,
+      label: json[r'label'] as String?,
+      title: json[r'title'] as String?,
+      href: json[r'href'] as String?,
+      weight: (json[r'weight'] as num?)?.toInt(),
     );
   }
 
@@ -6295,25 +6296,25 @@ class LinkGroupBeanHeader {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (styleClass != null) {
-      json['styleClass'] = styleClass;
+      json[r'styleClass'] = styleClass;
     }
     if (iconClass != null) {
-      json['iconClass'] = iconClass;
+      json[r'iconClass'] = iconClass;
     }
     if (label != null) {
-      json['label'] = label;
+      json[r'label'] = label;
     }
     if (title != null) {
-      json['title'] = title;
+      json[r'title'] = title;
     }
     if (href != null) {
-      json['href'] = href;
+      json[r'href'] = href;
     }
     if (weight != null) {
-      json['weight'] = weight;
+      json[r'weight'] = weight;
     }
     return json;
   }
@@ -6358,13 +6359,13 @@ class LinkGroupBeanLinksItem {
 
   factory LinkGroupBeanLinksItem.fromJson(Map<String, Object?> json) {
     return LinkGroupBeanLinksItem(
-      id: json['id'] as String?,
-      styleClass: json['styleClass'] as String?,
-      iconClass: json['iconClass'] as String?,
-      label: json['label'] as String?,
-      title: json['title'] as String?,
-      href: json['href'] as String?,
-      weight: (json['weight'] as num?)?.toInt(),
+      id: json[r'id'] as String?,
+      styleClass: json[r'styleClass'] as String?,
+      iconClass: json[r'iconClass'] as String?,
+      label: json[r'label'] as String?,
+      title: json[r'title'] as String?,
+      href: json[r'href'] as String?,
+      weight: (json[r'weight'] as num?)?.toInt(),
     );
   }
 
@@ -6379,25 +6380,25 @@ class LinkGroupBeanLinksItem {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (styleClass != null) {
-      json['styleClass'] = styleClass;
+      json[r'styleClass'] = styleClass;
     }
     if (iconClass != null) {
-      json['iconClass'] = iconClass;
+      json[r'iconClass'] = iconClass;
     }
     if (label != null) {
-      json['label'] = label;
+      json[r'label'] = label;
     }
     if (title != null) {
-      json['title'] = title;
+      json[r'title'] = title;
     }
     if (href != null) {
-      json['href'] = href;
+      json[r'href'] = href;
     }
     if (weight != null) {
-      json['weight'] = weight;
+      json[r'weight'] = weight;
     }
     return json;
   }
@@ -6442,19 +6443,19 @@ class LinkGroupBean {
 
   factory LinkGroupBean.fromJson(Map<String, Object?> json) {
     return LinkGroupBean(
-      id: json['id'] as String?,
-      styleClass: json['styleClass'] as String?,
-      header: json['header'] != null
+      id: json[r'id'] as String?,
+      styleClass: json[r'styleClass'] as String?,
+      header: json[r'header'] != null
           ? LinkGroupBeanHeader.fromJson(
-              json['header']! as Map<String, Object?>)
+              json[r'header']! as Map<String, Object?>)
           : null,
-      weight: (json['weight'] as num?)?.toInt(),
-      links: (json['links'] as List<Object?>?)
+      weight: (json[r'weight'] as num?)?.toInt(),
+      links: (json[r'links'] as List<Object?>?)
               ?.map((i) => LinkGroupBeanLinksItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      groups: (json['groups'] as List<Object?>?)
+      groups: (json[r'groups'] as List<Object?>?)
               ?.map((i) => LinkGroupBean.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -6472,19 +6473,19 @@ class LinkGroupBean {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (styleClass != null) {
-      json['styleClass'] = styleClass;
+      json[r'styleClass'] = styleClass;
     }
     if (header != null) {
-      json['header'] = header.toJson();
+      json[r'header'] = header.toJson();
     }
     if (weight != null) {
-      json['weight'] = weight;
+      json[r'weight'] = weight;
     }
-    json['links'] = links.map((i) => i.toJson()).toList();
-    json['groups'] = groups.map((i) => i.toJson()).toList();
+    json[r'links'] = links.map((i) => i.toJson()).toList();
+    json[r'groups'] = groups.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -6514,7 +6515,7 @@ class OpsbarBean {
 
   factory OpsbarBean.fromJson(Map<String, Object?> json) {
     return OpsbarBean(
-      linkGroups: (json['linkGroups'] as List<Object?>?)
+      linkGroups: (json[r'linkGroups'] as List<Object?>?)
               ?.map((i) => LinkGroupBean.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -6526,7 +6527,7 @@ class OpsbarBean {
     var linkGroups = this.linkGroups;
 
     final json = <String, Object?>{};
-    json['linkGroups'] = linkGroups.map((i) => i.toJson()).toList();
+    json[r'linkGroups'] = linkGroups.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -6557,13 +6558,13 @@ class SimpleLinkBean {
 
   factory SimpleLinkBean.fromJson(Map<String, Object?> json) {
     return SimpleLinkBean(
-      id: json['id'] as String?,
-      styleClass: json['styleClass'] as String?,
-      iconClass: json['iconClass'] as String?,
-      label: json['label'] as String?,
-      title: json['title'] as String?,
-      href: json['href'] as String?,
-      weight: (json['weight'] as num?)?.toInt(),
+      id: json[r'id'] as String?,
+      styleClass: json[r'styleClass'] as String?,
+      iconClass: json[r'iconClass'] as String?,
+      label: json[r'label'] as String?,
+      title: json[r'title'] as String?,
+      href: json[r'href'] as String?,
+      weight: (json[r'weight'] as num?)?.toInt(),
     );
   }
 
@@ -6578,25 +6579,25 @@ class SimpleLinkBean {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (styleClass != null) {
-      json['styleClass'] = styleClass;
+      json[r'styleClass'] = styleClass;
     }
     if (iconClass != null) {
-      json['iconClass'] = iconClass;
+      json[r'iconClass'] = iconClass;
     }
     if (label != null) {
-      json['label'] = label;
+      json[r'label'] = label;
     }
     if (title != null) {
-      json['title'] = title;
+      json[r'title'] = title;
     }
     if (href != null) {
-      json['href'] = href;
+      json[r'href'] = href;
     }
     if (weight != null) {
-      json['weight'] = weight;
+      json[r'weight'] = weight;
     }
     return json;
   }
@@ -6642,11 +6643,11 @@ class StatusCategoryJsonBean {
 
   factory StatusCategoryJsonBean.fromJson(Map<String, Object?> json) {
     return StatusCategoryJsonBean(
-      self: json['self'] as String?,
-      id: (json['id'] as num?)?.toInt(),
-      key: json['key'] as String?,
-      colorName: json['colorName'] as String?,
-      name: json['name'] as String?,
+      self: json[r'self'] as String?,
+      id: (json[r'id'] as num?)?.toInt(),
+      key: json[r'key'] as String?,
+      colorName: json[r'colorName'] as String?,
+      name: json[r'name'] as String?,
     );
   }
 
@@ -6659,19 +6660,19 @@ class StatusCategoryJsonBean {
 
     final json = <String, Object?>{};
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (key != null) {
-      json['key'] = key;
+      json[r'key'] = key;
     }
     if (colorName != null) {
-      json['colorName'] = colorName;
+      json[r'colorName'] = colorName;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     return json;
   }
@@ -6719,13 +6720,13 @@ class StatusJsonBean {
 
   factory StatusJsonBean.fromJson(Map<String, Object?> json) {
     return StatusJsonBean(
-      self: json['self'] as String?,
-      statusColor: json['statusColor'] as String?,
-      description: json['description'] as String?,
-      iconUrl: json['iconUrl'] as String?,
-      name: json['name'] as String?,
-      id: json['id'] as String?,
-      statusCategory: json['statusCategory'] as Map<String, Object?>?,
+      self: json[r'self'] as String?,
+      statusColor: json[r'statusColor'] as String?,
+      description: json[r'description'] as String?,
+      iconUrl: json[r'iconUrl'] as String?,
+      name: json[r'name'] as String?,
+      id: json[r'id'] as String?,
+      statusCategory: json[r'statusCategory'] as Map<String, Object?>?,
     );
   }
 
@@ -6740,25 +6741,25 @@ class StatusJsonBean {
 
     final json = <String, Object?>{};
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (statusColor != null) {
-      json['statusColor'] = statusColor;
+      json[r'statusColor'] = statusColor;
     }
     if (description != null) {
-      json['description'] = description;
+      json[r'description'] = description;
     }
     if (iconUrl != null) {
-      json['iconUrl'] = iconUrl;
+      json[r'iconUrl'] = iconUrl;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (statusCategory != null) {
-      json['statusCategory'] = statusCategory;
+      json[r'statusCategory'] = statusCategory;
     }
     return json;
   }
@@ -6841,16 +6842,16 @@ class UserJsonBean {
 
   factory UserJsonBean.fromJson(Map<String, Object?> json) {
     return UserJsonBean(
-      self: json['self'] as String?,
-      name: json['name'] as String?,
-      key: json['key'] as String?,
-      accountId: json['accountId'] as String?,
-      emailAddress: json['emailAddress'] as String?,
-      avatarUrls: json['avatarUrls'] as Map<String, Object?>?,
-      displayName: json['displayName'] as String?,
-      active: json['active'] as bool? ?? false,
-      timeZone: json['timeZone'] as String?,
-      accountType: json['accountType'] as String?,
+      self: json[r'self'] as String?,
+      name: json[r'name'] as String?,
+      key: json[r'key'] as String?,
+      accountId: json[r'accountId'] as String?,
+      emailAddress: json[r'emailAddress'] as String?,
+      avatarUrls: json[r'avatarUrls'] as Map<String, Object?>?,
+      displayName: json[r'displayName'] as String?,
+      active: json[r'active'] as bool? ?? false,
+      timeZone: json[r'timeZone'] as String?,
+      accountType: json[r'accountType'] as String?,
     );
   }
 
@@ -6868,32 +6869,32 @@ class UserJsonBean {
 
     final json = <String, Object?>{};
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (key != null) {
-      json['key'] = key;
+      json[r'key'] = key;
     }
     if (accountId != null) {
-      json['accountId'] = accountId;
+      json[r'accountId'] = accountId;
     }
     if (emailAddress != null) {
-      json['emailAddress'] = emailAddress;
+      json[r'emailAddress'] = emailAddress;
     }
     if (avatarUrls != null) {
-      json['avatarUrls'] = avatarUrls;
+      json[r'avatarUrls'] = avatarUrls;
     }
     if (displayName != null) {
-      json['displayName'] = displayName;
+      json[r'displayName'] = displayName;
     }
-    json['active'] = active;
+    json[r'active'] = active;
     if (timeZone != null) {
-      json['timeZone'] = timeZone;
+      json[r'timeZone'] = timeZone;
     }
     if (accountType != null) {
-      json['accountType'] = accountType;
+      json[r'accountType'] = accountType;
     }
     return json;
   }
@@ -6936,10 +6937,10 @@ class PartialSuccessBeanEntriesItem {
 
   factory PartialSuccessBeanEntriesItem.fromJson(Map<String, Object?> json) {
     return PartialSuccessBeanEntriesItem(
-      issueId: (json['issueId'] as num?)?.toInt(),
-      issueKey: json['issueKey'] as String?,
-      status: (json['status'] as num?)?.toInt(),
-      errors: (json['errors'] as List<Object?>?)
+      issueId: (json[r'issueId'] as num?)?.toInt(),
+      issueKey: json[r'issueKey'] as String?,
+      status: (json[r'status'] as num?)?.toInt(),
+      errors: (json[r'errors'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -6954,15 +6955,15 @@ class PartialSuccessBeanEntriesItem {
 
     final json = <String, Object?>{};
     if (issueId != null) {
-      json['issueId'] = issueId;
+      json[r'issueId'] = issueId;
     }
     if (issueKey != null) {
-      json['issueKey'] = issueKey;
+      json[r'issueKey'] = issueKey;
     }
     if (status != null) {
-      json['status'] = status;
+      json[r'status'] = status;
     }
-    json['errors'] = errors;
+    json[r'errors'] = errors;
     return json;
   }
 
@@ -6985,7 +6986,7 @@ class PartialSuccessBean {
 
   factory PartialSuccessBean.fromJson(Map<String, Object?> json) {
     return PartialSuccessBean(
-      entries: (json['entries'] as List<Object?>?)
+      entries: (json[r'entries'] as List<Object?>?)
               ?.map((i) => PartialSuccessBeanEntriesItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -6997,7 +6998,7 @@ class PartialSuccessBean {
     var entries = this.entries;
 
     final json = <String, Object?>{};
-    json['entries'] = entries.map((i) => i.toJson()).toList();
+    json[r'entries'] = entries.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -7019,10 +7020,10 @@ class Entry {
 
   factory Entry.fromJson(Map<String, Object?> json) {
     return Entry(
-      issueId: (json['issueId'] as num?)?.toInt(),
-      issueKey: json['issueKey'] as String?,
-      status: (json['status'] as num?)?.toInt(),
-      errors: (json['errors'] as List<Object?>?)
+      issueId: (json[r'issueId'] as num?)?.toInt(),
+      issueKey: json[r'issueKey'] as String?,
+      status: (json[r'status'] as num?)?.toInt(),
+      errors: (json[r'errors'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -7037,15 +7038,15 @@ class Entry {
 
     final json = <String, Object?>{};
     if (issueId != null) {
-      json['issueId'] = issueId;
+      json[r'issueId'] = issueId;
     }
     if (issueKey != null) {
-      json['issueKey'] = issueKey;
+      json[r'issueKey'] = issueKey;
     }
     if (status != null) {
-      json['status'] = status;
+      json[r'status'] = status;
     }
-    json['errors'] = errors;
+    json[r'errors'] = errors;
     return json;
   }
 
@@ -7068,8 +7069,8 @@ class BoardConfigBeanLocation {
 
   factory BoardConfigBeanLocation.fromJson(Map<String, Object?> json) {
     return BoardConfigBeanLocation(
-      type: json['type'] as String?,
-      projectKeyOrId: json['projectKeyOrId'] as String?,
+      type: json[r'type'] as String?,
+      projectKeyOrId: json[r'projectKeyOrId'] as String?,
     );
   }
 
@@ -7079,10 +7080,10 @@ class BoardConfigBeanLocation {
 
     final json = <String, Object?>{};
     if (type != null) {
-      json['type'] = type;
+      json[r'type'] = type;
     }
     if (projectKeyOrId != null) {
-      json['projectKeyOrId'] = projectKeyOrId;
+      json[r'projectKeyOrId'] = projectKeyOrId;
     }
     return json;
   }
@@ -7103,8 +7104,8 @@ class BoardConfigBeanFilter {
 
   factory BoardConfigBeanFilter.fromJson(Map<String, Object?> json) {
     return BoardConfigBeanFilter(
-      id: json['id'] as String?,
-      self: json['self'] as String?,
+      id: json[r'id'] as String?,
+      self: json[r'self'] as String?,
     );
   }
 
@@ -7114,10 +7115,10 @@ class BoardConfigBeanFilter {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     return json;
   }
@@ -7137,7 +7138,7 @@ class BoardConfigBeanSubQuery {
 
   factory BoardConfigBeanSubQuery.fromJson(Map<String, Object?> json) {
     return BoardConfigBeanSubQuery(
-      query: json['query'] as String?,
+      query: json[r'query'] as String?,
     );
   }
 
@@ -7146,7 +7147,7 @@ class BoardConfigBeanSubQuery {
 
     final json = <String, Object?>{};
     if (query != null) {
-      json['query'] = query;
+      json[r'query'] = query;
     }
     return json;
   }
@@ -7167,8 +7168,8 @@ class BoardConfigBeanColumnConfigColumnsItemStatusesItem {
   factory BoardConfigBeanColumnConfigColumnsItemStatusesItem.fromJson(
       Map<String, Object?> json) {
     return BoardConfigBeanColumnConfigColumnsItemStatusesItem(
-      id: json['id'] as String?,
-      self: json['self'] as String?,
+      id: json[r'id'] as String?,
+      self: json[r'self'] as String?,
     );
   }
 
@@ -7178,10 +7179,10 @@ class BoardConfigBeanColumnConfigColumnsItemStatusesItem {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     return json;
   }
@@ -7211,15 +7212,15 @@ class BoardConfigBeanColumnConfigColumnsItem {
   factory BoardConfigBeanColumnConfigColumnsItem.fromJson(
       Map<String, Object?> json) {
     return BoardConfigBeanColumnConfigColumnsItem(
-      name: json['name'] as String?,
-      statuses: (json['statuses'] as List<Object?>?)
+      name: json[r'name'] as String?,
+      statuses: (json[r'statuses'] as List<Object?>?)
               ?.map((i) =>
                   BoardConfigBeanColumnConfigColumnsItemStatusesItem.fromJson(
                       i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      min: (json['min'] as num?)?.toInt(),
-      max: (json['max'] as num?)?.toInt(),
+      min: (json[r'min'] as num?)?.toInt(),
+      max: (json[r'max'] as num?)?.toInt(),
     );
   }
 
@@ -7231,14 +7232,14 @@ class BoardConfigBeanColumnConfigColumnsItem {
 
     final json = <String, Object?>{};
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
-    json['statuses'] = statuses.map((i) => i.toJson()).toList();
+    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
     if (min != null) {
-      json['min'] = min;
+      json[r'min'] = min;
     }
     if (max != null) {
-      json['max'] = max;
+      json[r'max'] = max;
     }
     return json;
   }
@@ -7268,12 +7269,12 @@ class BoardConfigBeanColumnConfig {
 
   factory BoardConfigBeanColumnConfig.fromJson(Map<String, Object?> json) {
     return BoardConfigBeanColumnConfig(
-      columns: (json['columns'] as List<Object?>?)
+      columns: (json[r'columns'] as List<Object?>?)
               ?.map((i) => BoardConfigBeanColumnConfigColumnsItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      constraintType: json['constraintType'] as String?,
+      constraintType: json[r'constraintType'] as String?,
     );
   }
 
@@ -7282,9 +7283,9 @@ class BoardConfigBeanColumnConfig {
     var constraintType = this.constraintType;
 
     final json = <String, Object?>{};
-    json['columns'] = columns.map((i) => i.toJson()).toList();
+    json[r'columns'] = columns.map((i) => i.toJson()).toList();
     if (constraintType != null) {
-      json['constraintType'] = constraintType;
+      json[r'constraintType'] = constraintType;
     }
     return json;
   }
@@ -7307,8 +7308,8 @@ class BoardConfigBeanEstimationField {
 
   factory BoardConfigBeanEstimationField.fromJson(Map<String, Object?> json) {
     return BoardConfigBeanEstimationField(
-      fieldId: json['fieldId'] as String?,
-      displayName: json['displayName'] as String?,
+      fieldId: json[r'fieldId'] as String?,
+      displayName: json[r'displayName'] as String?,
     );
   }
 
@@ -7318,10 +7319,10 @@ class BoardConfigBeanEstimationField {
 
     final json = <String, Object?>{};
     if (fieldId != null) {
-      json['fieldId'] = fieldId;
+      json[r'fieldId'] = fieldId;
     }
     if (displayName != null) {
-      json['displayName'] = displayName;
+      json[r'displayName'] = displayName;
     }
     return json;
   }
@@ -7343,10 +7344,10 @@ class BoardConfigBeanEstimation {
 
   factory BoardConfigBeanEstimation.fromJson(Map<String, Object?> json) {
     return BoardConfigBeanEstimation(
-      type: json['type'] as String?,
-      field: json['field'] != null
+      type: json[r'type'] as String?,
+      field: json[r'field'] != null
           ? BoardConfigBeanEstimationField.fromJson(
-              json['field']! as Map<String, Object?>)
+              json[r'field']! as Map<String, Object?>)
           : null,
     );
   }
@@ -7357,10 +7358,10 @@ class BoardConfigBeanEstimation {
 
     final json = <String, Object?>{};
     if (type != null) {
-      json['type'] = type;
+      json[r'type'] = type;
     }
     if (field != null) {
-      json['field'] = field.toJson();
+      json[r'field'] = field.toJson();
     }
     return json;
   }
@@ -7381,7 +7382,7 @@ class BoardConfigBeanRanking {
 
   factory BoardConfigBeanRanking.fromJson(Map<String, Object?> json) {
     return BoardConfigBeanRanking(
-      rankCustomFieldId: (json['rankCustomFieldId'] as num?)?.toInt(),
+      rankCustomFieldId: (json[r'rankCustomFieldId'] as num?)?.toInt(),
     );
   }
 
@@ -7390,7 +7391,7 @@ class BoardConfigBeanRanking {
 
     final json = <String, Object?>{};
     if (rankCustomFieldId != null) {
-      json['rankCustomFieldId'] = rankCustomFieldId;
+      json[r'rankCustomFieldId'] = rankCustomFieldId;
     }
     return json;
   }
@@ -7428,33 +7429,33 @@ class BoardConfigBean {
 
   factory BoardConfigBean.fromJson(Map<String, Object?> json) {
     return BoardConfigBean(
-      id: (json['id'] as num?)?.toInt(),
-      name: json['name'] as String?,
-      type: json['type'] as String?,
-      self: json['self'] as String?,
-      location: json['location'] != null
+      id: (json[r'id'] as num?)?.toInt(),
+      name: json[r'name'] as String?,
+      type: json[r'type'] as String?,
+      self: json[r'self'] as String?,
+      location: json[r'location'] != null
           ? BoardConfigBeanLocation.fromJson(
-              json['location']! as Map<String, Object?>)
+              json[r'location']! as Map<String, Object?>)
           : null,
-      filter: json['filter'] != null
+      filter: json[r'filter'] != null
           ? BoardConfigBeanFilter.fromJson(
-              json['filter']! as Map<String, Object?>)
+              json[r'filter']! as Map<String, Object?>)
           : null,
-      subQuery: json['subQuery'] != null
+      subQuery: json[r'subQuery'] != null
           ? BoardConfigBeanSubQuery.fromJson(
-              json['subQuery']! as Map<String, Object?>)
+              json[r'subQuery']! as Map<String, Object?>)
           : null,
-      columnConfig: json['columnConfig'] != null
+      columnConfig: json[r'columnConfig'] != null
           ? BoardConfigBeanColumnConfig.fromJson(
-              json['columnConfig']! as Map<String, Object?>)
+              json[r'columnConfig']! as Map<String, Object?>)
           : null,
-      estimation: json['estimation'] != null
+      estimation: json[r'estimation'] != null
           ? BoardConfigBeanEstimation.fromJson(
-              json['estimation']! as Map<String, Object?>)
+              json[r'estimation']! as Map<String, Object?>)
           : null,
-      ranking: json['ranking'] != null
+      ranking: json[r'ranking'] != null
           ? BoardConfigBeanRanking.fromJson(
-              json['ranking']! as Map<String, Object?>)
+              json[r'ranking']! as Map<String, Object?>)
           : null,
     );
   }
@@ -7473,34 +7474,34 @@ class BoardConfigBean {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (type != null) {
-      json['type'] = type;
+      json[r'type'] = type;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (location != null) {
-      json['location'] = location.toJson();
+      json[r'location'] = location.toJson();
     }
     if (filter != null) {
-      json['filter'] = filter.toJson();
+      json[r'filter'] = filter.toJson();
     }
     if (subQuery != null) {
-      json['subQuery'] = subQuery.toJson();
+      json[r'subQuery'] = subQuery.toJson();
     }
     if (columnConfig != null) {
-      json['columnConfig'] = columnConfig.toJson();
+      json[r'columnConfig'] = columnConfig.toJson();
     }
     if (estimation != null) {
-      json['estimation'] = estimation.toJson();
+      json[r'estimation'] = estimation.toJson();
     }
     if (ranking != null) {
-      json['ranking'] = ranking.toJson();
+      json[r'ranking'] = ranking.toJson();
     }
     return json;
   }
@@ -7539,8 +7540,8 @@ class ColumnBeanStatusesItem {
 
   factory ColumnBeanStatusesItem.fromJson(Map<String, Object?> json) {
     return ColumnBeanStatusesItem(
-      id: json['id'] as String?,
-      self: json['self'] as String?,
+      id: json[r'id'] as String?,
+      self: json[r'self'] as String?,
     );
   }
 
@@ -7550,10 +7551,10 @@ class ColumnBeanStatusesItem {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     return json;
   }
@@ -7578,14 +7579,14 @@ class ColumnBean {
 
   factory ColumnBean.fromJson(Map<String, Object?> json) {
     return ColumnBean(
-      name: json['name'] as String?,
-      statuses: (json['statuses'] as List<Object?>?)
+      name: json[r'name'] as String?,
+      statuses: (json[r'statuses'] as List<Object?>?)
               ?.map((i) => ColumnBeanStatusesItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      min: (json['min'] as num?)?.toInt(),
-      max: (json['max'] as num?)?.toInt(),
+      min: (json[r'min'] as num?)?.toInt(),
+      max: (json[r'max'] as num?)?.toInt(),
     );
   }
 
@@ -7597,14 +7598,14 @@ class ColumnBean {
 
     final json = <String, Object?>{};
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
-    json['statuses'] = statuses.map((i) => i.toJson()).toList();
+    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
     if (min != null) {
-      json['min'] = min;
+      json[r'min'] = min;
     }
     if (max != null) {
-      json['max'] = max;
+      json[r'max'] = max;
     }
     return json;
   }
@@ -7632,8 +7633,8 @@ class ColumnConfigBeanColumnsItemStatusesItem {
   factory ColumnConfigBeanColumnsItemStatusesItem.fromJson(
       Map<String, Object?> json) {
     return ColumnConfigBeanColumnsItemStatusesItem(
-      id: json['id'] as String?,
-      self: json['self'] as String?,
+      id: json[r'id'] as String?,
+      self: json[r'self'] as String?,
     );
   }
 
@@ -7643,10 +7644,10 @@ class ColumnConfigBeanColumnsItemStatusesItem {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     return json;
   }
@@ -7674,14 +7675,14 @@ class ColumnConfigBeanColumnsItem {
 
   factory ColumnConfigBeanColumnsItem.fromJson(Map<String, Object?> json) {
     return ColumnConfigBeanColumnsItem(
-      name: json['name'] as String?,
-      statuses: (json['statuses'] as List<Object?>?)
+      name: json[r'name'] as String?,
+      statuses: (json[r'statuses'] as List<Object?>?)
               ?.map((i) => ColumnConfigBeanColumnsItemStatusesItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      min: (json['min'] as num?)?.toInt(),
-      max: (json['max'] as num?)?.toInt(),
+      min: (json[r'min'] as num?)?.toInt(),
+      max: (json[r'max'] as num?)?.toInt(),
     );
   }
 
@@ -7693,14 +7694,14 @@ class ColumnConfigBeanColumnsItem {
 
     final json = <String, Object?>{};
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
-    json['statuses'] = statuses.map((i) => i.toJson()).toList();
+    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
     if (min != null) {
-      json['min'] = min;
+      json[r'min'] = min;
     }
     if (max != null) {
-      json['max'] = max;
+      json[r'max'] = max;
     }
     return json;
   }
@@ -7729,12 +7730,12 @@ class ColumnConfigBean {
 
   factory ColumnConfigBean.fromJson(Map<String, Object?> json) {
     return ColumnConfigBean(
-      columns: (json['columns'] as List<Object?>?)
+      columns: (json[r'columns'] as List<Object?>?)
               ?.map((i) => ColumnConfigBeanColumnsItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      constraintType: json['constraintType'] as String?,
+      constraintType: json[r'constraintType'] as String?,
     );
   }
 
@@ -7743,9 +7744,9 @@ class ColumnConfigBean {
     var constraintType = this.constraintType;
 
     final json = <String, Object?>{};
-    json['columns'] = columns.map((i) => i.toJson()).toList();
+    json[r'columns'] = columns.map((i) => i.toJson()).toList();
     if (constraintType != null) {
-      json['constraintType'] = constraintType;
+      json[r'constraintType'] = constraintType;
     }
     return json;
   }
@@ -7767,8 +7768,8 @@ class EstimationConfigBeanField {
 
   factory EstimationConfigBeanField.fromJson(Map<String, Object?> json) {
     return EstimationConfigBeanField(
-      fieldId: json['fieldId'] as String?,
-      displayName: json['displayName'] as String?,
+      fieldId: json[r'fieldId'] as String?,
+      displayName: json[r'displayName'] as String?,
     );
   }
 
@@ -7778,10 +7779,10 @@ class EstimationConfigBeanField {
 
     final json = <String, Object?>{};
     if (fieldId != null) {
-      json['fieldId'] = fieldId;
+      json[r'fieldId'] = fieldId;
     }
     if (displayName != null) {
-      json['displayName'] = displayName;
+      json[r'displayName'] = displayName;
     }
     return json;
   }
@@ -7802,10 +7803,10 @@ class EstimationConfigBean {
 
   factory EstimationConfigBean.fromJson(Map<String, Object?> json) {
     return EstimationConfigBean(
-      type: json['type'] as String?,
-      field: json['field'] != null
+      type: json[r'type'] as String?,
+      field: json[r'field'] != null
           ? EstimationConfigBeanField.fromJson(
-              json['field']! as Map<String, Object?>)
+              json[r'field']! as Map<String, Object?>)
           : null,
     );
   }
@@ -7816,10 +7817,10 @@ class EstimationConfigBean {
 
     final json = <String, Object?>{};
     if (type != null) {
-      json['type'] = type;
+      json[r'type'] = type;
     }
     if (field != null) {
-      json['field'] = field.toJson();
+      json[r'field'] = field.toJson();
     }
     return json;
   }
@@ -7841,8 +7842,8 @@ class EstimationFieldBean {
 
   factory EstimationFieldBean.fromJson(Map<String, Object?> json) {
     return EstimationFieldBean(
-      fieldId: json['fieldId'] as String?,
-      displayName: json['displayName'] as String?,
+      fieldId: json[r'fieldId'] as String?,
+      displayName: json[r'displayName'] as String?,
     );
   }
 
@@ -7852,10 +7853,10 @@ class EstimationFieldBean {
 
     final json = <String, Object?>{};
     if (fieldId != null) {
-      json['fieldId'] = fieldId;
+      json[r'fieldId'] = fieldId;
     }
     if (displayName != null) {
-      json['displayName'] = displayName;
+      json[r'displayName'] = displayName;
     }
     return json;
   }
@@ -7876,8 +7877,8 @@ class LocationBean {
 
   factory LocationBean.fromJson(Map<String, Object?> json) {
     return LocationBean(
-      type: json['type'] as String?,
-      projectKeyOrId: json['projectKeyOrId'] as String?,
+      type: json[r'type'] as String?,
+      projectKeyOrId: json[r'projectKeyOrId'] as String?,
     );
   }
 
@@ -7887,10 +7888,10 @@ class LocationBean {
 
     final json = <String, Object?>{};
     if (type != null) {
-      json['type'] = type;
+      json[r'type'] = type;
     }
     if (projectKeyOrId != null) {
-      json['projectKeyOrId'] = projectKeyOrId;
+      json[r'projectKeyOrId'] = projectKeyOrId;
     }
     return json;
   }
@@ -7910,7 +7911,7 @@ class RankingConfigBean {
 
   factory RankingConfigBean.fromJson(Map<String, Object?> json) {
     return RankingConfigBean(
-      rankCustomFieldId: (json['rankCustomFieldId'] as num?)?.toInt(),
+      rankCustomFieldId: (json[r'rankCustomFieldId'] as num?)?.toInt(),
     );
   }
 
@@ -7919,7 +7920,7 @@ class RankingConfigBean {
 
     final json = <String, Object?>{};
     if (rankCustomFieldId != null) {
-      json['rankCustomFieldId'] = rankCustomFieldId;
+      json[r'rankCustomFieldId'] = rankCustomFieldId;
     }
     return json;
   }
@@ -7939,8 +7940,8 @@ class RelationBean {
 
   factory RelationBean.fromJson(Map<String, Object?> json) {
     return RelationBean(
-      id: json['id'] as String?,
-      self: json['self'] as String?,
+      id: json[r'id'] as String?,
+      self: json[r'self'] as String?,
     );
   }
 
@@ -7950,10 +7951,10 @@ class RelationBean {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     return json;
   }
@@ -7973,7 +7974,7 @@ class SubqueryBean {
 
   factory SubqueryBean.fromJson(Map<String, Object?> json) {
     return SubqueryBean(
-      query: json['query'] as String?,
+      query: json[r'query'] as String?,
     );
   }
 
@@ -7982,7 +7983,7 @@ class SubqueryBean {
 
     final json = <String, Object?>{};
     if (query != null) {
-      json['query'] = query;
+      json[r'query'] = query;
     }
     return json;
   }
@@ -8002,8 +8003,8 @@ class BoardCreateBeanLocation {
 
   factory BoardCreateBeanLocation.fromJson(Map<String, Object?> json) {
     return BoardCreateBeanLocation(
-      type: json['type'] as String?,
-      projectKeyOrId: json['projectKeyOrId'] as String?,
+      type: json[r'type'] as String?,
+      projectKeyOrId: json[r'projectKeyOrId'] as String?,
     );
   }
 
@@ -8013,10 +8014,10 @@ class BoardCreateBeanLocation {
 
     final json = <String, Object?>{};
     if (type != null) {
-      json['type'] = type;
+      json[r'type'] = type;
     }
     if (projectKeyOrId != null) {
-      json['projectKeyOrId'] = projectKeyOrId;
+      json[r'projectKeyOrId'] = projectKeyOrId;
     }
     return json;
   }
@@ -8039,12 +8040,12 @@ class BoardCreateBean {
 
   factory BoardCreateBean.fromJson(Map<String, Object?> json) {
     return BoardCreateBean(
-      name: json['name'] as String?,
-      type: json['type'] as String?,
-      filterId: (json['filterId'] as num?)?.toInt(),
-      location: json['location'] != null
+      name: json[r'name'] as String?,
+      type: json[r'type'] as String?,
+      filterId: (json[r'filterId'] as num?)?.toInt(),
+      location: json[r'location'] != null
           ? BoardCreateBeanLocation.fromJson(
-              json['location']! as Map<String, Object?>)
+              json[r'location']! as Map<String, Object?>)
           : null,
     );
   }
@@ -8057,16 +8058,16 @@ class BoardCreateBean {
 
     final json = <String, Object?>{};
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (type != null) {
-      json['type'] = type;
+      json[r'type'] = type;
     }
     if (filterId != null) {
-      json['filterId'] = filterId;
+      json[r'filterId'] = filterId;
     }
     if (location != null) {
-      json['location'] = location.toJson();
+      json[r'location'] = location.toJson();
     }
     return json;
   }
@@ -8097,11 +8098,11 @@ class SprintCreateBean {
 
   factory SprintCreateBean.fromJson(Map<String, Object?> json) {
     return SprintCreateBean(
-      name: json['name'] as String?,
-      startDate: json['startDate'] as String?,
-      endDate: json['endDate'] as String?,
-      originBoardId: (json['originBoardId'] as num?)?.toInt(),
-      goal: json['goal'] as String?,
+      name: json[r'name'] as String?,
+      startDate: json[r'startDate'] as String?,
+      endDate: json[r'endDate'] as String?,
+      originBoardId: (json[r'originBoardId'] as num?)?.toInt(),
+      goal: json[r'goal'] as String?,
     );
   }
 
@@ -8114,19 +8115,19 @@ class SprintCreateBean {
 
     final json = <String, Object?>{};
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (startDate != null) {
-      json['startDate'] = startDate;
+      json[r'startDate'] = startDate;
     }
     if (endDate != null) {
-      json['endDate'] = endDate;
+      json[r'endDate'] = endDate;
     }
     if (originBoardId != null) {
-      json['originBoardId'] = originBoardId;
+      json[r'originBoardId'] = originBoardId;
     }
     if (goal != null) {
-      json['goal'] = goal;
+      json[r'goal'] = goal;
     }
     return json;
   }
@@ -8171,15 +8172,15 @@ class SprintBean {
 
   factory SprintBean.fromJson(Map<String, Object?> json) {
     return SprintBean(
-      id: (json['id'] as num?)?.toInt(),
-      self: json['self'] as String?,
-      state: json['state'] as String?,
-      name: json['name'] as String?,
-      startDate: json['startDate'] as String?,
-      endDate: json['endDate'] as String?,
-      completeDate: json['completeDate'] as String?,
-      originBoardId: (json['originBoardId'] as num?)?.toInt(),
-      goal: json['goal'] as String?,
+      id: (json[r'id'] as num?)?.toInt(),
+      self: json[r'self'] as String?,
+      state: json[r'state'] as String?,
+      name: json[r'name'] as String?,
+      startDate: json[r'startDate'] as String?,
+      endDate: json[r'endDate'] as String?,
+      completeDate: json[r'completeDate'] as String?,
+      originBoardId: (json[r'originBoardId'] as num?)?.toInt(),
+      goal: json[r'goal'] as String?,
     );
   }
 
@@ -8196,31 +8197,31 @@ class SprintBean {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
     if (self != null) {
-      json['self'] = self;
+      json[r'self'] = self;
     }
     if (state != null) {
-      json['state'] = state;
+      json[r'state'] = state;
     }
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (startDate != null) {
-      json['startDate'] = startDate;
+      json[r'startDate'] = startDate;
     }
     if (endDate != null) {
-      json['endDate'] = endDate;
+      json[r'endDate'] = endDate;
     }
     if (completeDate != null) {
-      json['completeDate'] = completeDate;
+      json[r'completeDate'] = completeDate;
     }
     if (originBoardId != null) {
-      json['originBoardId'] = originBoardId;
+      json[r'originBoardId'] = originBoardId;
     }
     if (goal != null) {
-      json['goal'] = goal;
+      json[r'goal'] = goal;
     }
     return json;
   }
@@ -8256,7 +8257,7 @@ class SprintSwapBean {
 
   factory SprintSwapBean.fromJson(Map<String, Object?> json) {
     return SprintSwapBean(
-      sprintToSwapWith: (json['sprintToSwapWith'] as num?)?.toInt(),
+      sprintToSwapWith: (json[r'sprintToSwapWith'] as num?)?.toInt(),
     );
   }
 
@@ -8265,7 +8266,7 @@ class SprintSwapBean {
 
     final json = <String, Object?>{};
     if (sprintToSwapWith != null) {
-      json['sprintToSwapWith'] = sprintToSwapWith;
+      json[r'sprintToSwapWith'] = sprintToSwapWith;
     }
     return json;
   }

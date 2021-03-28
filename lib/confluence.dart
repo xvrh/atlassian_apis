@@ -1,2 +1,2 @@
-export 'src/generated/service_management.dart';
+export 'src/generated/confluence.dart';
 export 'src/api_utils.dart' show ApiClient, ApiException;

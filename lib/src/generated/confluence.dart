@@ -1,11 +1,11 @@
 // Generated code - Do not edit manually
 
-import 'api_utils.dart';
+import '../api_utils.dart';
 
 // ignore_for_file: deprecated_member_use_from_same_package
 
 class ConfluenceApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   ConfluenceApi(this._client);
 
@@ -72,7 +72,7 @@ class ConfluenceApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class AuditApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   AuditApi._(this._client);
 
@@ -202,7 +202,7 @@ class AuditApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   ContentApi._(this._client);
 
@@ -500,7 +500,7 @@ class ContentApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentAttachmentsApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   ContentAttachmentsApi._(this._client);
 
@@ -727,7 +727,7 @@ class ContentAttachmentsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentBodyApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   ContentBodyApi._(this._client);
 
@@ -772,7 +772,7 @@ class ContentBodyApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentChildrenAndDescendantsApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   ContentChildrenAndDescendantsApi._(this._client);
 
@@ -1029,7 +1029,7 @@ class ContentChildrenAndDescendantsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentMacroBodyApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   ContentMacroBodyApi._(this._client);
 
@@ -1071,7 +1071,7 @@ class ContentMacroBodyApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentCommentsApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   ContentCommentsApi._(this._client);
 
@@ -1109,7 +1109,7 @@ class ContentCommentsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentLabelsApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   ContentLabelsApi._(this._client);
 
@@ -1217,7 +1217,7 @@ class ContentLabelsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentPermissionsApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   ContentPermissionsApi._(this._client);
 
@@ -1253,7 +1253,7 @@ class ContentPermissionsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentPropertiesApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   ContentPropertiesApi._(this._client);
 
@@ -1405,7 +1405,7 @@ class ContentPropertiesApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentRestrictionsApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   ContentRestrictionsApi._(this._client);
 
@@ -1778,7 +1778,7 @@ class ContentRestrictionsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentVersionsApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   ContentVersionsApi._(this._client);
 
@@ -1876,7 +1876,7 @@ class ContentVersionsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ContentWatchesApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   ContentWatchesApi._(this._client);
 
@@ -2248,7 +2248,7 @@ class ContentWatchesApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class DynamicModulesApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   DynamicModulesApi._(this._client);
 
@@ -2295,7 +2295,7 @@ class DynamicModulesApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class GroupApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   GroupApi._(this._client);
 
@@ -2522,7 +2522,7 @@ class GroupApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class InlineTasksApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   InlineTasksApi._(this._client);
 
@@ -2573,7 +2573,7 @@ class InlineTasksApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class LabelInfoApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   LabelInfoApi._(this._client);
 
@@ -2602,7 +2602,7 @@ class LabelInfoApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class LongRunningTaskApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   LongRunningTaskApi._(this._client);
 
@@ -2645,7 +2645,7 @@ class LongRunningTaskApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class RelationApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   RelationApi._(this._client);
 
@@ -2860,7 +2860,7 @@ class RelationApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class SearchApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   SearchApi._(this._client);
 
@@ -2951,7 +2951,7 @@ class SearchApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class SettingsApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   SettingsApi._(this._client);
 
@@ -3046,7 +3046,7 @@ class SettingsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class SpaceApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   SpaceApi._(this._client);
 
@@ -3230,7 +3230,7 @@ class SpaceApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class SpacePermissionsApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   SpacePermissionsApi._(this._client);
 
@@ -3276,7 +3276,7 @@ class SpacePermissionsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class SpacePropertiesApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   SpacePropertiesApi._(this._client);
 
@@ -3403,7 +3403,7 @@ class SpacePropertiesApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class SpaceSettingsApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   SpaceSettingsApi._(this._client);
 
@@ -3443,7 +3443,7 @@ class SpaceSettingsApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class TemplateApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   TemplateApi._(this._client);
 
@@ -3563,7 +3563,7 @@ class TemplateApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class ThemesApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   ThemesApi._(this._client);
 
@@ -3661,7 +3661,7 @@ class ThemesApi {
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
 class UsersApi {
-  final JiraClient _client;
+  final ApiClient _client;
 
   UsersApi._(this._client);
 
@@ -3834,7 +3834,7 @@ class AccountId {
 
   factory AccountId.fromJson(Map<String, Object?> json) {
     return AccountId(
-      accountId: json['accountId'] as String? ?? '',
+      accountId: json[r'accountId'] as String? ?? '',
     );
   }
 
@@ -3842,7 +3842,7 @@ class AccountId {
     var accountId = this.accountId;
 
     final json = <String, Object?>{};
-    json['accountId'] = accountId;
+    json[r'accountId'] = accountId;
     return json;
   }
 
@@ -3861,8 +3861,8 @@ class AccountIdEmailRecord {
 
   factory AccountIdEmailRecord.fromJson(Map<String, Object?> json) {
     return AccountIdEmailRecord(
-      accountId: json['accountId'] as String? ?? '',
-      email: json['email'] as String? ?? '',
+      accountId: json[r'accountId'] as String? ?? '',
+      email: json[r'email'] as String? ?? '',
     );
   }
 
@@ -3871,8 +3871,8 @@ class AccountIdEmailRecord {
     var email = this.email;
 
     final json = <String, Object?>{};
-    json['accountId'] = accountId;
-    json['email'] = email;
+    json[r'accountId'] = accountId;
+    json[r'email'] = email;
     return json;
   }
 
@@ -3905,8 +3905,8 @@ class AffectedObject {
 
   factory AffectedObject.fromJson(Map<String, Object?> json) {
     return AffectedObject(
-      name: json['name'] as String? ?? '',
-      objectType: json['objectType'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      objectType: json[r'objectType'] as String? ?? '',
     );
   }
 
@@ -3915,8 +3915,8 @@ class AffectedObject {
     var objectType = this.objectType;
 
     final json = <String, Object?>{};
-    json['name'] = name;
-    json['objectType'] = objectType;
+    json[r'name'] = name;
+    json[r'objectType'] = objectType;
     return json;
   }
 
@@ -3939,7 +3939,7 @@ class AttachmentUpdateVersion {
 
   factory AttachmentUpdateVersion.fromJson(Map<String, Object?> json) {
     return AttachmentUpdateVersion(
-      number: (json['number'] as num?)?.toInt() ?? 0,
+      number: (json[r'number'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -3947,7 +3947,7 @@ class AttachmentUpdateVersion {
     var number = this.number;
 
     final json = <String, Object?>{};
-    json['number'] = number;
+    json[r'number'] = number;
     return json;
   }
 
@@ -3969,8 +3969,8 @@ class AttachmentUpdateMetadata {
 
   factory AttachmentUpdateMetadata.fromJson(Map<String, Object?> json) {
     return AttachmentUpdateMetadata(
-      mediaType: json['mediaType'] as String?,
-      comment: json['comment'] as String?,
+      mediaType: json[r'mediaType'] as String?,
+      comment: json[r'comment'] as String?,
     );
   }
 
@@ -3980,10 +3980,10 @@ class AttachmentUpdateMetadata {
 
     final json = <String, Object?>{};
     if (mediaType != null) {
-      json['mediaType'] = mediaType;
+      json[r'mediaType'] = mediaType;
     }
     if (comment != null) {
-      json['comment'] = comment;
+      json[r'comment'] = comment;
     }
     return json;
   }
@@ -4009,8 +4009,8 @@ class AttachmentUpdateContainer {
 
   factory AttachmentUpdateContainer.fromJson(Map<String, Object?> json) {
     return AttachmentUpdateContainer(
-      id: json['id'] as String? ?? '',
-      type: json['type'] as String? ?? '',
+      id: json[r'id'] as String? ?? '',
+      type: json[r'type'] as String? ?? '',
     );
   }
 
@@ -4019,8 +4019,8 @@ class AttachmentUpdateContainer {
     var type = this.type;
 
     final json = <String, Object?>{};
-    json['id'] = id;
-    json['type'] = type;
+    json[r'id'] = id;
+    json[r'type'] = type;
     return json;
   }
 
@@ -4062,17 +4062,17 @@ class AttachmentUpdate {
   factory AttachmentUpdate.fromJson(Map<String, Object?> json) {
     return AttachmentUpdate(
       version: AttachmentUpdateVersion.fromJson(
-          json['version'] as Map<String, Object?>? ?? const {}),
-      id: json['id'] as String? ?? '',
-      type: AttachmentUpdateType.fromValue(json['type'] as String? ?? ''),
-      title: json['title'] as String?,
-      metadata: json['metadata'] != null
+          json[r'version'] as Map<String, Object?>? ?? const {}),
+      id: json[r'id'] as String? ?? '',
+      type: AttachmentUpdateType.fromValue(json[r'type'] as String? ?? ''),
+      title: json[r'title'] as String?,
+      metadata: json[r'metadata'] != null
           ? AttachmentUpdateMetadata.fromJson(
-              json['metadata']! as Map<String, Object?>)
+              json[r'metadata']! as Map<String, Object?>)
           : null,
-      container: json['container'] != null
+      container: json[r'container'] != null
           ? AttachmentUpdateContainer.fromJson(
-              json['container']! as Map<String, Object?>)
+              json[r'container']! as Map<String, Object?>)
           : null,
     );
   }
@@ -4086,17 +4086,17 @@ class AttachmentUpdate {
     var container = this.container;
 
     final json = <String, Object?>{};
-    json['version'] = version.toJson();
-    json['id'] = id;
-    json['type'] = type.value;
+    json[r'version'] = version.toJson();
+    json[r'id'] = id;
+    json[r'type'] = type.value;
     if (title != null) {
-      json['title'] = title;
+      json[r'title'] = title;
     }
     if (metadata != null) {
-      json['metadata'] = metadata.toJson();
+      json[r'metadata'] = metadata.toJson();
     }
     if (container != null) {
-      json['container'] = container.toJson();
+      json[r'container'] = container.toJson();
     }
     return json;
   }
@@ -4160,11 +4160,11 @@ class AuditRecordAuthor {
 
   factory AuditRecordAuthor.fromJson(Map<String, Object?> json) {
     return AuditRecordAuthor(
-      type: AuditRecordAuthorType.fromValue(json['type'] as String? ?? ''),
-      displayName: json['displayName'] as String? ?? '',
-      operations: json['operations'] as Map<String, Object?>? ?? {},
-      username: json['username'] as String? ?? '',
-      userKey: json['userKey'] as String? ?? '',
+      type: AuditRecordAuthorType.fromValue(json[r'type'] as String? ?? ''),
+      displayName: json[r'displayName'] as String? ?? '',
+      operations: json[r'operations'] as Map<String, Object?>? ?? {},
+      username: json[r'username'] as String? ?? '',
+      userKey: json[r'userKey'] as String? ?? '',
     );
   }
 
@@ -4176,11 +4176,11 @@ class AuditRecordAuthor {
     var userKey = this.userKey;
 
     final json = <String, Object?>{};
-    json['type'] = type.value;
-    json['displayName'] = displayName;
-    json['operations'] = operations;
-    json['username'] = username;
-    json['userKey'] = userKey;
+    json[r'type'] = type.value;
+    json[r'displayName'] = displayName;
+    json[r'operations'] = operations;
+    json[r'username'] = username;
+    json[r'userKey'] = userKey;
     return json;
   }
 
@@ -4250,21 +4250,21 @@ class AuditRecord {
   factory AuditRecord.fromJson(Map<String, Object?> json) {
     return AuditRecord(
       author: AuditRecordAuthor.fromJson(
-          json['author'] as Map<String, Object?>? ?? const {}),
-      remoteAddress: json['remoteAddress'] as String? ?? '',
-      creationDate: (json['creationDate'] as num?)?.toInt() ?? 0,
-      summary: json['summary'] as String? ?? '',
-      description: json['description'] as String? ?? '',
-      category: json['category'] as String? ?? '',
-      sysAdmin: json['sysAdmin'] as bool? ?? false,
+          json[r'author'] as Map<String, Object?>? ?? const {}),
+      remoteAddress: json[r'remoteAddress'] as String? ?? '',
+      creationDate: (json[r'creationDate'] as num?)?.toInt() ?? 0,
+      summary: json[r'summary'] as String? ?? '',
+      description: json[r'description'] as String? ?? '',
+      category: json[r'category'] as String? ?? '',
+      sysAdmin: json[r'sysAdmin'] as bool? ?? false,
       affectedObject: AffectedObject.fromJson(
-          json['affectedObject'] as Map<String, Object?>? ?? const {}),
-      changedValues: (json['changedValues'] as List<Object?>?)
+          json[r'affectedObject'] as Map<String, Object?>? ?? const {}),
+      changedValues: (json[r'changedValues'] as List<Object?>?)
               ?.map((i) =>
                   ChangedValue.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      associatedObjects: (json['associatedObjects'] as List<Object?>?)
+      associatedObjects: (json[r'associatedObjects'] as List<Object?>?)
               ?.map((i) => AffectedObject.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -4285,16 +4285,16 @@ class AuditRecord {
     var associatedObjects = this.associatedObjects;
 
     final json = <String, Object?>{};
-    json['author'] = author.toJson();
-    json['remoteAddress'] = remoteAddress;
-    json['creationDate'] = creationDate;
-    json['summary'] = summary;
-    json['description'] = description;
-    json['category'] = category;
-    json['sysAdmin'] = sysAdmin;
-    json['affectedObject'] = affectedObject.toJson();
-    json['changedValues'] = changedValues.map((i) => i.toJson()).toList();
-    json['associatedObjects'] =
+    json[r'author'] = author.toJson();
+    json[r'remoteAddress'] = remoteAddress;
+    json[r'creationDate'] = creationDate;
+    json[r'summary'] = summary;
+    json[r'description'] = description;
+    json[r'category'] = category;
+    json[r'sysAdmin'] = sysAdmin;
+    json[r'affectedObject'] = affectedObject.toJson();
+    json[r'changedValues'] = changedValues.map((i) => i.toJson()).toList();
+    json[r'associatedObjects'] =
         associatedObjects.map((i) => i.toJson()).toList();
     return json;
   }
@@ -4341,16 +4341,16 @@ class AuditRecordArray {
 
   factory AuditRecordArray.fromJson(Map<String, Object?> json) {
     return AuditRecordArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map((i) =>
                   AuditRecord.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -4362,11 +4362,11 @@ class AuditRecordArray {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
-    json['_links'] = links.toJson();
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -4415,11 +4415,11 @@ class AuditRecordCreateAuthor {
   factory AuditRecordCreateAuthor.fromJson(Map<String, Object?> json) {
     return AuditRecordCreateAuthor(
       type:
-          AuditRecordCreateAuthorType.fromValue(json['type'] as String? ?? ''),
-      displayName: json['displayName'] as String?,
-      operations: json['operations'] as Map<String, Object?>?,
-      username: json['username'] as String?,
-      userKey: json['userKey'] as String?,
+          AuditRecordCreateAuthorType.fromValue(json[r'type'] as String? ?? ''),
+      displayName: json[r'displayName'] as String?,
+      operations: json[r'operations'] as Map<String, Object?>?,
+      username: json[r'username'] as String?,
+      userKey: json[r'userKey'] as String?,
     );
   }
 
@@ -4431,18 +4431,18 @@ class AuditRecordCreateAuthor {
     var userKey = this.userKey;
 
     final json = <String, Object?>{};
-    json['type'] = type.value;
+    json[r'type'] = type.value;
     if (displayName != null) {
-      json['displayName'] = displayName;
+      json[r'displayName'] = displayName;
     }
     if (operations != null) {
-      json['operations'] = operations;
+      json[r'operations'] = operations;
     }
     if (username != null) {
-      json['username'] = username;
+      json[r'username'] = username;
     }
     if (userKey != null) {
-      json['userKey'] = userKey;
+      json[r'userKey'] = userKey;
     }
     return json;
   }
@@ -4540,26 +4540,26 @@ class AuditRecordCreate {
 
   factory AuditRecordCreate.fromJson(Map<String, Object?> json) {
     return AuditRecordCreate(
-      author: json['author'] != null
+      author: json[r'author'] != null
           ? AuditRecordCreateAuthor.fromJson(
-              json['author']! as Map<String, Object?>)
+              json[r'author']! as Map<String, Object?>)
           : null,
-      remoteAddress: json['remoteAddress'] as String? ?? '',
-      creationDate: (json['creationDate'] as num?)?.toInt(),
-      summary: json['summary'] as String?,
-      description: json['description'] as String?,
-      category: json['category'] as String?,
-      sysAdmin: json['sysAdmin'] as bool? ?? false,
-      affectedObject: json['affectedObject'] != null
+      remoteAddress: json[r'remoteAddress'] as String? ?? '',
+      creationDate: (json[r'creationDate'] as num?)?.toInt(),
+      summary: json[r'summary'] as String?,
+      description: json[r'description'] as String?,
+      category: json[r'category'] as String?,
+      sysAdmin: json[r'sysAdmin'] as bool? ?? false,
+      affectedObject: json[r'affectedObject'] != null
           ? AffectedObject.fromJson(
-              json['affectedObject']! as Map<String, Object?>)
+              json[r'affectedObject']! as Map<String, Object?>)
           : null,
-      changedValues: (json['changedValues'] as List<Object?>?)
+      changedValues: (json[r'changedValues'] as List<Object?>?)
               ?.map((i) =>
                   ChangedValue.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      associatedObjects: (json['associatedObjects'] as List<Object?>?)
+      associatedObjects: (json[r'associatedObjects'] as List<Object?>?)
               ?.map((i) => AffectedObject.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -4581,27 +4581,27 @@ class AuditRecordCreate {
 
     final json = <String, Object?>{};
     if (author != null) {
-      json['author'] = author.toJson();
+      json[r'author'] = author.toJson();
     }
-    json['remoteAddress'] = remoteAddress;
+    json[r'remoteAddress'] = remoteAddress;
     if (creationDate != null) {
-      json['creationDate'] = creationDate;
+      json[r'creationDate'] = creationDate;
     }
     if (summary != null) {
-      json['summary'] = summary;
+      json[r'summary'] = summary;
     }
     if (description != null) {
-      json['description'] = description;
+      json[r'description'] = description;
     }
     if (category != null) {
-      json['category'] = category;
+      json[r'category'] = category;
     }
-    json['sysAdmin'] = sysAdmin;
+    json[r'sysAdmin'] = sysAdmin;
     if (affectedObject != null) {
-      json['affectedObject'] = affectedObject.toJson();
+      json[r'affectedObject'] = affectedObject.toJson();
     }
-    json['changedValues'] = changedValues.map((i) => i.toJson()).toList();
-    json['associatedObjects'] =
+    json[r'changedValues'] = changedValues.map((i) => i.toJson()).toList();
+    json[r'associatedObjects'] =
         associatedObjects.map((i) => i.toJson()).toList();
     return json;
   }
@@ -4642,8 +4642,8 @@ class BlueprintTemplateOriginalTemplate {
   factory BlueprintTemplateOriginalTemplate.fromJson(
       Map<String, Object?> json) {
     return BlueprintTemplateOriginalTemplate(
-      pluginKey: json['pluginKey'] as String? ?? '',
-      moduleKey: json['moduleKey'] as String? ?? '',
+      pluginKey: json[r'pluginKey'] as String? ?? '',
+      moduleKey: json[r'moduleKey'] as String? ?? '',
     );
   }
 
@@ -4652,8 +4652,8 @@ class BlueprintTemplateOriginalTemplate {
     var moduleKey = this.moduleKey;
 
     final json = <String, Object?>{};
-    json['pluginKey'] = pluginKey;
-    json['moduleKey'] = moduleKey;
+    json[r'pluginKey'] = pluginKey;
+    json[r'moduleKey'] = moduleKey;
     return json;
   }
 
@@ -4673,7 +4673,7 @@ class BlueprintTemplateExpandable {
 
   factory BlueprintTemplateExpandable.fromJson(Map<String, Object?> json) {
     return BlueprintTemplateExpandable(
-      body: json['body'] as String?,
+      body: json[r'body'] as String?,
     );
   }
 
@@ -4682,7 +4682,7 @@ class BlueprintTemplateExpandable {
 
     final json = <String, Object?>{};
     if (body != null) {
-      json['body'] = body;
+      json[r'body'] = body;
     }
     return json;
   }
@@ -4720,25 +4720,25 @@ class BlueprintTemplate {
 
   factory BlueprintTemplate.fromJson(Map<String, Object?> json) {
     return BlueprintTemplate(
-      templateId: json['templateId'] as String? ?? '',
+      templateId: json[r'templateId'] as String? ?? '',
       originalTemplate: BlueprintTemplateOriginalTemplate.fromJson(
-          json['originalTemplate'] as Map<String, Object?>? ?? const {}),
-      referencingBlueprint: json['referencingBlueprint'] as String? ?? '',
-      name: json['name'] as String? ?? '',
-      description: json['description'] as String? ?? '',
-      labels: (json['labels'] as List<Object?>?)
+          json[r'originalTemplate'] as Map<String, Object?>? ?? const {}),
+      referencingBlueprint: json[r'referencingBlueprint'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      description: json[r'description'] as String? ?? '',
+      labels: (json[r'labels'] as List<Object?>?)
               ?.map(
                   (i) => Label.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      templateType: json['templateType'] as String? ?? '',
-      body: json['body'] != null
-          ? ContentBody.fromJson(json['body']! as Map<String, Object?>)
+      templateType: json[r'templateType'] as String? ?? '',
+      body: json[r'body'] != null
+          ? ContentBody.fromJson(json[r'body']! as Map<String, Object?>)
           : null,
       expandable: BlueprintTemplateExpandable.fromJson(
-          json['_expandable'] as Map<String, Object?>? ?? const {}),
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -4755,18 +4755,18 @@ class BlueprintTemplate {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['templateId'] = templateId;
-    json['originalTemplate'] = originalTemplate.toJson();
-    json['referencingBlueprint'] = referencingBlueprint;
-    json['name'] = name;
-    json['description'] = description;
-    json['labels'] = labels.map((i) => i.toJson()).toList();
-    json['templateType'] = templateType;
+    json[r'templateId'] = templateId;
+    json[r'originalTemplate'] = originalTemplate.toJson();
+    json[r'referencingBlueprint'] = referencingBlueprint;
+    json[r'name'] = name;
+    json[r'description'] = description;
+    json[r'labels'] = labels.map((i) => i.toJson()).toList();
+    json[r'templateType'] = templateType;
     if (body != null) {
-      json['body'] = body.toJson();
+      json[r'body'] = body.toJson();
     }
-    json['_expandable'] = expandable.toJson();
-    json['_links'] = links.toJson();
+    json[r'_expandable'] = expandable.toJson();
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -4812,16 +4812,16 @@ class BlueprintTemplateArray {
 
   factory BlueprintTemplateArray.fromJson(Map<String, Object?> json) {
     return BlueprintTemplateArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map((i) => BlueprintTemplate.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -4833,11 +4833,11 @@ class BlueprintTemplateArray {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
-    json['_links'] = links.toJson();
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -4865,8 +4865,8 @@ class ButtonLookAndFeel {
 
   factory ButtonLookAndFeel.fromJson(Map<String, Object?> json) {
     return ButtonLookAndFeel(
-      backgroundColor: json['backgroundColor'] as String? ?? '',
-      color: json['color'] as String? ?? '',
+      backgroundColor: json[r'backgroundColor'] as String? ?? '',
+      color: json[r'color'] as String? ?? '',
     );
   }
 
@@ -4875,8 +4875,8 @@ class ButtonLookAndFeel {
     var color = this.color;
 
     final json = <String, Object?>{};
-    json['backgroundColor'] = backgroundColor;
-    json['color'] = color;
+    json[r'backgroundColor'] = backgroundColor;
+    json[r'color'] = color;
     return json;
   }
 
@@ -4897,9 +4897,9 @@ class Breadcrumb {
 
   factory Breadcrumb.fromJson(Map<String, Object?> json) {
     return Breadcrumb(
-      label: json['label'] as String? ?? '',
-      url: json['url'] as String? ?? '',
-      separator: json['separator'] as String? ?? '',
+      label: json[r'label'] as String? ?? '',
+      url: json[r'url'] as String? ?? '',
+      separator: json[r'separator'] as String? ?? '',
     );
   }
 
@@ -4909,9 +4909,9 @@ class Breadcrumb {
     var separator = this.separator;
 
     final json = <String, Object?>{};
-    json['label'] = label;
-    json['url'] = url;
-    json['separator'] = separator;
+    json[r'label'] = label;
+    json[r'url'] = url;
+    json[r'separator'] = separator;
     return json;
   }
 
@@ -4934,9 +4934,9 @@ class ChangedValue {
 
   factory ChangedValue.fromJson(Map<String, Object?> json) {
     return ChangedValue(
-      name: json['name'] as String? ?? '',
-      oldValue: json['oldValue'] as String? ?? '',
-      newValue: json['newValue'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      oldValue: json[r'oldValue'] as String? ?? '',
+      newValue: json[r'newValue'] as String? ?? '',
     );
   }
 
@@ -4946,9 +4946,9 @@ class ChangedValue {
     var newValue = this.newValue;
 
     final json = <String, Object?>{};
-    json['name'] = name;
-    json['oldValue'] = oldValue;
-    json['newValue'] = newValue;
+    json[r'name'] = name;
+    json[r'oldValue'] = oldValue;
+    json[r'newValue'] = newValue;
     return json;
   }
 
@@ -5027,12 +5027,12 @@ class ContainerLookAndFeel {
 
   factory ContainerLookAndFeel.fromJson(Map<String, Object?> json) {
     return ContainerLookAndFeel(
-      background: json['background'] as String? ?? '',
-      backgroundColor: json['backgroundColor'] as String? ?? '',
-      backgroundImage: json['backgroundImage'] as String? ?? '',
-      backgroundSize: json['backgroundSize'] as String? ?? '',
-      padding: json['padding'] as String? ?? '',
-      borderRadius: json['borderRadius'] as String? ?? '',
+      background: json[r'background'] as String? ?? '',
+      backgroundColor: json[r'backgroundColor'] as String? ?? '',
+      backgroundImage: json[r'backgroundImage'] as String? ?? '',
+      backgroundSize: json[r'backgroundSize'] as String? ?? '',
+      padding: json[r'padding'] as String? ?? '',
+      borderRadius: json[r'borderRadius'] as String? ?? '',
     );
   }
 
@@ -5045,12 +5045,12 @@ class ContainerLookAndFeel {
     var borderRadius = this.borderRadius;
 
     final json = <String, Object?>{};
-    json['background'] = background;
-    json['backgroundColor'] = backgroundColor;
-    json['backgroundImage'] = backgroundImage;
-    json['backgroundSize'] = backgroundSize;
-    json['padding'] = padding;
-    json['borderRadius'] = borderRadius;
+    json[r'background'] = background;
+    json[r'backgroundColor'] = backgroundColor;
+    json[r'backgroundImage'] = backgroundImage;
+    json[r'backgroundSize'] = backgroundSize;
+    json[r'padding'] = padding;
+    json[r'borderRadius'] = borderRadius;
     return json;
   }
 
@@ -5080,8 +5080,8 @@ class ContainerSummary {
 
   factory ContainerSummary.fromJson(Map<String, Object?> json) {
     return ContainerSummary(
-      title: json['title'] as String? ?? '',
-      displayUrl: json['displayUrl'] as String? ?? '',
+      title: json[r'title'] as String? ?? '',
+      displayUrl: json[r'displayUrl'] as String? ?? '',
     );
   }
 
@@ -5090,8 +5090,8 @@ class ContainerSummary {
     var displayUrl = this.displayUrl;
 
     final json = <String, Object?>{};
-    json['title'] = title;
-    json['displayUrl'] = displayUrl;
+    json[r'title'] = title;
+    json[r'displayUrl'] = displayUrl;
     return json;
   }
 
@@ -5123,13 +5123,13 @@ class ContentBodyExpandable {
 
   factory ContentBodyExpandable.fromJson(Map<String, Object?> json) {
     return ContentBodyExpandable(
-      editor: json['editor'] as String?,
-      view: json['view'] as String?,
-      exportView: json['export_view'] as String?,
-      styledView: json['styled_view'] as String?,
-      storage: json['storage'] as String?,
-      editor2: json['editor2'] as String?,
-      anonymousExportView: json['anonymous_export_view'] as String?,
+      editor: json[r'editor'] as String?,
+      view: json[r'view'] as String?,
+      exportView: json[r'export_view'] as String?,
+      styledView: json[r'styled_view'] as String?,
+      storage: json[r'storage'] as String?,
+      editor2: json[r'editor2'] as String?,
+      anonymousExportView: json[r'anonymous_export_view'] as String?,
     );
   }
 
@@ -5144,25 +5144,25 @@ class ContentBodyExpandable {
 
     final json = <String, Object?>{};
     if (editor != null) {
-      json['editor'] = editor;
+      json[r'editor'] = editor;
     }
     if (view != null) {
-      json['view'] = view;
+      json[r'view'] = view;
     }
     if (exportView != null) {
-      json['export_view'] = exportView;
+      json[r'export_view'] = exportView;
     }
     if (styledView != null) {
-      json['styled_view'] = styledView;
+      json[r'styled_view'] = styledView;
     }
     if (storage != null) {
-      json['storage'] = storage;
+      json[r'storage'] = storage;
     }
     if (editor2 != null) {
-      json['editor2'] = editor2;
+      json[r'editor2'] = editor2;
     }
     if (anonymousExportView != null) {
-      json['anonymous_export_view'] = anonymousExportView;
+      json[r'anonymous_export_view'] = anonymousExportView;
     }
     return json;
   }
@@ -5207,27 +5207,27 @@ class ContentBody {
 
   factory ContentBody.fromJson(Map<String, Object?> json) {
     return ContentBody(
-      view: json['view'] != null
-          ? ContentBody.fromJson(json['view']! as Map<String, Object?>)
+      view: json[r'view'] != null
+          ? ContentBody.fromJson(json[r'view']! as Map<String, Object?>)
           : null,
-      exportView: json['export_view'] != null
-          ? ContentBody.fromJson(json['export_view']! as Map<String, Object?>)
+      exportView: json[r'export_view'] != null
+          ? ContentBody.fromJson(json[r'export_view']! as Map<String, Object?>)
           : null,
-      styledView: json['styled_view'] != null
-          ? ContentBody.fromJson(json['styled_view']! as Map<String, Object?>)
+      styledView: json[r'styled_view'] != null
+          ? ContentBody.fromJson(json[r'styled_view']! as Map<String, Object?>)
           : null,
-      storage: json['storage'] != null
-          ? ContentBody.fromJson(json['storage']! as Map<String, Object?>)
+      storage: json[r'storage'] != null
+          ? ContentBody.fromJson(json[r'storage']! as Map<String, Object?>)
           : null,
-      editor2: json['editor2'] != null
-          ? ContentBody.fromJson(json['editor2']! as Map<String, Object?>)
+      editor2: json[r'editor2'] != null
+          ? ContentBody.fromJson(json[r'editor2']! as Map<String, Object?>)
           : null,
-      anonymousExportView: json['anonymous_export_view'] != null
+      anonymousExportView: json[r'anonymous_export_view'] != null
           ? ContentBody.fromJson(
-              json['anonymous_export_view']! as Map<String, Object?>)
+              json[r'anonymous_export_view']! as Map<String, Object?>)
           : null,
       expandable: ContentBodyExpandable.fromJson(
-          json['_expandable'] as Map<String, Object?>? ?? const {}),
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -5242,24 +5242,24 @@ class ContentBody {
 
     final json = <String, Object?>{};
     if (view != null) {
-      json['view'] = view.toJson();
+      json[r'view'] = view.toJson();
     }
     if (exportView != null) {
-      json['export_view'] = exportView.toJson();
+      json[r'export_view'] = exportView.toJson();
     }
     if (styledView != null) {
-      json['styled_view'] = styledView.toJson();
+      json[r'styled_view'] = styledView.toJson();
     }
     if (storage != null) {
-      json['storage'] = storage.toJson();
+      json[r'storage'] = storage.toJson();
     }
     if (editor2 != null) {
-      json['editor2'] = editor2.toJson();
+      json[r'editor2'] = editor2.toJson();
     }
     if (anonymousExportView != null) {
-      json['anonymous_export_view'] = anonymousExportView.toJson();
+      json[r'anonymous_export_view'] = anonymousExportView.toJson();
     }
-    json['_expandable'] = expandable.toJson();
+    json[r'_expandable'] = expandable.toJson();
     return json;
   }
 
@@ -5292,14 +5292,15 @@ class ContentRestrictions {
 
   factory ContentRestrictions.fromJson(Map<String, Object?> json) {
     return ContentRestrictions(
-      read: json['read'] != null
-          ? ContentRestriction.fromJson(json['read']! as Map<String, Object?>)
+      read: json[r'read'] != null
+          ? ContentRestriction.fromJson(json[r'read']! as Map<String, Object?>)
           : null,
-      update: json['update'] != null
-          ? ContentRestriction.fromJson(json['update']! as Map<String, Object?>)
+      update: json[r'update'] != null
+          ? ContentRestriction.fromJson(
+              json[r'update']! as Map<String, Object?>)
           : null,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -5310,12 +5311,12 @@ class ContentRestrictions {
 
     final json = <String, Object?>{};
     if (read != null) {
-      json['read'] = read.toJson();
+      json[r'read'] = read.toJson();
     }
     if (update != null) {
-      json['update'] = update.toJson();
+      json[r'update'] = update.toJson();
     }
-    json['_links'] = links.toJson();
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -5361,18 +5362,18 @@ class ContentExpandable {
 
   factory ContentExpandable.fromJson(Map<String, Object?> json) {
     return ContentExpandable(
-      childTypes: json['childTypes'] as String?,
-      container: json['container'] as String?,
-      metadata: json['metadata'] as String?,
-      operations: json['operations'] as String?,
-      children: json['children'] as String?,
-      restrictions: json['restrictions'] as String?,
-      history: json['history'] as String?,
-      ancestors: json['ancestors'] as String?,
-      body: json['body'] as String?,
-      version: json['version'] as String?,
-      descendants: json['descendants'] as String?,
-      space: json['space'] as String?,
+      childTypes: json[r'childTypes'] as String?,
+      container: json[r'container'] as String?,
+      metadata: json[r'metadata'] as String?,
+      operations: json[r'operations'] as String?,
+      children: json[r'children'] as String?,
+      restrictions: json[r'restrictions'] as String?,
+      history: json[r'history'] as String?,
+      ancestors: json[r'ancestors'] as String?,
+      body: json[r'body'] as String?,
+      version: json[r'version'] as String?,
+      descendants: json[r'descendants'] as String?,
+      space: json[r'space'] as String?,
     );
   }
 
@@ -5392,40 +5393,40 @@ class ContentExpandable {
 
     final json = <String, Object?>{};
     if (childTypes != null) {
-      json['childTypes'] = childTypes;
+      json[r'childTypes'] = childTypes;
     }
     if (container != null) {
-      json['container'] = container;
+      json[r'container'] = container;
     }
     if (metadata != null) {
-      json['metadata'] = metadata;
+      json[r'metadata'] = metadata;
     }
     if (operations != null) {
-      json['operations'] = operations;
+      json[r'operations'] = operations;
     }
     if (children != null) {
-      json['children'] = children;
+      json[r'children'] = children;
     }
     if (restrictions != null) {
-      json['restrictions'] = restrictions;
+      json[r'restrictions'] = restrictions;
     }
     if (history != null) {
-      json['history'] = history;
+      json[r'history'] = history;
     }
     if (ancestors != null) {
-      json['ancestors'] = ancestors;
+      json[r'ancestors'] = ancestors;
     }
     if (body != null) {
-      json['body'] = body;
+      json[r'body'] = body;
     }
     if (version != null) {
-      json['version'] = version;
+      json[r'version'] = version;
     }
     if (descendants != null) {
-      json['descendants'] = descendants;
+      json[r'descendants'] = descendants;
     }
     if (space != null) {
-      json['space'] = space;
+      json[r'space'] = space;
     }
     return json;
   }
@@ -5503,54 +5504,54 @@ class Content {
 
   factory Content.fromJson(Map<String, Object?> json) {
     return Content(
-      id: json['id'] as String? ?? '',
-      type: json['type'] as String? ?? '',
-      status: json['status'] as String? ?? '',
-      title: json['title'] as String? ?? '',
-      space: json['space'] != null
-          ? Space.fromJson(json['space']! as Map<String, Object?>)
+      id: json[r'id'] as String? ?? '',
+      type: json[r'type'] as String? ?? '',
+      status: json[r'status'] as String? ?? '',
+      title: json[r'title'] as String? ?? '',
+      space: json[r'space'] != null
+          ? Space.fromJson(json[r'space']! as Map<String, Object?>)
           : null,
-      history: json['history'] != null
-          ? ContentHistory.fromJson(json['history']! as Map<String, Object?>)
+      history: json[r'history'] != null
+          ? ContentHistory.fromJson(json[r'history']! as Map<String, Object?>)
           : null,
-      version: json['version'] != null
-          ? Version.fromJson(json['version']! as Map<String, Object?>)
+      version: json[r'version'] != null
+          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
           : null,
-      ancestors: (json['ancestors'] as List<Object?>?)
+      ancestors: (json[r'ancestors'] as List<Object?>?)
               ?.map((i) =>
                   Content.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      operations: (json['operations'] as List<Object?>?)
+      operations: (json[r'operations'] as List<Object?>?)
               ?.map((i) => OperationCheckResult.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      children: json['children'] != null
-          ? ContentChildren.fromJson(json['children']! as Map<String, Object?>)
+      children: json[r'children'] != null
+          ? ContentChildren.fromJson(json[r'children']! as Map<String, Object?>)
           : null,
-      childTypes: json['childTypes'] != null
+      childTypes: json[r'childTypes'] != null
           ? ContentChildType.fromJson(
-              json['childTypes']! as Map<String, Object?>)
+              json[r'childTypes']! as Map<String, Object?>)
           : null,
-      descendants: json['descendants'] != null
+      descendants: json[r'descendants'] != null
           ? ContentChildren.fromJson(
-              json['descendants']! as Map<String, Object?>)
+              json[r'descendants']! as Map<String, Object?>)
           : null,
-      container: json['container'] != null
-          ? Container.fromJson(json['container']! as Map<String, Object?>)
+      container: json[r'container'] != null
+          ? Container.fromJson(json[r'container']! as Map<String, Object?>)
           : null,
-      body: json['body'] != null
-          ? ContentBody.fromJson(json['body']! as Map<String, Object?>)
+      body: json[r'body'] != null
+          ? ContentBody.fromJson(json[r'body']! as Map<String, Object?>)
           : null,
-      restrictions: json['restrictions'] != null
+      restrictions: json[r'restrictions'] != null
           ? ContentRestrictions.fromJson(
-              json['restrictions']! as Map<String, Object?>)
+              json[r'restrictions']! as Map<String, Object?>)
           : null,
       expandable: ContentExpandable.fromJson(
-          json['_expandable'] as Map<String, Object?>? ?? const {}),
-      links: json['_links'] != null
-          ? GenericLinks.fromJson(json['_links']! as Map<String, Object?>)
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
+      links: json[r'_links'] != null
+          ? GenericLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -5575,42 +5576,42 @@ class Content {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['id'] = id;
-    json['type'] = type;
-    json['status'] = status;
-    json['title'] = title;
+    json[r'id'] = id;
+    json[r'type'] = type;
+    json[r'status'] = status;
+    json[r'title'] = title;
     if (space != null) {
-      json['space'] = space.toJson();
+      json[r'space'] = space.toJson();
     }
     if (history != null) {
-      json['history'] = history.toJson();
+      json[r'history'] = history.toJson();
     }
     if (version != null) {
-      json['version'] = version.toJson();
+      json[r'version'] = version.toJson();
     }
-    json['ancestors'] = ancestors.map((i) => i.toJson()).toList();
-    json['operations'] = operations.map((i) => i.toJson()).toList();
+    json[r'ancestors'] = ancestors.map((i) => i.toJson()).toList();
+    json[r'operations'] = operations.map((i) => i.toJson()).toList();
     if (children != null) {
-      json['children'] = children.toJson();
+      json[r'children'] = children.toJson();
     }
     if (childTypes != null) {
-      json['childTypes'] = childTypes.toJson();
+      json[r'childTypes'] = childTypes.toJson();
     }
     if (descendants != null) {
-      json['descendants'] = descendants.toJson();
+      json[r'descendants'] = descendants.toJson();
     }
     if (container != null) {
-      json['container'] = container.toJson();
+      json[r'container'] = container.toJson();
     }
     if (body != null) {
-      json['body'] = body.toJson();
+      json[r'body'] = body.toJson();
     }
     if (restrictions != null) {
-      json['restrictions'] = restrictions.toJson();
+      json[r'restrictions'] = restrictions.toJson();
     }
-    json['_expandable'] = expandable.toJson();
+    json[r'_expandable'] = expandable.toJson();
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -5671,16 +5672,16 @@ class ContentArray {
 
   factory ContentArray.fromJson(Map<String, Object?> json) {
     return ContentArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map((i) =>
                   Content.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -5692,11 +5693,11 @@ class ContentArray {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
-    json['_links'] = links.toJson();
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -5753,7 +5754,7 @@ class ContentBlueprintDraftVersion {
 
   factory ContentBlueprintDraftVersion.fromJson(Map<String, Object?> json) {
     return ContentBlueprintDraftVersion(
-      number: (json['number'] as num?)?.toInt() ?? 0,
+      number: (json[r'number'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -5761,7 +5762,7 @@ class ContentBlueprintDraftVersion {
     var number = this.number;
 
     final json = <String, Object?>{};
-    json['number'] = number;
+    json[r'number'] = number;
     return json;
   }
 
@@ -5781,7 +5782,7 @@ class ContentBlueprintDraftSpace {
 
   factory ContentBlueprintDraftSpace.fromJson(Map<String, Object?> json) {
     return ContentBlueprintDraftSpace(
-      key: json['key'] as String? ?? '',
+      key: json[r'key'] as String? ?? '',
     );
   }
 
@@ -5789,7 +5790,7 @@ class ContentBlueprintDraftSpace {
     var key = this.key;
 
     final json = <String, Object?>{};
-    json['key'] = key;
+    json[r'key'] = key;
     return json;
   }
 
@@ -5809,7 +5810,7 @@ class ContentBlueprintDraftAncestorsItem {
   factory ContentBlueprintDraftAncestorsItem.fromJson(
       Map<String, Object?> json) {
     return ContentBlueprintDraftAncestorsItem(
-      id: json['id'] as String? ?? '',
+      id: json[r'id'] as String? ?? '',
     );
   }
 
@@ -5817,7 +5818,7 @@ class ContentBlueprintDraftAncestorsItem {
     var id = this.id;
 
     final json = <String, Object?>{};
-    json['id'] = id;
+    json[r'id'] = id;
     return json;
   }
 
@@ -5865,17 +5866,17 @@ class ContentBlueprintDraft {
   factory ContentBlueprintDraft.fromJson(Map<String, Object?> json) {
     return ContentBlueprintDraft(
       version: ContentBlueprintDraftVersion.fromJson(
-          json['version'] as Map<String, Object?>? ?? const {}),
-      title: json['title'] as String? ?? '',
-      type: ContentBlueprintDraftType.fromValue(json['type'] as String? ?? ''),
-      status: json['status'] != null
-          ? ContentBlueprintDraftStatus.fromValue(json['status']! as String)
+          json[r'version'] as Map<String, Object?>? ?? const {}),
+      title: json[r'title'] as String? ?? '',
+      type: ContentBlueprintDraftType.fromValue(json[r'type'] as String? ?? ''),
+      status: json[r'status'] != null
+          ? ContentBlueprintDraftStatus.fromValue(json[r'status']! as String)
           : null,
-      space: json['space'] != null
+      space: json[r'space'] != null
           ? ContentBlueprintDraftSpace.fromJson(
-              json['space']! as Map<String, Object?>)
+              json[r'space']! as Map<String, Object?>)
           : null,
-      ancestors: (json['ancestors'] as List<Object?>?)
+      ancestors: (json[r'ancestors'] as List<Object?>?)
               ?.map((i) => ContentBlueprintDraftAncestorsItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -5892,16 +5893,16 @@ class ContentBlueprintDraft {
     var ancestors = this.ancestors;
 
     final json = <String, Object?>{};
-    json['version'] = version.toJson();
-    json['title'] = title;
-    json['type'] = type.value;
+    json[r'version'] = version.toJson();
+    json[r'title'] = title;
+    json[r'type'] = type.value;
     if (status != null) {
-      json['status'] = status.value;
+      json[r'status'] = status.value;
     }
     if (space != null) {
-      json['space'] = space.toJson();
+      json[r'space'] = space.toJson();
     }
-    json['ancestors'] = ancestors.map((i) => i.toJson()).toList();
+    json[r'ancestors'] = ancestors.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -5978,9 +5979,9 @@ class ContentBodyCreate {
 
   factory ContentBodyCreate.fromJson(Map<String, Object?> json) {
     return ContentBodyCreate(
-      value: json['value'] as String? ?? '',
+      value: json[r'value'] as String? ?? '',
       representation: ContentBodyCreateRepresentation.fromValue(
-          json['representation'] as String? ?? ''),
+          json[r'representation'] as String? ?? ''),
     );
   }
 
@@ -5989,8 +5990,8 @@ class ContentBodyCreate {
     var representation = this.representation;
 
     final json = <String, Object?>{};
-    json['value'] = value;
-    json['representation'] = representation.value;
+    json[r'value'] = value;
+    json[r'representation'] = representation.value;
     return json;
   }
 
@@ -6044,9 +6045,9 @@ class ContentChildrenExpandable {
 
   factory ContentChildrenExpandable.fromJson(Map<String, Object?> json) {
     return ContentChildrenExpandable(
-      attachment: json['attachment'] as String?,
-      comment: json['comment'] as String?,
-      page: json['page'] as String?,
+      attachment: json[r'attachment'] as String?,
+      comment: json[r'comment'] as String?,
+      page: json[r'page'] as String?,
     );
   }
 
@@ -6057,13 +6058,13 @@ class ContentChildrenExpandable {
 
     final json = <String, Object?>{};
     if (attachment != null) {
-      json['attachment'] = attachment;
+      json[r'attachment'] = attachment;
     }
     if (comment != null) {
-      json['comment'] = comment;
+      json[r'comment'] = comment;
     }
     if (page != null) {
-      json['page'] = page;
+      json[r'page'] = page;
     }
     return json;
   }
@@ -6094,19 +6095,19 @@ class ContentChildren {
 
   factory ContentChildren.fromJson(Map<String, Object?> json) {
     return ContentChildren(
-      attachment: json['attachment'] != null
-          ? ContentArray.fromJson(json['attachment']! as Map<String, Object?>)
+      attachment: json[r'attachment'] != null
+          ? ContentArray.fromJson(json[r'attachment']! as Map<String, Object?>)
           : null,
-      comment: json['comment'] != null
-          ? ContentArray.fromJson(json['comment']! as Map<String, Object?>)
+      comment: json[r'comment'] != null
+          ? ContentArray.fromJson(json[r'comment']! as Map<String, Object?>)
           : null,
-      page: json['page'] != null
-          ? ContentArray.fromJson(json['page']! as Map<String, Object?>)
+      page: json[r'page'] != null
+          ? ContentArray.fromJson(json[r'page']! as Map<String, Object?>)
           : null,
       expandable: ContentChildrenExpandable.fromJson(
-          json['_expandable'] as Map<String, Object?>? ?? const {}),
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -6119,16 +6120,16 @@ class ContentChildren {
 
     final json = <String, Object?>{};
     if (attachment != null) {
-      json['attachment'] = attachment.toJson();
+      json[r'attachment'] = attachment.toJson();
     }
     if (comment != null) {
-      json['comment'] = comment.toJson();
+      json[r'comment'] = comment.toJson();
     }
     if (page != null) {
-      json['page'] = page.toJson();
+      json[r'page'] = page.toJson();
     }
-    json['_expandable'] = expandable.toJson();
-    json['_links'] = links.toJson();
+    json[r'_expandable'] = expandable.toJson();
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -6161,9 +6162,9 @@ class ContentBodyCreateStorage {
 
   factory ContentBodyCreateStorage.fromJson(Map<String, Object?> json) {
     return ContentBodyCreateStorage(
-      value: json['value'] as String? ?? '',
+      value: json[r'value'] as String? ?? '',
       representation: ContentBodyCreateStorageRepresentation.fromValue(
-          json['representation'] as String? ?? ''),
+          json[r'representation'] as String? ?? ''),
     );
   }
 
@@ -6172,8 +6173,8 @@ class ContentBodyCreateStorage {
     var representation = this.representation;
 
     final json = <String, Object?>{};
-    json['value'] = value;
-    json['representation'] = representation.value;
+    json[r'value'] = value;
+    json[r'representation'] = representation.value;
     return json;
   }
 
@@ -6228,9 +6229,9 @@ class ContentChildTypeAttachment {
 
   factory ContentChildTypeAttachment.fromJson(Map<String, Object?> json) {
     return ContentChildTypeAttachment(
-      value: json['value'] as bool? ?? false,
+      value: json[r'value'] as bool? ?? false,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -6239,8 +6240,8 @@ class ContentChildTypeAttachment {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['value'] = value;
-    json['_links'] = links.toJson();
+    json[r'value'] = value;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -6260,9 +6261,9 @@ class ContentChildTypeComment {
 
   factory ContentChildTypeComment.fromJson(Map<String, Object?> json) {
     return ContentChildTypeComment(
-      value: json['value'] as bool? ?? false,
+      value: json[r'value'] as bool? ?? false,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -6271,8 +6272,8 @@ class ContentChildTypeComment {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['value'] = value;
-    json['_links'] = links.toJson();
+    json[r'value'] = value;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -6292,9 +6293,9 @@ class ContentChildTypePage {
 
   factory ContentChildTypePage.fromJson(Map<String, Object?> json) {
     return ContentChildTypePage(
-      value: json['value'] as bool? ?? false,
+      value: json[r'value'] as bool? ?? false,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -6303,8 +6304,8 @@ class ContentChildTypePage {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['value'] = value;
-    json['_links'] = links.toJson();
+    json[r'value'] = value;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -6327,10 +6328,10 @@ class ContentChildTypeExpandable {
 
   factory ContentChildTypeExpandable.fromJson(Map<String, Object?> json) {
     return ContentChildTypeExpandable(
-      all: json['all'] as String?,
-      attachment: json['attachment'] as String?,
-      comment: json['comment'] as String?,
-      page: json['page'] as String?,
+      all: json[r'all'] as String?,
+      attachment: json[r'attachment'] as String?,
+      comment: json[r'comment'] as String?,
+      page: json[r'page'] as String?,
     );
   }
 
@@ -6342,16 +6343,16 @@ class ContentChildTypeExpandable {
 
     final json = <String, Object?>{};
     if (all != null) {
-      json['all'] = all;
+      json[r'all'] = all;
     }
     if (attachment != null) {
-      json['attachment'] = attachment;
+      json[r'attachment'] = attachment;
     }
     if (comment != null) {
-      json['comment'] = comment;
+      json[r'comment'] = comment;
     }
     if (page != null) {
-      json['page'] = page;
+      json[r'page'] = page;
     }
     return json;
   }
@@ -6380,19 +6381,20 @@ class ContentChildType {
 
   factory ContentChildType.fromJson(Map<String, Object?> json) {
     return ContentChildType(
-      attachment: json['attachment'] != null
+      attachment: json[r'attachment'] != null
           ? ContentChildTypeAttachment.fromJson(
-              json['attachment']! as Map<String, Object?>)
+              json[r'attachment']! as Map<String, Object?>)
           : null,
-      comment: json['comment'] != null
+      comment: json[r'comment'] != null
           ? ContentChildTypeComment.fromJson(
-              json['comment']! as Map<String, Object?>)
+              json[r'comment']! as Map<String, Object?>)
           : null,
-      page: json['page'] != null
-          ? ContentChildTypePage.fromJson(json['page']! as Map<String, Object?>)
+      page: json[r'page'] != null
+          ? ContentChildTypePage.fromJson(
+              json[r'page']! as Map<String, Object?>)
           : null,
       expandable: ContentChildTypeExpandable.fromJson(
-          json['_expandable'] as Map<String, Object?>? ?? const {}),
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -6404,15 +6406,15 @@ class ContentChildType {
 
     final json = <String, Object?>{};
     if (attachment != null) {
-      json['attachment'] = attachment.toJson();
+      json[r'attachment'] = attachment.toJson();
     }
     if (comment != null) {
-      json['comment'] = comment.toJson();
+      json[r'comment'] = comment.toJson();
     }
     if (page != null) {
-      json['page'] = page.toJson();
+      json[r'page'] = page.toJson();
     }
-    json['_expandable'] = expandable.toJson();
+    json[r'_expandable'] = expandable.toJson();
     return json;
   }
 
@@ -6453,7 +6455,7 @@ class ContentCreateSpace {
 
   factory ContentCreateSpace.fromJson(Map<String, Object?> json) {
     return ContentCreateSpace(
-      key: json['key'] as String? ?? '',
+      key: json[r'key'] as String? ?? '',
     );
   }
 
@@ -6461,7 +6463,7 @@ class ContentCreateSpace {
     var key = this.key;
 
     final json = <String, Object?>{};
-    json['key'] = key;
+    json[r'key'] = key;
     return json;
   }
 
@@ -6480,7 +6482,7 @@ class ContentCreateAncestorsItem {
 
   factory ContentCreateAncestorsItem.fromJson(Map<String, Object?> json) {
     return ContentCreateAncestorsItem(
-      id: json['id'] as String? ?? '',
+      id: json[r'id'] as String? ?? '',
     );
   }
 
@@ -6488,7 +6490,7 @@ class ContentCreateAncestorsItem {
     var id = this.id;
 
     final json = <String, Object?>{};
-    json['id'] = id;
+    json[r'id'] = id;
     return json;
   }
 
@@ -6524,26 +6526,28 @@ class ContentCreateBody {
 
   factory ContentCreateBody.fromJson(Map<String, Object?> json) {
     return ContentCreateBody(
-      view: json['view'] != null
-          ? ContentBodyCreate.fromJson(json['view']! as Map<String, Object?>)
+      view: json[r'view'] != null
+          ? ContentBodyCreate.fromJson(json[r'view']! as Map<String, Object?>)
           : null,
-      exportView: json['export_view'] != null
+      exportView: json[r'export_view'] != null
           ? ContentBodyCreate.fromJson(
-              json['export_view']! as Map<String, Object?>)
+              json[r'export_view']! as Map<String, Object?>)
           : null,
-      styledView: json['styled_view'] != null
+      styledView: json[r'styled_view'] != null
           ? ContentBodyCreate.fromJson(
-              json['styled_view']! as Map<String, Object?>)
+              json[r'styled_view']! as Map<String, Object?>)
           : null,
-      storage: json['storage'] != null
-          ? ContentBodyCreate.fromJson(json['storage']! as Map<String, Object?>)
-          : null,
-      editor2: json['editor2'] != null
-          ? ContentBodyCreate.fromJson(json['editor2']! as Map<String, Object?>)
-          : null,
-      anonymousExportView: json['anonymous_export_view'] != null
+      storage: json[r'storage'] != null
           ? ContentBodyCreate.fromJson(
-              json['anonymous_export_view']! as Map<String, Object?>)
+              json[r'storage']! as Map<String, Object?>)
+          : null,
+      editor2: json[r'editor2'] != null
+          ? ContentBodyCreate.fromJson(
+              json[r'editor2']! as Map<String, Object?>)
+          : null,
+      anonymousExportView: json[r'anonymous_export_view'] != null
+          ? ContentBodyCreate.fromJson(
+              json[r'anonymous_export_view']! as Map<String, Object?>)
           : null,
     );
   }
@@ -6558,22 +6562,22 @@ class ContentCreateBody {
 
     final json = <String, Object?>{};
     if (view != null) {
-      json['view'] = view.toJson();
+      json[r'view'] = view.toJson();
     }
     if (exportView != null) {
-      json['export_view'] = exportView.toJson();
+      json[r'export_view'] = exportView.toJson();
     }
     if (styledView != null) {
-      json['styled_view'] = styledView.toJson();
+      json[r'styled_view'] = styledView.toJson();
     }
     if (storage != null) {
-      json['storage'] = storage.toJson();
+      json[r'storage'] = storage.toJson();
     }
     if (editor2 != null) {
-      json['editor2'] = editor2.toJson();
+      json[r'editor2'] = editor2.toJson();
     }
     if (anonymousExportView != null) {
-      json['anonymous_export_view'] = anonymousExportView.toJson();
+      json[r'anonymous_export_view'] = anonymousExportView.toJson();
     }
     return json;
   }
@@ -6637,21 +6641,21 @@ class ContentCreate {
 
   factory ContentCreate.fromJson(Map<String, Object?> json) {
     return ContentCreate(
-      id: json['id'] as String?,
-      title: json['title'] as String? ?? '',
-      type: ContentCreateType.fromValue(json['type'] as String? ?? ''),
+      id: json[r'id'] as String?,
+      title: json[r'title'] as String? ?? '',
+      type: ContentCreateType.fromValue(json[r'type'] as String? ?? ''),
       space: ContentCreateSpace.fromJson(
-          json['space'] as Map<String, Object?>? ?? const {}),
-      status: json['status'] != null
-          ? ContentCreateStatus.fromValue(json['status']! as String)
+          json[r'space'] as Map<String, Object?>? ?? const {}),
+      status: json[r'status'] != null
+          ? ContentCreateStatus.fromValue(json[r'status']! as String)
           : null,
-      ancestors: (json['ancestors'] as List<Object?>?)
+      ancestors: (json[r'ancestors'] as List<Object?>?)
               ?.map((i) => ContentCreateAncestorsItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
       body: ContentCreateBody.fromJson(
-          json['body'] as Map<String, Object?>? ?? const {}),
+          json[r'body'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -6666,16 +6670,16 @@ class ContentCreate {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
-    json['title'] = title;
-    json['type'] = type.value;
-    json['space'] = space.toJson();
+    json[r'title'] = title;
+    json[r'type'] = type.value;
+    json[r'space'] = space.toJson();
     if (status != null) {
-      json['status'] = status.value;
+      json[r'status'] = status.value;
     }
-    json['ancestors'] = ancestors.map((i) => i.toJson()).toList();
-    json['body'] = body.toJson();
+    json[r'ancestors'] = ancestors.map((i) => i.toJson()).toList();
+    json[r'body'] = body.toJson();
     return json;
   }
 
@@ -6760,8 +6764,8 @@ class ContentHistoryContributors {
 
   factory ContentHistoryContributors.fromJson(Map<String, Object?> json) {
     return ContentHistoryContributors(
-      publishers: json['publishers'] != null
-          ? UsersUserKeys.fromJson(json['publishers']! as Map<String, Object?>)
+      publishers: json[r'publishers'] != null
+          ? UsersUserKeys.fromJson(json[r'publishers']! as Map<String, Object?>)
           : null,
     );
   }
@@ -6771,7 +6775,7 @@ class ContentHistoryContributors {
 
     final json = <String, Object?>{};
     if (publishers != null) {
-      json['publishers'] = publishers.toJson();
+      json[r'publishers'] = publishers.toJson();
     }
     return json;
   }
@@ -6797,10 +6801,10 @@ class ContentHistoryExpandable {
 
   factory ContentHistoryExpandable.fromJson(Map<String, Object?> json) {
     return ContentHistoryExpandable(
-      lastUpdated: json['lastUpdated'] as String?,
-      previousVersion: json['previousVersion'] as String?,
-      contributors: json['contributors'] as String?,
-      nextVersion: json['nextVersion'] as String?,
+      lastUpdated: json[r'lastUpdated'] as String?,
+      previousVersion: json[r'previousVersion'] as String?,
+      contributors: json[r'contributors'] as String?,
+      nextVersion: json[r'nextVersion'] as String?,
     );
   }
 
@@ -6812,16 +6816,16 @@ class ContentHistoryExpandable {
 
     final json = <String, Object?>{};
     if (lastUpdated != null) {
-      json['lastUpdated'] = lastUpdated;
+      json[r'lastUpdated'] = lastUpdated;
     }
     if (previousVersion != null) {
-      json['previousVersion'] = previousVersion;
+      json[r'previousVersion'] = previousVersion;
     }
     if (contributors != null) {
-      json['contributors'] = contributors;
+      json[r'contributors'] = contributors;
     }
     if (nextVersion != null) {
-      json['nextVersion'] = nextVersion;
+      json[r'nextVersion'] = nextVersion;
     }
     return json;
   }
@@ -6864,30 +6868,30 @@ class ContentHistory {
 
   factory ContentHistory.fromJson(Map<String, Object?> json) {
     return ContentHistory(
-      latest: json['latest'] as bool? ?? false,
-      createdBy:
-          User.fromJson(json['createdBy'] as Map<String, Object?>? ?? const {}),
-      createdDate: DateTime.tryParse(json['createdDate'] as String? ?? '') ??
+      latest: json[r'latest'] as bool? ?? false,
+      createdBy: User.fromJson(
+          json[r'createdBy'] as Map<String, Object?>? ?? const {}),
+      createdDate: DateTime.tryParse(json[r'createdDate'] as String? ?? '') ??
           DateTime(0),
-      lastUpdated: json['lastUpdated'] != null
-          ? Version.fromJson(json['lastUpdated']! as Map<String, Object?>)
+      lastUpdated: json[r'lastUpdated'] != null
+          ? Version.fromJson(json[r'lastUpdated']! as Map<String, Object?>)
           : null,
-      previousVersion: json['previousVersion'] != null
-          ? Version.fromJson(json['previousVersion']! as Map<String, Object?>)
+      previousVersion: json[r'previousVersion'] != null
+          ? Version.fromJson(json[r'previousVersion']! as Map<String, Object?>)
           : null,
-      contributors: json['contributors'] != null
+      contributors: json[r'contributors'] != null
           ? ContentHistoryContributors.fromJson(
-              json['contributors']! as Map<String, Object?>)
+              json[r'contributors']! as Map<String, Object?>)
           : null,
-      nextVersion: json['nextVersion'] != null
-          ? Version.fromJson(json['nextVersion']! as Map<String, Object?>)
+      nextVersion: json[r'nextVersion'] != null
+          ? Version.fromJson(json[r'nextVersion']! as Map<String, Object?>)
           : null,
-      expandable: json['_expandable'] != null
+      expandable: json[r'_expandable'] != null
           ? ContentHistoryExpandable.fromJson(
-              json['_expandable']! as Map<String, Object?>)
+              json[r'_expandable']! as Map<String, Object?>)
           : null,
-      links: json['_links'] != null
-          ? GenericLinks.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? GenericLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -6904,26 +6908,26 @@ class ContentHistory {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['latest'] = latest;
-    json['createdBy'] = createdBy.toJson();
-    json['createdDate'] = createdDate.toIso8601String();
+    json[r'latest'] = latest;
+    json[r'createdBy'] = createdBy.toJson();
+    json[r'createdDate'] = createdDate.toIso8601String();
     if (lastUpdated != null) {
-      json['lastUpdated'] = lastUpdated.toJson();
+      json[r'lastUpdated'] = lastUpdated.toJson();
     }
     if (previousVersion != null) {
-      json['previousVersion'] = previousVersion.toJson();
+      json[r'previousVersion'] = previousVersion.toJson();
     }
     if (contributors != null) {
-      json['contributors'] = contributors.toJson();
+      json[r'contributors'] = contributors.toJson();
     }
     if (nextVersion != null) {
-      json['nextVersion'] = nextVersion.toJson();
+      json[r'nextVersion'] = nextVersion.toJson();
     }
     if (expandable != null) {
-      json['_expandable'] = expandable.toJson();
+      json[r'_expandable'] = expandable.toJson();
     }
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -6980,13 +6984,13 @@ class ContentLookAndFeel {
   factory ContentLookAndFeel.fromJson(Map<String, Object?> json) {
     return ContentLookAndFeel(
       screen: ScreenLookAndFeel.fromJson(
-          json['screen'] as Map<String, Object?>? ?? const {}),
+          json[r'screen'] as Map<String, Object?>? ?? const {}),
       container: ContainerLookAndFeel.fromJson(
-          json['container'] as Map<String, Object?>? ?? const {}),
+          json[r'container'] as Map<String, Object?>? ?? const {}),
       header: ContainerLookAndFeel.fromJson(
-          json['header'] as Map<String, Object?>? ?? const {}),
+          json[r'header'] as Map<String, Object?>? ?? const {}),
       body: ContainerLookAndFeel.fromJson(
-          json['body'] as Map<String, Object?>? ?? const {}),
+          json[r'body'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -6997,10 +7001,10 @@ class ContentLookAndFeel {
     var body = this.body;
 
     final json = <String, Object?>{};
-    json['screen'] = screen.toJson();
-    json['container'] = container.toJson();
-    json['header'] = header.toJson();
-    json['body'] = body.toJson();
+    json[r'screen'] = screen.toJson();
+    json[r'container'] = container.toJson();
+    json[r'header'] = header.toJson();
+    json[r'body'] = body.toJson();
     return json;
   }
 
@@ -7028,9 +7032,9 @@ class ContentMetadataCurrentuserFavourited {
   factory ContentMetadataCurrentuserFavourited.fromJson(
       Map<String, Object?> json) {
     return ContentMetadataCurrentuserFavourited(
-      isFavourite: json['isFavourite'] as bool? ?? false,
+      isFavourite: json[r'isFavourite'] as bool? ?? false,
       favouritedDate:
-          DateTime.tryParse(json['favouritedDate'] as String? ?? ''),
+          DateTime.tryParse(json[r'favouritedDate'] as String? ?? ''),
     );
   }
 
@@ -7039,9 +7043,9 @@ class ContentMetadataCurrentuserFavourited {
     var favouritedDate = this.favouritedDate;
 
     final json = <String, Object?>{};
-    json['isFavourite'] = isFavourite;
+    json[r'isFavourite'] = isFavourite;
     if (favouritedDate != null) {
-      json['favouritedDate'] = favouritedDate.toIso8601String();
+      json[r'favouritedDate'] = favouritedDate.toIso8601String();
     }
     return json;
   }
@@ -7065,10 +7069,10 @@ class ContentMetadataCurrentuserLastmodified {
   factory ContentMetadataCurrentuserLastmodified.fromJson(
       Map<String, Object?> json) {
     return ContentMetadataCurrentuserLastmodified(
-      version: json['version'] != null
-          ? Version.fromJson(json['version']! as Map<String, Object?>)
+      version: json[r'version'] != null
+          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
           : null,
-      friendlyLastModified: json['friendlyLastModified'] as String?,
+      friendlyLastModified: json[r'friendlyLastModified'] as String?,
     );
   }
 
@@ -7078,10 +7082,10 @@ class ContentMetadataCurrentuserLastmodified {
 
     final json = <String, Object?>{};
     if (version != null) {
-      json['version'] = version.toJson();
+      json[r'version'] = version.toJson();
     }
     if (friendlyLastModified != null) {
-      json['friendlyLastModified'] = friendlyLastModified;
+      json[r'friendlyLastModified'] = friendlyLastModified;
     }
     return json;
   }
@@ -7104,8 +7108,8 @@ class ContentMetadataCurrentuserLastcontributed {
   factory ContentMetadataCurrentuserLastcontributed.fromJson(
       Map<String, Object?> json) {
     return ContentMetadataCurrentuserLastcontributed(
-      status: json['status'] as String?,
-      when: DateTime.tryParse(json['when'] as String? ?? ''),
+      status: json[r'status'] as String?,
+      when: DateTime.tryParse(json[r'when'] as String? ?? ''),
     );
   }
 
@@ -7115,10 +7119,10 @@ class ContentMetadataCurrentuserLastcontributed {
 
     final json = <String, Object?>{};
     if (status != null) {
-      json['status'] = status;
+      json[r'status'] = status;
     }
     if (when != null) {
-      json['when'] = when.toIso8601String();
+      json[r'when'] = when.toIso8601String();
     }
     return json;
   }
@@ -7140,8 +7144,8 @@ class ContentMetadataCurrentuserViewed {
 
   factory ContentMetadataCurrentuserViewed.fromJson(Map<String, Object?> json) {
     return ContentMetadataCurrentuserViewed(
-      lastSeen: DateTime.tryParse(json['lastSeen'] as String? ?? ''),
-      friendlyLastSeen: json['friendlyLastSeen'] as String?,
+      lastSeen: DateTime.tryParse(json[r'lastSeen'] as String? ?? ''),
+      friendlyLastSeen: json[r'friendlyLastSeen'] as String?,
     );
   }
 
@@ -7151,10 +7155,10 @@ class ContentMetadataCurrentuserViewed {
 
     final json = <String, Object?>{};
     if (lastSeen != null) {
-      json['lastSeen'] = lastSeen.toIso8601String();
+      json[r'lastSeen'] = lastSeen.toIso8601String();
     }
     if (friendlyLastSeen != null) {
-      json['friendlyLastSeen'] = friendlyLastSeen;
+      json[r'friendlyLastSeen'] = friendlyLastSeen;
     }
     return json;
   }
@@ -7179,21 +7183,21 @@ class ContentMetadataCurrentuser {
 
   factory ContentMetadataCurrentuser.fromJson(Map<String, Object?> json) {
     return ContentMetadataCurrentuser(
-      favourited: json['favourited'] != null
+      favourited: json[r'favourited'] != null
           ? ContentMetadataCurrentuserFavourited.fromJson(
-              json['favourited']! as Map<String, Object?>)
+              json[r'favourited']! as Map<String, Object?>)
           : null,
-      lastmodified: json['lastmodified'] != null
+      lastmodified: json[r'lastmodified'] != null
           ? ContentMetadataCurrentuserLastmodified.fromJson(
-              json['lastmodified']! as Map<String, Object?>)
+              json[r'lastmodified']! as Map<String, Object?>)
           : null,
-      lastcontributed: json['lastcontributed'] != null
+      lastcontributed: json[r'lastcontributed'] != null
           ? ContentMetadataCurrentuserLastcontributed.fromJson(
-              json['lastcontributed']! as Map<String, Object?>)
+              json[r'lastcontributed']! as Map<String, Object?>)
           : null,
-      viewed: json['viewed'] != null
+      viewed: json[r'viewed'] != null
           ? ContentMetadataCurrentuserViewed.fromJson(
-              json['viewed']! as Map<String, Object?>)
+              json[r'viewed']! as Map<String, Object?>)
           : null,
     );
   }
@@ -7206,16 +7210,16 @@ class ContentMetadataCurrentuser {
 
     final json = <String, Object?>{};
     if (favourited != null) {
-      json['favourited'] = favourited.toJson();
+      json[r'favourited'] = favourited.toJson();
     }
     if (lastmodified != null) {
-      json['lastmodified'] = lastmodified.toJson();
+      json[r'lastmodified'] = lastmodified.toJson();
     }
     if (lastcontributed != null) {
-      json['lastcontributed'] = lastcontributed.toJson();
+      json[r'lastcontributed'] = lastcontributed.toJson();
     }
     if (viewed != null) {
-      json['viewed'] = viewed.toJson();
+      json[r'viewed'] = viewed.toJson();
     }
     return json;
   }
@@ -7246,16 +7250,16 @@ class ContentMetadata {
 
   factory ContentMetadata.fromJson(Map<String, Object?> json) {
     return ContentMetadata(
-      currentuser: json['currentuser'] != null
+      currentuser: json[r'currentuser'] != null
           ? ContentMetadataCurrentuser.fromJson(
-              json['currentuser']! as Map<String, Object?>)
+              json[r'currentuser']! as Map<String, Object?>)
           : null,
-      properties: json['properties'] != null
-          ? GenericLinks.fromJson(json['properties']! as Map<String, Object?>)
+      properties: json[r'properties'] != null
+          ? GenericLinks.fromJson(json[r'properties']! as Map<String, Object?>)
           : null,
-      frontend: json['frontend'] as Map<String, Object?>?,
-      labels: json['labels'] != null
-          ? LabelArray.fromJson(json['labels']! as Map<String, Object?>)
+      frontend: json[r'frontend'] as Map<String, Object?>?,
+      labels: json[r'labels'] != null
+          ? LabelArray.fromJson(json[r'labels']! as Map<String, Object?>)
           : null,
     );
   }
@@ -7268,16 +7272,16 @@ class ContentMetadata {
 
     final json = <String, Object?>{};
     if (currentuser != null) {
-      json['currentuser'] = currentuser.toJson();
+      json[r'currentuser'] = currentuser.toJson();
     }
     if (properties != null) {
-      json['properties'] = properties.toJson();
+      json[r'properties'] = properties.toJson();
     }
     if (frontend != null) {
-      json['frontend'] = frontend;
+      json[r'frontend'] = frontend;
     }
     if (labels != null) {
-      json['labels'] = labels.toJson();
+      json[r'labels'] = labels.toJson();
     }
     return json;
   }
@@ -7324,10 +7328,10 @@ class ContentPropertyVersion {
 
   factory ContentPropertyVersion.fromJson(Map<String, Object?> json) {
     return ContentPropertyVersion(
-      when: DateTime.tryParse(json['when'] as String? ?? '') ?? DateTime(0),
-      message: json['message'] as String? ?? '',
-      number: (json['number'] as num?)?.toInt() ?? 0,
-      minorEdit: json['minorEdit'] as bool? ?? false,
+      when: DateTime.tryParse(json[r'when'] as String? ?? '') ?? DateTime(0),
+      message: json[r'message'] as String? ?? '',
+      number: (json[r'number'] as num?)?.toInt() ?? 0,
+      minorEdit: json[r'minorEdit'] as bool? ?? false,
     );
   }
 
@@ -7338,10 +7342,10 @@ class ContentPropertyVersion {
     var minorEdit = this.minorEdit;
 
     final json = <String, Object?>{};
-    json['when'] = when.toIso8601String();
-    json['message'] = message;
-    json['number'] = number;
-    json['minorEdit'] = minorEdit;
+    json[r'when'] = when.toIso8601String();
+    json[r'message'] = message;
+    json[r'number'] = number;
+    json[r'minorEdit'] = minorEdit;
     return json;
   }
 
@@ -7376,18 +7380,18 @@ class ContentProperty {
 
   factory ContentProperty.fromJson(Map<String, Object?> json) {
     return ContentProperty(
-      id: (json['id'] as num?)?.toInt() ?? 0,
-      key: json['key'] as String? ?? '',
-      value: json['value'] as Map<String, Object?>? ?? {},
-      version: json['version'] != null
+      id: (json[r'id'] as num?)?.toInt() ?? 0,
+      key: json[r'key'] as String? ?? '',
+      value: json[r'value'] as Map<String, Object?>? ?? {},
+      version: json[r'version'] != null
           ? ContentPropertyVersion.fromJson(
-              json['version']! as Map<String, Object?>)
+              json[r'version']! as Map<String, Object?>)
           : null,
-      content: json['content'] != null
-          ? Content.fromJson(json['content']! as Map<String, Object?>)
+      content: json[r'content'] != null
+          ? Content.fromJson(json[r'content']! as Map<String, Object?>)
           : null,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -7400,16 +7404,16 @@ class ContentProperty {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['id'] = id;
-    json['key'] = key;
-    json['value'] = value;
+    json[r'id'] = id;
+    json[r'key'] = key;
+    json[r'value'] = value;
     if (version != null) {
-      json['version'] = version.toJson();
+      json[r'version'] = version.toJson();
     }
     if (content != null) {
-      json['content'] = content.toJson();
+      json[r'content'] = content.toJson();
     }
-    json['_links'] = links.toJson();
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -7447,16 +7451,16 @@ class ContentPropertyArray {
 
   factory ContentPropertyArray.fromJson(Map<String, Object?> json) {
     return ContentPropertyArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map((i) => ContentProperty.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -7468,11 +7472,11 @@ class ContentPropertyArray {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
-    json['_links'] = links.toJson();
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -7501,9 +7505,9 @@ class ContentPropertyCreate {
 
   factory ContentPropertyCreate.fromJson(Map<String, Object?> json) {
     return ContentPropertyCreate(
-      key: json['key'] as String? ?? '',
+      key: json[r'key'] as String? ?? '',
       value: PropertyValue.fromJson(
-          json['value'] as Map<String, Object?>? ?? const {}),
+          json[r'value'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -7512,8 +7516,8 @@ class ContentPropertyCreate {
     var value = this.value;
 
     final json = <String, Object?>{};
-    json['key'] = key;
-    json['value'] = value.toJson();
+    json[r'key'] = key;
+    json[r'value'] = value.toJson();
     return json;
   }
 
@@ -7533,7 +7537,7 @@ class ContentPropertyCreateNoKey {
   factory ContentPropertyCreateNoKey.fromJson(Map<String, Object?> json) {
     return ContentPropertyCreateNoKey(
       value: PropertyValue.fromJson(
-          json['value'] as Map<String, Object?>? ?? const {}),
+          json[r'value'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -7541,7 +7545,7 @@ class ContentPropertyCreateNoKey {
     var value = this.value;
 
     final json = <String, Object?>{};
-    json['value'] = value.toJson();
+    json[r'value'] = value.toJson();
     return json;
   }
 
@@ -7569,8 +7573,8 @@ class ContentPropertyUpdateVersion {
 
   factory ContentPropertyUpdateVersion.fromJson(Map<String, Object?> json) {
     return ContentPropertyUpdateVersion(
-      number: (json['number'] as num?)?.toInt() ?? 0,
-      minorEdit: json['minorEdit'] as bool? ?? false,
+      number: (json[r'number'] as num?)?.toInt() ?? 0,
+      minorEdit: json[r'minorEdit'] as bool? ?? false,
     );
   }
 
@@ -7579,8 +7583,8 @@ class ContentPropertyUpdateVersion {
     var minorEdit = this.minorEdit;
 
     final json = <String, Object?>{};
-    json['number'] = number;
-    json['minorEdit'] = minorEdit;
+    json[r'number'] = number;
+    json[r'minorEdit'] = minorEdit;
     return json;
   }
 
@@ -7603,9 +7607,9 @@ class ContentPropertyUpdate {
 
   factory ContentPropertyUpdate.fromJson(Map<String, Object?> json) {
     return ContentPropertyUpdate(
-      value: json['value'] as Map<String, Object?>? ?? {},
+      value: json[r'value'] as Map<String, Object?>? ?? {},
       version: ContentPropertyUpdateVersion.fromJson(
-          json['version'] as Map<String, Object?>? ?? const {}),
+          json[r'version'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -7614,8 +7618,8 @@ class ContentPropertyUpdate {
     var version = this.version;
 
     final json = <String, Object?>{};
-    json['value'] = value;
-    json['version'] = version.toJson();
+    json[r'value'] = value;
+    json[r'version'] = version.toJson();
     return json;
   }
 
@@ -7637,8 +7641,8 @@ class ContentRestrictionRestrictionsExpandable {
   factory ContentRestrictionRestrictionsExpandable.fromJson(
       Map<String, Object?> json) {
     return ContentRestrictionRestrictionsExpandable(
-      user: json['user'] as String?,
-      group: json['group'] as String?,
+      user: json[r'user'] as String?,
+      group: json[r'group'] as String?,
     );
   }
 
@@ -7648,10 +7652,10 @@ class ContentRestrictionRestrictionsExpandable {
 
     final json = <String, Object?>{};
     if (user != null) {
-      json['user'] = user;
+      json[r'user'] = user;
     }
     if (group != null) {
-      json['group'] = group;
+      json[r'group'] = group;
     }
     return json;
   }
@@ -7674,15 +7678,15 @@ class ContentRestrictionRestrictions {
 
   factory ContentRestrictionRestrictions.fromJson(Map<String, Object?> json) {
     return ContentRestrictionRestrictions(
-      user: json['user'] != null
-          ? UserArray.fromJson(json['user']! as Map<String, Object?>)
+      user: json[r'user'] != null
+          ? UserArray.fromJson(json[r'user']! as Map<String, Object?>)
           : null,
-      group: json['group'] != null
-          ? GroupArray.fromJson(json['group']! as Map<String, Object?>)
+      group: json[r'group'] != null
+          ? GroupArray.fromJson(json[r'group']! as Map<String, Object?>)
           : null,
-      expandable: json['_expandable'] != null
+      expandable: json[r'_expandable'] != null
           ? ContentRestrictionRestrictionsExpandable.fromJson(
-              json['_expandable']! as Map<String, Object?>)
+              json[r'_expandable']! as Map<String, Object?>)
           : null,
     );
   }
@@ -7694,13 +7698,13 @@ class ContentRestrictionRestrictions {
 
     final json = <String, Object?>{};
     if (user != null) {
-      json['user'] = user.toJson();
+      json[r'user'] = user.toJson();
     }
     if (group != null) {
-      json['group'] = group.toJson();
+      json[r'group'] = group.toJson();
     }
     if (expandable != null) {
-      json['_expandable'] = expandable.toJson();
+      json[r'_expandable'] = expandable.toJson();
     }
     return json;
   }
@@ -7725,8 +7729,8 @@ class ContentRestrictionExpandable {
 
   factory ContentRestrictionExpandable.fromJson(Map<String, Object?> json) {
     return ContentRestrictionExpandable(
-      restrictions: json['restrictions'] as String?,
-      content: json['content'] as String?,
+      restrictions: json[r'restrictions'] as String?,
+      content: json[r'content'] as String?,
     );
   }
 
@@ -7736,10 +7740,10 @@ class ContentRestrictionExpandable {
 
     final json = <String, Object?>{};
     if (restrictions != null) {
-      json['restrictions'] = restrictions;
+      json[r'restrictions'] = restrictions;
     }
     if (content != null) {
-      json['content'] = content;
+      json[r'content'] = content;
     }
     return json;
   }
@@ -7770,18 +7774,18 @@ class ContentRestriction {
   factory ContentRestriction.fromJson(Map<String, Object?> json) {
     return ContentRestriction(
       operation: ContentRestrictionOperation.fromValue(
-          json['operation'] as String? ?? ''),
-      restrictions: json['restrictions'] != null
+          json[r'operation'] as String? ?? ''),
+      restrictions: json[r'restrictions'] != null
           ? ContentRestrictionRestrictions.fromJson(
-              json['restrictions']! as Map<String, Object?>)
+              json[r'restrictions']! as Map<String, Object?>)
           : null,
-      content: json['content'] != null
-          ? Content.fromJson(json['content']! as Map<String, Object?>)
+      content: json[r'content'] != null
+          ? Content.fromJson(json[r'content']! as Map<String, Object?>)
           : null,
       expandable: ContentRestrictionExpandable.fromJson(
-          json['_expandable'] as Map<String, Object?>? ?? const {}),
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -7793,15 +7797,15 @@ class ContentRestriction {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['operation'] = operation.value;
+    json[r'operation'] = operation.value;
     if (restrictions != null) {
-      json['restrictions'] = restrictions.toJson();
+      json[r'restrictions'] = restrictions.toJson();
     }
     if (content != null) {
-      json['content'] = content.toJson();
+      json[r'content'] = content.toJson();
     }
-    json['_expandable'] = expandable.toJson();
-    json['_links'] = links.toJson();
+    json[r'_expandable'] = expandable.toJson();
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -7886,17 +7890,17 @@ class ContentRestrictionArray {
 
   factory ContentRestrictionArray.fromJson(Map<String, Object?> json) {
     return ContentRestrictionArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map((i) => ContentRestriction.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
-      restrictionsHash: json['restrictionsHash'] as String? ?? '',
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
+      restrictionsHash: json[r'restrictionsHash'] as String? ?? '',
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -7909,12 +7913,12 @@ class ContentRestrictionArray {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
-    json['restrictionsHash'] = restrictionsHash;
-    json['_links'] = links.toJson();
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    json[r'restrictionsHash'] = restrictionsHash;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -7973,10 +7977,10 @@ class ContentRestrictionUpdateRestrictionsUserItem {
       Map<String, Object?> json) {
     return ContentRestrictionUpdateRestrictionsUserItem(
       type: ContentRestrictionUpdateRestrictionsUserItemType.fromValue(
-          json['type'] as String? ?? ''),
-      username: json['username'] as String?,
-      userKey: json['userKey'] as String?,
-      accountId: json['accountId'] as String? ?? '',
+          json[r'type'] as String? ?? ''),
+      username: json[r'username'] as String?,
+      userKey: json[r'userKey'] as String?,
+      accountId: json[r'accountId'] as String? ?? '',
     );
   }
 
@@ -7987,14 +7991,14 @@ class ContentRestrictionUpdateRestrictionsUserItem {
     var accountId = this.accountId;
 
     final json = <String, Object?>{};
-    json['type'] = type.value;
+    json[r'type'] = type.value;
     if (username != null) {
-      json['username'] = username;
+      json[r'username'] = username;
     }
     if (userKey != null) {
-      json['userKey'] = userKey;
+      json[r'userKey'] = userKey;
     }
-    json['accountId'] = accountId;
+    json[r'accountId'] = accountId;
     return json;
   }
 
@@ -8060,8 +8064,8 @@ class ContentRestrictionUpdateRestrictionsGroupItem {
       Map<String, Object?> json) {
     return ContentRestrictionUpdateRestrictionsGroupItem(
       type: ContentRestrictionUpdateRestrictionsGroupItemType.fromValue(
-          json['type'] as String? ?? ''),
-      name: json['name'] as String? ?? '',
+          json[r'type'] as String? ?? ''),
+      name: json[r'name'] as String? ?? '',
     );
   }
 
@@ -8070,8 +8074,8 @@ class ContentRestrictionUpdateRestrictionsGroupItem {
     var name = this.name;
 
     final json = <String, Object?>{};
-    json['type'] = type.value;
-    json['name'] = name;
+    json[r'type'] = type.value;
+    json[r'name'] = name;
     return json;
   }
 
@@ -8128,13 +8132,13 @@ class ContentRestrictionUpdateRestrictions {
   factory ContentRestrictionUpdateRestrictions.fromJson(
       Map<String, Object?> json) {
     return ContentRestrictionUpdateRestrictions(
-      user: (json['user'] as List<Object?>?)
+      user: (json[r'user'] as List<Object?>?)
               ?.map((i) =>
                   ContentRestrictionUpdateRestrictionsUserItem.fromJson(
                       i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      group: (json['group'] as List<Object?>?)
+      group: (json[r'group'] as List<Object?>?)
               ?.map((i) =>
                   ContentRestrictionUpdateRestrictionsGroupItem.fromJson(
                       i as Map<String, Object?>? ?? const {}))
@@ -8148,8 +8152,8 @@ class ContentRestrictionUpdateRestrictions {
     var group = this.group;
 
     final json = <String, Object?>{};
-    json['user'] = user.map((i) => i.toJson()).toList();
-    json['group'] = group.map((i) => i.toJson()).toList();
+    json[r'user'] = user.map((i) => i.toJson()).toList();
+    json[r'group'] = group.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -8177,9 +8181,9 @@ class ContentRestrictionUpdate {
   factory ContentRestrictionUpdate.fromJson(Map<String, Object?> json) {
     return ContentRestrictionUpdate(
       operation: ContentRestrictionUpdateOperation.fromValue(
-          json['operation'] as String? ?? ''),
+          json[r'operation'] as String? ?? ''),
       restrictions: ContentRestrictionUpdateRestrictions.fromJson(
-          json['restrictions'] as Map<String, Object?>? ?? const {}),
+          json[r'restrictions'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -8188,8 +8192,8 @@ class ContentRestrictionUpdate {
     var restrictions = this.restrictions;
 
     final json = <String, Object?>{};
-    json['operation'] = operation.value;
-    json['restrictions'] = restrictions.toJson();
+    json[r'operation'] = operation.value;
+    json[r'restrictions'] = restrictions.toJson();
     return json;
   }
 
@@ -8297,10 +8301,10 @@ class AddContentRestrictionRestrictionsUserItem {
       Map<String, Object?> json) {
     return AddContentRestrictionRestrictionsUserItem(
       type: AddContentRestrictionRestrictionsUserItemType.fromValue(
-          json['type'] as String? ?? ''),
-      username: json['username'] as String?,
-      userKey: json['userKey'] as String?,
-      accountId: json['accountId'] as String? ?? '',
+          json[r'type'] as String? ?? ''),
+      username: json[r'username'] as String?,
+      userKey: json[r'userKey'] as String?,
+      accountId: json[r'accountId'] as String? ?? '',
     );
   }
 
@@ -8311,14 +8315,14 @@ class AddContentRestrictionRestrictionsUserItem {
     var accountId = this.accountId;
 
     final json = <String, Object?>{};
-    json['type'] = type.value;
+    json[r'type'] = type.value;
     if (username != null) {
-      json['username'] = username;
+      json[r'username'] = username;
     }
     if (userKey != null) {
-      json['userKey'] = userKey;
+      json[r'userKey'] = userKey;
     }
-    json['accountId'] = accountId;
+    json[r'accountId'] = accountId;
     return json;
   }
 
@@ -8381,8 +8385,8 @@ class AddContentRestrictionRestrictionsGroupItem {
       Map<String, Object?> json) {
     return AddContentRestrictionRestrictionsGroupItem(
       type: AddContentRestrictionRestrictionsGroupItemType.fromValue(
-          json['type'] as String? ?? ''),
-      name: json['name'] as String? ?? '',
+          json[r'type'] as String? ?? ''),
+      name: json[r'name'] as String? ?? '',
     );
   }
 
@@ -8391,8 +8395,8 @@ class AddContentRestrictionRestrictionsGroupItem {
     var name = this.name;
 
     final json = <String, Object?>{};
-    json['type'] = type.value;
-    json['name'] = name;
+    json[r'type'] = type.value;
+    json[r'name'] = name;
     return json;
   }
 
@@ -8449,12 +8453,12 @@ class AddContentRestrictionRestrictions {
   factory AddContentRestrictionRestrictions.fromJson(
       Map<String, Object?> json) {
     return AddContentRestrictionRestrictions(
-      user: (json['user'] as List<Object?>?)
+      user: (json[r'user'] as List<Object?>?)
               ?.map((i) => AddContentRestrictionRestrictionsUserItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      group: (json['group'] as List<Object?>?)
+      group: (json[r'group'] as List<Object?>?)
               ?.map((i) => AddContentRestrictionRestrictionsGroupItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -8467,8 +8471,8 @@ class AddContentRestrictionRestrictions {
     var group = this.group;
 
     final json = <String, Object?>{};
-    json['user'] = user.map((i) => i.toJson()).toList();
-    json['group'] = group.map((i) => i.toJson()).toList();
+    json[r'user'] = user.map((i) => i.toJson()).toList();
+    json[r'group'] = group.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -8495,9 +8499,9 @@ class AddContentRestriction {
   factory AddContentRestriction.fromJson(Map<String, Object?> json) {
     return AddContentRestriction(
       operation: AddContentRestrictionOperation.fromValue(
-          json['operation'] as String? ?? ''),
+          json[r'operation'] as String? ?? ''),
       restrictions: AddContentRestrictionRestrictions.fromJson(
-          json['restrictions'] as Map<String, Object?>? ?? const {}),
+          json[r'restrictions'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -8506,8 +8510,8 @@ class AddContentRestriction {
     var restrictions = this.restrictions;
 
     final json = <String, Object?>{};
-    json['operation'] = operation.value;
-    json['restrictions'] = restrictions.toJson();
+    json[r'operation'] = operation.value;
+    json[r'restrictions'] = restrictions.toJson();
     return json;
   }
 
@@ -8564,7 +8568,7 @@ class ContentTemplateExpandable {
 
   factory ContentTemplateExpandable.fromJson(Map<String, Object?> json) {
     return ContentTemplateExpandable(
-      body: json['body'] as String?,
+      body: json[r'body'] as String?,
     );
   }
 
@@ -8573,7 +8577,7 @@ class ContentTemplateExpandable {
 
     final json = <String, Object?>{};
     if (body != null) {
-      json['body'] = body;
+      json[r'body'] = body;
     }
     return json;
   }
@@ -8607,22 +8611,22 @@ class ContentTemplate {
 
   factory ContentTemplate.fromJson(Map<String, Object?> json) {
     return ContentTemplate(
-      templateId: json['templateId'] as String? ?? '',
-      name: json['name'] as String? ?? '',
-      description: json['description'] as String? ?? '',
-      labels: (json['labels'] as List<Object?>?)
+      templateId: json[r'templateId'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      description: json[r'description'] as String? ?? '',
+      labels: (json[r'labels'] as List<Object?>?)
               ?.map(
                   (i) => Label.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      templateType: json['templateType'] as String? ?? '',
-      body: json['body'] != null
-          ? ContentBody.fromJson(json['body']! as Map<String, Object?>)
+      templateType: json[r'templateType'] as String? ?? '',
+      body: json[r'body'] != null
+          ? ContentBody.fromJson(json[r'body']! as Map<String, Object?>)
           : null,
       expandable: ContentTemplateExpandable.fromJson(
-          json['_expandable'] as Map<String, Object?>? ?? const {}),
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -8637,16 +8641,16 @@ class ContentTemplate {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['templateId'] = templateId;
-    json['name'] = name;
-    json['description'] = description;
-    json['labels'] = labels.map((i) => i.toJson()).toList();
-    json['templateType'] = templateType;
+    json[r'templateId'] = templateId;
+    json[r'name'] = name;
+    json[r'description'] = description;
+    json[r'labels'] = labels.map((i) => i.toJson()).toList();
+    json[r'templateType'] = templateType;
     if (body != null) {
-      json['body'] = body.toJson();
+      json[r'body'] = body.toJson();
     }
-    json['_expandable'] = expandable.toJson();
-    json['_links'] = links.toJson();
+    json[r'_expandable'] = expandable.toJson();
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -8688,16 +8692,16 @@ class ContentTemplateArray {
 
   factory ContentTemplateArray.fromJson(Map<String, Object?> json) {
     return ContentTemplateArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map((i) => ContentTemplate.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -8709,11 +8713,11 @@ class ContentTemplateArray {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
-    json['_links'] = links.toJson();
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -8743,7 +8747,7 @@ class ContentTemplateCreateSpace {
 
   factory ContentTemplateCreateSpace.fromJson(Map<String, Object?> json) {
     return ContentTemplateCreateSpace(
-      key: json['key'] as String? ?? '',
+      key: json[r'key'] as String? ?? '',
     );
   }
 
@@ -8751,7 +8755,7 @@ class ContentTemplateCreateSpace {
     var key = this.key;
 
     final json = <String, Object?>{};
-    json['key'] = key;
+    json[r'key'] = key;
     return json;
   }
 
@@ -8794,19 +8798,19 @@ class ContentTemplateCreate {
 
   factory ContentTemplateCreate.fromJson(Map<String, Object?> json) {
     return ContentTemplateCreate(
-      name: json['name'] as String? ?? '',
-      templateType: json['templateType'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      templateType: json[r'templateType'] as String? ?? '',
       body: ContentTemplateBodyCreate.fromJson(
-          json['body'] as Map<String, Object?>? ?? const {}),
-      description: json['description'] as String?,
-      labels: (json['labels'] as List<Object?>?)
+          json[r'body'] as Map<String, Object?>? ?? const {}),
+      description: json[r'description'] as String?,
+      labels: (json[r'labels'] as List<Object?>?)
               ?.map(
                   (i) => Label.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      space: json['space'] != null
+      space: json[r'space'] != null
           ? ContentTemplateCreateSpace.fromJson(
-              json['space']! as Map<String, Object?>)
+              json[r'space']! as Map<String, Object?>)
           : null,
     );
   }
@@ -8820,15 +8824,15 @@ class ContentTemplateCreate {
     var space = this.space;
 
     final json = <String, Object?>{};
-    json['name'] = name;
-    json['templateType'] = templateType;
-    json['body'] = body.toJson();
+    json[r'name'] = name;
+    json[r'templateType'] = templateType;
+    json[r'body'] = body.toJson();
     if (description != null) {
-      json['description'] = description;
+      json[r'description'] = description;
     }
-    json['labels'] = labels.map((i) => i.toJson()).toList();
+    json[r'labels'] = labels.map((i) => i.toJson()).toList();
     if (space != null) {
-      json['space'] = space.toJson();
+      json[r'space'] = space.toJson();
     }
     return json;
   }
@@ -8859,8 +8863,9 @@ class ContentTemplateBodyCreate {
 
   factory ContentTemplateBodyCreate.fromJson(Map<String, Object?> json) {
     return ContentTemplateBodyCreate(
-      storage: json['storage'] != null
-          ? ContentBodyCreate.fromJson(json['storage']! as Map<String, Object?>)
+      storage: json[r'storage'] != null
+          ? ContentBodyCreate.fromJson(
+              json[r'storage']! as Map<String, Object?>)
           : null,
     );
   }
@@ -8870,7 +8875,7 @@ class ContentTemplateBodyCreate {
 
     final json = <String, Object?>{};
     if (storage != null) {
-      json['storage'] = storage.toJson();
+      json[r'storage'] = storage.toJson();
     }
     return json;
   }
@@ -8891,7 +8896,7 @@ class ContentTemplateUpdateSpace {
 
   factory ContentTemplateUpdateSpace.fromJson(Map<String, Object?> json) {
     return ContentTemplateUpdateSpace(
-      key: json['key'] as String? ?? '',
+      key: json[r'key'] as String? ?? '',
     );
   }
 
@@ -8899,7 +8904,7 @@ class ContentTemplateUpdateSpace {
     var key = this.key;
 
     final json = <String, Object?>{};
-    json['key'] = key;
+    json[r'key'] = key;
     return json;
   }
 
@@ -8945,21 +8950,21 @@ class ContentTemplateUpdate {
 
   factory ContentTemplateUpdate.fromJson(Map<String, Object?> json) {
     return ContentTemplateUpdate(
-      templateId: json['templateId'] as String? ?? '',
-      name: json['name'] as String? ?? '',
+      templateId: json[r'templateId'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
       templateType: ContentTemplateUpdateTemplateType.fromValue(
-          json['templateType'] as String? ?? ''),
+          json[r'templateType'] as String? ?? ''),
       body: ContentBodyCreate.fromJson(
-          json['body'] as Map<String, Object?>? ?? const {}),
-      description: json['description'] as String?,
-      labels: (json['labels'] as List<Object?>?)
+          json[r'body'] as Map<String, Object?>? ?? const {}),
+      description: json[r'description'] as String?,
+      labels: (json[r'labels'] as List<Object?>?)
               ?.map(
                   (i) => Label.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      space: json['space'] != null
+      space: json[r'space'] != null
           ? ContentTemplateUpdateSpace.fromJson(
-              json['space']! as Map<String, Object?>)
+              json[r'space']! as Map<String, Object?>)
           : null,
     );
   }
@@ -8974,16 +8979,16 @@ class ContentTemplateUpdate {
     var space = this.space;
 
     final json = <String, Object?>{};
-    json['templateId'] = templateId;
-    json['name'] = name;
-    json['templateType'] = templateType.value;
-    json['body'] = body.toJson();
+    json[r'templateId'] = templateId;
+    json[r'name'] = name;
+    json[r'templateType'] = templateType.value;
+    json[r'body'] = body.toJson();
     if (description != null) {
-      json['description'] = description;
+      json[r'description'] = description;
     }
-    json['labels'] = labels.map((i) => i.toJson()).toList();
+    json[r'labels'] = labels.map((i) => i.toJson()).toList();
     if (space != null) {
-      json['space'] = space.toJson();
+      json[r'space'] = space.toJson();
     }
     return json;
   }
@@ -9043,7 +9048,7 @@ class ContentUpdateVersion {
 
   factory ContentUpdateVersion.fromJson(Map<String, Object?> json) {
     return ContentUpdateVersion(
-      number: (json['number'] as num?)?.toInt() ?? 0,
+      number: (json[r'number'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -9051,7 +9056,7 @@ class ContentUpdateVersion {
     var number = this.number;
 
     final json = <String, Object?>{};
-    json['number'] = number;
+    json[r'number'] = number;
     return json;
   }
 
@@ -9070,7 +9075,7 @@ class ContentUpdateAncestorsItem {
 
   factory ContentUpdateAncestorsItem.fromJson(Map<String, Object?> json) {
     return ContentUpdateAncestorsItem(
-      id: json['id'] as String? ?? '',
+      id: json[r'id'] as String? ?? '',
     );
   }
 
@@ -9078,7 +9083,7 @@ class ContentUpdateAncestorsItem {
     var id = this.id;
 
     final json = <String, Object?>{};
-    json['id'] = id;
+    json[r'id'] = id;
     return json;
   }
 
@@ -9113,27 +9118,28 @@ class ContentUpdateBody {
 
   factory ContentUpdateBody.fromJson(Map<String, Object?> json) {
     return ContentUpdateBody(
-      view: json['view'] != null
-          ? ContentBodyCreate.fromJson(json['view']! as Map<String, Object?>)
+      view: json[r'view'] != null
+          ? ContentBodyCreate.fromJson(json[r'view']! as Map<String, Object?>)
           : null,
-      exportView: json['export_view'] != null
+      exportView: json[r'export_view'] != null
           ? ContentBodyCreate.fromJson(
-              json['export_view']! as Map<String, Object?>)
+              json[r'export_view']! as Map<String, Object?>)
           : null,
-      styledView: json['styled_view'] != null
+      styledView: json[r'styled_view'] != null
           ? ContentBodyCreate.fromJson(
-              json['styled_view']! as Map<String, Object?>)
+              json[r'styled_view']! as Map<String, Object?>)
           : null,
-      storage: json['storage'] != null
+      storage: json[r'storage'] != null
           ? ContentBodyCreateStorage.fromJson(
-              json['storage']! as Map<String, Object?>)
+              json[r'storage']! as Map<String, Object?>)
           : null,
-      editor2: json['editor2'] != null
-          ? ContentBodyCreate.fromJson(json['editor2']! as Map<String, Object?>)
-          : null,
-      anonymousExportView: json['anonymous_export_view'] != null
+      editor2: json[r'editor2'] != null
           ? ContentBodyCreate.fromJson(
-              json['anonymous_export_view']! as Map<String, Object?>)
+              json[r'editor2']! as Map<String, Object?>)
+          : null,
+      anonymousExportView: json[r'anonymous_export_view'] != null
+          ? ContentBodyCreate.fromJson(
+              json[r'anonymous_export_view']! as Map<String, Object?>)
           : null,
     );
   }
@@ -9148,22 +9154,22 @@ class ContentUpdateBody {
 
     final json = <String, Object?>{};
     if (view != null) {
-      json['view'] = view.toJson();
+      json[r'view'] = view.toJson();
     }
     if (exportView != null) {
-      json['export_view'] = exportView.toJson();
+      json[r'export_view'] = exportView.toJson();
     }
     if (styledView != null) {
-      json['styled_view'] = styledView.toJson();
+      json[r'styled_view'] = styledView.toJson();
     }
     if (storage != null) {
-      json['storage'] = storage.toJson();
+      json[r'storage'] = storage.toJson();
     }
     if (editor2 != null) {
-      json['editor2'] = editor2.toJson();
+      json[r'editor2'] = editor2.toJson();
     }
     if (anonymousExportView != null) {
-      json['anonymous_export_view'] = anonymousExportView.toJson();
+      json[r'anonymous_export_view'] = anonymousExportView.toJson();
     }
     return json;
   }
@@ -9233,19 +9239,19 @@ class ContentUpdate {
   factory ContentUpdate.fromJson(Map<String, Object?> json) {
     return ContentUpdate(
       version: ContentUpdateVersion.fromJson(
-          json['version'] as Map<String, Object?>? ?? const {}),
-      title: json['title'] as String? ?? '',
-      type: ContentUpdateType.fromValue(json['type'] as String? ?? ''),
-      status: json['status'] != null
-          ? ContentUpdateStatus.fromValue(json['status']! as String)
+          json[r'version'] as Map<String, Object?>? ?? const {}),
+      title: json[r'title'] as String? ?? '',
+      type: ContentUpdateType.fromValue(json[r'type'] as String? ?? ''),
+      status: json[r'status'] != null
+          ? ContentUpdateStatus.fromValue(json[r'status']! as String)
           : null,
-      ancestors: (json['ancestors'] as List<Object?>?)
+      ancestors: (json[r'ancestors'] as List<Object?>?)
               ?.map((i) => ContentUpdateAncestorsItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      body: json['body'] != null
-          ? ContentUpdateBody.fromJson(json['body']! as Map<String, Object?>)
+      body: json[r'body'] != null
+          ? ContentUpdateBody.fromJson(json[r'body']! as Map<String, Object?>)
           : null,
     );
   }
@@ -9259,15 +9265,15 @@ class ContentUpdate {
     var body = this.body;
 
     final json = <String, Object?>{};
-    json['version'] = version.toJson();
-    json['title'] = title;
-    json['type'] = type.value;
+    json[r'version'] = version.toJson();
+    json[r'title'] = title;
+    json[r'type'] = type.value;
     if (status != null) {
-      json['status'] = status.value;
+      json[r'status'] = status.value;
     }
-    json['ancestors'] = ancestors.map((i) => i.toJson()).toList();
+    json[r'ancestors'] = ancestors.map((i) => i.toJson()).toList();
     if (body != null) {
-      json['body'] = body.toJson();
+      json[r'body'] = body.toJson();
     }
     return json;
   }
@@ -9378,16 +9384,16 @@ class CopyPageHierarchyRequest {
 
   factory CopyPageHierarchyRequest.fromJson(Map<String, Object?> json) {
     return CopyPageHierarchyRequest(
-      copyAttachments: json['copyAttachments'] as bool? ?? false,
-      copyPermissions: json['copyPermissions'] as bool? ?? false,
-      copyProperties: json['copyProperties'] as bool? ?? false,
-      copyLabels: json['copyLabels'] as bool? ?? false,
-      copyCustomContents: json['copyCustomContents'] as bool? ?? false,
+      copyAttachments: json[r'copyAttachments'] as bool? ?? false,
+      copyPermissions: json[r'copyPermissions'] as bool? ?? false,
+      copyProperties: json[r'copyProperties'] as bool? ?? false,
+      copyLabels: json[r'copyLabels'] as bool? ?? false,
+      copyCustomContents: json[r'copyCustomContents'] as bool? ?? false,
       destinationPageId: ContentId.fromJson(
-          json['destinationPageId'] as Map<String, Object?>? ?? const {}),
-      titleOptions: json['titleOptions'] != null
+          json[r'destinationPageId'] as Map<String, Object?>? ?? const {}),
+      titleOptions: json[r'titleOptions'] != null
           ? CopyPageHierarchyTitleOptions.fromJson(
-              json['titleOptions']! as Map<String, Object?>)
+              json[r'titleOptions']! as Map<String, Object?>)
           : null,
     );
   }
@@ -9402,14 +9408,14 @@ class CopyPageHierarchyRequest {
     var titleOptions = this.titleOptions;
 
     final json = <String, Object?>{};
-    json['copyAttachments'] = copyAttachments;
-    json['copyPermissions'] = copyPermissions;
-    json['copyProperties'] = copyProperties;
-    json['copyLabels'] = copyLabels;
-    json['copyCustomContents'] = copyCustomContents;
-    json['destinationPageId'] = destinationPageId.toJson();
+    json[r'copyAttachments'] = copyAttachments;
+    json[r'copyPermissions'] = copyPermissions;
+    json[r'copyProperties'] = copyProperties;
+    json[r'copyLabels'] = copyLabels;
+    json[r'copyCustomContents'] = copyCustomContents;
+    json[r'destinationPageId'] = destinationPageId.toJson();
     if (titleOptions != null) {
-      json['titleOptions'] = titleOptions.toJson();
+      json[r'titleOptions'] = titleOptions.toJson();
     }
     return json;
   }
@@ -9444,9 +9450,9 @@ class CopyPageHierarchyTitleOptions {
 
   factory CopyPageHierarchyTitleOptions.fromJson(Map<String, Object?> json) {
     return CopyPageHierarchyTitleOptions(
-      prefix: json['prefix'] as String?,
-      replace: json['replace'] as String?,
-      search: json['search'] as String?,
+      prefix: json[r'prefix'] as String?,
+      replace: json[r'replace'] as String?,
+      search: json[r'search'] as String?,
     );
   }
 
@@ -9457,13 +9463,13 @@ class CopyPageHierarchyTitleOptions {
 
     final json = <String, Object?>{};
     if (prefix != null) {
-      json['prefix'] = prefix;
+      json[r'prefix'] = prefix;
     }
     if (replace != null) {
-      json['replace'] = replace;
+      json[r'replace'] = replace;
     }
     if (search != null) {
-      json['search'] = search;
+      json[r'search'] = search;
     }
     return json;
   }
@@ -9487,11 +9493,13 @@ class CopyPageRequestBody {
 
   factory CopyPageRequestBody.fromJson(Map<String, Object?> json) {
     return CopyPageRequestBody(
-      storage: json['storage'] != null
-          ? ContentBodyCreate.fromJson(json['storage']! as Map<String, Object?>)
+      storage: json[r'storage'] != null
+          ? ContentBodyCreate.fromJson(
+              json[r'storage']! as Map<String, Object?>)
           : null,
-      editor2: json['editor2'] != null
-          ? ContentBodyCreate.fromJson(json['editor2']! as Map<String, Object?>)
+      editor2: json[r'editor2'] != null
+          ? ContentBodyCreate.fromJson(
+              json[r'editor2']! as Map<String, Object?>)
           : null,
     );
   }
@@ -9502,10 +9510,10 @@ class CopyPageRequestBody {
 
     final json = <String, Object?>{};
     if (storage != null) {
-      json['storage'] = storage.toJson();
+      json[r'storage'] = storage.toJson();
     }
     if (editor2 != null) {
-      json['editor2'] = editor2.toJson();
+      json[r'editor2'] = editor2.toJson();
     }
     return json;
   }
@@ -9559,16 +9567,16 @@ class CopyPageRequest {
 
   factory CopyPageRequest.fromJson(Map<String, Object?> json) {
     return CopyPageRequest(
-      copyAttachments: json['copyAttachments'] as bool? ?? false,
-      copyPermissions: json['copyPermissions'] as bool? ?? false,
-      copyProperties: json['copyProperties'] as bool? ?? false,
-      copyLabels: json['copyLabels'] as bool? ?? false,
-      copyCustomContents: json['copyCustomContents'] as bool? ?? false,
+      copyAttachments: json[r'copyAttachments'] as bool? ?? false,
+      copyPermissions: json[r'copyPermissions'] as bool? ?? false,
+      copyProperties: json[r'copyProperties'] as bool? ?? false,
+      copyLabels: json[r'copyLabels'] as bool? ?? false,
+      copyCustomContents: json[r'copyCustomContents'] as bool? ?? false,
       destination: CopyPageRequestDestination.fromJson(
-          json['destination'] as Map<String, Object?>? ?? const {}),
-      pageTitle: json['pageTitle'] as String?,
-      body: json['body'] != null
-          ? CopyPageRequestBody.fromJson(json['body']! as Map<String, Object?>)
+          json[r'destination'] as Map<String, Object?>? ?? const {}),
+      pageTitle: json[r'pageTitle'] as String?,
+      body: json[r'body'] != null
+          ? CopyPageRequestBody.fromJson(json[r'body']! as Map<String, Object?>)
           : null,
     );
   }
@@ -9584,17 +9592,17 @@ class CopyPageRequest {
     var body = this.body;
 
     final json = <String, Object?>{};
-    json['copyAttachments'] = copyAttachments;
-    json['copyPermissions'] = copyPermissions;
-    json['copyProperties'] = copyProperties;
-    json['copyLabels'] = copyLabels;
-    json['copyCustomContents'] = copyCustomContents;
-    json['destination'] = destination.toJson();
+    json[r'copyAttachments'] = copyAttachments;
+    json[r'copyPermissions'] = copyPermissions;
+    json[r'copyProperties'] = copyProperties;
+    json[r'copyLabels'] = copyLabels;
+    json[r'copyCustomContents'] = copyCustomContents;
+    json[r'destination'] = destination.toJson();
     if (pageTitle != null) {
-      json['pageTitle'] = pageTitle;
+      json[r'pageTitle'] = pageTitle;
     }
     if (body != null) {
-      json['body'] = body.toJson();
+      json[r'body'] = body.toJson();
     }
     return json;
   }
@@ -9641,8 +9649,8 @@ class CopyPageRequestDestination {
   factory CopyPageRequestDestination.fromJson(Map<String, Object?> json) {
     return CopyPageRequestDestination(
       type: CopyPageRequestDestinationType.fromValue(
-          json['type'] as String? ?? ''),
-      value: json['value'] as String? ?? '',
+          json[r'type'] as String? ?? ''),
+      value: json[r'value'] as String? ?? '',
     );
   }
 
@@ -9651,8 +9659,8 @@ class CopyPageRequestDestination {
     var value = this.value;
 
     final json = <String, Object?>{};
-    json['type'] = type.value;
-    json['value'] = value;
+    json[r'type'] = type.value;
+    json[r'value'] = value;
     return json;
   }
 
@@ -9700,7 +9708,7 @@ class CQLPersonalDataConvertedQueries {
 
   factory CQLPersonalDataConvertedQueries.fromJson(Map<String, Object?> json) {
     return CQLPersonalDataConvertedQueries(
-      queryStrings: (json['queryStrings'] as List<Object?>?)
+      queryStrings: (json[r'queryStrings'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -9711,7 +9719,7 @@ class CQLPersonalDataConvertedQueries {
     var queryStrings = this.queryStrings;
 
     final json = <String, Object?>{};
-    json['queryStrings'] = queryStrings;
+    json[r'queryStrings'] = queryStrings;
     return json;
   }
 
@@ -9731,7 +9739,7 @@ class CQLPersonalDataMigrationRequest {
 
   factory CQLPersonalDataMigrationRequest.fromJson(Map<String, Object?> json) {
     return CQLPersonalDataMigrationRequest(
-      queryStrings: (json['queryStrings'] as List<Object?>?)
+      queryStrings: (json[r'queryStrings'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -9742,7 +9750,7 @@ class CQLPersonalDataMigrationRequest {
     var queryStrings = this.queryStrings;
 
     final json = <String, Object?>{};
-    json['queryStrings'] = queryStrings;
+    json[r'queryStrings'] = queryStrings;
     return json;
   }
 
@@ -9761,7 +9769,7 @@ class DynamicModulesErrorMessage {
 
   factory DynamicModulesErrorMessage.fromJson(Map<String, Object?> json) {
     return DynamicModulesErrorMessage(
-      message: json['message'] as String? ?? '',
+      message: json[r'message'] as String? ?? '',
     );
   }
 
@@ -9769,7 +9777,7 @@ class DynamicModulesErrorMessage {
     var message = this.message;
 
     final json = <String, Object?>{};
-    json['message'] = message;
+    json[r'message'] = message;
     return json;
   }
 
@@ -9801,9 +9809,9 @@ class EmbeddedContent {
 
   factory EmbeddedContent.fromJson(Map<String, Object?> json) {
     return EmbeddedContent(
-      entityId: (json['entityId'] as num?)?.toInt(),
-      entity: json['entity'] != null
-          ? Embeddable.fromJson(json['entity']! as Map<String, Object?>)
+      entityId: (json[r'entityId'] as num?)?.toInt(),
+      entity: json[r'entity'] != null
+          ? Embeddable.fromJson(json[r'entity']! as Map<String, Object?>)
           : null,
     );
   }
@@ -9814,10 +9822,10 @@ class EmbeddedContent {
 
     final json = <String, Object?>{};
     if (entityId != null) {
-      json['entityId'] = entityId;
+      json[r'entityId'] = entityId;
     }
     if (entity != null) {
-      json['entity'] = entity.toJson();
+      json[r'entity'] = entity.toJson();
     }
     return json;
   }
@@ -9857,11 +9865,11 @@ class Group {
 
   factory Group.fromJson(Map<String, Object?> json) {
     return Group(
-      type: GroupType.fromValue(json['type'] as String? ?? ''),
-      name: json['name'] as String? ?? '',
-      id: json['id'] as String? ?? '',
+      type: GroupType.fromValue(json[r'type'] as String? ?? ''),
+      name: json[r'name'] as String? ?? '',
+      id: json[r'id'] as String? ?? '',
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -9872,10 +9880,10 @@ class Group {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['type'] = type.value;
-    json['name'] = name;
-    json['id'] = id;
-    json['_links'] = links.toJson();
+    json[r'type'] = type.value;
+    json[r'name'] = name;
+    json[r'id'] = id;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -9924,14 +9932,14 @@ class GroupArray {
 
   factory GroupArray.fromJson(Map<String, Object?> json) {
     return GroupArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map(
                   (i) => Group.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -9942,10 +9950,10 @@ class GroupArray {
     var size = this.size;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
     return json;
   }
 
@@ -9981,7 +9989,7 @@ class GroupName {
 
   factory GroupName.fromJson(Map<String, Object?> json) {
     return GroupName(
-      name: json['name'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
     );
   }
 
@@ -9989,7 +9997,7 @@ class GroupName {
     var name = this.name;
 
     final json = <String, Object?>{};
-    json['name'] = name;
+    json[r'name'] = name;
     return json;
   }
 
@@ -10016,15 +10024,15 @@ class HeaderLookAndFeel {
 
   factory HeaderLookAndFeel.fromJson(Map<String, Object?> json) {
     return HeaderLookAndFeel(
-      backgroundColor: json['backgroundColor'] as String? ?? '',
+      backgroundColor: json[r'backgroundColor'] as String? ?? '',
       button: ButtonLookAndFeel.fromJson(
-          json['button'] as Map<String, Object?>? ?? const {}),
+          json[r'button'] as Map<String, Object?>? ?? const {}),
       primaryNavigation: NavigationLookAndFeel.fromJson(
-          json['primaryNavigation'] as Map<String, Object?>? ?? const {}),
+          json[r'primaryNavigation'] as Map<String, Object?>? ?? const {}),
       secondaryNavigation: NavigationLookAndFeel.fromJson(
-          json['secondaryNavigation'] as Map<String, Object?>? ?? const {}),
+          json[r'secondaryNavigation'] as Map<String, Object?>? ?? const {}),
       search: SearchFieldLookAndFeel.fromJson(
-          json['search'] as Map<String, Object?>? ?? const {}),
+          json[r'search'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -10036,11 +10044,11 @@ class HeaderLookAndFeel {
     var search = this.search;
 
     final json = <String, Object?>{};
-    json['backgroundColor'] = backgroundColor;
-    json['button'] = button.toJson();
-    json['primaryNavigation'] = primaryNavigation.toJson();
-    json['secondaryNavigation'] = secondaryNavigation.toJson();
-    json['search'] = search.toJson();
+    json[r'backgroundColor'] = backgroundColor;
+    json[r'button'] = button.toJson();
+    json[r'primaryNavigation'] = primaryNavigation.toJson();
+    json[r'secondaryNavigation'] = secondaryNavigation.toJson();
+    json[r'search'] = search.toJson();
     return json;
   }
 
@@ -10076,10 +10084,10 @@ class Icon {
 
   factory Icon.fromJson(Map<String, Object?> json) {
     return Icon(
-      path: json['path'] as String? ?? '',
-      width: (json['width'] as num?)?.toInt() ?? 0,
-      height: (json['height'] as num?)?.toInt() ?? 0,
-      isDefault: json['isDefault'] as bool? ?? false,
+      path: json[r'path'] as String? ?? '',
+      width: (json[r'width'] as num?)?.toInt() ?? 0,
+      height: (json[r'height'] as num?)?.toInt() ?? 0,
+      isDefault: json[r'isDefault'] as bool? ?? false,
     );
   }
 
@@ -10090,10 +10098,10 @@ class Icon {
     var isDefault = this.isDefault;
 
     final json = <String, Object?>{};
-    json['path'] = path;
-    json['width'] = width;
-    json['height'] = height;
-    json['isDefault'] = isDefault;
+    json[r'path'] = path;
+    json[r'width'] = width;
+    json[r'height'] = height;
+    json[r'isDefault'] = isDefault;
     return json;
   }
 
@@ -10121,10 +10129,10 @@ class Label {
 
   factory Label.fromJson(Map<String, Object?> json) {
     return Label(
-      prefix: json['prefix'] as String? ?? '',
-      name: json['name'] as String? ?? '',
-      id: json['id'] as String? ?? '',
-      label: json['label'] as String? ?? '',
+      prefix: json[r'prefix'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      id: json[r'id'] as String? ?? '',
+      label: json[r'label'] as String? ?? '',
     );
   }
 
@@ -10135,10 +10143,10 @@ class Label {
     var label = this.label;
 
     final json = <String, Object?>{};
-    json['prefix'] = prefix;
-    json['name'] = name;
-    json['id'] = id;
-    json['label'] = label;
+    json[r'prefix'] = prefix;
+    json[r'name'] = name;
+    json[r'id'] = id;
+    json[r'label'] = label;
     return json;
   }
 
@@ -10168,16 +10176,16 @@ class LabelArray {
 
   factory LabelArray.fromJson(Map<String, Object?> json) {
     return LabelArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map(
                   (i) => Label.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -10189,11 +10197,11 @@ class LabelArray {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
-    json['_links'] = links.toJson();
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -10228,9 +10236,9 @@ class LabeledContent {
   factory LabeledContent.fromJson(Map<String, Object?> json) {
     return LabeledContent(
       contentType: LabeledContentType.fromJson(
-          json['contentType'] as Map<String, Object?>? ?? const {}),
-      contentId: (json['contentId'] as num?)?.toInt() ?? 0,
-      title: json['title'] as String? ?? '',
+          json[r'contentType'] as Map<String, Object?>? ?? const {}),
+      contentId: (json[r'contentId'] as num?)?.toInt() ?? 0,
+      title: json[r'title'] as String? ?? '',
     );
   }
 
@@ -10240,9 +10248,9 @@ class LabeledContent {
     var title = this.title;
 
     final json = <String, Object?>{};
-    json['contentType'] = contentType.toJson();
-    json['contentId'] = contentId;
-    json['title'] = title;
+    json[r'contentType'] = contentType.toJson();
+    json[r'contentId'] = contentId;
+    json[r'title'] = title;
     return json;
   }
 
@@ -10280,14 +10288,14 @@ class LabeledContentPageResponse {
 
   factory LabeledContentPageResponse.fromJson(Map<String, Object?> json) {
     return LabeledContentPageResponse(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map((i) => LabeledContent.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt(),
-      limit: (json['limit'] as num?)?.toInt(),
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -10298,14 +10306,14 @@ class LabeledContentPageResponse {
     var size = this.size;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
+    json[r'results'] = results.map((i) => i.toJson()).toList();
     if (start != null) {
-      json['start'] = start;
+      json[r'start'] = start;
     }
     if (limit != null) {
-      json['limit'] = limit;
+      json[r'limit'] = limit;
     }
-    json['size'] = size;
+    json[r'size'] = size;
     return json;
   }
 
@@ -10328,10 +10336,11 @@ class LabelDetails {
 
   factory LabelDetails.fromJson(Map<String, Object?> json) {
     return LabelDetails(
-      label: Label.fromJson(json['label'] as Map<String, Object?>? ?? const {}),
-      associatedContents: json['associatedContents'] != null
+      label:
+          Label.fromJson(json[r'label'] as Map<String, Object?>? ?? const {}),
+      associatedContents: json[r'associatedContents'] != null
           ? LabeledContentPageResponse.fromJson(
-              json['associatedContents']! as Map<String, Object?>)
+              json[r'associatedContents']! as Map<String, Object?>)
           : null,
     );
   }
@@ -10341,9 +10350,9 @@ class LabelDetails {
     var associatedContents = this.associatedContents;
 
     final json = <String, Object?>{};
-    json['label'] = label.toJson();
+    json[r'label'] = label.toJson();
     if (associatedContents != null) {
-      json['associatedContents'] = associatedContents.toJson();
+      json[r'associatedContents'] = associatedContents.toJson();
     }
     return json;
   }
@@ -10368,8 +10377,8 @@ class LabelCreate {
 
   factory LabelCreate.fromJson(Map<String, Object?> json) {
     return LabelCreate(
-      prefix: LabelCreatePrefix.fromValue(json['prefix'] as String? ?? ''),
-      name: json['name'] as String? ?? '',
+      prefix: LabelCreatePrefix.fromValue(json[r'prefix'] as String? ?? ''),
+      name: json[r'name'] as String? ?? '',
     );
   }
 
@@ -10378,8 +10387,8 @@ class LabelCreate {
     var name = this.name;
 
     final json = <String, Object?>{};
-    json['prefix'] = prefix.value;
-    json['name'] = name;
+    json[r'prefix'] = prefix.value;
+    json[r'name'] = name;
     return json;
   }
 
@@ -10436,7 +10445,7 @@ class LookAndFeelHeadings {
 
   factory LookAndFeelHeadings.fromJson(Map<String, Object?> json) {
     return LookAndFeelHeadings(
-      color: json['color'] as String? ?? '',
+      color: json[r'color'] as String? ?? '',
     );
   }
 
@@ -10444,7 +10453,7 @@ class LookAndFeelHeadings {
     var color = this.color;
 
     final json = <String, Object?>{};
-    json['color'] = color;
+    json[r'color'] = color;
     return json;
   }
 
@@ -10462,7 +10471,7 @@ class LookAndFeelLinks {
 
   factory LookAndFeelLinks.fromJson(Map<String, Object?> json) {
     return LookAndFeelLinks(
-      color: json['color'] as String? ?? '',
+      color: json[r'color'] as String? ?? '',
     );
   }
 
@@ -10470,7 +10479,7 @@ class LookAndFeelLinks {
     var color = this.color;
 
     final json = <String, Object?>{};
-    json['color'] = color;
+    json[r'color'] = color;
     return json;
   }
 
@@ -10488,7 +10497,7 @@ class LookAndFeelBordersAndDividers {
 
   factory LookAndFeelBordersAndDividers.fromJson(Map<String, Object?> json) {
     return LookAndFeelBordersAndDividers(
-      color: json['color'] as String? ?? '',
+      color: json[r'color'] as String? ?? '',
     );
   }
 
@@ -10496,7 +10505,7 @@ class LookAndFeelBordersAndDividers {
     var color = this.color;
 
     final json = <String, Object?>{};
-    json['color'] = color;
+    json[r'color'] = color;
     return json;
   }
 
@@ -10526,17 +10535,17 @@ class LookAndFeel {
   factory LookAndFeel.fromJson(Map<String, Object?> json) {
     return LookAndFeel(
       headings: LookAndFeelHeadings.fromJson(
-          json['headings'] as Map<String, Object?>? ?? const {}),
+          json[r'headings'] as Map<String, Object?>? ?? const {}),
       links: LookAndFeelLinks.fromJson(
-          json['links'] as Map<String, Object?>? ?? const {}),
+          json[r'links'] as Map<String, Object?>? ?? const {}),
       menus: MenusLookAndFeel.fromJson(
-          json['menus'] as Map<String, Object?>? ?? const {}),
+          json[r'menus'] as Map<String, Object?>? ?? const {}),
       header: HeaderLookAndFeel.fromJson(
-          json['header'] as Map<String, Object?>? ?? const {}),
+          json[r'header'] as Map<String, Object?>? ?? const {}),
       content: ContentLookAndFeel.fromJson(
-          json['content'] as Map<String, Object?>? ?? const {}),
+          json[r'content'] as Map<String, Object?>? ?? const {}),
       bordersAndDividers: LookAndFeelBordersAndDividers.fromJson(
-          json['bordersAndDividers'] as Map<String, Object?>? ?? const {}),
+          json[r'bordersAndDividers'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -10549,12 +10558,12 @@ class LookAndFeel {
     var bordersAndDividers = this.bordersAndDividers;
 
     final json = <String, Object?>{};
-    json['headings'] = headings.toJson();
-    json['links'] = links.toJson();
-    json['menus'] = menus.toJson();
-    json['header'] = header.toJson();
-    json['content'] = content.toJson();
-    json['bordersAndDividers'] = bordersAndDividers.toJson();
+    json[r'headings'] = headings.toJson();
+    json[r'links'] = links.toJson();
+    json[r'menus'] = menus.toJson();
+    json[r'header'] = header.toJson();
+    json[r'content'] = content.toJson();
+    json[r'bordersAndDividers'] = bordersAndDividers.toJson();
     return json;
   }
 
@@ -10605,14 +10614,14 @@ class LookAndFeelSettings {
   factory LookAndFeelSettings.fromJson(Map<String, Object?> json) {
     return LookAndFeelSettings(
       selected: LookAndFeelSettingsSelected.fromValue(
-          json['selected'] as String? ?? ''),
+          json[r'selected'] as String? ?? ''),
       global: LookAndFeel.fromJson(
-          json['global'] as Map<String, Object?>? ?? const {}),
-      theme: json['theme'] != null
-          ? LookAndFeel.fromJson(json['theme']! as Map<String, Object?>)
+          json[r'global'] as Map<String, Object?>? ?? const {}),
+      theme: json[r'theme'] != null
+          ? LookAndFeel.fromJson(json[r'theme']! as Map<String, Object?>)
           : null,
       custom: LookAndFeel.fromJson(
-          json['custom'] as Map<String, Object?>? ?? const {}),
+          json[r'custom'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -10623,12 +10632,12 @@ class LookAndFeelSettings {
     var custom = this.custom;
 
     final json = <String, Object?>{};
-    json['selected'] = selected.value;
-    json['global'] = global.toJson();
+    json[r'selected'] = selected.value;
+    json[r'global'] = global.toJson();
     if (theme != null) {
-      json['theme'] = theme.toJson();
+      json[r'theme'] = theme.toJson();
     }
-    json['custom'] = custom.toJson();
+    json[r'custom'] = custom.toJson();
     return json;
   }
 
@@ -10677,8 +10686,8 @@ class LongTaskStatusName {
 
   factory LongTaskStatusName.fromJson(Map<String, Object?> json) {
     return LongTaskStatusName(
-      key: json['key'] as String? ?? '',
-      args: (json['args'] as List<Object?>?)
+      key: json[r'key'] as String? ?? '',
+      args: (json[r'args'] as List<Object?>?)
               ?.map((i) => i as Map<String, Object?>? ?? {})
               .toList() ??
           [],
@@ -10690,8 +10699,8 @@ class LongTaskStatusName {
     var args = this.args;
 
     final json = <String, Object?>{};
-    json['key'] = key;
-    json['args'] = args;
+    json[r'key'] = key;
+    json[r'args'] = args;
     return json;
   }
 
@@ -10751,24 +10760,24 @@ class LongTaskStatus {
 
   factory LongTaskStatus.fromJson(Map<String, Object?> json) {
     return LongTaskStatus(
-      id: json['id'] as String? ?? '',
+      id: json[r'id'] as String? ?? '',
       name: LongTaskStatusName.fromJson(
-          json['name'] as Map<String, Object?>? ?? const {}),
-      elapsedTime: (json['elapsedTime'] as num?)?.toInt() ?? 0,
-      percentageComplete: (json['percentageComplete'] as num?)?.toInt() ?? 0,
-      successful: json['successful'] as bool? ?? false,
-      messages: (json['messages'] as List<Object?>?)
+          json[r'name'] as Map<String, Object?>? ?? const {}),
+      elapsedTime: (json[r'elapsedTime'] as num?)?.toInt() ?? 0,
+      percentageComplete: (json[r'percentageComplete'] as num?)?.toInt() ?? 0,
+      successful: json[r'successful'] as bool? ?? false,
+      messages: (json[r'messages'] as List<Object?>?)
               ?.map((i) =>
                   Message.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      status: json['status'] as String?,
-      errors: (json['errors'] as List<Object?>?)
+      status: json[r'status'] as String?,
+      errors: (json[r'errors'] as List<Object?>?)
               ?.map((i) =>
                   Message.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      additionalDetails: json['additionalDetails'] as Map<String, Object?>?,
+      additionalDetails: json[r'additionalDetails'] as Map<String, Object?>?,
     );
   }
 
@@ -10784,18 +10793,18 @@ class LongTaskStatus {
     var additionalDetails = this.additionalDetails;
 
     final json = <String, Object?>{};
-    json['id'] = id;
-    json['name'] = name.toJson();
-    json['elapsedTime'] = elapsedTime;
-    json['percentageComplete'] = percentageComplete;
-    json['successful'] = successful;
-    json['messages'] = messages.map((i) => i.toJson()).toList();
+    json[r'id'] = id;
+    json[r'name'] = name.toJson();
+    json[r'elapsedTime'] = elapsedTime;
+    json[r'percentageComplete'] = percentageComplete;
+    json[r'successful'] = successful;
+    json[r'messages'] = messages.map((i) => i.toJson()).toList();
     if (status != null) {
-      json['status'] = status;
+      json[r'status'] = status;
     }
-    json['errors'] = errors.map((i) => i.toJson()).toList();
+    json[r'errors'] = errors.map((i) => i.toJson()).toList();
     if (additionalDetails != null) {
-      json['additionalDetails'] = additionalDetails;
+      json[r'additionalDetails'] = additionalDetails;
     }
     return json;
   }
@@ -10840,16 +10849,16 @@ class LongTaskStatusArray {
 
   factory LongTaskStatusArray.fromJson(Map<String, Object?> json) {
     return LongTaskStatusArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map((i) => LongTaskStatus.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -10861,11 +10870,11 @@ class LongTaskStatusArray {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
-    json['_links'] = links.toJson();
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -10909,11 +10918,11 @@ class MacroInstance {
 
   factory MacroInstance.fromJson(Map<String, Object?> json) {
     return MacroInstance(
-      name: json['name'] as String?,
-      body: json['body'] as String?,
-      parameters: json['parameters'] as Map<String, Object?>?,
-      links: json['_links'] != null
-          ? GenericLinks.fromJson(json['_links']! as Map<String, Object?>)
+      name: json[r'name'] as String?,
+      body: json[r'body'] as String?,
+      parameters: json[r'parameters'] as Map<String, Object?>?,
+      links: json[r'_links'] != null
+          ? GenericLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -10926,16 +10935,16 @@ class MacroInstance {
 
     final json = <String, Object?>{};
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (body != null) {
-      json['body'] = body;
+      json[r'body'] = body;
     }
     if (parameters != null) {
-      json['parameters'] = parameters;
+      json[r'parameters'] = parameters;
     }
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -10961,7 +10970,7 @@ class MenusLookAndFeelHoverOrFocus {
 
   factory MenusLookAndFeelHoverOrFocus.fromJson(Map<String, Object?> json) {
     return MenusLookAndFeelHoverOrFocus(
-      backgroundColor: json['backgroundColor'] as String? ?? '',
+      backgroundColor: json[r'backgroundColor'] as String? ?? '',
     );
   }
 
@@ -10969,7 +10978,7 @@ class MenusLookAndFeelHoverOrFocus {
     var backgroundColor = this.backgroundColor;
 
     final json = <String, Object?>{};
-    json['backgroundColor'] = backgroundColor;
+    json[r'backgroundColor'] = backgroundColor;
     return json;
   }
 
@@ -10989,8 +10998,8 @@ class MenusLookAndFeel {
   factory MenusLookAndFeel.fromJson(Map<String, Object?> json) {
     return MenusLookAndFeel(
       hoverOrFocus: MenusLookAndFeelHoverOrFocus.fromJson(
-          json['hoverOrFocus'] as Map<String, Object?>? ?? const {}),
-      color: json['color'] as String? ?? '',
+          json[r'hoverOrFocus'] as Map<String, Object?>? ?? const {}),
+      color: json[r'color'] as String? ?? '',
     );
   }
 
@@ -10999,8 +11008,8 @@ class MenusLookAndFeel {
     var color = this.color;
 
     final json = <String, Object?>{};
-    json['hoverOrFocus'] = hoverOrFocus.toJson();
-    json['color'] = color;
+    json[r'hoverOrFocus'] = hoverOrFocus.toJson();
+    json[r'color'] = color;
     return json;
   }
 
@@ -11021,8 +11030,8 @@ class Message {
 
   factory Message.fromJson(Map<String, Object?> json) {
     return Message(
-      translation: json['translation'] as String? ?? '',
-      args: (json['args'] as List<Object?>?)
+      translation: json[r'translation'] as String? ?? '',
+      args: (json[r'args'] as List<Object?>?)
               ?.map((i) => i as Map<String, Object?>? ?? {})
               .toList() ??
           [],
@@ -11034,8 +11043,8 @@ class Message {
     var args = this.args;
 
     final json = <String, Object?>{};
-    json['translation'] = translation;
-    json['args'] = args;
+    json[r'translation'] = translation;
+    json[r'args'] = args;
     return json;
   }
 
@@ -11056,9 +11065,9 @@ class MigratedUser {
 
   factory MigratedUser.fromJson(Map<String, Object?> json) {
     return MigratedUser(
-      username: json['username'] as String?,
-      key: json['key'] as String?,
-      accountId: json['accountId'] as String?,
+      username: json[r'username'] as String?,
+      key: json[r'key'] as String?,
+      accountId: json[r'accountId'] as String?,
     );
   }
 
@@ -11069,13 +11078,13 @@ class MigratedUser {
 
     final json = <String, Object?>{};
     if (username != null) {
-      json['username'] = username;
+      json[r'username'] = username;
     }
     if (key != null) {
-      json['key'] = key;
+      json[r'key'] = key;
     }
     if (accountId != null) {
-      json['accountId'] = accountId;
+      json[r'accountId'] = accountId;
     }
     return json;
   }
@@ -11105,16 +11114,16 @@ class MigratedUserArray {
 
   factory MigratedUserArray.fromJson(Map<String, Object?> json) {
     return MigratedUserArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map((i) =>
                   MigratedUser.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -11126,11 +11135,11 @@ class MigratedUserArray {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
-    json['_links'] = links.toJson();
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -11159,9 +11168,9 @@ class BulkUserLookupExpandable {
 
   factory BulkUserLookupExpandable.fromJson(Map<String, Object?> json) {
     return BulkUserLookupExpandable(
-      operations: json['operations'] as String?,
-      details: json['details'] as String?,
-      personalSpace: json['personalSpace'] as String?,
+      operations: json[r'operations'] as String?,
+      details: json[r'details'] as String?,
+      personalSpace: json[r'personalSpace'] as String?,
     );
   }
 
@@ -11172,13 +11181,13 @@ class BulkUserLookupExpandable {
 
     final json = <String, Object?>{};
     if (operations != null) {
-      json['operations'] = operations;
+      json[r'operations'] = operations;
     }
     if (details != null) {
-      json['details'] = details;
+      json[r'details'] = details;
     }
     if (personalSpace != null) {
-      json['personalSpace'] = personalSpace;
+      json[r'personalSpace'] = personalSpace;
     }
     return json;
   }
@@ -11256,31 +11265,31 @@ class BulkUserLookup {
 
   factory BulkUserLookup.fromJson(Map<String, Object?> json) {
     return BulkUserLookup(
-      type: BulkUserLookupType.fromValue(json['type'] as String? ?? ''),
-      username: json['username'] as String?,
-      userKey: json['userKey'] as String?,
-      accountId: json['accountId'] as String? ?? '',
-      accountType: json['accountType'] as String? ?? '',
-      email: json['email'] as String? ?? '',
-      publicName: json['publicName'] as String? ?? '',
+      type: BulkUserLookupType.fromValue(json[r'type'] as String? ?? ''),
+      username: json[r'username'] as String?,
+      userKey: json[r'userKey'] as String?,
+      accountId: json[r'accountId'] as String? ?? '',
+      accountType: json[r'accountType'] as String? ?? '',
+      email: json[r'email'] as String? ?? '',
+      publicName: json[r'publicName'] as String? ?? '',
       profilePicture: Icon.fromJson(
-          json['profilePicture'] as Map<String, Object?>? ?? const {}),
-      displayName: json['displayName'] as String? ?? '',
-      operations: (json['operations'] as List<Object?>?)
+          json[r'profilePicture'] as Map<String, Object?>? ?? const {}),
+      displayName: json[r'displayName'] as String? ?? '',
+      operations: (json[r'operations'] as List<Object?>?)
               ?.map((i) => OperationCheckResult.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      details: json['details'] != null
-          ? UserDetails.fromJson(json['details']! as Map<String, Object?>)
+      details: json[r'details'] != null
+          ? UserDetails.fromJson(json[r'details']! as Map<String, Object?>)
           : null,
-      personalSpace: json['personalSpace'] != null
-          ? Space.fromJson(json['personalSpace']! as Map<String, Object?>)
+      personalSpace: json[r'personalSpace'] != null
+          ? Space.fromJson(json[r'personalSpace']! as Map<String, Object?>)
           : null,
       expandable: BulkUserLookupExpandable.fromJson(
-          json['_expandable'] as Map<String, Object?>? ?? const {}),
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -11301,28 +11310,28 @@ class BulkUserLookup {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['type'] = type.value;
+    json[r'type'] = type.value;
     if (username != null) {
-      json['username'] = username;
+      json[r'username'] = username;
     }
     if (userKey != null) {
-      json['userKey'] = userKey;
+      json[r'userKey'] = userKey;
     }
-    json['accountId'] = accountId;
-    json['accountType'] = accountType;
-    json['email'] = email;
-    json['publicName'] = publicName;
-    json['profilePicture'] = profilePicture.toJson();
-    json['displayName'] = displayName;
-    json['operations'] = operations.map((i) => i.toJson()).toList();
+    json[r'accountId'] = accountId;
+    json[r'accountType'] = accountType;
+    json[r'email'] = email;
+    json[r'publicName'] = publicName;
+    json[r'profilePicture'] = profilePicture.toJson();
+    json[r'displayName'] = displayName;
+    json[r'operations'] = operations.map((i) => i.toJson()).toList();
     if (details != null) {
-      json['details'] = details.toJson();
+      json[r'details'] = details.toJson();
     }
     if (personalSpace != null) {
-      json['personalSpace'] = personalSpace.toJson();
+      json[r'personalSpace'] = personalSpace.toJson();
     }
-    json['_expandable'] = expandable.toJson();
-    json['_links'] = links.toJson();
+    json[r'_expandable'] = expandable.toJson();
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -11403,16 +11412,16 @@ class BulkUserLookupArray {
 
   factory BulkUserLookupArray.fromJson(Map<String, Object?> json) {
     return BulkUserLookupArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map((i) => BulkUserLookup.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -11424,11 +11433,11 @@ class BulkUserLookupArray {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
-    json['_links'] = links.toJson();
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -11458,8 +11467,8 @@ class NavigationLookAndFeelHoverOrFocus {
   factory NavigationLookAndFeelHoverOrFocus.fromJson(
       Map<String, Object?> json) {
     return NavigationLookAndFeelHoverOrFocus(
-      backgroundColor: json['backgroundColor'] as String? ?? '',
-      color: json['color'] as String? ?? '',
+      backgroundColor: json[r'backgroundColor'] as String? ?? '',
+      color: json[r'color'] as String? ?? '',
     );
   }
 
@@ -11468,8 +11477,8 @@ class NavigationLookAndFeelHoverOrFocus {
     var color = this.color;
 
     final json = <String, Object?>{};
-    json['backgroundColor'] = backgroundColor;
-    json['color'] = color;
+    json[r'backgroundColor'] = backgroundColor;
+    json[r'color'] = color;
     return json;
   }
 
@@ -11490,9 +11499,9 @@ class NavigationLookAndFeel {
 
   factory NavigationLookAndFeel.fromJson(Map<String, Object?> json) {
     return NavigationLookAndFeel(
-      color: json['color'] as String? ?? '',
+      color: json[r'color'] as String? ?? '',
       hoverOrFocus: NavigationLookAndFeelHoverOrFocus.fromJson(
-          json['hoverOrFocus'] as Map<String, Object?>? ?? const {}),
+          json[r'hoverOrFocus'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -11501,8 +11510,8 @@ class NavigationLookAndFeel {
     var hoverOrFocus = this.hoverOrFocus;
 
     final json = <String, Object?>{};
-    json['color'] = color;
-    json['hoverOrFocus'] = hoverOrFocus.toJson();
+    json[r'color'] = color;
+    json[r'hoverOrFocus'] = hoverOrFocus.toJson();
     return json;
   }
 
@@ -11528,9 +11537,9 @@ class OperationCheckResult {
   factory OperationCheckResult.fromJson(Map<String, Object?> json) {
     return OperationCheckResult(
       operation: OperationCheckResultOperation.fromValue(
-          json['operation'] as String? ?? ''),
+          json[r'operation'] as String? ?? ''),
       targetType: OperationCheckResultTargetType.fromValue(
-          json['targetType'] as String? ?? ''),
+          json[r'targetType'] as String? ?? ''),
     );
   }
 
@@ -11539,8 +11548,8 @@ class OperationCheckResult {
     var targetType = this.targetType;
 
     final json = <String, Object?>{};
-    json['operation'] = operation.value;
-    json['targetType'] = targetType.value;
+    json[r'operation'] = operation.value;
+    json[r'targetType'] = targetType.value;
     return json;
   }
 
@@ -11660,9 +11669,9 @@ class RelationExpandable {
 
   factory RelationExpandable.fromJson(Map<String, Object?> json) {
     return RelationExpandable(
-      relationData: json['relationData'] as String? ?? '',
-      source: json['source'] as String? ?? '',
-      target: json['target'] as String? ?? '',
+      relationData: json[r'relationData'] as String? ?? '',
+      source: json[r'source'] as String? ?? '',
+      target: json[r'target'] as String? ?? '',
     );
   }
 
@@ -11672,9 +11681,9 @@ class RelationExpandable {
     var target = this.target;
 
     final json = <String, Object?>{};
-    json['relationData'] = relationData;
-    json['source'] = source;
-    json['target'] = target;
+    json[r'relationData'] = relationData;
+    json[r'source'] = source;
+    json[r'target'] = target;
     return json;
   }
 
@@ -11706,16 +11715,17 @@ class Relation {
 
   factory Relation.fromJson(Map<String, Object?> json) {
     return Relation(
-      name: json['name'] as String? ?? '',
-      relationData: json['relationData'] != null
-          ? RelationData.fromJson(json['relationData']! as Map<String, Object?>)
+      name: json[r'name'] as String? ?? '',
+      relationData: json[r'relationData'] != null
+          ? RelationData.fromJson(
+              json[r'relationData']! as Map<String, Object?>)
           : null,
-      source: json['source'] as Map<String, Object?>?,
-      target: json['target'] as Map<String, Object?>?,
+      source: json[r'source'] as Map<String, Object?>?,
+      target: json[r'target'] as Map<String, Object?>?,
       expandable: RelationExpandable.fromJson(
-          json['_expandable'] as Map<String, Object?>? ?? const {}),
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -11728,18 +11738,18 @@ class Relation {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['name'] = name;
+    json[r'name'] = name;
     if (relationData != null) {
-      json['relationData'] = relationData.toJson();
+      json[r'relationData'] = relationData.toJson();
     }
     if (source != null) {
-      json['source'] = source;
+      json[r'source'] = source;
     }
     if (target != null) {
-      json['target'] = target;
+      json[r'target'] = target;
     }
-    json['_expandable'] = expandable.toJson();
-    json['_links'] = links.toJson();
+    json[r'_expandable'] = expandable.toJson();
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -11777,16 +11787,16 @@ class RelationArray {
 
   factory RelationArray.fromJson(Map<String, Object?> json) {
     return RelationArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map((i) =>
                   Relation.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -11798,11 +11808,11 @@ class RelationArray {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
-    json['_links'] = links.toJson();
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -11831,11 +11841,11 @@ class RelationData {
 
   factory RelationData.fromJson(Map<String, Object?> json) {
     return RelationData(
-      createdBy: json['createdBy'] != null
-          ? User.fromJson(json['createdBy']! as Map<String, Object?>)
+      createdBy: json[r'createdBy'] != null
+          ? User.fromJson(json[r'createdBy']! as Map<String, Object?>)
           : null,
-      createdDate: DateTime.tryParse(json['createdDate'] as String? ?? ''),
-      friendlyCreatedDate: json['friendlyCreatedDate'] as String?,
+      createdDate: DateTime.tryParse(json[r'createdDate'] as String? ?? ''),
+      friendlyCreatedDate: json[r'friendlyCreatedDate'] as String?,
     );
   }
 
@@ -11846,13 +11856,13 @@ class RelationData {
 
     final json = <String, Object?>{};
     if (createdBy != null) {
-      json['createdBy'] = createdBy.toJson();
+      json[r'createdBy'] = createdBy.toJson();
     }
     if (createdDate != null) {
-      json['createdDate'] = createdDate.toIso8601String();
+      json[r'createdDate'] = createdDate.toIso8601String();
     }
     if (friendlyCreatedDate != null) {
-      json['friendlyCreatedDate'] = friendlyCreatedDate;
+      json[r'friendlyCreatedDate'] = friendlyCreatedDate;
     }
     return json;
   }
@@ -11878,8 +11888,8 @@ class RetentionPeriod {
 
   factory RetentionPeriod.fromJson(Map<String, Object?> json) {
     return RetentionPeriod(
-      number: (json['number'] as num?)?.toInt() ?? 0,
-      units: RetentionPeriodUnits.fromValue(json['units'] as String? ?? ''),
+      number: (json[r'number'] as num?)?.toInt() ?? 0,
+      units: RetentionPeriodUnits.fromValue(json[r'units'] as String? ?? ''),
     );
   }
 
@@ -11888,8 +11898,8 @@ class RetentionPeriod {
     var units = this.units;
 
     final json = <String, Object?>{};
-    json['number'] = number;
-    json['units'] = units.value;
+    json[r'number'] = number;
+    json[r'units'] = units.value;
     return json;
   }
 
@@ -11974,14 +11984,14 @@ class ScreenLookAndFeel {
 
   factory ScreenLookAndFeel.fromJson(Map<String, Object?> json) {
     return ScreenLookAndFeel(
-      background: json['background'] as String? ?? '',
-      backgroundColor: json['backgroundColor'] as String? ?? '',
-      backgroundImage: json['backgroundImage'] as String? ?? '',
-      backgroundSize: json['backgroundSize'] as String? ?? '',
-      gutterTop: json['gutterTop'] as String? ?? '',
-      gutterRight: json['gutterRight'] as String? ?? '',
-      gutterBottom: json['gutterBottom'] as String? ?? '',
-      gutterLeft: json['gutterLeft'] as String? ?? '',
+      background: json[r'background'] as String? ?? '',
+      backgroundColor: json[r'backgroundColor'] as String? ?? '',
+      backgroundImage: json[r'backgroundImage'] as String? ?? '',
+      backgroundSize: json[r'backgroundSize'] as String? ?? '',
+      gutterTop: json[r'gutterTop'] as String? ?? '',
+      gutterRight: json[r'gutterRight'] as String? ?? '',
+      gutterBottom: json[r'gutterBottom'] as String? ?? '',
+      gutterLeft: json[r'gutterLeft'] as String? ?? '',
     );
   }
 
@@ -11996,14 +12006,14 @@ class ScreenLookAndFeel {
     var gutterLeft = this.gutterLeft;
 
     final json = <String, Object?>{};
-    json['background'] = background;
-    json['backgroundColor'] = backgroundColor;
-    json['backgroundImage'] = backgroundImage;
-    json['backgroundSize'] = backgroundSize;
-    json['gutterTop'] = gutterTop;
-    json['gutterRight'] = gutterRight;
-    json['gutterBottom'] = gutterBottom;
-    json['gutterLeft'] = gutterLeft;
+    json[r'background'] = background;
+    json[r'backgroundColor'] = backgroundColor;
+    json[r'backgroundImage'] = backgroundImage;
+    json[r'backgroundSize'] = backgroundSize;
+    json[r'gutterTop'] = gutterTop;
+    json[r'gutterRight'] = gutterRight;
+    json[r'gutterBottom'] = gutterBottom;
+    json[r'gutterLeft'] = gutterLeft;
     return json;
   }
 
@@ -12037,8 +12047,8 @@ class SearchFieldLookAndFeel {
 
   factory SearchFieldLookAndFeel.fromJson(Map<String, Object?> json) {
     return SearchFieldLookAndFeel(
-      backgroundColor: json['backgroundColor'] as String? ?? '',
-      color: json['color'] as String? ?? '',
+      backgroundColor: json[r'backgroundColor'] as String? ?? '',
+      color: json[r'color'] as String? ?? '',
     );
   }
 
@@ -12047,8 +12057,8 @@ class SearchFieldLookAndFeel {
     var color = this.color;
 
     final json = <String, Object?>{};
-    json['backgroundColor'] = backgroundColor;
-    json['color'] = color;
+    json[r'backgroundColor'] = backgroundColor;
+    json[r'color'] = color;
     return json;
   }
 
@@ -12082,19 +12092,19 @@ class SearchPageResponseSearchResult {
 
   factory SearchPageResponseSearchResult.fromJson(Map<String, Object?> json) {
     return SearchPageResponseSearchResult(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map((i) =>
                   SearchResult.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
-      totalSize: (json['totalSize'] as num?)?.toInt() ?? 0,
-      cqlQuery: json['cqlQuery'] as String? ?? '',
-      searchDuration: (json['searchDuration'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
+      totalSize: (json[r'totalSize'] as num?)?.toInt() ?? 0,
+      cqlQuery: json[r'cqlQuery'] as String? ?? '',
+      searchDuration: (json[r'searchDuration'] as num?)?.toInt() ?? 0,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -12109,14 +12119,14 @@ class SearchPageResponseSearchResult {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
-    json['totalSize'] = totalSize;
-    json['cqlQuery'] = cqlQuery;
-    json['searchDuration'] = searchDuration;
-    json['_links'] = links.toJson();
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    json[r'totalSize'] = totalSize;
+    json[r'cqlQuery'] = cqlQuery;
+    json[r'searchDuration'] = searchDuration;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -12171,24 +12181,24 @@ class SearchResult {
   factory SearchResult.fromJson(Map<String, Object?> json) {
     return SearchResult(
       content: Content.fromJson(
-          json['content'] as Map<String, Object?>? ?? const {}),
-      title: json['title'] as String? ?? '',
-      excerpt: json['excerpt'] as String? ?? '',
-      url: json['url'] as String? ?? '',
+          json[r'content'] as Map<String, Object?>? ?? const {}),
+      title: json[r'title'] as String? ?? '',
+      excerpt: json[r'excerpt'] as String? ?? '',
+      url: json[r'url'] as String? ?? '',
       resultParentContainer: ContainerSummary.fromJson(
-          json['resultParentContainer'] as Map<String, Object?>? ?? const {}),
+          json[r'resultParentContainer'] as Map<String, Object?>? ?? const {}),
       resultGlobalContainer: ContainerSummary.fromJson(
-          json['resultGlobalContainer'] as Map<String, Object?>? ?? const {}),
-      breadcrumbs: (json['breadcrumbs'] as List<Object?>?)
+          json[r'resultGlobalContainer'] as Map<String, Object?>? ?? const {}),
+      breadcrumbs: (json[r'breadcrumbs'] as List<Object?>?)
               ?.map((i) =>
                   Breadcrumb.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      entityType: json['entityType'] as String? ?? '',
-      iconCssClass: json['iconCssClass'] as String? ?? '',
-      lastModified: DateTime.tryParse(json['lastModified'] as String? ?? '') ??
+      entityType: json[r'entityType'] as String? ?? '',
+      iconCssClass: json[r'iconCssClass'] as String? ?? '',
+      lastModified: DateTime.tryParse(json[r'lastModified'] as String? ?? '') ??
           DateTime(0),
-      friendlyLastModified: json['friendlyLastModified'] as String? ?? '',
+      friendlyLastModified: json[r'friendlyLastModified'] as String? ?? '',
     );
   }
 
@@ -12206,17 +12216,17 @@ class SearchResult {
     var friendlyLastModified = this.friendlyLastModified;
 
     final json = <String, Object?>{};
-    json['content'] = content.toJson();
-    json['title'] = title;
-    json['excerpt'] = excerpt;
-    json['url'] = url;
-    json['resultParentContainer'] = resultParentContainer.toJson();
-    json['resultGlobalContainer'] = resultGlobalContainer.toJson();
-    json['breadcrumbs'] = breadcrumbs.map((i) => i.toJson()).toList();
-    json['entityType'] = entityType;
-    json['iconCssClass'] = iconCssClass;
-    json['lastModified'] = lastModified.toIso8601String();
-    json['friendlyLastModified'] = friendlyLastModified;
+    json[r'content'] = content.toJson();
+    json[r'title'] = title;
+    json[r'excerpt'] = excerpt;
+    json[r'url'] = url;
+    json[r'resultParentContainer'] = resultParentContainer.toJson();
+    json[r'resultGlobalContainer'] = resultGlobalContainer.toJson();
+    json[r'breadcrumbs'] = breadcrumbs.map((i) => i.toJson()).toList();
+    json[r'entityType'] = entityType;
+    json[r'iconCssClass'] = iconCssClass;
+    json[r'lastModified'] = lastModified.toIso8601String();
+    json[r'friendlyLastModified'] = friendlyLastModified;
     return json;
   }
 
@@ -12258,11 +12268,11 @@ class SpaceDescription {
 
   factory SpaceDescription.fromJson(Map<String, Object?> json) {
     return SpaceDescription(
-      plain: json['plain'] != null
-          ? SpaceDescription.fromJson(json['plain']! as Map<String, Object?>)
+      plain: json[r'plain'] != null
+          ? SpaceDescription.fromJson(json[r'plain']! as Map<String, Object?>)
           : null,
-      view: json['view'] != null
-          ? SpaceDescription.fromJson(json['view']! as Map<String, Object?>)
+      view: json[r'view'] != null
+          ? SpaceDescription.fromJson(json[r'view']! as Map<String, Object?>)
           : null,
     );
   }
@@ -12273,10 +12283,10 @@ class SpaceDescription {
 
     final json = <String, Object?>{};
     if (plain != null) {
-      json['plain'] = plain.toJson();
+      json[r'plain'] = plain.toJson();
     }
     if (view != null) {
-      json['view'] = view.toJson();
+      json[r'view'] = view.toJson();
     }
     return json;
   }
@@ -12297,7 +12307,7 @@ class SpaceMetadata {
   factory SpaceMetadata.fromJson(Map<String, Object?> json) {
     return SpaceMetadata(
       labels: LabelArray.fromJson(
-          json['labels'] as Map<String, Object?>? ?? const {}),
+          json[r'labels'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -12305,7 +12315,7 @@ class SpaceMetadata {
     var labels = this.labels;
 
     final json = <String, Object?>{};
-    json['labels'] = labels.toJson();
+    json[r'labels'] = labels.toJson();
     return json;
   }
 
@@ -12323,7 +12333,7 @@ class SpaceHistory {
 
   factory SpaceHistory.fromJson(Map<String, Object?> json) {
     return SpaceHistory(
-      createdDate: DateTime.tryParse(json['createdDate'] as String? ?? '') ??
+      createdDate: DateTime.tryParse(json[r'createdDate'] as String? ?? '') ??
           DateTime(0),
     );
   }
@@ -12332,7 +12342,7 @@ class SpaceHistory {
     var createdDate = this.createdDate;
 
     final json = <String, Object?>{};
-    json['createdDate'] = createdDate.toIso8601String();
+    json[r'createdDate'] = createdDate.toIso8601String();
     return json;
   }
 
@@ -12369,16 +12379,16 @@ class SpaceExpandable {
 
   factory SpaceExpandable.fromJson(Map<String, Object?> json) {
     return SpaceExpandable(
-      settings: json['settings'] as String?,
-      metadata: json['metadata'] as String?,
-      operations: json['operations'] as String?,
-      lookAndFeel: json['lookAndFeel'] as String?,
-      permissions: json['permissions'] as String?,
-      icon: json['icon'] as String?,
-      description: json['description'] as String?,
-      theme: json['theme'] as String?,
-      history: json['history'] as String?,
-      homepage: json['homepage'] as String?,
+      settings: json[r'settings'] as String?,
+      metadata: json[r'metadata'] as String?,
+      operations: json[r'operations'] as String?,
+      lookAndFeel: json[r'lookAndFeel'] as String?,
+      permissions: json[r'permissions'] as String?,
+      icon: json[r'icon'] as String?,
+      description: json[r'description'] as String?,
+      theme: json[r'theme'] as String?,
+      history: json[r'history'] as String?,
+      homepage: json[r'homepage'] as String?,
     );
   }
 
@@ -12396,34 +12406,34 @@ class SpaceExpandable {
 
     final json = <String, Object?>{};
     if (settings != null) {
-      json['settings'] = settings;
+      json[r'settings'] = settings;
     }
     if (metadata != null) {
-      json['metadata'] = metadata;
+      json[r'metadata'] = metadata;
     }
     if (operations != null) {
-      json['operations'] = operations;
+      json[r'operations'] = operations;
     }
     if (lookAndFeel != null) {
-      json['lookAndFeel'] = lookAndFeel;
+      json[r'lookAndFeel'] = lookAndFeel;
     }
     if (permissions != null) {
-      json['permissions'] = permissions;
+      json[r'permissions'] = permissions;
     }
     if (icon != null) {
-      json['icon'] = icon;
+      json[r'icon'] = icon;
     }
     if (description != null) {
-      json['description'] = description;
+      json[r'description'] = description;
     }
     if (theme != null) {
-      json['theme'] = theme;
+      json[r'theme'] = theme;
     }
     if (history != null) {
-      json['history'] = history;
+      json[r'history'] = history;
     }
     if (homepage != null) {
-      json['homepage'] = homepage;
+      json[r'homepage'] = homepage;
     }
     return json;
   }
@@ -12496,50 +12506,50 @@ class Space {
 
   factory Space.fromJson(Map<String, Object?> json) {
     return Space(
-      id: (json['id'] as num?)?.toInt() ?? 0,
-      key: json['key'] as String? ?? '',
-      name: json['name'] as String? ?? '',
-      icon: json['icon'] != null
-          ? Icon.fromJson(json['icon']! as Map<String, Object?>)
+      id: (json[r'id'] as num?)?.toInt() ?? 0,
+      key: json[r'key'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      icon: json[r'icon'] != null
+          ? Icon.fromJson(json[r'icon']! as Map<String, Object?>)
           : null,
-      description: json['description'] != null
+      description: json[r'description'] != null
           ? SpaceDescription.fromJson(
-              json['description']! as Map<String, Object?>)
+              json[r'description']! as Map<String, Object?>)
           : null,
-      homepage: json['homepage'] != null
-          ? Content.fromJson(json['homepage']! as Map<String, Object?>)
+      homepage: json[r'homepage'] != null
+          ? Content.fromJson(json[r'homepage']! as Map<String, Object?>)
           : null,
-      type: json['type'] as String? ?? '',
-      metadata: json['metadata'] != null
-          ? SpaceMetadata.fromJson(json['metadata']! as Map<String, Object?>)
+      type: json[r'type'] as String? ?? '',
+      metadata: json[r'metadata'] != null
+          ? SpaceMetadata.fromJson(json[r'metadata']! as Map<String, Object?>)
           : null,
-      operations: (json['operations'] as List<Object?>?)
+      operations: (json[r'operations'] as List<Object?>?)
               ?.map((i) => OperationCheckResult.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      permissions: (json['permissions'] as List<Object?>?)
+      permissions: (json[r'permissions'] as List<Object?>?)
               ?.map((i) => SpacePermission.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      status: json['status'] as String? ?? '',
-      settings: json['settings'] != null
-          ? SpaceSettings.fromJson(json['settings']! as Map<String, Object?>)
+      status: json[r'status'] as String? ?? '',
+      settings: json[r'settings'] != null
+          ? SpaceSettings.fromJson(json[r'settings']! as Map<String, Object?>)
           : null,
-      theme: json['theme'] != null
-          ? Theme.fromJson(json['theme']! as Map<String, Object?>)
+      theme: json[r'theme'] != null
+          ? Theme.fromJson(json[r'theme']! as Map<String, Object?>)
           : null,
-      lookAndFeel: json['lookAndFeel'] != null
-          ? LookAndFeel.fromJson(json['lookAndFeel']! as Map<String, Object?>)
+      lookAndFeel: json[r'lookAndFeel'] != null
+          ? LookAndFeel.fromJson(json[r'lookAndFeel']! as Map<String, Object?>)
           : null,
-      history: json['history'] != null
-          ? SpaceHistory.fromJson(json['history']! as Map<String, Object?>)
+      history: json[r'history'] != null
+          ? SpaceHistory.fromJson(json[r'history']! as Map<String, Object?>)
           : null,
       expandable: SpaceExpandable.fromJson(
-          json['_expandable'] as Map<String, Object?>? ?? const {}),
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -12563,39 +12573,39 @@ class Space {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['id'] = id;
-    json['key'] = key;
-    json['name'] = name;
+    json[r'id'] = id;
+    json[r'key'] = key;
+    json[r'name'] = name;
     if (icon != null) {
-      json['icon'] = icon.toJson();
+      json[r'icon'] = icon.toJson();
     }
     if (description != null) {
-      json['description'] = description.toJson();
+      json[r'description'] = description.toJson();
     }
     if (homepage != null) {
-      json['homepage'] = homepage.toJson();
+      json[r'homepage'] = homepage.toJson();
     }
-    json['type'] = type;
+    json[r'type'] = type;
     if (metadata != null) {
-      json['metadata'] = metadata.toJson();
+      json[r'metadata'] = metadata.toJson();
     }
-    json['operations'] = operations.map((i) => i.toJson()).toList();
-    json['permissions'] = permissions.map((i) => i.toJson()).toList();
-    json['status'] = status;
+    json[r'operations'] = operations.map((i) => i.toJson()).toList();
+    json[r'permissions'] = permissions.map((i) => i.toJson()).toList();
+    json[r'status'] = status;
     if (settings != null) {
-      json['settings'] = settings.toJson();
+      json[r'settings'] = settings.toJson();
     }
     if (theme != null) {
-      json['theme'] = theme.toJson();
+      json[r'theme'] = theme.toJson();
     }
     if (lookAndFeel != null) {
-      json['lookAndFeel'] = lookAndFeel.toJson();
+      json[r'lookAndFeel'] = lookAndFeel.toJson();
     }
     if (history != null) {
-      json['history'] = history.toJson();
+      json[r'history'] = history.toJson();
     }
-    json['_expandable'] = expandable.toJson();
-    json['_links'] = links.toJson();
+    json[r'_expandable'] = expandable.toJson();
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -12655,16 +12665,16 @@ class SpaceArray {
 
   factory SpaceArray.fromJson(Map<String, Object?> json) {
     return SpaceArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map(
                   (i) => Space.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -12676,11 +12686,11 @@ class SpaceArray {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
-    json['_links'] = links.toJson();
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -12729,13 +12739,13 @@ class SpaceCreate {
 
   factory SpaceCreate.fromJson(Map<String, Object?> json) {
     return SpaceCreate(
-      key: json['key'] as String? ?? '',
-      name: json['name'] as String? ?? '',
-      description: json['description'] != null
+      key: json[r'key'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      description: json[r'description'] != null
           ? SpaceDescriptionCreate.fromJson(
-              json['description']! as Map<String, Object?>)
+              json[r'description']! as Map<String, Object?>)
           : null,
-      permissions: (json['permissions'] as List<Object?>?)
+      permissions: (json[r'permissions'] as List<Object?>?)
               ?.map((i) => SpacePermission.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -12750,12 +12760,12 @@ class SpaceCreate {
     var permissions = this.permissions;
 
     final json = <String, Object?>{};
-    json['key'] = key;
-    json['name'] = name;
+    json[r'key'] = key;
+    json[r'name'] = name;
     if (description != null) {
-      json['description'] = description.toJson();
+      json[r'description'] = description.toJson();
     }
-    json['permissions'] = permissions.map((i) => i.toJson()).toList();
+    json[r'permissions'] = permissions.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -12784,8 +12794,8 @@ class SpaceDescriptionCreatePlain {
 
   factory SpaceDescriptionCreatePlain.fromJson(Map<String, Object?> json) {
     return SpaceDescriptionCreatePlain(
-      value: json['value'] as String?,
-      representation: json['representation'] as String?,
+      value: json[r'value'] as String?,
+      representation: json[r'representation'] as String?,
     );
   }
 
@@ -12795,10 +12805,10 @@ class SpaceDescriptionCreatePlain {
 
     final json = <String, Object?>{};
     if (value != null) {
-      json['value'] = value;
+      json[r'value'] = value;
     }
     if (representation != null) {
-      json['representation'] = representation;
+      json[r'representation'] = representation;
     }
     return json;
   }
@@ -12823,7 +12833,7 @@ class SpaceDescriptionCreate {
   factory SpaceDescriptionCreate.fromJson(Map<String, Object?> json) {
     return SpaceDescriptionCreate(
       plain: SpaceDescriptionCreatePlain.fromJson(
-          json['plain'] as Map<String, Object?>? ?? const {}),
+          json[r'plain'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -12831,7 +12841,7 @@ class SpaceDescriptionCreate {
     var plain = this.plain;
 
     final json = <String, Object?>{};
-    json['plain'] = plain.toJson();
+    json[r'plain'] = plain.toJson();
     return json;
   }
 
@@ -12850,12 +12860,12 @@ class SpacePermissionSubjectsUser {
 
   factory SpacePermissionSubjectsUser.fromJson(Map<String, Object?> json) {
     return SpacePermissionSubjectsUser(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map(
                   (i) => User.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -12864,8 +12874,8 @@ class SpacePermissionSubjectsUser {
     var size = this.size;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['size'] = size;
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'size'] = size;
     return json;
   }
 
@@ -12885,12 +12895,12 @@ class SpacePermissionSubjectsGroup {
 
   factory SpacePermissionSubjectsGroup.fromJson(Map<String, Object?> json) {
     return SpacePermissionSubjectsGroup(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map(
                   (i) => Group.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -12899,8 +12909,8 @@ class SpacePermissionSubjectsGroup {
     var size = this.size;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['size'] = size;
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'size'] = size;
     return json;
   }
 
@@ -12921,8 +12931,8 @@ class SpacePermissionSubjectsExpandable {
   factory SpacePermissionSubjectsExpandable.fromJson(
       Map<String, Object?> json) {
     return SpacePermissionSubjectsExpandable(
-      user: json['user'] as String?,
-      group: json['group'] as String?,
+      user: json[r'user'] as String?,
+      group: json[r'group'] as String?,
     );
   }
 
@@ -12932,10 +12942,10 @@ class SpacePermissionSubjectsExpandable {
 
     final json = <String, Object?>{};
     if (user != null) {
-      json['user'] = user;
+      json[r'user'] = user;
     }
     if (group != null) {
-      json['group'] = group;
+      json[r'group'] = group;
     }
     return json;
   }
@@ -12958,16 +12968,16 @@ class SpacePermissionSubjects {
 
   factory SpacePermissionSubjects.fromJson(Map<String, Object?> json) {
     return SpacePermissionSubjects(
-      user: json['user'] != null
+      user: json[r'user'] != null
           ? SpacePermissionSubjectsUser.fromJson(
-              json['user']! as Map<String, Object?>)
+              json[r'user']! as Map<String, Object?>)
           : null,
-      group: json['group'] != null
+      group: json[r'group'] != null
           ? SpacePermissionSubjectsGroup.fromJson(
-              json['group']! as Map<String, Object?>)
+              json[r'group']! as Map<String, Object?>)
           : null,
       expandable: SpacePermissionSubjectsExpandable.fromJson(
-          json['_expandable'] as Map<String, Object?>? ?? const {}),
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -12978,12 +12988,12 @@ class SpacePermissionSubjects {
 
     final json = <String, Object?>{};
     if (user != null) {
-      json['user'] = user.toJson();
+      json[r'user'] = user.toJson();
     }
     if (group != null) {
-      json['group'] = group.toJson();
+      json[r'group'] = group.toJson();
     }
-    json['_expandable'] = expandable.toJson();
+    json[r'_expandable'] = expandable.toJson();
     return json;
   }
 
@@ -13031,11 +13041,11 @@ class SpacePermission {
   factory SpacePermission.fromJson(Map<String, Object?> json) {
     return SpacePermission(
       subjects: SpacePermissionSubjects.fromJson(
-          json['subjects'] as Map<String, Object?>? ?? const {}),
+          json[r'subjects'] as Map<String, Object?>? ?? const {}),
       operation: OperationCheckResult.fromJson(
-          json['operation'] as Map<String, Object?>? ?? const {}),
-      anonymousAccess: json['anonymousAccess'] as bool? ?? false,
-      unlicensedAccess: json['unlicensedAccess'] as bool? ?? false,
+          json[r'operation'] as Map<String, Object?>? ?? const {}),
+      anonymousAccess: json[r'anonymousAccess'] as bool? ?? false,
+      unlicensedAccess: json[r'unlicensedAccess'] as bool? ?? false,
     );
   }
 
@@ -13046,10 +13056,10 @@ class SpacePermission {
     var unlicensedAccess = this.unlicensedAccess;
 
     final json = <String, Object?>{};
-    json['subjects'] = subjects.toJson();
-    json['operation'] = operation.toJson();
-    json['anonymousAccess'] = anonymousAccess;
-    json['unlicensedAccess'] = unlicensedAccess;
+    json[r'subjects'] = subjects.toJson();
+    json[r'operation'] = operation.toJson();
+    json[r'anonymousAccess'] = anonymousAccess;
+    json[r'unlicensedAccess'] = unlicensedAccess;
     return json;
   }
 
@@ -13081,11 +13091,11 @@ class SpacePrivateCreate {
 
   factory SpacePrivateCreate.fromJson(Map<String, Object?> json) {
     return SpacePrivateCreate(
-      key: json['key'] as String? ?? '',
-      name: json['name'] as String? ?? '',
-      description: json['description'] != null
+      key: json[r'key'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      description: json[r'description'] != null
           ? SpaceDescriptionCreate.fromJson(
-              json['description']! as Map<String, Object?>)
+              json[r'description']! as Map<String, Object?>)
           : null,
     );
   }
@@ -13096,10 +13106,10 @@ class SpacePrivateCreate {
     var description = this.description;
 
     final json = <String, Object?>{};
-    json['key'] = key;
-    json['name'] = name;
+    json[r'key'] = key;
+    json[r'name'] = name;
     if (description != null) {
-      json['description'] = description.toJson();
+      json[r'description'] = description.toJson();
     }
     return json;
   }
@@ -13128,10 +13138,10 @@ class SpacePropertyVersion {
 
   factory SpacePropertyVersion.fromJson(Map<String, Object?> json) {
     return SpacePropertyVersion(
-      when: DateTime.tryParse(json['when'] as String? ?? '') ?? DateTime(0),
-      message: json['message'] as String? ?? '',
-      number: (json['number'] as num?)?.toInt() ?? 0,
-      minorEdit: json['minorEdit'] as bool? ?? false,
+      when: DateTime.tryParse(json[r'when'] as String? ?? '') ?? DateTime(0),
+      message: json[r'message'] as String? ?? '',
+      number: (json[r'number'] as num?)?.toInt() ?? 0,
+      minorEdit: json[r'minorEdit'] as bool? ?? false,
     );
   }
 
@@ -13142,10 +13152,10 @@ class SpacePropertyVersion {
     var minorEdit = this.minorEdit;
 
     final json = <String, Object?>{};
-    json['when'] = when.toIso8601String();
-    json['message'] = message;
-    json['number'] = number;
-    json['minorEdit'] = minorEdit;
+    json[r'when'] = when.toIso8601String();
+    json[r'message'] = message;
+    json[r'number'] = number;
+    json[r'minorEdit'] = minorEdit;
     return json;
   }
 
@@ -13168,8 +13178,8 @@ class SpacePropertyExpandable {
 
   factory SpacePropertyExpandable.fromJson(Map<String, Object?> json) {
     return SpacePropertyExpandable(
-      version: json['version'] as String?,
-      space: json['space'] as String?,
+      version: json[r'version'] as String?,
+      space: json[r'space'] as String?,
     );
   }
 
@@ -13179,10 +13189,10 @@ class SpacePropertyExpandable {
 
     final json = <String, Object?>{};
     if (version != null) {
-      json['version'] = version;
+      json[r'version'] = version;
     }
     if (space != null) {
-      json['space'] = space;
+      json[r'space'] = space;
     }
     return json;
   }
@@ -13213,18 +13223,18 @@ class SpaceProperty {
 
   factory SpaceProperty.fromJson(Map<String, Object?> json) {
     return SpaceProperty(
-      id: (json['id'] as num?)?.toInt() ?? 0,
-      key: json['key'] as String? ?? '',
-      value: json['value'] as Map<String, Object?>? ?? {},
-      version: json['version'] != null
+      id: (json[r'id'] as num?)?.toInt() ?? 0,
+      key: json[r'key'] as String? ?? '',
+      value: json[r'value'] as Map<String, Object?>? ?? {},
+      version: json[r'version'] != null
           ? SpacePropertyVersion.fromJson(
-              json['version']! as Map<String, Object?>)
+              json[r'version']! as Map<String, Object?>)
           : null,
-      space: json['space'] != null
-          ? Space.fromJson(json['space']! as Map<String, Object?>)
+      space: json[r'space'] != null
+          ? Space.fromJson(json[r'space']! as Map<String, Object?>)
           : null,
       expandable: SpacePropertyExpandable.fromJson(
-          json['_expandable'] as Map<String, Object?>? ?? const {}),
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -13237,16 +13247,16 @@ class SpaceProperty {
     var expandable = this.expandable;
 
     final json = <String, Object?>{};
-    json['id'] = id;
-    json['key'] = key;
-    json['value'] = value;
+    json[r'id'] = id;
+    json[r'key'] = key;
+    json[r'value'] = value;
     if (version != null) {
-      json['version'] = version.toJson();
+      json[r'version'] = version.toJson();
     }
     if (space != null) {
-      json['space'] = space.toJson();
+      json[r'space'] = space.toJson();
     }
-    json['_expandable'] = expandable.toJson();
+    json[r'_expandable'] = expandable.toJson();
     return json;
   }
 
@@ -13284,16 +13294,16 @@ class SpacePropertyArray {
 
   factory SpacePropertyArray.fromJson(Map<String, Object?> json) {
     return SpacePropertyArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map((i) => SpaceProperty.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -13305,11 +13315,11 @@ class SpacePropertyArray {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
-    json['_links'] = links.toJson();
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -13338,9 +13348,9 @@ class SpacePropertyCreate {
 
   factory SpacePropertyCreate.fromJson(Map<String, Object?> json) {
     return SpacePropertyCreate(
-      key: json['key'] as String? ?? '',
+      key: json[r'key'] as String? ?? '',
       value: PropertyValue.fromJson(
-          json['value'] as Map<String, Object?>? ?? const {}),
+          json[r'value'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -13349,8 +13359,8 @@ class SpacePropertyCreate {
     var value = this.value;
 
     final json = <String, Object?>{};
-    json['key'] = key;
-    json['value'] = value.toJson();
+    json[r'key'] = key;
+    json[r'value'] = value.toJson();
     return json;
   }
 
@@ -13370,7 +13380,7 @@ class SpacePropertyCreateNoKey {
   factory SpacePropertyCreateNoKey.fromJson(Map<String, Object?> json) {
     return SpacePropertyCreateNoKey(
       value: PropertyValue.fromJson(
-          json['value'] as Map<String, Object?>? ?? const {}),
+          json[r'value'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -13378,7 +13388,7 @@ class SpacePropertyCreateNoKey {
     var value = this.value;
 
     final json = <String, Object?>{};
-    json['value'] = value.toJson();
+    json[r'value'] = value.toJson();
     return json;
   }
 
@@ -13406,8 +13416,8 @@ class SpacePropertyUpdateVersion {
 
   factory SpacePropertyUpdateVersion.fromJson(Map<String, Object?> json) {
     return SpacePropertyUpdateVersion(
-      number: (json['number'] as num?)?.toInt() ?? 0,
-      minorEdit: json['minorEdit'] as bool? ?? false,
+      number: (json[r'number'] as num?)?.toInt() ?? 0,
+      minorEdit: json[r'minorEdit'] as bool? ?? false,
     );
   }
 
@@ -13416,8 +13426,8 @@ class SpacePropertyUpdateVersion {
     var minorEdit = this.minorEdit;
 
     final json = <String, Object?>{};
-    json['number'] = number;
-    json['minorEdit'] = minorEdit;
+    json[r'number'] = number;
+    json[r'minorEdit'] = minorEdit;
     return json;
   }
 
@@ -13440,9 +13450,9 @@ class SpacePropertyUpdate {
 
   factory SpacePropertyUpdate.fromJson(Map<String, Object?> json) {
     return SpacePropertyUpdate(
-      value: json['value'] as Map<String, Object?>? ?? {},
+      value: json[r'value'] as Map<String, Object?>? ?? {},
       version: SpacePropertyUpdateVersion.fromJson(
-          json['version'] as Map<String, Object?>? ?? const {}),
+          json[r'version'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -13451,8 +13461,8 @@ class SpacePropertyUpdate {
     var version = this.version;
 
     final json = <String, Object?>{};
-    json['value'] = value;
-    json['version'] = version.toJson();
+    json[r'value'] = value;
+    json[r'version'] = version.toJson();
     return json;
   }
 
@@ -13479,9 +13489,9 @@ class SpaceSettings {
 
   factory SpaceSettings.fromJson(Map<String, Object?> json) {
     return SpaceSettings(
-      routeOverrideEnabled: json['routeOverrideEnabled'] as bool? ?? false,
+      routeOverrideEnabled: json[r'routeOverrideEnabled'] as bool? ?? false,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -13490,8 +13500,8 @@ class SpaceSettings {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['routeOverrideEnabled'] = routeOverrideEnabled;
-    json['_links'] = links.toJson();
+    json[r'routeOverrideEnabled'] = routeOverrideEnabled;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -13517,7 +13527,7 @@ class SpaceSettingsUpdate {
 
   factory SpaceSettingsUpdate.fromJson(Map<String, Object?> json) {
     return SpaceSettingsUpdate(
-      routeOverrideEnabled: json['routeOverrideEnabled'] as bool? ?? false,
+      routeOverrideEnabled: json[r'routeOverrideEnabled'] as bool? ?? false,
     );
   }
 
@@ -13525,7 +13535,7 @@ class SpaceSettingsUpdate {
     var routeOverrideEnabled = this.routeOverrideEnabled;
 
     final json = <String, Object?>{};
-    json['routeOverrideEnabled'] = routeOverrideEnabled;
+    json[r'routeOverrideEnabled'] = routeOverrideEnabled;
     return json;
   }
 
@@ -13545,7 +13555,7 @@ class SpaceUpdateHomepage {
 
   factory SpaceUpdateHomepage.fromJson(Map<String, Object?> json) {
     return SpaceUpdateHomepage(
-      id: json['id'] as String? ?? '',
+      id: json[r'id'] as String? ?? '',
     );
   }
 
@@ -13553,7 +13563,7 @@ class SpaceUpdateHomepage {
     var id = this.id;
 
     final json = <String, Object?>{};
-    json['id'] = id;
+    json[r'id'] = id;
     return json;
   }
 
@@ -13576,14 +13586,14 @@ class SpaceUpdate {
 
   factory SpaceUpdate.fromJson(Map<String, Object?> json) {
     return SpaceUpdate(
-      name: json['name'] as String?,
-      description: json['description'] != null
+      name: json[r'name'] as String?,
+      description: json[r'description'] != null
           ? SpaceDescriptionCreate.fromJson(
-              json['description']! as Map<String, Object?>)
+              json[r'description']! as Map<String, Object?>)
           : null,
-      homepage: json['homepage'] != null
+      homepage: json[r'homepage'] != null
           ? SpaceUpdateHomepage.fromJson(
-              json['homepage']! as Map<String, Object?>)
+              json[r'homepage']! as Map<String, Object?>)
           : null,
     );
   }
@@ -13595,13 +13605,13 @@ class SpaceUpdate {
 
     final json = <String, Object?>{};
     if (name != null) {
-      json['name'] = name;
+      json[r'name'] = name;
     }
     if (description != null) {
-      json['description'] = description.toJson();
+      json[r'description'] = description.toJson();
     }
     if (homepage != null) {
-      json['homepage'] = homepage.toJson();
+      json[r'homepage'] = homepage.toJson();
     }
     return json;
   }
@@ -13632,11 +13642,11 @@ class SpaceWatch {
 
   factory SpaceWatch.fromJson(Map<String, Object?> json) {
     return SpaceWatch(
-      type: json['type'] as String? ?? '',
+      type: json[r'type'] as String? ?? '',
       watcher: SpaceWatchUser.fromJson(
-          json['watcher'] as Map<String, Object?>? ?? const {}),
-      contentId: json['contentId'] as String?,
-      spaceKey: json['spaceKey'] as String? ?? '',
+          json[r'watcher'] as Map<String, Object?>? ?? const {}),
+      contentId: json[r'contentId'] as String?,
+      spaceKey: json[r'spaceKey'] as String? ?? '',
     );
   }
 
@@ -13647,12 +13657,12 @@ class SpaceWatch {
     var spaceKey = this.spaceKey;
 
     final json = <String, Object?>{};
-    json['type'] = type;
-    json['watcher'] = watcher.toJson();
+    json[r'type'] = type;
+    json[r'watcher'] = watcher.toJson();
     if (contentId != null) {
-      json['contentId'] = contentId;
+      json[r'contentId'] = contentId;
     }
-    json['spaceKey'] = spaceKey;
+    json[r'spaceKey'] = spaceKey;
     return json;
   }
 
@@ -13686,16 +13696,16 @@ class SpaceWatchArray {
 
   factory SpaceWatchArray.fromJson(Map<String, Object?> json) {
     return SpaceWatchArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map((i) =>
                   SpaceWatch.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
-      links: json['_links'] != null
-          ? GenericLinks.fromJson(json['_links']! as Map<String, Object?>)
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
+      links: json[r'_links'] != null
+          ? GenericLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -13708,12 +13718,12 @@ class SpaceWatchArray {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -13783,24 +13793,24 @@ class SpaceWatchUser {
 
   factory SpaceWatchUser.fromJson(Map<String, Object?> json) {
     return SpaceWatchUser(
-      type: json['type'] as String? ?? '',
-      username: json['username'] as String?,
-      userKey: json['userKey'] as String?,
-      accountId: json['accountId'] as String? ?? '',
+      type: json[r'type'] as String? ?? '',
+      username: json[r'username'] as String?,
+      userKey: json[r'userKey'] as String?,
+      accountId: json[r'accountId'] as String? ?? '',
       profilePicture: Icon.fromJson(
-          json['profilePicture'] as Map<String, Object?>? ?? const {}),
-      displayName: json['displayName'] as String? ?? '',
-      operations: (json['operations'] as List<Object?>?)
+          json[r'profilePicture'] as Map<String, Object?>? ?? const {}),
+      displayName: json[r'displayName'] as String? ?? '',
+      operations: (json[r'operations'] as List<Object?>?)
               ?.map((i) => OperationCheckResult.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      details: json['details'] != null
-          ? UserDetails.fromJson(json['details']! as Map<String, Object?>)
+      details: json[r'details'] != null
+          ? UserDetails.fromJson(json[r'details']! as Map<String, Object?>)
           : null,
-      accountType: json['accountType'] as String? ?? '',
-      email: json['email'] as String? ?? '',
-      publicName: json['publicName'] as String? ?? '',
+      accountType: json[r'accountType'] as String? ?? '',
+      email: json[r'email'] as String? ?? '',
+      publicName: json[r'publicName'] as String? ?? '',
     );
   }
 
@@ -13818,23 +13828,23 @@ class SpaceWatchUser {
     var publicName = this.publicName;
 
     final json = <String, Object?>{};
-    json['type'] = type;
+    json[r'type'] = type;
     if (username != null) {
-      json['username'] = username;
+      json[r'username'] = username;
     }
     if (userKey != null) {
-      json['userKey'] = userKey;
+      json[r'userKey'] = userKey;
     }
-    json['accountId'] = accountId;
-    json['profilePicture'] = profilePicture.toJson();
-    json['displayName'] = displayName;
-    json['operations'] = operations.map((i) => i.toJson()).toList();
+    json[r'accountId'] = accountId;
+    json[r'profilePicture'] = profilePicture.toJson();
+    json[r'displayName'] = displayName;
+    json[r'operations'] = operations.map((i) => i.toJson()).toList();
     if (details != null) {
-      json['details'] = details.toJson();
+      json[r'details'] = details.toJson();
     }
-    json['accountType'] = accountType;
-    json['email'] = email;
-    json['publicName'] = publicName;
+    json[r'accountType'] = accountType;
+    json[r'email'] = email;
+    json[r'publicName'] = publicName;
     return json;
   }
 
@@ -13875,9 +13885,9 @@ class SuperBatchWebResourcesUris {
 
   factory SuperBatchWebResourcesUris.fromJson(Map<String, Object?> json) {
     return SuperBatchWebResourcesUris(
-      all: json['all'] as String?,
-      css: json['css'] as String?,
-      js: json['js'] as String?,
+      all: json[r'all'] as String?,
+      css: json[r'css'] as String?,
+      js: json[r'js'] as String?,
     );
   }
 
@@ -13888,13 +13898,13 @@ class SuperBatchWebResourcesUris {
 
     final json = <String, Object?>{};
     if (all != null) {
-      json['all'] = all;
+      json[r'all'] = all;
     }
     if (css != null) {
-      json['css'] = css;
+      json[r'css'] = css;
     }
     if (js != null) {
-      json['js'] = js;
+      json[r'js'] = js;
     }
     return json;
   }
@@ -13918,10 +13928,10 @@ class SuperBatchWebResourcesTags {
 
   factory SuperBatchWebResourcesTags.fromJson(Map<String, Object?> json) {
     return SuperBatchWebResourcesTags(
-      all: json['all'] as String?,
-      css: json['css'] as String?,
-      data: json['data'] as String?,
-      js: json['js'] as String?,
+      all: json[r'all'] as String?,
+      css: json[r'css'] as String?,
+      data: json[r'data'] as String?,
+      js: json[r'js'] as String?,
     );
   }
 
@@ -13933,16 +13943,16 @@ class SuperBatchWebResourcesTags {
 
     final json = <String, Object?>{};
     if (all != null) {
-      json['all'] = all;
+      json[r'all'] = all;
     }
     if (css != null) {
-      json['css'] = css;
+      json[r'css'] = css;
     }
     if (data != null) {
-      json['data'] = data;
+      json[r'data'] = data;
     }
     if (js != null) {
-      json['js'] = js;
+      json[r'js'] = js;
     }
     return json;
   }
@@ -13967,15 +13977,15 @@ class SuperBatchWebResources {
 
   factory SuperBatchWebResources.fromJson(Map<String, Object?> json) {
     return SuperBatchWebResources(
-      uris: json['uris'] != null
+      uris: json[r'uris'] != null
           ? SuperBatchWebResourcesUris.fromJson(
-              json['uris']! as Map<String, Object?>)
+              json[r'uris']! as Map<String, Object?>)
           : null,
-      tags: json['tags'] != null
+      tags: json[r'tags'] != null
           ? SuperBatchWebResourcesTags.fromJson(
-              json['tags']! as Map<String, Object?>)
+              json[r'tags']! as Map<String, Object?>)
           : null,
-      metatags: json['metatags'] as String?,
+      metatags: json[r'metatags'] as String?,
     );
   }
 
@@ -13986,13 +13996,13 @@ class SuperBatchWebResources {
 
     final json = <String, Object?>{};
     if (uris != null) {
-      json['uris'] = uris.toJson();
+      json[r'uris'] = uris.toJson();
     }
     if (tags != null) {
-      json['tags'] = tags.toJson();
+      json[r'tags'] = tags.toJson();
     }
     if (metatags != null) {
-      json['metatags'] = metatags;
+      json[r'metatags'] = metatags;
     }
     return json;
   }
@@ -14027,12 +14037,12 @@ class SystemInfoEntity {
 
   factory SystemInfoEntity.fromJson(Map<String, Object?> json) {
     return SystemInfoEntity(
-      cloudId: json['cloudId'] as String? ?? '',
-      commitHash: json['commitHash'] as String? ?? '',
-      baseUrl: json['baseUrl'] as String?,
-      edition: json['edition'] as String?,
-      siteTitle: json['siteTitle'] as String?,
-      defaultLocale: json['defaultLocale'] as String?,
+      cloudId: json[r'cloudId'] as String? ?? '',
+      commitHash: json[r'commitHash'] as String? ?? '',
+      baseUrl: json[r'baseUrl'] as String?,
+      edition: json[r'edition'] as String?,
+      siteTitle: json[r'siteTitle'] as String?,
+      defaultLocale: json[r'defaultLocale'] as String?,
     );
   }
 
@@ -14045,19 +14055,19 @@ class SystemInfoEntity {
     var defaultLocale = this.defaultLocale;
 
     final json = <String, Object?>{};
-    json['cloudId'] = cloudId;
-    json['commitHash'] = commitHash;
+    json[r'cloudId'] = cloudId;
+    json[r'commitHash'] = commitHash;
     if (baseUrl != null) {
-      json['baseUrl'] = baseUrl;
+      json[r'baseUrl'] = baseUrl;
     }
     if (edition != null) {
-      json['edition'] = edition;
+      json[r'edition'] = edition;
     }
     if (siteTitle != null) {
-      json['siteTitle'] = siteTitle;
+      json[r'siteTitle'] = siteTitle;
     }
     if (defaultLocale != null) {
-      json['defaultLocale'] = defaultLocale;
+      json[r'defaultLocale'] = defaultLocale;
     }
     return json;
   }
@@ -14114,20 +14124,20 @@ class Task {
 
   factory Task.fromJson(Map<String, Object?> json) {
     return Task(
-      globalId: (json['globalId'] as num?)?.toInt() ?? 0,
-      id: (json['id'] as num?)?.toInt() ?? 0,
-      contentId: (json['contentId'] as num?)?.toInt() ?? 0,
-      status: json['status'] as String? ?? '',
-      title: json['title'] as String?,
-      description: json['description'] as String?,
-      body: json['body'] as String?,
-      creator: json['creator'] as String? ?? '',
-      assignee: json['assignee'] as String?,
-      completeUser: json['completeUser'] as String?,
-      createDate: (json['createDate'] as num?)?.toInt() ?? 0,
-      dueDate: (json['dueDate'] as num?)?.toInt(),
-      updateDate: (json['updateDate'] as num?)?.toInt(),
-      completeDate: (json['completeDate'] as num?)?.toInt(),
+      globalId: (json[r'globalId'] as num?)?.toInt() ?? 0,
+      id: (json[r'id'] as num?)?.toInt() ?? 0,
+      contentId: (json[r'contentId'] as num?)?.toInt() ?? 0,
+      status: json[r'status'] as String? ?? '',
+      title: json[r'title'] as String?,
+      description: json[r'description'] as String?,
+      body: json[r'body'] as String?,
+      creator: json[r'creator'] as String? ?? '',
+      assignee: json[r'assignee'] as String?,
+      completeUser: json[r'completeUser'] as String?,
+      createDate: (json[r'createDate'] as num?)?.toInt() ?? 0,
+      dueDate: (json[r'dueDate'] as num?)?.toInt(),
+      updateDate: (json[r'updateDate'] as num?)?.toInt(),
+      completeDate: (json[r'completeDate'] as num?)?.toInt(),
     );
   }
 
@@ -14148,35 +14158,35 @@ class Task {
     var completeDate = this.completeDate;
 
     final json = <String, Object?>{};
-    json['globalId'] = globalId;
-    json['id'] = id;
-    json['contentId'] = contentId;
-    json['status'] = status;
+    json[r'globalId'] = globalId;
+    json[r'id'] = id;
+    json[r'contentId'] = contentId;
+    json[r'status'] = status;
     if (title != null) {
-      json['title'] = title;
+      json[r'title'] = title;
     }
     if (description != null) {
-      json['description'] = description;
+      json[r'description'] = description;
     }
     if (body != null) {
-      json['body'] = body;
+      json[r'body'] = body;
     }
-    json['creator'] = creator;
+    json[r'creator'] = creator;
     if (assignee != null) {
-      json['assignee'] = assignee;
+      json[r'assignee'] = assignee;
     }
     if (completeUser != null) {
-      json['completeUser'] = completeUser;
+      json[r'completeUser'] = completeUser;
     }
-    json['createDate'] = createDate;
+    json[r'createDate'] = createDate;
     if (dueDate != null) {
-      json['dueDate'] = dueDate;
+      json[r'dueDate'] = dueDate;
     }
     if (updateDate != null) {
-      json['updateDate'] = updateDate;
+      json[r'updateDate'] = updateDate;
     }
     if (completeDate != null) {
-      json['completeDate'] = completeDate;
+      json[r'completeDate'] = completeDate;
     }
     return json;
   }
@@ -14229,14 +14239,14 @@ class TaskPageResponse {
 
   factory TaskPageResponse.fromJson(Map<String, Object?> json) {
     return TaskPageResponse(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map(
                   (i) => Task.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -14247,10 +14257,10 @@ class TaskPageResponse {
     var size = this.size;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
     return json;
   }
 
@@ -14294,16 +14304,16 @@ class ThemeArray {
 
   factory ThemeArray.fromJson(Map<String, Object?> json) {
     return ThemeArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map((i) =>
                   ThemeNoLinks.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -14315,11 +14325,11 @@ class ThemeArray {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
-    json['_links'] = links.toJson();
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -14354,10 +14364,10 @@ class ThemeNoLinks {
 
   factory ThemeNoLinks.fromJson(Map<String, Object?> json) {
     return ThemeNoLinks(
-      themeKey: json['themeKey'] as String? ?? '',
-      name: json['name'] as String? ?? '',
-      description: json['description'] as String? ?? '',
-      icon: Icon.fromJson(json['icon'] as Map<String, Object?>? ?? const {}),
+      themeKey: json[r'themeKey'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      description: json[r'description'] as String? ?? '',
+      icon: Icon.fromJson(json[r'icon'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -14368,10 +14378,10 @@ class ThemeNoLinks {
     var icon = this.icon;
 
     final json = <String, Object?>{};
-    json['themeKey'] = themeKey;
-    json['name'] = name;
-    json['description'] = description;
-    json['icon'] = icon.toJson();
+    json[r'themeKey'] = themeKey;
+    json[r'name'] = name;
+    json[r'description'] = description;
+    json[r'icon'] = icon.toJson();
     return json;
   }
 
@@ -14394,7 +14404,7 @@ class ThemeUpdate {
 
   factory ThemeUpdate.fromJson(Map<String, Object?> json) {
     return ThemeUpdate(
-      themeKey: json['themeKey'] as String? ?? '',
+      themeKey: json[r'themeKey'] as String? ?? '',
     );
   }
 
@@ -14402,7 +14412,7 @@ class ThemeUpdate {
     var themeKey = this.themeKey;
 
     final json = <String, Object?>{};
-    json['themeKey'] = themeKey;
+    json[r'themeKey'] = themeKey;
     return json;
   }
 
@@ -14422,9 +14432,9 @@ class UserExpandable {
 
   factory UserExpandable.fromJson(Map<String, Object?> json) {
     return UserExpandable(
-      operations: json['operations'] as String?,
-      details: json['details'] as String?,
-      personalSpace: json['personalSpace'] as String?,
+      operations: json[r'operations'] as String?,
+      details: json[r'details'] as String?,
+      personalSpace: json[r'personalSpace'] as String?,
     );
   }
 
@@ -14435,13 +14445,13 @@ class UserExpandable {
 
     final json = <String, Object?>{};
     if (operations != null) {
-      json['operations'] = operations;
+      json[r'operations'] = operations;
     }
     if (details != null) {
-      json['details'] = details;
+      json[r'details'] = details;
     }
     if (personalSpace != null) {
-      json['personalSpace'] = personalSpace;
+      json[r'personalSpace'] = personalSpace;
     }
     return json;
   }
@@ -14519,32 +14529,32 @@ class User {
 
   factory User.fromJson(Map<String, Object?> json) {
     return User(
-      type: UserType.fromValue(json['type'] as String? ?? ''),
-      username: json['username'] as String?,
-      userKey: json['userKey'] as String?,
-      accountId: json['accountId'] as String? ?? '',
+      type: UserType.fromValue(json[r'type'] as String? ?? ''),
+      username: json[r'username'] as String?,
+      userKey: json[r'userKey'] as String?,
+      accountId: json[r'accountId'] as String? ?? '',
       accountType:
-          UserAccountType.fromValue(json['accountType'] as String? ?? ''),
-      email: json['email'] as String? ?? '',
-      publicName: json['publicName'] as String? ?? '',
+          UserAccountType.fromValue(json[r'accountType'] as String? ?? ''),
+      email: json[r'email'] as String? ?? '',
+      publicName: json[r'publicName'] as String? ?? '',
       profilePicture: Icon.fromJson(
-          json['profilePicture'] as Map<String, Object?>? ?? const {}),
-      displayName: json['displayName'] as String? ?? '',
-      operations: (json['operations'] as List<Object?>?)
+          json[r'profilePicture'] as Map<String, Object?>? ?? const {}),
+      displayName: json[r'displayName'] as String? ?? '',
+      operations: (json[r'operations'] as List<Object?>?)
               ?.map((i) => OperationCheckResult.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      details: json['details'] != null
-          ? UserDetails.fromJson(json['details']! as Map<String, Object?>)
+      details: json[r'details'] != null
+          ? UserDetails.fromJson(json[r'details']! as Map<String, Object?>)
           : null,
-      personalSpace: json['personalSpace'] != null
-          ? Space.fromJson(json['personalSpace']! as Map<String, Object?>)
+      personalSpace: json[r'personalSpace'] != null
+          ? Space.fromJson(json[r'personalSpace']! as Map<String, Object?>)
           : null,
       expandable: UserExpandable.fromJson(
-          json['_expandable'] as Map<String, Object?>? ?? const {}),
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -14565,28 +14575,28 @@ class User {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['type'] = type.value;
+    json[r'type'] = type.value;
     if (username != null) {
-      json['username'] = username;
+      json[r'username'] = username;
     }
     if (userKey != null) {
-      json['userKey'] = userKey;
+      json[r'userKey'] = userKey;
     }
-    json['accountId'] = accountId;
-    json['accountType'] = accountType.value;
-    json['email'] = email;
-    json['publicName'] = publicName;
-    json['profilePicture'] = profilePicture.toJson();
-    json['displayName'] = displayName;
-    json['operations'] = operations.map((i) => i.toJson()).toList();
+    json[r'accountId'] = accountId;
+    json[r'accountType'] = accountType.value;
+    json[r'email'] = email;
+    json[r'publicName'] = publicName;
+    json[r'profilePicture'] = profilePicture.toJson();
+    json[r'displayName'] = displayName;
+    json[r'operations'] = operations.map((i) => i.toJson()).toList();
     if (details != null) {
-      json['details'] = details.toJson();
+      json[r'details'] = details.toJson();
     }
     if (personalSpace != null) {
-      json['personalSpace'] = personalSpace.toJson();
+      json[r'personalSpace'] = personalSpace.toJson();
     }
-    json['_expandable'] = expandable.toJson();
-    json['_links'] = links.toJson();
+    json[r'_expandable'] = expandable.toJson();
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -14682,7 +14692,7 @@ class UserAnonymousExpandable {
 
   factory UserAnonymousExpandable.fromJson(Map<String, Object?> json) {
     return UserAnonymousExpandable(
-      operations: json['operations'] as String?,
+      operations: json[r'operations'] as String?,
     );
   }
 
@@ -14691,7 +14701,7 @@ class UserAnonymousExpandable {
 
     final json = <String, Object?>{};
     if (operations != null) {
-      json['operations'] = operations;
+      json[r'operations'] = operations;
     }
     return json;
   }
@@ -14722,19 +14732,19 @@ class UserAnonymous {
 
   factory UserAnonymous.fromJson(Map<String, Object?> json) {
     return UserAnonymous(
-      type: json['type'] as String? ?? '',
+      type: json[r'type'] as String? ?? '',
       profilePicture: Icon.fromJson(
-          json['profilePicture'] as Map<String, Object?>? ?? const {}),
-      displayName: json['displayName'] as String? ?? '',
-      operations: (json['operations'] as List<Object?>?)
+          json[r'profilePicture'] as Map<String, Object?>? ?? const {}),
+      displayName: json[r'displayName'] as String? ?? '',
+      operations: (json[r'operations'] as List<Object?>?)
               ?.map((i) => OperationCheckResult.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
       expandable: UserAnonymousExpandable.fromJson(
-          json['_expandable'] as Map<String, Object?>? ?? const {}),
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -14747,12 +14757,12 @@ class UserAnonymous {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['type'] = type;
-    json['profilePicture'] = profilePicture.toJson();
-    json['displayName'] = displayName;
-    json['operations'] = operations.map((i) => i.toJson()).toList();
-    json['_expandable'] = expandable.toJson();
-    json['_links'] = links.toJson();
+    json[r'type'] = type;
+    json[r'profilePicture'] = profilePicture.toJson();
+    json[r'displayName'] = displayName;
+    json[r'operations'] = operations.map((i) => i.toJson()).toList();
+    json[r'_expandable'] = expandable.toJson();
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -14788,14 +14798,14 @@ class UserArray {
 
   factory UserArray.fromJson(Map<String, Object?> json) {
     return UserArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map(
                   (i) => User.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -14806,10 +14816,10 @@ class UserArray {
     var size = this.size;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
     return json;
   }
 
@@ -14860,9 +14870,9 @@ class UserDetailsBusiness {
 
   factory UserDetailsBusiness.fromJson(Map<String, Object?> json) {
     return UserDetailsBusiness(
-      position: json['position'] as String?,
-      department: json['department'] as String?,
-      location: json['location'] as String?,
+      position: json[r'position'] as String?,
+      department: json[r'department'] as String?,
+      location: json[r'location'] as String?,
     );
   }
 
@@ -14873,13 +14883,13 @@ class UserDetailsBusiness {
 
     final json = <String, Object?>{};
     if (position != null) {
-      json['position'] = position;
+      json[r'position'] = position;
     }
     if (department != null) {
-      json['department'] = department;
+      json[r'department'] = department;
     }
     if (location != null) {
-      json['location'] = location;
+      json[r'location'] = location;
     }
     return json;
   }
@@ -14923,10 +14933,10 @@ class UserDetailsPersonal {
 
   factory UserDetailsPersonal.fromJson(Map<String, Object?> json) {
     return UserDetailsPersonal(
-      phone: json['phone'] as String?,
-      im: json['im'] as String?,
-      website: json['website'] as String?,
-      email: json['email'] as String?,
+      phone: json[r'phone'] as String?,
+      im: json[r'im'] as String?,
+      website: json[r'website'] as String?,
+      email: json[r'email'] as String?,
     );
   }
 
@@ -14938,16 +14948,16 @@ class UserDetailsPersonal {
 
     final json = <String, Object?>{};
     if (phone != null) {
-      json['phone'] = phone;
+      json[r'phone'] = phone;
     }
     if (im != null) {
-      json['im'] = im;
+      json[r'im'] = im;
     }
     if (website != null) {
-      json['website'] = website;
+      json[r'website'] = website;
     }
     if (email != null) {
-      json['email'] = email;
+      json[r'email'] = email;
     }
     return json;
   }
@@ -14971,13 +14981,13 @@ class UserDetails {
 
   factory UserDetails.fromJson(Map<String, Object?> json) {
     return UserDetails(
-      business: json['business'] != null
+      business: json[r'business'] != null
           ? UserDetailsBusiness.fromJson(
-              json['business']! as Map<String, Object?>)
+              json[r'business']! as Map<String, Object?>)
           : null,
-      personal: json['personal'] != null
+      personal: json[r'personal'] != null
           ? UserDetailsPersonal.fromJson(
-              json['personal']! as Map<String, Object?>)
+              json[r'personal']! as Map<String, Object?>)
           : null,
     );
   }
@@ -14988,10 +14998,10 @@ class UserDetails {
 
     final json = <String, Object?>{};
     if (business != null) {
-      json['business'] = business.toJson();
+      json[r'business'] = business.toJson();
     }
     if (personal != null) {
-      json['personal'] = personal.toJson();
+      json[r'personal'] = personal.toJson();
     }
     return json;
   }
@@ -15014,17 +15024,17 @@ class UsersUserKeys {
 
   factory UsersUserKeys.fromJson(Map<String, Object?> json) {
     return UsersUserKeys(
-      users: (json['users'] as List<Object?>?)
+      users: (json[r'users'] as List<Object?>?)
               ?.map(
                   (i) => User.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      userKeys: (json['userKeys'] as List<Object?>?)
+      userKeys: (json[r'userKeys'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      links: json['_links'] != null
-          ? GenericLinks.fromJson(json['_links']! as Map<String, Object?>)
+      links: json[r'_links'] != null
+          ? GenericLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -15035,10 +15045,10 @@ class UsersUserKeys {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['users'] = users.map((i) => i.toJson()).toList();
-    json['userKeys'] = userKeys;
+    json[r'users'] = users.map((i) => i.toJson()).toList();
+    json[r'userKeys'] = userKeys;
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -15060,7 +15070,7 @@ class UserWatch {
 
   factory UserWatch.fromJson(Map<String, Object?> json) {
     return UserWatch(
-      watching: json['watching'] as bool? ?? false,
+      watching: json[r'watching'] as bool? ?? false,
     );
   }
 
@@ -15068,7 +15078,7 @@ class UserWatch {
     var watching = this.watching;
 
     final json = <String, Object?>{};
-    json['watching'] = watching;
+    json[r'watching'] = watching;
     return json;
   }
 
@@ -15087,8 +15097,8 @@ class VersionExpandable {
 
   factory VersionExpandable.fromJson(Map<String, Object?> json) {
     return VersionExpandable(
-      content: json['content'] as String? ?? '',
-      collaborators: json['collaborators'] as String? ?? '',
+      content: json[r'content'] as String? ?? '',
+      collaborators: json[r'collaborators'] as String? ?? '',
     );
   }
 
@@ -15097,8 +15107,8 @@ class VersionExpandable {
     var collaborators = this.collaborators;
 
     final json = <String, Object?>{};
-    json['content'] = content;
-    json['collaborators'] = collaborators;
+    json[r'content'] = content;
+    json[r'collaborators'] = collaborators;
     return json;
   }
 
@@ -15136,23 +15146,23 @@ class Version {
 
   factory Version.fromJson(Map<String, Object?> json) {
     return Version(
-      by: User.fromJson(json['by'] as Map<String, Object?>? ?? const {}),
-      when: DateTime.tryParse(json['when'] as String? ?? '') ?? DateTime(0),
-      friendlyWhen: json['friendlyWhen'] as String? ?? '',
-      message: json['message'] as String? ?? '',
-      number: (json['number'] as num?)?.toInt() ?? 0,
-      minorEdit: json['minorEdit'] as bool? ?? false,
-      content: json['content'] != null
-          ? Content.fromJson(json['content']! as Map<String, Object?>)
+      by: User.fromJson(json[r'by'] as Map<String, Object?>? ?? const {}),
+      when: DateTime.tryParse(json[r'when'] as String? ?? '') ?? DateTime(0),
+      friendlyWhen: json[r'friendlyWhen'] as String? ?? '',
+      message: json[r'message'] as String? ?? '',
+      number: (json[r'number'] as num?)?.toInt() ?? 0,
+      minorEdit: json[r'minorEdit'] as bool? ?? false,
+      content: json[r'content'] != null
+          ? Content.fromJson(json[r'content']! as Map<String, Object?>)
           : null,
-      collaborators: json['collaborators'] != null
+      collaborators: json[r'collaborators'] != null
           ? UsersUserKeys.fromJson(
-              json['collaborators']! as Map<String, Object?>)
+              json[r'collaborators']! as Map<String, Object?>)
           : null,
       expandable: VersionExpandable.fromJson(
-          json['_expandable'] as Map<String, Object?>? ?? const {}),
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -15169,20 +15179,20 @@ class Version {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['by'] = by.toJson();
-    json['when'] = when.toIso8601String();
-    json['friendlyWhen'] = friendlyWhen;
-    json['message'] = message;
-    json['number'] = number;
-    json['minorEdit'] = minorEdit;
+    json[r'by'] = by.toJson();
+    json[r'when'] = when.toIso8601String();
+    json[r'friendlyWhen'] = friendlyWhen;
+    json[r'message'] = message;
+    json[r'number'] = number;
+    json[r'minorEdit'] = minorEdit;
     if (content != null) {
-      json['content'] = content.toJson();
+      json[r'content'] = content.toJson();
     }
     if (collaborators != null) {
-      json['collaborators'] = collaborators.toJson();
+      json[r'collaborators'] = collaborators.toJson();
     }
-    json['_expandable'] = expandable.toJson();
-    json['_links'] = links.toJson();
+    json[r'_expandable'] = expandable.toJson();
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -15228,16 +15238,16 @@ class VersionArray {
 
   factory VersionArray.fromJson(Map<String, Object?> json) {
     return VersionArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map((i) =>
                   Version.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -15249,11 +15259,11 @@ class VersionArray {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
-    json['_links'] = links.toJson();
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -15284,8 +15294,8 @@ class VersionRestoreParams {
 
   factory VersionRestoreParams.fromJson(Map<String, Object?> json) {
     return VersionRestoreParams(
-      versionNumber: (json['versionNumber'] as num?)?.toInt() ?? 0,
-      message: json['message'] as String? ?? '',
+      versionNumber: (json[r'versionNumber'] as num?)?.toInt() ?? 0,
+      message: json[r'message'] as String? ?? '',
     );
   }
 
@@ -15294,8 +15304,8 @@ class VersionRestoreParams {
     var message = this.message;
 
     final json = <String, Object?>{};
-    json['versionNumber'] = versionNumber;
-    json['message'] = message;
+    json[r'versionNumber'] = versionNumber;
+    json[r'message'] = message;
     return json;
   }
 
@@ -15317,9 +15327,9 @@ class VersionRestore {
   factory VersionRestore.fromJson(Map<String, Object?> json) {
     return VersionRestore(
       operationKey: VersionRestoreOperationKey.fromValue(
-          json['operationKey'] as String? ?? ''),
+          json[r'operationKey'] as String? ?? ''),
       params: VersionRestoreParams.fromJson(
-          json['params'] as Map<String, Object?>? ?? const {}),
+          json[r'params'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -15328,8 +15338,8 @@ class VersionRestore {
     var params = this.params;
 
     final json = <String, Object?>{};
-    json['operationKey'] = operationKey.value;
-    json['params'] = params.toJson();
+    json[r'operationKey'] = operationKey.value;
+    json[r'params'] = params.toJson();
     return json;
   }
 
@@ -15373,10 +15383,10 @@ class Watch {
 
   factory Watch.fromJson(Map<String, Object?> json) {
     return Watch(
-      type: json['type'] as String? ?? '',
+      type: json[r'type'] as String? ?? '',
       watcher: WatchUser.fromJson(
-          json['watcher'] as Map<String, Object?>? ?? const {}),
-      contentId: json['contentId'] as String? ?? '',
+          json[r'watcher'] as Map<String, Object?>? ?? const {}),
+      contentId: json[r'contentId'] as String? ?? '',
     );
   }
 
@@ -15386,9 +15396,9 @@ class Watch {
     var contentId = this.contentId;
 
     final json = <String, Object?>{};
-    json['type'] = type;
-    json['watcher'] = watcher.toJson();
-    json['contentId'] = contentId;
+    json[r'type'] = type;
+    json[r'watcher'] = watcher.toJson();
+    json[r'contentId'] = contentId;
     return json;
   }
 
@@ -15417,16 +15427,16 @@ class WatchArray {
 
   factory WatchArray.fromJson(Map<String, Object?> json) {
     return WatchArray(
-      results: (json['results'] as List<Object?>?)
+      results: (json[r'results'] as List<Object?>?)
               ?.map(
                   (i) => Watch.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      start: (json['start'] as num?)?.toInt() ?? 0,
-      limit: (json['limit'] as num?)?.toInt() ?? 0,
-      size: (json['size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
       links: GenericLinks.fromJson(
-          json['_links'] as Map<String, Object?>? ?? const {}),
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -15438,11 +15448,11 @@ class WatchArray {
     var links = this.links;
 
     final json = <String, Object?>{};
-    json['results'] = results.map((i) => i.toJson()).toList();
-    json['start'] = start;
-    json['limit'] = limit;
-    json['size'] = size;
-    json['_links'] = links.toJson();
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
@@ -15504,20 +15514,20 @@ class WatchUser {
 
   factory WatchUser.fromJson(Map<String, Object?> json) {
     return WatchUser(
-      type: json['type'] as String? ?? '',
-      username: json['username'] as String?,
-      userKey: json['userKey'] as String?,
-      accountId: json['accountId'] as String? ?? '',
+      type: json[r'type'] as String? ?? '',
+      username: json[r'username'] as String?,
+      userKey: json[r'userKey'] as String?,
+      accountId: json[r'accountId'] as String? ?? '',
       profilePicture: Icon.fromJson(
-          json['profilePicture'] as Map<String, Object?>? ?? const {}),
-      displayName: json['displayName'] as String? ?? '',
-      operations: (json['operations'] as List<Object?>?)
+          json[r'profilePicture'] as Map<String, Object?>? ?? const {}),
+      displayName: json[r'displayName'] as String? ?? '',
+      operations: (json[r'operations'] as List<Object?>?)
               ?.map((i) => OperationCheckResult.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
       details: UserDetails.fromJson(
-          json['details'] as Map<String, Object?>? ?? const {}),
+          json[r'details'] as Map<String, Object?>? ?? const {}),
     );
   }
 
@@ -15532,18 +15542,18 @@ class WatchUser {
     var details = this.details;
 
     final json = <String, Object?>{};
-    json['type'] = type;
+    json[r'type'] = type;
     if (username != null) {
-      json['username'] = username;
+      json[r'username'] = username;
     }
     if (userKey != null) {
-      json['userKey'] = userKey;
+      json[r'userKey'] = userKey;
     }
-    json['accountId'] = accountId;
-    json['profilePicture'] = profilePicture.toJson();
-    json['displayName'] = displayName;
-    json['operations'] = operations.map((i) => i.toJson()).toList();
-    json['details'] = details.toJson();
+    json[r'accountId'] = accountId;
+    json[r'profilePicture'] = profilePicture.toJson();
+    json[r'displayName'] = displayName;
+    json[r'operations'] = operations.map((i) => i.toJson()).toList();
+    json[r'details'] = details.toJson();
     return json;
   }
 
@@ -15578,9 +15588,9 @@ class WebResourceDependenciesUris {
 
   factory WebResourceDependenciesUris.fromJson(Map<String, Object?> json) {
     return WebResourceDependenciesUris(
-      all: json['all'] as String?,
-      css: json['css'] as String?,
-      js: json['js'] as String?,
+      all: json[r'all'] as String?,
+      css: json[r'css'] as String?,
+      js: json[r'js'] as String?,
     );
   }
 
@@ -15591,13 +15601,13 @@ class WebResourceDependenciesUris {
 
     final json = <String, Object?>{};
     if (all != null) {
-      json['all'] = all;
+      json[r'all'] = all;
     }
     if (css != null) {
-      json['css'] = css;
+      json[r'css'] = css;
     }
     if (js != null) {
-      json['js'] = js;
+      json[r'js'] = js;
     }
     return json;
   }
@@ -15621,10 +15631,10 @@ class WebResourceDependenciesTags {
 
   factory WebResourceDependenciesTags.fromJson(Map<String, Object?> json) {
     return WebResourceDependenciesTags(
-      all: json['all'] as String?,
-      css: json['css'] as String?,
-      data: json['data'] as String?,
-      js: json['js'] as String?,
+      all: json[r'all'] as String?,
+      css: json[r'css'] as String?,
+      data: json[r'data'] as String?,
+      js: json[r'js'] as String?,
     );
   }
 
@@ -15636,16 +15646,16 @@ class WebResourceDependenciesTags {
 
     final json = <String, Object?>{};
     if (all != null) {
-      json['all'] = all;
+      json[r'all'] = all;
     }
     if (css != null) {
-      json['css'] = css;
+      json[r'css'] = css;
     }
     if (data != null) {
-      json['data'] = data;
+      json[r'data'] = data;
     }
     if (js != null) {
-      json['js'] = js;
+      json[r'js'] = js;
     }
     return json;
   }
@@ -15679,25 +15689,25 @@ class WebResourceDependencies {
 
   factory WebResourceDependencies.fromJson(Map<String, Object?> json) {
     return WebResourceDependencies(
-      keys: (json['keys'] as List<Object?>?)
+      keys: (json[r'keys'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      contexts: (json['contexts'] as List<Object?>?)
+      contexts: (json[r'contexts'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      uris: json['uris'] != null
+      uris: json[r'uris'] != null
           ? WebResourceDependenciesUris.fromJson(
-              json['uris']! as Map<String, Object?>)
+              json[r'uris']! as Map<String, Object?>)
           : null,
-      tags: json['tags'] != null
+      tags: json[r'tags'] != null
           ? WebResourceDependenciesTags.fromJson(
-              json['tags']! as Map<String, Object?>)
+              json[r'tags']! as Map<String, Object?>)
           : null,
-      superbatch: json['superbatch'] != null
+      superbatch: json[r'superbatch'] != null
           ? SuperBatchWebResources.fromJson(
-              json['superbatch']! as Map<String, Object?>)
+              json[r'superbatch']! as Map<String, Object?>)
           : null,
     );
   }
@@ -15710,16 +15720,16 @@ class WebResourceDependencies {
     var superbatch = this.superbatch;
 
     final json = <String, Object?>{};
-    json['keys'] = keys;
-    json['contexts'] = contexts;
+    json[r'keys'] = keys;
+    json[r'contexts'] = contexts;
     if (uris != null) {
-      json['uris'] = uris.toJson();
+      json[r'uris'] = uris.toJson();
     }
     if (tags != null) {
-      json['tags'] = tags.toJson();
+      json[r'tags'] = tags.toJson();
     }
     if (superbatch != null) {
-      json['superbatch'] = superbatch.toJson();
+      json[r'superbatch'] = superbatch.toJson();
     }
     return json;
   }
@@ -15754,8 +15764,8 @@ class PermissionSubject {
 
   factory PermissionSubject.fromJson(Map<String, Object?> json) {
     return PermissionSubject(
-      type: PermissionSubjectType.fromValue(json['type'] as String? ?? ''),
-      identifier: json['identifier'] as String? ?? '',
+      type: PermissionSubjectType.fromValue(json[r'type'] as String? ?? ''),
+      identifier: json[r'identifier'] as String? ?? '',
     );
   }
 
@@ -15764,8 +15774,8 @@ class PermissionSubject {
     var identifier = this.identifier;
 
     final json = <String, Object?>{};
-    json['type'] = type.value;
-    json['identifier'] = identifier;
+    json[r'type'] = type.value;
+    json[r'identifier'] = identifier;
     return json;
   }
 
@@ -15816,8 +15826,8 @@ class PermissionSubjectWithGroupId {
   factory PermissionSubjectWithGroupId.fromJson(Map<String, Object?> json) {
     return PermissionSubjectWithGroupId(
       type: PermissionSubjectWithGroupIdType.fromValue(
-          json['type'] as String? ?? ''),
-      identifier: json['identifier'] as String? ?? '',
+          json[r'type'] as String? ?? ''),
+      identifier: json[r'identifier'] as String? ?? '',
     );
   }
 
@@ -15826,8 +15836,8 @@ class PermissionSubjectWithGroupId {
     var identifier = this.identifier;
 
     final json = <String, Object?>{};
-    json['type'] = type.value;
-    json['identifier'] = identifier;
+    json[r'type'] = type.value;
+    json[r'identifier'] = identifier;
     return json;
   }
 
@@ -15873,10 +15883,10 @@ class SpacePermissionV2Operation {
 
   factory SpacePermissionV2Operation.fromJson(Map<String, Object?> json) {
     return SpacePermissionV2Operation(
-      key:
-          SpacePermissionV2OperationKey.fromValue(json['key'] as String? ?? ''),
+      key: SpacePermissionV2OperationKey.fromValue(
+          json[r'key'] as String? ?? ''),
       target: SpacePermissionV2OperationTarget.fromValue(
-          json['target'] as String? ?? ''),
+          json[r'target'] as String? ?? ''),
     );
   }
 
@@ -15885,8 +15895,8 @@ class SpacePermissionV2Operation {
     var target = this.target;
 
     final json = <String, Object?>{};
-    json['key'] = key.value;
-    json['target'] = target.value;
+    json[r'key'] = key.value;
+    json[r'target'] = target.value;
     return json;
   }
 
@@ -15996,13 +16006,13 @@ class SpacePermissionV2 {
 
   factory SpacePermissionV2.fromJson(Map<String, Object?> json) {
     return SpacePermissionV2(
-      id: (json['id'] as num?)?.toInt(),
+      id: (json[r'id'] as num?)?.toInt(),
       subject: PermissionSubject.fromJson(
-          json['subject'] as Map<String, Object?>? ?? const {}),
+          json[r'subject'] as Map<String, Object?>? ?? const {}),
       operation: SpacePermissionV2Operation.fromJson(
-          json['operation'] as Map<String, Object?>? ?? const {}),
-      links: json['_links'] != null
-          ? GenericLinks.fromJson(json['_links']! as Map<String, Object?>)
+          json[r'operation'] as Map<String, Object?>? ?? const {}),
+      links: json[r'_links'] != null
+          ? GenericLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -16015,12 +16025,12 @@ class SpacePermissionV2 {
 
     final json = <String, Object?>{};
     if (id != null) {
-      json['id'] = id;
+      json[r'id'] = id;
     }
-    json['subject'] = subject.toJson();
-    json['operation'] = operation.toJson();
+    json[r'subject'] = subject.toJson();
+    json[r'operation'] = operation.toJson();
     if (links != null) {
-      json['_links'] = links.toJson();
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
@@ -16051,9 +16061,9 @@ class ContentPermissionRequest {
   factory ContentPermissionRequest.fromJson(Map<String, Object?> json) {
     return ContentPermissionRequest(
       subject: PermissionSubjectWithGroupId.fromJson(
-          json['subject'] as Map<String, Object?>? ?? const {}),
+          json[r'subject'] as Map<String, Object?>? ?? const {}),
       operation: ContentPermissionRequestOperation.fromValue(
-          json['operation'] as String? ?? ''),
+          json[r'operation'] as String? ?? ''),
     );
   }
 
@@ -16062,8 +16072,8 @@ class ContentPermissionRequest {
     var operation = this.operation;
 
     final json = <String, Object?>{};
-    json['subject'] = subject.toJson();
-    json['operation'] = operation.value;
+    json[r'subject'] = subject.toJson();
+    json[r'operation'] = operation.value;
     return json;
   }
 
@@ -16123,8 +16133,8 @@ class PermissionCheckResponse {
 
   factory PermissionCheckResponse.fromJson(Map<String, Object?> json) {
     return PermissionCheckResponse(
-      hasPermission: json['hasPermission'] as bool? ?? false,
-      errors: (json['errors'] as List<Object?>?)
+      hasPermission: json[r'hasPermission'] as bool? ?? false,
+      errors: (json[r'errors'] as List<Object?>?)
               ?.map((i) =>
                   Message.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -16137,8 +16147,8 @@ class PermissionCheckResponse {
     var errors = this.errors;
 
     final json = <String, Object?>{};
-    json['hasPermission'] = hasPermission;
-    json['errors'] = errors.map((i) => i.toJson()).toList();
+    json[r'hasPermission'] = hasPermission;
+    json[r'errors'] = errors.map((i) => i.toJson()).toList();
     return json;
   }
 

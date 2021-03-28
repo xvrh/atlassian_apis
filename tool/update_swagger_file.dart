@@ -13,21 +13,39 @@ class Api {
 
   static final all = [
     Api(
-        'platform',
-        Uri.https('developer.atlassian.com',
-            'cloud/jira/platform/swagger-v3.v3.json')),
+      'jira_platform',
+      Uri.https(
+          'developer.atlassian.com', 'cloud/jira/platform/swagger-v3.v3.json'),
+    ),
     Api(
-        'service_management',
-        Uri.https('developer.atlassian.com',
-            'cloud/jira/service-desk/swagger.v3.json')),
+      'jira_software',
+      Uri.https(
+          'developer.atlassian.com', 'cloud/jira/software/swagger.v3.json'),
+    ),
     Api(
-        'confluence',
-        Uri.https(
-            'developer.atlassian.com', 'cloud/confluence/swagger.v3.json')),
+      'service_management',
+      Uri.https(
+          'developer.atlassian.com', 'cloud/jira/service-desk/swagger.v3.json'),
+    ),
     Api(
-        'software',
-        Uri.https(
-            'developer.atlassian.com', 'cloud/jira/software/swagger.v3.json')),
+      'confluence',
+      Uri.https('developer.atlassian.com', 'cloud/confluence/swagger.v3.json'),
+    ),
+    Api(
+      'admin_organization',
+      Uri.https('developer.atlassian.com',
+          'cloud/admin/organization/swagger.v3.json'),
+    ),
+    Api(
+      'admin_user',
+      Uri.https('developer.atlassian.com',
+          'cloud/admin/user-management/swagger.v3.json'),
+    ),
+    Api(
+      'admin_user_provisioning',
+      Uri.https('developer.atlassian.com',
+          'cloud/admin/user-provisioning/swagger.v3.json'),
+    ),
   ];
 }
 

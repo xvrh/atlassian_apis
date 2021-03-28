@@ -1,0 +1,2446 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API for Atlassian Access",
+    "version": "1.0"
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/orgs": {
+      "get": {
+        "tags": [
+          "orgs"
+        ],
+        "operationId": "getOrgs",
+        "summary": "Get organizations",
+        "description": "Returns a list of your organizations (based on your API key).",
+        "parameters": [
+          {
+            "name": "cursor",
+            "in": "query",
+            "description": "Sets the starting point for the page of results to return.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrgPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error.InvalidPageCursor"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error.Unauthenticated"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error.RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    },
+    "/orgs/{orgId}": {
+      "get": {
+        "tags": [
+          "orgs"
+        ],
+        "operationId": "getOrgById",
+        "summary": "Get an organization by ID",
+        "description": "Returns information about a single organization by ID",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "ID of the organization to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Org"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error.Unauthenticated"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error.OrgNotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error.RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    },
+    "/orgs/{orgId}/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "getUsers",
+        "summary": "Get users in an organization",
+        "description": "Returns a list of users in an organization.",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "ID of the organization to query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "description": "Sets the starting point for the page of results to return.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error.InvalidPageCursor"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error.Unauthenticated"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error.OrgNotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error.RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    },
+    "/orgs/{orgId}/domains": {
+      "get": {
+        "tags": [
+          "domains"
+        ],
+        "operationId": "getDomains",
+        "summary": "Get domains in an organization",
+        "description": "Returns a list of domains in an organization one page at a time.",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "ID of the organization to query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "description": "Sets the starting point for the page of results to return.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DomainPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error.InvalidPageCursor"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error.Unauthenticated"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error.OrgNotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error.RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    },
+    "/orgs/{orgId}/domains/{domainId}": {
+      "get": {
+        "tags": [
+          "domains"
+        ],
+        "operationId": "getDomainById",
+        "summary": "Get domain by ID",
+        "description": "Returns information about a single verified domain by ID.",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "ID of the organization the domain belongs to",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "domainId",
+            "in": "path",
+            "description": "ID of the domain to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Domain"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error.InvalidDomainIdentifier"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error.Unauthenticated"
+          },
+          "404": {
+            "description": "Domain or organization not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error.DomainNotFound.Model"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Error.OrgNotFound.Model"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Error.RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    },
+    "/orgs/{orgId}/events": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "operationId": "getEvents",
+        "summary": "Get an audit log of events",
+        "description": "Returns an audit log of events from an organization one page at a time.",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "ID of the org",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "description": "Sets the starting point for the page of results to return",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Single query term for searching events.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "description": "The earliest date and time of the event represented as a UNIX epoch time.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "The latest date and time of the event represented as a UNIX epoch time.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "action",
+            "in": "query",
+            "description": "A query filter that returns events of a specific action type.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error.InvalidPageCursor.Model"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Error.InvalidSearchTimeDate.Model"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error.Unauthenticated"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error.OrgNotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error.RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    },
+    "/orgs/{orgId}/events/{eventId}": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "operationId": "getEventById",
+        "summary": "Get an event by ID",
+        "description": "Returns information about a single event by ID.",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "ID of the organization to query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "eventId",
+            "in": "path",
+            "description": "ID of the event to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Event"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error.Unauthenticated"
+          },
+          "404": {
+            "description": "Event or Org Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error.EventNotFound.Model"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Error.OrgNotFound.Model"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Error.RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    },
+    "/orgs/{orgId}/event-actions": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "operationId": "getEventActions",
+        "summary": "Get list of event actions",
+        "description": "Returns information localized event actions",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "ID of the organization to query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventActions"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error.Unauthenticated"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error.OrgNotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error.RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    },
+    "/orgs/{orgId}/policies": {
+      "get": {
+        "tags": [
+          "policies"
+        ],
+        "operationId": "getPolicies",
+        "summary": "Get list of policies",
+        "description": "Returns information about org policies",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "ID of the organization to query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "description": "Sets the starting point for the page of results to return.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Sets the type for the page of policies to return.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PolicyPage"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error.Unauthenticated"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error.RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "policies"
+        ],
+        "operationId": "createPolicy",
+        "summary": "Create a policy",
+        "description": "Create a policy for an org",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "ID of the organization to create policy for",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PolicyCreateInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Policy"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error.InvalidResource"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error.Unauthenticated"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error.RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    },
+    "/orgs/{orgId}/policies/{policyId}": {
+      "get": {
+        "tags": [
+          "policies"
+        ],
+        "operationId": "getPolicyById",
+        "summary": "Get a policy by ID",
+        "description": "Returns information about a single policy by ID",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "ID of the organization to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "policyId",
+            "in": "path",
+            "description": "ID of the policy to query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Policy"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error.Unauthenticated"
+          },
+          "404": {
+            "description": "Policy or organization not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error.PolicyNotFound.Model"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Error.OrgNotFound.Model"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Error.RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "policies"
+        ],
+        "operationId": "updatePolicy",
+        "summary": "Update a policy",
+        "description": "Update a policy for an org",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "ID of the organization to update policy for",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "policyId",
+            "in": "path",
+            "description": "ID of the policy to update",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PolicyUpdateInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Policy"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error.InvalidResource"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error.Unauthenticated"
+          },
+          "404": {
+            "description": "Policy or organization not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error.PolicyNotFound.Model"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Error.OrgNotFound.Model"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Error.RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "policies"
+        ],
+        "operationId": "deletePolicy",
+        "summary": "Delete a policy",
+        "description": "Delete a policy for an org",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "ID of the organization to create policy for",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "policyId",
+            "in": "path",
+            "description": "ID of the policy to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error.InvalidResource"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error.Unauthenticated"
+          },
+          "404": {
+            "description": "Policy or organization not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error.PolicyNotFound.Model"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Error.OrgNotFound.Model"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Error.RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    },
+    "/orgs/{orgId}/policies/{policyId}/resources": {
+      "post": {
+        "tags": [
+          "policies"
+        ],
+        "operationId": "addResourceToPolicy",
+        "summary": "Add Resource to Policy",
+        "description": "Adds a resource to an existing Policy",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "ID of the organization to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "policyId",
+            "in": "path",
+            "description": "ID of the policy to query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResourceInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Policy"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error.Unauthenticated"
+          },
+          "404": {
+            "description": "Policy or organization not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error.PolicyNotFound.Model"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Error.OrgNotFound.Model"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Error.RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    },
+    "/orgs/{orgId}/policies/{policyId}/resources/{resourceId}": {
+      "put": {
+        "tags": [
+          "policies"
+        ],
+        "operationId": "updatePolicyResource",
+        "summary": "Update Policy Resource",
+        "description": "Update an existing Policy Resource",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "ID of the organization to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "policyId",
+            "in": "path",
+            "description": "ID of the policy to query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "resourceId",
+            "in": "path",
+            "description": "Resource ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResourceUpdateInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Policy"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error.Unauthenticated"
+          },
+          "404": {
+            "description": "Policy or organization not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error.PolicyNotFound.Model"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Error.OrgNotFound.Model"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Error.PolicyResourceNotFound.Model"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Error.RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "policies"
+        ],
+        "operationId": "deletePolicyResource",
+        "summary": "Delete Policy Resource",
+        "description": "Delete an existing Policy Resource",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "ID of the organization to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "policyId",
+            "in": "path",
+            "description": "ID of the policy to query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "resourceId",
+            "in": "path",
+            "description": "Resource ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Policy"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error.Unauthenticated"
+          },
+          "404": {
+            "description": "Policy or organization not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error.PolicyNotFound.Model"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Error.OrgNotFound.Model"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Error.PolicyResourceNotFound.Model"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Error.RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.atlassian.com/admin/v1"
+    }
+  ],
+  "x-atlassian-narrative": {
+    "documents": [
+      {
+        "title": "About the organizations REST API",
+        "anchor": "about",
+        "body": "Use this REST API to get details about organizations including their users and domains."
+      },
+      {
+        "title": "Authentication and authorization",
+        "anchor": "auth",
+        "body": "To use the organizations REST API you must have a valid API key. The API key protects the API\nand ensures that you have permission to update and disable the accounts owned by your organization.\nYou can use the same API key for the organizations REST API and the user management REST API.\nFor more information, see [Create an API key](https://confluence.atlassian.com/x/jPnJOQ).\n\nOnce you have your API key, you can provide it as a bearer token\nin the `Authorization` part of your HTTPS header."
+      },
+      {
+        "title": "Version and URI",
+        "anchor": "uri",
+        "body": "\nThis documentation is for version 1 of the organizations REST API. The URIs for resources have the following structure:\n\n```\nhttps://api.atlassian.com/admin/v1/orgs/<resource-name>\n```"
+      },
+      {
+        "title": "Pagination",
+        "anchor": "Pagination",
+        "body": "\nThe organizations REST API uses pagination to conserve server resources and limit response size. If there are more results available after the current page, a link to the next page of results is included in the JSON. You can use the `cursor` parameter to set a specific starting point for the results."
+      }
+    ]
+  },
+  "components": {
+    "responses": {
+      "Error.InvalidDomainIdentifier": {
+        "description": "Invalid domain identifier",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/ApplicationError"
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string",
+                            "enum": [
+                              "ADMIN-400-2"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Error.InvalidPageCursor": {
+        "description": "Invalid page cursor",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "$ref": "#/components/schemas/Error.InvalidPageCursor.Model"
+            }
+          }
+        }
+      },
+      "Error.InvalidResource": {
+        "description": "Resource is not valid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error.InvalidResource.Model"
+            }
+          }
+        }
+      },
+      "Error.DomainNotFound": {
+        "description": "Domain not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "$ref": "#/components/schemas/Error.DomainNotFound.Model"
+            }
+          }
+        }
+      },
+      "Error.OrgNotFound": {
+        "description": "Organization not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "$ref": "#/components/schemas/Error.OrgNotFound.Model"
+            }
+          }
+        }
+      },
+      "Error.Unauthenticated": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProxyError"
+            }
+          }
+        }
+      },
+      "Error.RateLimited": {
+        "description": "Too many API requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProxyError"
+            }
+          }
+        }
+      },
+      "Error.InternalError": {
+        "description": "Internal error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error.InternalError.Model"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "OrgModel": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "attributes",
+          "relationships",
+          "links"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of the Org"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "orgs"
+            ],
+            "description": "Type name of this object"
+          },
+          "attributes": {
+            "type": "object",
+            "description": "Attributes of this object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of this Org"
+              }
+            }
+          },
+          "relationships": {
+            "type": "object",
+            "description": "Relationships of this object",
+            "properties": {
+              "domains": {
+                "type": "object",
+                "description": "Link to the related Domains of the Org",
+                "properties": {
+                  "links": {
+                    "type": "object",
+                    "$ref": "#/components/schemas/LinkRelatedModel"
+                  }
+                }
+              },
+              "users": {
+                "type": "object",
+                "description": "Link to the related Users of the Org",
+                "properties": {
+                  "links": {
+                    "type": "object",
+                    "$ref": "#/components/schemas/LinkRelatedModel"
+                  }
+                }
+              }
+            }
+          },
+          "links": {
+            "type": "object",
+            "description": "Link to this Org",
+            "$ref": "#/components/schemas/LinkSelfModel"
+          }
+        }
+      },
+      "Org": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "$ref": "#/components/schemas/OrgModel"
+          }
+        }
+      },
+      "OrgPage": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "0 or more values of `Org` are returned",
+            "items": {
+              "$ref": "#/components/schemas/OrgModel"
+            }
+          },
+          "links": {
+            "type": "object",
+            "$ref": "#/components/schemas/LinkPageModel",
+            "description": "Links for Pagination."
+          }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "required": [
+          "key",
+          "name"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "enum": [
+              "jira-software",
+              "jira-service-desk",
+              "jira-core",
+              "jira-ops",
+              "stride",
+              "hipchat",
+              "confluence",
+              "bitbucket",
+              "trello",
+              "opsgenie",
+              "statuspage"
+            ],
+            "description": "Unique key of the Product"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the Product"
+          },
+          "url": {
+            "type": "string",
+            "description": "URL of the Product"
+          },
+          "last_active": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last active date for a product"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "required": [
+          "account_id",
+          "account_type",
+          "account_status",
+          "name",
+          "picture"
+        ],
+        "discriminator": {
+          "propertyName": "account_type"
+        },
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "The account ID for the user. The format is [a-zA-Z0-9_|-:]{1,128}"
+          },
+          "account_type": {
+            "type": "string",
+            "description": "The type of account",
+            "enum": [
+              "atlassian",
+              "customer",
+              "app"
+            ]
+          },
+          "account_status": {
+            "type": "string",
+            "description": "The lifecycle status of the account",
+            "enum": [
+              "active",
+              "inactive",
+              "closed"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "description": "The display name of the user. Should be used for contextual rendering of the authorship in content. If the user has restricted visibility of their name, their nickname will be displayed as a substitute value"
+          },
+          "picture": {
+            "type": "string",
+            "description": "The absolute URI (RFC3986) to the avatar name of the user. Should be used for contextual rendering of the authorship in content. If the user has restricted visibility of their avatar, an alternative URI will be provided as a substitute value"
+          },
+          "email": {
+            "type": "string",
+            "description": "The email address of the user. If the user has restricted visibility of the email address, the property will be absent"
+          },
+          "access_billable": {
+            "type": "boolean",
+            "description": "Billable status of User in Atlassian Access"
+          },
+          "last_active": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last active date for a user"
+          },
+          "product_access": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Product"
+            },
+            "description": "Products which the User is using"
+          },
+          "links": {
+            "type": "object",
+            "description": "Link to this User for mutation",
+            "$ref": "#/components/schemas/LinkSelfModel"
+          }
+        }
+      },
+      "UserPage": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "0 or more values of Users are returned",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "integer",
+                "description": "Total number of users in this Query"
+              }
+            }
+          },
+          "links": {
+            "type": "object",
+            "$ref": "#/components/schemas/LinkPageModel",
+            "description": "Links for Pagination."
+          }
+        }
+      },
+      "DomainModel": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "attributes",
+          "links"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of the Domain"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type name of this object",
+            "enum": [
+              "domains"
+            ]
+          },
+          "attributes": {
+            "type": "object",
+            "description": "Attributes of this object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Domain Name"
+              },
+              "claim": {
+                "type": "object",
+                "description": "Claim for the domain",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "http",
+                      "dns"
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "verified",
+                      "deleted",
+                      "unverified",
+                      "superseded",
+                      "missing_token"
+                    ],
+                    "description": "Verification Status of the Domain Claim"
+                  }
+                }
+              }
+            }
+          },
+          "links": {
+            "type": "object",
+            "description": "Link to this Domain",
+            "$ref": "#/components/schemas/LinkSelfModel"
+          }
+        }
+      },
+      "Domain": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "$ref": "#/components/schemas/DomainModel"
+          }
+        }
+      },
+      "DomainPage": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "0 or more values of Domain are returned",
+            "items": {
+              "$ref": "#/components/schemas/DomainModel"
+            }
+          },
+          "links": {
+            "type": "object",
+            "$ref": "#/components/schemas/LinkPageModel",
+            "description": "Links for Pagination."
+          }
+        }
+      },
+      "EventActorModel": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id of the Actor"
+          },
+          "name": {
+            "type": "string",
+            "description": "The display name of the Actor."
+          },
+          "links": {
+            "type": "object",
+            "description": "Link to this Actor",
+            "$ref": "#/components/schemas/LinkSelfModel"
+          }
+        }
+      },
+      "EventLocationModel": {
+        "type": "object",
+        "properties": {
+          "ip": {
+            "type": "string",
+            "description": "IP address"
+          },
+          "geo": {
+            "type": "string",
+            "description": "Geo location of the IP address"
+          }
+        }
+      },
+      "EventObjectModel": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of the event object"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type name of this object"
+          },
+          "attributes": {
+            "type": "object",
+            "description": "Attributes of this object",
+            "additionalProperties": {}
+          },
+          "links": {
+            "description": "Links to this event object",
+            "anyOf": [
+              {
+                "type": "object",
+                "$ref": "#/components/schemas/LinkSelfAltModel"
+              },
+              {
+                "type": "object",
+                "$ref": "#/components/schemas/LinkAltModel"
+              }
+            ]
+          }
+        }
+      },
+      "EventModel": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "attributes",
+          "links"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of the Event"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type name of this object",
+            "enum": [
+              "events"
+            ]
+          },
+          "attributes": {
+            "type": "object",
+            "description": "Attributes of this object",
+            "required": [
+              "time",
+              "action",
+              "actor",
+              "context"
+            ],
+            "properties": {
+              "time": {
+                "type": "string",
+                "format": "date-time",
+                "description": "The date and time of the event"
+              },
+              "action": {
+                "type": "string",
+                "description": "Kind of Event. Complete list see `event-actions` API."
+              },
+              "actor": {
+                "type": "object",
+                "description": "Actor is the User who performed this Event",
+                "$ref": "#/components/schemas/EventActorModel"
+              },
+              "context": {
+                "type": "array",
+                "description": "Describes one or more entities that the action was performed against. This field describes the \"what\" of the event.",
+                "items": {
+                  "$ref": "#/components/schemas/EventObjectModel"
+                }
+              },
+              "container": {
+                "type": "array",
+                "description": "Describes the location where the action was performed. This field describes the \"where\" of the event.",
+                "items": {
+                  "$ref": "#/components/schemas/EventObjectModel"
+                }
+              },
+              "location": {
+                "type": "object",
+                "description": "Location from where the Actor performed the Event",
+                "$ref": "#/components/schemas/EventLocationModel"
+              }
+            }
+          },
+          "links": {
+            "type": "object",
+            "description": "Link to this Event",
+            "$ref": "#/components/schemas/LinkSelfModel"
+          }
+        }
+      },
+      "EventActionModel": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of the event action object"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type name of this object"
+          },
+          "attributes": {
+            "type": "object",
+            "description": "Attributes of this object",
+            "required": [
+              "displayName",
+              "groupDisplayName"
+            ],
+            "properties": {
+              "displayName": {
+                "type": "string",
+                "description": "Display name of the event action"
+              },
+              "groupDisplayName": {
+                "type": "string",
+                "description": "Display name of the event action group"
+              }
+            }
+          }
+        }
+      },
+      "Event": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "$ref": "#/components/schemas/EventModel"
+          }
+        }
+      },
+      "EventPage": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "0 or more values of Event are returned",
+            "items": {
+              "$ref": "#/components/schemas/EventModel"
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties": {
+              "next": {
+                "type": "string",
+                "description": "Value for the next cursor"
+              },
+              "page_size": {
+                "type": "integer",
+                "description": "Number of items in a page"
+              }
+            }
+          },
+          "links": {
+            "type": "object",
+            "$ref": "#/components/schemas/LinkPageModel",
+            "description": "Links for Pagination."
+          }
+        }
+      },
+      "EventActions": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "0 or more values of event actions are returned",
+            "items": {
+              "$ref": "#/components/schemas/EventActionModel"
+            }
+          }
+        }
+      },
+      "PolicyModel": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of the Policy"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "policy"
+            ],
+            "description": "Type of this object"
+          },
+          "attributes": {
+            "type": "object",
+            "description": "Attributes of this object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "ip-allowlist",
+                  "data-residency"
+                ],
+                "description": "Type of this Policy"
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of this Policy"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "enabled",
+                  "disabled"
+                ],
+                "description": "Status of this Policy"
+              },
+              "rule": {
+                "type": "object",
+                "description": "Rule of the Policy",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AllowIfContainedRule"
+                  }
+                ]
+              },
+              "resources": {
+                "type": "array",
+                "description": "list of resources Policy is associated with",
+                "items": {
+                  "$ref": "#/components/schemas/Resource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PolicyCreateModel": {
+        "type": "object",
+        "required": [
+          "type",
+          "attributes"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "policy"
+            ],
+            "description": "Type of this object"
+          },
+          "attributes": {
+            "type": "object",
+            "description": "Attributes of this object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "ip-allowlist",
+                  "data-residency"
+                ],
+                "description": "Type of this Policy"
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of this Policy"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "enabled",
+                  "disabled"
+                ],
+                "description": "Status of this Policy"
+              },
+              "rule": {
+                "type": "object",
+                "description": "Rule of the Policy",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AllowIfContainedRule"
+                  }
+                ]
+              },
+              "resources": {
+                "type": "array",
+                "description": "list of resources Policy is associated with",
+                "items": {
+                  "$ref": "#/components/schemas/ResourceInput"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PolicyUpdateModel": {
+        "type": "object",
+        "required": [
+          "type",
+          "attributes"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of the Policy"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "policy"
+            ],
+            "description": "Type of this object"
+          },
+          "attributes": {
+            "type": "object",
+            "description": "Attributes of this object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "ip-allowlist",
+                  "data-residency"
+                ],
+                "description": "Type of this Policy"
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of this Policy"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "enabled",
+                  "disabled"
+                ],
+                "description": "Status of this Policy"
+              },
+              "rule": {
+                "type": "object",
+                "description": "Rule of the Policy",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AllowIfContainedRule"
+                  }
+                ]
+              },
+              "resources": {
+                "type": "array",
+                "description": "list of resources Policy is associated with",
+                "items": {
+                  "$ref": "#/components/schemas/ResourceInput"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Policy": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "$ref": "#/components/schemas/PolicyModel"
+          }
+        }
+      },
+      "PolicyCreateInput": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "$ref": "#/components/schemas/PolicyCreateModel"
+          }
+        }
+      },
+      "PolicyUpdateInput": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "$ref": "#/components/schemas/PolicyUpdateModel"
+          }
+        }
+      },
+      "PolicyPage": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "0 or more values of Policy are returned",
+            "items": {
+              "$ref": "#/components/schemas/PolicyModel"
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties": {
+              "next": {
+                "type": "string",
+                "nullable": true,
+                "description": "Value for the next cursor"
+              },
+              "page_size": {
+                "type": "integer",
+                "description": "Number of items in a page"
+              }
+            }
+          },
+          "links": {
+            "type": "object",
+            "$ref": "#/components/schemas/LinkPageModel",
+            "description": "Links for Pagination."
+          }
+        }
+      },
+      "ResourceInput": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        }
+      },
+      "ResourceUpdateInput": {
+        "type": "object",
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        }
+      },
+      "Resource": {
+        "type": "object",
+        "required": [
+          "id",
+          "applicationStatus"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "applicationStatus": {
+            "type": "string",
+            "description": "Status of policy application on resource",
+            "enum": [
+              "applying",
+              "removing",
+              "applied",
+              "failed",
+              "scheduled"
+            ]
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        }
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "scheduledDate": {
+            "type": "string"
+          }
+        }
+      },
+      "Links": {
+        "type": "object",
+        "properties": {
+          "ticket": {
+            "type": "string"
+          }
+        }
+      },
+      "AllowIfContainedRule": {
+        "type": "object",
+        "description": "Applicable when policy type is `ip-allowlist` or `data-residency`",
+        "required": [
+          "in"
+        ],
+        "properties": {
+          "in": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "LinkSelfModel": {
+        "type": "object",
+        "required": [
+          "self"
+        ],
+        "properties": {
+          "self": {
+            "type": "string",
+            "description": "URL to fetch this resource"
+          }
+        }
+      },
+      "LinkAltModel": {
+        "type": "object",
+        "required": [
+          "alt"
+        ],
+        "properties": {
+          "alt": {
+            "type": "string",
+            "description": "Alternate URL to fetch this resource"
+          }
+        }
+      },
+      "LinkRelatedModel": {
+        "type": "object",
+        "required": [
+          "related"
+        ],
+        "properties": {
+          "related": {
+            "type": "string",
+            "description": "URL to fetch this resource"
+          }
+        }
+      },
+      "LinkSelfAltModel": {
+        "type": "object",
+        "description": "Links for a resources with self and alternate links",
+        "properties": {
+          "self": {
+            "type": "string",
+            "description": "URL to fetch this resource"
+          },
+          "alt": {
+            "type": "string",
+            "description": "Alternate URL to fetch this resource"
+          }
+        }
+      },
+      "LinkPageModel": {
+        "type": "object",
+        "description": "Links for a Paginated response",
+        "properties": {
+          "self": {
+            "type": "string",
+            "description": "URL to fetch this Page"
+          },
+          "prev": {
+            "type": "string",
+            "description": "URL to fetch the Previous Page"
+          },
+          "next": {
+            "type": "string",
+            "description": "URL to fetch the Next Page"
+          }
+        }
+      },
+      "ApplicationError": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A unique identifier for this particular occurrence of the error."
+          },
+          "status": {
+            "type": "string",
+            "description": "The HTTP status code applicable to this error."
+          },
+          "code": {
+            "type": "string",
+            "description": "An application-specific error code:\n  - `ADMIN-400-1` - Invalid page cursor\n  - `ADMIN-400-2` - Invalid domain identifier\n  - `ADMIN-400-3` - Invalid time date\n  - `ADMIN-400-4` - Invalid resource\n  - `ADMIN-404-1` - Unknown resource\n  - `ADMIN-404-2` - Organization not found\n  - `ADMIN-404-3` - Domain not found\n  - `ADMIN-404-4` - Event not found\n  - `ADMIN-404-5` - Policy not found\n  - `ADMIN-405-1` - Method not supported\n  - `ADMIN-429-1` - Limit exceeded\n  - `ADMIN-500-1` - Internal error\n"
+          },
+          "title": {
+            "type": "string",
+            "description": "Human-readable summary of the error"
+          },
+          "detail": {
+            "type": "string",
+            "description": "Human-readable explanation specific to this occurrence of the error."
+          }
+        }
+      },
+      "ProxyError": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "number",
+            "description": "The HTTP status code applicable to this error."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable explanation of the error."
+          }
+        }
+      },
+      "Error.InvalidPageCursor.Model": {
+        "type": "object",
+        "description": "Invalid page cursor",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ApplicationError"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "ADMIN-400-1"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Error.InvalidSearchTimeDate.Model": {
+        "type": "object",
+        "description": "Invalid time date",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ApplicationError"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "ADMIN-400-3"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Error.InvalidResource.Model": {
+        "type": "object",
+        "description": "Resource is not valid",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ApplicationError"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "ADMIN-400-4"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Error.OrgNotFound.Model": {
+        "type": "object",
+        "description": "Organization not found",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ApplicationError"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "ADMIN-404-2"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Error.DomainNotFound.Model": {
+        "type": "object",
+        "description": "Domain not found",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ApplicationError"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "ADMIN-404-3"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Error.EventNotFound.Model": {
+        "type": "object",
+        "description": "Event not found",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ApplicationError"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "ADMIN-404-4"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Error.PolicyNotFound.Model": {
+        "type": "object",
+        "description": "Policy not found",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ApplicationError"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "ADMIN-404-5"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Error.PolicyResourceNotFound.Model": {
+        "type": "object",
+        "description": "Policy Resource not found",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ApplicationError"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "ADMIN-404-6"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Error.InternalError.Model": {
+        "type": "object",
+        "description": "Internal error",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ApplicationError"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "ADMIN-500-1"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
