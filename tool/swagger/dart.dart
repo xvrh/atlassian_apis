@@ -46,7 +46,7 @@ class Api {
                   orElse: () => throw Exception(
                       'Unknown tag ${path.tags} ${pathEntry.key}'));
 
-          var initialMethodName = _normalizeOperationId(path.operationId);
+          var initialMethodName = _normalizeOperationId(path);
           var methodName = initialMethodName;
           var operationIndex = 1;
           while (true) {
@@ -86,8 +86,15 @@ class Api {
 
   DartType typeFromSchema(sw.Schema schema) {
     var type = schema.type;
-    if (schema.ref != null) {
-      return parseDartType(schema.ref!.replaceAll('#/components/schemas/', ''));
+    var ref = schema.ref;
+    if (ref != null) {
+      if (ref.startsWith('#/components/responses/')) {
+        var response = _spec.components
+            .responses[ref.replaceAll('#/components/responses/', '')]!;
+        return typeFromSchema(response.content.entries.first.value.schema!);
+      }
+
+      return parseDartType(ref.replaceAll('#/components/schemas/', ''));
     } else if (type == 'array') {
       return ListDartType(this, typeFromSchema(schema.items!));
     } else if (type == 'object') {
@@ -184,6 +191,10 @@ class $className {
 
     for (var service in _taggedServices) {
       buffer.writeln(service.toCode());
+      buffer.writeln();
+    }
+    if (_untaggedService != null) {
+      buffer.writeln(_untaggedService!.toCode());
       buffer.writeln();
     }
 
@@ -324,7 +335,7 @@ class Operation {
     }
     if (body != null) {
       encodedParameters.add(
-          '${body.isRequired ? 'required' : ''} ${body.typeName}${!body.isRequired ? '?' : ''} ${body.isFileUpload ? 'file' : 'body'}');
+          'required ${body.typeName} ${body.isFileUpload ? 'file' : 'body'}');
     }
     if (encodedParameters.isNotEmpty) {
       var joinedParameters = encodedParameters.join(', ');
@@ -1046,12 +1057,6 @@ class PropertyName {
 
   PropertyName(this.original) {
     _camelCased = dartIdentifier(dartIdentifier(original));
-
-    /*if (!original.contains('.')) {
-      _camelCased = dartIdentifier(dartIdentifier(original));
-    } else {
-      _camelCased = original;
-    }*/
   }
 
   String get camelCased => _camelCased;
@@ -1060,8 +1065,13 @@ class PropertyName {
   String toString() => original;
 }
 
-String _normalizeOperationId(String id) {
-  var name = id.split('.').last.split('_').first;
+String _normalizeOperationId(sw.Path path) {
+  var id = path.operationId;
+  String? name;
+  if (id != null) {
+    name = id.split('.').last.split('_').first;
+  }
+  name ??= path.summary;
   return name.words.toLowerCamel();
 }
 

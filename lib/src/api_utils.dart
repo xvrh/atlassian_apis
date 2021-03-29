@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:path/path.dart' as p;
 import 'package:http/http.dart';
 export 'package:http/http.dart' show Client;
 export 'dart:io' show File;
@@ -10,14 +10,14 @@ class ApiClient {
   static const _headerExperimental = 'X-ExperimentalApi';
 
   final Client _client;
-  final String _host;
+  final Uri _baseUri;
 
-  ApiClient(this._host, this._client) : assert(!_host.contains('/'));
+  ApiClient(this._baseUri, this._client);
 
-  factory ApiClient.basicAuthentication(String host,
+  factory ApiClient.basicAuthentication(Uri baseUri,
       {required String user, required String apiToken, Client? client}) {
     client ??= Client();
-    return ApiClient(host,
+    return ApiClient(baseUri,
         BasicAuthenticationClient(client, user: user, apiToken: apiToken));
   }
 
@@ -40,7 +40,11 @@ class ApiClient {
     }
     assert(!path.contains('{'));
 
-    var uri = Uri.https(_host, path);
+    if (path.startsWith('/')) {
+      path = path.substring(1);
+    }
+
+    var uri = _baseUri.replace(path: p.url.join(_baseUri.path, path));
     if (queryParameters != null) {
       uri = uri.replace(queryParameters: {
         ...uri.queryParameters,

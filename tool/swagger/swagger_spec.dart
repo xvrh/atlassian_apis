@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:collection/collection.dart';
+import '../utils/string.dart';
 part 'swagger_spec.g.dart';
 
 class HttpMethod {
@@ -79,7 +80,7 @@ class Path {
   final String summary;
   final List<String> tags;
   final String description;
-  final String operationId;
+  final String? operationId;
   final bool deprecated;
   final List<Parameter> parameters;
   final Map<String, Response> responses;
@@ -87,7 +88,7 @@ class Path {
 
   Path(
       {required this.description,
-      String? operationId,
+      this.operationId,
       List<String>? tags,
       String? summary,
       bool? deprecated,
@@ -98,8 +99,7 @@ class Path {
         tags = tags ?? const [],
         deprecated = deprecated ?? false,
         parameters = parameters ?? const [],
-        responses = responses ?? const {},
-        operationId = operationId ?? '';
+        responses = responses ?? const {};
 
   factory Path.fromJson(Map<String, dynamic> json) => _$PathFromJson(json);
 }

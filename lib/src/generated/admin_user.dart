@@ -4,6 +4,119 @@ import '../api_utils.dart';
 
 // ignore_for_file: deprecated_member_use_from_same_package
 
+class AdminUserApi {
+  final ApiClient _client;
+
+  AdminUserApi._(this._client);
+
+  /// Returns the set of permissions you have for managing the specified
+  /// Atlassian account
+  Future<Map<String, dynamic>> getUserManagementPermissions(
+      {required AccountId accountId, List<String>? privileges}) async {
+    return await _client.send(
+      'get',
+      'users/{account_id}/manage',
+      pathParameters: {
+        'account_id': '$accountId',
+      },
+      queryParameters: {
+        if (privileges != null) 'privileges': '$privileges',
+      },
+    ) as Map<String, Object?>;
+  }
+
+  /// Returns information about a single Atlassian account by ID
+  Future<Map<String, dynamic>> getProfile(AccountId accountId) async {
+    return await _client.send(
+      'get',
+      'users/{account_id}/manage/profile',
+      pathParameters: {
+        'account_id': '$accountId',
+      },
+    ) as Map<String, Object?>;
+  }
+
+  /// Sets the specified user's email address. Before using this endpoint, you
+  /// must [verify the target domain](https://confluence.atlassian.com/x/gjcWN)
+  /// as the new email address will be considered verified.
+  /// The permission to make use of this resource is exposed by the `email.set`
+  /// privilege.
+  /// This call invalidates all active sessions.
+  Future<void> setEmail(
+      {required AccountId accountId,
+      required Map<String, dynamic> body}) async {
+    await _client.send(
+      'put',
+      'users/{account_id}/manage/email',
+      pathParameters: {
+        'account_id': '$accountId',
+      },
+      body: body,
+    );
+  }
+
+  /// Gets the API tokens owned by the specified user.
+  Future<List<Map<String, dynamic>>> getAPITokens(AccountId accountId) async {
+    return (await _client.send(
+      'get',
+      'users/{accountId}/manage/api-tokens',
+      pathParameters: {
+        'account_id': '$accountId',
+      },
+    ) as List<Object?>)
+        .map((i) => i as Map<String, Object?>? ?? {})
+        .toList();
+  }
+
+  /// Deletes a specifid API token by ID.
+  Future<void> deleteAPIToken(
+      {required AccountId accountId, required String tokenId}) async {
+    await _client.send(
+      'delete',
+      'users/{accountId}/manage/api-tokens/{tokenId}',
+      pathParameters: {
+        'account_id': '$accountId',
+        'tokenId': tokenId,
+      },
+    );
+  }
+
+  ///
+  /// Disables the specified user account. The permission to make use of this
+  /// resource is exposed by the `lifecycle.enablement` privilege.
+  /// You can optionally set a message associated with the block that will be
+  /// shown to the user on attempted authentication. If none is supplied, a
+  /// default message will be used.
+  Future<void> disableAUser(
+      {required AccountId accountId,
+      required Map<String, dynamic> body}) async {
+    await _client.send(
+      'post',
+      'users/{account_id}/manage/lifecycle/disable',
+      pathParameters: {
+        'account_id': '$accountId',
+      },
+      body: body,
+    );
+  }
+
+  ///
+  /// Enables the specified user account. The permission to make use of this
+  /// resource is exposed by the `lifecycle.enablement` privilege.
+  /// You can optionally set a message associated with the block that will be
+  /// shown to the user on attempted authentication. If none is supplied, a
+  /// default message will be used.
+  Future<void> enableAUser(AccountId accountId) async {
+    await _client.send(
+      'post',
+      'users/{account_id}/manage/lifecycle/enable',
+      pathParameters: {
+        'account_id': '$accountId',
+      },
+    );
+  }
+}
+
 class AtlassianAccountUser {
   AtlassianAccountUser();
 

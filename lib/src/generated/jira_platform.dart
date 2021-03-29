@@ -1292,7 +1292,7 @@ class FiltersApi {
   /// for.
   ///  *  filters shared with a public project.
   ///  *  filters shared with the public.
-  Future<void> setColumns({required int id, List<String>? body}) async {
+  Future<void> setColumns({required int id, required List<String> body}) async {
     await _client.send(
       'put',
       'rest/api/3/filter/{id}/columns',
@@ -2358,7 +2358,7 @@ class IssueAttachmentsApi {
   ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
   /// is configured, issue-level security permission to view the issue.
   Future<List<Attachment>> addAttachment(
-      {required String issueIdOrKey, File? file}) async {
+      {required String issueIdOrKey, required File file}) async {
     return (await _client.send(
       'post',
       'rest/api/3/issue/{issueIdOrKey}/attachments',
@@ -4025,7 +4025,8 @@ class IssueNavigatorSettingsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> setIssueNavigatorDefaultColumns({List<String>? body}) async {
+  Future<void> setIssueNavigatorDefaultColumns(
+      {required List<String> body}) async {
     await _client.send(
       'put',
       'rest/api/3/settings/columns',
@@ -9503,7 +9504,8 @@ class UsersApi {
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the
   /// columns on any user.
   ///  *  Permission to access Jira, to set the calling user's columns.
-  Future<void> setUserColumns({String? accountId, List<String>? body}) async {
+  Future<void> setUserColumns(
+      {String? accountId, required List<String> body}) async {
     await _client.send(
       'put',
       'rest/api/3/user/columns',

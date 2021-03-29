@@ -1055,7 +1055,7 @@ class ServicedeskApi {
   /// **[Permissions](#permissions) required**: Permission to add attachments in
   /// this Service Desk.
   Future<void> attachTemporaryFile(
-      {required int serviceDeskId, File? file}) async {
+      {required int serviceDeskId, required File file}) async {
     await _client.send(
       'post',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/attachTemporaryFile',

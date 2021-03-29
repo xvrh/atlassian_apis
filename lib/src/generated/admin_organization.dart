@@ -4,6 +4,244 @@ import '../api_utils.dart';
 
 // ignore_for_file: deprecated_member_use_from_same_package
 
+class AdminOrganizationApi {
+  final ApiClient _client;
+
+  AdminOrganizationApi._(this._client);
+
+  /// Returns a list of your organizations (based on your API key).
+  Future<OrgPage> getOrgs({String? cursor}) async {
+    return OrgPage.fromJson(await _client.send(
+      'get',
+      'orgs',
+      queryParameters: {
+        if (cursor != null) 'cursor': cursor,
+      },
+    ));
+  }
+
+  /// Returns information about a single organization by ID
+  Future<Org> getOrgById(String orgId) async {
+    return Org.fromJson(await _client.send(
+      'get',
+      'orgs/{orgId}',
+      pathParameters: {
+        'orgId': orgId,
+      },
+    ));
+  }
+
+  /// Returns a list of users in an organization.
+  Future<UserPage> getUsers({required String orgId, String? cursor}) async {
+    return UserPage.fromJson(await _client.send(
+      'get',
+      'orgs/{orgId}/users',
+      pathParameters: {
+        'orgId': orgId,
+      },
+      queryParameters: {
+        if (cursor != null) 'cursor': cursor,
+      },
+    ));
+  }
+
+  /// Returns a list of domains in an organization one page at a time.
+  Future<DomainPage> getDomains({required String orgId, String? cursor}) async {
+    return DomainPage.fromJson(await _client.send(
+      'get',
+      'orgs/{orgId}/domains',
+      pathParameters: {
+        'orgId': orgId,
+      },
+      queryParameters: {
+        if (cursor != null) 'cursor': cursor,
+      },
+    ));
+  }
+
+  /// Returns information about a single verified domain by ID.
+  Future<Domain> getDomainById(
+      {required String orgId, required String domainId}) async {
+    return Domain.fromJson(await _client.send(
+      'get',
+      'orgs/{orgId}/domains/{domainId}',
+      pathParameters: {
+        'orgId': orgId,
+        'domainId': domainId,
+      },
+    ));
+  }
+
+  /// Returns an audit log of events from an organization one page at a time.
+  Future<EventPage> getEvents(
+      {required String orgId,
+      String? cursor,
+      String? q,
+      String? from,
+      String? to,
+      String? action}) async {
+    return EventPage.fromJson(await _client.send(
+      'get',
+      'orgs/{orgId}/events',
+      pathParameters: {
+        'orgId': orgId,
+      },
+      queryParameters: {
+        if (cursor != null) 'cursor': cursor,
+        if (q != null) 'q': q,
+        if (from != null) 'from': from,
+        if (to != null) 'to': to,
+        if (action != null) 'action': action,
+      },
+    ));
+  }
+
+  /// Returns information about a single event by ID.
+  Future<Event> getEventById(
+      {required String orgId, required String eventId}) async {
+    return Event.fromJson(await _client.send(
+      'get',
+      'orgs/{orgId}/events/{eventId}',
+      pathParameters: {
+        'orgId': orgId,
+        'eventId': eventId,
+      },
+    ));
+  }
+
+  /// Returns information localized event actions
+  Future<EventActions> getEventActions(String orgId) async {
+    return EventActions.fromJson(await _client.send(
+      'get',
+      'orgs/{orgId}/event-actions',
+      pathParameters: {
+        'orgId': orgId,
+      },
+    ));
+  }
+
+  /// Returns information about org policies
+  Future<PolicyPage> getPolicies(
+      {required String orgId, String? cursor, String? type}) async {
+    return PolicyPage.fromJson(await _client.send(
+      'get',
+      'orgs/{orgId}/policies',
+      pathParameters: {
+        'orgId': orgId,
+      },
+      queryParameters: {
+        if (cursor != null) 'cursor': cursor,
+        if (type != null) 'type': type,
+      },
+    ));
+  }
+
+  /// Create a policy for an org
+  Future<Policy> createPolicy(
+      {required String orgId, required PolicyCreateInput body}) async {
+    return Policy.fromJson(await _client.send(
+      'post',
+      'orgs/{orgId}/policies',
+      pathParameters: {
+        'orgId': orgId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Returns information about a single policy by ID
+  Future<Policy> getPolicyById(
+      {required String orgId, required String policyId}) async {
+    return Policy.fromJson(await _client.send(
+      'get',
+      'orgs/{orgId}/policies/{policyId}',
+      pathParameters: {
+        'orgId': orgId,
+        'policyId': policyId,
+      },
+    ));
+  }
+
+  /// Update a policy for an org
+  Future<Policy> updatePolicy(
+      {required String orgId,
+      required String policyId,
+      required PolicyUpdateInput body}) async {
+    return Policy.fromJson(await _client.send(
+      'put',
+      'orgs/{orgId}/policies/{policyId}',
+      pathParameters: {
+        'orgId': orgId,
+        'policyId': policyId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Delete a policy for an org
+  Future<void> deletePolicy(
+      {required String orgId, required String policyId}) async {
+    await _client.send(
+      'delete',
+      'orgs/{orgId}/policies/{policyId}',
+      pathParameters: {
+        'orgId': orgId,
+        'policyId': policyId,
+      },
+    );
+  }
+
+  /// Adds a resource to an existing Policy
+  Future<Policy> addResourceToPolicy(
+      {required String orgId,
+      required String policyId,
+      required ResourceInput body}) async {
+    return Policy.fromJson(await _client.send(
+      'post',
+      'orgs/{orgId}/policies/{policyId}/resources',
+      pathParameters: {
+        'orgId': orgId,
+        'policyId': policyId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Update an existing Policy Resource
+  Future<Policy> updatePolicyResource(
+      {required String orgId,
+      required String policyId,
+      required String resourceId,
+      required ResourceUpdateInput body}) async {
+    return Policy.fromJson(await _client.send(
+      'put',
+      'orgs/{orgId}/policies/{policyId}/resources/{resourceId}',
+      pathParameters: {
+        'orgId': orgId,
+        'policyId': policyId,
+        'resourceId': resourceId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Delete an existing Policy Resource
+  Future<Policy> deletePolicyResource(
+      {required String orgId,
+      required String policyId,
+      required String resourceId}) async {
+    return Policy.fromJson(await _client.send(
+      'delete',
+      'orgs/{orgId}/policies/{policyId}/resources/{resourceId}',
+      pathParameters: {
+        'orgId': orgId,
+        'policyId': policyId,
+        'resourceId': resourceId,
+      },
+    ));
+  }
+}
+
 /// Attributes of this object
 class OrgModelAttributes {
   /// Name of this Org

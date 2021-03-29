@@ -4,7 +4,7 @@ import 'package:atlassian_apis/service_management.dart';
 void main() async {
   var user = '<user>';
   var apiToken = '<token>';
-  var client = ApiClient.basicAuthentication('<host>.atlassian.net',
+  var client = ApiClient.basicAuthentication(Uri.https('<host>.atlassian.net',''),
       user: user, apiToken: apiToken);
   var serviceManagement = ServiceManagementApi(client);
 
