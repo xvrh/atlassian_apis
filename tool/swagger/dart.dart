@@ -364,11 +364,14 @@ class Operation {
     var returnTypeName = 'void';
     DartType? returnDartType;
     if (response.content.isNotEmpty) {
-      var responseSchema = response.content.entries.first.value.schema;
+      var firstResponseContent = response.content.entries.first.value;
+      var responseSchema = firstResponseContent.schema;
       if (responseSchema != null &&
           (responseSchema.type != null || responseSchema.ref != null)) {
         returnDartType = _api.typeFromSchema(responseSchema);
         returnTypeName = returnDartType.toString();
+      } else if (firstResponseContent.example != null) {
+        returnTypeName = 'dynamic';
       }
     }
 
@@ -417,6 +420,8 @@ class Operation {
           _api, returnDartType, sendCode,
           accessorIsNullable: false, targetIsNullable: false);
       buffer.write('return $decodeCode;');
+    } else if (returnTypeName != 'void') {
+      buffer.writeln('return $sendCode;');
     } else {
       buffer.writeln('$sendCode;');
     }

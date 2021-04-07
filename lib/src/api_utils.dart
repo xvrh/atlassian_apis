@@ -52,18 +52,27 @@ class ApiClient {
       });
     }
 
-    var request = Request(method, uri);
-    if (body != null) {
-      request
-        ..headers[HttpHeaders.contentTypeHeader] = 'application/json'
-        ..body = jsonEncode(body);
+    BaseRequest request;
+    if (file != null) {
+      request = MultipartRequest(method, uri)
+        ..headers[_headerAtlassianToken] ??= 'no-check'
+        ..headers[HttpHeaders.contentTypeHeader] = 'multipart/form-data'
+        ..files.add(MultipartFile('file', file.openRead(), file.lengthSync(),
+            filename: p.basename(file.path)));
+    } else {
+      var bodyRequest = Request(method, uri);
+      request = bodyRequest;
+
+      if (body != null) {
+        bodyRequest
+          ..headers[HttpHeaders.contentTypeHeader] = 'application/json'
+          ..body = jsonEncode(body);
+      }
     }
     if (headers != null) {
       request.headers.addAll(headers);
     }
-    if (file != null) {
-      request.headers[_headerAtlassianToken] ??= 'no-check';
-    }
+
     request.headers[_headerExperimental] = 'opt-in';
 
     var response = await Response.fromStream(await _client.send(request));

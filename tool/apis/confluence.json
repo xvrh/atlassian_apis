@@ -7351,7 +7351,7 @@
           "Space permissions"
         ],
         "summary": "Add new permission to space",
-        "description": "Adds new permission to space.\n\nIf the permission to be added is a group permission, the group can be identified\nby its group name or group id.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Admin' permission for the space.",
+        "description": "Adds new permission to space.\n\nIf the permission to be added is a group permission, the group can be identified\nby its group name or group id.\n\nNote: Apps cannot access this REST resource - including when utilizing user impersonation.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Admin' permission for the space.",
         "operationId": "com.atlassian.confluence.plugins.restapi.resources.SpacePermissionResource.addPermission",
         "parameters": [
           {
@@ -7408,7 +7408,7 @@
           "Space permissions"
         ],
         "summary": "Remove a space permission",
-        "description": "Removes a space permission. Note that removing Read Space permission for a user or group will remove all\nthe space permissions for that user or group.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Admin' permission for the space.",
+        "description": "Removes a space permission. Note that removing Read Space permission for a user or group will remove all\nthe space permissions for that user or group.\n\nNote: Apps cannot access this REST resource - including when utilizing user impersonation.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Admin' permission for the space.",
         "operationId": "com.atlassian.confluence.plugins.restapi.resources.SpacePermissionResource.removePermission",
         "parameters": [
           {

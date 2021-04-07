@@ -3240,6 +3240,9 @@ class SpacePermissionsApi {
   /// identified
   /// by its group name or group id.
   ///
+  /// Note: Apps cannot access this REST resource - including when utilizing
+  /// user impersonation.
+  ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'Admin' permission for the space.
   Future<SpacePermissionV2> addPermission(
@@ -3257,6 +3260,9 @@ class SpacePermissionsApi {
   /// Removes a space permission. Note that removing Read Space permission for a
   /// user or group will remove all
   /// the space permissions for that user or group.
+  ///
+  /// Note: Apps cannot access this REST resource - including when utilizing
+  /// user impersonation.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'Admin' permission for the space.
