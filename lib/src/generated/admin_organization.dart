@@ -1285,7 +1285,7 @@ class EventObjectModel {
   final Map<String, dynamic>? attributes;
 
   /// Links to this event object
-  final Map<String, dynamic>? links;
+  final dynamic? links;
 
   EventObjectModel({required this.id, this.type, this.attributes, this.links});
 
@@ -1294,7 +1294,7 @@ class EventObjectModel {
       id: json[r'id'] as String? ?? '',
       type: json[r'type'] as String?,
       attributes: json[r'attributes'] as Map<String, Object?>?,
-      links: json[r'links'] as Map<String, Object?>?,
+      links: json[r'links'],
     );
   }
 
@@ -1322,7 +1322,7 @@ class EventObjectModel {
       {String? id,
       String? type,
       Map<String, dynamic>? attributes,
-      Map<String, dynamic>? links}) {
+      dynamic? links}) {
     return EventObjectModel(
       id: id ?? this.id,
       type: type ?? this.type,

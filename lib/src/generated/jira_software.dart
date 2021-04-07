@@ -1547,7 +1547,7 @@ class FeatureFlagsApi {
   ///
   /// Only apps that define the Feature Flags module can access this resource.
   /// This resource requires the 'WRITE' scope.
-  Future<void> submitFeatureFlags({required Map<String, dynamic> body}) async {
+  Future<void> submitFeatureFlags({required dynamic body}) async {
     await _client.send(
       'post',
       'featureflags/0.1/bulk',
@@ -1648,7 +1648,7 @@ class DeploymentsApi {
   /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and
   /// on-premise integrations, can access this resource.
   /// This resource requires the 'WRITE' scope for Connect apps.
-  Future<void> submitDeployments({required Map<String, dynamic> body}) async {
+  Future<void> submitDeployments({required dynamic body}) async {
     await _client.send(
       'post',
       'deployments/0.1/bulk',
@@ -2977,14 +2977,14 @@ class PageBean {
   final int? startAt;
   final int? total;
   final bool isLast;
-  final List<Map<String, dynamic>> values;
+  final List<dynamic> values;
 
   PageBean(
       {this.maxResults,
       this.startAt,
       this.total,
       bool? isLast,
-      List<Map<String, dynamic>>? values})
+      List<dynamic>? values})
       : isLast = isLast ?? false,
         values = values ?? [];
 
@@ -2994,10 +2994,7 @@ class PageBean {
       startAt: (json[r'startAt'] as num?)?.toInt(),
       total: (json[r'total'] as num?)?.toInt(),
       isLast: json[r'isLast'] as bool? ?? false,
-      values: (json[r'values'] as List<Object?>?)
-              ?.map((i) => i as Map<String, Object?>? ?? {})
-              .toList() ??
-          [],
+      values: (json[r'values'] as List<Object?>?)?.map((i) => i).toList() ?? [],
     );
   }
 
@@ -3028,7 +3025,7 @@ class PageBean {
       int? startAt,
       int? total,
       bool? isLast,
-      List<Map<String, dynamic>>? values}) {
+      List<dynamic>? values}) {
     return PageBean(
       maxResults: maxResults ?? this.maxResults,
       startAt: startAt ?? this.startAt,
@@ -5396,10 +5393,10 @@ class FieldMetaBean {
   final List<String> operations;
 
   /// The list of values allowed in the field.
-  final List<Map<String, dynamic>> allowedValues;
+  final List<dynamic> allowedValues;
 
   /// The default value of the field.
-  final Map<String, dynamic>? defaultValue;
+  final dynamic? defaultValue;
 
   FieldMetaBean(
       {bool? required,
@@ -5409,7 +5406,7 @@ class FieldMetaBean {
       this.autoCompleteUrl,
       bool? hasDefaultValue,
       List<String>? operations,
-      List<Map<String, dynamic>>? allowedValues,
+      List<dynamic>? allowedValues,
       this.defaultValue})
       : required = required ?? false,
         hasDefaultValue = hasDefaultValue ?? false,
@@ -5428,11 +5425,10 @@ class FieldMetaBean {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      allowedValues: (json[r'allowedValues'] as List<Object?>?)
-              ?.map((i) => i as Map<String, Object?>? ?? {})
-              .toList() ??
-          [],
-      defaultValue: json[r'defaultValue'] as Map<String, Object?>?,
+      allowedValues:
+          (json[r'allowedValues'] as List<Object?>?)?.map((i) => i).toList() ??
+              [],
+      defaultValue: json[r'defaultValue'],
     );
   }
 
@@ -5478,8 +5474,8 @@ class FieldMetaBean {
       String? autoCompleteUrl,
       bool? hasDefaultValue,
       List<String>? operations,
-      List<Map<String, dynamic>>? allowedValues,
-      Map<String, dynamic>? defaultValue}) {
+      List<dynamic>? allowedValues,
+      dynamic? defaultValue}) {
     return FieldMetaBean(
       required: required ?? this.required,
       schema: schema ?? this.schema,

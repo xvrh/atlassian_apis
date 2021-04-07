@@ -5,7 +5,6 @@ import 'swagger/swagger_spec.dart';
 import 'package:dart_style/dart_style.dart';
 import 'swagger/dart.dart' as dart;
 import 'update_swagger_file.dart' show Api;
-import 'utils/string.dart';
 
 void main() {
   for (var api in Api.all) {

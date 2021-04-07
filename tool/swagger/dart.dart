@@ -110,7 +110,7 @@ class Api {
           }
           //TODO(xha): support oneOf (with discriminator) & anyOf (with sub types)
 
-          return MapDartType.withDynamic(this);
+          return DartType(this, 'dynamic');
         }
         return parseDartType(type);
       }

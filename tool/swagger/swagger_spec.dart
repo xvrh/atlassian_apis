@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:collection/collection.dart';
-import '../utils/string.dart';
 part 'swagger_spec.g.dart';
 
 class HttpMethod {

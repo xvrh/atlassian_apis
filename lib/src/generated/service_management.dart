@@ -4389,10 +4389,10 @@ class FieldMetadata {
   final List<String> operations;
 
   /// The list of values allowed in the field.
-  final List<Map<String, dynamic>> allowedValues;
+  final List<dynamic> allowedValues;
 
   /// The default value of the field.
-  final Map<String, dynamic>? defaultValue;
+  final dynamic? defaultValue;
 
   FieldMetadata(
       {required this.required,
@@ -4402,7 +4402,7 @@ class FieldMetadata {
       this.autoCompleteUrl,
       bool? hasDefaultValue,
       required this.operations,
-      List<Map<String, dynamic>>? allowedValues,
+      List<dynamic>? allowedValues,
       this.defaultValue})
       : hasDefaultValue = hasDefaultValue ?? false,
         allowedValues = allowedValues ?? [];
@@ -4420,11 +4420,10 @@ class FieldMetadata {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      allowedValues: (json[r'allowedValues'] as List<Object?>?)
-              ?.map((i) => i as Map<String, Object?>? ?? {})
-              .toList() ??
-          [],
-      defaultValue: json[r'defaultValue'] as Map<String, Object?>?,
+      allowedValues:
+          (json[r'allowedValues'] as List<Object?>?)?.map((i) => i).toList() ??
+              [],
+      defaultValue: json[r'defaultValue'],
     );
   }
 
@@ -4464,8 +4463,8 @@ class FieldMetadata {
       String? autoCompleteUrl,
       bool? hasDefaultValue,
       List<String>? operations,
-      List<Map<String, dynamic>>? allowedValues,
-      Map<String, dynamic>? defaultValue}) {
+      List<dynamic>? allowedValues,
+      dynamic? defaultValue}) {
     return FieldMetadata(
       required: required ?? this.required,
       schema: schema ?? this.schema,
@@ -6080,14 +6079,14 @@ class EntityProperty {
   final String? key;
 
   /// The value of the property. Required on create and update.
-  final Map<String, dynamic>? value;
+  final dynamic? value;
 
   EntityProperty({this.key, this.value});
 
   factory EntityProperty.fromJson(Map<String, Object?> json) {
     return EntityProperty(
       key: json[r'key'] as String?,
-      value: json[r'value'] as Map<String, Object?>?,
+      value: json[r'value'],
     );
   }
 
@@ -6105,7 +6104,7 @@ class EntityProperty {
     return json;
   }
 
-  EntityProperty copyWith({String? key, Map<String, dynamic>? value}) {
+  EntityProperty copyWith({String? key, dynamic? value}) {
     return EntityProperty(
       key: key ?? this.key,
       value: value ?? this.value,
@@ -7619,7 +7618,7 @@ class CustomerRequestFieldValueDTO {
   final String? label;
 
   /// Value of the field.
-  final Map<String, dynamic>? value;
+  final dynamic? value;
 
   /// Value of the field rendered in the UI.
   final Map<String, dynamic>? renderedValue;
@@ -7631,7 +7630,7 @@ class CustomerRequestFieldValueDTO {
     return CustomerRequestFieldValueDTO(
       fieldId: json[r'fieldId'] as String?,
       label: json[r'label'] as String?,
-      value: json[r'value'] as Map<String, Object?>?,
+      value: json[r'value'],
       renderedValue: json[r'renderedValue'] as Map<String, Object?>?,
     );
   }
@@ -7661,7 +7660,7 @@ class CustomerRequestFieldValueDTO {
   CustomerRequestFieldValueDTO copyWith(
       {String? fieldId,
       String? label,
-      Map<String, dynamic>? value,
+      dynamic? value,
       Map<String, dynamic>? renderedValue}) {
     return CustomerRequestFieldValueDTO(
       fieldId: fieldId ?? this.fieldId,
