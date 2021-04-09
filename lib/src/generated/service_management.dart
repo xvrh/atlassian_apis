@@ -9,19 +9,19 @@ class ServiceManagementApi {
 
   ServiceManagementApi(this._client);
 
-  late final customer = CustomerApi._(_client);
+  late final customer = CustomerApi(_client);
 
-  late final info = InfoApi._(_client);
+  late final info = InfoApi(_client);
 
-  late final knowledgebase = KnowledgebaseApi._(_client);
+  late final knowledgebase = KnowledgebaseApi(_client);
 
-  late final organization = OrganizationApi._(_client);
+  late final organization = OrganizationApi(_client);
 
-  late final request = RequestApi._(_client);
+  late final request = RequestApi(_client);
 
-  late final requesttype = RequesttypeApi._(_client);
+  late final requesttype = RequesttypeApi(_client);
 
-  late final servicedesk = ServicedeskApi._(_client);
+  late final servicedesk = ServicedeskApi(_client);
 
   void close() => _client.close();
 }
@@ -31,7 +31,7 @@ class ServiceManagementApi {
 class CustomerApi {
   final ApiClient _client;
 
-  CustomerApi._(this._client);
+  CustomerApi(this._client);
 
   /// This method adds a customer to the Jira Service Management instance by
   /// passing a JSON file including an email address and display name. The
@@ -54,7 +54,7 @@ class CustomerApi {
 class InfoApi {
   final ApiClient _client;
 
-  InfoApi._(this._client);
+  InfoApi(this._client);
 
   /// This method retrieves information about the Jira Service Management
   /// instance such as software version, builds, and related links.
@@ -74,7 +74,7 @@ class InfoApi {
 class KnowledgebaseApi {
   final ApiClient _client;
 
-  KnowledgebaseApi._(this._client);
+  KnowledgebaseApi(this._client);
 
   /// Returns articles which match the given query string across all service
   /// desks.
@@ -101,7 +101,7 @@ class KnowledgebaseApi {
 class OrganizationApi {
   final ApiClient _client;
 
-  OrganizationApi._(this._client);
+  OrganizationApi(this._client);
 
   /// This method returns a list of organizations in the Jira Service Management
   /// instance. Use this method when you want to present a list of organizations
@@ -382,7 +382,7 @@ class OrganizationApi {
 class RequestApi {
   final ApiClient _client;
 
-  RequestApi._(this._client);
+  RequestApi(this._client);
 
   /// This method returns all customer requests for the user executing the
   /// query.
@@ -947,7 +947,7 @@ class RequestApi {
 class RequesttypeApi {
   final ApiClient _client;
 
-  RequesttypeApi._(this._client);
+  RequesttypeApi(this._client);
 
   /// This method returns all customer request types used in the Jira Service
   /// Management instance, optionally filtered by a query string.
@@ -988,7 +988,7 @@ class RequesttypeApi {
 class ServicedeskApi {
   final ApiClient _client;
 
-  ServicedeskApi._(this._client);
+  ServicedeskApi(this._client);
 
   /// This method returns all the service desks in the Jira Service Management
   /// instance that the user has permission to access. Use this method where you
@@ -1054,16 +1054,16 @@ class ServicedeskApi {
   ///
   /// **[Permissions](#permissions) required**: Permission to add attachments in
   /// this Service Desk.
-  Future<dynamic> attachTemporaryFile(
+  Future<TemporaryAttachments> attachTemporaryFile(
       {required int serviceDeskId, required MultipartFile file}) async {
-    return await _client.send(
+    return TemporaryAttachments.fromJson(await _client.send(
       'post',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/attachTemporaryFile',
       pathParameters: {
         'serviceDeskId': '$serviceDeskId',
       },
       file: file,
-    );
+    ));
   }
 
   /// This method returns a list of the customers on a service desk.
@@ -8493,6 +8493,76 @@ class OrganizationServiceDeskUpdateDTO {
   OrganizationServiceDeskUpdateDTO copyWith({int? organizationId}) {
     return OrganizationServiceDeskUpdateDTO(
       organizationId: organizationId ?? this.organizationId,
+    );
+  }
+}
+
+class TemporaryAttachments {
+  final List<TemporaryAttachment> temporaryAttachments;
+
+  TemporaryAttachments({List<TemporaryAttachment>? temporaryAttachments})
+      : temporaryAttachments = temporaryAttachments ?? [];
+
+  factory TemporaryAttachments.fromJson(Map<String, Object?> json) {
+    return TemporaryAttachments(
+      temporaryAttachments: (json[r'temporaryAttachments'] as List<Object?>?)
+              ?.map((i) => TemporaryAttachment.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var temporaryAttachments = this.temporaryAttachments;
+
+    final json = <String, Object?>{};
+    json[r'temporaryAttachments'] =
+        temporaryAttachments.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  TemporaryAttachments copyWith(
+      {List<TemporaryAttachment>? temporaryAttachments}) {
+    return TemporaryAttachments(
+      temporaryAttachments: temporaryAttachments ?? this.temporaryAttachments,
+    );
+  }
+}
+
+class TemporaryAttachment {
+  final String? temporaryAttachmentId;
+  final String? fileName;
+
+  TemporaryAttachment({this.temporaryAttachmentId, this.fileName});
+
+  factory TemporaryAttachment.fromJson(Map<String, Object?> json) {
+    return TemporaryAttachment(
+      temporaryAttachmentId: json[r'temporaryAttachmentId'] as String?,
+      fileName: json[r'fileName'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var temporaryAttachmentId = this.temporaryAttachmentId;
+    var fileName = this.fileName;
+
+    final json = <String, Object?>{};
+    if (temporaryAttachmentId != null) {
+      json[r'temporaryAttachmentId'] = temporaryAttachmentId;
+    }
+    if (fileName != null) {
+      json[r'fileName'] = fileName;
+    }
+    return json;
+  }
+
+  TemporaryAttachment copyWith(
+      {String? temporaryAttachmentId, String? fileName}) {
+    return TemporaryAttachment(
+      temporaryAttachmentId:
+          temporaryAttachmentId ?? this.temporaryAttachmentId,
+      fileName: fileName ?? this.fileName,
     );
   }
 }

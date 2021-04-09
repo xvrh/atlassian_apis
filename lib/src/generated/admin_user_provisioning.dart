@@ -21,14 +21,14 @@ class AdminUserProvisioningApi {
   /// | Timezone           | timezone          | Singular       | false    |
   /// | Department         | department        | Singular       | false    |
   /// | Preferred language | preferredLanguage | Singular       | false    |
-  late final users = UsersApi._(_client);
+  late final users = UsersApi(_client);
 
-  late final groups = GroupsApi._(_client);
+  late final groups = GroupsApi(_client);
 
-  late final schemas = SchemasApi._(_client);
+  late final schemas = SchemasApi(_client);
 
   late final serviceProviderConfiguration =
-      ServiceProviderConfigurationApi._(_client);
+      ServiceProviderConfigurationApi(_client);
 
   void close() => _client.close();
 }
@@ -38,7 +38,7 @@ class AdminUserProvisioningApi {
 class UsersApi {
   final ApiClient _client;
 
-  UsersApi._(this._client);
+  UsersApi(this._client);
 
   /// Get a user from a directory by `userId`.
   Future<ScimUser> getaUserFromActiveDirectory(
@@ -161,7 +161,7 @@ class UsersApi {
 class GroupsApi {
   final ApiClient _client;
 
-  GroupsApi._(this._client);
+  GroupsApi(this._client);
 
   /// Get a group from a directory by group ID.
   Future<ScimGroup> get(
@@ -243,7 +243,7 @@ class GroupsApi {
 class SchemasApi {
   final ApiClient _client;
 
-  SchemasApi._(this._client);
+  SchemasApi(this._client);
 
   /// Get all SCIM features metadata. Filtering, pagination and sorting are  not
   /// supported.
@@ -312,7 +312,7 @@ class SchemasApi {
 class ServiceProviderConfigurationApi {
   final ApiClient _client;
 
-  ServiceProviderConfigurationApi._(this._client);
+  ServiceProviderConfigurationApi(this._client);
 
   /// Get types of resources available on a SCIM service provider (e.g., Users
   /// and Groups). This  is used to get all resources of the SCIM provider.

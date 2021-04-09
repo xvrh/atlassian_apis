@@ -7,7 +7,7 @@ import '../api_utils.dart';
 class AdminUserApi {
   final ApiClient _client;
 
-  AdminUserApi._(this._client);
+  AdminUserApi(this._client);
 
   /// Returns the set of permissions you have for managing the specified
   /// Atlassian account

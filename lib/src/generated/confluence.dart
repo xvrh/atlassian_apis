@@ -9,62 +9,62 @@ class ConfluenceApi {
 
   ConfluenceApi(this._client);
 
-  late final audit = AuditApi._(_client);
+  late final audit = AuditApi(_client);
 
-  late final content = ContentApi._(_client);
+  late final content = ContentApi(_client);
 
-  late final contentAttachments = ContentAttachmentsApi._(_client);
+  late final contentAttachments = ContentAttachmentsApi(_client);
 
-  late final contentBody = ContentBodyApi._(_client);
+  late final contentBody = ContentBodyApi(_client);
 
   late final contentChildrenAndDescendants =
-      ContentChildrenAndDescendantsApi._(_client);
+      ContentChildrenAndDescendantsApi(_client);
 
-  late final contentMacroBody = ContentMacroBodyApi._(_client);
+  late final contentMacroBody = ContentMacroBodyApi(_client);
 
-  late final contentComments = ContentCommentsApi._(_client);
+  late final contentComments = ContentCommentsApi(_client);
 
-  late final contentLabels = ContentLabelsApi._(_client);
+  late final contentLabels = ContentLabelsApi(_client);
 
-  late final contentPermissions = ContentPermissionsApi._(_client);
+  late final contentPermissions = ContentPermissionsApi(_client);
 
-  late final contentProperties = ContentPropertiesApi._(_client);
+  late final contentProperties = ContentPropertiesApi(_client);
 
-  late final contentRestrictions = ContentRestrictionsApi._(_client);
+  late final contentRestrictions = ContentRestrictionsApi(_client);
 
-  late final contentVersions = ContentVersionsApi._(_client);
+  late final contentVersions = ContentVersionsApi(_client);
 
-  late final contentWatches = ContentWatchesApi._(_client);
+  late final contentWatches = ContentWatchesApi(_client);
 
-  late final dynamicModules = DynamicModulesApi._(_client);
+  late final dynamicModules = DynamicModulesApi(_client);
 
-  late final group = GroupApi._(_client);
+  late final group = GroupApi(_client);
 
-  late final inlineTasks = InlineTasksApi._(_client);
+  late final inlineTasks = InlineTasksApi(_client);
 
-  late final labelInfo = LabelInfoApi._(_client);
+  late final labelInfo = LabelInfoApi(_client);
 
-  late final longRunningTask = LongRunningTaskApi._(_client);
+  late final longRunningTask = LongRunningTaskApi(_client);
 
-  late final relation = RelationApi._(_client);
+  late final relation = RelationApi(_client);
 
-  late final search = SearchApi._(_client);
+  late final search = SearchApi(_client);
 
-  late final settings = SettingsApi._(_client);
+  late final settings = SettingsApi(_client);
 
-  late final space = SpaceApi._(_client);
+  late final space = SpaceApi(_client);
 
-  late final spacePermissions = SpacePermissionsApi._(_client);
+  late final spacePermissions = SpacePermissionsApi(_client);
 
-  late final spaceProperties = SpacePropertiesApi._(_client);
+  late final spaceProperties = SpacePropertiesApi(_client);
 
-  late final spaceSettings = SpaceSettingsApi._(_client);
+  late final spaceSettings = SpaceSettingsApi(_client);
 
-  late final template = TemplateApi._(_client);
+  late final template = TemplateApi(_client);
 
-  late final themes = ThemesApi._(_client);
+  late final themes = ThemesApi(_client);
 
-  late final users = UsersApi._(_client);
+  late final users = UsersApi(_client);
 
   void close() => _client.close();
 }
@@ -74,7 +74,7 @@ class ConfluenceApi {
 class AuditApi {
   final ApiClient _client;
 
-  AuditApi._(this._client);
+  AuditApi(this._client);
 
   /// Returns all records in the audit log, optionally for a certain date range.
   /// This contains information about events like space exports, group
@@ -204,7 +204,7 @@ class AuditApi {
 class ContentApi {
   final ApiClient _client;
 
-  ContentApi._(this._client);
+  ContentApi(this._client);
 
   /// Returns all content in a Confluence instance.
   ///
@@ -502,7 +502,7 @@ class ContentApi {
 class ContentAttachmentsApi {
   final ApiClient _client;
 
-  ContentAttachmentsApi._(this._client);
+  ContentAttachmentsApi(this._client);
 
   /// Returns the attachments for a piece of content.
   ///
@@ -729,7 +729,7 @@ class ContentAttachmentsApi {
 class ContentBodyApi {
   final ApiClient _client;
 
-  ContentBodyApi._(this._client);
+  ContentBodyApi(this._client);
 
   /// Converts a content body from one format to another format.
   ///
@@ -774,7 +774,7 @@ class ContentBodyApi {
 class ContentChildrenAndDescendantsApi {
   final ApiClient _client;
 
-  ContentChildrenAndDescendantsApi._(this._client);
+  ContentChildrenAndDescendantsApi(this._client);
 
   /// Returns a map of the direct children of a piece of content. A piece of
   /// content
@@ -1031,7 +1031,7 @@ class ContentChildrenAndDescendantsApi {
 class ContentMacroBodyApi {
   final ApiClient _client;
 
-  ContentMacroBodyApi._(this._client);
+  ContentMacroBodyApi(this._client);
 
   /// Returns the body of a macro in storage format, for the given macro ID.
   /// This includes information like the name of the macro, the body of the
@@ -1073,7 +1073,7 @@ class ContentMacroBodyApi {
 class ContentCommentsApi {
   final ApiClient _client;
 
-  ContentCommentsApi._(this._client);
+  ContentCommentsApi(this._client);
 
   /// Returns the comments on a piece of content.
   ///
@@ -1111,7 +1111,7 @@ class ContentCommentsApi {
 class ContentLabelsApi {
   final ApiClient _client;
 
-  ContentLabelsApi._(this._client);
+  ContentLabelsApi(this._client);
 
   /// Returns the labels on a piece of content.
   ///
@@ -1219,7 +1219,7 @@ class ContentLabelsApi {
 class ContentPermissionsApi {
   final ApiClient _client;
 
-  ContentPermissionsApi._(this._client);
+  ContentPermissionsApi(this._client);
 
   /// Check if a user or a group can perform an operation to the specified
   /// content. The `operation` to check
@@ -1255,7 +1255,7 @@ class ContentPermissionsApi {
 class ContentPropertiesApi {
   final ApiClient _client;
 
-  ContentPropertiesApi._(this._client);
+  ContentPropertiesApi(this._client);
 
   /// Returns the properties for a piece of content. For more information
   /// about content properties, see
@@ -1407,7 +1407,7 @@ class ContentPropertiesApi {
 class ContentRestrictionsApi {
   final ApiClient _client;
 
-  ContentRestrictionsApi._(this._client);
+  ContentRestrictionsApi(this._client);
 
   /// Returns the restrictions on a piece of content.
   ///
@@ -1780,7 +1780,7 @@ class ContentRestrictionsApi {
 class ContentVersionsApi {
   final ApiClient _client;
 
-  ContentVersionsApi._(this._client);
+  ContentVersionsApi(this._client);
 
   /// Returns the versions for a piece of content in descending order.
   ///
@@ -1878,7 +1878,7 @@ class ContentVersionsApi {
 class ContentWatchesApi {
   final ApiClient _client;
 
-  ContentWatchesApi._(this._client);
+  ContentWatchesApi(this._client);
 
   /// Returns the watches for a page. A user that watches a page will receive
   /// receive notifications when the page is updated.
@@ -2250,7 +2250,7 @@ class ContentWatchesApi {
 class DynamicModulesApi {
   final ApiClient _client;
 
-  DynamicModulesApi._(this._client);
+  DynamicModulesApi(this._client);
 
   /// Returns all modules registered dynamically by the calling app.
   ///
@@ -2297,7 +2297,7 @@ class DynamicModulesApi {
 class GroupApi {
   final ApiClient _client;
 
-  GroupApi._(this._client);
+  GroupApi(this._client);
 
   /// Returns all user groups. The returned groups are ordered alphabetically in
   /// ascending order by group name.
@@ -2524,7 +2524,7 @@ class GroupApi {
 class InlineTasksApi {
   final ApiClient _client;
 
-  InlineTasksApi._(this._client);
+  InlineTasksApi(this._client);
 
   /// Returns inline tasks based on the search query.
   ///
@@ -2575,7 +2575,7 @@ class InlineTasksApi {
 class LabelInfoApi {
   final ApiClient _client;
 
-  LabelInfoApi._(this._client);
+  LabelInfoApi(this._client);
 
   /// Returns label information and a list of contents associated with the
   /// label.
@@ -2604,7 +2604,7 @@ class LabelInfoApi {
 class LongRunningTaskApi {
   final ApiClient _client;
 
-  LongRunningTaskApi._(this._client);
+  LongRunningTaskApi(this._client);
 
   /// Returns information about all active long-running tasks (e.g. space
   /// export),
@@ -2647,7 +2647,7 @@ class LongRunningTaskApi {
 class RelationApi {
   final ApiClient _client;
 
-  RelationApi._(this._client);
+  RelationApi(this._client);
 
   /// Returns all target entities that have a particular relationship to the
   /// source entity. Note, relationships are one way.
@@ -2862,7 +2862,7 @@ class RelationApi {
 class SearchApi {
   final ApiClient _client;
 
-  SearchApi._(this._client);
+  SearchApi(this._client);
 
   /// Searches for content using the
   /// [Confluence Query Language (CQL)](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/)
@@ -2953,7 +2953,7 @@ class SearchApi {
 class SettingsApi {
   final ApiClient _client;
 
-  SettingsApi._(this._client);
+  SettingsApi(this._client);
 
   /// Returns the look and feel settings for the site or a single space. This
   /// includes attributes such as the color scheme, padding, and border radius.
@@ -3048,7 +3048,7 @@ class SettingsApi {
 class SpaceApi {
   final ApiClient _client;
 
-  SpaceApi._(this._client);
+  SpaceApi(this._client);
 
   /// Returns all spaces. The returned spaces are ordered alphabetically in
   /// ascending order by space key.
@@ -3232,7 +3232,7 @@ class SpaceApi {
 class SpacePermissionsApi {
   final ApiClient _client;
 
-  SpacePermissionsApi._(this._client);
+  SpacePermissionsApi(this._client);
 
   /// Adds new permission to space.
   ///
@@ -3284,7 +3284,7 @@ class SpacePermissionsApi {
 class SpacePropertiesApi {
   final ApiClient _client;
 
-  SpacePropertiesApi._(this._client);
+  SpacePropertiesApi(this._client);
 
   /// Returns all properties for the given space. Space properties are a
   /// key-value storage associated with a space.
@@ -3411,7 +3411,7 @@ class SpacePropertiesApi {
 class SpaceSettingsApi {
   final ApiClient _client;
 
-  SpaceSettingsApi._(this._client);
+  SpaceSettingsApi(this._client);
 
   /// Returns the settings of a space. Currently only the
   /// `routeOverrideEnabled` setting can be returned.
@@ -3451,7 +3451,7 @@ class SpaceSettingsApi {
 class TemplateApi {
   final ApiClient _client;
 
-  TemplateApi._(this._client);
+  TemplateApi(this._client);
 
   /// Creates a new content template. Note, blueprint templates cannot be
   /// created via the REST API.
@@ -3571,7 +3571,7 @@ class TemplateApi {
 class ThemesApi {
   final ApiClient _client;
 
-  ThemesApi._(this._client);
+  ThemesApi(this._client);
 
   /// Returns all themes, not including the default theme.
   ///
@@ -3669,7 +3669,7 @@ class ThemesApi {
 class UsersApi {
   final ApiClient _client;
 
-  UsersApi._(this._client);
+  UsersApi(this._client);
 
   /// Returns a user. This includes information about the user, such as the
   /// display name, account ID, profile picture, and more. The information

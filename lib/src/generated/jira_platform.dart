@@ -11,39 +11,39 @@ class JiraPlatformApi {
 
   /// This resource represents application roles. Use it to get details of an
   /// application role or all application roles.
-  late final applicationRoles = ApplicationRolesApi._(_client);
+  late final applicationRoles = ApplicationRolesApi(_client);
 
   /// This resource represents audits that record activities undertaken in Jira.
   /// Use it to get a list of audit records.
-  late final auditRecords = AuditRecordsApi._(_client);
+  late final auditRecords = AuditRecordsApi(_client);
 
   /// This resource represents system and custom avatars. Use it to obtain the
   /// details of system or custom avatars as well as add and remove avatars from
   /// a project or issue type.
-  late final avatars = AvatarsApi._(_client);
+  late final avatars = AvatarsApi(_client);
 
   /// This resource represents dashboards. Use it to obtain the details of
   /// dashboards as well as add and remove item properties from dashboards.
-  late final dashboards = DashboardsApi._(_client);
+  late final dashboards = DashboardsApi(_client);
 
   /// This resource represents
   /// [filters](https://confluence.atlassian.com/x/eQiiLQ). Use it to get,
   /// create, update, or delete filters. Also use it to configure the columns
   /// for a filter and set favorite filters.
-  late final filters = FiltersApi._(_client);
+  late final filters = FiltersApi(_client);
 
   /// This resource represents options for sharing
   /// [filters](#api-group-Filters). Use it to get share scopes as well as add
   /// and remove share scopes from filters.
-  late final filterSharing = FilterSharingApi._(_client);
+  late final filterSharing = FilterSharingApi(_client);
 
   /// This resource represents a list of users and a list of groups. Use it to
   /// obtain the details to populate user and group picker suggestions list.
-  late final groupAndUserPicker = GroupAndUserPickerApi._(_client);
+  late final groupAndUserPicker = GroupAndUserPickerApi(_client);
 
   /// This resource represents groups of users. Use it to get, create, find, and
   /// delete groups as well as add and remove users from groups.
-  late final groups = GroupsApi._(_client);
+  late final groups = GroupsApi(_client);
 
   /// This resource represents Jira issues. Use it to:
   ///
@@ -55,20 +55,20 @@ class JiraPlatformApi {
   ///  *  send notifications about an issue.
   ///  *  get details of the transitions available for an issue.
   ///  *  transition an issue.
-  late final issues = IssuesApi._(_client);
+  late final issues = IssuesApi(_client);
 
   /// This resource represents issue attachments and the attachment settings for
   /// Jira. Use it to get the metadata for an attachment, delete an attachment,
   /// and view the metadata for the contents of an attachment. Also, use it to
   /// get the attachment settings for Jira.
-  late final issueAttachments = IssueAttachmentsApi._(_client);
+  late final issueAttachments = IssueAttachmentsApi(_client);
 
   /// This resource represents issue comments. Use it to:
   ///
   ///  *  get, create, update, and delete a comment from an issue.
   ///  *  get all comments from issue.
   ///  *  get a list of comments by comment ID.
-  late final issueComments = IssueCommentsApi._(_client);
+  late final issueComments = IssueCommentsApi(_client);
 
   /// This resource represents [issue comment](#api-group-Issue-comments)
   /// properties, which provides for storing custom data against an issue
@@ -76,15 +76,15 @@ class JiraPlatformApi {
   /// as obtain the keys of all properties on a comment. Comment properties are
   /// a type of
   /// [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
-  late final issueCommentProperties = IssueCommentPropertiesApi._(_client);
+  late final issueCommentProperties = IssueCommentPropertiesApi(_client);
 
   /// This resource represents issue fields, both system and custom fields. Use
   /// it to get fields, field configurations, and create custom fields.
-  late final issueFields = IssueFieldsApi._(_client);
+  late final issueFields = IssueFieldsApi(_client);
 
   /// This resource represents issue field configurations. Use it to get, set,
   /// and delete field configurations and field configuration schemes.
-  late final issueFieldConfigurations = IssueFieldConfigurationsApi._(_client);
+  late final issueFieldConfigurations = IssueFieldConfigurationsApi(_client);
 
   /// This resource represents issue custom field contexts. Use it to:
   ///
@@ -94,7 +94,7 @@ class JiraPlatformApi {
   ///  *  assign custom field contexts to projects.
   ///  *  remove custom field contexts from projects.
   ///  *  add issue types to custom field contexts.
-  late final issueCustomFieldContexts = IssueCustomFieldContextsApi._(_client);
+  late final issueCustomFieldContexts = IssueCustomFieldContextsApi(_client);
 
   /// This resource represents custom issue field select list options created in
   /// Jira or using the REST API. This resource supports the following field
@@ -113,7 +113,7 @@ class JiraPlatformApi {
   ///
   /// Use this resource to retrieve, create, update, order, and delete custom
   /// field options.
-  late final issueCustomFieldOptions = IssueCustomFieldOptionsApi._(_client);
+  late final issueCustomFieldOptions = IssueCustomFieldOptionsApi(_client);
 
   /// This resource represents custom issue field select list options created by
   /// a Connect app. See
@@ -125,14 +125,14 @@ class JiraPlatformApi {
   /// that enables a user to select an option from a list. Use this resource to
   /// add, remove, and update the options of a select list issue field.
   late final issueCustomFieldOptionsApps =
-      IssueCustomFieldOptionsAppsApi._(_client);
+      IssueCustomFieldOptionsAppsApi(_client);
 
   /// This resource represents links between issues. Use it to get, create, and
   /// delete links between issues.
   ///
   /// To use this resource, the site must have
   /// [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
-  late final issueLinks = IssueLinksApi._(_client);
+  late final issueLinks = IssueLinksApi(_client);
 
   /// This resource represents [issue link](#api-group-Issue-links) types. Use
   /// it to get, create, update, and delete link issue types as well as get
@@ -140,21 +140,21 @@ class JiraPlatformApi {
   ///
   /// To use this resource, the site must have
   /// [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
-  late final issueLinkTypes = IssueLinkTypesApi._(_client);
+  late final issueLinkTypes = IssueLinkTypesApi(_client);
 
   /// This resource represents issue navigator settings. Use it to get and set
   /// issue navigator default columns.
-  late final issueNavigatorSettings = IssueNavigatorSettingsApi._(_client);
+  late final issueNavigatorSettings = IssueNavigatorSettingsApi(_client);
 
   /// This resource represents notification schemes, lists of events and the
   /// recipients who will receive notifications for those events. Use this
   /// resource to get details of a notification scheme and a list of
   /// notification schemes.
-  late final issueNotificationSchemes = IssueNotificationSchemesApi._(_client);
+  late final issueNotificationSchemes = IssueNotificationSchemesApi(_client);
 
   /// This resource represents issue priorities. Use it to obtain a list of
   /// issue priorities and details for individual issue priorities.
-  late final issuePriorities = IssuePrioritiesApi._(_client);
+  late final issuePriorities = IssuePrioritiesApi(_client);
 
   /// This resource represents [issue](#api-group-Issues) properties, which
   /// provides for storing custom data against an issue. Use it to get, set, and
@@ -162,30 +162,30 @@ class JiraPlatformApi {
   /// issue. Operations to bulk update and delete issue properties are also
   /// provided. Issue properties are a type of
   /// [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
-  late final issueProperties = IssuePropertiesApi._(_client);
+  late final issueProperties = IssuePropertiesApi(_client);
 
   /// This resource represents remote issue links, a way of linking Jira to
   /// information in other systems. Use this resource to get, create, update,
   /// and delete remote issue links either by ID or global ID. The global ID
   /// provides a way of accessing remote issue links using information about the
   /// item's remote system host and remote system identifier.
-  late final issueRemoteLinks = IssueRemoteLinksApi._(_client);
+  late final issueRemoteLinks = IssueRemoteLinksApi(_client);
 
   /// This resource represents issue resolution values. Use it to obtain a list
   /// of all issue resolution values and the details of individual resolution
   /// values.
-  late final issueResolutions = IssueResolutionsApi._(_client);
+  late final issueResolutions = IssueResolutionsApi(_client);
 
   /// This resource represents various ways to search for issues. Use it to
   /// search for issues with a JQL query and find issues to populate an issue
   /// picker.
-  late final issueSearch = IssueSearchApi._(_client);
+  late final issueSearch = IssueSearchApi(_client);
 
   /// This resource represents issue security levels. Use it to obtain the
   /// details of any issue security level. For more information about issue
   /// security levels, see
   /// [Configuring issue-level security](https://confluence.atlassian.com/x/J4lKLg).
-  late final issueSecurityLevel = IssueSecurityLevelApi._(_client);
+  late final issueSecurityLevel = IssueSecurityLevelApi(_client);
 
   /// This resource represents issue security schemes. Use it to get an issue
   /// security scheme or list of issues security schemes.
@@ -194,7 +194,7 @@ class JiraPlatformApi {
   /// issue. When an issue security scheme is associated with a project, its
   /// security levels can be applied to issues in that project. Sub-tasks also
   /// inherit the security level of their parent issue.
-  late final issueSecuritySchemes = IssueSecuritySchemesApi._(_client);
+  late final issueSecuritySchemes = IssueSecuritySchemesApi(_client);
 
   /// This resource represents issues types. Use it to:
   ///
@@ -202,7 +202,7 @@ class JiraPlatformApi {
   ///  *  get all issue types for a user.
   ///  *  get alternative issue types.
   ///  *  set an avatar for an issue type.
-  late final issueTypes = IssueTypesApi._(_client);
+  late final issueTypes = IssueTypesApi(_client);
 
   /// This resource represents issue type schemes in classic projects. Use it
   /// to:
@@ -213,7 +213,7 @@ class JiraPlatformApi {
   ///  *  delete issue types from issue type schemes.
   ///  *  create, update, and delete issue type schemes.
   ///  *  change the order of issue types in issue type schemes.
-  late final issueTypeSchemes = IssueTypeSchemesApi._(_client);
+  late final issueTypeSchemes = IssueTypeSchemesApi(_client);
 
   /// This resource represents issue type screen schemes. Use it to:
   ///
@@ -228,29 +228,29 @@ class JiraPlatformApi {
   ///  *  remove issue type to screen scheme mappings from issue type screen
   /// schemes.
   ///  *  update default screen scheme of issue type screen scheme.
-  late final issueTypeScreenSchemes = IssueTypeScreenSchemesApi._(_client);
+  late final issueTypeScreenSchemes = IssueTypeScreenSchemesApi(_client);
 
   /// This resource represents [issue type](#api-group-Issue-types) properties,
   /// which provides for storing custom data against an issue type. Use it to
   /// get, create, and delete issue type properties as well as obtain the keys
   /// of all properties on a issues type. Issue type properties are a type of
   /// [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
-  late final issueTypeProperties = IssueTypePropertiesApi._(_client);
+  late final issueTypeProperties = IssueTypePropertiesApi(_client);
 
   /// This resource represents votes cast by users on an issue. Use it to get
   /// details of votes on an issue as well as cast and withdrawal votes.
-  late final issueVotes = IssueVotesApi._(_client);
+  late final issueVotes = IssueVotesApi(_client);
 
   /// This resource represents users watching an issue. Use it to get details of
   /// users watching an issue as well as start and stop a user watching an
   /// issue.
-  late final issueWatchers = IssueWatchersApi._(_client);
+  late final issueWatchers = IssueWatchersApi(_client);
 
   /// This resource represents issue worklogs. Use it to:
   ///
   ///  *  get, create, update, and delete worklogs.
   ///  *  obtain lists of updated or deleted worklogs.
-  late final issueWorklogs = IssueWorklogsApi._(_client);
+  late final issueWorklogs = IssueWorklogsApi(_client);
 
   /// This resource represents [issue worklog](#api-group-Issue-worklogs)
   /// properties, which provides for storing custom data against an issue
@@ -258,15 +258,15 @@ class JiraPlatformApi {
   /// well as obtain the keys of all properties on a issue worklog. Issue
   /// worklog properties are a type of
   /// [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
-  late final issueWorklogProperties = IssueWorklogPropertiesApi._(_client);
+  late final issueWorklogProperties = IssueWorklogPropertiesApi(_client);
 
   /// This resource is a collection of operations for
   /// [Jira expressions](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/).
-  late final jiraExpressions = JiraExpressionsApi._(_client);
+  late final jiraExpressions = JiraExpressionsApi(_client);
 
   /// This resource represents various settings in Jira. Use it to get and
   /// update Jira settings and properties.
-  late final jiraSettings = JiraSettingsApi._(_client);
+  late final jiraSettings = JiraSettingsApi(_client);
 
   /// This resource represents JQL search auto-complete details. Use it to
   /// obtain JQL search auto-complete data and suggestions for use in
@@ -274,56 +274,56 @@ class JiraPlatformApi {
   /// provides an operation to convert one or more JQL queries with user
   /// identifiers (username or user key) to equivalent JQL queries with account
   /// IDs.
-  late final jql = JQLApi._(_client);
+  late final jql = JQLApi(_client);
 
   /// This resource represents available labels. Use it to get available labels
   /// for the global label field.
-  late final labels = LabelsApi._(_client);
+  late final labels = LabelsApi(_client);
 
   /// This resource represents information about the current user, such as basic
   /// details, group membership, application roles, preferences, and locale. Use
   /// it to get, create, update, and delete (restore default) values of the
   /// user's preferences and locale.
-  late final myself = MyselfApi._(_client);
+  late final myself = MyselfApi(_client);
 
   /// This resource represents permissions. Use it to obtain details of all
   /// permissions and determine whether the user has certain permissions.
-  late final permissions = PermissionsApi._(_client);
+  late final permissions = PermissionsApi(_client);
 
   /// This resource represents permission schemes. Use it to get, create,
   /// update, and delete permission schemes as well as get, create, update, and
   /// delete details of the permissions granted in those schemes.
-  late final permissionSchemes = PermissionSchemesApi._(_client);
+  late final permissionSchemes = PermissionSchemesApi(_client);
 
   /// This resource represents projects. Use this resource to get, create,
   /// update, and delete projects. Also get statuses available to a project, a
   /// project's notification schemes, and update a project's type.
-  late final projects = ProjectsApi._(_client);
+  late final projects = ProjectsApi(_client);
 
   /// This resource represents avatars associated with a project. Use it to get,
   /// load, set, and remove project avatars.
-  late final projectAvatars = ProjectAvatarsApi._(_client);
+  late final projectAvatars = ProjectAvatarsApi(_client);
 
   /// This resource represents project categories. Use it to create, update, and
   /// delete project categories as well as obtain a list of all project
   /// categories and details of individual categories. For more information on
   /// managing project categories, see
   /// [Adding, assigning, and deleting project categories](https://confluence.atlassian.com/x/-A5WMg).
-  late final projectCategories = ProjectCategoriesApi._(_client);
+  late final projectCategories = ProjectCategoriesApi(_client);
 
   /// This resource represents project components. Uses to get, create, update,
   /// and delete project components. Also get components for project and get a
   /// count of issues by component.
-  late final projectComponents = ProjectComponentsApi._(_client);
+  late final projectComponents = ProjectComponentsApi(_client);
 
   /// This resource represents the email address used to send a project's
   /// notifications. Use this resource to get and set the
   /// [project's sender email address](https://confluence.atlassian.com/x/dolKLg).
-  late final projectEmail = ProjectEmailApi._(_client);
+  late final projectEmail = ProjectEmailApi(_client);
 
   /// This resource provides validation for project keys and names.
   late final projectKeyAndNameValidation =
-      ProjectKeyAndNameValidationApi._(_client);
+      ProjectKeyAndNameValidationApi(_client);
 
   /// This resource represents permission schemes for a project. Use this
   /// resource to:
@@ -337,34 +337,34 @@ class JiraPlatformApi {
   /// See
   /// [Managing project permissions](https://confluence.atlassian.com/x/yodKLg)
   /// for more information about permission schemes.
-  late final projectPermissionSchemes = ProjectPermissionSchemesApi._(_client);
+  late final projectPermissionSchemes = ProjectPermissionSchemesApi(_client);
 
   /// This resource represents [project](#api-group-Projects) properties, which
   /// provides for storing custom data against a project. Use it to get, create,
   /// and delete project properties as well as get a list of property keys for a
   /// project. Project properties are a type of
   /// [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
-  late final projectProperties = ProjectPropertiesApi._(_client);
+  late final projectProperties = ProjectPropertiesApi(_client);
 
   /// This resource represents the roles that users can play in projects. Use
   /// this resource to get, create, update, and delete project roles.
-  late final projectRoles = ProjectRolesApi._(_client);
+  late final projectRoles = ProjectRolesApi(_client);
 
   /// This resource represents the users assigned to
   /// [project roles](#api-group-Issue-comments). Use this resource to get, add,
   /// and remove default users from project roles. Also use this resource to add
   /// and remove users from a project role associated with a project.
-  late final projectRoleActors = ProjectRoleActorsApi._(_client);
+  late final projectRoleActors = ProjectRoleActorsApi(_client);
 
   /// This resource represents project types. Use it to obtain a list of all
   /// project types, a list of project types accessible to the calling user, and
   /// details of a project type.
-  late final projectTypes = ProjectTypesApi._(_client);
+  late final projectTypes = ProjectTypesApi(_client);
 
   /// This resource represents project versions. Use it to get, get lists of,
   /// create, update, move, merge, and delete project versions. This resource
   /// also provides counts of issues by version.
-  late final projectVersions = ProjectVersionsApi._(_client);
+  late final projectVersions = ProjectVersionsApi(_client);
 
   /// This resource represents the screens used to record issue details. Use
   /// this resource to:
@@ -375,34 +375,34 @@ class JiraPlatformApi {
   ///  *  delete screens.
   ///  *  update screens.
   ///  *  add a field to the default screen.
-  late final screens = ScreensApi._(_client);
+  late final screens = ScreensApi(_client);
 
   /// This resource represents the screen tabs used to record issue details. Use
   /// this resource to get, create, update, move, and delete screen tabs.
-  late final screenTabs = ScreenTabsApi._(_client);
+  late final screenTabs = ScreenTabsApi(_client);
 
   /// This resource represents the screen tab fields used to record issue
   /// details. Use this resource to get, add, move, and remove fields from
   /// screen tabs.
-  late final screenTabFields = ScreenTabFieldsApi._(_client);
+  late final screenTabFields = ScreenTabFieldsApi(_client);
 
   /// This resource represents screen schemes in classic projects. Use it to
   /// get, create, update, and delete screen schemes.
-  late final screenSchemes = ScreenSchemesApi._(_client);
+  late final screenSchemes = ScreenSchemesApi(_client);
 
   /// This resource provides information about the Jira instance.
-  late final serverInfo = ServerInfoApi._(_client);
+  late final serverInfo = ServerInfoApi(_client);
 
   /// This resource represents a
   /// [long-running asynchronous tasks](#async-operations). Use it to obtain
   /// details about the progress of a long-running task or cancel a long-running
   /// task.
-  late final tasks = TasksApi._(_client);
+  late final tasks = TasksApi(_client);
 
   /// This resource represents time tracking and time tracking providers. Use it
   /// to get and set the time tracking provider, get and set the time tracking
   /// options, and disable time tracking.
-  late final timeTracking = TimeTrackingApi._(_client);
+  late final timeTracking = TimeTrackingApi(_client);
 
   /// This resource represent users. Use this resource to:
   ///
@@ -410,7 +410,7 @@ class JiraPlatformApi {
   ///  *  get, set, and reset a user's default issue table columns.
   ///  *  get a list of the groups the user belongs to.
   ///  *  get a list of user account IDs for a list of usernames or user keys.
-  late final users = UsersApi._(_client);
+  late final users = UsersApi(_client);
 
   /// This resource represents [user](#api-group-Users) properties and provides
   /// for storing custom data against a user. Use it to get, create, and delete
@@ -423,30 +423,30 @@ class JiraPlatformApi {
   /// This resource does not access the
   /// [user properties](https://confluence.atlassian.com/x/8YxjL) created and
   /// maintained in Jira.
-  late final userProperties = UserPropertiesApi._(_client);
+  late final userProperties = UserPropertiesApi(_client);
 
   /// This resource represents various ways to search for and find users. Use it
   /// to obtain list of users including users assignable to projects and issues,
   /// users with permissions, user lists for pickup fields, and user lists
   /// generated using structured queries. Note that the operations in this
   /// resource only return users found within the first 1000 users.
-  late final userSearch = UserSearchApi._(_client);
+  late final userSearch = UserSearchApi(_client);
 
   /// This resource represents webhooks. Webhooks are calls sent to a URL when
   /// an event occurs in Jira for issues specified by a JQL query. Only Connect
   /// apps can register webhooks. For more information, see
   /// [Webhooks](https://developer.atlassian.com/cloud/jira/platform/webhooks/#registering-a-webhook-via-the-jira-rest-api-for-connect-apps).
-  late final webhooks = WebhooksApi._(_client);
+  late final webhooks = WebhooksApi(_client);
 
   /// This resource represents workflows. Use it to get a list of workflows.
-  late final workflows = WorkflowsApi._(_client);
+  late final workflows = WorkflowsApi(_client);
 
   /// This resource represents workflow transition rules. Workflow transition
   /// rules define a Connect app routine, such as a
   /// [workflow post functions](https://developer.atlassian.com/cloud/jira/platform/modules/workflow-post-function/)
   /// that is executed in association with the workflow. Use this resource to
   /// read and modify configuration of workflow transition rules.
-  late final workflowTransitionRules = WorkflowTransitionRulesApi._(_client);
+  late final workflowTransitionRules = WorkflowTransitionRulesApi(_client);
 
   /// This resource represents workflow schemes. Use this resource to manage
   /// workflow schemes and the workflow scheme's workflows and issue types.
@@ -463,7 +463,7 @@ class JiraPlatformApi {
   /// See
   /// [Configuring workflow schemes](https://confluence.atlassian.com/x/tohKLg)
   /// for more information.
-  late final workflowSchemes = WorkflowSchemesApi._(_client);
+  late final workflowSchemes = WorkflowSchemesApi(_client);
 
   /// This resource represents the associations between workflow schemes and
   /// projects.
@@ -471,7 +471,7 @@ class JiraPlatformApi {
   /// For more information, see
   /// [Managing your workflows](https://confluence.atlassian.com/x/q4hKLg).
   late final workflowSchemeProjectAssociations =
-      WorkflowSchemeProjectAssociationsApi._(_client);
+      WorkflowSchemeProjectAssociationsApi(_client);
 
   /// This resource represents draft workflow schemes. Use this resource to
   /// manage drafts of workflow schemes.
@@ -488,17 +488,17 @@ class JiraPlatformApi {
   /// See
   /// [Configuring workflow schemes](https://confluence.atlassian.com/x/tohKLg)
   /// for more information.
-  late final workflowSchemeDrafts = WorkflowSchemeDraftsApi._(_client);
+  late final workflowSchemeDrafts = WorkflowSchemeDraftsApi(_client);
 
   /// This resource represents issue workflow statuses. Use it to obtain a list
   /// of all statuses associated with workflows and the details of a status.
-  late final workflowStatuses = WorkflowStatusesApi._(_client);
+  late final workflowStatuses = WorkflowStatusesApi(_client);
 
   /// This resource represents status categories. Use it to obtain a list of all
   /// status categories and the details of a category. Status categories
   /// provided a mechanism for categorizing
   /// [statuses](#api-group-Workflow-statuses).
-  late final workflowStatusCategories = WorkflowStatusCategoriesApi._(_client);
+  late final workflowStatusCategories = WorkflowStatusCategoriesApi(_client);
 
   /// This resource represents workflow transition properties, which provides
   /// for storing custom data against a workflow transition. Use it to get,
@@ -507,18 +507,18 @@ class JiraPlatformApi {
   /// are a type of
   /// [entity property](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
   late final workflowTransitionProperties =
-      WorkflowTransitionPropertiesApi._(_client);
+      WorkflowTransitionPropertiesApi(_client);
 
   /// This resource represents app properties. Use it to store arbitrary data
   /// for your
   /// [Connect app](https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/#atlassian-connect).
-  late final appProperties = AppPropertiesApi._(_client);
+  late final appProperties = AppPropertiesApi(_client);
 
   /// This resource represents
   /// [modules registered dynamically](https://developer.atlassian.com/cloud/jira/platform/dynamic-modules/)
   /// by
   /// [Connect apps](https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/#atlassian-connect).
-  late final dynamicModules = DynamicModulesApi._(_client);
+  late final dynamicModules = DynamicModulesApi(_client);
 
   void close() => _client.close();
 }
@@ -528,7 +528,7 @@ class JiraPlatformApi {
 class ApplicationRolesApi {
   final ApiClient _client;
 
-  ApplicationRolesApi._(this._client);
+  ApplicationRolesApi(this._client);
 
   /// Returns all application roles. In Jira, application roles are managed
   /// using the
@@ -567,7 +567,7 @@ class ApplicationRolesApi {
 class AuditRecordsApi {
   final ApiClient _client;
 
-  AuditRecordsApi._(this._client);
+  AuditRecordsApi(this._client);
 
   /// Returns a list of audit records. The list can be filtered to include
   /// items:
@@ -606,7 +606,7 @@ class AuditRecordsApi {
 class AvatarsApi {
   final ApiClient _client;
 
-  AvatarsApi._(this._client);
+  AvatarsApi(this._client);
 
   /// Returns a list of system avatar details by owner type, where the owner
   /// types are issue type, project, or user.
@@ -739,7 +739,7 @@ class AvatarsApi {
 class DashboardsApi {
   final ApiClient _client;
 
-  DashboardsApi._(this._client);
+  DashboardsApi(this._client);
 
   /// Returns a list of dashboards owned by or shared with the user. The list
   /// may be filtered to include only favorite or owned dashboards.
@@ -1027,7 +1027,7 @@ class DashboardsApi {
 class FiltersApi {
   final ApiClient _client;
 
-  FiltersApi._(this._client);
+  FiltersApi(this._client);
 
   /// Returns all filters. Deprecated, use
   /// [ Search for filters](#api-rest-api-3-filter-search-get) that supports
@@ -1378,7 +1378,7 @@ class FiltersApi {
 class FilterSharingApi {
   final ApiClient _client;
 
-  FilterSharingApi._(this._client);
+  FilterSharingApi(this._client);
 
   /// Returns the default sharing settings for new filters and dashboards for a
   /// user.
@@ -1507,7 +1507,7 @@ class FilterSharingApi {
 class GroupAndUserPickerApi {
   final ApiClient _client;
 
-  GroupAndUserPickerApi._(this._client);
+  GroupAndUserPickerApi(this._client);
 
   /// Returns a list of users and groups matching a string. The string is used:
   ///
@@ -1583,7 +1583,7 @@ class GroupAndUserPickerApi {
 class GroupsApi {
   final ApiClient _client;
 
-  GroupsApi._(this._client);
+  GroupsApi(this._client);
 
   /// This operation is deprecated, use
   /// [`group/member`](#api-rest-api-3-group-member-get).
@@ -1760,7 +1760,7 @@ class GroupsApi {
 class IssuesApi {
   final ApiClient _client;
 
-  IssuesApi._(this._client);
+  IssuesApi(this._client);
 
   /// Creates an issue or, where the option to create subtasks is enabled in
   /// Jira, a subtask. A transition may be applied, to move the issue or subtask
@@ -2195,7 +2195,7 @@ class IssuesApi {
 class IssueAttachmentsApi {
   final ApiClient _client;
 
-  IssueAttachmentsApi._(this._client);
+  IssueAttachmentsApi(this._client);
 
   /// Returns the attachment settings, that is, whether attachments are enabled
   /// and the maximum attachment size allowed.
@@ -2377,7 +2377,7 @@ class IssueAttachmentsApi {
 class IssueCommentsApi {
   final ApiClient _client;
 
-  IssueCommentsApi._(this._client);
+  IssueCommentsApi(this._client);
 
   /// Returns a [paginated](#pagination) list of just the comments for a list of
   /// comments specified by comment IDs.
@@ -2568,7 +2568,7 @@ class IssueCommentsApi {
 class IssueCommentPropertiesApi {
   final ApiClient _client;
 
-  IssueCommentPropertiesApi._(this._client);
+  IssueCommentPropertiesApi(this._client);
 
   /// Returns the keys of all the properties of a comment.
   ///
@@ -2682,7 +2682,7 @@ class IssueCommentPropertiesApi {
 class IssueFieldsApi {
   final ApiClient _client;
 
-  IssueFieldsApi._(this._client);
+  IssueFieldsApi(this._client);
 
   /// Returns system and custom issue fields according to the following rules:
   ///
@@ -2803,7 +2803,7 @@ class IssueFieldsApi {
 class IssueFieldConfigurationsApi {
   final ApiClient _client;
 
-  IssueFieldConfigurationsApi._(this._client);
+  IssueFieldConfigurationsApi(this._client);
 
   /// Returns a [paginated](#pagination) list of all field configurations.
   ///
@@ -2937,7 +2937,7 @@ class IssueFieldConfigurationsApi {
 class IssueCustomFieldContextsApi {
   final ApiClient _client;
 
-  IssueCustomFieldContextsApi._(this._client);
+  IssueCustomFieldContextsApi(this._client);
 
   /// Returns a [paginated](#pagination) list of
   /// [ contexts](https://confluence.atlassian.com/adminjiracloud/what-are-custom-field-contexts-991923859.html)
@@ -3286,7 +3286,7 @@ class IssueCustomFieldContextsApi {
 class IssueCustomFieldOptionsApi {
   final ApiClient _client;
 
-  IssueCustomFieldOptionsApi._(this._client);
+  IssueCustomFieldOptionsApi(this._client);
 
   /// This operation is deprecated and becomes unavailable on 8 May 2021. Use
   /// [Get custom field options (context)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-get)
@@ -3575,7 +3575,7 @@ class IssueCustomFieldOptionsApi {
 class IssueCustomFieldOptionsAppsApi {
   final ApiClient _client;
 
-  IssueCustomFieldOptionsAppsApi._(this._client);
+  IssueCustomFieldOptionsAppsApi(this._client);
 
   /// Returns a [paginated](#pagination) list of all the options of a select
   /// list issue field. A select list issue field is a type of
@@ -3806,7 +3806,7 @@ class IssueCustomFieldOptionsAppsApi {
 class IssueLinksApi {
   final ApiClient _client;
 
-  IssueLinksApi._(this._client);
+  IssueLinksApi(this._client);
 
   /// Creates a link between two issues. Use this operation to indicate a
   /// relationship between two issues and optionally add a comment to the from
@@ -3894,7 +3894,7 @@ class IssueLinksApi {
 class IssueLinkTypesApi {
   final ApiClient _client;
 
-  IssueLinkTypesApi._(this._client);
+  IssueLinkTypesApi(this._client);
 
   /// Returns a list of all issue link types.
   ///
@@ -3993,7 +3993,7 @@ class IssueLinkTypesApi {
 class IssueNavigatorSettingsApi {
   final ApiClient _client;
 
-  IssueNavigatorSettingsApi._(this._client);
+  IssueNavigatorSettingsApi(this._client);
 
   /// Returns the default issue navigator columns.
   ///
@@ -4040,7 +4040,7 @@ class IssueNavigatorSettingsApi {
 class IssueNotificationSchemesApi {
   final ApiClient _client;
 
-  IssueNotificationSchemesApi._(this._client);
+  IssueNotificationSchemesApi(this._client);
 
   /// Returns a [paginated](#pagination) list of
   /// [notification schemes](https://confluence.atlassian.com/x/8YdKLg) ordered
@@ -4121,7 +4121,7 @@ class IssueNotificationSchemesApi {
 class IssuePrioritiesApi {
   final ApiClient _client;
 
-  IssuePrioritiesApi._(this._client);
+  IssuePrioritiesApi(this._client);
 
   /// Returns the list of all issue priorities.
   ///
@@ -4154,7 +4154,7 @@ class IssuePrioritiesApi {
 class IssuePropertiesApi {
   final ApiClient _client;
 
-  IssuePropertiesApi._(this._client);
+  IssuePropertiesApi(this._client);
 
   /// Sets the values of entity properties on issues. It can set up to 10 entity
   /// properties on up to 10,000 issues.
@@ -4404,7 +4404,7 @@ class IssuePropertiesApi {
 class IssueRemoteLinksApi {
   final ApiClient _client;
 
-  IssueRemoteLinksApi._(this._client);
+  IssueRemoteLinksApi(this._client);
 
   /// Returns the remote issue links for an issue. When a remote issue link
   /// global ID is provided the record with that global ID is returned,
@@ -4591,7 +4591,7 @@ class IssueRemoteLinksApi {
 class IssueResolutionsApi {
   final ApiClient _client;
 
-  IssueResolutionsApi._(this._client);
+  IssueResolutionsApi(this._client);
 
   /// Returns a list of all issue resolution values.
   ///
@@ -4624,7 +4624,7 @@ class IssueResolutionsApi {
 class IssueSearchApi {
   final ApiClient _client;
 
-  IssueSearchApi._(this._client);
+  IssueSearchApi(this._client);
 
   /// Returns lists of issues matching a query string. Use this resource to
   /// provide auto-completion suggestions when the user is looking for an issue
@@ -4755,7 +4755,7 @@ class IssueSearchApi {
 class IssueSecurityLevelApi {
   final ApiClient _client;
 
-  IssueSecurityLevelApi._(this._client);
+  IssueSecurityLevelApi(this._client);
 
   /// Returns issue security level members.
   ///
@@ -4812,7 +4812,7 @@ class IssueSecurityLevelApi {
 class IssueSecuritySchemesApi {
   final ApiClient _client;
 
-  IssueSecuritySchemesApi._(this._client);
+  IssueSecuritySchemesApi(this._client);
 
   /// Returns all
   /// [issue security schemes](https://confluence.atlassian.com/x/J4lKLg).
@@ -4851,7 +4851,7 @@ class IssueSecuritySchemesApi {
 class IssueTypesApi {
   final ApiClient _client;
 
-  IssueTypesApi._(this._client);
+  IssueTypesApi(this._client);
 
   /// Returns all issue types.
   ///
@@ -5024,7 +5024,7 @@ class IssueTypesApi {
 class IssueTypeSchemesApi {
   final ApiClient _client;
 
-  IssueTypeSchemesApi._(this._client);
+  IssueTypeSchemesApi(this._client);
 
   /// Returns a [paginated](#pagination) list of issue type schemes.
   ///
@@ -5224,7 +5224,7 @@ class IssueTypeSchemesApi {
 class IssueTypeScreenSchemesApi {
   final ApiClient _client;
 
-  IssueTypeScreenSchemesApi._(this._client);
+  IssueTypeScreenSchemesApi(this._client);
 
   /// Returns a [paginated](#pagination) list of issue type screen schemes.
   ///
@@ -5408,7 +5408,7 @@ class IssueTypeScreenSchemesApi {
 class IssueTypePropertiesApi {
   final ApiClient _client;
 
-  IssueTypePropertiesApi._(this._client);
+  IssueTypePropertiesApi(this._client);
 
   /// Returns all the
   /// [issue type property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties)
@@ -5509,7 +5509,7 @@ class IssueTypePropertiesApi {
 class IssueVotesApi {
   final ApiClient _client;
 
-  IssueVotesApi._(this._client);
+  IssueVotesApi(this._client);
 
   /// Returns details about the votes on an issue.
   ///
@@ -5597,7 +5597,7 @@ class IssueVotesApi {
 class IssueWatchersApi {
   final ApiClient _client;
 
-  IssueWatchersApi._(this._client);
+  IssueWatchersApi(this._client);
 
   /// Returns the watchers for an issue.
   ///
@@ -5701,7 +5701,7 @@ class IssueWatchersApi {
 class IssueWorklogsApi {
   final ApiClient _client;
 
-  IssueWorklogsApi._(this._client);
+  IssueWorklogsApi(this._client);
 
   /// Returns worklogs for an issue, starting from the oldest worklog or from
   /// the worklog started on or after a date and time.
@@ -6001,7 +6001,7 @@ class IssueWorklogsApi {
 class IssueWorklogPropertiesApi {
   final ApiClient _client;
 
-  IssueWorklogPropertiesApi._(this._client);
+  IssueWorklogPropertiesApi(this._client);
 
   /// Returns the keys of all properties for a worklog.
   ///
@@ -6129,7 +6129,7 @@ class IssueWorklogPropertiesApi {
 class JiraExpressionsApi {
   final ApiClient _client;
 
-  JiraExpressionsApi._(this._client);
+  JiraExpressionsApi(this._client);
 
   /// Analyses and validates Jira expressions.
   ///
@@ -6234,7 +6234,7 @@ class JiraExpressionsApi {
 class JiraSettingsApi {
   final ApiClient _client;
 
-  JiraSettingsApi._(this._client);
+  JiraSettingsApi(this._client);
 
   /// Returns all application properties or an application property.
   ///
@@ -6411,7 +6411,7 @@ class JiraSettingsApi {
 class JQLApi {
   final ApiClient _client;
 
-  JQLApi._(this._client);
+  JQLApi(this._client);
 
   /// Returns reference data for JQL searches. This is a downloadable version of
   /// the documentation provided in
@@ -6507,7 +6507,7 @@ class JQLApi {
 class LabelsApi {
   final ApiClient _client;
 
-  LabelsApi._(this._client);
+  LabelsApi(this._client);
 
   /// Returns a [paginated](#pagination) list of labels.
   Future<PageBeanString> getAllLabels({int? startAt, int? maxResults}) async {
@@ -6527,7 +6527,7 @@ class LabelsApi {
 class MyselfApi {
   final ApiClient _client;
 
-  MyselfApi._(this._client);
+  MyselfApi(this._client);
 
   /// Returns the value of a preference of the current user.
   ///
@@ -6688,7 +6688,7 @@ class MyselfApi {
 class PermissionsApi {
   final ApiClient _client;
 
-  PermissionsApi._(this._client);
+  PermissionsApi(this._client);
 
   /// Returns a list of permissions indicating which permissions the user has.
   /// Details of the user's permissions can be obtained in a global, project, or
@@ -6815,7 +6815,7 @@ class PermissionsApi {
 class PermissionSchemesApi {
   final ApiClient _client;
 
-  PermissionSchemesApi._(this._client);
+  PermissionSchemesApi(this._client);
 
   /// Returns all permission schemes.
   ///
@@ -7104,7 +7104,7 @@ class PermissionSchemesApi {
 class ProjectsApi {
   final ApiClient _client;
 
-  ProjectsApi._(this._client);
+  ProjectsApi(this._client);
 
   /// Returns all projects visible to the user. Deprecated, use
   /// [ Get projects paginated](#api-rest-api-3-project-search-get) that
@@ -7443,7 +7443,7 @@ class ProjectsApi {
 class ProjectAvatarsApi {
   final ApiClient _client;
 
-  ProjectAvatarsApi._(this._client);
+  ProjectAvatarsApi(this._client);
 
   /// Sets the avatar displayed for a project.
   ///
@@ -7565,7 +7565,7 @@ class ProjectAvatarsApi {
 class ProjectCategoriesApi {
   final ApiClient _client;
 
-  ProjectCategoriesApi._(this._client);
+  ProjectCategoriesApi(this._client);
 
   /// Returns all project categories.
   ///
@@ -7642,7 +7642,7 @@ class ProjectCategoriesApi {
 class ProjectComponentsApi {
   final ApiClient _client;
 
-  ProjectComponentsApi._(this._client);
+  ProjectComponentsApi(this._client);
 
   /// Creates a component. Use components to provide containers for issues
   /// within a project.
@@ -7794,7 +7794,7 @@ class ProjectComponentsApi {
 class ProjectEmailApi {
   final ApiClient _client;
 
-  ProjectEmailApi._(this._client);
+  ProjectEmailApi(this._client);
 
   /// Returns the
   /// [project's sender email address](https://confluence.atlassian.com/x/dolKLg).
@@ -7839,7 +7839,7 @@ class ProjectEmailApi {
 class ProjectKeyAndNameValidationApi {
   final ApiClient _client;
 
-  ProjectKeyAndNameValidationApi._(this._client);
+  ProjectKeyAndNameValidationApi(this._client);
 
   /// Validates a project key by confirming the key is a valid string and not in
   /// use.
@@ -7892,7 +7892,7 @@ class ProjectKeyAndNameValidationApi {
 class ProjectPermissionSchemesApi {
   final ApiClient _client;
 
-  ProjectPermissionSchemesApi._(this._client);
+  ProjectPermissionSchemesApi(this._client);
 
   /// Returns the
   /// [issue security scheme](https://confluence.atlassian.com/x/J4lKLg)
@@ -7985,7 +7985,7 @@ class ProjectPermissionSchemesApi {
 class ProjectPropertiesApi {
   final ApiClient _client;
 
-  ProjectPropertiesApi._(this._client);
+  ProjectPropertiesApi(this._client);
 
   /// Returns all
   /// [project property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties)
@@ -8085,7 +8085,7 @@ class ProjectPropertiesApi {
 class ProjectRolesApi {
   final ApiClient _client;
 
-  ProjectRolesApi._(this._client);
+  ProjectRolesApi(this._client);
 
   /// Returns a list of
   /// [project roles](https://confluence.atlassian.com/x/3odKLg) for the project
@@ -8311,7 +8311,7 @@ class ProjectRolesApi {
 class ProjectRoleActorsApi {
   final ApiClient _client;
 
-  ProjectRoleActorsApi._(this._client);
+  ProjectRoleActorsApi(this._client);
 
   /// Sets the actors for a project role for a project, replacing all existing
   /// actors.
@@ -8460,7 +8460,7 @@ class ProjectRoleActorsApi {
 class ProjectTypesApi {
   final ApiClient _client;
 
-  ProjectTypesApi._(this._client);
+  ProjectTypesApi(this._client);
 
   /// Returns all [project types](https://confluence.atlassian.com/x/Var1Nw),
   /// whether or not the instance has a valid license for each type.
@@ -8526,7 +8526,7 @@ class ProjectTypesApi {
 class ProjectVersionsApi {
   final ApiClient _client;
 
-  ProjectVersionsApi._(this._client);
+  ProjectVersionsApi(this._client);
 
   /// Returns a [paginated](#pagination) list of all versions in a project. See
   /// the
@@ -8803,7 +8803,7 @@ class ProjectVersionsApi {
 class ScreensApi {
   final ApiClient _client;
 
-  ScreensApi._(this._client);
+  ScreensApi(this._client);
 
   /// Returns a [paginated](#pagination) list of the screens a field is used in.
   ///
@@ -8925,7 +8925,7 @@ class ScreensApi {
 class ScreenTabsApi {
   final ApiClient _client;
 
-  ScreenTabsApi._(this._client);
+  ScreenTabsApi(this._client);
 
   /// Returns the list of tabs for a screen.
   ///
@@ -9028,7 +9028,7 @@ class ScreenTabsApi {
 class ScreenTabFieldsApi {
   final ApiClient _client;
 
-  ScreenTabFieldsApi._(this._client);
+  ScreenTabFieldsApi(this._client);
 
   /// Returns all fields for a screen tab.
   ///
@@ -9124,7 +9124,7 @@ class ScreenTabFieldsApi {
 class ScreenSchemesApi {
   final ApiClient _client;
 
-  ScreenSchemesApi._(this._client);
+  ScreenSchemesApi(this._client);
 
   /// Returns a [paginated](#pagination) list of screen schemes.
   ///
@@ -9199,7 +9199,7 @@ class ScreenSchemesApi {
 class ServerInfoApi {
   final ApiClient _client;
 
-  ServerInfoApi._(this._client);
+  ServerInfoApi(this._client);
 
   /// Returns information about the Jira instance.
   ///
@@ -9219,7 +9219,7 @@ class ServerInfoApi {
 class TasksApi {
   final ApiClient _client;
 
-  TasksApi._(this._client);
+  TasksApi(this._client);
 
   /// Returns the status of a [long-running asynchronous task](#async).
   ///
@@ -9267,7 +9267,7 @@ class TasksApi {
 class TimeTrackingApi {
   final ApiClient _client;
 
-  TimeTrackingApi._(this._client);
+  TimeTrackingApi(this._client);
 
   /// Returns the time tracking provider that is currently selected. Note that
   /// if time tracking is disabled, then a successful but empty response is
@@ -9347,7 +9347,7 @@ class TimeTrackingApi {
 class UsersApi {
   final ApiClient _client;
 
-  UsersApi._(this._client);
+  UsersApi(this._client);
 
   /// Returns a user.
   ///
@@ -9624,7 +9624,7 @@ class UsersApi {
 class UserPropertiesApi {
   final ApiClient _client;
 
-  UserPropertiesApi._(this._client);
+  UserPropertiesApi(this._client);
 
   /// Returns the keys of all properties for a user.
   ///
@@ -9754,7 +9754,7 @@ class UserPropertiesApi {
 class UserSearchApi {
   final ApiClient _client;
 
-  UserSearchApi._(this._client);
+  UserSearchApi(this._client);
 
   /// Returns a list of users who can be assigned issues in one or more
   /// projects. The list may be restricted to users whose attributes match a
@@ -10146,7 +10146,7 @@ class UserSearchApi {
 class WebhooksApi {
   final ApiClient _client;
 
-  WebhooksApi._(this._client);
+  WebhooksApi(this._client);
 
   /// Returns a [paginated](#pagination) list of the webhooks registered by the
   /// calling app.
@@ -10245,7 +10245,7 @@ class WebhooksApi {
 class WorkflowsApi {
   final ApiClient _client;
 
-  WorkflowsApi._(this._client);
+  WorkflowsApi(this._client);
 
   /// Returns all workflows in Jira or a workflow. Deprecated, use
   /// [Get workflows paginated](#api-rest-api-3-workflow-search-get).
@@ -10322,7 +10322,7 @@ class WorkflowsApi {
 class WorkflowTransitionRulesApi {
   final ApiClient _client;
 
-  WorkflowTransitionRulesApi._(this._client);
+  WorkflowTransitionRulesApi(this._client);
 
   /// Returns a [paginated](#pagination) list of workflows with transition
   /// rules. The workflows can be filtered to return only those containing
@@ -10391,7 +10391,7 @@ class WorkflowTransitionRulesApi {
 class WorkflowSchemesApi {
   final ApiClient _client;
 
-  WorkflowSchemesApi._(this._client);
+  WorkflowSchemesApi(this._client);
 
   /// Returns a [paginated](#pagination) list of all workflow schemes, not
   /// including draft workflow schemes.
@@ -10704,7 +10704,7 @@ class WorkflowSchemesApi {
 class WorkflowSchemeProjectAssociationsApi {
   final ApiClient _client;
 
-  WorkflowSchemeProjectAssociationsApi._(this._client);
+  WorkflowSchemeProjectAssociationsApi(this._client);
 
   /// Returns a list of the workflow schemes associated with a list of projects.
   /// Each returned workflow scheme includes a list of the requested projects
@@ -10746,7 +10746,7 @@ class WorkflowSchemeProjectAssociationsApi {
 class WorkflowSchemeDraftsApi {
   final ApiClient _client;
 
-  WorkflowSchemeDraftsApi._(this._client);
+  WorkflowSchemeDraftsApi(this._client);
 
   /// Create a draft workflow scheme from an active workflow scheme, by copying
   /// the active workflow scheme. Note that an active workflow scheme can only
@@ -10988,7 +10988,7 @@ class WorkflowSchemeDraftsApi {
 class WorkflowStatusesApi {
   final ApiClient _client;
 
-  WorkflowStatusesApi._(this._client);
+  WorkflowStatusesApi(this._client);
 
   /// Returns a list of all statuses associated with workflows.
   ///
@@ -11030,7 +11030,7 @@ class WorkflowStatusesApi {
 class WorkflowStatusCategoriesApi {
   final ApiClient _client;
 
-  WorkflowStatusCategoriesApi._(this._client);
+  WorkflowStatusCategoriesApi(this._client);
 
   /// Returns a list of all status categories.
   ///
@@ -11065,7 +11065,7 @@ class WorkflowStatusCategoriesApi {
 class WorkflowTransitionPropertiesApi {
   final ApiClient _client;
 
-  WorkflowTransitionPropertiesApi._(this._client);
+  WorkflowTransitionPropertiesApi(this._client);
 
   /// Returns the properties on a workflow transition. Transition properties are
   /// used to change the behavior of a transition. For more information, see
@@ -11186,7 +11186,7 @@ class WorkflowTransitionPropertiesApi {
 class AppPropertiesApi {
   final ApiClient _client;
 
-  AppPropertiesApi._(this._client);
+  AppPropertiesApi(this._client);
 
   /// Gets all the properties of an app.
   ///
@@ -11264,7 +11264,7 @@ class AppPropertiesApi {
 class DynamicModulesApi {
   final ApiClient _client;
 
-  DynamicModulesApi._(this._client);
+  DynamicModulesApi(this._client);
 
   /// Returns all modules registered dynamically by the calling app.
   ///

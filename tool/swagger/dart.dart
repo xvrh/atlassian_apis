@@ -179,7 +179,7 @@ class $className {
           buffer.writeln(documentationComment(description, indent: 2));
         }
         buffer.writeln(
-            'late final ${tag.name.words.toLowerCamel()} = ${service.className}._(_client);');
+            'late final ${tag.name.words.toLowerCamel()} = ${service.className}(_client);');
         buffer.writeln();
       }
 
@@ -265,7 +265,7 @@ class Service {
 class $_className {
     final ApiClient _client;
   
-  $_className._(this._client);
+  $_className(this._client);
 ''');
 
     for (var operation in operations) {

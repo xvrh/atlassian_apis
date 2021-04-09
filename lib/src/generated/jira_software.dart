@@ -10,19 +10,19 @@ class JiraSoftwareApi {
   JiraSoftwareApi(this._client);
 
   /// Apis related to the backlog
-  late final backlog = BacklogApi._(_client);
+  late final backlog = BacklogApi(_client);
 
   /// Apis related to boards
-  late final board = BoardApi._(_client);
+  late final board = BoardApi(_client);
 
   /// Apis related to epics
-  late final epic = EpicApi._(_client);
+  late final epic = EpicApi(_client);
 
   /// Apis related to issues
-  late final issue = IssueApi._(_client);
+  late final issue = IssueApi(_client);
 
   /// Apis related to sprints
-  late final sprint = SprintApi._(_client);
+  late final sprint = SprintApi(_client);
 
   /// APIs related to integrating development information (commits, branches and
   /// pull requests) with Jira. These APIs are available to Atlassian Connect
@@ -32,14 +32,14 @@ class JiraSoftwareApi {
   /// For more details on integrating Jira Software Cloud with on-premises tools
   /// using OAuth 2.0 credentials, see
   /// https://developer.atlassian.com/cloud/jira/software/integrate-jsw-cloud-with-onpremises-tools/.
-  late final developmentInformation = DevelopmentInformationApi._(_client);
+  late final developmentInformation = DevelopmentInformationApi(_client);
 
   /// Apis related to integrating Feature Flags with Jira Software. These apis
   /// are only available to Atlassian Connect apps. To use these apis you must
   /// have the Feature Flag module (see
   /// https://developer.atlassian.com/cloud/jira/software/modules/feature-flag/)
   /// in your app's descriptor
-  late final featureFlags = FeatureFlagsApi._(_client);
+  late final featureFlags = FeatureFlagsApi(_client);
 
   /// APIs related to integrating deployments data with Jira Software. These
   /// APIs
@@ -50,7 +50,7 @@ class JiraSoftwareApi {
   /// Software Cloud with on-premises tools using
   /// OAuth 2.0 credentials, see
   /// https://developer.atlassian.com/cloud/jira/software/integrate-jsw-cloud-with-onpremises-tools/.
-  late final deployments = DeploymentsApi._(_client);
+  late final deployments = DeploymentsApi(_client);
 
   /// APIs related to integrating builds data with Jira Software. These APIs
   /// are available to Atlassian Connect apps. To use these APIs you must
@@ -60,7 +60,7 @@ class JiraSoftwareApi {
   /// Software Cloud with on-premises tools using
   /// OAuth 2.0 credentials, see
   /// https://developer.atlassian.com/cloud/jira/software/integrate-jsw-cloud-with-onpremises-tools/.
-  late final builds = BuildsApi._(_client);
+  late final builds = BuildsApi(_client);
 
   /// APIs related to integrating Remote Links data with Jira Software. These
   /// APIs are available to Atlassian Connect
@@ -171,7 +171,7 @@ class JiraSoftwareApi {
   /// supports
   /// [internationalization](https://developer.atlassian.com/cloud/jira/software/internationalization/).
   /// | Yes      |
-  late final remoteLinks = RemoteLinksApi._(_client);
+  late final remoteLinks = RemoteLinksApi(_client);
 
   void close() => _client.close();
 }
@@ -181,7 +181,7 @@ class JiraSoftwareApi {
 class BacklogApi {
   final ApiClient _client;
 
-  BacklogApi._(this._client);
+  BacklogApi(this._client);
 
   /// Move issues to the backlog.
   ///
@@ -224,7 +224,7 @@ class BacklogApi {
 class BoardApi {
   final ApiClient _client;
 
-  BoardApi._(this._client);
+  BoardApi(this._client);
 
   /// Returns all boards. This only includes boards that the user has permission
   /// to view.
@@ -854,7 +854,7 @@ class BoardApi {
 class EpicApi {
   final ApiClient _client;
 
-  EpicApi._(this._client);
+  EpicApi(this._client);
 
   /// Returns all issues that do not belong to any epic.
   ///  This only includes issues that the user has permission to view.
@@ -1052,7 +1052,7 @@ class EpicApi {
 class IssueApi {
   final ApiClient _client;
 
-  IssueApi._(this._client);
+  IssueApi(this._client);
 
   /// Moves (ranks) issues before or after a given issue. At most 50 issues may
   /// be ranked at once.
@@ -1182,7 +1182,7 @@ class IssueApi {
 class SprintApi {
   final ApiClient _client;
 
-  SprintApi._(this._client);
+  SprintApi(this._client);
 
   /// Creates a future sprint. Sprint name and origin board id are required.
   /// Start date, end date, and goal are optional.
@@ -1407,7 +1407,7 @@ class SprintApi {
 class DevelopmentInformationApi {
   final ApiClient _client;
 
-  DevelopmentInformationApi._(this._client);
+  DevelopmentInformationApi(this._client);
 
   /// Stores development information provided in the request to make it
   /// available when viewing issues in Jira. Existing repository and entity data
@@ -1527,7 +1527,7 @@ class DevelopmentInformationApi {
 class FeatureFlagsApi {
   final ApiClient _client;
 
-  FeatureFlagsApi._(this._client);
+  FeatureFlagsApi(this._client);
 
   /// Update / insert Feature Flag data.
   ///
@@ -1625,7 +1625,7 @@ class FeatureFlagsApi {
 class DeploymentsApi {
   final ApiClient _client;
 
-  DeploymentsApi._(this._client);
+  DeploymentsApi(this._client);
 
   /// Update / insert deployment data.
   ///
@@ -1765,7 +1765,7 @@ class DeploymentsApi {
 class BuildsApi {
   final ApiClient _client;
 
-  BuildsApi._(this._client);
+  BuildsApi(this._client);
 
   /// Update / insert builds data.
   ///
@@ -1885,7 +1885,7 @@ class BuildsApi {
 class RemoteLinksApi {
   final ApiClient _client;
 
-  RemoteLinksApi._(this._client);
+  RemoteLinksApi(this._client);
 
   /// Update / insert Remote Link data.
   ///

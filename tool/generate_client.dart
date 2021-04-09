@@ -45,5 +45,41 @@ void fixApi(String name, Map<String, dynamic> api) {
           'properties']!['allowed']! as Map<String, Object?>;
       target.remove('enum');
     }
+  } else if (name == 'service_management') {
+    // ignore: avoid_dynamic_calls
+    var schemas = api['components']!['schemas']! as Map<String, dynamic>;
+    schemas['TemporaryAttachments'] = jsonDecode(r'''
+      {
+        "type": "object",
+        "properties": {
+          "temporaryAttachments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TemporaryAttachment"
+            }
+          }
+        },
+        "additionalProperties": false
+      }''');
+    schemas['TemporaryAttachment'] = jsonDecode(r'''
+      {
+        "type": "object",
+        "properties": {
+          "temporaryAttachmentId": {
+            "type": "string"
+          },
+          "fileName": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }''');
+    // ignore: avoid_dynamic_calls
+    var content = api['paths'][
+                '/rest/servicedeskapi/servicedesk/{serviceDeskId}/attachTemporaryFile']
+            ['post']['responses']['201']['content']['application/json']
+        as Map<String, dynamic>;
+    assert(!content.containsKey('schema'));
+    content['schema'] = {r'$ref': '#/components/schemas/TemporaryAttachments'};
   }
 }

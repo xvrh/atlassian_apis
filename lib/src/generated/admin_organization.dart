@@ -7,7 +7,7 @@ import '../api_utils.dart';
 class AdminOrganizationApi {
   final ApiClient _client;
 
-  AdminOrganizationApi._(this._client);
+  AdminOrganizationApi(this._client);
 
   /// Returns a list of your organizations (based on your API key).
   Future<OrgPage> getOrgs({String? cursor}) async {
