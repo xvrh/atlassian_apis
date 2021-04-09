@@ -500,7 +500,7 @@ class RequestBody {
       return jsonType.toString();
     } else {
       assert(_isFileUpload);
-      return 'File';
+      return 'MultipartFile';
     }
   }
 }

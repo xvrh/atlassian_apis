@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:http/http.dart';
 export 'package:http/http.dart' show Client;
-export 'dart:io' show File;
+export 'package:http/http.dart' show MultipartFile;
 
 class ApiClient {
   static const _headerAtlassianToken = 'X-Atlassian-Token';
@@ -28,7 +28,7 @@ class ApiClient {
     Map<String, String>? queryParameters,
     Map<String, String>? headers,
     dynamic body,
-    File? file,
+    MultipartFile? file,
   }) async {
     var path = pathTemplate;
 
@@ -57,8 +57,7 @@ class ApiClient {
       request = MultipartRequest(method, uri)
         ..headers[_headerAtlassianToken] ??= 'no-check'
         ..headers[HttpHeaders.contentTypeHeader] = 'multipart/form-data'
-        ..files.add(MultipartFile('file', file.openRead(), file.lengthSync(),
-            filename: p.basename(file.path)));
+        ..files.add(file);
     } else {
       var bodyRequest = Request(method, uri);
       request = bodyRequest;

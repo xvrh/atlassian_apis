@@ -2358,7 +2358,7 @@ class IssueAttachmentsApi {
   ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
   /// is configured, issue-level security permission to view the issue.
   Future<List<Attachment>> addAttachment(
-      {required String issueIdOrKey, required File file}) async {
+      {required String issueIdOrKey, required MultipartFile file}) async {
     return (await _client.send(
       'post',
       'rest/api/3/issue/{issueIdOrKey}/attachments',
