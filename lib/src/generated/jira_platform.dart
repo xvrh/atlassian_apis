@@ -11322,7 +11322,7 @@ class TaskProgressBeanObject {
   final String? message;
 
   /// The result of the task execution.
-  final dynamic? result;
+  final dynamic result;
 
   /// The ID of the user who submitted the task.
   final int submittedBy;
@@ -11427,7 +11427,7 @@ class TaskProgressBeanObject {
       String? description,
       TaskProgressBeanObjectStatus? status,
       String? message,
-      dynamic? result,
+      dynamic result,
       int? submittedBy,
       int? progress,
       int? elapsedRuntime,
@@ -11988,7 +11988,7 @@ class EntityProperty {
   final String? key;
 
   /// The value of the property. Required on create and update.
-  final dynamic? value;
+  final dynamic value;
 
   EntityProperty({this.key, this.value});
 
@@ -12013,7 +12013,7 @@ class EntityProperty {
     return json;
   }
 
-  EntityProperty copyWith({String? key, dynamic? value}) {
+  EntityProperty copyWith({String? key, dynamic value}) {
     return EntityProperty(
       key: key ?? this.key,
       value: value ?? this.value,
@@ -14634,7 +14634,7 @@ class FieldMetadata {
   final List<dynamic> allowedValues;
 
   /// The default value of the field.
-  final dynamic? defaultValue;
+  final dynamic defaultValue;
 
   FieldMetadata(
       {required this.required,
@@ -14706,7 +14706,7 @@ class FieldMetadata {
       bool? hasDefaultValue,
       List<String>? operations,
       List<dynamic>? allowedValues,
-      dynamic? defaultValue}) {
+      dynamic defaultValue}) {
     return FieldMetadata(
       required: required ?? this.required,
       schema: schema ?? this.schema,
@@ -20306,7 +20306,7 @@ class JiraExpressionResult {
   }
 
   JiraExpressionResult copyWith(
-      {dynamic? value, JiraExpressionEvaluationMetaDataBean? meta}) {
+      {dynamic value, JiraExpressionEvaluationMetaDataBean? meta}) {
     return JiraExpressionResult(
       value: value ?? this.value,
       meta: meta ?? this.meta,
@@ -21693,7 +21693,7 @@ class BulkIssuePropertyUpdateRequest {
   /// The value of the property. The value must be a
   /// [valid](https://tools.ietf.org/html/rfc4627), non-empty JSON blob. The
   /// maximum length is 32768 characters.
-  final dynamic? value;
+  final dynamic value;
 
   /// EXPERIMENTAL. The Jira expression to calculate the value of the property.
   /// The value of the expression must be an object that can be converted to
@@ -21738,7 +21738,7 @@ class BulkIssuePropertyUpdateRequest {
   }
 
   BulkIssuePropertyUpdateRequest copyWith(
-      {dynamic? value,
+      {dynamic value,
       String? expression,
       IssueFilterForBulkPropertySet? filter}) {
     return BulkIssuePropertyUpdateRequest(
@@ -21755,7 +21755,7 @@ class IssueFilterForBulkPropertySet {
   final List<int> entityIds;
 
   /// The value of properties to perform the bulk operation on.
-  final dynamic? currentValue;
+  final dynamic currentValue;
 
   /// Whether the bulk operation occurs only when the property is present on or
   /// absent from an issue.
@@ -21792,7 +21792,7 @@ class IssueFilterForBulkPropertySet {
   }
 
   IssueFilterForBulkPropertySet copyWith(
-      {List<int>? entityIds, dynamic? currentValue, bool? hasProperty}) {
+      {List<int>? entityIds, dynamic currentValue, bool? hasProperty}) {
     return IssueFilterForBulkPropertySet(
       entityIds: entityIds ?? this.entityIds,
       currentValue: currentValue ?? this.currentValue,
@@ -21807,7 +21807,7 @@ class IssueFilterForBulkPropertyDelete {
   final List<int> entityIds;
 
   /// The value of properties to perform the bulk operation on.
-  final dynamic? currentValue;
+  final dynamic currentValue;
 
   IssueFilterForBulkPropertyDelete({List<int>? entityIds, this.currentValue})
       : entityIds = entityIds ?? [];
@@ -21835,7 +21835,7 @@ class IssueFilterForBulkPropertyDelete {
   }
 
   IssueFilterForBulkPropertyDelete copyWith(
-      {List<int>? entityIds, dynamic? currentValue}) {
+      {List<int>? entityIds, dynamic currentValue}) {
     return IssueFilterForBulkPropertyDelete(
       entityIds: entityIds ?? this.entityIds,
       currentValue: currentValue ?? this.currentValue,
@@ -24841,7 +24841,7 @@ class Comment {
 
   /// The comment text in
   /// [Atlassian Document Format](https://developer.atlassian.com/cloud/jira/platform/apis/document/structure/).
-  final dynamic? body;
+  final dynamic body;
 
   /// The rendered version of the comment.
   final String? renderedBody;
@@ -24963,7 +24963,7 @@ class Comment {
       {String? self,
       String? id,
       UserDetails? author,
-      dynamic? body,
+      dynamic body,
       String? renderedBody,
       UserDetails? updateAuthor,
       DateTime? created,
@@ -25660,7 +25660,7 @@ class Worklog {
   /// A comment about the worklog in
   /// [Atlassian Document Format](https://developer.atlassian.com/cloud/jira/platform/apis/document/structure/).
   /// Optional when creating or updating a worklog.
-  final dynamic? comment;
+  final dynamic comment;
 
   /// The datetime on which the worklog was created.
   final DateTime? created;
@@ -25801,7 +25801,7 @@ class Worklog {
       {String? self,
       UserDetails? author,
       UserDetails? updateAuthor,
-      dynamic? comment,
+      dynamic comment,
       DateTime? created,
       DateTime? updated,
       Visibility? visibility,
@@ -26378,16 +26378,16 @@ class SuggestedIssue {
 /// Details of an operation to perform on a field.
 class FieldUpdateOperation {
   /// A map containing the name of a field and the value to add to it.
-  final dynamic? add;
+  final dynamic add;
 
   /// A map containing the name of a field and the value to set in it.
-  final dynamic? set;
+  final dynamic set;
 
   /// A map containing the name of a field and the value to removed from it.
-  final dynamic? remove;
+  final dynamic remove;
 
   /// A map containing the name of a field and the value to edit in it.
-  final dynamic? edit;
+  final dynamic edit;
 
   FieldUpdateOperation({this.add, this.set, this.remove, this.edit});
 
@@ -26423,7 +26423,7 @@ class FieldUpdateOperation {
   }
 
   FieldUpdateOperation copyWith(
-      {dynamic? add, dynamic? set, dynamic? remove, dynamic? edit}) {
+      {dynamic add, dynamic set, dynamic remove, dynamic edit}) {
     return FieldUpdateOperation(
       add: add ?? this.add,
       set: set ?? this.set,
@@ -40167,7 +40167,7 @@ class WorkflowTransitionRule {
   /// The configuration of the transition rule. This is currently returned only
   /// for some of the rule types. Availability of this property is subject to
   /// change.
-  final dynamic? configuration;
+  final dynamic configuration;
 
   WorkflowTransitionRule({required this.type, this.configuration});
 
@@ -40190,7 +40190,7 @@ class WorkflowTransitionRule {
     return json;
   }
 
-  WorkflowTransitionRule copyWith({String? type, dynamic? configuration}) {
+  WorkflowTransitionRule copyWith({String? type, dynamic configuration}) {
     return WorkflowTransitionRule(
       type: type ?? this.type,
       configuration: configuration ?? this.configuration,

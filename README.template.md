@@ -12,11 +12,20 @@ See [Atlassian documentation of the APIs](https://developer.atlassian.com/cloud/
 
 ## Usage
 
+### Authentication
 
 ```dart
-import 'package:atlassian_apis/service_management.dart';
+import 'example/main.dart';
+```
 
-void main() {
+### Jira
 
-}
+```dart
+import 'example/jira.dart#example';
+```
+
+### Service desk
+
+```dart
+import 'example/service_management.dart#example';
 ```
