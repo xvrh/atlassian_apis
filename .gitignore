@@ -16,3 +16,4 @@ doc/api/
 _*
 .*
 !.gitignore
+!.github
