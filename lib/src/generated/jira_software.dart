@@ -5396,7 +5396,7 @@ class FieldMetaBean {
   final List<dynamic> allowedValues;
 
   /// The default value of the field.
-  final dynamic? defaultValue;
+  final dynamic defaultValue;
 
   FieldMetaBean(
       {bool? required,
@@ -5475,7 +5475,7 @@ class FieldMetaBean {
       bool? hasDefaultValue,
       List<String>? operations,
       List<dynamic>? allowedValues,
-      dynamic? defaultValue}) {
+      dynamic defaultValue}) {
     return FieldMetaBean(
       required: required ?? this.required,
       schema: schema ?? this.schema,

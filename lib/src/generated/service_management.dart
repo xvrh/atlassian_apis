@@ -3341,7 +3341,7 @@ class EntityProperty {
   final String? key;
 
   /// The value of the property. Required on create and update.
-  final dynamic? value;
+  final dynamic value;
 
   EntityProperty({this.key, this.value});
 
@@ -3366,7 +3366,7 @@ class EntityProperty {
     return json;
   }
 
-  EntityProperty copyWith({String? key, dynamic? value}) {
+  EntityProperty copyWith({String? key, dynamic value}) {
     return EntityProperty(
       key: key ?? this.key,
       value: value ?? this.value,
@@ -5416,7 +5416,7 @@ class FieldMetadata {
   final List<dynamic> allowedValues;
 
   /// The default value of the field.
-  final dynamic? defaultValue;
+  final dynamic defaultValue;
 
   FieldMetadata(
       {required this.required,
@@ -5488,7 +5488,7 @@ class FieldMetadata {
       bool? hasDefaultValue,
       List<String>? operations,
       List<dynamic>? allowedValues,
-      dynamic? defaultValue}) {
+      dynamic defaultValue}) {
     return FieldMetadata(
       required: required ?? this.required,
       schema: schema ?? this.schema,
@@ -7496,7 +7496,7 @@ class CustomerRequestFieldValueDTO {
   final String? label;
 
   /// Value of the field.
-  final dynamic? value;
+  final dynamic value;
 
   /// Value of the field rendered in the UI.
   final Map<String, dynamic>? renderedValue;
@@ -7538,7 +7538,7 @@ class CustomerRequestFieldValueDTO {
   CustomerRequestFieldValueDTO copyWith(
       {String? fieldId,
       String? label,
-      dynamic? value,
+      dynamic value,
       Map<String, dynamic>? renderedValue}) {
     return CustomerRequestFieldValueDTO(
       fieldId: fieldId ?? this.fieldId,

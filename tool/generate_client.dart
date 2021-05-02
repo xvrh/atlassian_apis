@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'swagger/swagger_spec.dart';
 import 'package:dart_style/dart_style.dart';
 import 'swagger/dart.dart' as dart;
+import 'swagger/swagger_spec.dart';
 import 'update_swagger_file.dart' show Api;
 
 void main() {
@@ -16,7 +15,7 @@ void main() {
     final spec = Spec.fromJson(jsonSpec);
 
     var apiGenerator = dart.Api(api.name, spec);
-    var code = apiGenerator.toCode();
+    var code = apiGenerator.toCode().replaceAll('dynamic?', 'dynamic');
     try {
       code = DartFormatter().format(code);
     } catch (e) {

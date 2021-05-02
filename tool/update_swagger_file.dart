@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:path/path.dart' as p;
 import 'package:http/http.dart';
+import 'package:path/path.dart' as p;
 
 final String apisPath = 'tool/apis';
 
