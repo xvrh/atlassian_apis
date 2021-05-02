@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart';
 import 'package:path/path.dart' as p;
 
@@ -57,7 +56,7 @@ class ApiClient {
     if (file != null) {
       request = MultipartRequest(method, uri)
         ..headers[_headerAtlassianToken] ??= 'no-check'
-        ..headers[HttpHeaders.contentTypeHeader] = 'multipart/form-data'
+        ..headers['content-type'] = 'multipart/form-data'
         ..files.add(file);
     } else {
       var bodyRequest = Request(method, uri);
@@ -65,7 +64,7 @@ class ApiClient {
 
       if (body != null) {
         bodyRequest
-          ..headers[HttpHeaders.contentTypeHeader] = 'application/json'
+          ..headers['content-type'] = 'application/json'
           ..body = jsonEncode(body);
       }
     }
