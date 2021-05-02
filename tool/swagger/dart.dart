@@ -164,6 +164,8 @@ import '../api_utils.dart';
 // ignore_for_file: deprecated_member_use_from_same_package
 ''');
 
+    var sortedTaggedServices = _taggedServices.sortedBy((e) => e.tag!.name);
+
     if (_untaggedService == null) {
       buffer.writeln('''
 class $className {
@@ -172,7 +174,7 @@ class $className {
   $className(this._client);
 ''');
 
-      for (var service in _taggedServices) {
+      for (var service in sortedTaggedServices) {
         var tag = service.tag!;
         var description = tag.description;
         if (description.isNotEmpty) {
@@ -189,7 +191,7 @@ class $className {
 ''');
     }
 
-    for (var service in _taggedServices) {
+    for (var service in sortedTaggedServices) {
       buffer.writeln(service.toCode());
       buffer.writeln();
     }
@@ -199,11 +201,11 @@ class $className {
     }
 
     var generatedClasses = <String>[];
-    for (var topLevelEnum in _topLevelEnums.values) {
+    for (var topLevelEnum in _topLevelEnums.values.sortedBy((e) => e.name)) {
       buffer.writeln(topLevelEnum.toCode());
       buffer.writeln();
     }
-    for (var complexType in _complexTypes) {
+    for (var complexType in _complexTypes.sortedBy((e) => e.className)) {
       if (!generatedClasses.contains(complexType.className)) {
         generatedClasses.add(complexType.className);
         buffer.writeln(complexType.toCode());
