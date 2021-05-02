@@ -117,11 +117,127 @@ class AdminUserApi {
   }
 }
 
+class AccountCharacteristics {
+  final bool notMentionable;
+
+  AccountCharacteristics({bool? notMentionable})
+      : notMentionable = notMentionable ?? false;
+
+  factory AccountCharacteristics.fromJson(Map<String, Object?> json) {
+    return AccountCharacteristics(
+      notMentionable: json[r'not_mentionable'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var notMentionable = this.notMentionable;
+
+    final json = <String, Object?>{};
+    json[r'not_mentionable'] = notMentionable;
+    return json;
+  }
+
+  AccountCharacteristics copyWith({bool? notMentionable}) {
+    return AccountCharacteristics(
+      notMentionable: notMentionable ?? this.notMentionable,
+    );
+  }
+}
+
+/// A unique account identifier
+class AccountId {
+  AccountId();
+
+  factory AccountId.fromJson(Map<String, Object?> json) {
+    return AccountId();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+/// The lifecycle status of the account
+class AccountStatus {
+  AccountStatus();
+
+  factory AccountStatus.fromJson(Map<String, Object?> json) {
+    return AccountStatus();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+/// The type of account
+class AccountType {
+  AccountType();
+
+  factory AccountType.fromJson(Map<String, Object?> json) {
+    return AccountType();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
 class AtlassianAccountUser {
   AtlassianAccountUser();
 
   factory AtlassianAccountUser.fromJson(Map<String, Object?> json) {
     return AtlassianAccountUser();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+/// The absolute URI (RFC3986) to the avatar name of the user.
+class Avatar {
+  Avatar();
+
+  factory Avatar.fromJson(Map<String, Object?> json) {
+    return Avatar();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+/// The department in which the user works
+class Department {
+  Department();
+
+  factory Department.fromJson(Map<String, Object?> json) {
+    return Department();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+/// The email address of the user.
+///
+/// _Constraints_
+/// - `partMaxLength`: The maximum length of the user part and of any
+///   subdomain is 255 characters.
+/// - `validCharacters`: Control and null characters are not allowed
+class Email {
+  Email();
+
+  factory Email.fromJson(Map<String, Object?> json) {
+    return Email();
   }
 
   Map<String, Object?> toJson() {
@@ -193,49 +309,12 @@ class ExtendedProfile {
   }
 }
 
-/// A unique account identifier
-class AccountId {
-  AccountId();
+/// The job title of the user
+class JobTitle {
+  JobTitle();
 
-  factory AccountId.fromJson(Map<String, Object?> json) {
-    return AccountId();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-/// A nickname for the user in content references to the user.
-///
-/// _Constraints_
-/// - `maxLength`: The maximum nickname length is 30 characters
-/// - `validCharacters`: Control and null characters are not allowed
-class Nickname {
-  Nickname();
-
-  factory Nickname.fromJson(Map<String, Object?> json) {
-    return Nickname();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-/// The display name of the user. Should be used for contextual rendering of
-/// content authorship.
-///
-/// _Constraints_
-/// - `maxLength`: The maximum display name length is 100 characters
-/// - `validCharacters`: Control and null characters are not allowed
-class Name {
-  Name();
-
-  factory Name.fromJson(Map<String, Object?> json) {
-    return Name();
+  factory JobTitle.fromJson(Map<String, Object?> json) {
+    return JobTitle();
   }
 
   Map<String, Object?> toJson() {
@@ -258,81 +337,6 @@ class Locale {
   }
 }
 
-/// A unix zoneinfo string describing the local timezone of the user
-class ZoneInfo {
-  ZoneInfo();
-
-  factory ZoneInfo.fromJson(Map<String, Object?> json) {
-    return ZoneInfo();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-/// The email address of the user.
-///
-/// _Constraints_
-/// - `partMaxLength`: The maximum length of the user part and of any
-///   subdomain is 255 characters.
-/// - `validCharacters`: Control and null characters are not allowed
-class Email {
-  Email();
-
-  factory Email.fromJson(Map<String, Object?> json) {
-    return Email();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-/// The job title of the user
-class JobTitle {
-  JobTitle();
-
-  factory JobTitle.fromJson(Map<String, Object?> json) {
-    return JobTitle();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-/// The organisation to which the user belongs
-class Organization {
-  Organization();
-
-  factory Organization.fromJson(Map<String, Object?> json) {
-    return Organization();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-/// The department in which the user works
-class Department {
-  Department();
-
-  factory Department.fromJson(Map<String, Object?> json) {
-    return Department();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
 /// The physical location of the user
 class Location {
   Location();
@@ -347,165 +351,29 @@ class Location {
   }
 }
 
-/// A secret for use by the user in basic authentication flows
-class Password {
-  Password();
+/// You are allowed to take or write the action/property
+class ManageabilityAllowed {
+  final bool allowed;
 
-  factory Password.fromJson(Map<String, Object?> json) {
-    return Password();
-  }
+  ManageabilityAllowed({required this.allowed});
 
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-class AccountCharacteristics {
-  final bool notMentionable;
-
-  AccountCharacteristics({bool? notMentionable})
-      : notMentionable = notMentionable ?? false;
-
-  factory AccountCharacteristics.fromJson(Map<String, Object?> json) {
-    return AccountCharacteristics(
-      notMentionable: json[r'not_mentionable'] as bool? ?? false,
+  factory ManageabilityAllowed.fromJson(Map<String, Object?> json) {
+    return ManageabilityAllowed(
+      allowed: json[r'allowed'] as bool? ?? false,
     );
   }
 
   Map<String, Object?> toJson() {
-    var notMentionable = this.notMentionable;
+    var allowed = this.allowed;
 
     final json = <String, Object?>{};
-    json[r'not_mentionable'] = notMentionable;
+    json[r'allowed'] = allowed;
     return json;
   }
 
-  AccountCharacteristics copyWith({bool? notMentionable}) {
-    return AccountCharacteristics(
-      notMentionable: notMentionable ?? this.notMentionable,
-    );
-  }
-}
-
-/// The absolute URI (RFC3986) to the avatar name of the user.
-class Avatar {
-  Avatar();
-
-  factory Avatar.fromJson(Map<String, Object?> json) {
-    return Avatar();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-/// The type of account
-class AccountType {
-  AccountType();
-
-  factory AccountType.fromJson(Map<String, Object?> json) {
-    return AccountType();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-/// The lifecycle status of the account
-class AccountStatus {
-  AccountStatus();
-
-  factory AccountStatus.fromJson(Map<String, Object?> json) {
-    return AccountStatus();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-class User {
-  final AccountId accountId;
-  final AccountType accountType;
-  final AccountStatus accountStatus;
-  final Name name;
-  final Avatar picture;
-  final Email email;
-  final AccountCharacteristics? characteristics;
-
-  User(
-      {required this.accountId,
-      required this.accountType,
-      required this.accountStatus,
-      required this.name,
-      required this.picture,
-      required this.email,
-      this.characteristics});
-
-  factory User.fromJson(Map<String, Object?> json) {
-    return User(
-      accountId: AccountId.fromJson(
-          json[r'account_id'] as Map<String, Object?>? ?? const {}),
-      accountType: AccountType.fromJson(
-          json[r'account_type'] as Map<String, Object?>? ?? const {}),
-      accountStatus: AccountStatus.fromJson(
-          json[r'account_status'] as Map<String, Object?>? ?? const {}),
-      name: Name.fromJson(json[r'name'] as Map<String, Object?>? ?? const {}),
-      picture: Avatar.fromJson(
-          json[r'picture'] as Map<String, Object?>? ?? const {}),
-      email:
-          Email.fromJson(json[r'email'] as Map<String, Object?>? ?? const {}),
-      characteristics: json[r'characteristics'] != null
-          ? AccountCharacteristics.fromJson(
-              json[r'characteristics']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var accountId = this.accountId;
-    var accountType = this.accountType;
-    var accountStatus = this.accountStatus;
-    var name = this.name;
-    var picture = this.picture;
-    var email = this.email;
-    var characteristics = this.characteristics;
-
-    final json = <String, Object?>{};
-    json[r'account_id'] = accountId.toJson();
-    json[r'account_type'] = accountType.toJson();
-    json[r'account_status'] = accountStatus.toJson();
-    json[r'name'] = name.toJson();
-    json[r'picture'] = picture.toJson();
-    json[r'email'] = email.toJson();
-    if (characteristics != null) {
-      json[r'characteristics'] = characteristics.toJson();
-    }
-    return json;
-  }
-
-  User copyWith(
-      {AccountId? accountId,
-      AccountType? accountType,
-      AccountStatus? accountStatus,
-      Name? name,
-      Avatar? picture,
-      Email? email,
-      AccountCharacteristics? characteristics}) {
-    return User(
-      accountId: accountId ?? this.accountId,
-      accountType: accountType ?? this.accountType,
-      accountStatus: accountStatus ?? this.accountStatus,
-      name: name ?? this.name,
-      picture: picture ?? this.picture,
-      email: email ?? this.email,
-      characteristics: characteristics ?? this.characteristics,
+  ManageabilityAllowed copyWith({bool? allowed}) {
+    return ManageabilityAllowed(
+      allowed: allowed ?? this.allowed,
     );
   }
 }
@@ -594,30 +462,32 @@ class ManageabilityRestrictionReasonKey {
   String toString() => value;
 }
 
-/// You are allowed to take or write the action/property
-class ManageabilityAllowed {
-  final bool allowed;
+/// Describes your permissions to change the object. Each key should be a valid
+/// JSON path of the target object.
+class ManageabilityRuleObjectMutability {
+  ManageabilityRuleObjectMutability();
 
-  ManageabilityAllowed({required this.allowed});
-
-  factory ManageabilityAllowed.fromJson(Map<String, Object?> json) {
-    return ManageabilityAllowed(
-      allowed: json[r'allowed'] as bool? ?? false,
-    );
+  factory ManageabilityRuleObjectMutability.fromJson(
+      Map<String, Object?> json) {
+    return ManageabilityRuleObjectMutability();
   }
 
   Map<String, Object?> toJson() {
-    var allowed = this.allowed;
-
     final json = <String, Object?>{};
-    json[r'allowed'] = allowed;
     return json;
   }
+}
 
-  ManageabilityAllowed copyWith({bool? allowed}) {
-    return ManageabilityAllowed(
-      allowed: allowed ?? this.allowed,
-    );
+class ManageabilityRuleSimple {
+  ManageabilityRuleSimple();
+
+  factory ManageabilityRuleSimple.fromJson(Map<String, Object?> json) {
+    return ManageabilityRuleSimple();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
   }
 }
 
@@ -655,11 +525,17 @@ class ManageabilityUnallowed {
   }
 }
 
-class ManageabilityRuleSimple {
-  ManageabilityRuleSimple();
+/// The display name of the user. Should be used for contextual rendering of
+/// content authorship.
+///
+/// _Constraints_
+/// - `maxLength`: The maximum display name length is 100 characters
+/// - `validCharacters`: Control and null characters are not allowed
+class Name {
+  Name();
 
-  factory ManageabilityRuleSimple.fromJson(Map<String, Object?> json) {
-    return ManageabilityRuleSimple();
+  factory Name.fromJson(Map<String, Object?> json) {
+    return Name();
   }
 
   Map<String, Object?> toJson() {
@@ -668,14 +544,44 @@ class ManageabilityRuleSimple {
   }
 }
 
-/// Describes your permissions to change the object. Each key should be a valid
-/// JSON path of the target object.
-class ManageabilityRuleObjectMutability {
-  ManageabilityRuleObjectMutability();
+/// A nickname for the user in content references to the user.
+///
+/// _Constraints_
+/// - `maxLength`: The maximum nickname length is 30 characters
+/// - `validCharacters`: Control and null characters are not allowed
+class Nickname {
+  Nickname();
 
-  factory ManageabilityRuleObjectMutability.fromJson(
-      Map<String, Object?> json) {
-    return ManageabilityRuleObjectMutability();
+  factory Nickname.fromJson(Map<String, Object?> json) {
+    return Nickname();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+/// The organisation to which the user belongs
+class Organization {
+  Organization();
+
+  factory Organization.fromJson(Map<String, Object?> json) {
+    return Organization();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+/// A secret for use by the user in basic authentication flows
+class Password {
+  Password();
+
+  factory Password.fromJson(Map<String, Object?> json) {
+    return Password();
   }
 
   Map<String, Object?> toJson() {
@@ -712,34 +618,77 @@ class ResponseBadRequestBodyParseFailure {
   }
 }
 
-class ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItemViolationsItem {
-  /// The key for a constraint that the submitted value has violated.
-  /// See documentation for any submittable model for a set of constraint keys
-  /// and definitions.
+/// The submitted JSON entity had one or more invalid properties.
+/// For each invalid field, a set of violated constraint keys are returned.
+class ResponseBadRequestFieldConstraintsViolated {
   final String key;
+  final ResponseBadRequestFieldConstraintsViolatedContext context;
 
-  ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItemViolationsItem(
-      {required this.key});
+  ResponseBadRequestFieldConstraintsViolated(
+      {required this.key, required this.context});
 
-  factory ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItemViolationsItem.fromJson(
+  factory ResponseBadRequestFieldConstraintsViolated.fromJson(
       Map<String, Object?> json) {
-    return ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItemViolationsItem(
+    return ResponseBadRequestFieldConstraintsViolated(
       key: json[r'key'] as String? ?? '',
+      context: ResponseBadRequestFieldConstraintsViolatedContext.fromJson(
+          json[r'context'] as Map<String, Object?>? ?? const {}),
     );
   }
 
   Map<String, Object?> toJson() {
     var key = this.key;
+    var context = this.context;
 
     final json = <String, Object?>{};
     json[r'key'] = key;
+    json[r'context'] = context.toJson();
     return json;
   }
 
-  ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItemViolationsItem
-      copyWith({String? key}) {
-    return ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItemViolationsItem(
+  ResponseBadRequestFieldConstraintsViolated copyWith(
+      {String? key,
+      ResponseBadRequestFieldConstraintsViolatedContext? context}) {
+    return ResponseBadRequestFieldConstraintsViolated(
       key: key ?? this.key,
+      context: context ?? this.context,
+    );
+  }
+}
+
+class ResponseBadRequestFieldConstraintsViolatedContext {
+  final List<
+          ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItem>
+      fieldViolations;
+
+  ResponseBadRequestFieldConstraintsViolatedContext(
+      {required this.fieldViolations});
+
+  factory ResponseBadRequestFieldConstraintsViolatedContext.fromJson(
+      Map<String, Object?> json) {
+    return ResponseBadRequestFieldConstraintsViolatedContext(
+      fieldViolations: (json[r'fieldViolations'] as List<Object?>?)
+              ?.map((i) =>
+                  ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItem
+                      .fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fieldViolations = this.fieldViolations;
+
+    final json = <String, Object?>{};
+    json[r'fieldViolations'] = fieldViolations.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  ResponseBadRequestFieldConstraintsViolatedContext copyWith(
+      {List<ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItem>?
+          fieldViolations}) {
+    return ResponseBadRequestFieldConstraintsViolatedContext(
+      fieldViolations: fieldViolations ?? this.fieldViolations,
     );
   }
 }
@@ -788,127 +737,36 @@ class ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItem {
   }
 }
 
-class ResponseBadRequestFieldConstraintsViolatedContext {
-  final List<
-          ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItem>
-      fieldViolations;
-
-  ResponseBadRequestFieldConstraintsViolatedContext(
-      {required this.fieldViolations});
-
-  factory ResponseBadRequestFieldConstraintsViolatedContext.fromJson(
-      Map<String, Object?> json) {
-    return ResponseBadRequestFieldConstraintsViolatedContext(
-      fieldViolations: (json[r'fieldViolations'] as List<Object?>?)
-              ?.map((i) =>
-                  ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItem
-                      .fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var fieldViolations = this.fieldViolations;
-
-    final json = <String, Object?>{};
-    json[r'fieldViolations'] = fieldViolations.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  ResponseBadRequestFieldConstraintsViolatedContext copyWith(
-      {List<ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItem>?
-          fieldViolations}) {
-    return ResponseBadRequestFieldConstraintsViolatedContext(
-      fieldViolations: fieldViolations ?? this.fieldViolations,
-    );
-  }
-}
-
-/// The submitted JSON entity had one or more invalid properties.
-/// For each invalid field, a set of violated constraint keys are returned.
-class ResponseBadRequestFieldConstraintsViolated {
+class ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItemViolationsItem {
+  /// The key for a constraint that the submitted value has violated.
+  /// See documentation for any submittable model for a set of constraint keys
+  /// and definitions.
   final String key;
-  final ResponseBadRequestFieldConstraintsViolatedContext context;
 
-  ResponseBadRequestFieldConstraintsViolated(
-      {required this.key, required this.context});
+  ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItemViolationsItem(
+      {required this.key});
 
-  factory ResponseBadRequestFieldConstraintsViolated.fromJson(
+  factory ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItemViolationsItem.fromJson(
       Map<String, Object?> json) {
-    return ResponseBadRequestFieldConstraintsViolated(
+    return ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItemViolationsItem(
       key: json[r'key'] as String? ?? '',
-      context: ResponseBadRequestFieldConstraintsViolatedContext.fromJson(
-          json[r'context'] as Map<String, Object?>? ?? const {}),
     );
   }
 
   Map<String, Object?> toJson() {
     var key = this.key;
-    var context = this.context;
 
     final json = <String, Object?>{};
     json[r'key'] = key;
-    json[r'context'] = context.toJson();
     return json;
   }
 
-  ResponseBadRequestFieldConstraintsViolated copyWith(
-      {String? key,
-      ResponseBadRequestFieldConstraintsViolatedContext? context}) {
-    return ResponseBadRequestFieldConstraintsViolated(
-      key: key ?? this.key,
-      context: context ?? this.context,
-    );
-  }
-}
-
-/// You are not authorized to access this resource
-class ResponseForbiddenBasic {
-  final ResponseForbiddenBasicKey key;
-
-  ResponseForbiddenBasic({required this.key});
-
-  factory ResponseForbiddenBasic.fromJson(Map<String, Object?> json) {
-    return ResponseForbiddenBasic(
-      key: ResponseForbiddenBasicKey.fromValue(json[r'key'] as String? ?? ''),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var key = this.key;
-
-    final json = <String, Object?>{};
-    json[r'key'] = key.value;
-    return json;
-  }
-
-  ResponseForbiddenBasic copyWith({ResponseForbiddenBasicKey? key}) {
-    return ResponseForbiddenBasic(
+  ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItemViolationsItem
+      copyWith({String? key}) {
+    return ResponseBadRequestFieldConstraintsViolatedContextFieldViolationsItemViolationsItem(
       key: key ?? this.key,
     );
   }
-}
-
-class ResponseForbiddenBasicKey {
-  static const forbidden = ResponseForbiddenBasicKey._('forbidden');
-
-  static const values = [
-    forbidden,
-  ];
-  final String value;
-
-  const ResponseForbiddenBasicKey._(this.value);
-
-  static ResponseForbiddenBasicKey fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => ResponseForbiddenBasicKey._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
 }
 
 class ResponseForbiddenAction {
@@ -966,86 +824,46 @@ class ResponseForbiddenActionKey {
   String toString() => value;
 }
 
-class ResponseForbiddenUnclaimedDomainContext {
-  final String domain;
+/// You are not authorized to access this resource
+class ResponseForbiddenBasic {
+  final ResponseForbiddenBasicKey key;
 
-  ResponseForbiddenUnclaimedDomainContext({required this.domain});
+  ResponseForbiddenBasic({required this.key});
 
-  factory ResponseForbiddenUnclaimedDomainContext.fromJson(
-      Map<String, Object?> json) {
-    return ResponseForbiddenUnclaimedDomainContext(
-      domain: json[r'domain'] as String? ?? '',
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var domain = this.domain;
-
-    final json = <String, Object?>{};
-    json[r'domain'] = domain;
-    return json;
-  }
-
-  ResponseForbiddenUnclaimedDomainContext copyWith({String? domain}) {
-    return ResponseForbiddenUnclaimedDomainContext(
-      domain: domain ?? this.domain,
-    );
-  }
-}
-
-class ResponseForbiddenUnclaimedDomain {
-  final ResponseForbiddenUnclaimedDomainKey key;
-  final ResponseForbiddenUnclaimedDomainContext? context;
-
-  ResponseForbiddenUnclaimedDomain({required this.key, this.context});
-
-  factory ResponseForbiddenUnclaimedDomain.fromJson(Map<String, Object?> json) {
-    return ResponseForbiddenUnclaimedDomain(
-      key: ResponseForbiddenUnclaimedDomainKey.fromValue(
-          json[r'key'] as String? ?? ''),
-      context: json[r'context'] != null
-          ? ResponseForbiddenUnclaimedDomainContext.fromJson(
-              json[r'context']! as Map<String, Object?>)
-          : null,
+  factory ResponseForbiddenBasic.fromJson(Map<String, Object?> json) {
+    return ResponseForbiddenBasic(
+      key: ResponseForbiddenBasicKey.fromValue(json[r'key'] as String? ?? ''),
     );
   }
 
   Map<String, Object?> toJson() {
     var key = this.key;
-    var context = this.context;
 
     final json = <String, Object?>{};
     json[r'key'] = key.value;
-    if (context != null) {
-      json[r'context'] = context.toJson();
-    }
     return json;
   }
 
-  ResponseForbiddenUnclaimedDomain copyWith(
-      {ResponseForbiddenUnclaimedDomainKey? key,
-      ResponseForbiddenUnclaimedDomainContext? context}) {
-    return ResponseForbiddenUnclaimedDomain(
+  ResponseForbiddenBasic copyWith({ResponseForbiddenBasicKey? key}) {
+    return ResponseForbiddenBasic(
       key: key ?? this.key,
-      context: context ?? this.context,
     );
   }
 }
 
-class ResponseForbiddenUnclaimedDomainKey {
-  static const forbiddenUnclaimedDomain =
-      ResponseForbiddenUnclaimedDomainKey._('forbidden.unclaimedDomain');
+class ResponseForbiddenBasicKey {
+  static const forbidden = ResponseForbiddenBasicKey._('forbidden');
 
   static const values = [
-    forbiddenUnclaimedDomain,
+    forbidden,
   ];
   final String value;
 
-  const ResponseForbiddenUnclaimedDomainKey._(this.value);
+  const ResponseForbiddenBasicKey._(this.value);
 
-  static ResponseForbiddenUnclaimedDomainKey fromValue(String value) =>
+  static ResponseForbiddenBasicKey fromValue(String value) =>
       values.firstWhere((e) => e.value == value,
-          orElse: () => ResponseForbiddenUnclaimedDomainKey._(value));
+          orElse: () => ResponseForbiddenBasicKey._(value));
 
   /// An enum received from the server but this version of the client doesn't recognize it.
   bool get isUnknown => values.every((v) => v.value != value);
@@ -1110,4 +928,186 @@ class ResponseForbiddenObjectMutabilityKey {
 
   @override
   String toString() => value;
+}
+
+class ResponseForbiddenUnclaimedDomain {
+  final ResponseForbiddenUnclaimedDomainKey key;
+  final ResponseForbiddenUnclaimedDomainContext? context;
+
+  ResponseForbiddenUnclaimedDomain({required this.key, this.context});
+
+  factory ResponseForbiddenUnclaimedDomain.fromJson(Map<String, Object?> json) {
+    return ResponseForbiddenUnclaimedDomain(
+      key: ResponseForbiddenUnclaimedDomainKey.fromValue(
+          json[r'key'] as String? ?? ''),
+      context: json[r'context'] != null
+          ? ResponseForbiddenUnclaimedDomainContext.fromJson(
+              json[r'context']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+    var context = this.context;
+
+    final json = <String, Object?>{};
+    json[r'key'] = key.value;
+    if (context != null) {
+      json[r'context'] = context.toJson();
+    }
+    return json;
+  }
+
+  ResponseForbiddenUnclaimedDomain copyWith(
+      {ResponseForbiddenUnclaimedDomainKey? key,
+      ResponseForbiddenUnclaimedDomainContext? context}) {
+    return ResponseForbiddenUnclaimedDomain(
+      key: key ?? this.key,
+      context: context ?? this.context,
+    );
+  }
+}
+
+class ResponseForbiddenUnclaimedDomainKey {
+  static const forbiddenUnclaimedDomain =
+      ResponseForbiddenUnclaimedDomainKey._('forbidden.unclaimedDomain');
+
+  static const values = [
+    forbiddenUnclaimedDomain,
+  ];
+  final String value;
+
+  const ResponseForbiddenUnclaimedDomainKey._(this.value);
+
+  static ResponseForbiddenUnclaimedDomainKey fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ResponseForbiddenUnclaimedDomainKey._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class ResponseForbiddenUnclaimedDomainContext {
+  final String domain;
+
+  ResponseForbiddenUnclaimedDomainContext({required this.domain});
+
+  factory ResponseForbiddenUnclaimedDomainContext.fromJson(
+      Map<String, Object?> json) {
+    return ResponseForbiddenUnclaimedDomainContext(
+      domain: json[r'domain'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var domain = this.domain;
+
+    final json = <String, Object?>{};
+    json[r'domain'] = domain;
+    return json;
+  }
+
+  ResponseForbiddenUnclaimedDomainContext copyWith({String? domain}) {
+    return ResponseForbiddenUnclaimedDomainContext(
+      domain: domain ?? this.domain,
+    );
+  }
+}
+
+class User {
+  final AccountId accountId;
+  final AccountType accountType;
+  final AccountStatus accountStatus;
+  final Name name;
+  final Avatar picture;
+  final Email email;
+  final AccountCharacteristics? characteristics;
+
+  User(
+      {required this.accountId,
+      required this.accountType,
+      required this.accountStatus,
+      required this.name,
+      required this.picture,
+      required this.email,
+      this.characteristics});
+
+  factory User.fromJson(Map<String, Object?> json) {
+    return User(
+      accountId: AccountId.fromJson(
+          json[r'account_id'] as Map<String, Object?>? ?? const {}),
+      accountType: AccountType.fromJson(
+          json[r'account_type'] as Map<String, Object?>? ?? const {}),
+      accountStatus: AccountStatus.fromJson(
+          json[r'account_status'] as Map<String, Object?>? ?? const {}),
+      name: Name.fromJson(json[r'name'] as Map<String, Object?>? ?? const {}),
+      picture: Avatar.fromJson(
+          json[r'picture'] as Map<String, Object?>? ?? const {}),
+      email:
+          Email.fromJson(json[r'email'] as Map<String, Object?>? ?? const {}),
+      characteristics: json[r'characteristics'] != null
+          ? AccountCharacteristics.fromJson(
+              json[r'characteristics']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var accountId = this.accountId;
+    var accountType = this.accountType;
+    var accountStatus = this.accountStatus;
+    var name = this.name;
+    var picture = this.picture;
+    var email = this.email;
+    var characteristics = this.characteristics;
+
+    final json = <String, Object?>{};
+    json[r'account_id'] = accountId.toJson();
+    json[r'account_type'] = accountType.toJson();
+    json[r'account_status'] = accountStatus.toJson();
+    json[r'name'] = name.toJson();
+    json[r'picture'] = picture.toJson();
+    json[r'email'] = email.toJson();
+    if (characteristics != null) {
+      json[r'characteristics'] = characteristics.toJson();
+    }
+    return json;
+  }
+
+  User copyWith(
+      {AccountId? accountId,
+      AccountType? accountType,
+      AccountStatus? accountStatus,
+      Name? name,
+      Avatar? picture,
+      Email? email,
+      AccountCharacteristics? characteristics}) {
+    return User(
+      accountId: accountId ?? this.accountId,
+      accountType: accountType ?? this.accountType,
+      accountStatus: accountStatus ?? this.accountStatus,
+      name: name ?? this.name,
+      picture: picture ?? this.picture,
+      email: email ?? this.email,
+      characteristics: characteristics ?? this.characteristics,
+    );
+  }
+}
+
+/// A unix zoneinfo string describing the local timezone of the user
+class ZoneInfo {
+  ZoneInfo();
+
+  factory ZoneInfo.fromJson(Map<String, Object?> json) {
+    return ZoneInfo();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
 }

@@ -1926,6 +1926,21 @@
             }
           },
           {
+            "name": "depth",
+            "in": "query",
+            "description": "Filter the results to descendants upto a desired level of the content. Note, the maximum value supported is 100. root level of the content means immediate (level 1) descendants of the type requested. all represents returning all descendants of the type requested.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "root",
+                "<any positive integer argument in the range of 1 and 100>"
+              ],
+              "default": "all"
+            }
+          },
+          {
             "$ref": "#/components/parameters/contentExpand"
           },
           {
@@ -6533,6 +6548,57 @@
           }
         },
         "x-atlassian-connect-scope": "READ"
+      },
+      "put": {
+        "tags": [
+          "Settings"
+        ],
+        "summary": "Select look and feel settings",
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "manage:confluence-configuration"
+            ]
+          }
+        ],
+        "description": "Sets the look and feel settings to the default (global) settings, the\ncustom settings, or the current theme's settings for a space.\nThe custom and theme settings can only be selected if there is already\na theme set for a space. Note, the default space settings are inherited\nfrom the current global settings.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Admin' permission for the space.",
+        "operationId": "com.atlassian.confluence.plugins.restapi.resources.LookAndFeelResource.updateLookAndFeel_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LookAndFeelSelection"
+              }
+            }
+          },
+          "description": "The look and feel type to be set.",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Returned if the look and feel settings were set.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LookAndFeelSelection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if;\n\n- `spaceKey` is invalid.\n- `lookAndFeelType` is invalid."
+          },
+          "403": {
+            "description": "Returned if the calling user doesn't have permission to edit the\nlook and feel settings."
+          },
+          "404": {
+            "description": "Returned if there is no space with the given `spaceKey`."
+          },
+          "409": {
+            "description": "Returned if `lookAndFeelType` is set to 'custom' or 'theme',\nand a theme is not currently set for the space."
+          }
+        },
+        "x-atlassian-connect-scope": "WRITE"
       }
     },
     "/api/settings/lookandfeel/custom": {
@@ -6639,6 +6705,7 @@
     },
     "/api/settings/lookandfeel/selected": {
       "put": {
+        "deprecated": true,
         "tags": [
           "Settings"
         ],
@@ -11369,8 +11436,7 @@
             "enum": [
               "page",
               "blogpost",
-              "comment",
-              "attachment"
+              "comment"
             ]
           },
           "space": {
@@ -11397,9 +11463,27 @@
             ],
             "default": "current"
           },
+          "container": {
+            "type": "object",
+            "required": [
+              "id",
+              "type"
+            ],
+            "description": "The container of the content. Required if type is `comment` or certain types of\ncustom content. If you are trying to create a comment that is a child of another comment,\nspecify the parent comment in the ancestors field, not in this field.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The `id` of the container."
+              },
+              "type": {
+                "type": "string",
+                "description": "The `type` of the container."
+              }
+            }
+          },
           "ancestors": {
             "type": "array",
-            "description": "The parent content of the new content. Only one parent content\n`id` can be specified.",
+            "description": "The parent content of the new content.  If you are creating a top-level `page` or `comment`,\nthis can be left blank. If you are creating a child page, this is where the parent page id goes.\nIf you are creating a child comment, this is where the parent comment id goes. Only one parent\ncontent id can be specified.",
             "items": {
               "type": "object",
               "required": [
@@ -12972,6 +13056,28 @@
             }
           }
         ]
+      },
+      "LookAndFeelSelection": {
+        "description": "Look and feel selection",
+        "type": "object",
+        "required": [
+          "spaceKey",
+          "lookAndFeelType"
+        ],
+        "properties": {
+          "spaceKey": {
+            "type": "string",
+            "description": "The key of the space for which the look and feel settings will be\nset."
+          },
+          "lookAndFeelType": {
+            "type": "string",
+            "enum": [
+              "global",
+              "custom",
+              "theme"
+            ]
+          }
+        }
       },
       "LookAndFeelSettings": {
         "type": "object",

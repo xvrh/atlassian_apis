@@ -15,12 +15,12 @@ class ConfluenceApi {
 
   late final contentAttachments = ContentAttachmentsApi(_client);
 
-  late final contentBody = ContentBodyApi(_client);
-
   late final contentChildrenAndDescendants =
       ContentChildrenAndDescendantsApi(_client);
 
   late final contentMacroBody = ContentMacroBodyApi(_client);
+
+  late final contentBody = ContentBodyApi(_client);
 
   late final contentComments = ContentCommentsApi(_client);
 
@@ -726,51 +726,6 @@ class ContentAttachmentsApi {
 
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
 
-class ContentBodyApi {
-  final ApiClient _client;
-
-  ContentBodyApi(this._client);
-
-  /// Converts a content body from one format to another format.
-  ///
-  /// Supported conversions:
-  ///
-  /// - storage: view, export_view, styled_view, editor
-  /// - editor: storage
-  /// - view: none
-  /// - export_view: none
-  /// - styled_view: none
-  ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// If request specifies 'contentIdContext', 'View' permission for the space,
-  /// and permission to view the content.
-  Future<ContentBody> convertContentBody(
-      {required String to,
-      List<String>? expand,
-      String? spaceKeyContext,
-      String? contentIdContext,
-      String? embeddedContentRender,
-      required ContentBodyCreate body}) async {
-    return ContentBody.fromJson(await _client.send(
-      'post',
-      'api/contentbody/convert/{to}',
-      pathParameters: {
-        'to': to,
-      },
-      queryParameters: {
-        if (expand != null) 'expand': '$expand',
-        if (spaceKeyContext != null) 'spaceKeyContext': spaceKeyContext,
-        if (contentIdContext != null) 'contentIdContext': contentIdContext,
-        if (embeddedContentRender != null)
-          'embeddedContentRender': embeddedContentRender,
-      },
-      body: body.toJson(),
-    ));
-  }
-}
-
-/// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
-
 class ContentChildrenAndDescendantsApi {
   final ApiClient _client;
 
@@ -939,6 +894,7 @@ class ContentChildrenAndDescendantsApi {
   Future<ContentArray> descendantsOfType(
       {required String id,
       required String type,
+      String? depth,
       List<String>? expand,
       int? start,
       int? limit}) async {
@@ -950,6 +906,7 @@ class ContentChildrenAndDescendantsApi {
         'type': type,
       },
       queryParameters: {
+        if (depth != null) 'depth': depth,
         if (expand != null) 'expand': '$expand',
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
@@ -1064,6 +1021,51 @@ class ContentMacroBodyApi {
         'version': '$version',
         'macroId': macroId,
       },
+    ));
+  }
+}
+
+/// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
+
+class ContentBodyApi {
+  final ApiClient _client;
+
+  ContentBodyApi(this._client);
+
+  /// Converts a content body from one format to another format.
+  ///
+  /// Supported conversions:
+  ///
+  /// - storage: view, export_view, styled_view, editor
+  /// - editor: storage
+  /// - view: none
+  /// - export_view: none
+  /// - styled_view: none
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// If request specifies 'contentIdContext', 'View' permission for the space,
+  /// and permission to view the content.
+  Future<ContentBody> convertContentBody(
+      {required String to,
+      List<String>? expand,
+      String? spaceKeyContext,
+      String? contentIdContext,
+      String? embeddedContentRender,
+      required ContentBodyCreate body}) async {
+    return ContentBody.fromJson(await _client.send(
+      'post',
+      'api/contentbody/convert/{to}',
+      pathParameters: {
+        'to': to,
+      },
+      queryParameters: {
+        if (expand != null) 'expand': '$expand',
+        if (spaceKeyContext != null) 'spaceKeyContext': spaceKeyContext,
+        if (contentIdContext != null) 'contentIdContext': contentIdContext,
+        if (embeddedContentRender != null)
+          'embeddedContentRender': embeddedContentRender,
+      },
+      body: body.toJson(),
     ));
   }
 }
@@ -2973,6 +2975,23 @@ class SettingsApi {
     ));
   }
 
+  /// Sets the look and feel settings to the default (global) settings, the
+  /// custom settings, or the current theme's settings for a space.
+  /// The custom and theme settings can only be selected if there is already
+  /// a theme set for a space. Note, the default space settings are inherited
+  /// from the current global settings.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Admin' permission for the space.
+  Future<LookAndFeelSelection> updateLookAndFeel(
+      {required LookAndFeelSelection body}) async {
+    return LookAndFeelSelection.fromJson(await _client.send(
+      'put',
+      'api/settings/lookandfeel',
+      body: body.toJson(),
+    ));
+  }
+
   /// Updates the look and feel settings for the site or for a single space.
   /// If custom settings exist, they are updated. If no custom settings exist,
   /// then a set of custom settings is created.
@@ -3903,6 +3922,303 @@ class AccountIdEmailRecordArray {
   }
 }
 
+class AddContentRestriction {
+  /// The restriction operation applied to content.
+  final AddContentRestrictionOperation operation;
+
+  /// The users/groups that the restrictions will be applied to. At least one of
+  /// `user` or `group` must be specified for this object.
+  final AddContentRestrictionRestrictions restrictions;
+
+  AddContentRestriction({required this.operation, required this.restrictions});
+
+  factory AddContentRestriction.fromJson(Map<String, Object?> json) {
+    return AddContentRestriction(
+      operation: AddContentRestrictionOperation.fromValue(
+          json[r'operation'] as String? ?? ''),
+      restrictions: AddContentRestrictionRestrictions.fromJson(
+          json[r'restrictions'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var operation = this.operation;
+    var restrictions = this.restrictions;
+
+    final json = <String, Object?>{};
+    json[r'operation'] = operation.value;
+    json[r'restrictions'] = restrictions.toJson();
+    return json;
+  }
+
+  AddContentRestriction copyWith(
+      {AddContentRestrictionOperation? operation,
+      AddContentRestrictionRestrictions? restrictions}) {
+    return AddContentRestriction(
+      operation: operation ?? this.operation,
+      restrictions: restrictions ?? this.restrictions,
+    );
+  }
+}
+
+class AddContentRestrictionOperation {
+  static const read = AddContentRestrictionOperation._('read');
+  static const update = AddContentRestrictionOperation._('update');
+
+  static const values = [
+    read,
+    update,
+  ];
+  final String value;
+
+  const AddContentRestrictionOperation._(this.value);
+
+  static AddContentRestrictionOperation fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => AddContentRestrictionOperation._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// The users/groups that the restrictions will be applied to. At least one of
+/// `user` or `group` must be specified for this object.
+class AddContentRestrictionRestrictions {
+  /// The users that the restrictions will be applied to. This array must
+  /// have at least one item, otherwise it should be omitted.
+  final List<AddContentRestrictionRestrictionsUserItem> user;
+
+  /// The groups that the restrictions will be applied to. This array must
+  /// have at least one item, otherwise it should be omitted.
+  final List<AddContentRestrictionRestrictionsGroupItem> group;
+
+  AddContentRestrictionRestrictions(
+      {List<AddContentRestrictionRestrictionsUserItem>? user,
+      List<AddContentRestrictionRestrictionsGroupItem>? group})
+      : user = user ?? [],
+        group = group ?? [];
+
+  factory AddContentRestrictionRestrictions.fromJson(
+      Map<String, Object?> json) {
+    return AddContentRestrictionRestrictions(
+      user: (json[r'user'] as List<Object?>?)
+              ?.map((i) => AddContentRestrictionRestrictionsUserItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      group: (json[r'group'] as List<Object?>?)
+              ?.map((i) => AddContentRestrictionRestrictionsGroupItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var user = this.user;
+    var group = this.group;
+
+    final json = <String, Object?>{};
+    json[r'user'] = user.map((i) => i.toJson()).toList();
+    json[r'group'] = group.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  AddContentRestrictionRestrictions copyWith(
+      {List<AddContentRestrictionRestrictionsUserItem>? user,
+      List<AddContentRestrictionRestrictionsGroupItem>? group}) {
+    return AddContentRestrictionRestrictions(
+      user: user ?? this.user,
+      group: group ?? this.group,
+    );
+  }
+}
+
+/// A group that the restriction will be applied to.
+class AddContentRestrictionRestrictionsGroupItem {
+  /// Set to 'group'.
+  final AddContentRestrictionRestrictionsGroupItemType type;
+
+  /// The name of the group.
+  final String name;
+
+  AddContentRestrictionRestrictionsGroupItem(
+      {required this.type, required this.name});
+
+  factory AddContentRestrictionRestrictionsGroupItem.fromJson(
+      Map<String, Object?> json) {
+    return AddContentRestrictionRestrictionsGroupItem(
+      type: AddContentRestrictionRestrictionsGroupItemType.fromValue(
+          json[r'type'] as String? ?? ''),
+      name: json[r'name'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    json[r'type'] = type.value;
+    json[r'name'] = name;
+    return json;
+  }
+
+  AddContentRestrictionRestrictionsGroupItem copyWith(
+      {AddContentRestrictionRestrictionsGroupItemType? type, String? name}) {
+    return AddContentRestrictionRestrictionsGroupItem(
+      type: type ?? this.type,
+      name: name ?? this.name,
+    );
+  }
+}
+
+class AddContentRestrictionRestrictionsGroupItemType {
+  static const group =
+      AddContentRestrictionRestrictionsGroupItemType._('group');
+
+  static const values = [
+    group,
+  ];
+  final String value;
+
+  const AddContentRestrictionRestrictionsGroupItemType._(this.value);
+
+  static AddContentRestrictionRestrictionsGroupItemType fromValue(
+          String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () =>
+              AddContentRestrictionRestrictionsGroupItemType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// A user that the restriction will be applied to. Either the `username`
+/// or the `userKey` must be specified to identify the user.
+class AddContentRestrictionRestrictionsUserItem {
+  /// Set to 'known'.
+  final AddContentRestrictionRestrictionsUserItemType type;
+
+  /// This property is no longer available and will be removed from the
+  /// documentation soon.
+  /// Use `accountId` instead.
+  /// See the
+  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
+  final String? username;
+
+  /// This property is no longer available and will be removed from the
+  /// documentation soon.
+  /// Use `accountId` instead.
+  /// See the
+  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
+  final String? userKey;
+
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products.
+  /// For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.
+  final String accountId;
+
+  AddContentRestrictionRestrictionsUserItem(
+      {required this.type,
+      this.username,
+      this.userKey,
+      required this.accountId});
+
+  factory AddContentRestrictionRestrictionsUserItem.fromJson(
+      Map<String, Object?> json) {
+    return AddContentRestrictionRestrictionsUserItem(
+      type: AddContentRestrictionRestrictionsUserItemType.fromValue(
+          json[r'type'] as String? ?? ''),
+      username: json[r'username'] as String?,
+      userKey: json[r'userKey'] as String?,
+      accountId: json[r'accountId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var username = this.username;
+    var userKey = this.userKey;
+    var accountId = this.accountId;
+
+    final json = <String, Object?>{};
+    json[r'type'] = type.value;
+    if (username != null) {
+      json[r'username'] = username;
+    }
+    if (userKey != null) {
+      json[r'userKey'] = userKey;
+    }
+    json[r'accountId'] = accountId;
+    return json;
+  }
+
+  AddContentRestrictionRestrictionsUserItem copyWith(
+      {AddContentRestrictionRestrictionsUserItemType? type,
+      String? username,
+      String? userKey,
+      String? accountId}) {
+    return AddContentRestrictionRestrictionsUserItem(
+      type: type ?? this.type,
+      username: username ?? this.username,
+      userKey: userKey ?? this.userKey,
+      accountId: accountId ?? this.accountId,
+    );
+  }
+}
+
+class AddContentRestrictionRestrictionsUserItemType {
+  static const known = AddContentRestrictionRestrictionsUserItemType._('known');
+  static const unknown =
+      AddContentRestrictionRestrictionsUserItemType._('unknown');
+  static const anonymous =
+      AddContentRestrictionRestrictionsUserItemType._('anonymous');
+  static const user = AddContentRestrictionRestrictionsUserItemType._('user');
+
+  static const values = [
+    known,
+    unknown,
+    anonymous,
+    user,
+  ];
+  final String value;
+
+  const AddContentRestrictionRestrictionsUserItemType._(this.value);
+
+  static AddContentRestrictionRestrictionsUserItemType fromValue(
+          String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => AddContentRestrictionRestrictionsUserItemType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class AddContentRestrictionUpdateArray {
+  AddContentRestrictionUpdateArray();
+
+  factory AddContentRestrictionUpdateArray.fromJson(Map<String, Object?> json) {
+    return AddContentRestrictionUpdateArray();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
 class AffectedObject {
   final String name;
   final String objectType;
@@ -3930,110 +4246,6 @@ class AffectedObject {
     return AffectedObject(
       name: name ?? this.name,
       objectType: objectType ?? this.objectType,
-    );
-  }
-}
-
-/// The attachment version. Set this to the current version number of the
-/// attachment. Note, the version number only needs to be incremented when
-/// updating the actual attachment, not its properties.
-class AttachmentUpdateVersion {
-  /// The version number.
-  final int number;
-
-  AttachmentUpdateVersion({required this.number});
-
-  factory AttachmentUpdateVersion.fromJson(Map<String, Object?> json) {
-    return AttachmentUpdateVersion(
-      number: (json[r'number'] as num?)?.toInt() ?? 0,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var number = this.number;
-
-    final json = <String, Object?>{};
-    json[r'number'] = number;
-    return json;
-  }
-
-  AttachmentUpdateVersion copyWith({int? number}) {
-    return AttachmentUpdateVersion(
-      number: number ?? this.number,
-    );
-  }
-}
-
-class AttachmentUpdateMetadata {
-  /// The media type of the attachment, e.g. 'img/jpg'.
-  final String? mediaType;
-
-  /// The comment for this update.
-  final String? comment;
-
-  AttachmentUpdateMetadata({this.mediaType, this.comment});
-
-  factory AttachmentUpdateMetadata.fromJson(Map<String, Object?> json) {
-    return AttachmentUpdateMetadata(
-      mediaType: json[r'mediaType'] as String?,
-      comment: json[r'comment'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var mediaType = this.mediaType;
-    var comment = this.comment;
-
-    final json = <String, Object?>{};
-    if (mediaType != null) {
-      json[r'mediaType'] = mediaType;
-    }
-    if (comment != null) {
-      json[r'comment'] = comment;
-    }
-    return json;
-  }
-
-  AttachmentUpdateMetadata copyWith({String? mediaType, String? comment}) {
-    return AttachmentUpdateMetadata(
-      mediaType: mediaType ?? this.mediaType,
-      comment: comment ?? this.comment,
-    );
-  }
-}
-
-/// The new content to attach the attachment to.
-class AttachmentUpdateContainer {
-  /// The `id` of the parent content.
-  final String id;
-
-  /// The content type. You can only attach attachments to content
-  /// of type: `page`, `blogpost`.
-  final String type;
-
-  AttachmentUpdateContainer({required this.id, required this.type});
-
-  factory AttachmentUpdateContainer.fromJson(Map<String, Object?> json) {
-    return AttachmentUpdateContainer(
-      id: json[r'id'] as String? ?? '',
-      type: json[r'type'] as String? ?? '',
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var type = this.type;
-
-    final json = <String, Object?>{};
-    json[r'id'] = id;
-    json[r'type'] = type;
-    return json;
-  }
-
-  AttachmentUpdateContainer copyWith({String? id, String? type}) {
-    return AttachmentUpdateContainer(
-      id: id ?? this.id,
-      type: type ?? this.type,
     );
   }
 }
@@ -4146,85 +4358,108 @@ class AttachmentUpdateType {
   String toString() => value;
 }
 
-class AuditRecordAuthor {
-  final AuditRecordAuthorType type;
-  final String displayName;
-  final Map<String, dynamic> operations;
+/// The new content to attach the attachment to.
+class AttachmentUpdateContainer {
+  /// The `id` of the parent content.
+  final String id;
 
-  /// This property has been deprecated and will be removed soon.
-  final String username;
+  /// The content type. You can only attach attachments to content
+  /// of type: `page`, `blogpost`.
+  final String type;
 
-  /// This property has been deprecated and will be removed soon.
-  final String userKey;
+  AttachmentUpdateContainer({required this.id, required this.type});
 
-  AuditRecordAuthor(
-      {required this.type,
-      required this.displayName,
-      required this.operations,
-      required this.username,
-      required this.userKey});
-
-  factory AuditRecordAuthor.fromJson(Map<String, Object?> json) {
-    return AuditRecordAuthor(
-      type: AuditRecordAuthorType.fromValue(json[r'type'] as String? ?? ''),
-      displayName: json[r'displayName'] as String? ?? '',
-      operations: json[r'operations'] as Map<String, Object?>? ?? {},
-      username: json[r'username'] as String? ?? '',
-      userKey: json[r'userKey'] as String? ?? '',
+  factory AttachmentUpdateContainer.fromJson(Map<String, Object?> json) {
+    return AttachmentUpdateContainer(
+      id: json[r'id'] as String? ?? '',
+      type: json[r'type'] as String? ?? '',
     );
   }
 
   Map<String, Object?> toJson() {
+    var id = this.id;
     var type = this.type;
-    var displayName = this.displayName;
-    var operations = this.operations;
-    var username = this.username;
-    var userKey = this.userKey;
 
     final json = <String, Object?>{};
-    json[r'type'] = type.value;
-    json[r'displayName'] = displayName;
-    json[r'operations'] = operations;
-    json[r'username'] = username;
-    json[r'userKey'] = userKey;
+    json[r'id'] = id;
+    json[r'type'] = type;
     return json;
   }
 
-  AuditRecordAuthor copyWith(
-      {AuditRecordAuthorType? type,
-      String? displayName,
-      Map<String, dynamic>? operations,
-      String? username,
-      String? userKey}) {
-    return AuditRecordAuthor(
+  AttachmentUpdateContainer copyWith({String? id, String? type}) {
+    return AttachmentUpdateContainer(
+      id: id ?? this.id,
       type: type ?? this.type,
-      displayName: displayName ?? this.displayName,
-      operations: operations ?? this.operations,
-      username: username ?? this.username,
-      userKey: userKey ?? this.userKey,
     );
   }
 }
 
-class AuditRecordAuthorType {
-  static const user = AuditRecordAuthorType._('user');
+class AttachmentUpdateMetadata {
+  /// The media type of the attachment, e.g. 'img/jpg'.
+  final String? mediaType;
 
-  static const values = [
-    user,
-  ];
-  final String value;
+  /// The comment for this update.
+  final String? comment;
 
-  const AuditRecordAuthorType._(this.value);
+  AttachmentUpdateMetadata({this.mediaType, this.comment});
 
-  static AuditRecordAuthorType fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => AuditRecordAuthorType._(value));
+  factory AttachmentUpdateMetadata.fromJson(Map<String, Object?> json) {
+    return AttachmentUpdateMetadata(
+      mediaType: json[r'mediaType'] as String?,
+      comment: json[r'comment'] as String?,
+    );
+  }
 
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
+  Map<String, Object?> toJson() {
+    var mediaType = this.mediaType;
+    var comment = this.comment;
 
-  @override
-  String toString() => value;
+    final json = <String, Object?>{};
+    if (mediaType != null) {
+      json[r'mediaType'] = mediaType;
+    }
+    if (comment != null) {
+      json[r'comment'] = comment;
+    }
+    return json;
+  }
+
+  AttachmentUpdateMetadata copyWith({String? mediaType, String? comment}) {
+    return AttachmentUpdateMetadata(
+      mediaType: mediaType ?? this.mediaType,
+      comment: comment ?? this.comment,
+    );
+  }
+}
+
+/// The attachment version. Set this to the current version number of the
+/// attachment. Note, the version number only needs to be incremented when
+/// updating the actual attachment, not its properties.
+class AttachmentUpdateVersion {
+  /// The version number.
+  final int number;
+
+  AttachmentUpdateVersion({required this.number});
+
+  factory AttachmentUpdateVersion.fromJson(Map<String, Object?> json) {
+    return AttachmentUpdateVersion(
+      number: (json[r'number'] as num?)?.toInt() ?? 0,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var number = this.number;
+
+    final json = <String, Object?>{};
+    json[r'number'] = number;
+    return json;
+  }
+
+  AttachmentUpdateVersion copyWith({int? number}) {
+    return AttachmentUpdateVersion(
+      number: number ?? this.number,
+    );
+  }
 }
 
 class AuditRecord {
@@ -4392,40 +4627,31 @@ class AuditRecordArray {
   }
 }
 
-/// The user that actioned the event. If `author` is not specified, then all
-/// `author` properties will be set to null/empty, except for `type` which
-/// will be set to 'user'.
-class AuditRecordCreateAuthor {
-  /// Set to 'user'.
-  final AuditRecordCreateAuthorType type;
-
-  /// The name that is displayed on the audit log in the Confluence UI.
-  final String? displayName;
-
-  /// Always defaults to null.
-  final Map<String, dynamic>? operations;
+class AuditRecordAuthor {
+  final AuditRecordAuthorType type;
+  final String displayName;
+  final Map<String, dynamic> operations;
 
   /// This property has been deprecated and will be removed soon.
-  final String? username;
+  final String username;
 
   /// This property has been deprecated and will be removed soon.
-  final String? userKey;
+  final String userKey;
 
-  AuditRecordCreateAuthor(
+  AuditRecordAuthor(
       {required this.type,
-      this.displayName,
-      this.operations,
-      this.username,
-      this.userKey});
+      required this.displayName,
+      required this.operations,
+      required this.username,
+      required this.userKey});
 
-  factory AuditRecordCreateAuthor.fromJson(Map<String, Object?> json) {
-    return AuditRecordCreateAuthor(
-      type:
-          AuditRecordCreateAuthorType.fromValue(json[r'type'] as String? ?? ''),
-      displayName: json[r'displayName'] as String?,
-      operations: json[r'operations'] as Map<String, Object?>?,
-      username: json[r'username'] as String?,
-      userKey: json[r'userKey'] as String?,
+  factory AuditRecordAuthor.fromJson(Map<String, Object?> json) {
+    return AuditRecordAuthor(
+      type: AuditRecordAuthorType.fromValue(json[r'type'] as String? ?? ''),
+      displayName: json[r'displayName'] as String? ?? '',
+      operations: json[r'operations'] as Map<String, Object?>? ?? {},
+      username: json[r'username'] as String? ?? '',
+      userKey: json[r'userKey'] as String? ?? '',
     );
   }
 
@@ -4438,28 +4664,20 @@ class AuditRecordCreateAuthor {
 
     final json = <String, Object?>{};
     json[r'type'] = type.value;
-    if (displayName != null) {
-      json[r'displayName'] = displayName;
-    }
-    if (operations != null) {
-      json[r'operations'] = operations;
-    }
-    if (username != null) {
-      json[r'username'] = username;
-    }
-    if (userKey != null) {
-      json[r'userKey'] = userKey;
-    }
+    json[r'displayName'] = displayName;
+    json[r'operations'] = operations;
+    json[r'username'] = username;
+    json[r'userKey'] = userKey;
     return json;
   }
 
-  AuditRecordCreateAuthor copyWith(
-      {AuditRecordCreateAuthorType? type,
+  AuditRecordAuthor copyWith(
+      {AuditRecordAuthorType? type,
       String? displayName,
       Map<String, dynamic>? operations,
       String? username,
       String? userKey}) {
-    return AuditRecordCreateAuthor(
+    return AuditRecordAuthor(
       type: type ?? this.type,
       displayName: displayName ?? this.displayName,
       operations: operations ?? this.operations,
@@ -4469,19 +4687,19 @@ class AuditRecordCreateAuthor {
   }
 }
 
-class AuditRecordCreateAuthorType {
-  static const user = AuditRecordCreateAuthorType._('user');
+class AuditRecordAuthorType {
+  static const user = AuditRecordAuthorType._('user');
 
   static const values = [
     user,
   ];
   final String value;
 
-  const AuditRecordCreateAuthorType._(this.value);
+  const AuditRecordAuthorType._(this.value);
 
-  static AuditRecordCreateAuthorType fromValue(String value) =>
+  static AuditRecordAuthorType fromValue(String value) =>
       values.firstWhere((e) => e.value == value,
-          orElse: () => AuditRecordCreateAuthorType._(value));
+          orElse: () => AuditRecordAuthorType._(value));
 
   /// An enum received from the server but this version of the client doesn't recognize it.
   bool get isUnknown => values.every((v) => v.value != value);
@@ -4638,66 +4856,102 @@ class AuditRecordCreate {
   }
 }
 
-class BlueprintTemplateOriginalTemplate {
-  final String pluginKey;
-  final String moduleKey;
+/// The user that actioned the event. If `author` is not specified, then all
+/// `author` properties will be set to null/empty, except for `type` which
+/// will be set to 'user'.
+class AuditRecordCreateAuthor {
+  /// Set to 'user'.
+  final AuditRecordCreateAuthorType type;
 
-  BlueprintTemplateOriginalTemplate(
-      {required this.pluginKey, required this.moduleKey});
+  /// The name that is displayed on the audit log in the Confluence UI.
+  final String? displayName;
 
-  factory BlueprintTemplateOriginalTemplate.fromJson(
-      Map<String, Object?> json) {
-    return BlueprintTemplateOriginalTemplate(
-      pluginKey: json[r'pluginKey'] as String? ?? '',
-      moduleKey: json[r'moduleKey'] as String? ?? '',
+  /// Always defaults to null.
+  final Map<String, dynamic>? operations;
+
+  /// This property has been deprecated and will be removed soon.
+  final String? username;
+
+  /// This property has been deprecated and will be removed soon.
+  final String? userKey;
+
+  AuditRecordCreateAuthor(
+      {required this.type,
+      this.displayName,
+      this.operations,
+      this.username,
+      this.userKey});
+
+  factory AuditRecordCreateAuthor.fromJson(Map<String, Object?> json) {
+    return AuditRecordCreateAuthor(
+      type:
+          AuditRecordCreateAuthorType.fromValue(json[r'type'] as String? ?? ''),
+      displayName: json[r'displayName'] as String?,
+      operations: json[r'operations'] as Map<String, Object?>?,
+      username: json[r'username'] as String?,
+      userKey: json[r'userKey'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var pluginKey = this.pluginKey;
-    var moduleKey = this.moduleKey;
+    var type = this.type;
+    var displayName = this.displayName;
+    var operations = this.operations;
+    var username = this.username;
+    var userKey = this.userKey;
 
     final json = <String, Object?>{};
-    json[r'pluginKey'] = pluginKey;
-    json[r'moduleKey'] = moduleKey;
-    return json;
-  }
-
-  BlueprintTemplateOriginalTemplate copyWith(
-      {String? pluginKey, String? moduleKey}) {
-    return BlueprintTemplateOriginalTemplate(
-      pluginKey: pluginKey ?? this.pluginKey,
-      moduleKey: moduleKey ?? this.moduleKey,
-    );
-  }
-}
-
-class BlueprintTemplateExpandable {
-  final String? body;
-
-  BlueprintTemplateExpandable({this.body});
-
-  factory BlueprintTemplateExpandable.fromJson(Map<String, Object?> json) {
-    return BlueprintTemplateExpandable(
-      body: json[r'body'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var body = this.body;
-
-    final json = <String, Object?>{};
-    if (body != null) {
-      json[r'body'] = body;
+    json[r'type'] = type.value;
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
+    if (operations != null) {
+      json[r'operations'] = operations;
+    }
+    if (username != null) {
+      json[r'username'] = username;
+    }
+    if (userKey != null) {
+      json[r'userKey'] = userKey;
     }
     return json;
   }
 
-  BlueprintTemplateExpandable copyWith({String? body}) {
-    return BlueprintTemplateExpandable(
-      body: body ?? this.body,
+  AuditRecordCreateAuthor copyWith(
+      {AuditRecordCreateAuthorType? type,
+      String? displayName,
+      Map<String, dynamic>? operations,
+      String? username,
+      String? userKey}) {
+    return AuditRecordCreateAuthor(
+      type: type ?? this.type,
+      displayName: displayName ?? this.displayName,
+      operations: operations ?? this.operations,
+      username: username ?? this.username,
+      userKey: userKey ?? this.userKey,
     );
   }
+}
+
+class AuditRecordCreateAuthorType {
+  static const user = AuditRecordCreateAuthorType._('user');
+
+  static const values = [
+    user,
+  ];
+  final String value;
+
+  const AuditRecordCreateAuthorType._(this.value);
+
+  static AuditRecordCreateAuthorType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => AuditRecordCreateAuthorType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 class BlueprintTemplate {
@@ -4863,33 +5117,64 @@ class BlueprintTemplateArray {
   }
 }
 
-class ButtonLookAndFeel {
-  final String backgroundColor;
-  final String color;
+class BlueprintTemplateExpandable {
+  final String? body;
 
-  ButtonLookAndFeel({required this.backgroundColor, required this.color});
+  BlueprintTemplateExpandable({this.body});
 
-  factory ButtonLookAndFeel.fromJson(Map<String, Object?> json) {
-    return ButtonLookAndFeel(
-      backgroundColor: json[r'backgroundColor'] as String? ?? '',
-      color: json[r'color'] as String? ?? '',
+  factory BlueprintTemplateExpandable.fromJson(Map<String, Object?> json) {
+    return BlueprintTemplateExpandable(
+      body: json[r'body'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var backgroundColor = this.backgroundColor;
-    var color = this.color;
+    var body = this.body;
 
     final json = <String, Object?>{};
-    json[r'backgroundColor'] = backgroundColor;
-    json[r'color'] = color;
+    if (body != null) {
+      json[r'body'] = body;
+    }
     return json;
   }
 
-  ButtonLookAndFeel copyWith({String? backgroundColor, String? color}) {
-    return ButtonLookAndFeel(
-      backgroundColor: backgroundColor ?? this.backgroundColor,
-      color: color ?? this.color,
+  BlueprintTemplateExpandable copyWith({String? body}) {
+    return BlueprintTemplateExpandable(
+      body: body ?? this.body,
+    );
+  }
+}
+
+class BlueprintTemplateOriginalTemplate {
+  final String pluginKey;
+  final String moduleKey;
+
+  BlueprintTemplateOriginalTemplate(
+      {required this.pluginKey, required this.moduleKey});
+
+  factory BlueprintTemplateOriginalTemplate.fromJson(
+      Map<String, Object?> json) {
+    return BlueprintTemplateOriginalTemplate(
+      pluginKey: json[r'pluginKey'] as String? ?? '',
+      moduleKey: json[r'moduleKey'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var pluginKey = this.pluginKey;
+    var moduleKey = this.moduleKey;
+
+    final json = <String, Object?>{};
+    json[r'pluginKey'] = pluginKey;
+    json[r'moduleKey'] = moduleKey;
+    return json;
+  }
+
+  BlueprintTemplateOriginalTemplate copyWith(
+      {String? pluginKey, String? moduleKey}) {
+    return BlueprintTemplateOriginalTemplate(
+      pluginKey: pluginKey ?? this.pluginKey,
+      moduleKey: moduleKey ?? this.moduleKey,
     );
   }
 }
@@ -4926,6 +5211,398 @@ class Breadcrumb {
       label: label ?? this.label,
       url: url ?? this.url,
       separator: separator ?? this.separator,
+    );
+  }
+}
+
+class BulkUserLookup {
+  final BulkUserLookupType type;
+
+  /// This property is no longer available and will be removed from the
+  /// documentation soon.
+  /// Use `accountId` instead.
+  /// See the
+  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
+  final String? username;
+
+  /// This property is no longer available and will be removed from the
+  /// documentation soon.
+  /// Use `accountId` instead.
+  /// See the
+  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
+  final String? userKey;
+
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products.
+  /// For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.
+  final String accountId;
+
+  /// The account type of the user, may return empty string if unavailable.
+  final String accountType;
+
+  /// The email address of the user. Depending on the user's privacy setting,
+  /// this may return an empty string.
+  final String email;
+
+  /// The public name or nickname of the user. Will always contain a value.
+  final String publicName;
+  final Icon profilePicture;
+
+  /// The display name of the user. Depending on the user's privacy setting,
+  /// this may be the same as publicName.
+  final String displayName;
+  final List<OperationCheckResult> operations;
+  final UserDetails? details;
+  final Space? personalSpace;
+  final BulkUserLookupExpandable expandable;
+  final GenericLinks links;
+
+  BulkUserLookup(
+      {required this.type,
+      this.username,
+      this.userKey,
+      required this.accountId,
+      required this.accountType,
+      required this.email,
+      required this.publicName,
+      required this.profilePicture,
+      required this.displayName,
+      List<OperationCheckResult>? operations,
+      this.details,
+      this.personalSpace,
+      required this.expandable,
+      required this.links})
+      : operations = operations ?? [];
+
+  factory BulkUserLookup.fromJson(Map<String, Object?> json) {
+    return BulkUserLookup(
+      type: BulkUserLookupType.fromValue(json[r'type'] as String? ?? ''),
+      username: json[r'username'] as String?,
+      userKey: json[r'userKey'] as String?,
+      accountId: json[r'accountId'] as String? ?? '',
+      accountType: json[r'accountType'] as String? ?? '',
+      email: json[r'email'] as String? ?? '',
+      publicName: json[r'publicName'] as String? ?? '',
+      profilePicture: Icon.fromJson(
+          json[r'profilePicture'] as Map<String, Object?>? ?? const {}),
+      displayName: json[r'displayName'] as String? ?? '',
+      operations: (json[r'operations'] as List<Object?>?)
+              ?.map((i) => OperationCheckResult.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      details: json[r'details'] != null
+          ? UserDetails.fromJson(json[r'details']! as Map<String, Object?>)
+          : null,
+      personalSpace: json[r'personalSpace'] != null
+          ? Space.fromJson(json[r'personalSpace']! as Map<String, Object?>)
+          : null,
+      expandable: BulkUserLookupExpandable.fromJson(
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
+      links: GenericLinks.fromJson(
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var username = this.username;
+    var userKey = this.userKey;
+    var accountId = this.accountId;
+    var accountType = this.accountType;
+    var email = this.email;
+    var publicName = this.publicName;
+    var profilePicture = this.profilePicture;
+    var displayName = this.displayName;
+    var operations = this.operations;
+    var details = this.details;
+    var personalSpace = this.personalSpace;
+    var expandable = this.expandable;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'type'] = type.value;
+    if (username != null) {
+      json[r'username'] = username;
+    }
+    if (userKey != null) {
+      json[r'userKey'] = userKey;
+    }
+    json[r'accountId'] = accountId;
+    json[r'accountType'] = accountType;
+    json[r'email'] = email;
+    json[r'publicName'] = publicName;
+    json[r'profilePicture'] = profilePicture.toJson();
+    json[r'displayName'] = displayName;
+    json[r'operations'] = operations.map((i) => i.toJson()).toList();
+    if (details != null) {
+      json[r'details'] = details.toJson();
+    }
+    if (personalSpace != null) {
+      json[r'personalSpace'] = personalSpace.toJson();
+    }
+    json[r'_expandable'] = expandable.toJson();
+    json[r'_links'] = links.toJson();
+    return json;
+  }
+
+  BulkUserLookup copyWith(
+      {BulkUserLookupType? type,
+      String? username,
+      String? userKey,
+      String? accountId,
+      String? accountType,
+      String? email,
+      String? publicName,
+      Icon? profilePicture,
+      String? displayName,
+      List<OperationCheckResult>? operations,
+      UserDetails? details,
+      Space? personalSpace,
+      BulkUserLookupExpandable? expandable,
+      GenericLinks? links}) {
+    return BulkUserLookup(
+      type: type ?? this.type,
+      username: username ?? this.username,
+      userKey: userKey ?? this.userKey,
+      accountId: accountId ?? this.accountId,
+      accountType: accountType ?? this.accountType,
+      email: email ?? this.email,
+      publicName: publicName ?? this.publicName,
+      profilePicture: profilePicture ?? this.profilePicture,
+      displayName: displayName ?? this.displayName,
+      operations: operations ?? this.operations,
+      details: details ?? this.details,
+      personalSpace: personalSpace ?? this.personalSpace,
+      expandable: expandable ?? this.expandable,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class BulkUserLookupType {
+  static const known = BulkUserLookupType._('known');
+  static const unknown = BulkUserLookupType._('unknown');
+  static const anonymous = BulkUserLookupType._('anonymous');
+  static const user = BulkUserLookupType._('user');
+
+  static const values = [
+    known,
+    unknown,
+    anonymous,
+    user,
+  ];
+  final String value;
+
+  const BulkUserLookupType._(this.value);
+
+  static BulkUserLookupType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => BulkUserLookupType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class BulkUserLookupArray {
+  final List<BulkUserLookup> results;
+  final int start;
+  final int limit;
+  final int size;
+  final GenericLinks links;
+
+  BulkUserLookupArray(
+      {required this.results,
+      required this.start,
+      required this.limit,
+      required this.size,
+      required this.links});
+
+  factory BulkUserLookupArray.fromJson(Map<String, Object?> json) {
+    return BulkUserLookupArray(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) => BulkUserLookup.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
+      links: GenericLinks.fromJson(
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var start = this.start;
+    var limit = this.limit;
+    var size = this.size;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    json[r'_links'] = links.toJson();
+    return json;
+  }
+
+  BulkUserLookupArray copyWith(
+      {List<BulkUserLookup>? results,
+      int? start,
+      int? limit,
+      int? size,
+      GenericLinks? links}) {
+    return BulkUserLookupArray(
+      results: results ?? this.results,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
+      size: size ?? this.size,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class BulkUserLookupExpandable {
+  final String? operations;
+  final String? details;
+  final String? personalSpace;
+
+  BulkUserLookupExpandable({this.operations, this.details, this.personalSpace});
+
+  factory BulkUserLookupExpandable.fromJson(Map<String, Object?> json) {
+    return BulkUserLookupExpandable(
+      operations: json[r'operations'] as String?,
+      details: json[r'details'] as String?,
+      personalSpace: json[r'personalSpace'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var operations = this.operations;
+    var details = this.details;
+    var personalSpace = this.personalSpace;
+
+    final json = <String, Object?>{};
+    if (operations != null) {
+      json[r'operations'] = operations;
+    }
+    if (details != null) {
+      json[r'details'] = details;
+    }
+    if (personalSpace != null) {
+      json[r'personalSpace'] = personalSpace;
+    }
+    return json;
+  }
+
+  BulkUserLookupExpandable copyWith(
+      {String? operations, String? details, String? personalSpace}) {
+    return BulkUserLookupExpandable(
+      operations: operations ?? this.operations,
+      details: details ?? this.details,
+      personalSpace: personalSpace ?? this.personalSpace,
+    );
+  }
+}
+
+class ButtonLookAndFeel {
+  final String backgroundColor;
+  final String color;
+
+  ButtonLookAndFeel({required this.backgroundColor, required this.color});
+
+  factory ButtonLookAndFeel.fromJson(Map<String, Object?> json) {
+    return ButtonLookAndFeel(
+      backgroundColor: json[r'backgroundColor'] as String? ?? '',
+      color: json[r'color'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var backgroundColor = this.backgroundColor;
+    var color = this.color;
+
+    final json = <String, Object?>{};
+    json[r'backgroundColor'] = backgroundColor;
+    json[r'color'] = color;
+    return json;
+  }
+
+  ButtonLookAndFeel copyWith({String? backgroundColor, String? color}) {
+    return ButtonLookAndFeel(
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      color: color ?? this.color,
+    );
+  }
+}
+
+/// The converted CQL queries.
+class CQLPersonalDataConvertedQueries {
+  /// The list of converted CQL query strings with account IDs in
+  /// place of user identifiers.
+  final List<String> queryStrings;
+
+  CQLPersonalDataConvertedQueries({required this.queryStrings});
+
+  factory CQLPersonalDataConvertedQueries.fromJson(Map<String, Object?> json) {
+    return CQLPersonalDataConvertedQueries(
+      queryStrings: (json[r'queryStrings'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var queryStrings = this.queryStrings;
+
+    final json = <String, Object?>{};
+    json[r'queryStrings'] = queryStrings;
+    return json;
+  }
+
+  CQLPersonalDataConvertedQueries copyWith({List<String>? queryStrings}) {
+    return CQLPersonalDataConvertedQueries(
+      queryStrings: queryStrings ?? this.queryStrings,
+    );
+  }
+}
+
+/// The CQL queries to be converted.
+class CQLPersonalDataMigrationRequest {
+  /// A list of queries with user identifiers. Maximum of 100 queries.
+  final List<String> queryStrings;
+
+  CQLPersonalDataMigrationRequest({required this.queryStrings});
+
+  factory CQLPersonalDataMigrationRequest.fromJson(Map<String, Object?> json) {
+    return CQLPersonalDataMigrationRequest(
+      queryStrings: (json[r'queryStrings'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var queryStrings = this.queryStrings;
+
+    final json = <String, Object?>{};
+    json[r'queryStrings'] = queryStrings;
+    return json;
+  }
+
+  CQLPersonalDataMigrationRequest copyWith({List<String>? queryStrings}) {
+    return CQLPersonalDataMigrationRequest(
+      queryStrings: queryStrings ?? this.queryStrings,
     );
   }
 }
@@ -5105,364 +5782,6 @@ class ContainerSummary {
     return ContainerSummary(
       title: title ?? this.title,
       displayUrl: displayUrl ?? this.displayUrl,
-    );
-  }
-}
-
-class ContentBodyExpandable {
-  final String? editor;
-  final String? view;
-  final String? exportView;
-  final String? styledView;
-  final String? storage;
-  final String? editor2;
-  final String? anonymousExportView;
-
-  ContentBodyExpandable(
-      {this.editor,
-      this.view,
-      this.exportView,
-      this.styledView,
-      this.storage,
-      this.editor2,
-      this.anonymousExportView});
-
-  factory ContentBodyExpandable.fromJson(Map<String, Object?> json) {
-    return ContentBodyExpandable(
-      editor: json[r'editor'] as String?,
-      view: json[r'view'] as String?,
-      exportView: json[r'export_view'] as String?,
-      styledView: json[r'styled_view'] as String?,
-      storage: json[r'storage'] as String?,
-      editor2: json[r'editor2'] as String?,
-      anonymousExportView: json[r'anonymous_export_view'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var editor = this.editor;
-    var view = this.view;
-    var exportView = this.exportView;
-    var styledView = this.styledView;
-    var storage = this.storage;
-    var editor2 = this.editor2;
-    var anonymousExportView = this.anonymousExportView;
-
-    final json = <String, Object?>{};
-    if (editor != null) {
-      json[r'editor'] = editor;
-    }
-    if (view != null) {
-      json[r'view'] = view;
-    }
-    if (exportView != null) {
-      json[r'export_view'] = exportView;
-    }
-    if (styledView != null) {
-      json[r'styled_view'] = styledView;
-    }
-    if (storage != null) {
-      json[r'storage'] = storage;
-    }
-    if (editor2 != null) {
-      json[r'editor2'] = editor2;
-    }
-    if (anonymousExportView != null) {
-      json[r'anonymous_export_view'] = anonymousExportView;
-    }
-    return json;
-  }
-
-  ContentBodyExpandable copyWith(
-      {String? editor,
-      String? view,
-      String? exportView,
-      String? styledView,
-      String? storage,
-      String? editor2,
-      String? anonymousExportView}) {
-    return ContentBodyExpandable(
-      editor: editor ?? this.editor,
-      view: view ?? this.view,
-      exportView: exportView ?? this.exportView,
-      styledView: styledView ?? this.styledView,
-      storage: storage ?? this.storage,
-      editor2: editor2 ?? this.editor2,
-      anonymousExportView: anonymousExportView ?? this.anonymousExportView,
-    );
-  }
-}
-
-class ContentBody {
-  final ContentBody? view;
-  final ContentBody? exportView;
-  final ContentBody? styledView;
-  final ContentBody? storage;
-  final ContentBody? editor2;
-  final ContentBody? anonymousExportView;
-  final ContentBodyExpandable expandable;
-
-  ContentBody(
-      {this.view,
-      this.exportView,
-      this.styledView,
-      this.storage,
-      this.editor2,
-      this.anonymousExportView,
-      required this.expandable});
-
-  factory ContentBody.fromJson(Map<String, Object?> json) {
-    return ContentBody(
-      view: json[r'view'] != null
-          ? ContentBody.fromJson(json[r'view']! as Map<String, Object?>)
-          : null,
-      exportView: json[r'export_view'] != null
-          ? ContentBody.fromJson(json[r'export_view']! as Map<String, Object?>)
-          : null,
-      styledView: json[r'styled_view'] != null
-          ? ContentBody.fromJson(json[r'styled_view']! as Map<String, Object?>)
-          : null,
-      storage: json[r'storage'] != null
-          ? ContentBody.fromJson(json[r'storage']! as Map<String, Object?>)
-          : null,
-      editor2: json[r'editor2'] != null
-          ? ContentBody.fromJson(json[r'editor2']! as Map<String, Object?>)
-          : null,
-      anonymousExportView: json[r'anonymous_export_view'] != null
-          ? ContentBody.fromJson(
-              json[r'anonymous_export_view']! as Map<String, Object?>)
-          : null,
-      expandable: ContentBodyExpandable.fromJson(
-          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var view = this.view;
-    var exportView = this.exportView;
-    var styledView = this.styledView;
-    var storage = this.storage;
-    var editor2 = this.editor2;
-    var anonymousExportView = this.anonymousExportView;
-    var expandable = this.expandable;
-
-    final json = <String, Object?>{};
-    if (view != null) {
-      json[r'view'] = view.toJson();
-    }
-    if (exportView != null) {
-      json[r'export_view'] = exportView.toJson();
-    }
-    if (styledView != null) {
-      json[r'styled_view'] = styledView.toJson();
-    }
-    if (storage != null) {
-      json[r'storage'] = storage.toJson();
-    }
-    if (editor2 != null) {
-      json[r'editor2'] = editor2.toJson();
-    }
-    if (anonymousExportView != null) {
-      json[r'anonymous_export_view'] = anonymousExportView.toJson();
-    }
-    json[r'_expandable'] = expandable.toJson();
-    return json;
-  }
-
-  ContentBody copyWith(
-      {ContentBody? view,
-      ContentBody? exportView,
-      ContentBody? styledView,
-      ContentBody? storage,
-      ContentBody? editor2,
-      ContentBody? anonymousExportView,
-      ContentBodyExpandable? expandable}) {
-    return ContentBody(
-      view: view ?? this.view,
-      exportView: exportView ?? this.exportView,
-      styledView: styledView ?? this.styledView,
-      storage: storage ?? this.storage,
-      editor2: editor2 ?? this.editor2,
-      anonymousExportView: anonymousExportView ?? this.anonymousExportView,
-      expandable: expandable ?? this.expandable,
-    );
-  }
-}
-
-class ContentRestrictions {
-  final ContentRestriction? read;
-  final ContentRestriction? update;
-  final GenericLinks links;
-
-  ContentRestrictions({this.read, this.update, required this.links});
-
-  factory ContentRestrictions.fromJson(Map<String, Object?> json) {
-    return ContentRestrictions(
-      read: json[r'read'] != null
-          ? ContentRestriction.fromJson(json[r'read']! as Map<String, Object?>)
-          : null,
-      update: json[r'update'] != null
-          ? ContentRestriction.fromJson(
-              json[r'update']! as Map<String, Object?>)
-          : null,
-      links: GenericLinks.fromJson(
-          json[r'_links'] as Map<String, Object?>? ?? const {}),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var read = this.read;
-    var update = this.update;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (read != null) {
-      json[r'read'] = read.toJson();
-    }
-    if (update != null) {
-      json[r'update'] = update.toJson();
-    }
-    json[r'_links'] = links.toJson();
-    return json;
-  }
-
-  ContentRestrictions copyWith(
-      {ContentRestriction? read,
-      ContentRestriction? update,
-      GenericLinks? links}) {
-    return ContentRestrictions(
-      read: read ?? this.read,
-      update: update ?? this.update,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class ContentExpandable {
-  final String? childTypes;
-  final String? container;
-  final String? metadata;
-  final String? operations;
-  final String? children;
-  final String? restrictions;
-  final String? history;
-  final String? ancestors;
-  final String? body;
-  final String? version;
-  final String? descendants;
-  final String? space;
-
-  ContentExpandable(
-      {this.childTypes,
-      this.container,
-      this.metadata,
-      this.operations,
-      this.children,
-      this.restrictions,
-      this.history,
-      this.ancestors,
-      this.body,
-      this.version,
-      this.descendants,
-      this.space});
-
-  factory ContentExpandable.fromJson(Map<String, Object?> json) {
-    return ContentExpandable(
-      childTypes: json[r'childTypes'] as String?,
-      container: json[r'container'] as String?,
-      metadata: json[r'metadata'] as String?,
-      operations: json[r'operations'] as String?,
-      children: json[r'children'] as String?,
-      restrictions: json[r'restrictions'] as String?,
-      history: json[r'history'] as String?,
-      ancestors: json[r'ancestors'] as String?,
-      body: json[r'body'] as String?,
-      version: json[r'version'] as String?,
-      descendants: json[r'descendants'] as String?,
-      space: json[r'space'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var childTypes = this.childTypes;
-    var container = this.container;
-    var metadata = this.metadata;
-    var operations = this.operations;
-    var children = this.children;
-    var restrictions = this.restrictions;
-    var history = this.history;
-    var ancestors = this.ancestors;
-    var body = this.body;
-    var version = this.version;
-    var descendants = this.descendants;
-    var space = this.space;
-
-    final json = <String, Object?>{};
-    if (childTypes != null) {
-      json[r'childTypes'] = childTypes;
-    }
-    if (container != null) {
-      json[r'container'] = container;
-    }
-    if (metadata != null) {
-      json[r'metadata'] = metadata;
-    }
-    if (operations != null) {
-      json[r'operations'] = operations;
-    }
-    if (children != null) {
-      json[r'children'] = children;
-    }
-    if (restrictions != null) {
-      json[r'restrictions'] = restrictions;
-    }
-    if (history != null) {
-      json[r'history'] = history;
-    }
-    if (ancestors != null) {
-      json[r'ancestors'] = ancestors;
-    }
-    if (body != null) {
-      json[r'body'] = body;
-    }
-    if (version != null) {
-      json[r'version'] = version;
-    }
-    if (descendants != null) {
-      json[r'descendants'] = descendants;
-    }
-    if (space != null) {
-      json[r'space'] = space;
-    }
-    return json;
-  }
-
-  ContentExpandable copyWith(
-      {String? childTypes,
-      String? container,
-      String? metadata,
-      String? operations,
-      String? children,
-      String? restrictions,
-      String? history,
-      String? ancestors,
-      String? body,
-      String? version,
-      String? descendants,
-      String? space}) {
-    return ContentExpandable(
-      childTypes: childTypes ?? this.childTypes,
-      container: container ?? this.container,
-      metadata: metadata ?? this.metadata,
-      operations: operations ?? this.operations,
-      children: children ?? this.children,
-      restrictions: restrictions ?? this.restrictions,
-      history: history ?? this.history,
-      ancestors: ancestors ?? this.ancestors,
-      body: body ?? this.body,
-      version: version ?? this.version,
-      descendants: descendants ?? this.descendants,
-      space: space ?? this.space,
     );
   }
 }
@@ -5751,90 +6070,6 @@ class ContentBlogpost {
   }
 }
 
-/// The version for the new content.
-class ContentBlueprintDraftVersion {
-  /// The version number. Set this to `1`.
-  final int number;
-
-  ContentBlueprintDraftVersion({required this.number});
-
-  factory ContentBlueprintDraftVersion.fromJson(Map<String, Object?> json) {
-    return ContentBlueprintDraftVersion(
-      number: (json[r'number'] as num?)?.toInt() ?? 0,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var number = this.number;
-
-    final json = <String, Object?>{};
-    json[r'number'] = number;
-    return json;
-  }
-
-  ContentBlueprintDraftVersion copyWith({int? number}) {
-    return ContentBlueprintDraftVersion(
-      number: number ?? this.number,
-    );
-  }
-}
-
-/// The space for the content.
-class ContentBlueprintDraftSpace {
-  /// The key of the space
-  final String key;
-
-  ContentBlueprintDraftSpace({required this.key});
-
-  factory ContentBlueprintDraftSpace.fromJson(Map<String, Object?> json) {
-    return ContentBlueprintDraftSpace(
-      key: json[r'key'] as String? ?? '',
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var key = this.key;
-
-    final json = <String, Object?>{};
-    json[r'key'] = key;
-    return json;
-  }
-
-  ContentBlueprintDraftSpace copyWith({String? key}) {
-    return ContentBlueprintDraftSpace(
-      key: key ?? this.key,
-    );
-  }
-}
-
-class ContentBlueprintDraftAncestorsItem {
-  /// The content ID of the ancestor.
-  final String id;
-
-  ContentBlueprintDraftAncestorsItem({required this.id});
-
-  factory ContentBlueprintDraftAncestorsItem.fromJson(
-      Map<String, Object?> json) {
-    return ContentBlueprintDraftAncestorsItem(
-      id: json[r'id'] as String? ?? '',
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-
-    final json = <String, Object?>{};
-    json[r'id'] = id;
-    return json;
-  }
-
-  ContentBlueprintDraftAncestorsItem copyWith({String? id}) {
-    return ContentBlueprintDraftAncestorsItem(
-      id: id ?? this.id,
-    );
-  }
-}
-
 class ContentBlueprintDraft {
   /// The version for the new content.
   final ContentBlueprintDraftVersion version;
@@ -5972,6 +6207,186 @@ class ContentBlueprintDraftStatus {
   String toString() => value;
 }
 
+class ContentBlueprintDraftAncestorsItem {
+  /// The content ID of the ancestor.
+  final String id;
+
+  ContentBlueprintDraftAncestorsItem({required this.id});
+
+  factory ContentBlueprintDraftAncestorsItem.fromJson(
+      Map<String, Object?> json) {
+    return ContentBlueprintDraftAncestorsItem(
+      id: json[r'id'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    return json;
+  }
+
+  ContentBlueprintDraftAncestorsItem copyWith({String? id}) {
+    return ContentBlueprintDraftAncestorsItem(
+      id: id ?? this.id,
+    );
+  }
+}
+
+/// The space for the content.
+class ContentBlueprintDraftSpace {
+  /// The key of the space
+  final String key;
+
+  ContentBlueprintDraftSpace({required this.key});
+
+  factory ContentBlueprintDraftSpace.fromJson(Map<String, Object?> json) {
+    return ContentBlueprintDraftSpace(
+      key: json[r'key'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+
+    final json = <String, Object?>{};
+    json[r'key'] = key;
+    return json;
+  }
+
+  ContentBlueprintDraftSpace copyWith({String? key}) {
+    return ContentBlueprintDraftSpace(
+      key: key ?? this.key,
+    );
+  }
+}
+
+/// The version for the new content.
+class ContentBlueprintDraftVersion {
+  /// The version number. Set this to `1`.
+  final int number;
+
+  ContentBlueprintDraftVersion({required this.number});
+
+  factory ContentBlueprintDraftVersion.fromJson(Map<String, Object?> json) {
+    return ContentBlueprintDraftVersion(
+      number: (json[r'number'] as num?)?.toInt() ?? 0,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var number = this.number;
+
+    final json = <String, Object?>{};
+    json[r'number'] = number;
+    return json;
+  }
+
+  ContentBlueprintDraftVersion copyWith({int? number}) {
+    return ContentBlueprintDraftVersion(
+      number: number ?? this.number,
+    );
+  }
+}
+
+class ContentBody {
+  final ContentBody? view;
+  final ContentBody? exportView;
+  final ContentBody? styledView;
+  final ContentBody? storage;
+  final ContentBody? editor2;
+  final ContentBody? anonymousExportView;
+  final ContentBodyExpandable expandable;
+
+  ContentBody(
+      {this.view,
+      this.exportView,
+      this.styledView,
+      this.storage,
+      this.editor2,
+      this.anonymousExportView,
+      required this.expandable});
+
+  factory ContentBody.fromJson(Map<String, Object?> json) {
+    return ContentBody(
+      view: json[r'view'] != null
+          ? ContentBody.fromJson(json[r'view']! as Map<String, Object?>)
+          : null,
+      exportView: json[r'export_view'] != null
+          ? ContentBody.fromJson(json[r'export_view']! as Map<String, Object?>)
+          : null,
+      styledView: json[r'styled_view'] != null
+          ? ContentBody.fromJson(json[r'styled_view']! as Map<String, Object?>)
+          : null,
+      storage: json[r'storage'] != null
+          ? ContentBody.fromJson(json[r'storage']! as Map<String, Object?>)
+          : null,
+      editor2: json[r'editor2'] != null
+          ? ContentBody.fromJson(json[r'editor2']! as Map<String, Object?>)
+          : null,
+      anonymousExportView: json[r'anonymous_export_view'] != null
+          ? ContentBody.fromJson(
+              json[r'anonymous_export_view']! as Map<String, Object?>)
+          : null,
+      expandable: ContentBodyExpandable.fromJson(
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var view = this.view;
+    var exportView = this.exportView;
+    var styledView = this.styledView;
+    var storage = this.storage;
+    var editor2 = this.editor2;
+    var anonymousExportView = this.anonymousExportView;
+    var expandable = this.expandable;
+
+    final json = <String, Object?>{};
+    if (view != null) {
+      json[r'view'] = view.toJson();
+    }
+    if (exportView != null) {
+      json[r'export_view'] = exportView.toJson();
+    }
+    if (styledView != null) {
+      json[r'styled_view'] = styledView.toJson();
+    }
+    if (storage != null) {
+      json[r'storage'] = storage.toJson();
+    }
+    if (editor2 != null) {
+      json[r'editor2'] = editor2.toJson();
+    }
+    if (anonymousExportView != null) {
+      json[r'anonymous_export_view'] = anonymousExportView.toJson();
+    }
+    json[r'_expandable'] = expandable.toJson();
+    return json;
+  }
+
+  ContentBody copyWith(
+      {ContentBody? view,
+      ContentBody? exportView,
+      ContentBody? styledView,
+      ContentBody? storage,
+      ContentBody? editor2,
+      ContentBody? anonymousExportView,
+      ContentBodyExpandable? expandable}) {
+    return ContentBody(
+      view: view ?? this.view,
+      exportView: exportView ?? this.exportView,
+      styledView: styledView ?? this.styledView,
+      storage: storage ?? this.storage,
+      editor2: editor2 ?? this.editor2,
+      anonymousExportView: anonymousExportView ?? this.anonymousExportView,
+      expandable: expandable ?? this.expandable,
+    );
+  }
+}
+
 /// This object is used when creating or updating content.
 class ContentBodyCreate {
   /// The body of the content in the relevant format.
@@ -6040,119 +6455,6 @@ class ContentBodyCreateRepresentation {
 
   @override
   String toString() => value;
-}
-
-class ContentChildrenExpandable {
-  final String? attachment;
-  final String? comment;
-  final String? page;
-
-  ContentChildrenExpandable({this.attachment, this.comment, this.page});
-
-  factory ContentChildrenExpandable.fromJson(Map<String, Object?> json) {
-    return ContentChildrenExpandable(
-      attachment: json[r'attachment'] as String?,
-      comment: json[r'comment'] as String?,
-      page: json[r'page'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var attachment = this.attachment;
-    var comment = this.comment;
-    var page = this.page;
-
-    final json = <String, Object?>{};
-    if (attachment != null) {
-      json[r'attachment'] = attachment;
-    }
-    if (comment != null) {
-      json[r'comment'] = comment;
-    }
-    if (page != null) {
-      json[r'page'] = page;
-    }
-    return json;
-  }
-
-  ContentChildrenExpandable copyWith(
-      {String? attachment, String? comment, String? page}) {
-    return ContentChildrenExpandable(
-      attachment: attachment ?? this.attachment,
-      comment: comment ?? this.comment,
-      page: page ?? this.page,
-    );
-  }
-}
-
-class ContentChildren {
-  final ContentArray? attachment;
-  final ContentArray? comment;
-  final ContentArray? page;
-  final ContentChildrenExpandable expandable;
-  final GenericLinks links;
-
-  ContentChildren(
-      {this.attachment,
-      this.comment,
-      this.page,
-      required this.expandable,
-      required this.links});
-
-  factory ContentChildren.fromJson(Map<String, Object?> json) {
-    return ContentChildren(
-      attachment: json[r'attachment'] != null
-          ? ContentArray.fromJson(json[r'attachment']! as Map<String, Object?>)
-          : null,
-      comment: json[r'comment'] != null
-          ? ContentArray.fromJson(json[r'comment']! as Map<String, Object?>)
-          : null,
-      page: json[r'page'] != null
-          ? ContentArray.fromJson(json[r'page']! as Map<String, Object?>)
-          : null,
-      expandable: ContentChildrenExpandable.fromJson(
-          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
-      links: GenericLinks.fromJson(
-          json[r'_links'] as Map<String, Object?>? ?? const {}),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var attachment = this.attachment;
-    var comment = this.comment;
-    var page = this.page;
-    var expandable = this.expandable;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (attachment != null) {
-      json[r'attachment'] = attachment.toJson();
-    }
-    if (comment != null) {
-      json[r'comment'] = comment.toJson();
-    }
-    if (page != null) {
-      json[r'page'] = page.toJson();
-    }
-    json[r'_expandable'] = expandable.toJson();
-    json[r'_links'] = links.toJson();
-    return json;
-  }
-
-  ContentChildren copyWith(
-      {ContentArray? attachment,
-      ContentArray? comment,
-      ContentArray? page,
-      ContentChildrenExpandable? expandable,
-      GenericLinks? links}) {
-    return ContentChildren(
-      attachment: attachment ?? this.attachment,
-      comment: comment ?? this.comment,
-      page: page ?? this.page,
-      expandable: expandable ?? this.expandable,
-      links: links ?? this.links,
-    );
-  }
 }
 
 /// This object is used when creating or updating content.
@@ -6227,149 +6529,86 @@ class ContentBodyCreateStorageRepresentation {
   String toString() => value;
 }
 
-class ContentChildTypeAttachment {
-  final bool value;
-  final GenericLinks links;
+class ContentBodyExpandable {
+  final String? editor;
+  final String? view;
+  final String? exportView;
+  final String? styledView;
+  final String? storage;
+  final String? editor2;
+  final String? anonymousExportView;
 
-  ContentChildTypeAttachment({required this.value, required this.links});
+  ContentBodyExpandable(
+      {this.editor,
+      this.view,
+      this.exportView,
+      this.styledView,
+      this.storage,
+      this.editor2,
+      this.anonymousExportView});
 
-  factory ContentChildTypeAttachment.fromJson(Map<String, Object?> json) {
-    return ContentChildTypeAttachment(
-      value: json[r'value'] as bool? ?? false,
-      links: GenericLinks.fromJson(
-          json[r'_links'] as Map<String, Object?>? ?? const {}),
+  factory ContentBodyExpandable.fromJson(Map<String, Object?> json) {
+    return ContentBodyExpandable(
+      editor: json[r'editor'] as String?,
+      view: json[r'view'] as String?,
+      exportView: json[r'export_view'] as String?,
+      styledView: json[r'styled_view'] as String?,
+      storage: json[r'storage'] as String?,
+      editor2: json[r'editor2'] as String?,
+      anonymousExportView: json[r'anonymous_export_view'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var value = this.value;
-    var links = this.links;
+    var editor = this.editor;
+    var view = this.view;
+    var exportView = this.exportView;
+    var styledView = this.styledView;
+    var storage = this.storage;
+    var editor2 = this.editor2;
+    var anonymousExportView = this.anonymousExportView;
 
     final json = <String, Object?>{};
-    json[r'value'] = value;
-    json[r'_links'] = links.toJson();
-    return json;
-  }
-
-  ContentChildTypeAttachment copyWith({bool? value, GenericLinks? links}) {
-    return ContentChildTypeAttachment(
-      value: value ?? this.value,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class ContentChildTypeComment {
-  final bool value;
-  final GenericLinks links;
-
-  ContentChildTypeComment({required this.value, required this.links});
-
-  factory ContentChildTypeComment.fromJson(Map<String, Object?> json) {
-    return ContentChildTypeComment(
-      value: json[r'value'] as bool? ?? false,
-      links: GenericLinks.fromJson(
-          json[r'_links'] as Map<String, Object?>? ?? const {}),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var value = this.value;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    json[r'value'] = value;
-    json[r'_links'] = links.toJson();
-    return json;
-  }
-
-  ContentChildTypeComment copyWith({bool? value, GenericLinks? links}) {
-    return ContentChildTypeComment(
-      value: value ?? this.value,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class ContentChildTypePage {
-  final bool value;
-  final GenericLinks links;
-
-  ContentChildTypePage({required this.value, required this.links});
-
-  factory ContentChildTypePage.fromJson(Map<String, Object?> json) {
-    return ContentChildTypePage(
-      value: json[r'value'] as bool? ?? false,
-      links: GenericLinks.fromJson(
-          json[r'_links'] as Map<String, Object?>? ?? const {}),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var value = this.value;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    json[r'value'] = value;
-    json[r'_links'] = links.toJson();
-    return json;
-  }
-
-  ContentChildTypePage copyWith({bool? value, GenericLinks? links}) {
-    return ContentChildTypePage(
-      value: value ?? this.value,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class ContentChildTypeExpandable {
-  final String? all;
-  final String? attachment;
-  final String? comment;
-  final String? page;
-
-  ContentChildTypeExpandable(
-      {this.all, this.attachment, this.comment, this.page});
-
-  factory ContentChildTypeExpandable.fromJson(Map<String, Object?> json) {
-    return ContentChildTypeExpandable(
-      all: json[r'all'] as String?,
-      attachment: json[r'attachment'] as String?,
-      comment: json[r'comment'] as String?,
-      page: json[r'page'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var all = this.all;
-    var attachment = this.attachment;
-    var comment = this.comment;
-    var page = this.page;
-
-    final json = <String, Object?>{};
-    if (all != null) {
-      json[r'all'] = all;
+    if (editor != null) {
+      json[r'editor'] = editor;
     }
-    if (attachment != null) {
-      json[r'attachment'] = attachment;
+    if (view != null) {
+      json[r'view'] = view;
     }
-    if (comment != null) {
-      json[r'comment'] = comment;
+    if (exportView != null) {
+      json[r'export_view'] = exportView;
     }
-    if (page != null) {
-      json[r'page'] = page;
+    if (styledView != null) {
+      json[r'styled_view'] = styledView;
+    }
+    if (storage != null) {
+      json[r'storage'] = storage;
+    }
+    if (editor2 != null) {
+      json[r'editor2'] = editor2;
+    }
+    if (anonymousExportView != null) {
+      json[r'anonymous_export_view'] = anonymousExportView;
     }
     return json;
   }
 
-  ContentChildTypeExpandable copyWith(
-      {String? all, String? attachment, String? comment, String? page}) {
-    return ContentChildTypeExpandable(
-      all: all ?? this.all,
-      attachment: attachment ?? this.attachment,
-      comment: comment ?? this.comment,
-      page: page ?? this.page,
+  ContentBodyExpandable copyWith(
+      {String? editor,
+      String? view,
+      String? exportView,
+      String? styledView,
+      String? storage,
+      String? editor2,
+      String? anonymousExportView}) {
+    return ContentBodyExpandable(
+      editor: editor ?? this.editor,
+      view: view ?? this.view,
+      exportView: exportView ?? this.exportView,
+      styledView: styledView ?? this.styledView,
+      storage: storage ?? this.storage,
+      editor2: editor2 ?? this.editor2,
+      anonymousExportView: anonymousExportView ?? this.anonymousExportView,
     );
   }
 }
@@ -6438,6 +6677,266 @@ class ContentChildType {
   }
 }
 
+class ContentChildTypeAttachment {
+  final bool value;
+  final GenericLinks links;
+
+  ContentChildTypeAttachment({required this.value, required this.links});
+
+  factory ContentChildTypeAttachment.fromJson(Map<String, Object?> json) {
+    return ContentChildTypeAttachment(
+      value: json[r'value'] as bool? ?? false,
+      links: GenericLinks.fromJson(
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var value = this.value;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'value'] = value;
+    json[r'_links'] = links.toJson();
+    return json;
+  }
+
+  ContentChildTypeAttachment copyWith({bool? value, GenericLinks? links}) {
+    return ContentChildTypeAttachment(
+      value: value ?? this.value,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class ContentChildTypeComment {
+  final bool value;
+  final GenericLinks links;
+
+  ContentChildTypeComment({required this.value, required this.links});
+
+  factory ContentChildTypeComment.fromJson(Map<String, Object?> json) {
+    return ContentChildTypeComment(
+      value: json[r'value'] as bool? ?? false,
+      links: GenericLinks.fromJson(
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var value = this.value;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'value'] = value;
+    json[r'_links'] = links.toJson();
+    return json;
+  }
+
+  ContentChildTypeComment copyWith({bool? value, GenericLinks? links}) {
+    return ContentChildTypeComment(
+      value: value ?? this.value,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class ContentChildTypeExpandable {
+  final String? all;
+  final String? attachment;
+  final String? comment;
+  final String? page;
+
+  ContentChildTypeExpandable(
+      {this.all, this.attachment, this.comment, this.page});
+
+  factory ContentChildTypeExpandable.fromJson(Map<String, Object?> json) {
+    return ContentChildTypeExpandable(
+      all: json[r'all'] as String?,
+      attachment: json[r'attachment'] as String?,
+      comment: json[r'comment'] as String?,
+      page: json[r'page'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var all = this.all;
+    var attachment = this.attachment;
+    var comment = this.comment;
+    var page = this.page;
+
+    final json = <String, Object?>{};
+    if (all != null) {
+      json[r'all'] = all;
+    }
+    if (attachment != null) {
+      json[r'attachment'] = attachment;
+    }
+    if (comment != null) {
+      json[r'comment'] = comment;
+    }
+    if (page != null) {
+      json[r'page'] = page;
+    }
+    return json;
+  }
+
+  ContentChildTypeExpandable copyWith(
+      {String? all, String? attachment, String? comment, String? page}) {
+    return ContentChildTypeExpandable(
+      all: all ?? this.all,
+      attachment: attachment ?? this.attachment,
+      comment: comment ?? this.comment,
+      page: page ?? this.page,
+    );
+  }
+}
+
+class ContentChildTypePage {
+  final bool value;
+  final GenericLinks links;
+
+  ContentChildTypePage({required this.value, required this.links});
+
+  factory ContentChildTypePage.fromJson(Map<String, Object?> json) {
+    return ContentChildTypePage(
+      value: json[r'value'] as bool? ?? false,
+      links: GenericLinks.fromJson(
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var value = this.value;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'value'] = value;
+    json[r'_links'] = links.toJson();
+    return json;
+  }
+
+  ContentChildTypePage copyWith({bool? value, GenericLinks? links}) {
+    return ContentChildTypePage(
+      value: value ?? this.value,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class ContentChildren {
+  final ContentArray? attachment;
+  final ContentArray? comment;
+  final ContentArray? page;
+  final ContentChildrenExpandable expandable;
+  final GenericLinks links;
+
+  ContentChildren(
+      {this.attachment,
+      this.comment,
+      this.page,
+      required this.expandable,
+      required this.links});
+
+  factory ContentChildren.fromJson(Map<String, Object?> json) {
+    return ContentChildren(
+      attachment: json[r'attachment'] != null
+          ? ContentArray.fromJson(json[r'attachment']! as Map<String, Object?>)
+          : null,
+      comment: json[r'comment'] != null
+          ? ContentArray.fromJson(json[r'comment']! as Map<String, Object?>)
+          : null,
+      page: json[r'page'] != null
+          ? ContentArray.fromJson(json[r'page']! as Map<String, Object?>)
+          : null,
+      expandable: ContentChildrenExpandable.fromJson(
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
+      links: GenericLinks.fromJson(
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var attachment = this.attachment;
+    var comment = this.comment;
+    var page = this.page;
+    var expandable = this.expandable;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (attachment != null) {
+      json[r'attachment'] = attachment.toJson();
+    }
+    if (comment != null) {
+      json[r'comment'] = comment.toJson();
+    }
+    if (page != null) {
+      json[r'page'] = page.toJson();
+    }
+    json[r'_expandable'] = expandable.toJson();
+    json[r'_links'] = links.toJson();
+    return json;
+  }
+
+  ContentChildren copyWith(
+      {ContentArray? attachment,
+      ContentArray? comment,
+      ContentArray? page,
+      ContentChildrenExpandable? expandable,
+      GenericLinks? links}) {
+    return ContentChildren(
+      attachment: attachment ?? this.attachment,
+      comment: comment ?? this.comment,
+      page: page ?? this.page,
+      expandable: expandable ?? this.expandable,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class ContentChildrenExpandable {
+  final String? attachment;
+  final String? comment;
+  final String? page;
+
+  ContentChildrenExpandable({this.attachment, this.comment, this.page});
+
+  factory ContentChildrenExpandable.fromJson(Map<String, Object?> json) {
+    return ContentChildrenExpandable(
+      attachment: json[r'attachment'] as String?,
+      comment: json[r'comment'] as String?,
+      page: json[r'page'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var attachment = this.attachment;
+    var comment = this.comment;
+    var page = this.page;
+
+    final json = <String, Object?>{};
+    if (attachment != null) {
+      json[r'attachment'] = attachment;
+    }
+    if (comment != null) {
+      json[r'comment'] = comment;
+    }
+    if (page != null) {
+      json[r'page'] = page;
+    }
+    return json;
+  }
+
+  ContentChildrenExpandable copyWith(
+      {String? attachment, String? comment, String? page}) {
+    return ContentChildrenExpandable(
+      attachment: attachment ?? this.attachment,
+      comment: comment ?? this.comment,
+      page: page ?? this.page,
+    );
+  }
+}
+
 /// Representation of a comment (content)
 class ContentComment {
   ContentComment();
@@ -6452,32 +6951,182 @@ class ContentComment {
   }
 }
 
-/// The space that the content is being created in.
-class ContentCreateSpace {
-  /// The key of the space.
-  final String key;
+class ContentCreate {
+  /// The ID of the draft content. Required when publishing a draft.
+  final String? id;
+  final String title;
 
-  ContentCreateSpace({required this.key});
+  /// The type of the new content. Custom content types defined by apps are also
+  /// supported.
+  final ContentCreateType type;
 
-  factory ContentCreateSpace.fromJson(Map<String, Object?> json) {
-    return ContentCreateSpace(
-      key: json[r'key'] as String? ?? '',
+  /// The space that the content is being created in.
+  final ContentCreateSpace space;
+
+  /// The status of the new content.
+  final ContentCreateStatus? status;
+
+  /// The container of the content. Required if type is `comment` or certain
+  /// types of
+  /// custom content. If you are trying to create a comment that is a child of
+  /// another comment,
+  /// specify the parent comment in the ancestors field, not in this field.
+  final ContentCreateContainer? container;
+
+  /// The parent content of the new content.  If you are creating a top-level
+  /// `page` or `comment`,
+  /// this can be left blank. If you are creating a child page, this is where
+  /// the parent page id goes.
+  /// If you are creating a child comment, this is where the parent comment id
+  /// goes. Only one parent
+  /// content id can be specified.
+  final List<ContentCreateAncestorsItem> ancestors;
+
+  /// The body of the new content. Does not apply to attachments.
+  /// Only one body format should be specified as the property for
+  /// this object, e.g. `storage`.
+  ///
+  /// Note, `editor2` format is used by Atlassian only. `anonymous_export_view`
+  /// is
+  /// the same as 'export_view' format but only content viewable by an anonymous
+  /// user is included.
+  final ContentCreateBody body;
+
+  ContentCreate(
+      {this.id,
+      required this.title,
+      required this.type,
+      required this.space,
+      this.status,
+      this.container,
+      List<ContentCreateAncestorsItem>? ancestors,
+      required this.body})
+      : ancestors = ancestors ?? [];
+
+  factory ContentCreate.fromJson(Map<String, Object?> json) {
+    return ContentCreate(
+      id: json[r'id'] as String?,
+      title: json[r'title'] as String? ?? '',
+      type: ContentCreateType.fromValue(json[r'type'] as String? ?? ''),
+      space: ContentCreateSpace.fromJson(
+          json[r'space'] as Map<String, Object?>? ?? const {}),
+      status: json[r'status'] != null
+          ? ContentCreateStatus.fromValue(json[r'status']! as String)
+          : null,
+      container: json[r'container'] != null
+          ? ContentCreateContainer.fromJson(
+              json[r'container']! as Map<String, Object?>)
+          : null,
+      ancestors: (json[r'ancestors'] as List<Object?>?)
+              ?.map((i) => ContentCreateAncestorsItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      body: ContentCreateBody.fromJson(
+          json[r'body'] as Map<String, Object?>? ?? const {}),
     );
   }
 
   Map<String, Object?> toJson() {
-    var key = this.key;
+    var id = this.id;
+    var title = this.title;
+    var type = this.type;
+    var space = this.space;
+    var status = this.status;
+    var container = this.container;
+    var ancestors = this.ancestors;
+    var body = this.body;
 
     final json = <String, Object?>{};
-    json[r'key'] = key;
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    json[r'title'] = title;
+    json[r'type'] = type.value;
+    json[r'space'] = space.toJson();
+    if (status != null) {
+      json[r'status'] = status.value;
+    }
+    if (container != null) {
+      json[r'container'] = container.toJson();
+    }
+    json[r'ancestors'] = ancestors.map((i) => i.toJson()).toList();
+    json[r'body'] = body.toJson();
     return json;
   }
 
-  ContentCreateSpace copyWith({String? key}) {
-    return ContentCreateSpace(
-      key: key ?? this.key,
+  ContentCreate copyWith(
+      {String? id,
+      String? title,
+      ContentCreateType? type,
+      ContentCreateSpace? space,
+      ContentCreateStatus? status,
+      ContentCreateContainer? container,
+      List<ContentCreateAncestorsItem>? ancestors,
+      ContentCreateBody? body}) {
+    return ContentCreate(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      type: type ?? this.type,
+      space: space ?? this.space,
+      status: status ?? this.status,
+      container: container ?? this.container,
+      ancestors: ancestors ?? this.ancestors,
+      body: body ?? this.body,
     );
   }
+}
+
+class ContentCreateType {
+  static const page = ContentCreateType._('page');
+  static const blogpost = ContentCreateType._('blogpost');
+  static const comment = ContentCreateType._('comment');
+
+  static const values = [
+    page,
+    blogpost,
+    comment,
+  ];
+  final String value;
+
+  const ContentCreateType._(this.value);
+
+  static ContentCreateType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ContentCreateType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class ContentCreateStatus {
+  static const current = ContentCreateStatus._('current');
+  static const trashed = ContentCreateStatus._('trashed');
+  static const historical = ContentCreateStatus._('historical');
+  static const draft = ContentCreateStatus._('draft');
+
+  static const values = [
+    current,
+    trashed,
+    historical,
+    draft,
+  ];
+  final String value;
+
+  const ContentCreateStatus._(this.value);
+
+  static ContentCreateStatus fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ContentCreateStatus._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 class ContentCreateAncestorsItem {
@@ -6606,246 +7255,198 @@ class ContentCreateBody {
   }
 }
 
-class ContentCreate {
-  /// The ID of the draft content. Required when publishing a draft.
-  final String? id;
-  final String title;
+/// The container of the content. Required if type is `comment` or certain types
+/// of
+/// custom content. If you are trying to create a comment that is a child of
+/// another comment,
+/// specify the parent comment in the ancestors field, not in this field.
+class ContentCreateContainer {
+  /// The `id` of the container.
+  final String id;
 
-  /// The type of the new content. Custom content types defined by apps are also
-  /// supported.
-  final ContentCreateType type;
+  /// The `type` of the container.
+  final String type;
 
-  /// The space that the content is being created in.
-  final ContentCreateSpace space;
+  ContentCreateContainer({required this.id, required this.type});
 
-  /// The status of the new content.
-  final ContentCreateStatus? status;
-
-  /// The parent content of the new content. Only one parent content
-  /// `id` can be specified.
-  final List<ContentCreateAncestorsItem> ancestors;
-
-  /// The body of the new content. Does not apply to attachments.
-  /// Only one body format should be specified as the property for
-  /// this object, e.g. `storage`.
-  ///
-  /// Note, `editor2` format is used by Atlassian only. `anonymous_export_view`
-  /// is
-  /// the same as 'export_view' format but only content viewable by an anonymous
-  /// user is included.
-  final ContentCreateBody body;
-
-  ContentCreate(
-      {this.id,
-      required this.title,
-      required this.type,
-      required this.space,
-      this.status,
-      List<ContentCreateAncestorsItem>? ancestors,
-      required this.body})
-      : ancestors = ancestors ?? [];
-
-  factory ContentCreate.fromJson(Map<String, Object?> json) {
-    return ContentCreate(
-      id: json[r'id'] as String?,
-      title: json[r'title'] as String? ?? '',
-      type: ContentCreateType.fromValue(json[r'type'] as String? ?? ''),
-      space: ContentCreateSpace.fromJson(
-          json[r'space'] as Map<String, Object?>? ?? const {}),
-      status: json[r'status'] != null
-          ? ContentCreateStatus.fromValue(json[r'status']! as String)
-          : null,
-      ancestors: (json[r'ancestors'] as List<Object?>?)
-              ?.map((i) => ContentCreateAncestorsItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      body: ContentCreateBody.fromJson(
-          json[r'body'] as Map<String, Object?>? ?? const {}),
+  factory ContentCreateContainer.fromJson(Map<String, Object?> json) {
+    return ContentCreateContainer(
+      id: json[r'id'] as String? ?? '',
+      type: json[r'type'] as String? ?? '',
     );
   }
 
   Map<String, Object?> toJson() {
     var id = this.id;
-    var title = this.title;
     var type = this.type;
-    var space = this.space;
-    var status = this.status;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    json[r'type'] = type;
+    return json;
+  }
+
+  ContentCreateContainer copyWith({String? id, String? type}) {
+    return ContentCreateContainer(
+      id: id ?? this.id,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// The space that the content is being created in.
+class ContentCreateSpace {
+  /// The key of the space.
+  final String key;
+
+  ContentCreateSpace({required this.key});
+
+  factory ContentCreateSpace.fromJson(Map<String, Object?> json) {
+    return ContentCreateSpace(
+      key: json[r'key'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+
+    final json = <String, Object?>{};
+    json[r'key'] = key;
+    return json;
+  }
+
+  ContentCreateSpace copyWith({String? key}) {
+    return ContentCreateSpace(
+      key: key ?? this.key,
+    );
+  }
+}
+
+class ContentExpandable {
+  final String? childTypes;
+  final String? container;
+  final String? metadata;
+  final String? operations;
+  final String? children;
+  final String? restrictions;
+  final String? history;
+  final String? ancestors;
+  final String? body;
+  final String? version;
+  final String? descendants;
+  final String? space;
+
+  ContentExpandable(
+      {this.childTypes,
+      this.container,
+      this.metadata,
+      this.operations,
+      this.children,
+      this.restrictions,
+      this.history,
+      this.ancestors,
+      this.body,
+      this.version,
+      this.descendants,
+      this.space});
+
+  factory ContentExpandable.fromJson(Map<String, Object?> json) {
+    return ContentExpandable(
+      childTypes: json[r'childTypes'] as String?,
+      container: json[r'container'] as String?,
+      metadata: json[r'metadata'] as String?,
+      operations: json[r'operations'] as String?,
+      children: json[r'children'] as String?,
+      restrictions: json[r'restrictions'] as String?,
+      history: json[r'history'] as String?,
+      ancestors: json[r'ancestors'] as String?,
+      body: json[r'body'] as String?,
+      version: json[r'version'] as String?,
+      descendants: json[r'descendants'] as String?,
+      space: json[r'space'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var childTypes = this.childTypes;
+    var container = this.container;
+    var metadata = this.metadata;
+    var operations = this.operations;
+    var children = this.children;
+    var restrictions = this.restrictions;
+    var history = this.history;
     var ancestors = this.ancestors;
     var body = this.body;
+    var version = this.version;
+    var descendants = this.descendants;
+    var space = this.space;
 
     final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
+    if (childTypes != null) {
+      json[r'childTypes'] = childTypes;
     }
-    json[r'title'] = title;
-    json[r'type'] = type.value;
-    json[r'space'] = space.toJson();
-    if (status != null) {
-      json[r'status'] = status.value;
+    if (container != null) {
+      json[r'container'] = container;
     }
-    json[r'ancestors'] = ancestors.map((i) => i.toJson()).toList();
-    json[r'body'] = body.toJson();
+    if (metadata != null) {
+      json[r'metadata'] = metadata;
+    }
+    if (operations != null) {
+      json[r'operations'] = operations;
+    }
+    if (children != null) {
+      json[r'children'] = children;
+    }
+    if (restrictions != null) {
+      json[r'restrictions'] = restrictions;
+    }
+    if (history != null) {
+      json[r'history'] = history;
+    }
+    if (ancestors != null) {
+      json[r'ancestors'] = ancestors;
+    }
+    if (body != null) {
+      json[r'body'] = body;
+    }
+    if (version != null) {
+      json[r'version'] = version;
+    }
+    if (descendants != null) {
+      json[r'descendants'] = descendants;
+    }
+    if (space != null) {
+      json[r'space'] = space;
+    }
     return json;
   }
 
-  ContentCreate copyWith(
-      {String? id,
-      String? title,
-      ContentCreateType? type,
-      ContentCreateSpace? space,
-      ContentCreateStatus? status,
-      List<ContentCreateAncestorsItem>? ancestors,
-      ContentCreateBody? body}) {
-    return ContentCreate(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      type: type ?? this.type,
-      space: space ?? this.space,
-      status: status ?? this.status,
+  ContentExpandable copyWith(
+      {String? childTypes,
+      String? container,
+      String? metadata,
+      String? operations,
+      String? children,
+      String? restrictions,
+      String? history,
+      String? ancestors,
+      String? body,
+      String? version,
+      String? descendants,
+      String? space}) {
+    return ContentExpandable(
+      childTypes: childTypes ?? this.childTypes,
+      container: container ?? this.container,
+      metadata: metadata ?? this.metadata,
+      operations: operations ?? this.operations,
+      children: children ?? this.children,
+      restrictions: restrictions ?? this.restrictions,
+      history: history ?? this.history,
       ancestors: ancestors ?? this.ancestors,
       body: body ?? this.body,
-    );
-  }
-}
-
-class ContentCreateType {
-  static const page = ContentCreateType._('page');
-  static const blogpost = ContentCreateType._('blogpost');
-  static const comment = ContentCreateType._('comment');
-  static const attachment = ContentCreateType._('attachment');
-
-  static const values = [
-    page,
-    blogpost,
-    comment,
-    attachment,
-  ];
-  final String value;
-
-  const ContentCreateType._(this.value);
-
-  static ContentCreateType fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => ContentCreateType._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class ContentCreateStatus {
-  static const current = ContentCreateStatus._('current');
-  static const trashed = ContentCreateStatus._('trashed');
-  static const historical = ContentCreateStatus._('historical');
-  static const draft = ContentCreateStatus._('draft');
-
-  static const values = [
-    current,
-    trashed,
-    historical,
-    draft,
-  ];
-  final String value;
-
-  const ContentCreateStatus._(this.value);
-
-  static ContentCreateStatus fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => ContentCreateStatus._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class ContentHistoryContributors {
-  final UsersUserKeys? publishers;
-
-  ContentHistoryContributors({this.publishers});
-
-  factory ContentHistoryContributors.fromJson(Map<String, Object?> json) {
-    return ContentHistoryContributors(
-      publishers: json[r'publishers'] != null
-          ? UsersUserKeys.fromJson(json[r'publishers']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var publishers = this.publishers;
-
-    final json = <String, Object?>{};
-    if (publishers != null) {
-      json[r'publishers'] = publishers.toJson();
-    }
-    return json;
-  }
-
-  ContentHistoryContributors copyWith({UsersUserKeys? publishers}) {
-    return ContentHistoryContributors(
-      publishers: publishers ?? this.publishers,
-    );
-  }
-}
-
-class ContentHistoryExpandable {
-  final String? lastUpdated;
-  final String? previousVersion;
-  final String? contributors;
-  final String? nextVersion;
-
-  ContentHistoryExpandable(
-      {this.lastUpdated,
-      this.previousVersion,
-      this.contributors,
-      this.nextVersion});
-
-  factory ContentHistoryExpandable.fromJson(Map<String, Object?> json) {
-    return ContentHistoryExpandable(
-      lastUpdated: json[r'lastUpdated'] as String?,
-      previousVersion: json[r'previousVersion'] as String?,
-      contributors: json[r'contributors'] as String?,
-      nextVersion: json[r'nextVersion'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var lastUpdated = this.lastUpdated;
-    var previousVersion = this.previousVersion;
-    var contributors = this.contributors;
-    var nextVersion = this.nextVersion;
-
-    final json = <String, Object?>{};
-    if (lastUpdated != null) {
-      json[r'lastUpdated'] = lastUpdated;
-    }
-    if (previousVersion != null) {
-      json[r'previousVersion'] = previousVersion;
-    }
-    if (contributors != null) {
-      json[r'contributors'] = contributors;
-    }
-    if (nextVersion != null) {
-      json[r'nextVersion'] = nextVersion;
-    }
-    return json;
-  }
-
-  ContentHistoryExpandable copyWith(
-      {String? lastUpdated,
-      String? previousVersion,
-      String? contributors,
-      String? nextVersion}) {
-    return ContentHistoryExpandable(
-      lastUpdated: lastUpdated ?? this.lastUpdated,
-      previousVersion: previousVersion ?? this.previousVersion,
-      contributors: contributors ?? this.contributors,
-      nextVersion: nextVersion ?? this.nextVersion,
+      version: version ?? this.version,
+      descendants: descendants ?? this.descendants,
+      space: space ?? this.space,
     );
   }
 }
@@ -6962,6 +7563,93 @@ class ContentHistory {
   }
 }
 
+class ContentHistoryContributors {
+  final UsersUserKeys? publishers;
+
+  ContentHistoryContributors({this.publishers});
+
+  factory ContentHistoryContributors.fromJson(Map<String, Object?> json) {
+    return ContentHistoryContributors(
+      publishers: json[r'publishers'] != null
+          ? UsersUserKeys.fromJson(json[r'publishers']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var publishers = this.publishers;
+
+    final json = <String, Object?>{};
+    if (publishers != null) {
+      json[r'publishers'] = publishers.toJson();
+    }
+    return json;
+  }
+
+  ContentHistoryContributors copyWith({UsersUserKeys? publishers}) {
+    return ContentHistoryContributors(
+      publishers: publishers ?? this.publishers,
+    );
+  }
+}
+
+class ContentHistoryExpandable {
+  final String? lastUpdated;
+  final String? previousVersion;
+  final String? contributors;
+  final String? nextVersion;
+
+  ContentHistoryExpandable(
+      {this.lastUpdated,
+      this.previousVersion,
+      this.contributors,
+      this.nextVersion});
+
+  factory ContentHistoryExpandable.fromJson(Map<String, Object?> json) {
+    return ContentHistoryExpandable(
+      lastUpdated: json[r'lastUpdated'] as String?,
+      previousVersion: json[r'previousVersion'] as String?,
+      contributors: json[r'contributors'] as String?,
+      nextVersion: json[r'nextVersion'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var lastUpdated = this.lastUpdated;
+    var previousVersion = this.previousVersion;
+    var contributors = this.contributors;
+    var nextVersion = this.nextVersion;
+
+    final json = <String, Object?>{};
+    if (lastUpdated != null) {
+      json[r'lastUpdated'] = lastUpdated;
+    }
+    if (previousVersion != null) {
+      json[r'previousVersion'] = previousVersion;
+    }
+    if (contributors != null) {
+      json[r'contributors'] = contributors;
+    }
+    if (nextVersion != null) {
+      json[r'nextVersion'] = nextVersion;
+    }
+    return json;
+  }
+
+  ContentHistoryExpandable copyWith(
+      {String? lastUpdated,
+      String? previousVersion,
+      String? contributors,
+      String? nextVersion}) {
+    return ContentHistoryExpandable(
+      lastUpdated: lastUpdated ?? this.lastUpdated,
+      previousVersion: previousVersion ?? this.previousVersion,
+      contributors: contributors ?? this.contributors,
+      nextVersion: nextVersion ?? this.nextVersion,
+    );
+  }
+}
+
 class ContentId {
   ContentId();
 
@@ -7028,152 +7716,64 @@ class ContentLookAndFeel {
   }
 }
 
-class ContentMetadataCurrentuserFavourited {
-  final bool isFavourite;
-  final DateTime? favouritedDate;
+/// Metadata object for page, blogpost, comment content
+class ContentMetadata {
+  final ContentMetadataCurrentuser? currentuser;
+  final GenericLinks? properties;
+  final Map<String, dynamic>? frontend;
+  final LabelArray? labels;
 
-  ContentMetadataCurrentuserFavourited({bool? isFavourite, this.favouritedDate})
-      : isFavourite = isFavourite ?? false;
+  ContentMetadata(
+      {this.currentuser, this.properties, this.frontend, this.labels});
 
-  factory ContentMetadataCurrentuserFavourited.fromJson(
-      Map<String, Object?> json) {
-    return ContentMetadataCurrentuserFavourited(
-      isFavourite: json[r'isFavourite'] as bool? ?? false,
-      favouritedDate:
-          DateTime.tryParse(json[r'favouritedDate'] as String? ?? ''),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var isFavourite = this.isFavourite;
-    var favouritedDate = this.favouritedDate;
-
-    final json = <String, Object?>{};
-    json[r'isFavourite'] = isFavourite;
-    if (favouritedDate != null) {
-      json[r'favouritedDate'] = favouritedDate.toIso8601String();
-    }
-    return json;
-  }
-
-  ContentMetadataCurrentuserFavourited copyWith(
-      {bool? isFavourite, DateTime? favouritedDate}) {
-    return ContentMetadataCurrentuserFavourited(
-      isFavourite: isFavourite ?? this.isFavourite,
-      favouritedDate: favouritedDate ?? this.favouritedDate,
-    );
-  }
-}
-
-class ContentMetadataCurrentuserLastmodified {
-  final Version? version;
-  final String? friendlyLastModified;
-
-  ContentMetadataCurrentuserLastmodified(
-      {this.version, this.friendlyLastModified});
-
-  factory ContentMetadataCurrentuserLastmodified.fromJson(
-      Map<String, Object?> json) {
-    return ContentMetadataCurrentuserLastmodified(
-      version: json[r'version'] != null
-          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+  factory ContentMetadata.fromJson(Map<String, Object?> json) {
+    return ContentMetadata(
+      currentuser: json[r'currentuser'] != null
+          ? ContentMetadataCurrentuser.fromJson(
+              json[r'currentuser']! as Map<String, Object?>)
           : null,
-      friendlyLastModified: json[r'friendlyLastModified'] as String?,
+      properties: json[r'properties'] != null
+          ? GenericLinks.fromJson(json[r'properties']! as Map<String, Object?>)
+          : null,
+      frontend: json[r'frontend'] as Map<String, Object?>?,
+      labels: json[r'labels'] != null
+          ? LabelArray.fromJson(json[r'labels']! as Map<String, Object?>)
+          : null,
     );
   }
 
   Map<String, Object?> toJson() {
-    var version = this.version;
-    var friendlyLastModified = this.friendlyLastModified;
+    var currentuser = this.currentuser;
+    var properties = this.properties;
+    var frontend = this.frontend;
+    var labels = this.labels;
 
     final json = <String, Object?>{};
-    if (version != null) {
-      json[r'version'] = version.toJson();
+    if (currentuser != null) {
+      json[r'currentuser'] = currentuser.toJson();
     }
-    if (friendlyLastModified != null) {
-      json[r'friendlyLastModified'] = friendlyLastModified;
+    if (properties != null) {
+      json[r'properties'] = properties.toJson();
+    }
+    if (frontend != null) {
+      json[r'frontend'] = frontend;
+    }
+    if (labels != null) {
+      json[r'labels'] = labels.toJson();
     }
     return json;
   }
 
-  ContentMetadataCurrentuserLastmodified copyWith(
-      {Version? version, String? friendlyLastModified}) {
-    return ContentMetadataCurrentuserLastmodified(
-      version: version ?? this.version,
-      friendlyLastModified: friendlyLastModified ?? this.friendlyLastModified,
-    );
-  }
-}
-
-class ContentMetadataCurrentuserLastcontributed {
-  final String? status;
-  final DateTime? when;
-
-  ContentMetadataCurrentuserLastcontributed({this.status, this.when});
-
-  factory ContentMetadataCurrentuserLastcontributed.fromJson(
-      Map<String, Object?> json) {
-    return ContentMetadataCurrentuserLastcontributed(
-      status: json[r'status'] as String?,
-      when: DateTime.tryParse(json[r'when'] as String? ?? ''),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var status = this.status;
-    var when = this.when;
-
-    final json = <String, Object?>{};
-    if (status != null) {
-      json[r'status'] = status;
-    }
-    if (when != null) {
-      json[r'when'] = when.toIso8601String();
-    }
-    return json;
-  }
-
-  ContentMetadataCurrentuserLastcontributed copyWith(
-      {String? status, DateTime? when}) {
-    return ContentMetadataCurrentuserLastcontributed(
-      status: status ?? this.status,
-      when: when ?? this.when,
-    );
-  }
-}
-
-class ContentMetadataCurrentuserViewed {
-  final DateTime? lastSeen;
-  final String? friendlyLastSeen;
-
-  ContentMetadataCurrentuserViewed({this.lastSeen, this.friendlyLastSeen});
-
-  factory ContentMetadataCurrentuserViewed.fromJson(Map<String, Object?> json) {
-    return ContentMetadataCurrentuserViewed(
-      lastSeen: DateTime.tryParse(json[r'lastSeen'] as String? ?? ''),
-      friendlyLastSeen: json[r'friendlyLastSeen'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var lastSeen = this.lastSeen;
-    var friendlyLastSeen = this.friendlyLastSeen;
-
-    final json = <String, Object?>{};
-    if (lastSeen != null) {
-      json[r'lastSeen'] = lastSeen.toIso8601String();
-    }
-    if (friendlyLastSeen != null) {
-      json[r'friendlyLastSeen'] = friendlyLastSeen;
-    }
-    return json;
-  }
-
-  ContentMetadataCurrentuserViewed copyWith(
-      {DateTime? lastSeen, String? friendlyLastSeen}) {
-    return ContentMetadataCurrentuserViewed(
-      lastSeen: lastSeen ?? this.lastSeen,
-      friendlyLastSeen: friendlyLastSeen ?? this.friendlyLastSeen,
+  ContentMetadata copyWith(
+      {ContentMetadataCurrentuser? currentuser,
+      GenericLinks? properties,
+      Map<String, dynamic>? frontend,
+      LabelArray? labels}) {
+    return ContentMetadata(
+      currentuser: currentuser ?? this.currentuser,
+      properties: properties ?? this.properties,
+      frontend: frontend ?? this.frontend,
+      labels: labels ?? this.labels,
     );
   }
 }
@@ -7244,64 +7844,152 @@ class ContentMetadataCurrentuser {
   }
 }
 
-/// Metadata object for page, blogpost, comment content
-class ContentMetadata {
-  final ContentMetadataCurrentuser? currentuser;
-  final GenericLinks? properties;
-  final Map<String, dynamic>? frontend;
-  final LabelArray? labels;
+class ContentMetadataCurrentuserFavourited {
+  final bool isFavourite;
+  final DateTime? favouritedDate;
 
-  ContentMetadata(
-      {this.currentuser, this.properties, this.frontend, this.labels});
+  ContentMetadataCurrentuserFavourited({bool? isFavourite, this.favouritedDate})
+      : isFavourite = isFavourite ?? false;
 
-  factory ContentMetadata.fromJson(Map<String, Object?> json) {
-    return ContentMetadata(
-      currentuser: json[r'currentuser'] != null
-          ? ContentMetadataCurrentuser.fromJson(
-              json[r'currentuser']! as Map<String, Object?>)
-          : null,
-      properties: json[r'properties'] != null
-          ? GenericLinks.fromJson(json[r'properties']! as Map<String, Object?>)
-          : null,
-      frontend: json[r'frontend'] as Map<String, Object?>?,
-      labels: json[r'labels'] != null
-          ? LabelArray.fromJson(json[r'labels']! as Map<String, Object?>)
-          : null,
+  factory ContentMetadataCurrentuserFavourited.fromJson(
+      Map<String, Object?> json) {
+    return ContentMetadataCurrentuserFavourited(
+      isFavourite: json[r'isFavourite'] as bool? ?? false,
+      favouritedDate:
+          DateTime.tryParse(json[r'favouritedDate'] as String? ?? ''),
     );
   }
 
   Map<String, Object?> toJson() {
-    var currentuser = this.currentuser;
-    var properties = this.properties;
-    var frontend = this.frontend;
-    var labels = this.labels;
+    var isFavourite = this.isFavourite;
+    var favouritedDate = this.favouritedDate;
 
     final json = <String, Object?>{};
-    if (currentuser != null) {
-      json[r'currentuser'] = currentuser.toJson();
-    }
-    if (properties != null) {
-      json[r'properties'] = properties.toJson();
-    }
-    if (frontend != null) {
-      json[r'frontend'] = frontend;
-    }
-    if (labels != null) {
-      json[r'labels'] = labels.toJson();
+    json[r'isFavourite'] = isFavourite;
+    if (favouritedDate != null) {
+      json[r'favouritedDate'] = favouritedDate.toIso8601String();
     }
     return json;
   }
 
-  ContentMetadata copyWith(
-      {ContentMetadataCurrentuser? currentuser,
-      GenericLinks? properties,
-      Map<String, dynamic>? frontend,
-      LabelArray? labels}) {
-    return ContentMetadata(
-      currentuser: currentuser ?? this.currentuser,
-      properties: properties ?? this.properties,
-      frontend: frontend ?? this.frontend,
-      labels: labels ?? this.labels,
+  ContentMetadataCurrentuserFavourited copyWith(
+      {bool? isFavourite, DateTime? favouritedDate}) {
+    return ContentMetadataCurrentuserFavourited(
+      isFavourite: isFavourite ?? this.isFavourite,
+      favouritedDate: favouritedDate ?? this.favouritedDate,
+    );
+  }
+}
+
+class ContentMetadataCurrentuserLastcontributed {
+  final String? status;
+  final DateTime? when;
+
+  ContentMetadataCurrentuserLastcontributed({this.status, this.when});
+
+  factory ContentMetadataCurrentuserLastcontributed.fromJson(
+      Map<String, Object?> json) {
+    return ContentMetadataCurrentuserLastcontributed(
+      status: json[r'status'] as String?,
+      when: DateTime.tryParse(json[r'when'] as String? ?? ''),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var status = this.status;
+    var when = this.when;
+
+    final json = <String, Object?>{};
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (when != null) {
+      json[r'when'] = when.toIso8601String();
+    }
+    return json;
+  }
+
+  ContentMetadataCurrentuserLastcontributed copyWith(
+      {String? status, DateTime? when}) {
+    return ContentMetadataCurrentuserLastcontributed(
+      status: status ?? this.status,
+      when: when ?? this.when,
+    );
+  }
+}
+
+class ContentMetadataCurrentuserLastmodified {
+  final Version? version;
+  final String? friendlyLastModified;
+
+  ContentMetadataCurrentuserLastmodified(
+      {this.version, this.friendlyLastModified});
+
+  factory ContentMetadataCurrentuserLastmodified.fromJson(
+      Map<String, Object?> json) {
+    return ContentMetadataCurrentuserLastmodified(
+      version: json[r'version'] != null
+          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      friendlyLastModified: json[r'friendlyLastModified'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var version = this.version;
+    var friendlyLastModified = this.friendlyLastModified;
+
+    final json = <String, Object?>{};
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
+    if (friendlyLastModified != null) {
+      json[r'friendlyLastModified'] = friendlyLastModified;
+    }
+    return json;
+  }
+
+  ContentMetadataCurrentuserLastmodified copyWith(
+      {Version? version, String? friendlyLastModified}) {
+    return ContentMetadataCurrentuserLastmodified(
+      version: version ?? this.version,
+      friendlyLastModified: friendlyLastModified ?? this.friendlyLastModified,
+    );
+  }
+}
+
+class ContentMetadataCurrentuserViewed {
+  final DateTime? lastSeen;
+  final String? friendlyLastSeen;
+
+  ContentMetadataCurrentuserViewed({this.lastSeen, this.friendlyLastSeen});
+
+  factory ContentMetadataCurrentuserViewed.fromJson(Map<String, Object?> json) {
+    return ContentMetadataCurrentuserViewed(
+      lastSeen: DateTime.tryParse(json[r'lastSeen'] as String? ?? ''),
+      friendlyLastSeen: json[r'friendlyLastSeen'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var lastSeen = this.lastSeen;
+    var friendlyLastSeen = this.friendlyLastSeen;
+
+    final json = <String, Object?>{};
+    if (lastSeen != null) {
+      json[r'lastSeen'] = lastSeen.toIso8601String();
+    }
+    if (friendlyLastSeen != null) {
+      json[r'friendlyLastSeen'] = friendlyLastSeen;
+    }
+    return json;
+  }
+
+  ContentMetadataCurrentuserViewed copyWith(
+      {DateTime? lastSeen, String? friendlyLastSeen}) {
+    return ContentMetadataCurrentuserViewed(
+      lastSeen: lastSeen ?? this.lastSeen,
+      friendlyLastSeen: friendlyLastSeen ?? this.friendlyLastSeen,
     );
   }
 }
@@ -7320,50 +8008,67 @@ class ContentPage {
   }
 }
 
-class ContentPropertyVersion {
-  final DateTime when;
-  final String message;
-  final int number;
-  final bool minorEdit;
+/// This object represents the request for the content permission check API.
+class ContentPermissionRequest {
+  final PermissionSubjectWithGroupId subject;
 
-  ContentPropertyVersion(
-      {required this.when,
-      required this.message,
-      required this.number,
-      required this.minorEdit});
+  /// The content permission operation to check.
+  final ContentPermissionRequestOperation operation;
 
-  factory ContentPropertyVersion.fromJson(Map<String, Object?> json) {
-    return ContentPropertyVersion(
-      when: DateTime.tryParse(json[r'when'] as String? ?? '') ?? DateTime(0),
-      message: json[r'message'] as String? ?? '',
-      number: (json[r'number'] as num?)?.toInt() ?? 0,
-      minorEdit: json[r'minorEdit'] as bool? ?? false,
+  ContentPermissionRequest({required this.subject, required this.operation});
+
+  factory ContentPermissionRequest.fromJson(Map<String, Object?> json) {
+    return ContentPermissionRequest(
+      subject: PermissionSubjectWithGroupId.fromJson(
+          json[r'subject'] as Map<String, Object?>? ?? const {}),
+      operation: ContentPermissionRequestOperation.fromValue(
+          json[r'operation'] as String? ?? ''),
     );
   }
 
   Map<String, Object?> toJson() {
-    var when = this.when;
-    var message = this.message;
-    var number = this.number;
-    var minorEdit = this.minorEdit;
+    var subject = this.subject;
+    var operation = this.operation;
 
     final json = <String, Object?>{};
-    json[r'when'] = when.toIso8601String();
-    json[r'message'] = message;
-    json[r'number'] = number;
-    json[r'minorEdit'] = minorEdit;
+    json[r'subject'] = subject.toJson();
+    json[r'operation'] = operation.value;
     return json;
   }
 
-  ContentPropertyVersion copyWith(
-      {DateTime? when, String? message, int? number, bool? minorEdit}) {
-    return ContentPropertyVersion(
-      when: when ?? this.when,
-      message: message ?? this.message,
-      number: number ?? this.number,
-      minorEdit: minorEdit ?? this.minorEdit,
+  ContentPermissionRequest copyWith(
+      {PermissionSubjectWithGroupId? subject,
+      ContentPermissionRequestOperation? operation}) {
+    return ContentPermissionRequest(
+      subject: subject ?? this.subject,
+      operation: operation ?? this.operation,
     );
   }
+}
+
+class ContentPermissionRequestOperation {
+  static const read = ContentPermissionRequestOperation._('read');
+  static const update = ContentPermissionRequestOperation._('update');
+  static const delete = ContentPermissionRequestOperation._('delete');
+
+  static const values = [
+    read,
+    update,
+    delete,
+  ];
+  final String value;
+
+  const ContentPermissionRequestOperation._(this.value);
+
+  static ContentPermissionRequestOperation fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ContentPermissionRequestOperation._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 class ContentProperty {
@@ -7562,6 +8267,42 @@ class ContentPropertyCreateNoKey {
   }
 }
 
+class ContentPropertyUpdate {
+  /// The value of the content property. This can be empty or a complex object.
+  final Map<String, dynamic> value;
+
+  /// The version number of the property.
+  final ContentPropertyUpdateVersion version;
+
+  ContentPropertyUpdate({required this.value, required this.version});
+
+  factory ContentPropertyUpdate.fromJson(Map<String, Object?> json) {
+    return ContentPropertyUpdate(
+      value: json[r'value'] as Map<String, Object?>? ?? {},
+      version: ContentPropertyUpdateVersion.fromJson(
+          json[r'version'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var value = this.value;
+    var version = this.version;
+
+    final json = <String, Object?>{};
+    json[r'value'] = value;
+    json[r'version'] = version.toJson();
+    return json;
+  }
+
+  ContentPropertyUpdate copyWith(
+      {Map<String, dynamic>? value, ContentPropertyUpdateVersion? version}) {
+    return ContentPropertyUpdate(
+      value: value ?? this.value,
+      version: version ?? this.version,
+    );
+  }
+}
+
 /// The version number of the property.
 class ContentPropertyUpdateVersion {
   /// The new version for the updated content property. Set this to the
@@ -7602,163 +8343,48 @@ class ContentPropertyUpdateVersion {
   }
 }
 
-class ContentPropertyUpdate {
-  /// The value of the content property. This can be empty or a complex object.
-  final Map<String, dynamic> value;
+class ContentPropertyVersion {
+  final DateTime when;
+  final String message;
+  final int number;
+  final bool minorEdit;
 
-  /// The version number of the property.
-  final ContentPropertyUpdateVersion version;
+  ContentPropertyVersion(
+      {required this.when,
+      required this.message,
+      required this.number,
+      required this.minorEdit});
 
-  ContentPropertyUpdate({required this.value, required this.version});
-
-  factory ContentPropertyUpdate.fromJson(Map<String, Object?> json) {
-    return ContentPropertyUpdate(
-      value: json[r'value'] as Map<String, Object?>? ?? {},
-      version: ContentPropertyUpdateVersion.fromJson(
-          json[r'version'] as Map<String, Object?>? ?? const {}),
+  factory ContentPropertyVersion.fromJson(Map<String, Object?> json) {
+    return ContentPropertyVersion(
+      when: DateTime.tryParse(json[r'when'] as String? ?? '') ?? DateTime(0),
+      message: json[r'message'] as String? ?? '',
+      number: (json[r'number'] as num?)?.toInt() ?? 0,
+      minorEdit: json[r'minorEdit'] as bool? ?? false,
     );
   }
 
   Map<String, Object?> toJson() {
-    var value = this.value;
-    var version = this.version;
+    var when = this.when;
+    var message = this.message;
+    var number = this.number;
+    var minorEdit = this.minorEdit;
 
     final json = <String, Object?>{};
-    json[r'value'] = value;
-    json[r'version'] = version.toJson();
+    json[r'when'] = when.toIso8601String();
+    json[r'message'] = message;
+    json[r'number'] = number;
+    json[r'minorEdit'] = minorEdit;
     return json;
   }
 
-  ContentPropertyUpdate copyWith(
-      {Map<String, dynamic>? value, ContentPropertyUpdateVersion? version}) {
-    return ContentPropertyUpdate(
-      value: value ?? this.value,
-      version: version ?? this.version,
-    );
-  }
-}
-
-class ContentRestrictionRestrictionsExpandable {
-  final String? user;
-  final String? group;
-
-  ContentRestrictionRestrictionsExpandable({this.user, this.group});
-
-  factory ContentRestrictionRestrictionsExpandable.fromJson(
-      Map<String, Object?> json) {
-    return ContentRestrictionRestrictionsExpandable(
-      user: json[r'user'] as String?,
-      group: json[r'group'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var user = this.user;
-    var group = this.group;
-
-    final json = <String, Object?>{};
-    if (user != null) {
-      json[r'user'] = user;
-    }
-    if (group != null) {
-      json[r'group'] = group;
-    }
-    return json;
-  }
-
-  ContentRestrictionRestrictionsExpandable copyWith(
-      {String? user, String? group}) {
-    return ContentRestrictionRestrictionsExpandable(
-      user: user ?? this.user,
-      group: group ?? this.group,
-    );
-  }
-}
-
-class ContentRestrictionRestrictions {
-  final UserArray? user;
-  final GroupArray? group;
-  final ContentRestrictionRestrictionsExpandable? expandable;
-
-  ContentRestrictionRestrictions({this.user, this.group, this.expandable});
-
-  factory ContentRestrictionRestrictions.fromJson(Map<String, Object?> json) {
-    return ContentRestrictionRestrictions(
-      user: json[r'user'] != null
-          ? UserArray.fromJson(json[r'user']! as Map<String, Object?>)
-          : null,
-      group: json[r'group'] != null
-          ? GroupArray.fromJson(json[r'group']! as Map<String, Object?>)
-          : null,
-      expandable: json[r'_expandable'] != null
-          ? ContentRestrictionRestrictionsExpandable.fromJson(
-              json[r'_expandable']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var user = this.user;
-    var group = this.group;
-    var expandable = this.expandable;
-
-    final json = <String, Object?>{};
-    if (user != null) {
-      json[r'user'] = user.toJson();
-    }
-    if (group != null) {
-      json[r'group'] = group.toJson();
-    }
-    if (expandable != null) {
-      json[r'_expandable'] = expandable.toJson();
-    }
-    return json;
-  }
-
-  ContentRestrictionRestrictions copyWith(
-      {UserArray? user,
-      GroupArray? group,
-      ContentRestrictionRestrictionsExpandable? expandable}) {
-    return ContentRestrictionRestrictions(
-      user: user ?? this.user,
-      group: group ?? this.group,
-      expandable: expandable ?? this.expandable,
-    );
-  }
-}
-
-class ContentRestrictionExpandable {
-  final String? restrictions;
-  final String? content;
-
-  ContentRestrictionExpandable({this.restrictions, this.content});
-
-  factory ContentRestrictionExpandable.fromJson(Map<String, Object?> json) {
-    return ContentRestrictionExpandable(
-      restrictions: json[r'restrictions'] as String?,
-      content: json[r'content'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var restrictions = this.restrictions;
-    var content = this.content;
-
-    final json = <String, Object?>{};
-    if (restrictions != null) {
-      json[r'restrictions'] = restrictions;
-    }
-    if (content != null) {
-      json[r'content'] = content;
-    }
-    return json;
-  }
-
-  ContentRestrictionExpandable copyWith(
-      {String? restrictions, String? content}) {
-    return ContentRestrictionExpandable(
-      restrictions: restrictions ?? this.restrictions,
-      content: content ?? this.content,
+  ContentPropertyVersion copyWith(
+      {DateTime? when, String? message, int? number, bool? minorEdit}) {
+    return ContentPropertyVersion(
+      when: when ?? this.when,
+      message: message ?? this.message,
+      number: number ?? this.number,
+      minorEdit: minorEdit ?? this.minorEdit,
     );
   }
 }
@@ -7946,6 +8572,346 @@ class ContentRestrictionArray {
   }
 }
 
+class ContentRestrictionExpandable {
+  final String? restrictions;
+  final String? content;
+
+  ContentRestrictionExpandable({this.restrictions, this.content});
+
+  factory ContentRestrictionExpandable.fromJson(Map<String, Object?> json) {
+    return ContentRestrictionExpandable(
+      restrictions: json[r'restrictions'] as String?,
+      content: json[r'content'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var restrictions = this.restrictions;
+    var content = this.content;
+
+    final json = <String, Object?>{};
+    if (restrictions != null) {
+      json[r'restrictions'] = restrictions;
+    }
+    if (content != null) {
+      json[r'content'] = content;
+    }
+    return json;
+  }
+
+  ContentRestrictionExpandable copyWith(
+      {String? restrictions, String? content}) {
+    return ContentRestrictionExpandable(
+      restrictions: restrictions ?? this.restrictions,
+      content: content ?? this.content,
+    );
+  }
+}
+
+class ContentRestrictionRestrictions {
+  final UserArray? user;
+  final GroupArray? group;
+  final ContentRestrictionRestrictionsExpandable? expandable;
+
+  ContentRestrictionRestrictions({this.user, this.group, this.expandable});
+
+  factory ContentRestrictionRestrictions.fromJson(Map<String, Object?> json) {
+    return ContentRestrictionRestrictions(
+      user: json[r'user'] != null
+          ? UserArray.fromJson(json[r'user']! as Map<String, Object?>)
+          : null,
+      group: json[r'group'] != null
+          ? GroupArray.fromJson(json[r'group']! as Map<String, Object?>)
+          : null,
+      expandable: json[r'_expandable'] != null
+          ? ContentRestrictionRestrictionsExpandable.fromJson(
+              json[r'_expandable']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var user = this.user;
+    var group = this.group;
+    var expandable = this.expandable;
+
+    final json = <String, Object?>{};
+    if (user != null) {
+      json[r'user'] = user.toJson();
+    }
+    if (group != null) {
+      json[r'group'] = group.toJson();
+    }
+    if (expandable != null) {
+      json[r'_expandable'] = expandable.toJson();
+    }
+    return json;
+  }
+
+  ContentRestrictionRestrictions copyWith(
+      {UserArray? user,
+      GroupArray? group,
+      ContentRestrictionRestrictionsExpandable? expandable}) {
+    return ContentRestrictionRestrictions(
+      user: user ?? this.user,
+      group: group ?? this.group,
+      expandable: expandable ?? this.expandable,
+    );
+  }
+}
+
+class ContentRestrictionRestrictionsExpandable {
+  final String? user;
+  final String? group;
+
+  ContentRestrictionRestrictionsExpandable({this.user, this.group});
+
+  factory ContentRestrictionRestrictionsExpandable.fromJson(
+      Map<String, Object?> json) {
+    return ContentRestrictionRestrictionsExpandable(
+      user: json[r'user'] as String?,
+      group: json[r'group'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var user = this.user;
+    var group = this.group;
+
+    final json = <String, Object?>{};
+    if (user != null) {
+      json[r'user'] = user;
+    }
+    if (group != null) {
+      json[r'group'] = group;
+    }
+    return json;
+  }
+
+  ContentRestrictionRestrictionsExpandable copyWith(
+      {String? user, String? group}) {
+    return ContentRestrictionRestrictionsExpandable(
+      user: user ?? this.user,
+      group: group ?? this.group,
+    );
+  }
+}
+
+class ContentRestrictionUpdate {
+  /// The restriction operation applied to content.
+  final ContentRestrictionUpdateOperation operation;
+
+  /// The users/groups that the restrictions will be applied to. At least one of
+  /// `user` or `group` must be specified for this object.
+  final ContentRestrictionUpdateRestrictions restrictions;
+
+  ContentRestrictionUpdate(
+      {required this.operation, required this.restrictions});
+
+  factory ContentRestrictionUpdate.fromJson(Map<String, Object?> json) {
+    return ContentRestrictionUpdate(
+      operation: ContentRestrictionUpdateOperation.fromValue(
+          json[r'operation'] as String? ?? ''),
+      restrictions: ContentRestrictionUpdateRestrictions.fromJson(
+          json[r'restrictions'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var operation = this.operation;
+    var restrictions = this.restrictions;
+
+    final json = <String, Object?>{};
+    json[r'operation'] = operation.value;
+    json[r'restrictions'] = restrictions.toJson();
+    return json;
+  }
+
+  ContentRestrictionUpdate copyWith(
+      {ContentRestrictionUpdateOperation? operation,
+      ContentRestrictionUpdateRestrictions? restrictions}) {
+    return ContentRestrictionUpdate(
+      operation: operation ?? this.operation,
+      restrictions: restrictions ?? this.restrictions,
+    );
+  }
+}
+
+class ContentRestrictionUpdateOperation {
+  static const administer = ContentRestrictionUpdateOperation._('administer');
+  static const copy = ContentRestrictionUpdateOperation._('copy');
+  static const create = ContentRestrictionUpdateOperation._('create');
+  static const delete = ContentRestrictionUpdateOperation._('delete');
+  static const export$ = ContentRestrictionUpdateOperation._('export');
+  static const move = ContentRestrictionUpdateOperation._('move');
+  static const purge = ContentRestrictionUpdateOperation._('purge');
+  static const purgeVersion =
+      ContentRestrictionUpdateOperation._('purge_version');
+  static const read = ContentRestrictionUpdateOperation._('read');
+  static const restore = ContentRestrictionUpdateOperation._('restore');
+  static const update = ContentRestrictionUpdateOperation._('update');
+  static const use = ContentRestrictionUpdateOperation._('use');
+
+  static const values = [
+    administer,
+    copy,
+    create,
+    delete,
+    export$,
+    move,
+    purge,
+    purgeVersion,
+    read,
+    restore,
+    update,
+    use,
+  ];
+  final String value;
+
+  const ContentRestrictionUpdateOperation._(this.value);
+
+  static ContentRestrictionUpdateOperation fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ContentRestrictionUpdateOperation._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class ContentRestrictionUpdateArray {
+  ContentRestrictionUpdateArray();
+
+  factory ContentRestrictionUpdateArray.fromJson(Map<String, Object?> json) {
+    return ContentRestrictionUpdateArray();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+/// The users/groups that the restrictions will be applied to. At least one of
+/// `user` or `group` must be specified for this object.
+class ContentRestrictionUpdateRestrictions {
+  /// The users that the restrictions will be applied to. This array must
+  /// have at least one item, otherwise it should be omitted.
+  final List<ContentRestrictionUpdateRestrictionsUserItem> user;
+
+  /// The groups that the restrictions will be applied to. This array must
+  /// have at least one item, otherwise it should be omitted.
+  final List<ContentRestrictionUpdateRestrictionsGroupItem> group;
+
+  ContentRestrictionUpdateRestrictions(
+      {List<ContentRestrictionUpdateRestrictionsUserItem>? user,
+      List<ContentRestrictionUpdateRestrictionsGroupItem>? group})
+      : user = user ?? [],
+        group = group ?? [];
+
+  factory ContentRestrictionUpdateRestrictions.fromJson(
+      Map<String, Object?> json) {
+    return ContentRestrictionUpdateRestrictions(
+      user: (json[r'user'] as List<Object?>?)
+              ?.map((i) =>
+                  ContentRestrictionUpdateRestrictionsUserItem.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      group: (json[r'group'] as List<Object?>?)
+              ?.map((i) =>
+                  ContentRestrictionUpdateRestrictionsGroupItem.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var user = this.user;
+    var group = this.group;
+
+    final json = <String, Object?>{};
+    json[r'user'] = user.map((i) => i.toJson()).toList();
+    json[r'group'] = group.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  ContentRestrictionUpdateRestrictions copyWith(
+      {List<ContentRestrictionUpdateRestrictionsUserItem>? user,
+      List<ContentRestrictionUpdateRestrictionsGroupItem>? group}) {
+    return ContentRestrictionUpdateRestrictions(
+      user: user ?? this.user,
+      group: group ?? this.group,
+    );
+  }
+}
+
+/// A group that the restriction will be applied to.
+class ContentRestrictionUpdateRestrictionsGroupItem {
+  /// Set to 'group'.
+  final ContentRestrictionUpdateRestrictionsGroupItemType type;
+
+  /// The name of the group.
+  final String name;
+
+  ContentRestrictionUpdateRestrictionsGroupItem(
+      {required this.type, required this.name});
+
+  factory ContentRestrictionUpdateRestrictionsGroupItem.fromJson(
+      Map<String, Object?> json) {
+    return ContentRestrictionUpdateRestrictionsGroupItem(
+      type: ContentRestrictionUpdateRestrictionsGroupItemType.fromValue(
+          json[r'type'] as String? ?? ''),
+      name: json[r'name'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    json[r'type'] = type.value;
+    json[r'name'] = name;
+    return json;
+  }
+
+  ContentRestrictionUpdateRestrictionsGroupItem copyWith(
+      {ContentRestrictionUpdateRestrictionsGroupItemType? type, String? name}) {
+    return ContentRestrictionUpdateRestrictionsGroupItem(
+      type: type ?? this.type,
+      name: name ?? this.name,
+    );
+  }
+}
+
+class ContentRestrictionUpdateRestrictionsGroupItemType {
+  static const group =
+      ContentRestrictionUpdateRestrictionsGroupItemType._('group');
+
+  static const values = [
+    group,
+  ];
+  final String value;
+
+  const ContentRestrictionUpdateRestrictionsGroupItemType._(this.value);
+
+  static ContentRestrictionUpdateRestrictionsGroupItemType fromValue(
+          String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () =>
+              ContentRestrictionUpdateRestrictionsGroupItemType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 /// A user that the restriction will be applied to. Either the `username`
 /// or the `userKey` must be specified to identify the user.
 class ContentRestrictionUpdateRestrictionsUserItem {
@@ -8055,542 +9021,51 @@ class ContentRestrictionUpdateRestrictionsUserItemType {
   String toString() => value;
 }
 
-/// A group that the restriction will be applied to.
-class ContentRestrictionUpdateRestrictionsGroupItem {
-  /// Set to 'group'.
-  final ContentRestrictionUpdateRestrictionsGroupItemType type;
+class ContentRestrictions {
+  final ContentRestriction? read;
+  final ContentRestriction? update;
+  final GenericLinks links;
 
-  /// The name of the group.
-  final String name;
+  ContentRestrictions({this.read, this.update, required this.links});
 
-  ContentRestrictionUpdateRestrictionsGroupItem(
-      {required this.type, required this.name});
-
-  factory ContentRestrictionUpdateRestrictionsGroupItem.fromJson(
-      Map<String, Object?> json) {
-    return ContentRestrictionUpdateRestrictionsGroupItem(
-      type: ContentRestrictionUpdateRestrictionsGroupItemType.fromValue(
-          json[r'type'] as String? ?? ''),
-      name: json[r'name'] as String? ?? '',
+  factory ContentRestrictions.fromJson(Map<String, Object?> json) {
+    return ContentRestrictions(
+      read: json[r'read'] != null
+          ? ContentRestriction.fromJson(json[r'read']! as Map<String, Object?>)
+          : null,
+      update: json[r'update'] != null
+          ? ContentRestriction.fromJson(
+              json[r'update']! as Map<String, Object?>)
+          : null,
+      links: GenericLinks.fromJson(
+          json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
   }
 
   Map<String, Object?> toJson() {
-    var type = this.type;
-    var name = this.name;
+    var read = this.read;
+    var update = this.update;
+    var links = this.links;
 
     final json = <String, Object?>{};
-    json[r'type'] = type.value;
-    json[r'name'] = name;
-    return json;
-  }
-
-  ContentRestrictionUpdateRestrictionsGroupItem copyWith(
-      {ContentRestrictionUpdateRestrictionsGroupItemType? type, String? name}) {
-    return ContentRestrictionUpdateRestrictionsGroupItem(
-      type: type ?? this.type,
-      name: name ?? this.name,
-    );
-  }
-}
-
-class ContentRestrictionUpdateRestrictionsGroupItemType {
-  static const group =
-      ContentRestrictionUpdateRestrictionsGroupItemType._('group');
-
-  static const values = [
-    group,
-  ];
-  final String value;
-
-  const ContentRestrictionUpdateRestrictionsGroupItemType._(this.value);
-
-  static ContentRestrictionUpdateRestrictionsGroupItemType fromValue(
-          String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () =>
-              ContentRestrictionUpdateRestrictionsGroupItemType._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-/// The users/groups that the restrictions will be applied to. At least one of
-/// `user` or `group` must be specified for this object.
-class ContentRestrictionUpdateRestrictions {
-  /// The users that the restrictions will be applied to. This array must
-  /// have at least one item, otherwise it should be omitted.
-  final List<ContentRestrictionUpdateRestrictionsUserItem> user;
-
-  /// The groups that the restrictions will be applied to. This array must
-  /// have at least one item, otherwise it should be omitted.
-  final List<ContentRestrictionUpdateRestrictionsGroupItem> group;
-
-  ContentRestrictionUpdateRestrictions(
-      {List<ContentRestrictionUpdateRestrictionsUserItem>? user,
-      List<ContentRestrictionUpdateRestrictionsGroupItem>? group})
-      : user = user ?? [],
-        group = group ?? [];
-
-  factory ContentRestrictionUpdateRestrictions.fromJson(
-      Map<String, Object?> json) {
-    return ContentRestrictionUpdateRestrictions(
-      user: (json[r'user'] as List<Object?>?)
-              ?.map((i) =>
-                  ContentRestrictionUpdateRestrictionsUserItem.fromJson(
-                      i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      group: (json[r'group'] as List<Object?>?)
-              ?.map((i) =>
-                  ContentRestrictionUpdateRestrictionsGroupItem.fromJson(
-                      i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var user = this.user;
-    var group = this.group;
-
-    final json = <String, Object?>{};
-    json[r'user'] = user.map((i) => i.toJson()).toList();
-    json[r'group'] = group.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  ContentRestrictionUpdateRestrictions copyWith(
-      {List<ContentRestrictionUpdateRestrictionsUserItem>? user,
-      List<ContentRestrictionUpdateRestrictionsGroupItem>? group}) {
-    return ContentRestrictionUpdateRestrictions(
-      user: user ?? this.user,
-      group: group ?? this.group,
-    );
-  }
-}
-
-class ContentRestrictionUpdate {
-  /// The restriction operation applied to content.
-  final ContentRestrictionUpdateOperation operation;
-
-  /// The users/groups that the restrictions will be applied to. At least one of
-  /// `user` or `group` must be specified for this object.
-  final ContentRestrictionUpdateRestrictions restrictions;
-
-  ContentRestrictionUpdate(
-      {required this.operation, required this.restrictions});
-
-  factory ContentRestrictionUpdate.fromJson(Map<String, Object?> json) {
-    return ContentRestrictionUpdate(
-      operation: ContentRestrictionUpdateOperation.fromValue(
-          json[r'operation'] as String? ?? ''),
-      restrictions: ContentRestrictionUpdateRestrictions.fromJson(
-          json[r'restrictions'] as Map<String, Object?>? ?? const {}),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var operation = this.operation;
-    var restrictions = this.restrictions;
-
-    final json = <String, Object?>{};
-    json[r'operation'] = operation.value;
-    json[r'restrictions'] = restrictions.toJson();
-    return json;
-  }
-
-  ContentRestrictionUpdate copyWith(
-      {ContentRestrictionUpdateOperation? operation,
-      ContentRestrictionUpdateRestrictions? restrictions}) {
-    return ContentRestrictionUpdate(
-      operation: operation ?? this.operation,
-      restrictions: restrictions ?? this.restrictions,
-    );
-  }
-}
-
-class ContentRestrictionUpdateOperation {
-  static const administer = ContentRestrictionUpdateOperation._('administer');
-  static const copy = ContentRestrictionUpdateOperation._('copy');
-  static const create = ContentRestrictionUpdateOperation._('create');
-  static const delete = ContentRestrictionUpdateOperation._('delete');
-  static const export$ = ContentRestrictionUpdateOperation._('export');
-  static const move = ContentRestrictionUpdateOperation._('move');
-  static const purge = ContentRestrictionUpdateOperation._('purge');
-  static const purgeVersion =
-      ContentRestrictionUpdateOperation._('purge_version');
-  static const read = ContentRestrictionUpdateOperation._('read');
-  static const restore = ContentRestrictionUpdateOperation._('restore');
-  static const update = ContentRestrictionUpdateOperation._('update');
-  static const use = ContentRestrictionUpdateOperation._('use');
-
-  static const values = [
-    administer,
-    copy,
-    create,
-    delete,
-    export$,
-    move,
-    purge,
-    purgeVersion,
-    read,
-    restore,
-    update,
-    use,
-  ];
-  final String value;
-
-  const ContentRestrictionUpdateOperation._(this.value);
-
-  static ContentRestrictionUpdateOperation fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => ContentRestrictionUpdateOperation._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class ContentRestrictionUpdateArray {
-  ContentRestrictionUpdateArray();
-
-  factory ContentRestrictionUpdateArray.fromJson(Map<String, Object?> json) {
-    return ContentRestrictionUpdateArray();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-/// A user that the restriction will be applied to. Either the `username`
-/// or the `userKey` must be specified to identify the user.
-class AddContentRestrictionRestrictionsUserItem {
-  /// Set to 'known'.
-  final AddContentRestrictionRestrictionsUserItemType type;
-
-  /// This property is no longer available and will be removed from the
-  /// documentation soon.
-  /// Use `accountId` instead.
-  /// See the
-  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
-  /// for details.
-  final String? username;
-
-  /// This property is no longer available and will be removed from the
-  /// documentation soon.
-  /// Use `accountId` instead.
-  /// See the
-  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
-  /// for details.
-  final String? userKey;
-
-  /// The account ID of the user, which uniquely identifies the user across all
-  /// Atlassian products.
-  /// For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.
-  final String accountId;
-
-  AddContentRestrictionRestrictionsUserItem(
-      {required this.type,
-      this.username,
-      this.userKey,
-      required this.accountId});
-
-  factory AddContentRestrictionRestrictionsUserItem.fromJson(
-      Map<String, Object?> json) {
-    return AddContentRestrictionRestrictionsUserItem(
-      type: AddContentRestrictionRestrictionsUserItemType.fromValue(
-          json[r'type'] as String? ?? ''),
-      username: json[r'username'] as String?,
-      userKey: json[r'userKey'] as String?,
-      accountId: json[r'accountId'] as String? ?? '',
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var type = this.type;
-    var username = this.username;
-    var userKey = this.userKey;
-    var accountId = this.accountId;
-
-    final json = <String, Object?>{};
-    json[r'type'] = type.value;
-    if (username != null) {
-      json[r'username'] = username;
+    if (read != null) {
+      json[r'read'] = read.toJson();
     }
-    if (userKey != null) {
-      json[r'userKey'] = userKey;
+    if (update != null) {
+      json[r'update'] = update.toJson();
     }
-    json[r'accountId'] = accountId;
+    json[r'_links'] = links.toJson();
     return json;
   }
 
-  AddContentRestrictionRestrictionsUserItem copyWith(
-      {AddContentRestrictionRestrictionsUserItemType? type,
-      String? username,
-      String? userKey,
-      String? accountId}) {
-    return AddContentRestrictionRestrictionsUserItem(
-      type: type ?? this.type,
-      username: username ?? this.username,
-      userKey: userKey ?? this.userKey,
-      accountId: accountId ?? this.accountId,
-    );
-  }
-}
-
-class AddContentRestrictionRestrictionsUserItemType {
-  static const known = AddContentRestrictionRestrictionsUserItemType._('known');
-  static const unknown =
-      AddContentRestrictionRestrictionsUserItemType._('unknown');
-  static const anonymous =
-      AddContentRestrictionRestrictionsUserItemType._('anonymous');
-  static const user = AddContentRestrictionRestrictionsUserItemType._('user');
-
-  static const values = [
-    known,
-    unknown,
-    anonymous,
-    user,
-  ];
-  final String value;
-
-  const AddContentRestrictionRestrictionsUserItemType._(this.value);
-
-  static AddContentRestrictionRestrictionsUserItemType fromValue(
-          String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => AddContentRestrictionRestrictionsUserItemType._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-/// A group that the restriction will be applied to.
-class AddContentRestrictionRestrictionsGroupItem {
-  /// Set to 'group'.
-  final AddContentRestrictionRestrictionsGroupItemType type;
-
-  /// The name of the group.
-  final String name;
-
-  AddContentRestrictionRestrictionsGroupItem(
-      {required this.type, required this.name});
-
-  factory AddContentRestrictionRestrictionsGroupItem.fromJson(
-      Map<String, Object?> json) {
-    return AddContentRestrictionRestrictionsGroupItem(
-      type: AddContentRestrictionRestrictionsGroupItemType.fromValue(
-          json[r'type'] as String? ?? ''),
-      name: json[r'name'] as String? ?? '',
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var type = this.type;
-    var name = this.name;
-
-    final json = <String, Object?>{};
-    json[r'type'] = type.value;
-    json[r'name'] = name;
-    return json;
-  }
-
-  AddContentRestrictionRestrictionsGroupItem copyWith(
-      {AddContentRestrictionRestrictionsGroupItemType? type, String? name}) {
-    return AddContentRestrictionRestrictionsGroupItem(
-      type: type ?? this.type,
-      name: name ?? this.name,
-    );
-  }
-}
-
-class AddContentRestrictionRestrictionsGroupItemType {
-  static const group =
-      AddContentRestrictionRestrictionsGroupItemType._('group');
-
-  static const values = [
-    group,
-  ];
-  final String value;
-
-  const AddContentRestrictionRestrictionsGroupItemType._(this.value);
-
-  static AddContentRestrictionRestrictionsGroupItemType fromValue(
-          String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () =>
-              AddContentRestrictionRestrictionsGroupItemType._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-/// The users/groups that the restrictions will be applied to. At least one of
-/// `user` or `group` must be specified for this object.
-class AddContentRestrictionRestrictions {
-  /// The users that the restrictions will be applied to. This array must
-  /// have at least one item, otherwise it should be omitted.
-  final List<AddContentRestrictionRestrictionsUserItem> user;
-
-  /// The groups that the restrictions will be applied to. This array must
-  /// have at least one item, otherwise it should be omitted.
-  final List<AddContentRestrictionRestrictionsGroupItem> group;
-
-  AddContentRestrictionRestrictions(
-      {List<AddContentRestrictionRestrictionsUserItem>? user,
-      List<AddContentRestrictionRestrictionsGroupItem>? group})
-      : user = user ?? [],
-        group = group ?? [];
-
-  factory AddContentRestrictionRestrictions.fromJson(
-      Map<String, Object?> json) {
-    return AddContentRestrictionRestrictions(
-      user: (json[r'user'] as List<Object?>?)
-              ?.map((i) => AddContentRestrictionRestrictionsUserItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      group: (json[r'group'] as List<Object?>?)
-              ?.map((i) => AddContentRestrictionRestrictionsGroupItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var user = this.user;
-    var group = this.group;
-
-    final json = <String, Object?>{};
-    json[r'user'] = user.map((i) => i.toJson()).toList();
-    json[r'group'] = group.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  AddContentRestrictionRestrictions copyWith(
-      {List<AddContentRestrictionRestrictionsUserItem>? user,
-      List<AddContentRestrictionRestrictionsGroupItem>? group}) {
-    return AddContentRestrictionRestrictions(
-      user: user ?? this.user,
-      group: group ?? this.group,
-    );
-  }
-}
-
-class AddContentRestriction {
-  /// The restriction operation applied to content.
-  final AddContentRestrictionOperation operation;
-
-  /// The users/groups that the restrictions will be applied to. At least one of
-  /// `user` or `group` must be specified for this object.
-  final AddContentRestrictionRestrictions restrictions;
-
-  AddContentRestriction({required this.operation, required this.restrictions});
-
-  factory AddContentRestriction.fromJson(Map<String, Object?> json) {
-    return AddContentRestriction(
-      operation: AddContentRestrictionOperation.fromValue(
-          json[r'operation'] as String? ?? ''),
-      restrictions: AddContentRestrictionRestrictions.fromJson(
-          json[r'restrictions'] as Map<String, Object?>? ?? const {}),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var operation = this.operation;
-    var restrictions = this.restrictions;
-
-    final json = <String, Object?>{};
-    json[r'operation'] = operation.value;
-    json[r'restrictions'] = restrictions.toJson();
-    return json;
-  }
-
-  AddContentRestriction copyWith(
-      {AddContentRestrictionOperation? operation,
-      AddContentRestrictionRestrictions? restrictions}) {
-    return AddContentRestriction(
-      operation: operation ?? this.operation,
-      restrictions: restrictions ?? this.restrictions,
-    );
-  }
-}
-
-class AddContentRestrictionOperation {
-  static const read = AddContentRestrictionOperation._('read');
-  static const update = AddContentRestrictionOperation._('update');
-
-  static const values = [
-    read,
-    update,
-  ];
-  final String value;
-
-  const AddContentRestrictionOperation._(this.value);
-
-  static AddContentRestrictionOperation fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => AddContentRestrictionOperation._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class AddContentRestrictionUpdateArray {
-  AddContentRestrictionUpdateArray();
-
-  factory AddContentRestrictionUpdateArray.fromJson(Map<String, Object?> json) {
-    return AddContentRestrictionUpdateArray();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-class ContentTemplateExpandable {
-  final String? body;
-
-  ContentTemplateExpandable({this.body});
-
-  factory ContentTemplateExpandable.fromJson(Map<String, Object?> json) {
-    return ContentTemplateExpandable(
-      body: json[r'body'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var body = this.body;
-
-    final json = <String, Object?>{};
-    if (body != null) {
-      json[r'body'] = body;
-    }
-    return json;
-  }
-
-  ContentTemplateExpandable copyWith({String? body}) {
-    return ContentTemplateExpandable(
-      body: body ?? this.body,
+  ContentRestrictions copyWith(
+      {ContentRestriction? read,
+      ContentRestriction? update,
+      GenericLinks? links}) {
+    return ContentRestrictions(
+      read: read ?? this.read,
+      update: update ?? this.update,
+      links: links ?? this.links,
     );
   }
 }
@@ -8743,31 +9218,34 @@ class ContentTemplateArray {
   }
 }
 
-/// The key for the space of the new template. Only applies to space templates.
-/// If the spaceKey is not specified, the template will be created as a global
-/// template.
-class ContentTemplateCreateSpace {
-  final String key;
+/// This object is used when creating or updating content.
+class ContentTemplateBodyCreate {
+  final ContentBodyCreate? storage;
 
-  ContentTemplateCreateSpace({required this.key});
+  ContentTemplateBodyCreate({this.storage});
 
-  factory ContentTemplateCreateSpace.fromJson(Map<String, Object?> json) {
-    return ContentTemplateCreateSpace(
-      key: json[r'key'] as String? ?? '',
+  factory ContentTemplateBodyCreate.fromJson(Map<String, Object?> json) {
+    return ContentTemplateBodyCreate(
+      storage: json[r'storage'] != null
+          ? ContentBodyCreate.fromJson(
+              json[r'storage']! as Map<String, Object?>)
+          : null,
     );
   }
 
   Map<String, Object?> toJson() {
-    var key = this.key;
+    var storage = this.storage;
 
     final json = <String, Object?>{};
-    json[r'key'] = key;
+    if (storage != null) {
+      json[r'storage'] = storage.toJson();
+    }
     return json;
   }
 
-  ContentTemplateCreateSpace copyWith({String? key}) {
-    return ContentTemplateCreateSpace(
-      key: key ?? this.key,
+  ContentTemplateBodyCreate copyWith({ContentBodyCreate? storage}) {
+    return ContentTemplateBodyCreate(
+      storage: storage ?? this.storage,
     );
   }
 }
@@ -8861,47 +9339,16 @@ class ContentTemplateCreate {
   }
 }
 
-/// This object is used when creating or updating content.
-class ContentTemplateBodyCreate {
-  final ContentBodyCreate? storage;
-
-  ContentTemplateBodyCreate({this.storage});
-
-  factory ContentTemplateBodyCreate.fromJson(Map<String, Object?> json) {
-    return ContentTemplateBodyCreate(
-      storage: json[r'storage'] != null
-          ? ContentBodyCreate.fromJson(
-              json[r'storage']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var storage = this.storage;
-
-    final json = <String, Object?>{};
-    if (storage != null) {
-      json[r'storage'] = storage.toJson();
-    }
-    return json;
-  }
-
-  ContentTemplateBodyCreate copyWith({ContentBodyCreate? storage}) {
-    return ContentTemplateBodyCreate(
-      storage: storage ?? this.storage,
-    );
-  }
-}
-
-/// The key for the space of the template. Required if the template is a
-/// space template. Set this to the current `space.key`.
-class ContentTemplateUpdateSpace {
+/// The key for the space of the new template. Only applies to space templates.
+/// If the spaceKey is not specified, the template will be created as a global
+/// template.
+class ContentTemplateCreateSpace {
   final String key;
 
-  ContentTemplateUpdateSpace({required this.key});
+  ContentTemplateCreateSpace({required this.key});
 
-  factory ContentTemplateUpdateSpace.fromJson(Map<String, Object?> json) {
-    return ContentTemplateUpdateSpace(
+  factory ContentTemplateCreateSpace.fromJson(Map<String, Object?> json) {
+    return ContentTemplateCreateSpace(
       key: json[r'key'] as String? ?? '',
     );
   }
@@ -8914,9 +9361,37 @@ class ContentTemplateUpdateSpace {
     return json;
   }
 
-  ContentTemplateUpdateSpace copyWith({String? key}) {
-    return ContentTemplateUpdateSpace(
+  ContentTemplateCreateSpace copyWith({String? key}) {
+    return ContentTemplateCreateSpace(
       key: key ?? this.key,
+    );
+  }
+}
+
+class ContentTemplateExpandable {
+  final String? body;
+
+  ContentTemplateExpandable({this.body});
+
+  factory ContentTemplateExpandable.fromJson(Map<String, Object?> json) {
+    return ContentTemplateExpandable(
+      body: json[r'body'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var body = this.body;
+
+    final json = <String, Object?>{};
+    if (body != null) {
+      json[r'body'] = body;
+    }
+    return json;
+  }
+
+  ContentTemplateExpandable copyWith({String? body}) {
+    return ContentTemplateExpandable(
+      body: body ?? this.body,
     );
   }
 }
@@ -9040,160 +9515,30 @@ class ContentTemplateUpdateTemplateType {
   String toString() => value;
 }
 
-/// The new version for the updated content. Set this to the current version
-/// number incremented by one, unless you are changing the status to 'draft'
-/// which must have a version number of 1.
-///
-/// To get the current version number, use
-/// [Get content by ID](#api-content-id-get) and retrieve `version.number`.
-class ContentUpdateVersion {
-  /// The version number.
-  final int number;
+/// The key for the space of the template. Required if the template is a
+/// space template. Set this to the current `space.key`.
+class ContentTemplateUpdateSpace {
+  final String key;
 
-  ContentUpdateVersion({required this.number});
+  ContentTemplateUpdateSpace({required this.key});
 
-  factory ContentUpdateVersion.fromJson(Map<String, Object?> json) {
-    return ContentUpdateVersion(
-      number: (json[r'number'] as num?)?.toInt() ?? 0,
+  factory ContentTemplateUpdateSpace.fromJson(Map<String, Object?> json) {
+    return ContentTemplateUpdateSpace(
+      key: json[r'key'] as String? ?? '',
     );
   }
 
   Map<String, Object?> toJson() {
-    var number = this.number;
+    var key = this.key;
 
     final json = <String, Object?>{};
-    json[r'number'] = number;
+    json[r'key'] = key;
     return json;
   }
 
-  ContentUpdateVersion copyWith({int? number}) {
-    return ContentUpdateVersion(
-      number: number ?? this.number,
-    );
-  }
-}
-
-class ContentUpdateAncestorsItem {
-  /// The `id` of the parent content.
-  final String id;
-
-  ContentUpdateAncestorsItem({required this.id});
-
-  factory ContentUpdateAncestorsItem.fromJson(Map<String, Object?> json) {
-    return ContentUpdateAncestorsItem(
-      id: json[r'id'] as String? ?? '',
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-
-    final json = <String, Object?>{};
-    json[r'id'] = id;
-    return json;
-  }
-
-  ContentUpdateAncestorsItem copyWith({String? id}) {
-    return ContentUpdateAncestorsItem(
-      id: id ?? this.id,
-    );
-  }
-}
-
-/// The updated body of the content. Does not apply to attachments.
-/// If you are not sure how to generate these formats, you can create a page in
-/// the
-/// Confluence application, retrieve the content using
-/// [Get content](#api-content-get),
-/// and expand the desired content format, e.g. `expand=body.storage`.
-class ContentUpdateBody {
-  final ContentBodyCreate? view;
-  final ContentBodyCreate? exportView;
-  final ContentBodyCreate? styledView;
-  final ContentBodyCreateStorage? storage;
-  final ContentBodyCreate? editor2;
-  final ContentBodyCreate? anonymousExportView;
-
-  ContentUpdateBody(
-      {this.view,
-      this.exportView,
-      this.styledView,
-      this.storage,
-      this.editor2,
-      this.anonymousExportView});
-
-  factory ContentUpdateBody.fromJson(Map<String, Object?> json) {
-    return ContentUpdateBody(
-      view: json[r'view'] != null
-          ? ContentBodyCreate.fromJson(json[r'view']! as Map<String, Object?>)
-          : null,
-      exportView: json[r'export_view'] != null
-          ? ContentBodyCreate.fromJson(
-              json[r'export_view']! as Map<String, Object?>)
-          : null,
-      styledView: json[r'styled_view'] != null
-          ? ContentBodyCreate.fromJson(
-              json[r'styled_view']! as Map<String, Object?>)
-          : null,
-      storage: json[r'storage'] != null
-          ? ContentBodyCreateStorage.fromJson(
-              json[r'storage']! as Map<String, Object?>)
-          : null,
-      editor2: json[r'editor2'] != null
-          ? ContentBodyCreate.fromJson(
-              json[r'editor2']! as Map<String, Object?>)
-          : null,
-      anonymousExportView: json[r'anonymous_export_view'] != null
-          ? ContentBodyCreate.fromJson(
-              json[r'anonymous_export_view']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var view = this.view;
-    var exportView = this.exportView;
-    var styledView = this.styledView;
-    var storage = this.storage;
-    var editor2 = this.editor2;
-    var anonymousExportView = this.anonymousExportView;
-
-    final json = <String, Object?>{};
-    if (view != null) {
-      json[r'view'] = view.toJson();
-    }
-    if (exportView != null) {
-      json[r'export_view'] = exportView.toJson();
-    }
-    if (styledView != null) {
-      json[r'styled_view'] = styledView.toJson();
-    }
-    if (storage != null) {
-      json[r'storage'] = storage.toJson();
-    }
-    if (editor2 != null) {
-      json[r'editor2'] = editor2.toJson();
-    }
-    if (anonymousExportView != null) {
-      json[r'anonymous_export_view'] = anonymousExportView.toJson();
-    }
-    return json;
-  }
-
-  ContentUpdateBody copyWith(
-      {ContentBodyCreate? view,
-      ContentBodyCreate? exportView,
-      ContentBodyCreate? styledView,
-      ContentBodyCreateStorage? storage,
-      ContentBodyCreate? editor2,
-      ContentBodyCreate? anonymousExportView}) {
-    return ContentUpdateBody(
-      view: view ?? this.view,
-      exportView: exportView ?? this.exportView,
-      styledView: styledView ?? this.styledView,
-      storage: storage ?? this.storage,
-      editor2: editor2 ?? this.editor2,
-      anonymousExportView: anonymousExportView ?? this.anonymousExportView,
+  ContentTemplateUpdateSpace copyWith({String? key}) {
+    return ContentTemplateUpdateSpace(
+      key: key ?? this.key,
     );
   }
 }
@@ -9356,6 +9701,164 @@ class ContentUpdateStatus {
   String toString() => value;
 }
 
+class ContentUpdateAncestorsItem {
+  /// The `id` of the parent content.
+  final String id;
+
+  ContentUpdateAncestorsItem({required this.id});
+
+  factory ContentUpdateAncestorsItem.fromJson(Map<String, Object?> json) {
+    return ContentUpdateAncestorsItem(
+      id: json[r'id'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    return json;
+  }
+
+  ContentUpdateAncestorsItem copyWith({String? id}) {
+    return ContentUpdateAncestorsItem(
+      id: id ?? this.id,
+    );
+  }
+}
+
+/// The updated body of the content. Does not apply to attachments.
+/// If you are not sure how to generate these formats, you can create a page in
+/// the
+/// Confluence application, retrieve the content using
+/// [Get content](#api-content-get),
+/// and expand the desired content format, e.g. `expand=body.storage`.
+class ContentUpdateBody {
+  final ContentBodyCreate? view;
+  final ContentBodyCreate? exportView;
+  final ContentBodyCreate? styledView;
+  final ContentBodyCreateStorage? storage;
+  final ContentBodyCreate? editor2;
+  final ContentBodyCreate? anonymousExportView;
+
+  ContentUpdateBody(
+      {this.view,
+      this.exportView,
+      this.styledView,
+      this.storage,
+      this.editor2,
+      this.anonymousExportView});
+
+  factory ContentUpdateBody.fromJson(Map<String, Object?> json) {
+    return ContentUpdateBody(
+      view: json[r'view'] != null
+          ? ContentBodyCreate.fromJson(json[r'view']! as Map<String, Object?>)
+          : null,
+      exportView: json[r'export_view'] != null
+          ? ContentBodyCreate.fromJson(
+              json[r'export_view']! as Map<String, Object?>)
+          : null,
+      styledView: json[r'styled_view'] != null
+          ? ContentBodyCreate.fromJson(
+              json[r'styled_view']! as Map<String, Object?>)
+          : null,
+      storage: json[r'storage'] != null
+          ? ContentBodyCreateStorage.fromJson(
+              json[r'storage']! as Map<String, Object?>)
+          : null,
+      editor2: json[r'editor2'] != null
+          ? ContentBodyCreate.fromJson(
+              json[r'editor2']! as Map<String, Object?>)
+          : null,
+      anonymousExportView: json[r'anonymous_export_view'] != null
+          ? ContentBodyCreate.fromJson(
+              json[r'anonymous_export_view']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var view = this.view;
+    var exportView = this.exportView;
+    var styledView = this.styledView;
+    var storage = this.storage;
+    var editor2 = this.editor2;
+    var anonymousExportView = this.anonymousExportView;
+
+    final json = <String, Object?>{};
+    if (view != null) {
+      json[r'view'] = view.toJson();
+    }
+    if (exportView != null) {
+      json[r'export_view'] = exportView.toJson();
+    }
+    if (styledView != null) {
+      json[r'styled_view'] = styledView.toJson();
+    }
+    if (storage != null) {
+      json[r'storage'] = storage.toJson();
+    }
+    if (editor2 != null) {
+      json[r'editor2'] = editor2.toJson();
+    }
+    if (anonymousExportView != null) {
+      json[r'anonymous_export_view'] = anonymousExportView.toJson();
+    }
+    return json;
+  }
+
+  ContentUpdateBody copyWith(
+      {ContentBodyCreate? view,
+      ContentBodyCreate? exportView,
+      ContentBodyCreate? styledView,
+      ContentBodyCreateStorage? storage,
+      ContentBodyCreate? editor2,
+      ContentBodyCreate? anonymousExportView}) {
+    return ContentUpdateBody(
+      view: view ?? this.view,
+      exportView: exportView ?? this.exportView,
+      styledView: styledView ?? this.styledView,
+      storage: storage ?? this.storage,
+      editor2: editor2 ?? this.editor2,
+      anonymousExportView: anonymousExportView ?? this.anonymousExportView,
+    );
+  }
+}
+
+/// The new version for the updated content. Set this to the current version
+/// number incremented by one, unless you are changing the status to 'draft'
+/// which must have a version number of 1.
+///
+/// To get the current version number, use
+/// [Get content by ID](#api-content-id-get) and retrieve `version.number`.
+class ContentUpdateVersion {
+  /// The version number.
+  final int number;
+
+  ContentUpdateVersion({required this.number});
+
+  factory ContentUpdateVersion.fromJson(Map<String, Object?> json) {
+    return ContentUpdateVersion(
+      number: (json[r'number'] as num?)?.toInt() ?? 0,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var number = this.number;
+
+    final json = <String, Object?>{};
+    json[r'number'] = number;
+    return json;
+  }
+
+  ContentUpdateVersion copyWith({int? number}) {
+    return ContentUpdateVersion(
+      number: number ?? this.number,
+    );
+  }
+}
+
 class CopyPageHierarchyRequest {
   /// If set to `true`, attachments are copied to the destination page.
   final bool copyAttachments;
@@ -9490,49 +9993,6 @@ class CopyPageHierarchyTitleOptions {
   }
 }
 
-/// If defined, this will replace the body of the destination page.
-class CopyPageRequestBody {
-  final ContentBodyCreate? storage;
-  final ContentBodyCreate? editor2;
-
-  CopyPageRequestBody({this.storage, this.editor2});
-
-  factory CopyPageRequestBody.fromJson(Map<String, Object?> json) {
-    return CopyPageRequestBody(
-      storage: json[r'storage'] != null
-          ? ContentBodyCreate.fromJson(
-              json[r'storage']! as Map<String, Object?>)
-          : null,
-      editor2: json[r'editor2'] != null
-          ? ContentBodyCreate.fromJson(
-              json[r'editor2']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var storage = this.storage;
-    var editor2 = this.editor2;
-
-    final json = <String, Object?>{};
-    if (storage != null) {
-      json[r'storage'] = storage.toJson();
-    }
-    if (editor2 != null) {
-      json[r'editor2'] = editor2.toJson();
-    }
-    return json;
-  }
-
-  CopyPageRequestBody copyWith(
-      {ContentBodyCreate? storage, ContentBodyCreate? editor2}) {
-    return CopyPageRequestBody(
-      storage: storage ?? this.storage,
-      editor2: editor2 ?? this.editor2,
-    );
-  }
-}
-
 class CopyPageRequest {
   /// If set to `true`, attachments are copied to the destination page.
   final bool copyAttachments;
@@ -9635,6 +10095,49 @@ class CopyPageRequest {
   }
 }
 
+/// If defined, this will replace the body of the destination page.
+class CopyPageRequestBody {
+  final ContentBodyCreate? storage;
+  final ContentBodyCreate? editor2;
+
+  CopyPageRequestBody({this.storage, this.editor2});
+
+  factory CopyPageRequestBody.fromJson(Map<String, Object?> json) {
+    return CopyPageRequestBody(
+      storage: json[r'storage'] != null
+          ? ContentBodyCreate.fromJson(
+              json[r'storage']! as Map<String, Object?>)
+          : null,
+      editor2: json[r'editor2'] != null
+          ? ContentBodyCreate.fromJson(
+              json[r'editor2']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var storage = this.storage;
+    var editor2 = this.editor2;
+
+    final json = <String, Object?>{};
+    if (storage != null) {
+      json[r'storage'] = storage.toJson();
+    }
+    if (editor2 != null) {
+      json[r'editor2'] = editor2.toJson();
+    }
+    return json;
+  }
+
+  CopyPageRequestBody copyWith(
+      {ContentBodyCreate? storage, ContentBodyCreate? editor2}) {
+    return CopyPageRequestBody(
+      storage: storage ?? this.storage,
+      editor2: editor2 ?? this.editor2,
+    );
+  }
+}
+
 /// Defines where the page will be copied to, and can be one of the following
 /// types.
 ///
@@ -9702,69 +10205,6 @@ class CopyPageRequestDestinationType {
 
   @override
   String toString() => value;
-}
-
-/// The converted CQL queries.
-class CQLPersonalDataConvertedQueries {
-  /// The list of converted CQL query strings with account IDs in
-  /// place of user identifiers.
-  final List<String> queryStrings;
-
-  CQLPersonalDataConvertedQueries({required this.queryStrings});
-
-  factory CQLPersonalDataConvertedQueries.fromJson(Map<String, Object?> json) {
-    return CQLPersonalDataConvertedQueries(
-      queryStrings: (json[r'queryStrings'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var queryStrings = this.queryStrings;
-
-    final json = <String, Object?>{};
-    json[r'queryStrings'] = queryStrings;
-    return json;
-  }
-
-  CQLPersonalDataConvertedQueries copyWith({List<String>? queryStrings}) {
-    return CQLPersonalDataConvertedQueries(
-      queryStrings: queryStrings ?? this.queryStrings,
-    );
-  }
-}
-
-/// The CQL queries to be converted.
-class CQLPersonalDataMigrationRequest {
-  /// A list of queries with user identifiers. Maximum of 100 queries.
-  final List<String> queryStrings;
-
-  CQLPersonalDataMigrationRequest({required this.queryStrings});
-
-  factory CQLPersonalDataMigrationRequest.fromJson(Map<String, Object?> json) {
-    return CQLPersonalDataMigrationRequest(
-      queryStrings: (json[r'queryStrings'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var queryStrings = this.queryStrings;
-
-    final json = <String, Object?>{};
-    json[r'queryStrings'] = queryStrings;
-    return json;
-  }
-
-  CQLPersonalDataMigrationRequest copyWith({List<String>? queryStrings}) {
-    return CQLPersonalDataMigrationRequest(
-      queryStrings: queryStrings ?? this.queryStrings,
-    );
-  }
 }
 
 class DynamicModulesErrorMessage {
@@ -10227,151 +10667,6 @@ class LabelArray {
   }
 }
 
-class LabeledContent {
-  final LabeledContentType contentType;
-  final int contentId;
-
-  /// Title of the content.
-  final String title;
-
-  LabeledContent(
-      {required this.contentType,
-      required this.contentId,
-      required this.title});
-
-  factory LabeledContent.fromJson(Map<String, Object?> json) {
-    return LabeledContent(
-      contentType: LabeledContentType.fromJson(
-          json[r'contentType'] as Map<String, Object?>? ?? const {}),
-      contentId: (json[r'contentId'] as num?)?.toInt() ?? 0,
-      title: json[r'title'] as String? ?? '',
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var contentType = this.contentType;
-    var contentId = this.contentId;
-    var title = this.title;
-
-    final json = <String, Object?>{};
-    json[r'contentType'] = contentType.toJson();
-    json[r'contentId'] = contentId;
-    json[r'title'] = title;
-    return json;
-  }
-
-  LabeledContent copyWith(
-      {LabeledContentType? contentType, int? contentId, String? title}) {
-    return LabeledContent(
-      contentType: contentType ?? this.contentType,
-      contentId: contentId ?? this.contentId,
-      title: title ?? this.title,
-    );
-  }
-}
-
-class LabeledContentType {
-  LabeledContentType();
-
-  factory LabeledContentType.fromJson(Map<String, Object?> json) {
-    return LabeledContentType();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-class LabeledContentPageResponse {
-  final List<LabeledContent> results;
-  final int? start;
-  final int? limit;
-  final int size;
-
-  LabeledContentPageResponse(
-      {required this.results, this.start, this.limit, required this.size});
-
-  factory LabeledContentPageResponse.fromJson(Map<String, Object?> json) {
-    return LabeledContentPageResponse(
-      results: (json[r'results'] as List<Object?>?)
-              ?.map((i) => LabeledContent.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      start: (json[r'start'] as num?)?.toInt(),
-      limit: (json[r'limit'] as num?)?.toInt(),
-      size: (json[r'size'] as num?)?.toInt() ?? 0,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var results = this.results;
-    var start = this.start;
-    var limit = this.limit;
-    var size = this.size;
-
-    final json = <String, Object?>{};
-    json[r'results'] = results.map((i) => i.toJson()).toList();
-    if (start != null) {
-      json[r'start'] = start;
-    }
-    if (limit != null) {
-      json[r'limit'] = limit;
-    }
-    json[r'size'] = size;
-    return json;
-  }
-
-  LabeledContentPageResponse copyWith(
-      {List<LabeledContent>? results, int? start, int? limit, int? size}) {
-    return LabeledContentPageResponse(
-      results: results ?? this.results,
-      start: start ?? this.start,
-      limit: limit ?? this.limit,
-      size: size ?? this.size,
-    );
-  }
-}
-
-class LabelDetails {
-  final Label label;
-  final LabeledContentPageResponse? associatedContents;
-
-  LabelDetails({required this.label, this.associatedContents});
-
-  factory LabelDetails.fromJson(Map<String, Object?> json) {
-    return LabelDetails(
-      label:
-          Label.fromJson(json[r'label'] as Map<String, Object?>? ?? const {}),
-      associatedContents: json[r'associatedContents'] != null
-          ? LabeledContentPageResponse.fromJson(
-              json[r'associatedContents']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var label = this.label;
-    var associatedContents = this.associatedContents;
-
-    final json = <String, Object?>{};
-    json[r'label'] = label.toJson();
-    if (associatedContents != null) {
-      json[r'associatedContents'] = associatedContents.toJson();
-    }
-    return json;
-  }
-
-  LabelDetails copyWith(
-      {Label? label, LabeledContentPageResponse? associatedContents}) {
-    return LabelDetails(
-      label: label ?? this.label,
-      associatedContents: associatedContents ?? this.associatedContents,
-    );
-  }
-}
-
 class LabelCreate {
   /// The prefix for the label.
   final LabelCreatePrefix prefix;
@@ -10444,277 +10739,148 @@ class LabelCreateArray {
   }
 }
 
-class LookAndFeelHeadings {
-  final String color;
+class LabelDetails {
+  final Label label;
+  final LabeledContentPageResponse? associatedContents;
 
-  LookAndFeelHeadings({required this.color});
+  LabelDetails({required this.label, this.associatedContents});
 
-  factory LookAndFeelHeadings.fromJson(Map<String, Object?> json) {
-    return LookAndFeelHeadings(
-      color: json[r'color'] as String? ?? '',
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var color = this.color;
-
-    final json = <String, Object?>{};
-    json[r'color'] = color;
-    return json;
-  }
-
-  LookAndFeelHeadings copyWith({String? color}) {
-    return LookAndFeelHeadings(
-      color: color ?? this.color,
-    );
-  }
-}
-
-class LookAndFeelLinks {
-  final String color;
-
-  LookAndFeelLinks({required this.color});
-
-  factory LookAndFeelLinks.fromJson(Map<String, Object?> json) {
-    return LookAndFeelLinks(
-      color: json[r'color'] as String? ?? '',
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var color = this.color;
-
-    final json = <String, Object?>{};
-    json[r'color'] = color;
-    return json;
-  }
-
-  LookAndFeelLinks copyWith({String? color}) {
-    return LookAndFeelLinks(
-      color: color ?? this.color,
-    );
-  }
-}
-
-class LookAndFeelBordersAndDividers {
-  final String color;
-
-  LookAndFeelBordersAndDividers({required this.color});
-
-  factory LookAndFeelBordersAndDividers.fromJson(Map<String, Object?> json) {
-    return LookAndFeelBordersAndDividers(
-      color: json[r'color'] as String? ?? '',
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var color = this.color;
-
-    final json = <String, Object?>{};
-    json[r'color'] = color;
-    return json;
-  }
-
-  LookAndFeelBordersAndDividers copyWith({String? color}) {
-    return LookAndFeelBordersAndDividers(
-      color: color ?? this.color,
-    );
-  }
-}
-
-class LookAndFeel {
-  final LookAndFeelHeadings headings;
-  final LookAndFeelLinks links;
-  final MenusLookAndFeel menus;
-  final HeaderLookAndFeel header;
-  final ContentLookAndFeel content;
-  final LookAndFeelBordersAndDividers bordersAndDividers;
-
-  LookAndFeel(
-      {required this.headings,
-      required this.links,
-      required this.menus,
-      required this.header,
-      required this.content,
-      required this.bordersAndDividers});
-
-  factory LookAndFeel.fromJson(Map<String, Object?> json) {
-    return LookAndFeel(
-      headings: LookAndFeelHeadings.fromJson(
-          json[r'headings'] as Map<String, Object?>? ?? const {}),
-      links: LookAndFeelLinks.fromJson(
-          json[r'links'] as Map<String, Object?>? ?? const {}),
-      menus: MenusLookAndFeel.fromJson(
-          json[r'menus'] as Map<String, Object?>? ?? const {}),
-      header: HeaderLookAndFeel.fromJson(
-          json[r'header'] as Map<String, Object?>? ?? const {}),
-      content: ContentLookAndFeel.fromJson(
-          json[r'content'] as Map<String, Object?>? ?? const {}),
-      bordersAndDividers: LookAndFeelBordersAndDividers.fromJson(
-          json[r'bordersAndDividers'] as Map<String, Object?>? ?? const {}),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var headings = this.headings;
-    var links = this.links;
-    var menus = this.menus;
-    var header = this.header;
-    var content = this.content;
-    var bordersAndDividers = this.bordersAndDividers;
-
-    final json = <String, Object?>{};
-    json[r'headings'] = headings.toJson();
-    json[r'links'] = links.toJson();
-    json[r'menus'] = menus.toJson();
-    json[r'header'] = header.toJson();
-    json[r'content'] = content.toJson();
-    json[r'bordersAndDividers'] = bordersAndDividers.toJson();
-    return json;
-  }
-
-  LookAndFeel copyWith(
-      {LookAndFeelHeadings? headings,
-      LookAndFeelLinks? links,
-      MenusLookAndFeel? menus,
-      HeaderLookAndFeel? header,
-      ContentLookAndFeel? content,
-      LookAndFeelBordersAndDividers? bordersAndDividers}) {
-    return LookAndFeel(
-      headings: headings ?? this.headings,
-      links: links ?? this.links,
-      menus: menus ?? this.menus,
-      header: header ?? this.header,
-      content: content ?? this.content,
-      bordersAndDividers: bordersAndDividers ?? this.bordersAndDividers,
-    );
-  }
-}
-
-/// Look and feel settings returned after an update.
-class LookAndFeelUpdated {
-  LookAndFeelUpdated();
-
-  factory LookAndFeelUpdated.fromJson(Map<String, Object?> json) {
-    return LookAndFeelUpdated();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-class LookAndFeelSettings {
-  final LookAndFeelSettingsSelected selected;
-  final LookAndFeel global;
-  final LookAndFeel? theme;
-  final LookAndFeel custom;
-
-  LookAndFeelSettings(
-      {required this.selected,
-      required this.global,
-      this.theme,
-      required this.custom});
-
-  factory LookAndFeelSettings.fromJson(Map<String, Object?> json) {
-    return LookAndFeelSettings(
-      selected: LookAndFeelSettingsSelected.fromValue(
-          json[r'selected'] as String? ?? ''),
-      global: LookAndFeel.fromJson(
-          json[r'global'] as Map<String, Object?>? ?? const {}),
-      theme: json[r'theme'] != null
-          ? LookAndFeel.fromJson(json[r'theme']! as Map<String, Object?>)
+  factory LabelDetails.fromJson(Map<String, Object?> json) {
+    return LabelDetails(
+      label:
+          Label.fromJson(json[r'label'] as Map<String, Object?>? ?? const {}),
+      associatedContents: json[r'associatedContents'] != null
+          ? LabeledContentPageResponse.fromJson(
+              json[r'associatedContents']! as Map<String, Object?>)
           : null,
-      custom: LookAndFeel.fromJson(
-          json[r'custom'] as Map<String, Object?>? ?? const {}),
     );
   }
 
   Map<String, Object?> toJson() {
-    var selected = this.selected;
-    var global = this.global;
-    var theme = this.theme;
-    var custom = this.custom;
+    var label = this.label;
+    var associatedContents = this.associatedContents;
 
     final json = <String, Object?>{};
-    json[r'selected'] = selected.value;
-    json[r'global'] = global.toJson();
-    if (theme != null) {
-      json[r'theme'] = theme.toJson();
+    json[r'label'] = label.toJson();
+    if (associatedContents != null) {
+      json[r'associatedContents'] = associatedContents.toJson();
     }
-    json[r'custom'] = custom.toJson();
     return json;
   }
 
-  LookAndFeelSettings copyWith(
-      {LookAndFeelSettingsSelected? selected,
-      LookAndFeel? global,
-      LookAndFeel? theme,
-      LookAndFeel? custom}) {
-    return LookAndFeelSettings(
-      selected: selected ?? this.selected,
-      global: global ?? this.global,
-      theme: theme ?? this.theme,
-      custom: custom ?? this.custom,
+  LabelDetails copyWith(
+      {Label? label, LabeledContentPageResponse? associatedContents}) {
+    return LabelDetails(
+      label: label ?? this.label,
+      associatedContents: associatedContents ?? this.associatedContents,
     );
   }
 }
 
-class LookAndFeelSettingsSelected {
-  static const global = LookAndFeelSettingsSelected._('global');
-  static const custom = LookAndFeelSettingsSelected._('custom');
+class LabeledContent {
+  final LabeledContentType contentType;
+  final int contentId;
 
-  static const values = [
-    global,
-    custom,
-  ];
-  final String value;
+  /// Title of the content.
+  final String title;
 
-  const LookAndFeelSettingsSelected._(this.value);
+  LabeledContent(
+      {required this.contentType,
+      required this.contentId,
+      required this.title});
 
-  static LookAndFeelSettingsSelected fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => LookAndFeelSettingsSelected._(value));
+  factory LabeledContent.fromJson(Map<String, Object?> json) {
+    return LabeledContent(
+      contentType: LabeledContentType.fromJson(
+          json[r'contentType'] as Map<String, Object?>? ?? const {}),
+      contentId: (json[r'contentId'] as num?)?.toInt() ?? 0,
+      title: json[r'title'] as String? ?? '',
+    );
+  }
 
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
+  Map<String, Object?> toJson() {
+    var contentType = this.contentType;
+    var contentId = this.contentId;
+    var title = this.title;
 
-  @override
-  String toString() => value;
+    final json = <String, Object?>{};
+    json[r'contentType'] = contentType.toJson();
+    json[r'contentId'] = contentId;
+    json[r'title'] = title;
+    return json;
+  }
+
+  LabeledContent copyWith(
+      {LabeledContentType? contentType, int? contentId, String? title}) {
+    return LabeledContent(
+      contentType: contentType ?? this.contentType,
+      contentId: contentId ?? this.contentId,
+      title: title ?? this.title,
+    );
+  }
 }
 
-class LongTaskStatusName {
-  final String key;
-  final List<Map<String, dynamic>> args;
+class LabeledContentPageResponse {
+  final List<LabeledContent> results;
+  final int? start;
+  final int? limit;
+  final int size;
 
-  LongTaskStatusName({required this.key, required this.args});
+  LabeledContentPageResponse(
+      {required this.results, this.start, this.limit, required this.size});
 
-  factory LongTaskStatusName.fromJson(Map<String, Object?> json) {
-    return LongTaskStatusName(
-      key: json[r'key'] as String? ?? '',
-      args: (json[r'args'] as List<Object?>?)
-              ?.map((i) => i as Map<String, Object?>? ?? {})
+  factory LabeledContentPageResponse.fromJson(Map<String, Object?> json) {
+    return LabeledContentPageResponse(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) => LabeledContent.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
     );
   }
 
   Map<String, Object?> toJson() {
-    var key = this.key;
-    var args = this.args;
+    var results = this.results;
+    var start = this.start;
+    var limit = this.limit;
+    var size = this.size;
 
     final json = <String, Object?>{};
-    json[r'key'] = key;
-    json[r'args'] = args;
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (start != null) {
+      json[r'start'] = start;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
+    json[r'size'] = size;
     return json;
   }
 
-  LongTaskStatusName copyWith({String? key, List<Map<String, dynamic>>? args}) {
-    return LongTaskStatusName(
-      key: key ?? this.key,
-      args: args ?? this.args,
+  LabeledContentPageResponse copyWith(
+      {List<LabeledContent>? results, int? start, int? limit, int? size}) {
+    return LabeledContentPageResponse(
+      results: results ?? this.results,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
+      size: size ?? this.size,
     );
+  }
+}
+
+class LabeledContentType {
+  LabeledContentType();
+
+  factory LabeledContentType.fromJson(Map<String, Object?> json) {
+    return LabeledContentType();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
   }
 }
 
@@ -10900,12 +11066,348 @@ class LongTaskStatusArray {
   }
 }
 
+class LongTaskStatusName {
+  final String key;
+  final List<Map<String, dynamic>> args;
+
+  LongTaskStatusName({required this.key, required this.args});
+
+  factory LongTaskStatusName.fromJson(Map<String, Object?> json) {
+    return LongTaskStatusName(
+      key: json[r'key'] as String? ?? '',
+      args: (json[r'args'] as List<Object?>?)
+              ?.map((i) => i as Map<String, Object?>? ?? {})
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+    var args = this.args;
+
+    final json = <String, Object?>{};
+    json[r'key'] = key;
+    json[r'args'] = args;
+    return json;
+  }
+
+  LongTaskStatusName copyWith({String? key, List<Map<String, dynamic>>? args}) {
+    return LongTaskStatusName(
+      key: key ?? this.key,
+      args: args ?? this.args,
+    );
+  }
+}
+
 /// Same as LongTaskStatus but with `_links` property.
 class LongTaskStatusWithLinks {
   LongTaskStatusWithLinks();
 
   factory LongTaskStatusWithLinks.fromJson(Map<String, Object?> json) {
     return LongTaskStatusWithLinks();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+class LookAndFeel {
+  final LookAndFeelHeadings headings;
+  final LookAndFeelLinks links;
+  final MenusLookAndFeel menus;
+  final HeaderLookAndFeel header;
+  final ContentLookAndFeel content;
+  final LookAndFeelBordersAndDividers bordersAndDividers;
+
+  LookAndFeel(
+      {required this.headings,
+      required this.links,
+      required this.menus,
+      required this.header,
+      required this.content,
+      required this.bordersAndDividers});
+
+  factory LookAndFeel.fromJson(Map<String, Object?> json) {
+    return LookAndFeel(
+      headings: LookAndFeelHeadings.fromJson(
+          json[r'headings'] as Map<String, Object?>? ?? const {}),
+      links: LookAndFeelLinks.fromJson(
+          json[r'links'] as Map<String, Object?>? ?? const {}),
+      menus: MenusLookAndFeel.fromJson(
+          json[r'menus'] as Map<String, Object?>? ?? const {}),
+      header: HeaderLookAndFeel.fromJson(
+          json[r'header'] as Map<String, Object?>? ?? const {}),
+      content: ContentLookAndFeel.fromJson(
+          json[r'content'] as Map<String, Object?>? ?? const {}),
+      bordersAndDividers: LookAndFeelBordersAndDividers.fromJson(
+          json[r'bordersAndDividers'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var headings = this.headings;
+    var links = this.links;
+    var menus = this.menus;
+    var header = this.header;
+    var content = this.content;
+    var bordersAndDividers = this.bordersAndDividers;
+
+    final json = <String, Object?>{};
+    json[r'headings'] = headings.toJson();
+    json[r'links'] = links.toJson();
+    json[r'menus'] = menus.toJson();
+    json[r'header'] = header.toJson();
+    json[r'content'] = content.toJson();
+    json[r'bordersAndDividers'] = bordersAndDividers.toJson();
+    return json;
+  }
+
+  LookAndFeel copyWith(
+      {LookAndFeelHeadings? headings,
+      LookAndFeelLinks? links,
+      MenusLookAndFeel? menus,
+      HeaderLookAndFeel? header,
+      ContentLookAndFeel? content,
+      LookAndFeelBordersAndDividers? bordersAndDividers}) {
+    return LookAndFeel(
+      headings: headings ?? this.headings,
+      links: links ?? this.links,
+      menus: menus ?? this.menus,
+      header: header ?? this.header,
+      content: content ?? this.content,
+      bordersAndDividers: bordersAndDividers ?? this.bordersAndDividers,
+    );
+  }
+}
+
+class LookAndFeelBordersAndDividers {
+  final String color;
+
+  LookAndFeelBordersAndDividers({required this.color});
+
+  factory LookAndFeelBordersAndDividers.fromJson(Map<String, Object?> json) {
+    return LookAndFeelBordersAndDividers(
+      color: json[r'color'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var color = this.color;
+
+    final json = <String, Object?>{};
+    json[r'color'] = color;
+    return json;
+  }
+
+  LookAndFeelBordersAndDividers copyWith({String? color}) {
+    return LookAndFeelBordersAndDividers(
+      color: color ?? this.color,
+    );
+  }
+}
+
+class LookAndFeelHeadings {
+  final String color;
+
+  LookAndFeelHeadings({required this.color});
+
+  factory LookAndFeelHeadings.fromJson(Map<String, Object?> json) {
+    return LookAndFeelHeadings(
+      color: json[r'color'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var color = this.color;
+
+    final json = <String, Object?>{};
+    json[r'color'] = color;
+    return json;
+  }
+
+  LookAndFeelHeadings copyWith({String? color}) {
+    return LookAndFeelHeadings(
+      color: color ?? this.color,
+    );
+  }
+}
+
+class LookAndFeelLinks {
+  final String color;
+
+  LookAndFeelLinks({required this.color});
+
+  factory LookAndFeelLinks.fromJson(Map<String, Object?> json) {
+    return LookAndFeelLinks(
+      color: json[r'color'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var color = this.color;
+
+    final json = <String, Object?>{};
+    json[r'color'] = color;
+    return json;
+  }
+
+  LookAndFeelLinks copyWith({String? color}) {
+    return LookAndFeelLinks(
+      color: color ?? this.color,
+    );
+  }
+}
+
+/// Look and feel selection
+class LookAndFeelSelection {
+  /// The key of the space for which the look and feel settings will be
+  /// set.
+  final String spaceKey;
+  final LookAndFeelSelectionLookAndFeelType lookAndFeelType;
+
+  LookAndFeelSelection({required this.spaceKey, required this.lookAndFeelType});
+
+  factory LookAndFeelSelection.fromJson(Map<String, Object?> json) {
+    return LookAndFeelSelection(
+      spaceKey: json[r'spaceKey'] as String? ?? '',
+      lookAndFeelType: LookAndFeelSelectionLookAndFeelType.fromValue(
+          json[r'lookAndFeelType'] as String? ?? ''),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var spaceKey = this.spaceKey;
+    var lookAndFeelType = this.lookAndFeelType;
+
+    final json = <String, Object?>{};
+    json[r'spaceKey'] = spaceKey;
+    json[r'lookAndFeelType'] = lookAndFeelType.value;
+    return json;
+  }
+
+  LookAndFeelSelection copyWith(
+      {String? spaceKey,
+      LookAndFeelSelectionLookAndFeelType? lookAndFeelType}) {
+    return LookAndFeelSelection(
+      spaceKey: spaceKey ?? this.spaceKey,
+      lookAndFeelType: lookAndFeelType ?? this.lookAndFeelType,
+    );
+  }
+}
+
+class LookAndFeelSelectionLookAndFeelType {
+  static const global = LookAndFeelSelectionLookAndFeelType._('global');
+  static const custom = LookAndFeelSelectionLookAndFeelType._('custom');
+  static const theme = LookAndFeelSelectionLookAndFeelType._('theme');
+
+  static const values = [
+    global,
+    custom,
+    theme,
+  ];
+  final String value;
+
+  const LookAndFeelSelectionLookAndFeelType._(this.value);
+
+  static LookAndFeelSelectionLookAndFeelType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => LookAndFeelSelectionLookAndFeelType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class LookAndFeelSettings {
+  final LookAndFeelSettingsSelected selected;
+  final LookAndFeel global;
+  final LookAndFeel? theme;
+  final LookAndFeel custom;
+
+  LookAndFeelSettings(
+      {required this.selected,
+      required this.global,
+      this.theme,
+      required this.custom});
+
+  factory LookAndFeelSettings.fromJson(Map<String, Object?> json) {
+    return LookAndFeelSettings(
+      selected: LookAndFeelSettingsSelected.fromValue(
+          json[r'selected'] as String? ?? ''),
+      global: LookAndFeel.fromJson(
+          json[r'global'] as Map<String, Object?>? ?? const {}),
+      theme: json[r'theme'] != null
+          ? LookAndFeel.fromJson(json[r'theme']! as Map<String, Object?>)
+          : null,
+      custom: LookAndFeel.fromJson(
+          json[r'custom'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var selected = this.selected;
+    var global = this.global;
+    var theme = this.theme;
+    var custom = this.custom;
+
+    final json = <String, Object?>{};
+    json[r'selected'] = selected.value;
+    json[r'global'] = global.toJson();
+    if (theme != null) {
+      json[r'theme'] = theme.toJson();
+    }
+    json[r'custom'] = custom.toJson();
+    return json;
+  }
+
+  LookAndFeelSettings copyWith(
+      {LookAndFeelSettingsSelected? selected,
+      LookAndFeel? global,
+      LookAndFeel? theme,
+      LookAndFeel? custom}) {
+    return LookAndFeelSettings(
+      selected: selected ?? this.selected,
+      global: global ?? this.global,
+      theme: theme ?? this.theme,
+      custom: custom ?? this.custom,
+    );
+  }
+}
+
+class LookAndFeelSettingsSelected {
+  static const global = LookAndFeelSettingsSelected._('global');
+  static const custom = LookAndFeelSettingsSelected._('custom');
+
+  static const values = [
+    global,
+    custom,
+  ];
+  final String value;
+
+  const LookAndFeelSettingsSelected._(this.value);
+
+  static LookAndFeelSettingsSelected fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => LookAndFeelSettingsSelected._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// Look and feel settings returned after an update.
+class LookAndFeelUpdated {
+  LookAndFeelUpdated();
+
+  factory LookAndFeelUpdated.fromJson(Map<String, Object?> json) {
+    return LookAndFeelUpdated();
   }
 
   Map<String, Object?> toJson() {
@@ -10969,32 +11471,6 @@ class MacroInstance {
   }
 }
 
-class MenusLookAndFeelHoverOrFocus {
-  final String backgroundColor;
-
-  MenusLookAndFeelHoverOrFocus({required this.backgroundColor});
-
-  factory MenusLookAndFeelHoverOrFocus.fromJson(Map<String, Object?> json) {
-    return MenusLookAndFeelHoverOrFocus(
-      backgroundColor: json[r'backgroundColor'] as String? ?? '',
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var backgroundColor = this.backgroundColor;
-
-    final json = <String, Object?>{};
-    json[r'backgroundColor'] = backgroundColor;
-    return json;
-  }
-
-  MenusLookAndFeelHoverOrFocus copyWith({String? backgroundColor}) {
-    return MenusLookAndFeelHoverOrFocus(
-      backgroundColor: backgroundColor ?? this.backgroundColor,
-    );
-  }
-}
-
 class MenusLookAndFeel {
   final MenusLookAndFeelHoverOrFocus hoverOrFocus;
   final String color;
@@ -11024,6 +11500,32 @@ class MenusLookAndFeel {
     return MenusLookAndFeel(
       hoverOrFocus: hoverOrFocus ?? this.hoverOrFocus,
       color: color ?? this.color,
+    );
+  }
+}
+
+class MenusLookAndFeelHoverOrFocus {
+  final String backgroundColor;
+
+  MenusLookAndFeelHoverOrFocus({required this.backgroundColor});
+
+  factory MenusLookAndFeelHoverOrFocus.fromJson(Map<String, Object?> json) {
+    return MenusLookAndFeelHoverOrFocus(
+      backgroundColor: json[r'backgroundColor'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var backgroundColor = this.backgroundColor;
+
+    final json = <String, Object?>{};
+    json[r'backgroundColor'] = backgroundColor;
+    return json;
+  }
+
+  MenusLookAndFeelHoverOrFocus copyWith({String? backgroundColor}) {
+    return MenusLookAndFeelHoverOrFocus(
+      backgroundColor: backgroundColor ?? this.backgroundColor,
     );
   }
 }
@@ -11165,300 +11667,35 @@ class MigratedUserArray {
   }
 }
 
-class BulkUserLookupExpandable {
-  final String? operations;
-  final String? details;
-  final String? personalSpace;
+class NavigationLookAndFeel {
+  final String color;
+  final NavigationLookAndFeelHoverOrFocus hoverOrFocus;
 
-  BulkUserLookupExpandable({this.operations, this.details, this.personalSpace});
+  NavigationLookAndFeel({required this.color, required this.hoverOrFocus});
 
-  factory BulkUserLookupExpandable.fromJson(Map<String, Object?> json) {
-    return BulkUserLookupExpandable(
-      operations: json[r'operations'] as String?,
-      details: json[r'details'] as String?,
-      personalSpace: json[r'personalSpace'] as String?,
+  factory NavigationLookAndFeel.fromJson(Map<String, Object?> json) {
+    return NavigationLookAndFeel(
+      color: json[r'color'] as String? ?? '',
+      hoverOrFocus: NavigationLookAndFeelHoverOrFocus.fromJson(
+          json[r'hoverOrFocus'] as Map<String, Object?>? ?? const {}),
     );
   }
 
   Map<String, Object?> toJson() {
-    var operations = this.operations;
-    var details = this.details;
-    var personalSpace = this.personalSpace;
+    var color = this.color;
+    var hoverOrFocus = this.hoverOrFocus;
 
     final json = <String, Object?>{};
-    if (operations != null) {
-      json[r'operations'] = operations;
-    }
-    if (details != null) {
-      json[r'details'] = details;
-    }
-    if (personalSpace != null) {
-      json[r'personalSpace'] = personalSpace;
-    }
+    json[r'color'] = color;
+    json[r'hoverOrFocus'] = hoverOrFocus.toJson();
     return json;
   }
 
-  BulkUserLookupExpandable copyWith(
-      {String? operations, String? details, String? personalSpace}) {
-    return BulkUserLookupExpandable(
-      operations: operations ?? this.operations,
-      details: details ?? this.details,
-      personalSpace: personalSpace ?? this.personalSpace,
-    );
-  }
-}
-
-class BulkUserLookup {
-  final BulkUserLookupType type;
-
-  /// This property is no longer available and will be removed from the
-  /// documentation soon.
-  /// Use `accountId` instead.
-  /// See the
-  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
-  /// for details.
-  final String? username;
-
-  /// This property is no longer available and will be removed from the
-  /// documentation soon.
-  /// Use `accountId` instead.
-  /// See the
-  /// [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
-  /// for details.
-  final String? userKey;
-
-  /// The account ID of the user, which uniquely identifies the user across all
-  /// Atlassian products.
-  /// For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.
-  final String accountId;
-
-  /// The account type of the user, may return empty string if unavailable.
-  final String accountType;
-
-  /// The email address of the user. Depending on the user's privacy setting,
-  /// this may return an empty string.
-  final String email;
-
-  /// The public name or nickname of the user. Will always contain a value.
-  final String publicName;
-  final Icon profilePicture;
-
-  /// The display name of the user. Depending on the user's privacy setting,
-  /// this may be the same as publicName.
-  final String displayName;
-  final List<OperationCheckResult> operations;
-  final UserDetails? details;
-  final Space? personalSpace;
-  final BulkUserLookupExpandable expandable;
-  final GenericLinks links;
-
-  BulkUserLookup(
-      {required this.type,
-      this.username,
-      this.userKey,
-      required this.accountId,
-      required this.accountType,
-      required this.email,
-      required this.publicName,
-      required this.profilePicture,
-      required this.displayName,
-      List<OperationCheckResult>? operations,
-      this.details,
-      this.personalSpace,
-      required this.expandable,
-      required this.links})
-      : operations = operations ?? [];
-
-  factory BulkUserLookup.fromJson(Map<String, Object?> json) {
-    return BulkUserLookup(
-      type: BulkUserLookupType.fromValue(json[r'type'] as String? ?? ''),
-      username: json[r'username'] as String?,
-      userKey: json[r'userKey'] as String?,
-      accountId: json[r'accountId'] as String? ?? '',
-      accountType: json[r'accountType'] as String? ?? '',
-      email: json[r'email'] as String? ?? '',
-      publicName: json[r'publicName'] as String? ?? '',
-      profilePicture: Icon.fromJson(
-          json[r'profilePicture'] as Map<String, Object?>? ?? const {}),
-      displayName: json[r'displayName'] as String? ?? '',
-      operations: (json[r'operations'] as List<Object?>?)
-              ?.map((i) => OperationCheckResult.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      details: json[r'details'] != null
-          ? UserDetails.fromJson(json[r'details']! as Map<String, Object?>)
-          : null,
-      personalSpace: json[r'personalSpace'] != null
-          ? Space.fromJson(json[r'personalSpace']! as Map<String, Object?>)
-          : null,
-      expandable: BulkUserLookupExpandable.fromJson(
-          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
-      links: GenericLinks.fromJson(
-          json[r'_links'] as Map<String, Object?>? ?? const {}),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var type = this.type;
-    var username = this.username;
-    var userKey = this.userKey;
-    var accountId = this.accountId;
-    var accountType = this.accountType;
-    var email = this.email;
-    var publicName = this.publicName;
-    var profilePicture = this.profilePicture;
-    var displayName = this.displayName;
-    var operations = this.operations;
-    var details = this.details;
-    var personalSpace = this.personalSpace;
-    var expandable = this.expandable;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    json[r'type'] = type.value;
-    if (username != null) {
-      json[r'username'] = username;
-    }
-    if (userKey != null) {
-      json[r'userKey'] = userKey;
-    }
-    json[r'accountId'] = accountId;
-    json[r'accountType'] = accountType;
-    json[r'email'] = email;
-    json[r'publicName'] = publicName;
-    json[r'profilePicture'] = profilePicture.toJson();
-    json[r'displayName'] = displayName;
-    json[r'operations'] = operations.map((i) => i.toJson()).toList();
-    if (details != null) {
-      json[r'details'] = details.toJson();
-    }
-    if (personalSpace != null) {
-      json[r'personalSpace'] = personalSpace.toJson();
-    }
-    json[r'_expandable'] = expandable.toJson();
-    json[r'_links'] = links.toJson();
-    return json;
-  }
-
-  BulkUserLookup copyWith(
-      {BulkUserLookupType? type,
-      String? username,
-      String? userKey,
-      String? accountId,
-      String? accountType,
-      String? email,
-      String? publicName,
-      Icon? profilePicture,
-      String? displayName,
-      List<OperationCheckResult>? operations,
-      UserDetails? details,
-      Space? personalSpace,
-      BulkUserLookupExpandable? expandable,
-      GenericLinks? links}) {
-    return BulkUserLookup(
-      type: type ?? this.type,
-      username: username ?? this.username,
-      userKey: userKey ?? this.userKey,
-      accountId: accountId ?? this.accountId,
-      accountType: accountType ?? this.accountType,
-      email: email ?? this.email,
-      publicName: publicName ?? this.publicName,
-      profilePicture: profilePicture ?? this.profilePicture,
-      displayName: displayName ?? this.displayName,
-      operations: operations ?? this.operations,
-      details: details ?? this.details,
-      personalSpace: personalSpace ?? this.personalSpace,
-      expandable: expandable ?? this.expandable,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class BulkUserLookupType {
-  static const known = BulkUserLookupType._('known');
-  static const unknown = BulkUserLookupType._('unknown');
-  static const anonymous = BulkUserLookupType._('anonymous');
-  static const user = BulkUserLookupType._('user');
-
-  static const values = [
-    known,
-    unknown,
-    anonymous,
-    user,
-  ];
-  final String value;
-
-  const BulkUserLookupType._(this.value);
-
-  static BulkUserLookupType fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => BulkUserLookupType._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class BulkUserLookupArray {
-  final List<BulkUserLookup> results;
-  final int start;
-  final int limit;
-  final int size;
-  final GenericLinks links;
-
-  BulkUserLookupArray(
-      {required this.results,
-      required this.start,
-      required this.limit,
-      required this.size,
-      required this.links});
-
-  factory BulkUserLookupArray.fromJson(Map<String, Object?> json) {
-    return BulkUserLookupArray(
-      results: (json[r'results'] as List<Object?>?)
-              ?.map((i) => BulkUserLookup.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      start: (json[r'start'] as num?)?.toInt() ?? 0,
-      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
-      size: (json[r'size'] as num?)?.toInt() ?? 0,
-      links: GenericLinks.fromJson(
-          json[r'_links'] as Map<String, Object?>? ?? const {}),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var results = this.results;
-    var start = this.start;
-    var limit = this.limit;
-    var size = this.size;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    json[r'results'] = results.map((i) => i.toJson()).toList();
-    json[r'start'] = start;
-    json[r'limit'] = limit;
-    json[r'size'] = size;
-    json[r'_links'] = links.toJson();
-    return json;
-  }
-
-  BulkUserLookupArray copyWith(
-      {List<BulkUserLookup>? results,
-      int? start,
-      int? limit,
-      int? size,
-      GenericLinks? links}) {
-    return BulkUserLookupArray(
-      results: results ?? this.results,
-      start: start ?? this.start,
-      limit: limit ?? this.limit,
-      size: size ?? this.size,
-      links: links ?? this.links,
+  NavigationLookAndFeel copyWith(
+      {String? color, NavigationLookAndFeelHoverOrFocus? hoverOrFocus}) {
+    return NavigationLookAndFeel(
+      color: color ?? this.color,
+      hoverOrFocus: hoverOrFocus ?? this.hoverOrFocus,
     );
   }
 }
@@ -11493,39 +11730,6 @@ class NavigationLookAndFeelHoverOrFocus {
     return NavigationLookAndFeelHoverOrFocus(
       backgroundColor: backgroundColor ?? this.backgroundColor,
       color: color ?? this.color,
-    );
-  }
-}
-
-class NavigationLookAndFeel {
-  final String color;
-  final NavigationLookAndFeelHoverOrFocus hoverOrFocus;
-
-  NavigationLookAndFeel({required this.color, required this.hoverOrFocus});
-
-  factory NavigationLookAndFeel.fromJson(Map<String, Object?> json) {
-    return NavigationLookAndFeel(
-      color: json[r'color'] as String? ?? '',
-      hoverOrFocus: NavigationLookAndFeelHoverOrFocus.fromJson(
-          json[r'hoverOrFocus'] as Map<String, Object?>? ?? const {}),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var color = this.color;
-    var hoverOrFocus = this.hoverOrFocus;
-
-    final json = <String, Object?>{};
-    json[r'color'] = color;
-    json[r'hoverOrFocus'] = hoverOrFocus.toJson();
-    return json;
-  }
-
-  NavigationLookAndFeel copyWith(
-      {String? color, NavigationLookAndFeelHoverOrFocus? hoverOrFocus}) {
-    return NavigationLookAndFeel(
-      color: color ?? this.color,
-      hoverOrFocus: hoverOrFocus ?? this.hoverOrFocus,
     );
   }
 }
@@ -11643,6 +11847,178 @@ class OperationCheckResultTargetType {
   String toString() => value;
 }
 
+/// This object represents the response for the content permission check API. If
+/// the user or group does not have
+/// permissions, the following errors may be returned:
+///
+/// - Group does not have permission to the space
+/// - Group does not have permission to the content
+/// - User is not allowed to use Confluence
+/// - User does not have permission to the space
+/// - User does not have permission to the content
+/// - Anonymous users are not allowed to use Confluence
+/// - Anonymous user does not have permission to the space
+/// - Anonymous user does not have permission to the content
+class PermissionCheckResponse {
+  final bool hasPermission;
+  final List<Message> errors;
+
+  PermissionCheckResponse({required this.hasPermission, List<Message>? errors})
+      : errors = errors ?? [];
+
+  factory PermissionCheckResponse.fromJson(Map<String, Object?> json) {
+    return PermissionCheckResponse(
+      hasPermission: json[r'hasPermission'] as bool? ?? false,
+      errors: (json[r'errors'] as List<Object?>?)
+              ?.map((i) =>
+                  Message.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var hasPermission = this.hasPermission;
+    var errors = this.errors;
+
+    final json = <String, Object?>{};
+    json[r'hasPermission'] = hasPermission;
+    json[r'errors'] = errors.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PermissionCheckResponse copyWith(
+      {bool? hasPermission, List<Message>? errors}) {
+    return PermissionCheckResponse(
+      hasPermission: hasPermission ?? this.hasPermission,
+      errors: errors ?? this.errors,
+    );
+  }
+}
+
+/// The user or group that the permission applies to.
+class PermissionSubject {
+  final PermissionSubjectType type;
+
+  /// for `type=user`, identifier should be user's accountId or `anonymous` for
+  /// anonymous users
+  ///
+  /// for `type=group`, identifier should be name of the group or groupId
+  final String identifier;
+
+  PermissionSubject({required this.type, required this.identifier});
+
+  factory PermissionSubject.fromJson(Map<String, Object?> json) {
+    return PermissionSubject(
+      type: PermissionSubjectType.fromValue(json[r'type'] as String? ?? ''),
+      identifier: json[r'identifier'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var identifier = this.identifier;
+
+    final json = <String, Object?>{};
+    json[r'type'] = type.value;
+    json[r'identifier'] = identifier;
+    return json;
+  }
+
+  PermissionSubject copyWith(
+      {PermissionSubjectType? type, String? identifier}) {
+    return PermissionSubject(
+      type: type ?? this.type,
+      identifier: identifier ?? this.identifier,
+    );
+  }
+}
+
+class PermissionSubjectType {
+  static const user = PermissionSubjectType._('user');
+  static const group = PermissionSubjectType._('group');
+
+  static const values = [
+    user,
+    group,
+  ];
+  final String value;
+
+  const PermissionSubjectType._(this.value);
+
+  static PermissionSubjectType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => PermissionSubjectType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// The user or group that the permission applies to.
+class PermissionSubjectWithGroupId {
+  final PermissionSubjectWithGroupIdType type;
+
+  /// for `type=user`, identifier should be user's accountId or `anonymous` for
+  /// anonymous users
+  ///
+  /// for `type=group`, identifier should be ID of the group
+  final String identifier;
+
+  PermissionSubjectWithGroupId({required this.type, required this.identifier});
+
+  factory PermissionSubjectWithGroupId.fromJson(Map<String, Object?> json) {
+    return PermissionSubjectWithGroupId(
+      type: PermissionSubjectWithGroupIdType.fromValue(
+          json[r'type'] as String? ?? ''),
+      identifier: json[r'identifier'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var identifier = this.identifier;
+
+    final json = <String, Object?>{};
+    json[r'type'] = type.value;
+    json[r'identifier'] = identifier;
+    return json;
+  }
+
+  PermissionSubjectWithGroupId copyWith(
+      {PermissionSubjectWithGroupIdType? type, String? identifier}) {
+    return PermissionSubjectWithGroupId(
+      type: type ?? this.type,
+      identifier: identifier ?? this.identifier,
+    );
+  }
+}
+
+class PermissionSubjectWithGroupIdType {
+  static const user = PermissionSubjectWithGroupIdType._('user');
+  static const group = PermissionSubjectWithGroupIdType._('group');
+
+  static const values = [
+    user,
+    group,
+  ];
+  final String value;
+
+  const PermissionSubjectWithGroupIdType._(this.value);
+
+  static PermissionSubjectWithGroupIdType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => PermissionSubjectWithGroupIdType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 /// The value of the property. This can be empty or a complex object.
 /// For example,
 /// ```
@@ -11662,44 +12038,6 @@ class PropertyValue {
   Map<String, Object?> toJson() {
     final json = <String, Object?>{};
     return json;
-  }
-}
-
-class RelationExpandable {
-  final String relationData;
-  final String source;
-  final String target;
-
-  RelationExpandable(
-      {required this.relationData, required this.source, required this.target});
-
-  factory RelationExpandable.fromJson(Map<String, Object?> json) {
-    return RelationExpandable(
-      relationData: json[r'relationData'] as String? ?? '',
-      source: json[r'source'] as String? ?? '',
-      target: json[r'target'] as String? ?? '',
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var relationData = this.relationData;
-    var source = this.source;
-    var target = this.target;
-
-    final json = <String, Object?>{};
-    json[r'relationData'] = relationData;
-    json[r'source'] = source;
-    json[r'target'] = target;
-    return json;
-  }
-
-  RelationExpandable copyWith(
-      {String? relationData, String? source, String? target}) {
-    return RelationExpandable(
-      relationData: relationData ?? this.relationData,
-      source: source ?? this.source,
-      target: target ?? this.target,
-    );
   }
 }
 
@@ -11879,6 +12217,44 @@ class RelationData {
       createdBy: createdBy ?? this.createdBy,
       createdDate: createdDate ?? this.createdDate,
       friendlyCreatedDate: friendlyCreatedDate ?? this.friendlyCreatedDate,
+    );
+  }
+}
+
+class RelationExpandable {
+  final String relationData;
+  final String source;
+  final String target;
+
+  RelationExpandable(
+      {required this.relationData, required this.source, required this.target});
+
+  factory RelationExpandable.fromJson(Map<String, Object?> json) {
+    return RelationExpandable(
+      relationData: json[r'relationData'] as String? ?? '',
+      source: json[r'source'] as String? ?? '',
+      target: json[r'target'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var relationData = this.relationData;
+    var source = this.source;
+    var target = this.target;
+
+    final json = <String, Object?>{};
+    json[r'relationData'] = relationData;
+    json[r'source'] = source;
+    json[r'target'] = target;
+    return json;
+  }
+
+  RelationExpandable copyWith(
+      {String? relationData, String? source, String? target}) {
+    return RelationExpandable(
+      relationData: relationData ?? this.relationData,
+      source: source ?? this.source,
+      target: target ?? this.target,
     );
   }
 }
@@ -12266,210 +12642,6 @@ class SearchResult {
   }
 }
 
-class SpaceDescription {
-  final SpaceDescription? plain;
-  final SpaceDescription? view;
-
-  SpaceDescription({this.plain, this.view});
-
-  factory SpaceDescription.fromJson(Map<String, Object?> json) {
-    return SpaceDescription(
-      plain: json[r'plain'] != null
-          ? SpaceDescription.fromJson(json[r'plain']! as Map<String, Object?>)
-          : null,
-      view: json[r'view'] != null
-          ? SpaceDescription.fromJson(json[r'view']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var plain = this.plain;
-    var view = this.view;
-
-    final json = <String, Object?>{};
-    if (plain != null) {
-      json[r'plain'] = plain.toJson();
-    }
-    if (view != null) {
-      json[r'view'] = view.toJson();
-    }
-    return json;
-  }
-
-  SpaceDescription copyWith({SpaceDescription? plain, SpaceDescription? view}) {
-    return SpaceDescription(
-      plain: plain ?? this.plain,
-      view: view ?? this.view,
-    );
-  }
-}
-
-class SpaceMetadata {
-  final LabelArray labels;
-
-  SpaceMetadata({required this.labels});
-
-  factory SpaceMetadata.fromJson(Map<String, Object?> json) {
-    return SpaceMetadata(
-      labels: LabelArray.fromJson(
-          json[r'labels'] as Map<String, Object?>? ?? const {}),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var labels = this.labels;
-
-    final json = <String, Object?>{};
-    json[r'labels'] = labels.toJson();
-    return json;
-  }
-
-  SpaceMetadata copyWith({LabelArray? labels}) {
-    return SpaceMetadata(
-      labels: labels ?? this.labels,
-    );
-  }
-}
-
-class SpaceHistory {
-  final DateTime createdDate;
-
-  SpaceHistory({required this.createdDate});
-
-  factory SpaceHistory.fromJson(Map<String, Object?> json) {
-    return SpaceHistory(
-      createdDate: DateTime.tryParse(json[r'createdDate'] as String? ?? '') ??
-          DateTime(0),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var createdDate = this.createdDate;
-
-    final json = <String, Object?>{};
-    json[r'createdDate'] = createdDate.toIso8601String();
-    return json;
-  }
-
-  SpaceHistory copyWith({DateTime? createdDate}) {
-    return SpaceHistory(
-      createdDate: createdDate ?? this.createdDate,
-    );
-  }
-}
-
-class SpaceExpandable {
-  final String? settings;
-  final String? metadata;
-  final String? operations;
-  final String? lookAndFeel;
-  final String? permissions;
-  final String? icon;
-  final String? description;
-  final String? theme;
-  final String? history;
-  final String? homepage;
-
-  SpaceExpandable(
-      {this.settings,
-      this.metadata,
-      this.operations,
-      this.lookAndFeel,
-      this.permissions,
-      this.icon,
-      this.description,
-      this.theme,
-      this.history,
-      this.homepage});
-
-  factory SpaceExpandable.fromJson(Map<String, Object?> json) {
-    return SpaceExpandable(
-      settings: json[r'settings'] as String?,
-      metadata: json[r'metadata'] as String?,
-      operations: json[r'operations'] as String?,
-      lookAndFeel: json[r'lookAndFeel'] as String?,
-      permissions: json[r'permissions'] as String?,
-      icon: json[r'icon'] as String?,
-      description: json[r'description'] as String?,
-      theme: json[r'theme'] as String?,
-      history: json[r'history'] as String?,
-      homepage: json[r'homepage'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var settings = this.settings;
-    var metadata = this.metadata;
-    var operations = this.operations;
-    var lookAndFeel = this.lookAndFeel;
-    var permissions = this.permissions;
-    var icon = this.icon;
-    var description = this.description;
-    var theme = this.theme;
-    var history = this.history;
-    var homepage = this.homepage;
-
-    final json = <String, Object?>{};
-    if (settings != null) {
-      json[r'settings'] = settings;
-    }
-    if (metadata != null) {
-      json[r'metadata'] = metadata;
-    }
-    if (operations != null) {
-      json[r'operations'] = operations;
-    }
-    if (lookAndFeel != null) {
-      json[r'lookAndFeel'] = lookAndFeel;
-    }
-    if (permissions != null) {
-      json[r'permissions'] = permissions;
-    }
-    if (icon != null) {
-      json[r'icon'] = icon;
-    }
-    if (description != null) {
-      json[r'description'] = description;
-    }
-    if (theme != null) {
-      json[r'theme'] = theme;
-    }
-    if (history != null) {
-      json[r'history'] = history;
-    }
-    if (homepage != null) {
-      json[r'homepage'] = homepage;
-    }
-    return json;
-  }
-
-  SpaceExpandable copyWith(
-      {String? settings,
-      String? metadata,
-      String? operations,
-      String? lookAndFeel,
-      String? permissions,
-      String? icon,
-      String? description,
-      String? theme,
-      String? history,
-      String? homepage}) {
-    return SpaceExpandable(
-      settings: settings ?? this.settings,
-      metadata: metadata ?? this.metadata,
-      operations: operations ?? this.operations,
-      lookAndFeel: lookAndFeel ?? this.lookAndFeel,
-      permissions: permissions ?? this.permissions,
-      icon: icon ?? this.icon,
-      description: description ?? this.description,
-      theme: theme ?? this.theme,
-      history: history ?? this.history,
-      homepage: homepage ?? this.homepage,
-    );
-  }
-}
-
 class Space {
   final int id;
   final String key;
@@ -12789,6 +12961,75 @@ class SpaceCreate {
   }
 }
 
+class SpaceDescription {
+  final SpaceDescription? plain;
+  final SpaceDescription? view;
+
+  SpaceDescription({this.plain, this.view});
+
+  factory SpaceDescription.fromJson(Map<String, Object?> json) {
+    return SpaceDescription(
+      plain: json[r'plain'] != null
+          ? SpaceDescription.fromJson(json[r'plain']! as Map<String, Object?>)
+          : null,
+      view: json[r'view'] != null
+          ? SpaceDescription.fromJson(json[r'view']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var plain = this.plain;
+    var view = this.view;
+
+    final json = <String, Object?>{};
+    if (plain != null) {
+      json[r'plain'] = plain.toJson();
+    }
+    if (view != null) {
+      json[r'view'] = view.toJson();
+    }
+    return json;
+  }
+
+  SpaceDescription copyWith({SpaceDescription? plain, SpaceDescription? view}) {
+    return SpaceDescription(
+      plain: plain ?? this.plain,
+      view: view ?? this.view,
+    );
+  }
+}
+
+/// The description of the new/updated space. Note, only the 'plain'
+/// representation
+/// can be used for the description when creating or updating a space.
+class SpaceDescriptionCreate {
+  final SpaceDescriptionCreatePlain plain;
+
+  SpaceDescriptionCreate({required this.plain});
+
+  factory SpaceDescriptionCreate.fromJson(Map<String, Object?> json) {
+    return SpaceDescriptionCreate(
+      plain: SpaceDescriptionCreatePlain.fromJson(
+          json[r'plain'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var plain = this.plain;
+
+    final json = <String, Object?>{};
+    json[r'plain'] = plain.toJson();
+    return json;
+  }
+
+  SpaceDescriptionCreate copyWith({SpaceDescriptionCreatePlain? plain}) {
+    return SpaceDescriptionCreate(
+      plain: plain ?? this.plain,
+    );
+  }
+}
+
 class SpaceDescriptionCreatePlain {
   /// The space description.
   final String? value;
@@ -12828,189 +13069,167 @@ class SpaceDescriptionCreatePlain {
   }
 }
 
-/// The description of the new/updated space. Note, only the 'plain'
-/// representation
-/// can be used for the description when creating or updating a space.
-class SpaceDescriptionCreate {
-  final SpaceDescriptionCreatePlain plain;
+class SpaceExpandable {
+  final String? settings;
+  final String? metadata;
+  final String? operations;
+  final String? lookAndFeel;
+  final String? permissions;
+  final String? icon;
+  final String? description;
+  final String? theme;
+  final String? history;
+  final String? homepage;
 
-  SpaceDescriptionCreate({required this.plain});
+  SpaceExpandable(
+      {this.settings,
+      this.metadata,
+      this.operations,
+      this.lookAndFeel,
+      this.permissions,
+      this.icon,
+      this.description,
+      this.theme,
+      this.history,
+      this.homepage});
 
-  factory SpaceDescriptionCreate.fromJson(Map<String, Object?> json) {
-    return SpaceDescriptionCreate(
-      plain: SpaceDescriptionCreatePlain.fromJson(
-          json[r'plain'] as Map<String, Object?>? ?? const {}),
+  factory SpaceExpandable.fromJson(Map<String, Object?> json) {
+    return SpaceExpandable(
+      settings: json[r'settings'] as String?,
+      metadata: json[r'metadata'] as String?,
+      operations: json[r'operations'] as String?,
+      lookAndFeel: json[r'lookAndFeel'] as String?,
+      permissions: json[r'permissions'] as String?,
+      icon: json[r'icon'] as String?,
+      description: json[r'description'] as String?,
+      theme: json[r'theme'] as String?,
+      history: json[r'history'] as String?,
+      homepage: json[r'homepage'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var plain = this.plain;
+    var settings = this.settings;
+    var metadata = this.metadata;
+    var operations = this.operations;
+    var lookAndFeel = this.lookAndFeel;
+    var permissions = this.permissions;
+    var icon = this.icon;
+    var description = this.description;
+    var theme = this.theme;
+    var history = this.history;
+    var homepage = this.homepage;
 
     final json = <String, Object?>{};
-    json[r'plain'] = plain.toJson();
-    return json;
-  }
-
-  SpaceDescriptionCreate copyWith({SpaceDescriptionCreatePlain? plain}) {
-    return SpaceDescriptionCreate(
-      plain: plain ?? this.plain,
-    );
-  }
-}
-
-class SpacePermissionSubjectsUser {
-  final List<User> results;
-  final int size;
-
-  SpacePermissionSubjectsUser({required this.results, required this.size});
-
-  factory SpacePermissionSubjectsUser.fromJson(Map<String, Object?> json) {
-    return SpacePermissionSubjectsUser(
-      results: (json[r'results'] as List<Object?>?)
-              ?.map(
-                  (i) => User.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      size: (json[r'size'] as num?)?.toInt() ?? 0,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var results = this.results;
-    var size = this.size;
-
-    final json = <String, Object?>{};
-    json[r'results'] = results.map((i) => i.toJson()).toList();
-    json[r'size'] = size;
-    return json;
-  }
-
-  SpacePermissionSubjectsUser copyWith({List<User>? results, int? size}) {
-    return SpacePermissionSubjectsUser(
-      results: results ?? this.results,
-      size: size ?? this.size,
-    );
-  }
-}
-
-class SpacePermissionSubjectsGroup {
-  final List<Group> results;
-  final int size;
-
-  SpacePermissionSubjectsGroup({required this.results, required this.size});
-
-  factory SpacePermissionSubjectsGroup.fromJson(Map<String, Object?> json) {
-    return SpacePermissionSubjectsGroup(
-      results: (json[r'results'] as List<Object?>?)
-              ?.map(
-                  (i) => Group.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      size: (json[r'size'] as num?)?.toInt() ?? 0,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var results = this.results;
-    var size = this.size;
-
-    final json = <String, Object?>{};
-    json[r'results'] = results.map((i) => i.toJson()).toList();
-    json[r'size'] = size;
-    return json;
-  }
-
-  SpacePermissionSubjectsGroup copyWith({List<Group>? results, int? size}) {
-    return SpacePermissionSubjectsGroup(
-      results: results ?? this.results,
-      size: size ?? this.size,
-    );
-  }
-}
-
-class SpacePermissionSubjectsExpandable {
-  final String? user;
-  final String? group;
-
-  SpacePermissionSubjectsExpandable({this.user, this.group});
-
-  factory SpacePermissionSubjectsExpandable.fromJson(
-      Map<String, Object?> json) {
-    return SpacePermissionSubjectsExpandable(
-      user: json[r'user'] as String?,
-      group: json[r'group'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var user = this.user;
-    var group = this.group;
-
-    final json = <String, Object?>{};
-    if (user != null) {
-      json[r'user'] = user;
+    if (settings != null) {
+      json[r'settings'] = settings;
     }
-    if (group != null) {
-      json[r'group'] = group;
+    if (metadata != null) {
+      json[r'metadata'] = metadata;
+    }
+    if (operations != null) {
+      json[r'operations'] = operations;
+    }
+    if (lookAndFeel != null) {
+      json[r'lookAndFeel'] = lookAndFeel;
+    }
+    if (permissions != null) {
+      json[r'permissions'] = permissions;
+    }
+    if (icon != null) {
+      json[r'icon'] = icon;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (theme != null) {
+      json[r'theme'] = theme;
+    }
+    if (history != null) {
+      json[r'history'] = history;
+    }
+    if (homepage != null) {
+      json[r'homepage'] = homepage;
     }
     return json;
   }
 
-  SpacePermissionSubjectsExpandable copyWith({String? user, String? group}) {
-    return SpacePermissionSubjectsExpandable(
-      user: user ?? this.user,
-      group: group ?? this.group,
+  SpaceExpandable copyWith(
+      {String? settings,
+      String? metadata,
+      String? operations,
+      String? lookAndFeel,
+      String? permissions,
+      String? icon,
+      String? description,
+      String? theme,
+      String? history,
+      String? homepage}) {
+    return SpaceExpandable(
+      settings: settings ?? this.settings,
+      metadata: metadata ?? this.metadata,
+      operations: operations ?? this.operations,
+      lookAndFeel: lookAndFeel ?? this.lookAndFeel,
+      permissions: permissions ?? this.permissions,
+      icon: icon ?? this.icon,
+      description: description ?? this.description,
+      theme: theme ?? this.theme,
+      history: history ?? this.history,
+      homepage: homepage ?? this.homepage,
     );
   }
 }
 
-/// The users and/or groups that the permission applies to.
-class SpacePermissionSubjects {
-  final SpacePermissionSubjectsUser? user;
-  final SpacePermissionSubjectsGroup? group;
-  final SpacePermissionSubjectsExpandable expandable;
+class SpaceHistory {
+  final DateTime createdDate;
 
-  SpacePermissionSubjects({this.user, this.group, required this.expandable});
+  SpaceHistory({required this.createdDate});
 
-  factory SpacePermissionSubjects.fromJson(Map<String, Object?> json) {
-    return SpacePermissionSubjects(
-      user: json[r'user'] != null
-          ? SpacePermissionSubjectsUser.fromJson(
-              json[r'user']! as Map<String, Object?>)
-          : null,
-      group: json[r'group'] != null
-          ? SpacePermissionSubjectsGroup.fromJson(
-              json[r'group']! as Map<String, Object?>)
-          : null,
-      expandable: SpacePermissionSubjectsExpandable.fromJson(
-          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
+  factory SpaceHistory.fromJson(Map<String, Object?> json) {
+    return SpaceHistory(
+      createdDate: DateTime.tryParse(json[r'createdDate'] as String? ?? '') ??
+          DateTime(0),
     );
   }
 
   Map<String, Object?> toJson() {
-    var user = this.user;
-    var group = this.group;
-    var expandable = this.expandable;
+    var createdDate = this.createdDate;
 
     final json = <String, Object?>{};
-    if (user != null) {
-      json[r'user'] = user.toJson();
-    }
-    if (group != null) {
-      json[r'group'] = group.toJson();
-    }
-    json[r'_expandable'] = expandable.toJson();
+    json[r'createdDate'] = createdDate.toIso8601String();
     return json;
   }
 
-  SpacePermissionSubjects copyWith(
-      {SpacePermissionSubjectsUser? user,
-      SpacePermissionSubjectsGroup? group,
-      SpacePermissionSubjectsExpandable? expandable}) {
-    return SpacePermissionSubjects(
-      user: user ?? this.user,
-      group: group ?? this.group,
-      expandable: expandable ?? this.expandable,
+  SpaceHistory copyWith({DateTime? createdDate}) {
+    return SpaceHistory(
+      createdDate: createdDate ?? this.createdDate,
+    );
+  }
+}
+
+class SpaceMetadata {
+  final LabelArray labels;
+
+  SpaceMetadata({required this.labels});
+
+  factory SpaceMetadata.fromJson(Map<String, Object?> json) {
+    return SpaceMetadata(
+      labels: LabelArray.fromJson(
+          json[r'labels'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var labels = this.labels;
+
+    final json = <String, Object?>{};
+    json[r'labels'] = labels.toJson();
+    return json;
+  }
+
+  SpaceMetadata copyWith({LabelArray? labels}) {
+    return SpaceMetadata(
+      labels: labels ?? this.labels,
     );
   }
 }
@@ -13083,6 +13302,339 @@ class SpacePermission {
   }
 }
 
+/// The users and/or groups that the permission applies to.
+class SpacePermissionSubjects {
+  final SpacePermissionSubjectsUser? user;
+  final SpacePermissionSubjectsGroup? group;
+  final SpacePermissionSubjectsExpandable expandable;
+
+  SpacePermissionSubjects({this.user, this.group, required this.expandable});
+
+  factory SpacePermissionSubjects.fromJson(Map<String, Object?> json) {
+    return SpacePermissionSubjects(
+      user: json[r'user'] != null
+          ? SpacePermissionSubjectsUser.fromJson(
+              json[r'user']! as Map<String, Object?>)
+          : null,
+      group: json[r'group'] != null
+          ? SpacePermissionSubjectsGroup.fromJson(
+              json[r'group']! as Map<String, Object?>)
+          : null,
+      expandable: SpacePermissionSubjectsExpandable.fromJson(
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var user = this.user;
+    var group = this.group;
+    var expandable = this.expandable;
+
+    final json = <String, Object?>{};
+    if (user != null) {
+      json[r'user'] = user.toJson();
+    }
+    if (group != null) {
+      json[r'group'] = group.toJson();
+    }
+    json[r'_expandable'] = expandable.toJson();
+    return json;
+  }
+
+  SpacePermissionSubjects copyWith(
+      {SpacePermissionSubjectsUser? user,
+      SpacePermissionSubjectsGroup? group,
+      SpacePermissionSubjectsExpandable? expandable}) {
+    return SpacePermissionSubjects(
+      user: user ?? this.user,
+      group: group ?? this.group,
+      expandable: expandable ?? this.expandable,
+    );
+  }
+}
+
+class SpacePermissionSubjectsExpandable {
+  final String? user;
+  final String? group;
+
+  SpacePermissionSubjectsExpandable({this.user, this.group});
+
+  factory SpacePermissionSubjectsExpandable.fromJson(
+      Map<String, Object?> json) {
+    return SpacePermissionSubjectsExpandable(
+      user: json[r'user'] as String?,
+      group: json[r'group'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var user = this.user;
+    var group = this.group;
+
+    final json = <String, Object?>{};
+    if (user != null) {
+      json[r'user'] = user;
+    }
+    if (group != null) {
+      json[r'group'] = group;
+    }
+    return json;
+  }
+
+  SpacePermissionSubjectsExpandable copyWith({String? user, String? group}) {
+    return SpacePermissionSubjectsExpandable(
+      user: user ?? this.user,
+      group: group ?? this.group,
+    );
+  }
+}
+
+class SpacePermissionSubjectsGroup {
+  final List<Group> results;
+  final int size;
+
+  SpacePermissionSubjectsGroup({required this.results, required this.size});
+
+  factory SpacePermissionSubjectsGroup.fromJson(Map<String, Object?> json) {
+    return SpacePermissionSubjectsGroup(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map(
+                  (i) => Group.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var size = this.size;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'size'] = size;
+    return json;
+  }
+
+  SpacePermissionSubjectsGroup copyWith({List<Group>? results, int? size}) {
+    return SpacePermissionSubjectsGroup(
+      results: results ?? this.results,
+      size: size ?? this.size,
+    );
+  }
+}
+
+class SpacePermissionSubjectsUser {
+  final List<User> results;
+  final int size;
+
+  SpacePermissionSubjectsUser({required this.results, required this.size});
+
+  factory SpacePermissionSubjectsUser.fromJson(Map<String, Object?> json) {
+    return SpacePermissionSubjectsUser(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map(
+                  (i) => User.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var size = this.size;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'size'] = size;
+    return json;
+  }
+
+  SpacePermissionSubjectsUser copyWith({List<User>? results, int? size}) {
+    return SpacePermissionSubjectsUser(
+      results: results ?? this.results,
+      size: size ?? this.size,
+    );
+  }
+}
+
+/// This object represents a single space permission. Permissions consist of
+/// at least one operation object with an accompanying subjects object.
+///
+/// The following combinations of `operation.key` and `operation.target` values
+/// are
+/// valid for the `operation` object:
+/// ``` bash
+/// 'create': 'page', 'blogpost', 'comment', 'attachment'
+/// 'read': 'space'
+/// 'delete': 'page', 'blogpost', 'comment', 'attachment'
+/// 'export': 'space'
+/// 'administer': 'space'
+/// ```
+class SpacePermissionV2 {
+  final int? id;
+  final PermissionSubject subject;
+  final SpacePermissionV2Operation operation;
+  final GenericLinks? links;
+
+  SpacePermissionV2(
+      {this.id, required this.subject, required this.operation, this.links});
+
+  factory SpacePermissionV2.fromJson(Map<String, Object?> json) {
+    return SpacePermissionV2(
+      id: (json[r'id'] as num?)?.toInt(),
+      subject: PermissionSubject.fromJson(
+          json[r'subject'] as Map<String, Object?>? ?? const {}),
+      operation: SpacePermissionV2Operation.fromJson(
+          json[r'operation'] as Map<String, Object?>? ?? const {}),
+      links: json[r'_links'] != null
+          ? GenericLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var subject = this.subject;
+    var operation = this.operation;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    json[r'subject'] = subject.toJson();
+    json[r'operation'] = operation.toJson();
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  SpacePermissionV2 copyWith(
+      {int? id,
+      PermissionSubject? subject,
+      SpacePermissionV2Operation? operation,
+      GenericLinks? links}) {
+    return SpacePermissionV2(
+      id: id ?? this.id,
+      subject: subject ?? this.subject,
+      operation: operation ?? this.operation,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class SpacePermissionV2Operation {
+  final SpacePermissionV2OperationKey key;
+
+  /// The space or content type that the operation applies to.
+  final SpacePermissionV2OperationTarget target;
+
+  SpacePermissionV2Operation({required this.key, required this.target});
+
+  factory SpacePermissionV2Operation.fromJson(Map<String, Object?> json) {
+    return SpacePermissionV2Operation(
+      key: SpacePermissionV2OperationKey.fromValue(
+          json[r'key'] as String? ?? ''),
+      target: SpacePermissionV2OperationTarget.fromValue(
+          json[r'target'] as String? ?? ''),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+    var target = this.target;
+
+    final json = <String, Object?>{};
+    json[r'key'] = key.value;
+    json[r'target'] = target.value;
+    return json;
+  }
+
+  SpacePermissionV2Operation copyWith(
+      {SpacePermissionV2OperationKey? key,
+      SpacePermissionV2OperationTarget? target}) {
+    return SpacePermissionV2Operation(
+      key: key ?? this.key,
+      target: target ?? this.target,
+    );
+  }
+}
+
+class SpacePermissionV2OperationKey {
+  static const administer = SpacePermissionV2OperationKey._('administer');
+  static const copy = SpacePermissionV2OperationKey._('copy');
+  static const create = SpacePermissionV2OperationKey._('create');
+  static const delete = SpacePermissionV2OperationKey._('delete');
+  static const export$ = SpacePermissionV2OperationKey._('export');
+  static const move = SpacePermissionV2OperationKey._('move');
+  static const purge = SpacePermissionV2OperationKey._('purge');
+  static const purgeVersion = SpacePermissionV2OperationKey._('purge_version');
+  static const read = SpacePermissionV2OperationKey._('read');
+  static const restore = SpacePermissionV2OperationKey._('restore');
+  static const update = SpacePermissionV2OperationKey._('update');
+  static const use = SpacePermissionV2OperationKey._('use');
+
+  static const values = [
+    administer,
+    copy,
+    create,
+    delete,
+    export$,
+    move,
+    purge,
+    purgeVersion,
+    read,
+    restore,
+    update,
+    use,
+  ];
+  final String value;
+
+  const SpacePermissionV2OperationKey._(this.value);
+
+  static SpacePermissionV2OperationKey fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => SpacePermissionV2OperationKey._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class SpacePermissionV2OperationTarget {
+  static const page = SpacePermissionV2OperationTarget._('page');
+  static const blogpost = SpacePermissionV2OperationTarget._('blogpost');
+  static const comment = SpacePermissionV2OperationTarget._('comment');
+  static const attachment = SpacePermissionV2OperationTarget._('attachment');
+  static const space = SpacePermissionV2OperationTarget._('space');
+
+  static const values = [
+    page,
+    blogpost,
+    comment,
+    attachment,
+    space,
+  ];
+  final String value;
+
+  const SpacePermissionV2OperationTarget._(this.value);
+
+  static SpacePermissionV2OperationTarget fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => SpacePermissionV2OperationTarget._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 /// This is the request object used when creating a new private space.
 class SpacePrivateCreate {
   /// The key for the new space. Format: See [Space
@@ -13126,87 +13678,6 @@ class SpacePrivateCreate {
       key: key ?? this.key,
       name: name ?? this.name,
       description: description ?? this.description,
-    );
-  }
-}
-
-class SpacePropertyVersion {
-  final DateTime when;
-  final String message;
-  final int number;
-  final bool minorEdit;
-
-  SpacePropertyVersion(
-      {required this.when,
-      required this.message,
-      required this.number,
-      required this.minorEdit});
-
-  factory SpacePropertyVersion.fromJson(Map<String, Object?> json) {
-    return SpacePropertyVersion(
-      when: DateTime.tryParse(json[r'when'] as String? ?? '') ?? DateTime(0),
-      message: json[r'message'] as String? ?? '',
-      number: (json[r'number'] as num?)?.toInt() ?? 0,
-      minorEdit: json[r'minorEdit'] as bool? ?? false,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var when = this.when;
-    var message = this.message;
-    var number = this.number;
-    var minorEdit = this.minorEdit;
-
-    final json = <String, Object?>{};
-    json[r'when'] = when.toIso8601String();
-    json[r'message'] = message;
-    json[r'number'] = number;
-    json[r'minorEdit'] = minorEdit;
-    return json;
-  }
-
-  SpacePropertyVersion copyWith(
-      {DateTime? when, String? message, int? number, bool? minorEdit}) {
-    return SpacePropertyVersion(
-      when: when ?? this.when,
-      message: message ?? this.message,
-      number: number ?? this.number,
-      minorEdit: minorEdit ?? this.minorEdit,
-    );
-  }
-}
-
-class SpacePropertyExpandable {
-  final String? version;
-  final String? space;
-
-  SpacePropertyExpandable({this.version, this.space});
-
-  factory SpacePropertyExpandable.fromJson(Map<String, Object?> json) {
-    return SpacePropertyExpandable(
-      version: json[r'version'] as String?,
-      space: json[r'space'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var version = this.version;
-    var space = this.space;
-
-    final json = <String, Object?>{};
-    if (version != null) {
-      json[r'version'] = version;
-    }
-    if (space != null) {
-      json[r'space'] = space;
-    }
-    return json;
-  }
-
-  SpacePropertyExpandable copyWith({String? version, String? space}) {
-    return SpacePropertyExpandable(
-      version: version ?? this.version,
-      space: space ?? this.space,
     );
   }
 }
@@ -13405,6 +13876,77 @@ class SpacePropertyCreateNoKey {
   }
 }
 
+class SpacePropertyExpandable {
+  final String? version;
+  final String? space;
+
+  SpacePropertyExpandable({this.version, this.space});
+
+  factory SpacePropertyExpandable.fromJson(Map<String, Object?> json) {
+    return SpacePropertyExpandable(
+      version: json[r'version'] as String?,
+      space: json[r'space'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var version = this.version;
+    var space = this.space;
+
+    final json = <String, Object?>{};
+    if (version != null) {
+      json[r'version'] = version;
+    }
+    if (space != null) {
+      json[r'space'] = space;
+    }
+    return json;
+  }
+
+  SpacePropertyExpandable copyWith({String? version, String? space}) {
+    return SpacePropertyExpandable(
+      version: version ?? this.version,
+      space: space ?? this.space,
+    );
+  }
+}
+
+class SpacePropertyUpdate {
+  /// The value of the property.
+  final Map<String, dynamic> value;
+
+  /// The version number of the property.
+  final SpacePropertyUpdateVersion version;
+
+  SpacePropertyUpdate({required this.value, required this.version});
+
+  factory SpacePropertyUpdate.fromJson(Map<String, Object?> json) {
+    return SpacePropertyUpdate(
+      value: json[r'value'] as Map<String, Object?>? ?? {},
+      version: SpacePropertyUpdateVersion.fromJson(
+          json[r'version'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var value = this.value;
+    var version = this.version;
+
+    final json = <String, Object?>{};
+    json[r'value'] = value;
+    json[r'version'] = version.toJson();
+    return json;
+  }
+
+  SpacePropertyUpdate copyWith(
+      {Map<String, dynamic>? value, SpacePropertyUpdateVersion? version}) {
+    return SpacePropertyUpdate(
+      value: value ?? this.value,
+      version: version ?? this.version,
+    );
+  }
+}
+
 /// The version number of the property.
 class SpacePropertyUpdateVersion {
   /// The new version for the updated space property. Set this to the
@@ -13445,38 +13987,48 @@ class SpacePropertyUpdateVersion {
   }
 }
 
-class SpacePropertyUpdate {
-  /// The value of the property.
-  final Map<String, dynamic> value;
+class SpacePropertyVersion {
+  final DateTime when;
+  final String message;
+  final int number;
+  final bool minorEdit;
 
-  /// The version number of the property.
-  final SpacePropertyUpdateVersion version;
+  SpacePropertyVersion(
+      {required this.when,
+      required this.message,
+      required this.number,
+      required this.minorEdit});
 
-  SpacePropertyUpdate({required this.value, required this.version});
-
-  factory SpacePropertyUpdate.fromJson(Map<String, Object?> json) {
-    return SpacePropertyUpdate(
-      value: json[r'value'] as Map<String, Object?>? ?? {},
-      version: SpacePropertyUpdateVersion.fromJson(
-          json[r'version'] as Map<String, Object?>? ?? const {}),
+  factory SpacePropertyVersion.fromJson(Map<String, Object?> json) {
+    return SpacePropertyVersion(
+      when: DateTime.tryParse(json[r'when'] as String? ?? '') ?? DateTime(0),
+      message: json[r'message'] as String? ?? '',
+      number: (json[r'number'] as num?)?.toInt() ?? 0,
+      minorEdit: json[r'minorEdit'] as bool? ?? false,
     );
   }
 
   Map<String, Object?> toJson() {
-    var value = this.value;
-    var version = this.version;
+    var when = this.when;
+    var message = this.message;
+    var number = this.number;
+    var minorEdit = this.minorEdit;
 
     final json = <String, Object?>{};
-    json[r'value'] = value;
-    json[r'version'] = version.toJson();
+    json[r'when'] = when.toIso8601String();
+    json[r'message'] = message;
+    json[r'number'] = number;
+    json[r'minorEdit'] = minorEdit;
     return json;
   }
 
-  SpacePropertyUpdate copyWith(
-      {Map<String, dynamic>? value, SpacePropertyUpdateVersion? version}) {
-    return SpacePropertyUpdate(
-      value: value ?? this.value,
-      version: version ?? this.version,
+  SpacePropertyVersion copyWith(
+      {DateTime? when, String? message, int? number, bool? minorEdit}) {
+    return SpacePropertyVersion(
+      when: when ?? this.when,
+      message: message ?? this.message,
+      number: number ?? this.number,
+      minorEdit: minorEdit ?? this.minorEdit,
     );
   }
 }
@@ -13552,34 +14104,6 @@ class SpaceSettingsUpdate {
   }
 }
 
-/// The page to set as the homepage of the space.
-class SpaceUpdateHomepage {
-  /// The ID of the page.
-  final String id;
-
-  SpaceUpdateHomepage({required this.id});
-
-  factory SpaceUpdateHomepage.fromJson(Map<String, Object?> json) {
-    return SpaceUpdateHomepage(
-      id: json[r'id'] as String? ?? '',
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-
-    final json = <String, Object?>{};
-    json[r'id'] = id;
-    return json;
-  }
-
-  SpaceUpdateHomepage copyWith({String? id}) {
-    return SpaceUpdateHomepage(
-      id: id ?? this.id,
-    );
-  }
-}
-
 class SpaceUpdate {
   /// The name of the space.
   final String? name;
@@ -13630,6 +14154,34 @@ class SpaceUpdate {
       name: name ?? this.name,
       description: description ?? this.description,
       homepage: homepage ?? this.homepage,
+    );
+  }
+}
+
+/// The page to set as the homepage of the space.
+class SpaceUpdateHomepage {
+  /// The ID of the page.
+  final String id;
+
+  SpaceUpdateHomepage({required this.id});
+
+  factory SpaceUpdateHomepage.fromJson(Map<String, Object?> json) {
+    return SpaceUpdateHomepage(
+      id: json[r'id'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    return json;
+  }
+
+  SpaceUpdateHomepage copyWith({String? id}) {
+    return SpaceUpdateHomepage(
+      id: id ?? this.id,
     );
   }
 }
@@ -13882,44 +14434,53 @@ class SpaceWatchUser {
   }
 }
 
-class SuperBatchWebResourcesUris {
-  final String? all;
-  final String? css;
-  final String? js;
+class SuperBatchWebResources {
+  final SuperBatchWebResourcesUris? uris;
+  final SuperBatchWebResourcesTags? tags;
+  final String? metatags;
 
-  SuperBatchWebResourcesUris({this.all, this.css, this.js});
+  SuperBatchWebResources({this.uris, this.tags, this.metatags});
 
-  factory SuperBatchWebResourcesUris.fromJson(Map<String, Object?> json) {
-    return SuperBatchWebResourcesUris(
-      all: json[r'all'] as String?,
-      css: json[r'css'] as String?,
-      js: json[r'js'] as String?,
+  factory SuperBatchWebResources.fromJson(Map<String, Object?> json) {
+    return SuperBatchWebResources(
+      uris: json[r'uris'] != null
+          ? SuperBatchWebResourcesUris.fromJson(
+              json[r'uris']! as Map<String, Object?>)
+          : null,
+      tags: json[r'tags'] != null
+          ? SuperBatchWebResourcesTags.fromJson(
+              json[r'tags']! as Map<String, Object?>)
+          : null,
+      metatags: json[r'metatags'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var all = this.all;
-    var css = this.css;
-    var js = this.js;
+    var uris = this.uris;
+    var tags = this.tags;
+    var metatags = this.metatags;
 
     final json = <String, Object?>{};
-    if (all != null) {
-      json[r'all'] = all;
+    if (uris != null) {
+      json[r'uris'] = uris.toJson();
     }
-    if (css != null) {
-      json[r'css'] = css;
+    if (tags != null) {
+      json[r'tags'] = tags.toJson();
     }
-    if (js != null) {
-      json[r'js'] = js;
+    if (metatags != null) {
+      json[r'metatags'] = metatags;
     }
     return json;
   }
 
-  SuperBatchWebResourcesUris copyWith({String? all, String? css, String? js}) {
-    return SuperBatchWebResourcesUris(
-      all: all ?? this.all,
-      css: css ?? this.css,
-      js: js ?? this.js,
+  SuperBatchWebResources copyWith(
+      {SuperBatchWebResourcesUris? uris,
+      SuperBatchWebResourcesTags? tags,
+      String? metatags}) {
+    return SuperBatchWebResources(
+      uris: uris ?? this.uris,
+      tags: tags ?? this.tags,
+      metatags: metatags ?? this.metatags,
     );
   }
 }
@@ -13974,53 +14535,44 @@ class SuperBatchWebResourcesTags {
   }
 }
 
-class SuperBatchWebResources {
-  final SuperBatchWebResourcesUris? uris;
-  final SuperBatchWebResourcesTags? tags;
-  final String? metatags;
+class SuperBatchWebResourcesUris {
+  final String? all;
+  final String? css;
+  final String? js;
 
-  SuperBatchWebResources({this.uris, this.tags, this.metatags});
+  SuperBatchWebResourcesUris({this.all, this.css, this.js});
 
-  factory SuperBatchWebResources.fromJson(Map<String, Object?> json) {
-    return SuperBatchWebResources(
-      uris: json[r'uris'] != null
-          ? SuperBatchWebResourcesUris.fromJson(
-              json[r'uris']! as Map<String, Object?>)
-          : null,
-      tags: json[r'tags'] != null
-          ? SuperBatchWebResourcesTags.fromJson(
-              json[r'tags']! as Map<String, Object?>)
-          : null,
-      metatags: json[r'metatags'] as String?,
+  factory SuperBatchWebResourcesUris.fromJson(Map<String, Object?> json) {
+    return SuperBatchWebResourcesUris(
+      all: json[r'all'] as String?,
+      css: json[r'css'] as String?,
+      js: json[r'js'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var uris = this.uris;
-    var tags = this.tags;
-    var metatags = this.metatags;
+    var all = this.all;
+    var css = this.css;
+    var js = this.js;
 
     final json = <String, Object?>{};
-    if (uris != null) {
-      json[r'uris'] = uris.toJson();
+    if (all != null) {
+      json[r'all'] = all;
     }
-    if (tags != null) {
-      json[r'tags'] = tags.toJson();
+    if (css != null) {
+      json[r'css'] = css;
     }
-    if (metatags != null) {
-      json[r'metatags'] = metatags;
+    if (js != null) {
+      json[r'js'] = js;
     }
     return json;
   }
 
-  SuperBatchWebResources copyWith(
-      {SuperBatchWebResourcesUris? uris,
-      SuperBatchWebResourcesTags? tags,
-      String? metatags}) {
-    return SuperBatchWebResources(
-      uris: uris ?? this.uris,
-      tags: tags ?? this.tags,
-      metatags: metatags ?? this.metatags,
+  SuperBatchWebResourcesUris copyWith({String? all, String? css, String? js}) {
+    return SuperBatchWebResourcesUris(
+      all: all ?? this.all,
+      css: css ?? this.css,
+      js: js ?? this.js,
     );
   }
 }
@@ -14429,49 +14981,6 @@ class ThemeUpdate {
   }
 }
 
-class UserExpandable {
-  final String? operations;
-  final String? details;
-  final String? personalSpace;
-
-  UserExpandable({this.operations, this.details, this.personalSpace});
-
-  factory UserExpandable.fromJson(Map<String, Object?> json) {
-    return UserExpandable(
-      operations: json[r'operations'] as String?,
-      details: json[r'details'] as String?,
-      personalSpace: json[r'personalSpace'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var operations = this.operations;
-    var details = this.details;
-    var personalSpace = this.personalSpace;
-
-    final json = <String, Object?>{};
-    if (operations != null) {
-      json[r'operations'] = operations;
-    }
-    if (details != null) {
-      json[r'details'] = details;
-    }
-    if (personalSpace != null) {
-      json[r'personalSpace'] = personalSpace;
-    }
-    return json;
-  }
-
-  UserExpandable copyWith(
-      {String? operations, String? details, String? personalSpace}) {
-    return UserExpandable(
-      operations: operations ?? this.operations,
-      details: details ?? this.details,
-      personalSpace: personalSpace ?? this.personalSpace,
-    );
-  }
-}
-
 class User {
   final UserType type;
 
@@ -14691,34 +15200,6 @@ class UserAccountType {
   String toString() => value;
 }
 
-class UserAnonymousExpandable {
-  final String? operations;
-
-  UserAnonymousExpandable({this.operations});
-
-  factory UserAnonymousExpandable.fromJson(Map<String, Object?> json) {
-    return UserAnonymousExpandable(
-      operations: json[r'operations'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var operations = this.operations;
-
-    final json = <String, Object?>{};
-    if (operations != null) {
-      json[r'operations'] = operations;
-    }
-    return json;
-  }
-
-  UserAnonymousExpandable copyWith({String? operations}) {
-    return UserAnonymousExpandable(
-      operations: operations ?? this.operations,
-    );
-  }
-}
-
 class UserAnonymous {
   final String type;
   final Icon profilePicture;
@@ -14790,6 +15271,34 @@ class UserAnonymous {
   }
 }
 
+class UserAnonymousExpandable {
+  final String? operations;
+
+  UserAnonymousExpandable({this.operations});
+
+  factory UserAnonymousExpandable.fromJson(Map<String, Object?> json) {
+    return UserAnonymousExpandable(
+      operations: json[r'operations'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var operations = this.operations;
+
+    final json = <String, Object?>{};
+    if (operations != null) {
+      json[r'operations'] = operations;
+    }
+    return json;
+  }
+
+  UserAnonymousExpandable copyWith({String? operations}) {
+    return UserAnonymousExpandable(
+      operations: operations ?? this.operations,
+    );
+  }
+}
+
 class UserArray {
   final List<User> results;
   final int start;
@@ -14850,6 +15359,48 @@ class UserArrayWithLinks {
   Map<String, Object?> toJson() {
     final json = <String, Object?>{};
     return json;
+  }
+}
+
+class UserDetails {
+  final UserDetailsBusiness? business;
+  final UserDetailsPersonal? personal;
+
+  UserDetails({this.business, this.personal});
+
+  factory UserDetails.fromJson(Map<String, Object?> json) {
+    return UserDetails(
+      business: json[r'business'] != null
+          ? UserDetailsBusiness.fromJson(
+              json[r'business']! as Map<String, Object?>)
+          : null,
+      personal: json[r'personal'] != null
+          ? UserDetailsPersonal.fromJson(
+              json[r'personal']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var business = this.business;
+    var personal = this.personal;
+
+    final json = <String, Object?>{};
+    if (business != null) {
+      json[r'business'] = business.toJson();
+    }
+    if (personal != null) {
+      json[r'personal'] = personal.toJson();
+    }
+    return json;
+  }
+
+  UserDetails copyWith(
+      {UserDetailsBusiness? business, UserDetailsPersonal? personal}) {
+    return UserDetails(
+      business: business ?? this.business,
+      personal: personal ?? this.personal,
+    );
   }
 }
 
@@ -14979,44 +15530,71 @@ class UserDetailsPersonal {
   }
 }
 
-class UserDetails {
-  final UserDetailsBusiness? business;
-  final UserDetailsPersonal? personal;
+class UserExpandable {
+  final String? operations;
+  final String? details;
+  final String? personalSpace;
 
-  UserDetails({this.business, this.personal});
+  UserExpandable({this.operations, this.details, this.personalSpace});
 
-  factory UserDetails.fromJson(Map<String, Object?> json) {
-    return UserDetails(
-      business: json[r'business'] != null
-          ? UserDetailsBusiness.fromJson(
-              json[r'business']! as Map<String, Object?>)
-          : null,
-      personal: json[r'personal'] != null
-          ? UserDetailsPersonal.fromJson(
-              json[r'personal']! as Map<String, Object?>)
-          : null,
+  factory UserExpandable.fromJson(Map<String, Object?> json) {
+    return UserExpandable(
+      operations: json[r'operations'] as String?,
+      details: json[r'details'] as String?,
+      personalSpace: json[r'personalSpace'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var business = this.business;
-    var personal = this.personal;
+    var operations = this.operations;
+    var details = this.details;
+    var personalSpace = this.personalSpace;
 
     final json = <String, Object?>{};
-    if (business != null) {
-      json[r'business'] = business.toJson();
+    if (operations != null) {
+      json[r'operations'] = operations;
     }
-    if (personal != null) {
-      json[r'personal'] = personal.toJson();
+    if (details != null) {
+      json[r'details'] = details;
+    }
+    if (personalSpace != null) {
+      json[r'personalSpace'] = personalSpace;
     }
     return json;
   }
 
-  UserDetails copyWith(
-      {UserDetailsBusiness? business, UserDetailsPersonal? personal}) {
-    return UserDetails(
-      business: business ?? this.business,
-      personal: personal ?? this.personal,
+  UserExpandable copyWith(
+      {String? operations, String? details, String? personalSpace}) {
+    return UserExpandable(
+      operations: operations ?? this.operations,
+      details: details ?? this.details,
+      personalSpace: personalSpace ?? this.personalSpace,
+    );
+  }
+}
+
+class UserWatch {
+  final bool watching;
+
+  UserWatch({required this.watching});
+
+  factory UserWatch.fromJson(Map<String, Object?> json) {
+    return UserWatch(
+      watching: json[r'watching'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var watching = this.watching;
+
+    final json = <String, Object?>{};
+    json[r'watching'] = watching;
+    return json;
+  }
+
+  UserWatch copyWith({bool? watching}) {
+    return UserWatch(
+      watching: watching ?? this.watching,
     );
   }
 }
@@ -15065,63 +15643,6 @@ class UsersUserKeys {
       users: users ?? this.users,
       userKeys: userKeys ?? this.userKeys,
       links: links ?? this.links,
-    );
-  }
-}
-
-class UserWatch {
-  final bool watching;
-
-  UserWatch({required this.watching});
-
-  factory UserWatch.fromJson(Map<String, Object?> json) {
-    return UserWatch(
-      watching: json[r'watching'] as bool? ?? false,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var watching = this.watching;
-
-    final json = <String, Object?>{};
-    json[r'watching'] = watching;
-    return json;
-  }
-
-  UserWatch copyWith({bool? watching}) {
-    return UserWatch(
-      watching: watching ?? this.watching,
-    );
-  }
-}
-
-class VersionExpandable {
-  final String content;
-  final String collaborators;
-
-  VersionExpandable({required this.content, required this.collaborators});
-
-  factory VersionExpandable.fromJson(Map<String, Object?> json) {
-    return VersionExpandable(
-      content: json[r'content'] as String? ?? '',
-      collaborators: json[r'collaborators'] as String? ?? '',
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var content = this.content;
-    var collaborators = this.collaborators;
-
-    final json = <String, Object?>{};
-    json[r'content'] = content;
-    json[r'collaborators'] = collaborators;
-    return json;
-  }
-
-  VersionExpandable copyWith({String? content, String? collaborators}) {
-    return VersionExpandable(
-      content: content ?? this.content,
-      collaborators: collaborators ?? this.collaborators,
     );
   }
 }
@@ -15289,36 +15810,33 @@ class VersionArray {
   }
 }
 
-class VersionRestoreParams {
-  /// The version number to be restored.
-  final int versionNumber;
+class VersionExpandable {
+  final String content;
+  final String collaborators;
 
-  /// Description for the version.
-  final String message;
+  VersionExpandable({required this.content, required this.collaborators});
 
-  VersionRestoreParams({required this.versionNumber, required this.message});
-
-  factory VersionRestoreParams.fromJson(Map<String, Object?> json) {
-    return VersionRestoreParams(
-      versionNumber: (json[r'versionNumber'] as num?)?.toInt() ?? 0,
-      message: json[r'message'] as String? ?? '',
+  factory VersionExpandable.fromJson(Map<String, Object?> json) {
+    return VersionExpandable(
+      content: json[r'content'] as String? ?? '',
+      collaborators: json[r'collaborators'] as String? ?? '',
     );
   }
 
   Map<String, Object?> toJson() {
-    var versionNumber = this.versionNumber;
-    var message = this.message;
+    var content = this.content;
+    var collaborators = this.collaborators;
 
     final json = <String, Object?>{};
-    json[r'versionNumber'] = versionNumber;
-    json[r'message'] = message;
+    json[r'content'] = content;
+    json[r'collaborators'] = collaborators;
     return json;
   }
 
-  VersionRestoreParams copyWith({int? versionNumber, String? message}) {
-    return VersionRestoreParams(
-      versionNumber: versionNumber ?? this.versionNumber,
-      message: message ?? this.message,
+  VersionExpandable copyWith({String? content, String? collaborators}) {
+    return VersionExpandable(
+      content: content ?? this.content,
+      collaborators: collaborators ?? this.collaborators,
     );
   }
 }
@@ -15378,6 +15896,40 @@ class VersionRestoreOperationKey {
 
   @override
   String toString() => value;
+}
+
+class VersionRestoreParams {
+  /// The version number to be restored.
+  final int versionNumber;
+
+  /// Description for the version.
+  final String message;
+
+  VersionRestoreParams({required this.versionNumber, required this.message});
+
+  factory VersionRestoreParams.fromJson(Map<String, Object?> json) {
+    return VersionRestoreParams(
+      versionNumber: (json[r'versionNumber'] as num?)?.toInt() ?? 0,
+      message: json[r'message'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var versionNumber = this.versionNumber;
+    var message = this.message;
+
+    final json = <String, Object?>{};
+    json[r'versionNumber'] = versionNumber;
+    json[r'message'] = message;
+    return json;
+  }
+
+  VersionRestoreParams copyWith({int? versionNumber, String? message}) {
+    return VersionRestoreParams(
+      versionNumber: versionNumber ?? this.versionNumber,
+      message: message ?? this.message,
+    );
+  }
 }
 
 class Watch {
@@ -15585,98 +16137,6 @@ class WatchUser {
   }
 }
 
-class WebResourceDependenciesUris {
-  final String? all;
-  final String? css;
-  final String? js;
-
-  WebResourceDependenciesUris({this.all, this.css, this.js});
-
-  factory WebResourceDependenciesUris.fromJson(Map<String, Object?> json) {
-    return WebResourceDependenciesUris(
-      all: json[r'all'] as String?,
-      css: json[r'css'] as String?,
-      js: json[r'js'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var all = this.all;
-    var css = this.css;
-    var js = this.js;
-
-    final json = <String, Object?>{};
-    if (all != null) {
-      json[r'all'] = all;
-    }
-    if (css != null) {
-      json[r'css'] = css;
-    }
-    if (js != null) {
-      json[r'js'] = js;
-    }
-    return json;
-  }
-
-  WebResourceDependenciesUris copyWith({String? all, String? css, String? js}) {
-    return WebResourceDependenciesUris(
-      all: all ?? this.all,
-      css: css ?? this.css,
-      js: js ?? this.js,
-    );
-  }
-}
-
-class WebResourceDependenciesTags {
-  final String? all;
-  final String? css;
-  final String? data;
-  final String? js;
-
-  WebResourceDependenciesTags({this.all, this.css, this.data, this.js});
-
-  factory WebResourceDependenciesTags.fromJson(Map<String, Object?> json) {
-    return WebResourceDependenciesTags(
-      all: json[r'all'] as String?,
-      css: json[r'css'] as String?,
-      data: json[r'data'] as String?,
-      js: json[r'js'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var all = this.all;
-    var css = this.css;
-    var data = this.data;
-    var js = this.js;
-
-    final json = <String, Object?>{};
-    if (all != null) {
-      json[r'all'] = all;
-    }
-    if (css != null) {
-      json[r'css'] = css;
-    }
-    if (data != null) {
-      json[r'data'] = data;
-    }
-    if (js != null) {
-      json[r'js'] = js;
-    }
-    return json;
-  }
-
-  WebResourceDependenciesTags copyWith(
-      {String? all, String? css, String? data, String? js}) {
-    return WebResourceDependenciesTags(
-      all: all ?? this.all,
-      css: css ?? this.css,
-      data: data ?? this.data,
-      js: js ?? this.js,
-    );
-  }
-}
-
 class WebResourceDependencies {
   final List<String> keys;
   final List<String> contexts;
@@ -15756,413 +16216,94 @@ class WebResourceDependencies {
   }
 }
 
-/// The user or group that the permission applies to.
-class PermissionSubject {
-  final PermissionSubjectType type;
+class WebResourceDependenciesTags {
+  final String? all;
+  final String? css;
+  final String? data;
+  final String? js;
 
-  /// for `type=user`, identifier should be user's accountId or `anonymous` for
-  /// anonymous users
-  ///
-  /// for `type=group`, identifier should be name of the group or groupId
-  final String identifier;
+  WebResourceDependenciesTags({this.all, this.css, this.data, this.js});
 
-  PermissionSubject({required this.type, required this.identifier});
-
-  factory PermissionSubject.fromJson(Map<String, Object?> json) {
-    return PermissionSubject(
-      type: PermissionSubjectType.fromValue(json[r'type'] as String? ?? ''),
-      identifier: json[r'identifier'] as String? ?? '',
+  factory WebResourceDependenciesTags.fromJson(Map<String, Object?> json) {
+    return WebResourceDependenciesTags(
+      all: json[r'all'] as String?,
+      css: json[r'css'] as String?,
+      data: json[r'data'] as String?,
+      js: json[r'js'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var type = this.type;
-    var identifier = this.identifier;
+    var all = this.all;
+    var css = this.css;
+    var data = this.data;
+    var js = this.js;
 
     final json = <String, Object?>{};
-    json[r'type'] = type.value;
-    json[r'identifier'] = identifier;
-    return json;
-  }
-
-  PermissionSubject copyWith(
-      {PermissionSubjectType? type, String? identifier}) {
-    return PermissionSubject(
-      type: type ?? this.type,
-      identifier: identifier ?? this.identifier,
-    );
-  }
-}
-
-class PermissionSubjectType {
-  static const user = PermissionSubjectType._('user');
-  static const group = PermissionSubjectType._('group');
-
-  static const values = [
-    user,
-    group,
-  ];
-  final String value;
-
-  const PermissionSubjectType._(this.value);
-
-  static PermissionSubjectType fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => PermissionSubjectType._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-/// The user or group that the permission applies to.
-class PermissionSubjectWithGroupId {
-  final PermissionSubjectWithGroupIdType type;
-
-  /// for `type=user`, identifier should be user's accountId or `anonymous` for
-  /// anonymous users
-  ///
-  /// for `type=group`, identifier should be ID of the group
-  final String identifier;
-
-  PermissionSubjectWithGroupId({required this.type, required this.identifier});
-
-  factory PermissionSubjectWithGroupId.fromJson(Map<String, Object?> json) {
-    return PermissionSubjectWithGroupId(
-      type: PermissionSubjectWithGroupIdType.fromValue(
-          json[r'type'] as String? ?? ''),
-      identifier: json[r'identifier'] as String? ?? '',
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var type = this.type;
-    var identifier = this.identifier;
-
-    final json = <String, Object?>{};
-    json[r'type'] = type.value;
-    json[r'identifier'] = identifier;
-    return json;
-  }
-
-  PermissionSubjectWithGroupId copyWith(
-      {PermissionSubjectWithGroupIdType? type, String? identifier}) {
-    return PermissionSubjectWithGroupId(
-      type: type ?? this.type,
-      identifier: identifier ?? this.identifier,
-    );
-  }
-}
-
-class PermissionSubjectWithGroupIdType {
-  static const user = PermissionSubjectWithGroupIdType._('user');
-  static const group = PermissionSubjectWithGroupIdType._('group');
-
-  static const values = [
-    user,
-    group,
-  ];
-  final String value;
-
-  const PermissionSubjectWithGroupIdType._(this.value);
-
-  static PermissionSubjectWithGroupIdType fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => PermissionSubjectWithGroupIdType._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class SpacePermissionV2Operation {
-  final SpacePermissionV2OperationKey key;
-
-  /// The space or content type that the operation applies to.
-  final SpacePermissionV2OperationTarget target;
-
-  SpacePermissionV2Operation({required this.key, required this.target});
-
-  factory SpacePermissionV2Operation.fromJson(Map<String, Object?> json) {
-    return SpacePermissionV2Operation(
-      key: SpacePermissionV2OperationKey.fromValue(
-          json[r'key'] as String? ?? ''),
-      target: SpacePermissionV2OperationTarget.fromValue(
-          json[r'target'] as String? ?? ''),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var key = this.key;
-    var target = this.target;
-
-    final json = <String, Object?>{};
-    json[r'key'] = key.value;
-    json[r'target'] = target.value;
-    return json;
-  }
-
-  SpacePermissionV2Operation copyWith(
-      {SpacePermissionV2OperationKey? key,
-      SpacePermissionV2OperationTarget? target}) {
-    return SpacePermissionV2Operation(
-      key: key ?? this.key,
-      target: target ?? this.target,
-    );
-  }
-}
-
-class SpacePermissionV2OperationKey {
-  static const administer = SpacePermissionV2OperationKey._('administer');
-  static const copy = SpacePermissionV2OperationKey._('copy');
-  static const create = SpacePermissionV2OperationKey._('create');
-  static const delete = SpacePermissionV2OperationKey._('delete');
-  static const export$ = SpacePermissionV2OperationKey._('export');
-  static const move = SpacePermissionV2OperationKey._('move');
-  static const purge = SpacePermissionV2OperationKey._('purge');
-  static const purgeVersion = SpacePermissionV2OperationKey._('purge_version');
-  static const read = SpacePermissionV2OperationKey._('read');
-  static const restore = SpacePermissionV2OperationKey._('restore');
-  static const update = SpacePermissionV2OperationKey._('update');
-  static const use = SpacePermissionV2OperationKey._('use');
-
-  static const values = [
-    administer,
-    copy,
-    create,
-    delete,
-    export$,
-    move,
-    purge,
-    purgeVersion,
-    read,
-    restore,
-    update,
-    use,
-  ];
-  final String value;
-
-  const SpacePermissionV2OperationKey._(this.value);
-
-  static SpacePermissionV2OperationKey fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => SpacePermissionV2OperationKey._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class SpacePermissionV2OperationTarget {
-  static const page = SpacePermissionV2OperationTarget._('page');
-  static const blogpost = SpacePermissionV2OperationTarget._('blogpost');
-  static const comment = SpacePermissionV2OperationTarget._('comment');
-  static const attachment = SpacePermissionV2OperationTarget._('attachment');
-  static const space = SpacePermissionV2OperationTarget._('space');
-
-  static const values = [
-    page,
-    blogpost,
-    comment,
-    attachment,
-    space,
-  ];
-  final String value;
-
-  const SpacePermissionV2OperationTarget._(this.value);
-
-  static SpacePermissionV2OperationTarget fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => SpacePermissionV2OperationTarget._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-/// This object represents a single space permission. Permissions consist of
-/// at least one operation object with an accompanying subjects object.
-///
-/// The following combinations of `operation.key` and `operation.target` values
-/// are
-/// valid for the `operation` object:
-/// ``` bash
-/// 'create': 'page', 'blogpost', 'comment', 'attachment'
-/// 'read': 'space'
-/// 'delete': 'page', 'blogpost', 'comment', 'attachment'
-/// 'export': 'space'
-/// 'administer': 'space'
-/// ```
-class SpacePermissionV2 {
-  final int? id;
-  final PermissionSubject subject;
-  final SpacePermissionV2Operation operation;
-  final GenericLinks? links;
-
-  SpacePermissionV2(
-      {this.id, required this.subject, required this.operation, this.links});
-
-  factory SpacePermissionV2.fromJson(Map<String, Object?> json) {
-    return SpacePermissionV2(
-      id: (json[r'id'] as num?)?.toInt(),
-      subject: PermissionSubject.fromJson(
-          json[r'subject'] as Map<String, Object?>? ?? const {}),
-      operation: SpacePermissionV2Operation.fromJson(
-          json[r'operation'] as Map<String, Object?>? ?? const {}),
-      links: json[r'_links'] != null
-          ? GenericLinks.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var subject = this.subject;
-    var operation = this.operation;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
+    if (all != null) {
+      json[r'all'] = all;
     }
-    json[r'subject'] = subject.toJson();
-    json[r'operation'] = operation.toJson();
-    if (links != null) {
-      json[r'_links'] = links.toJson();
+    if (css != null) {
+      json[r'css'] = css;
+    }
+    if (data != null) {
+      json[r'data'] = data;
+    }
+    if (js != null) {
+      json[r'js'] = js;
     }
     return json;
   }
 
-  SpacePermissionV2 copyWith(
-      {int? id,
-      PermissionSubject? subject,
-      SpacePermissionV2Operation? operation,
-      GenericLinks? links}) {
-    return SpacePermissionV2(
-      id: id ?? this.id,
-      subject: subject ?? this.subject,
-      operation: operation ?? this.operation,
-      links: links ?? this.links,
+  WebResourceDependenciesTags copyWith(
+      {String? all, String? css, String? data, String? js}) {
+    return WebResourceDependenciesTags(
+      all: all ?? this.all,
+      css: css ?? this.css,
+      data: data ?? this.data,
+      js: js ?? this.js,
     );
   }
 }
 
-/// This object represents the request for the content permission check API.
-class ContentPermissionRequest {
-  final PermissionSubjectWithGroupId subject;
+class WebResourceDependenciesUris {
+  final String? all;
+  final String? css;
+  final String? js;
 
-  /// The content permission operation to check.
-  final ContentPermissionRequestOperation operation;
+  WebResourceDependenciesUris({this.all, this.css, this.js});
 
-  ContentPermissionRequest({required this.subject, required this.operation});
-
-  factory ContentPermissionRequest.fromJson(Map<String, Object?> json) {
-    return ContentPermissionRequest(
-      subject: PermissionSubjectWithGroupId.fromJson(
-          json[r'subject'] as Map<String, Object?>? ?? const {}),
-      operation: ContentPermissionRequestOperation.fromValue(
-          json[r'operation'] as String? ?? ''),
+  factory WebResourceDependenciesUris.fromJson(Map<String, Object?> json) {
+    return WebResourceDependenciesUris(
+      all: json[r'all'] as String?,
+      css: json[r'css'] as String?,
+      js: json[r'js'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var subject = this.subject;
-    var operation = this.operation;
+    var all = this.all;
+    var css = this.css;
+    var js = this.js;
 
     final json = <String, Object?>{};
-    json[r'subject'] = subject.toJson();
-    json[r'operation'] = operation.value;
+    if (all != null) {
+      json[r'all'] = all;
+    }
+    if (css != null) {
+      json[r'css'] = css;
+    }
+    if (js != null) {
+      json[r'js'] = js;
+    }
     return json;
   }
 
-  ContentPermissionRequest copyWith(
-      {PermissionSubjectWithGroupId? subject,
-      ContentPermissionRequestOperation? operation}) {
-    return ContentPermissionRequest(
-      subject: subject ?? this.subject,
-      operation: operation ?? this.operation,
-    );
-  }
-}
-
-class ContentPermissionRequestOperation {
-  static const read = ContentPermissionRequestOperation._('read');
-  static const update = ContentPermissionRequestOperation._('update');
-  static const delete = ContentPermissionRequestOperation._('delete');
-
-  static const values = [
-    read,
-    update,
-    delete,
-  ];
-  final String value;
-
-  const ContentPermissionRequestOperation._(this.value);
-
-  static ContentPermissionRequestOperation fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => ContentPermissionRequestOperation._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-/// This object represents the response for the content permission check API. If
-/// the user or group does not have
-/// permissions, the following errors may be returned:
-///
-/// - Group does not have permission to the space
-/// - Group does not have permission to the content
-/// - User is not allowed to use Confluence
-/// - User does not have permission to the space
-/// - User does not have permission to the content
-/// - Anonymous users are not allowed to use Confluence
-/// - Anonymous user does not have permission to the space
-/// - Anonymous user does not have permission to the content
-class PermissionCheckResponse {
-  final bool hasPermission;
-  final List<Message> errors;
-
-  PermissionCheckResponse({required this.hasPermission, List<Message>? errors})
-      : errors = errors ?? [];
-
-  factory PermissionCheckResponse.fromJson(Map<String, Object?> json) {
-    return PermissionCheckResponse(
-      hasPermission: json[r'hasPermission'] as bool? ?? false,
-      errors: (json[r'errors'] as List<Object?>?)
-              ?.map((i) =>
-                  Message.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var hasPermission = this.hasPermission;
-    var errors = this.errors;
-
-    final json = <String, Object?>{};
-    json[r'hasPermission'] = hasPermission;
-    json[r'errors'] = errors.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  PermissionCheckResponse copyWith(
-      {bool? hasPermission, List<Message>? errors}) {
-    return PermissionCheckResponse(
-      hasPermission: hasPermission ?? this.hasPermission,
-      errors: errors ?? this.errors,
+  WebResourceDependenciesUris copyWith({String? all, String? css, String? js}) {
+    return WebResourceDependenciesUris(
+      all: all ?? this.all,
+      css: css ?? this.css,
+      js: js ?? this.js,
     );
   }
 }

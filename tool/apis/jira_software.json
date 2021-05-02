@@ -10742,7 +10742,7 @@
             }
           }
         },
-        "x-atlassian-connect-scope": "INACCESSIBLE"
+        "x-atlassian-connect-scope": "WRITE"
       },
       "parameters": [
         {
@@ -10861,7 +10861,7 @@
             }
           }
         },
-        "x-atlassian-connect-scope": "INACCESSIBLE"
+        "x-atlassian-connect-scope": "DELETE"
       },
       "parameters": [
         {
@@ -11122,7 +11122,7 @@
             }
           }
         },
-        "x-atlassian-connect-scope": "INACCESSIBLE"
+        "x-atlassian-connect-scope": "READ"
       },
       "delete": {
         "operationId": "deleteRemoteLinkById",
@@ -11200,7 +11200,7 @@
             }
           }
         },
-        "x-atlassian-connect-scope": "INACCESSIBLE"
+        "x-atlassian-connect-scope": "DELETE"
       },
       "parameters": [
         {

@@ -164,6 +164,9 @@ import '../api_utils.dart';
 // ignore_for_file: deprecated_member_use_from_same_package
 ''');
 
+    var sortedTaggedServices =
+        _taggedServices.mergeSortedBy((e) => e.tag!.name);
+
     if (_untaggedService == null) {
       buffer.writeln('''
 class $className {
@@ -172,7 +175,7 @@ class $className {
   $className(this._client);
 ''');
 
-      for (var service in _taggedServices) {
+      for (var service in sortedTaggedServices) {
         var tag = service.tag!;
         var description = tag.description;
         if (description.isNotEmpty) {
@@ -189,7 +192,7 @@ class $className {
 ''');
     }
 
-    for (var service in _taggedServices) {
+    for (var service in sortedTaggedServices) {
       buffer.writeln(service.toCode());
       buffer.writeln();
     }
@@ -199,11 +202,12 @@ class $className {
     }
 
     var generatedClasses = <String>[];
-    for (var topLevelEnum in _topLevelEnums.values) {
+    for (var topLevelEnum
+        in _topLevelEnums.values.mergeSortedBy((e) => e.name)) {
       buffer.writeln(topLevelEnum.toCode());
       buffer.writeln();
     }
-    for (var complexType in _complexTypes) {
+    for (var complexType in _complexTypes.mergeSortedBy((e) => e.className)) {
       if (!generatedClasses.contains(complexType.className)) {
         generatedClasses.add(complexType.className);
         buffer.writeln(complexType.toCode());
@@ -1082,3 +1086,12 @@ String _normalizeOperationId(sw.Path path) {
 
 bool _isObsolete(String? comment) =>
     comment != null && comment.toLowerCase().contains('obsolete');
+
+extension<T> on Iterable<T> {
+  List<T> mergeSortedBy<K extends Comparable<K>>(K Function(T element) keyOf) {
+    var elements = [...this];
+    mergeSort(elements,
+        compare: (a, b) => keyOf(a as T).compareTo(keyOf(b as T)));
+    return elements;
+  }
+}
