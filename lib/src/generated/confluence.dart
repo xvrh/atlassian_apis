@@ -6292,43 +6292,33 @@ class ContentBlueprintDraftVersion {
 }
 
 class ContentBody {
-  final ContentBody? view;
-  final ContentBody? exportView;
-  final ContentBody? styledView;
-  final ContentBody? storage;
-  final ContentBody? editor2;
-  final ContentBody? anonymousExportView;
+  final String value;
+  final ContentBodyRepresentation representation;
+  final List<EmbeddedContent> embeddedContent;
+  final WebResourceDependencies? webresource;
   final ContentBodyExpandable expandable;
 
   ContentBody(
-      {this.view,
-      this.exportView,
-      this.styledView,
-      this.storage,
-      this.editor2,
-      this.anonymousExportView,
-      required this.expandable});
+      {required this.value,
+      required this.representation,
+      List<EmbeddedContent>? embeddedContent,
+      this.webresource,
+      required this.expandable})
+      : embeddedContent = embeddedContent ?? [];
 
   factory ContentBody.fromJson(Map<String, Object?> json) {
     return ContentBody(
-      view: json[r'view'] != null
-          ? ContentBody.fromJson(json[r'view']! as Map<String, Object?>)
-          : null,
-      exportView: json[r'export_view'] != null
-          ? ContentBody.fromJson(json[r'export_view']! as Map<String, Object?>)
-          : null,
-      styledView: json[r'styled_view'] != null
-          ? ContentBody.fromJson(json[r'styled_view']! as Map<String, Object?>)
-          : null,
-      storage: json[r'storage'] != null
-          ? ContentBody.fromJson(json[r'storage']! as Map<String, Object?>)
-          : null,
-      editor2: json[r'editor2'] != null
-          ? ContentBody.fromJson(json[r'editor2']! as Map<String, Object?>)
-          : null,
-      anonymousExportView: json[r'anonymous_export_view'] != null
-          ? ContentBody.fromJson(
-              json[r'anonymous_export_view']! as Map<String, Object?>)
+      value: json[r'value'] as String? ?? '',
+      representation: ContentBodyRepresentation.fromValue(
+          json[r'representation'] as String? ?? ''),
+      embeddedContent: (json[r'embeddedContent'] as List<Object?>?)
+              ?.map((i) => EmbeddedContent.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      webresource: json[r'webresource'] != null
+          ? WebResourceDependencies.fromJson(
+              json[r'webresource']! as Map<String, Object?>)
           : null,
       expandable: ContentBodyExpandable.fromJson(
           json[r'_expandable'] as Map<String, Object?>? ?? const {}),
@@ -6336,55 +6326,69 @@ class ContentBody {
   }
 
   Map<String, Object?> toJson() {
-    var view = this.view;
-    var exportView = this.exportView;
-    var styledView = this.styledView;
-    var storage = this.storage;
-    var editor2 = this.editor2;
-    var anonymousExportView = this.anonymousExportView;
+    var value = this.value;
+    var representation = this.representation;
+    var embeddedContent = this.embeddedContent;
+    var webresource = this.webresource;
     var expandable = this.expandable;
 
     final json = <String, Object?>{};
-    if (view != null) {
-      json[r'view'] = view.toJson();
-    }
-    if (exportView != null) {
-      json[r'export_view'] = exportView.toJson();
-    }
-    if (styledView != null) {
-      json[r'styled_view'] = styledView.toJson();
-    }
-    if (storage != null) {
-      json[r'storage'] = storage.toJson();
-    }
-    if (editor2 != null) {
-      json[r'editor2'] = editor2.toJson();
-    }
-    if (anonymousExportView != null) {
-      json[r'anonymous_export_view'] = anonymousExportView.toJson();
+    json[r'value'] = value;
+    json[r'representation'] = representation.value;
+    json[r'embeddedContent'] = embeddedContent.map((i) => i.toJson()).toList();
+    if (webresource != null) {
+      json[r'webresource'] = webresource.toJson();
     }
     json[r'_expandable'] = expandable.toJson();
     return json;
   }
 
   ContentBody copyWith(
-      {ContentBody? view,
-      ContentBody? exportView,
-      ContentBody? styledView,
-      ContentBody? storage,
-      ContentBody? editor2,
-      ContentBody? anonymousExportView,
+      {String? value,
+      ContentBodyRepresentation? representation,
+      List<EmbeddedContent>? embeddedContent,
+      WebResourceDependencies? webresource,
       ContentBodyExpandable? expandable}) {
     return ContentBody(
-      view: view ?? this.view,
-      exportView: exportView ?? this.exportView,
-      styledView: styledView ?? this.styledView,
-      storage: storage ?? this.storage,
-      editor2: editor2 ?? this.editor2,
-      anonymousExportView: anonymousExportView ?? this.anonymousExportView,
+      value: value ?? this.value,
+      representation: representation ?? this.representation,
+      embeddedContent: embeddedContent ?? this.embeddedContent,
+      webresource: webresource ?? this.webresource,
       expandable: expandable ?? this.expandable,
     );
   }
+}
+
+class ContentBodyRepresentation {
+  static const view = ContentBodyRepresentation._('view');
+  static const exportView = ContentBodyRepresentation._('export_view');
+  static const styledView = ContentBodyRepresentation._('styled_view');
+  static const storage = ContentBodyRepresentation._('storage');
+  static const editor2 = ContentBodyRepresentation._('editor2');
+  static const anonymousExportView =
+      ContentBodyRepresentation._('anonymous_export_view');
+
+  static const values = [
+    view,
+    exportView,
+    styledView,
+    storage,
+    editor2,
+    anonymousExportView,
+  ];
+  final String value;
+
+  const ContentBodyRepresentation._(this.value);
+
+  static ContentBodyRepresentation fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ContentBodyRepresentation._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 /// This object is used when creating or updating content.
@@ -12962,72 +12966,42 @@ class SpaceCreate {
 }
 
 class SpaceDescription {
-  final String value;
-  final SpaceDescriptionRepresentation representation;
-  final List<Map<String, dynamic>> embeddedContent;
+  final SpaceDescription? plain;
+  final SpaceDescription? view;
 
-  SpaceDescription(
-      {required this.value,
-      required this.representation,
-      required this.embeddedContent});
+  SpaceDescription({this.plain, this.view});
 
   factory SpaceDescription.fromJson(Map<String, Object?> json) {
     return SpaceDescription(
-      value: json[r'value'] as String? ?? '',
-      representation: SpaceDescriptionRepresentation.fromValue(
-          json[r'representation'] as String? ?? ''),
-      embeddedContent: (json[r'embeddedContent'] as List<Object?>?)
-              ?.map((i) => i as Map<String, Object?>? ?? {})
-              .toList() ??
-          [],
+      plain: json[r'plain'] != null
+          ? SpaceDescription.fromJson(json[r'plain']! as Map<String, Object?>)
+          : null,
+      view: json[r'view'] != null
+          ? SpaceDescription.fromJson(json[r'view']! as Map<String, Object?>)
+          : null,
     );
   }
 
   Map<String, Object?> toJson() {
-    var value = this.value;
-    var representation = this.representation;
-    var embeddedContent = this.embeddedContent;
+    var plain = this.plain;
+    var view = this.view;
 
     final json = <String, Object?>{};
-    json[r'value'] = value;
-    json[r'representation'] = representation.value;
-    json[r'embeddedContent'] = embeddedContent;
+    if (plain != null) {
+      json[r'plain'] = plain.toJson();
+    }
+    if (view != null) {
+      json[r'view'] = view.toJson();
+    }
     return json;
   }
 
-  SpaceDescription copyWith(
-      {String? value,
-      SpaceDescriptionRepresentation? representation,
-      List<Map<String, dynamic>>? embeddedContent}) {
+  SpaceDescription copyWith({SpaceDescription? plain, SpaceDescription? view}) {
     return SpaceDescription(
-      value: value ?? this.value,
-      representation: representation ?? this.representation,
-      embeddedContent: embeddedContent ?? this.embeddedContent,
+      plain: plain ?? this.plain,
+      view: view ?? this.view,
     );
   }
-}
-
-class SpaceDescriptionRepresentation {
-  static const plain = SpaceDescriptionRepresentation._('plain');
-  static const view = SpaceDescriptionRepresentation._('view');
-
-  static const values = [
-    plain,
-    view,
-  ];
-  final String value;
-
-  const SpaceDescriptionRepresentation._(this.value);
-
-  static SpaceDescriptionRepresentation fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => SpaceDescriptionRepresentation._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
 }
 
 /// The description of the new/updated space. Note, only the 'plain'
