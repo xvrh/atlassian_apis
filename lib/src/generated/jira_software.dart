@@ -15,31 +15,15 @@ class JiraSoftwareApi {
   /// Apis related to boards
   late final board = BoardApi(_client);
 
-  /// Apis related to epics
-  late final epic = EpicApi(_client);
-
-  /// Apis related to issues
-  late final issue = IssueApi(_client);
-
-  /// Apis related to sprints
-  late final sprint = SprintApi(_client);
-
-  /// APIs related to integrating development information (commits, branches and
-  /// pull requests) with Jira. These APIs are available to Atlassian Connect
-  /// apps and on-premise integrations using OAuth. Connect apps using these
-  /// APIs must have the Development Tool module in the app descriptor, see
-  /// https://developer.atlassian.com/cloud/jira/software/modules/development-tool/.
-  /// For more details on integrating Jira Software Cloud with on-premises tools
-  /// using OAuth 2.0 credentials, see
+  /// APIs related to integrating builds data with Jira Software. These APIs
+  /// are available to Atlassian Connect apps. To use these APIs you must
+  /// have the Build module see
+  /// https://developer.atlassian.com/cloud/jira/software/modules/build/
+  /// in your app's descriptor. They are also related to integrating Jira
+  /// Software Cloud with on-premises tools using
+  /// OAuth 2.0 credentials, see
   /// https://developer.atlassian.com/cloud/jira/software/integrate-jsw-cloud-with-onpremises-tools/.
-  late final developmentInformation = DevelopmentInformationApi(_client);
-
-  /// Apis related to integrating Feature Flags with Jira Software. These apis
-  /// are only available to Atlassian Connect apps. To use these apis you must
-  /// have the Feature Flag module (see
-  /// https://developer.atlassian.com/cloud/jira/software/modules/feature-flag/)
-  /// in your app's descriptor
-  late final featureFlags = FeatureFlagsApi(_client);
+  late final builds = BuildsApi(_client);
 
   /// APIs related to integrating deployments data with Jira Software. These
   /// APIs
@@ -52,15 +36,28 @@ class JiraSoftwareApi {
   /// https://developer.atlassian.com/cloud/jira/software/integrate-jsw-cloud-with-onpremises-tools/.
   late final deployments = DeploymentsApi(_client);
 
-  /// APIs related to integrating builds data with Jira Software. These APIs
-  /// are available to Atlassian Connect apps. To use these APIs you must
-  /// have the Build module see
-  /// https://developer.atlassian.com/cloud/jira/software/modules/build/
-  /// in your app's descriptor. They are also related to integrating Jira
-  /// Software Cloud with on-premises tools using
-  /// OAuth 2.0 credentials, see
+  /// APIs related to integrating development information (commits, branches and
+  /// pull requests) with Jira. These APIs are available to Atlassian Connect
+  /// apps and on-premise integrations using OAuth. Connect apps using these
+  /// APIs must have the Development Tool module in the app descriptor, see
+  /// https://developer.atlassian.com/cloud/jira/software/modules/development-tool/.
+  /// For more details on integrating Jira Software Cloud with on-premises tools
+  /// using OAuth 2.0 credentials, see
   /// https://developer.atlassian.com/cloud/jira/software/integrate-jsw-cloud-with-onpremises-tools/.
-  late final builds = BuildsApi(_client);
+  late final developmentInformation = DevelopmentInformationApi(_client);
+
+  /// Apis related to epics
+  late final epic = EpicApi(_client);
+
+  /// Apis related to integrating Feature Flags with Jira Software. These apis
+  /// are only available to Atlassian Connect apps. To use these apis you must
+  /// have the Feature Flag module (see
+  /// https://developer.atlassian.com/cloud/jira/software/modules/feature-flag/)
+  /// in your app's descriptor
+  late final featureFlags = FeatureFlagsApi(_client);
+
+  /// Apis related to issues
+  late final issue = IssueApi(_client);
 
   /// APIs related to integrating Remote Links data with Jira Software. These
   /// APIs are available to Atlassian Connect
@@ -172,6 +169,9 @@ class JiraSoftwareApi {
   /// [internationalization](https://developer.atlassian.com/cloud/jira/software/internationalization/).
   /// | Yes      |
   late final remoteLinks = RemoteLinksApi(_client);
+
+  /// Apis related to sprints
+  late final sprint = SprintApi(_client);
 
   void close() => _client.close();
 }
@@ -851,6 +851,386 @@ class BoardApi {
 
 /// Jira Software Cloud REST API documentation
 
+class BuildsApi {
+  final ApiClient _client;
+
+  BuildsApi(this._client);
+
+  /// Update / insert builds data.
+  ///
+  /// Builds are identified by the combination of `pipelineId` and
+  /// `buildNumber`, and existing build data for the same
+  /// build will be replaced if it exists and the `updateSequenceNumber` of the
+  /// existing data is less than the
+  /// incoming data.
+  ///
+  /// Submissions are performed asynchronously. Submitted data will eventually
+  /// be available in Jira; most updates are
+  /// available within a short period of time, but may take some time during
+  /// peak load and/or maintenance times.
+  /// The `getBuildByKey` operation can be used to confirm that data has been
+  /// stored successfully (if needed).
+  ///
+  /// In the case of multiple builds being submitted in one request, each is
+  /// validated individually prior to
+  /// submission. Details of which build failed submission (if any) are
+  /// available in the response object.
+  ///
+  /// Only Connect apps that define the `jiraBuildInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
+  /// This resource requires the 'WRITE' scope for Connect apps.
+  Future<Map<String, dynamic>> submitBuilds(
+      {required Map<String, dynamic> body}) async {
+    return await _client.send(
+      'post',
+      'builds/0.1/bulk',
+      body: body,
+    ) as Map<String, Object?>;
+  }
+
+  /// Bulk delete all builds data that match the given request.
+  ///
+  /// One or more query params must be supplied to specify Properties to delete
+  /// by.
+  /// Optional param `_updateSequenceNumber` is no longer supported.
+  /// If more than one Property is provided, data will be deleted that matches
+  /// ALL of the
+  /// Properties (e.g. treated as an AND).
+  ///
+  /// See the documentation for the `submitBuilds` operation for more details.
+  ///
+  /// e.g. DELETE /bulkByProperties?accountId=account-123&repoId=repo-345
+  ///
+  /// Deletion is performed asynchronously. The `getBuildByKey` operation can be
+  /// used to confirm that data has been
+  /// deleted successfully (if needed).
+  ///
+  /// Only Connect apps that define the `jiraBuildInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
+  /// This resource requires the 'WRITE' scope for Connect apps.
+  Future<void> deleteBuildsByProperty({int? updateSequenceNumber}) async {
+    await _client.send(
+      'delete',
+      'builds/0.1/bulkByProperties',
+      queryParameters: {
+        if (updateSequenceNumber != null)
+          '_updateSequenceNumber': '$updateSequenceNumber',
+      },
+    );
+  }
+
+  /// Retrieve the currently stored build data for the given `pipelineId` and
+  /// `buildNumber` combination.
+  ///
+  /// The result will be what is currently stored, ignoring any pending updates
+  /// or deletes.
+  ///
+  /// Only Connect apps that define the `jiraBuildInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
+  /// This resource requires the 'WRITE' scope for Connect apps.
+  Future<void> getBuildByKey(
+      {required String pipelineId, required int buildNumber}) async {
+    await _client.send(
+      'get',
+      'builds/0.1/pipelines/{pipelineId}/builds/{buildNumber}',
+      pathParameters: {
+        'pipelineId': pipelineId,
+        'buildNumber': '$buildNumber',
+      },
+    );
+  }
+
+  /// Delete the build data currently stored for the given `pipelineId` and
+  /// `buildNumber` combination.
+  ///
+  /// Deletion is performed asynchronously. The `getBuildByKey` operation can be
+  /// used to confirm that data has been
+  /// deleted successfully (if needed).
+  ///
+  /// Only Connect apps that define the `jiraBuildInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
+  /// This resource requires the 'WRITE' scope for Connect apps.
+  Future<void> deleteBuildByKey(
+      {required String pipelineId,
+      required int buildNumber,
+      int? updateSequenceNumber}) async {
+    await _client.send(
+      'delete',
+      'builds/0.1/pipelines/{pipelineId}/builds/{buildNumber}',
+      pathParameters: {
+        'pipelineId': pipelineId,
+        'buildNumber': '$buildNumber',
+      },
+      queryParameters: {
+        if (updateSequenceNumber != null)
+          '_updateSequenceNumber': '$updateSequenceNumber',
+      },
+    );
+  }
+}
+
+/// Jira Software Cloud REST API documentation
+
+class DeploymentsApi {
+  final ApiClient _client;
+
+  DeploymentsApi(this._client);
+
+  /// Update / insert deployment data.
+  ///
+  /// Deployments are identified by the combination of `pipelineId`,
+  /// `environmentId` and `deploymentSequenceNumber`, and existing deployment
+  /// data for the same deployment will be replaced if it exists and the
+  /// `updateSequenceNumber` of existing data is less than the incoming data.
+  ///
+  /// Submissions are processed asynchronously. Submitted data will eventually
+  /// be available in Jira. Most updates are available within a short period of
+  /// time, but may take some time during peak load and/or maintenance times.
+  /// The `getDeploymentByKey` operation can be used to confirm that data has
+  /// been stored successfully (if needed).
+  ///
+  /// In the case of multiple deployments being submitted in one request, each
+  /// is validated individually prior to submission. Details of which
+  /// deployments failed submission (if any) are available in the response
+  /// object.
+  ///
+  /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
+  /// This resource requires the 'WRITE' scope for Connect apps.
+  Future<void> submitDeployments({required dynamic body}) async {
+    await _client.send(
+      'post',
+      'deployments/0.1/bulk',
+      body: body,
+    );
+  }
+
+  /// Bulk delete all deployments that match the given request.
+  ///
+  /// One or more query params must be supplied to specify the Properties to
+  /// delete by. Optional param `_updateSequenceNumber` is no longer supported.
+  /// If more than one Property is provided, data will be deleted that matches
+  /// ALL of the Properties (i.e. treated as AND).
+  /// See the documentation for the `submitDeployments` operation for more
+  /// details.
+  ///
+  /// Example operation: DELETE
+  /// /bulkByProperties?accountId=account-123&createdBy=user-456
+  ///
+  /// Deletion is performed asynchronously. The `getDeploymentByKey` operation
+  /// can be used to confirm that data has been deleted successfully (if
+  /// needed).
+  ///
+  /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
+  /// This resource requires the 'DELETE' scope for Connect apps.
+  Future<void> deleteDeploymentsByProperty({int? updateSequenceNumber}) async {
+    await _client.send(
+      'delete',
+      'deployments/0.1/bulkByProperties',
+      queryParameters: {
+        if (updateSequenceNumber != null)
+          '_updateSequenceNumber': '$updateSequenceNumber',
+      },
+    );
+  }
+
+  /// Retrieve the currently stored deployment data for the given `pipelineId`,
+  /// `environmentId` and `deploymentSequenceNumber` combination.
+  ///
+  /// The result will be what is currently stored, ignoring any pending updates
+  /// or deletes.
+  ///
+  /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
+  /// This resource requires the 'READ' scope for Connect apps.
+  Future<void> getDeploymentByKey(
+      {required String pipelineId,
+      required String environmentId,
+      required int deploymentSequenceNumber}) async {
+    await _client.send(
+      'get',
+      'deployments/0.1/pipelines/{pipelineId}/environments/{environmentId}/deployments/{deploymentSequenceNumber}',
+      pathParameters: {
+        'pipelineId': pipelineId,
+        'environmentId': environmentId,
+        'deploymentSequenceNumber': '$deploymentSequenceNumber',
+      },
+    );
+  }
+
+  /// Delete the currently stored deployment data for the given `pipelineId`,
+  /// `environmentId` and `deploymentSequenceNumber` combination.
+  ///
+  /// Deletion is performed asynchronously. The `getDeploymentByKey` operation
+  /// can be used to confirm that data has been deleted successfully (if
+  /// needed).
+  ///
+  /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
+  /// This resource requires the 'DELETE' scope for Connect apps.
+  Future<void> deleteDeploymentByKey(
+      {required String pipelineId,
+      required String environmentId,
+      required int deploymentSequenceNumber,
+      int? updateSequenceNumber}) async {
+    await _client.send(
+      'delete',
+      'deployments/0.1/pipelines/{pipelineId}/environments/{environmentId}/deployments/{deploymentSequenceNumber}',
+      pathParameters: {
+        'pipelineId': pipelineId,
+        'environmentId': environmentId,
+        'deploymentSequenceNumber': '$deploymentSequenceNumber',
+      },
+      queryParameters: {
+        if (updateSequenceNumber != null)
+          '_updateSequenceNumber': '$updateSequenceNumber',
+      },
+    );
+  }
+
+  /// Retrieve the  Deployment gating status for the given `pipelineId +
+  /// environmentId + deploymentSequenceNumber` combination. Only apps that
+  /// define the `jiraDeploymentInfoProvider` module can access this resource.
+  /// This resource requires the 'READ' scope.
+  Future<void> getDeploymentGatingStatusByKey(
+      {required String pipelineId,
+      required String environmentId,
+      required int deploymentSequenceNumber}) async {
+    await _client.send(
+      'get',
+      'deployments/0.1/pipelines/{pipelineId}/environments/{environmentId}/deployments/{deploymentSequenceNumber}/gating-status',
+      pathParameters: {
+        'pipelineId': pipelineId,
+        'environmentId': environmentId,
+        'deploymentSequenceNumber': '$deploymentSequenceNumber',
+      },
+    );
+  }
+}
+
+/// Jira Software Cloud REST API documentation
+
+class DevelopmentInformationApi {
+  final ApiClient _client;
+
+  DevelopmentInformationApi(this._client);
+
+  /// Stores development information provided in the request to make it
+  /// available when viewing issues in Jira. Existing repository and entity data
+  /// for the same ID will be replaced if the updateSequenceId of existing data
+  /// is less than the incoming data. Submissions are performed asynchronously.
+  /// Submitted data will eventually be available in Jira; most updates are
+  /// available within a short period of time, but may take some time during
+  /// peak load and/or maintenance times.
+  Future<Map<String, dynamic>> storeDevelopmentInformation(
+      {required String authorization,
+      required Map<String, dynamic> body}) async {
+    return await _client.send(
+      'post',
+      'devinfo/0.10/bulk',
+      body: body,
+    ) as Map<String, Object?>;
+  }
+
+  /// For the specified repository ID, retrieves the repository and the most
+  /// recent 400 development information entities. The result will be what is
+  /// currently stored, ignoring any pending updates or deletes.
+  Future<Map<String, dynamic>> getRepository(
+      {required String repositoryId, required String authorization}) async {
+    return await _client.send(
+      'get',
+      'devinfo/0.10/repository/{repositoryId}',
+      pathParameters: {
+        'repositoryId': repositoryId,
+      },
+    ) as Map<String, Object?>;
+  }
+
+  /// Deletes the repository data stored by the given ID and all related
+  /// development information entities. Deletion is performed asynchronously.
+  Future<void> deleteRepository(
+      {required String repositoryId,
+      int? updateSequenceId,
+      required String authorization}) async {
+    await _client.send(
+      'delete',
+      'devinfo/0.10/repository/{repositoryId}',
+      pathParameters: {
+        'repositoryId': repositoryId,
+      },
+      queryParameters: {
+        if (updateSequenceId != null) '_updateSequenceId': '$updateSequenceId',
+      },
+    );
+  }
+
+  /// Deletes development information entities which have all the provided
+  /// properties. Entities will be deleted that match ALL of the properties
+  /// (i.e. treated as an AND). For example if request is `DELETE
+  /// bulk?accountId=123&projectId=ABC` entities which have properties
+  /// `accountId=123` and `projectId=ABC` will be deleted. Special property
+  /// `_updateSequenceId` can be used to delete all entities with
+  /// updateSequenceId less or equal than the value specified. In addition to
+  /// the optional `_updateSequenceId`, one or more query params must be
+  /// supplied to specify properties to delete by. Deletion is performed
+  /// asynchronously: specified entities will eventually be removed from Jira.
+  Future<void> deleteByProperties(
+      {required String authorization, int? updateSequenceId}) async {
+    await _client.send(
+      'delete',
+      'devinfo/0.10/bulkByProperties',
+      queryParameters: {
+        if (updateSequenceId != null) '_updateSequenceId': '$updateSequenceId',
+      },
+    );
+  }
+
+  /// Checks if development information which have all the provided properties
+  /// exists. For example, if request is `GET
+  /// existsByProperties?accountId=123&projectId=ABC` then result will be
+  /// positive only if there is at least one entity or repository with both
+  /// properties `accountId=123` and `projectId=ABC`. Special property
+  /// `_updateSequenceId` can be used to filter all entities with
+  /// updateSequenceId less or equal than the value specified. In addition to
+  /// the optional `_updateSequenceId`, one or more query params must be
+  /// supplied to specify properties to search by.
+  Future<Map<String, dynamic>> existsByProperties(
+      {required String authorization, int? updateSequenceId}) async {
+    return await _client.send(
+      'get',
+      'devinfo/0.10/existsByProperties',
+      queryParameters: {
+        if (updateSequenceId != null) '_updateSequenceId': '$updateSequenceId',
+      },
+    ) as Map<String, Object?>;
+  }
+
+  /// Deletes particular development information entity. Deletion is performed
+  /// asynchronously.
+  Future<void> deleteEntity(
+      {required String repositoryId,
+      required String entityType,
+      required String entityId,
+      int? updateSequenceId,
+      required String authorization}) async {
+    await _client.send(
+      'delete',
+      'devinfo/0.10/repository/{repositoryId}/{entityType}/{entityId}',
+      pathParameters: {
+        'repositoryId': repositoryId,
+        'entityType': entityType,
+        'entityId': entityId,
+      },
+      queryParameters: {
+        if (updateSequenceId != null) '_updateSequenceId': '$updateSequenceId',
+      },
+    );
+  }
+}
+
+/// Jira Software Cloud REST API documentation
+
 class EpicApi {
   final ApiClient _client;
 
@@ -1049,6 +1429,104 @@ class EpicApi {
 
 /// Jira Software Cloud REST API documentation
 
+class FeatureFlagsApi {
+  final ApiClient _client;
+
+  FeatureFlagsApi(this._client);
+
+  /// Update / insert Feature Flag data.
+  ///
+  /// Feature Flags are identified by their ID, and existing Feature Flag data
+  /// for the same ID will be replaced if it exists and the updateSequenceId of
+  /// existing data is less than the incoming data.
+  ///
+  /// Submissions are performed asynchronously. Submitted data will eventually
+  /// be available in Jira; most updates are available within a short period of
+  /// time, but may take some time during peak load and/or maintenance times.
+  /// The getFeatureFlagById operation can be used to confirm that data has been
+  /// stored successfully (if needed).
+  ///
+  /// In the case of multiple Feature Flags being submitted in one request, each
+  /// is validated individually prior to submission. Details of which Feature
+  /// Flags failed submission (if any) are available in the response object.
+  ///
+  /// Only apps that define the Feature Flags module can access this resource.
+  /// This resource requires the 'WRITE' scope.
+  Future<void> submitFeatureFlags({required dynamic body}) async {
+    await _client.send(
+      'post',
+      'featureflags/0.1/bulk',
+      body: body,
+    );
+  }
+
+  /// Bulk delete all Feature Flags that match the given request.
+  ///
+  /// One or more query params must be supplied to specify Properties to delete
+  /// by. Optional param `_updateSequenceId` is no longer supported.
+  /// If more than one Property is provided, data will be deleted that matches
+  /// ALL of the Properties (e.g. treated as an AND).
+  /// See the documentation for the submitFeatureFlags operation for more
+  /// details.
+  ///
+  /// e.g. DELETE /bulkByProperties?accountId=account-123&createdBy=user-456
+  ///
+  /// Deletion is performed asynchronously. The getFeatureFlagById operation can
+  /// be used to confirm that data has been deleted successfully (if needed).
+  ///
+  /// Only apps that define the Feature Flags module can access this resource.
+  /// This resource requires the 'DELETE' scope.
+  Future<void> deleteFeatureFlagsByProperty({int? updateSequenceId}) async {
+    await _client.send(
+      'delete',
+      'featureflags/0.1/bulkByProperties',
+      queryParameters: {
+        if (updateSequenceId != null) '_updateSequenceId': '$updateSequenceId',
+      },
+    );
+  }
+
+  /// Retrieve the currently stored Feature Flag data for the given ID.
+  ///
+  /// The result will be what is currently stored, ignoring any pending updates
+  /// or deletes.
+  ///
+  /// Only apps that define the Feature Flags module can access this resource.
+  /// This resource requires the 'READ' scope.
+  Future<void> getFeatureFlagById(String featureFlagId) async {
+    await _client.send(
+      'get',
+      'featureflags/0.1/flag/{featureFlagId}',
+      pathParameters: {
+        'featureFlagId': featureFlagId,
+      },
+    );
+  }
+
+  /// Delete the Feature Flag data currently stored for the given ID.
+  ///
+  /// Deletion is performed asynchronously. The getFeatureFlagById operation can
+  /// be used to confirm that data has been deleted successfully (if needed).
+  ///
+  /// Only apps that define the Feature Flags module can access this resource.
+  /// This resource requires the 'DELETE' scope.
+  Future<void> deleteFeatureFlagById(
+      {required String featureFlagId, int? updateSequenceId}) async {
+    await _client.send(
+      'delete',
+      'featureflags/0.1/flag/{featureFlagId}',
+      pathParameters: {
+        'featureFlagId': featureFlagId,
+      },
+      queryParameters: {
+        if (updateSequenceId != null) '_updateSequenceId': '$updateSequenceId',
+      },
+    );
+  }
+}
+
+/// Jira Software Cloud REST API documentation
+
 class IssueApi {
   final ApiClient _client;
 
@@ -1174,6 +1652,121 @@ class IssueApi {
         'projectIdOrKey': projectIdOrKey,
       },
     ) as Map<String, Object?>;
+  }
+}
+
+/// Jira Software Cloud REST API documentation
+
+class RemoteLinksApi {
+  final ApiClient _client;
+
+  RemoteLinksApi(this._client);
+
+  /// Update / insert Remote Link data.
+  ///
+  /// Remote Links are identified by their ID, existing Remote Link data for the
+  /// same ID will be replaced if it
+  /// exists and the updateSequenceId of existing data is less than the incoming
+  /// data.
+  ///
+  /// Submissions are performed asynchronously. Submitted data will eventually
+  /// be available in Jira; most updates are
+  /// available within a short period of time, but may take some time during
+  /// peak load and/or maintenance times.
+  /// The `getRemoteLinkById` operation can be used to confirm that data has
+  /// been stored successfully (if needed).
+  ///
+  /// In the case of multiple Remote Links being submitted in one request, each
+  /// is validated individually prior to
+  /// submission. Details of which Remote LInk failed submission (if any) are
+  /// available in the response object.
+  ///
+  /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module can
+  /// access this resource. This resource
+  /// requires the 'WRITE' scope for Connect apps.
+  Future<Map<String, dynamic>> submitRemoteLinks(
+      {required Map<String, dynamic> body}) async {
+    return await _client.send(
+      'post',
+      'remotelinks/1.0/bulk',
+      body: body,
+    ) as Map<String, Object?>;
+  }
+
+  /// Bulk delete all Remote Links data that match the given request.
+  ///
+  /// One or more query params must be supplied to specify Properties to delete
+  /// by.
+  /// Optional param `_updateSequenceNumber` is no longer supported. If more
+  /// than one Property is provided,
+  /// data will be deleted that matches ALL of the Properties (e.g. treated as
+  /// an AND).
+  ///
+  /// See the documentation for the `submitRemoteLinks` operation for more
+  /// details.
+  ///
+  /// e.g. DELETE /bulkByProperties?accountId=account-123&repoId=repo-345
+  ///
+  /// Deletion is performed asynchronously. The `getRemoteLinkById` operation
+  /// can be used to confirm that data has been
+  /// deleted successfully (if needed).
+  ///
+  /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
+  /// This resource requires the 'WRITE' scope for Connect apps.
+  Future<void> deleteRemoteLinksByProperty(
+      {int? updateSequenceNumber, Map<String, dynamic>? params}) async {
+    await _client.send(
+      'delete',
+      'remotelinks/1.0/bulkByProperties',
+      queryParameters: {
+        if (updateSequenceNumber != null)
+          '_updateSequenceNumber': '$updateSequenceNumber',
+        if (params != null) 'params': '$params',
+      },
+    );
+  }
+
+  /// Retrieve the currently stored Remote Link data for the given ID.
+  ///
+  /// The result will be what is currently stored, ignoring any pending updates
+  /// or deletes.
+  ///
+  /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
+  /// This resource requires the 'WRITE' scope for Connect apps.
+  Future<void> getRemoteLinkById(String remoteLinkId) async {
+    await _client.send(
+      'get',
+      'remotelinks/1.0/remotelink/{remoteLinkId}',
+      pathParameters: {
+        'remoteLinkId': remoteLinkId,
+      },
+    );
+  }
+
+  /// Delete the Remote Link data currently stored for the given ID.
+  ///
+  /// Deletion is performed asynchronously. The `getRemoteLinkById` operation
+  /// can be used to confirm that data has been
+  /// deleted successfully (if needed).
+  ///
+  /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module, and
+  /// on-premise integrations, can access this resource.
+  /// This resource requires the 'WRITE' scope for Connect apps.
+  Future<void> deleteRemoteLinkById(
+      {required String remoteLinkId, int? updateSequenceNumber}) async {
+    await _client.send(
+      'delete',
+      'remotelinks/1.0/remotelink/{remoteLinkId}',
+      pathParameters: {
+        'remoteLinkId': remoteLinkId,
+      },
+      queryParameters: {
+        if (updateSequenceNumber != null)
+          '_updateSequenceNumber': '$updateSequenceNumber',
+      },
+    );
   }
 }
 
@@ -1402,1003 +1995,1539 @@ class SprintApi {
   }
 }
 
-/// Jira Software Cloud REST API documentation
+/// Details about the avatars for an item.
+class AvatarUrls {
+  /// The URL of the item's 16x16 pixel avatar.
+  final String? $16X16;
 
-class DevelopmentInformationApi {
-  final ApiClient _client;
+  /// The URL of the item's 24x24 pixel avatar.
+  final String? $24X24;
 
-  DevelopmentInformationApi(this._client);
+  /// The URL of the item's 32x32 pixel avatar.
+  final String? $32X32;
 
-  /// Stores development information provided in the request to make it
-  /// available when viewing issues in Jira. Existing repository and entity data
-  /// for the same ID will be replaced if the updateSequenceId of existing data
-  /// is less than the incoming data. Submissions are performed asynchronously.
-  /// Submitted data will eventually be available in Jira; most updates are
-  /// available within a short period of time, but may take some time during
-  /// peak load and/or maintenance times.
-  Future<Map<String, dynamic>> storeDevelopmentInformation(
-      {required String authorization,
-      required Map<String, dynamic> body}) async {
-    return await _client.send(
-      'post',
-      'devinfo/0.10/bulk',
-      body: body,
-    ) as Map<String, Object?>;
-  }
+  /// The URL of the item's 48x48 pixel avatar.
+  final String? $48X48;
 
-  /// For the specified repository ID, retrieves the repository and the most
-  /// recent 400 development information entities. The result will be what is
-  /// currently stored, ignoring any pending updates or deletes.
-  Future<Map<String, dynamic>> getRepository(
-      {required String repositoryId, required String authorization}) async {
-    return await _client.send(
-      'get',
-      'devinfo/0.10/repository/{repositoryId}',
-      pathParameters: {
-        'repositoryId': repositoryId,
-      },
-    ) as Map<String, Object?>;
-  }
+  AvatarUrls({this.$16X16, this.$24X24, this.$32X32, this.$48X48});
 
-  /// Deletes the repository data stored by the given ID and all related
-  /// development information entities. Deletion is performed asynchronously.
-  Future<void> deleteRepository(
-      {required String repositoryId,
-      int? updateSequenceId,
-      required String authorization}) async {
-    await _client.send(
-      'delete',
-      'devinfo/0.10/repository/{repositoryId}',
-      pathParameters: {
-        'repositoryId': repositoryId,
-      },
-      queryParameters: {
-        if (updateSequenceId != null) '_updateSequenceId': '$updateSequenceId',
-      },
-    );
-  }
-
-  /// Deletes development information entities which have all the provided
-  /// properties. Entities will be deleted that match ALL of the properties
-  /// (i.e. treated as an AND). For example if request is `DELETE
-  /// bulk?accountId=123&projectId=ABC` entities which have properties
-  /// `accountId=123` and `projectId=ABC` will be deleted. Special property
-  /// `_updateSequenceId` can be used to delete all entities with
-  /// updateSequenceId less or equal than the value specified. In addition to
-  /// the optional `_updateSequenceId`, one or more query params must be
-  /// supplied to specify properties to delete by. Deletion is performed
-  /// asynchronously: specified entities will eventually be removed from Jira.
-  Future<void> deleteByProperties(
-      {required String authorization, int? updateSequenceId}) async {
-    await _client.send(
-      'delete',
-      'devinfo/0.10/bulkByProperties',
-      queryParameters: {
-        if (updateSequenceId != null) '_updateSequenceId': '$updateSequenceId',
-      },
-    );
-  }
-
-  /// Checks if development information which have all the provided properties
-  /// exists. For example, if request is `GET
-  /// existsByProperties?accountId=123&projectId=ABC` then result will be
-  /// positive only if there is at least one entity or repository with both
-  /// properties `accountId=123` and `projectId=ABC`. Special property
-  /// `_updateSequenceId` can be used to filter all entities with
-  /// updateSequenceId less or equal than the value specified. In addition to
-  /// the optional `_updateSequenceId`, one or more query params must be
-  /// supplied to specify properties to search by.
-  Future<Map<String, dynamic>> existsByProperties(
-      {required String authorization, int? updateSequenceId}) async {
-    return await _client.send(
-      'get',
-      'devinfo/0.10/existsByProperties',
-      queryParameters: {
-        if (updateSequenceId != null) '_updateSequenceId': '$updateSequenceId',
-      },
-    ) as Map<String, Object?>;
-  }
-
-  /// Deletes particular development information entity. Deletion is performed
-  /// asynchronously.
-  Future<void> deleteEntity(
-      {required String repositoryId,
-      required String entityType,
-      required String entityId,
-      int? updateSequenceId,
-      required String authorization}) async {
-    await _client.send(
-      'delete',
-      'devinfo/0.10/repository/{repositoryId}/{entityType}/{entityId}',
-      pathParameters: {
-        'repositoryId': repositoryId,
-        'entityType': entityType,
-        'entityId': entityId,
-      },
-      queryParameters: {
-        if (updateSequenceId != null) '_updateSequenceId': '$updateSequenceId',
-      },
-    );
-  }
-}
-
-/// Jira Software Cloud REST API documentation
-
-class FeatureFlagsApi {
-  final ApiClient _client;
-
-  FeatureFlagsApi(this._client);
-
-  /// Update / insert Feature Flag data.
-  ///
-  /// Feature Flags are identified by their ID, and existing Feature Flag data
-  /// for the same ID will be replaced if it exists and the updateSequenceId of
-  /// existing data is less than the incoming data.
-  ///
-  /// Submissions are performed asynchronously. Submitted data will eventually
-  /// be available in Jira; most updates are available within a short period of
-  /// time, but may take some time during peak load and/or maintenance times.
-  /// The getFeatureFlagById operation can be used to confirm that data has been
-  /// stored successfully (if needed).
-  ///
-  /// In the case of multiple Feature Flags being submitted in one request, each
-  /// is validated individually prior to submission. Details of which Feature
-  /// Flags failed submission (if any) are available in the response object.
-  ///
-  /// Only apps that define the Feature Flags module can access this resource.
-  /// This resource requires the 'WRITE' scope.
-  Future<void> submitFeatureFlags({required dynamic body}) async {
-    await _client.send(
-      'post',
-      'featureflags/0.1/bulk',
-      body: body,
-    );
-  }
-
-  /// Bulk delete all Feature Flags that match the given request.
-  ///
-  /// One or more query params must be supplied to specify Properties to delete
-  /// by. Optional param `_updateSequenceId` is no longer supported.
-  /// If more than one Property is provided, data will be deleted that matches
-  /// ALL of the Properties (e.g. treated as an AND).
-  /// See the documentation for the submitFeatureFlags operation for more
-  /// details.
-  ///
-  /// e.g. DELETE /bulkByProperties?accountId=account-123&createdBy=user-456
-  ///
-  /// Deletion is performed asynchronously. The getFeatureFlagById operation can
-  /// be used to confirm that data has been deleted successfully (if needed).
-  ///
-  /// Only apps that define the Feature Flags module can access this resource.
-  /// This resource requires the 'DELETE' scope.
-  Future<void> deleteFeatureFlagsByProperty({int? updateSequenceId}) async {
-    await _client.send(
-      'delete',
-      'featureflags/0.1/bulkByProperties',
-      queryParameters: {
-        if (updateSequenceId != null) '_updateSequenceId': '$updateSequenceId',
-      },
-    );
-  }
-
-  /// Retrieve the currently stored Feature Flag data for the given ID.
-  ///
-  /// The result will be what is currently stored, ignoring any pending updates
-  /// or deletes.
-  ///
-  /// Only apps that define the Feature Flags module can access this resource.
-  /// This resource requires the 'READ' scope.
-  Future<void> getFeatureFlagById(String featureFlagId) async {
-    await _client.send(
-      'get',
-      'featureflags/0.1/flag/{featureFlagId}',
-      pathParameters: {
-        'featureFlagId': featureFlagId,
-      },
-    );
-  }
-
-  /// Delete the Feature Flag data currently stored for the given ID.
-  ///
-  /// Deletion is performed asynchronously. The getFeatureFlagById operation can
-  /// be used to confirm that data has been deleted successfully (if needed).
-  ///
-  /// Only apps that define the Feature Flags module can access this resource.
-  /// This resource requires the 'DELETE' scope.
-  Future<void> deleteFeatureFlagById(
-      {required String featureFlagId, int? updateSequenceId}) async {
-    await _client.send(
-      'delete',
-      'featureflags/0.1/flag/{featureFlagId}',
-      pathParameters: {
-        'featureFlagId': featureFlagId,
-      },
-      queryParameters: {
-        if (updateSequenceId != null) '_updateSequenceId': '$updateSequenceId',
-      },
-    );
-  }
-}
-
-/// Jira Software Cloud REST API documentation
-
-class DeploymentsApi {
-  final ApiClient _client;
-
-  DeploymentsApi(this._client);
-
-  /// Update / insert deployment data.
-  ///
-  /// Deployments are identified by the combination of `pipelineId`,
-  /// `environmentId` and `deploymentSequenceNumber`, and existing deployment
-  /// data for the same deployment will be replaced if it exists and the
-  /// `updateSequenceNumber` of existing data is less than the incoming data.
-  ///
-  /// Submissions are processed asynchronously. Submitted data will eventually
-  /// be available in Jira. Most updates are available within a short period of
-  /// time, but may take some time during peak load and/or maintenance times.
-  /// The `getDeploymentByKey` operation can be used to confirm that data has
-  /// been stored successfully (if needed).
-  ///
-  /// In the case of multiple deployments being submitted in one request, each
-  /// is validated individually prior to submission. Details of which
-  /// deployments failed submission (if any) are available in the response
-  /// object.
-  ///
-  /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and
-  /// on-premise integrations, can access this resource.
-  /// This resource requires the 'WRITE' scope for Connect apps.
-  Future<void> submitDeployments({required dynamic body}) async {
-    await _client.send(
-      'post',
-      'deployments/0.1/bulk',
-      body: body,
-    );
-  }
-
-  /// Bulk delete all deployments that match the given request.
-  ///
-  /// One or more query params must be supplied to specify the Properties to
-  /// delete by. Optional param `_updateSequenceNumber` is no longer supported.
-  /// If more than one Property is provided, data will be deleted that matches
-  /// ALL of the Properties (i.e. treated as AND).
-  /// See the documentation for the `submitDeployments` operation for more
-  /// details.
-  ///
-  /// Example operation: DELETE
-  /// /bulkByProperties?accountId=account-123&createdBy=user-456
-  ///
-  /// Deletion is performed asynchronously. The `getDeploymentByKey` operation
-  /// can be used to confirm that data has been deleted successfully (if
-  /// needed).
-  ///
-  /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and
-  /// on-premise integrations, can access this resource.
-  /// This resource requires the 'DELETE' scope for Connect apps.
-  Future<void> deleteDeploymentsByProperty({int? updateSequenceNumber}) async {
-    await _client.send(
-      'delete',
-      'deployments/0.1/bulkByProperties',
-      queryParameters: {
-        if (updateSequenceNumber != null)
-          '_updateSequenceNumber': '$updateSequenceNumber',
-      },
-    );
-  }
-
-  /// Retrieve the currently stored deployment data for the given `pipelineId`,
-  /// `environmentId` and `deploymentSequenceNumber` combination.
-  ///
-  /// The result will be what is currently stored, ignoring any pending updates
-  /// or deletes.
-  ///
-  /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and
-  /// on-premise integrations, can access this resource.
-  /// This resource requires the 'READ' scope for Connect apps.
-  Future<void> getDeploymentByKey(
-      {required String pipelineId,
-      required String environmentId,
-      required int deploymentSequenceNumber}) async {
-    await _client.send(
-      'get',
-      'deployments/0.1/pipelines/{pipelineId}/environments/{environmentId}/deployments/{deploymentSequenceNumber}',
-      pathParameters: {
-        'pipelineId': pipelineId,
-        'environmentId': environmentId,
-        'deploymentSequenceNumber': '$deploymentSequenceNumber',
-      },
-    );
-  }
-
-  /// Delete the currently stored deployment data for the given `pipelineId`,
-  /// `environmentId` and `deploymentSequenceNumber` combination.
-  ///
-  /// Deletion is performed asynchronously. The `getDeploymentByKey` operation
-  /// can be used to confirm that data has been deleted successfully (if
-  /// needed).
-  ///
-  /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and
-  /// on-premise integrations, can access this resource.
-  /// This resource requires the 'DELETE' scope for Connect apps.
-  Future<void> deleteDeploymentByKey(
-      {required String pipelineId,
-      required String environmentId,
-      required int deploymentSequenceNumber,
-      int? updateSequenceNumber}) async {
-    await _client.send(
-      'delete',
-      'deployments/0.1/pipelines/{pipelineId}/environments/{environmentId}/deployments/{deploymentSequenceNumber}',
-      pathParameters: {
-        'pipelineId': pipelineId,
-        'environmentId': environmentId,
-        'deploymentSequenceNumber': '$deploymentSequenceNumber',
-      },
-      queryParameters: {
-        if (updateSequenceNumber != null)
-          '_updateSequenceNumber': '$updateSequenceNumber',
-      },
-    );
-  }
-
-  /// Retrieve the  Deployment gating status for the given `pipelineId +
-  /// environmentId + deploymentSequenceNumber` combination. Only apps that
-  /// define the `jiraDeploymentInfoProvider` module can access this resource.
-  /// This resource requires the 'READ' scope.
-  Future<void> getDeploymentGatingStatusByKey(
-      {required String pipelineId,
-      required String environmentId,
-      required int deploymentSequenceNumber}) async {
-    await _client.send(
-      'get',
-      'deployments/0.1/pipelines/{pipelineId}/environments/{environmentId}/deployments/{deploymentSequenceNumber}/gating-status',
-      pathParameters: {
-        'pipelineId': pipelineId,
-        'environmentId': environmentId,
-        'deploymentSequenceNumber': '$deploymentSequenceNumber',
-      },
-    );
-  }
-}
-
-/// Jira Software Cloud REST API documentation
-
-class BuildsApi {
-  final ApiClient _client;
-
-  BuildsApi(this._client);
-
-  /// Update / insert builds data.
-  ///
-  /// Builds are identified by the combination of `pipelineId` and
-  /// `buildNumber`, and existing build data for the same
-  /// build will be replaced if it exists and the `updateSequenceNumber` of the
-  /// existing data is less than the
-  /// incoming data.
-  ///
-  /// Submissions are performed asynchronously. Submitted data will eventually
-  /// be available in Jira; most updates are
-  /// available within a short period of time, but may take some time during
-  /// peak load and/or maintenance times.
-  /// The `getBuildByKey` operation can be used to confirm that data has been
-  /// stored successfully (if needed).
-  ///
-  /// In the case of multiple builds being submitted in one request, each is
-  /// validated individually prior to
-  /// submission. Details of which build failed submission (if any) are
-  /// available in the response object.
-  ///
-  /// Only Connect apps that define the `jiraBuildInfoProvider` module, and
-  /// on-premise integrations, can access this resource.
-  /// This resource requires the 'WRITE' scope for Connect apps.
-  Future<Map<String, dynamic>> submitBuilds(
-      {required Map<String, dynamic> body}) async {
-    return await _client.send(
-      'post',
-      'builds/0.1/bulk',
-      body: body,
-    ) as Map<String, Object?>;
-  }
-
-  /// Bulk delete all builds data that match the given request.
-  ///
-  /// One or more query params must be supplied to specify Properties to delete
-  /// by.
-  /// Optional param `_updateSequenceNumber` is no longer supported.
-  /// If more than one Property is provided, data will be deleted that matches
-  /// ALL of the
-  /// Properties (e.g. treated as an AND).
-  ///
-  /// See the documentation for the `submitBuilds` operation for more details.
-  ///
-  /// e.g. DELETE /bulkByProperties?accountId=account-123&repoId=repo-345
-  ///
-  /// Deletion is performed asynchronously. The `getBuildByKey` operation can be
-  /// used to confirm that data has been
-  /// deleted successfully (if needed).
-  ///
-  /// Only Connect apps that define the `jiraBuildInfoProvider` module, and
-  /// on-premise integrations, can access this resource.
-  /// This resource requires the 'WRITE' scope for Connect apps.
-  Future<void> deleteBuildsByProperty({int? updateSequenceNumber}) async {
-    await _client.send(
-      'delete',
-      'builds/0.1/bulkByProperties',
-      queryParameters: {
-        if (updateSequenceNumber != null)
-          '_updateSequenceNumber': '$updateSequenceNumber',
-      },
-    );
-  }
-
-  /// Retrieve the currently stored build data for the given `pipelineId` and
-  /// `buildNumber` combination.
-  ///
-  /// The result will be what is currently stored, ignoring any pending updates
-  /// or deletes.
-  ///
-  /// Only Connect apps that define the `jiraBuildInfoProvider` module, and
-  /// on-premise integrations, can access this resource.
-  /// This resource requires the 'WRITE' scope for Connect apps.
-  Future<void> getBuildByKey(
-      {required String pipelineId, required int buildNumber}) async {
-    await _client.send(
-      'get',
-      'builds/0.1/pipelines/{pipelineId}/builds/{buildNumber}',
-      pathParameters: {
-        'pipelineId': pipelineId,
-        'buildNumber': '$buildNumber',
-      },
-    );
-  }
-
-  /// Delete the build data currently stored for the given `pipelineId` and
-  /// `buildNumber` combination.
-  ///
-  /// Deletion is performed asynchronously. The `getBuildByKey` operation can be
-  /// used to confirm that data has been
-  /// deleted successfully (if needed).
-  ///
-  /// Only Connect apps that define the `jiraBuildInfoProvider` module, and
-  /// on-premise integrations, can access this resource.
-  /// This resource requires the 'WRITE' scope for Connect apps.
-  Future<void> deleteBuildByKey(
-      {required String pipelineId,
-      required int buildNumber,
-      int? updateSequenceNumber}) async {
-    await _client.send(
-      'delete',
-      'builds/0.1/pipelines/{pipelineId}/builds/{buildNumber}',
-      pathParameters: {
-        'pipelineId': pipelineId,
-        'buildNumber': '$buildNumber',
-      },
-      queryParameters: {
-        if (updateSequenceNumber != null)
-          '_updateSequenceNumber': '$updateSequenceNumber',
-      },
-    );
-  }
-}
-
-/// Jira Software Cloud REST API documentation
-
-class RemoteLinksApi {
-  final ApiClient _client;
-
-  RemoteLinksApi(this._client);
-
-  /// Update / insert Remote Link data.
-  ///
-  /// Remote Links are identified by their ID, existing Remote Link data for the
-  /// same ID will be replaced if it
-  /// exists and the updateSequenceId of existing data is less than the incoming
-  /// data.
-  ///
-  /// Submissions are performed asynchronously. Submitted data will eventually
-  /// be available in Jira; most updates are
-  /// available within a short period of time, but may take some time during
-  /// peak load and/or maintenance times.
-  /// The `getRemoteLinkById` operation can be used to confirm that data has
-  /// been stored successfully (if needed).
-  ///
-  /// In the case of multiple Remote Links being submitted in one request, each
-  /// is validated individually prior to
-  /// submission. Details of which Remote LInk failed submission (if any) are
-  /// available in the response object.
-  ///
-  /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module can
-  /// access this resource. This resource
-  /// requires the 'WRITE' scope for Connect apps.
-  Future<Map<String, dynamic>> submitRemoteLinks(
-      {required Map<String, dynamic> body}) async {
-    return await _client.send(
-      'post',
-      'remotelinks/1.0/bulk',
-      body: body,
-    ) as Map<String, Object?>;
-  }
-
-  /// Bulk delete all Remote Links data that match the given request.
-  ///
-  /// One or more query params must be supplied to specify Properties to delete
-  /// by.
-  /// Optional param `_updateSequenceNumber` is no longer supported. If more
-  /// than one Property is provided,
-  /// data will be deleted that matches ALL of the Properties (e.g. treated as
-  /// an AND).
-  ///
-  /// See the documentation for the `submitRemoteLinks` operation for more
-  /// details.
-  ///
-  /// e.g. DELETE /bulkByProperties?accountId=account-123&repoId=repo-345
-  ///
-  /// Deletion is performed asynchronously. The `getRemoteLinkById` operation
-  /// can be used to confirm that data has been
-  /// deleted successfully (if needed).
-  ///
-  /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module, and
-  /// on-premise integrations, can access this resource.
-  /// This resource requires the 'WRITE' scope for Connect apps.
-  Future<void> deleteRemoteLinksByProperty(
-      {int? updateSequenceNumber, Map<String, dynamic>? params}) async {
-    await _client.send(
-      'delete',
-      'remotelinks/1.0/bulkByProperties',
-      queryParameters: {
-        if (updateSequenceNumber != null)
-          '_updateSequenceNumber': '$updateSequenceNumber',
-        if (params != null) 'params': '$params',
-      },
-    );
-  }
-
-  /// Retrieve the currently stored Remote Link data for the given ID.
-  ///
-  /// The result will be what is currently stored, ignoring any pending updates
-  /// or deletes.
-  ///
-  /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module, and
-  /// on-premise integrations, can access this resource.
-  /// This resource requires the 'WRITE' scope for Connect apps.
-  Future<void> getRemoteLinkById(String remoteLinkId) async {
-    await _client.send(
-      'get',
-      'remotelinks/1.0/remotelink/{remoteLinkId}',
-      pathParameters: {
-        'remoteLinkId': remoteLinkId,
-      },
-    );
-  }
-
-  /// Delete the Remote Link data currently stored for the given ID.
-  ///
-  /// Deletion is performed asynchronously. The `getRemoteLinkById` operation
-  /// can be used to confirm that data has been
-  /// deleted successfully (if needed).
-  ///
-  /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module, and
-  /// on-premise integrations, can access this resource.
-  /// This resource requires the 'WRITE' scope for Connect apps.
-  Future<void> deleteRemoteLinkById(
-      {required String remoteLinkId, int? updateSequenceNumber}) async {
-    await _client.send(
-      'delete',
-      'remotelinks/1.0/remotelink/{remoteLinkId}',
-      pathParameters: {
-        'remoteLinkId': remoteLinkId,
-      },
-      queryParameters: {
-        if (updateSequenceNumber != null)
-          '_updateSequenceNumber': '$updateSequenceNumber',
-      },
-    );
-  }
-}
-
-class ReportsResponseBean {
-  final List<Map<String, dynamic>> reports;
-
-  ReportsResponseBean({List<Map<String, dynamic>>? reports})
-      : reports = reports ?? [];
-
-  factory ReportsResponseBean.fromJson(Map<String, Object?> json) {
-    return ReportsResponseBean(
-      reports: (json[r'reports'] as List<Object?>?)
-              ?.map((i) => i as Map<String, Object?>? ?? {})
-              .toList() ??
-          [],
+  factory AvatarUrls.fromJson(Map<String, Object?> json) {
+    return AvatarUrls(
+      $16X16: json[r'16x16'] as String?,
+      $24X24: json[r'24x24'] as String?,
+      $32X32: json[r'32x32'] as String?,
+      $48X48: json[r'48x48'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var reports = this.reports;
+    var $16X16 = this.$16X16;
+    var $24X24 = this.$24X24;
+    var $32X32 = this.$32X32;
+    var $48X48 = this.$48X48;
 
     final json = <String, Object?>{};
-    json[r'reports'] = reports;
-    return json;
-  }
-
-  ReportsResponseBean copyWith({List<Map<String, dynamic>>? reports}) {
-    return ReportsResponseBean(
-      reports: reports ?? this.reports,
-    );
-  }
-}
-
-class ReportBean {
-  ReportBean();
-
-  factory ReportBean.fromJson(Map<String, Object?> json) {
-    return ReportBean();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-class IssueRankRequestBean {
-  final List<String> issues;
-  final String? rankBeforeIssue;
-  final String? rankAfterIssue;
-  final int? rankCustomFieldId;
-
-  IssueRankRequestBean(
-      {List<String>? issues,
-      this.rankBeforeIssue,
-      this.rankAfterIssue,
-      this.rankCustomFieldId})
-      : issues = issues ?? [];
-
-  factory IssueRankRequestBean.fromJson(Map<String, Object?> json) {
-    return IssueRankRequestBean(
-      issues: (json[r'issues'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      rankBeforeIssue: json[r'rankBeforeIssue'] as String?,
-      rankAfterIssue: json[r'rankAfterIssue'] as String?,
-      rankCustomFieldId: (json[r'rankCustomFieldId'] as num?)?.toInt(),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var issues = this.issues;
-    var rankBeforeIssue = this.rankBeforeIssue;
-    var rankAfterIssue = this.rankAfterIssue;
-    var rankCustomFieldId = this.rankCustomFieldId;
-
-    final json = <String, Object?>{};
-    json[r'issues'] = issues;
-    if (rankBeforeIssue != null) {
-      json[r'rankBeforeIssue'] = rankBeforeIssue;
+    if ($16X16 != null) {
+      json[r'16x16'] = $16X16;
     }
-    if (rankAfterIssue != null) {
-      json[r'rankAfterIssue'] = rankAfterIssue;
+    if ($24X24 != null) {
+      json[r'24x24'] = $24X24;
     }
-    if (rankCustomFieldId != null) {
-      json[r'rankCustomFieldId'] = rankCustomFieldId;
+    if ($32X32 != null) {
+      json[r'32x32'] = $32X32;
+    }
+    if ($48X48 != null) {
+      json[r'48x48'] = $48X48;
     }
     return json;
   }
 
-  IssueRankRequestBean copyWith(
-      {List<String>? issues,
-      String? rankBeforeIssue,
-      String? rankAfterIssue,
-      int? rankCustomFieldId}) {
-    return IssueRankRequestBean(
-      issues: issues ?? this.issues,
-      rankBeforeIssue: rankBeforeIssue ?? this.rankBeforeIssue,
-      rankAfterIssue: rankAfterIssue ?? this.rankAfterIssue,
-      rankCustomFieldId: rankCustomFieldId ?? this.rankCustomFieldId,
+  AvatarUrls copyWith(
+      {String? $16X16, String? $24X24, String? $32X32, String? $48X48}) {
+    return AvatarUrls(
+      $16X16: $16X16 ?? this.$16X16,
+      $24X24: $24X24 ?? this.$24X24,
+      $32X32: $32X32 ?? this.$32X32,
+      $48X48: $48X48 ?? this.$48X48,
     );
   }
 }
 
-class FieldEditBean {
-  final String? value;
+/// Details of a user's active status, identifiers, name, and avatars as
+/// permitted by the user's Atlassian Account privacy settings. However, be
+/// aware of these exceptions:<ul><li>User record deleted from Atlassian: This
+/// occurs as the result of a right to be forgotten request. In this case,
+/// `displayName` provides an indication and other parameters have default
+/// values or are blank (for example, email is blank).</li><li>User record
+/// corrupted: This occurs as a results of events such as a server import and
+/// can only happen to deleted users. In this case, `accountId` returns
+/// <em>unknown</em> and all other parameters have fallback values.</li><li>User
+/// record unavailable: This usually occurs due to an internal service outage.
+/// In this case, all parameters have fallback values.</li></ul>
+class BasicUser {
+  /// This property is deprecated in favor of `accountId` because of privacy
+  /// changes. See the <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
+  /// guide</a> for details.
+  /// The key of the user.
+  final String? key;
 
-  FieldEditBean({this.value});
+  /// The URL of the user.
+  final String? self;
 
-  factory FieldEditBean.fromJson(Map<String, Object?> json) {
-    return FieldEditBean(
-      value: json[r'value'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var value = this.value;
-
-    final json = <String, Object?>{};
-    if (value != null) {
-      json[r'value'] = value;
-    }
-    return json;
-  }
-
-  FieldEditBean copyWith({String? value}) {
-    return FieldEditBean(
-      value: value ?? this.value,
-    );
-  }
-}
-
-class IssueAssignRequestBean {
-  final List<String> issues;
-
-  IssueAssignRequestBean({List<String>? issues}) : issues = issues ?? [];
-
-  factory IssueAssignRequestBean.fromJson(Map<String, Object?> json) {
-    return IssueAssignRequestBean(
-      issues: (json[r'issues'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var issues = this.issues;
-
-    final json = <String, Object?>{};
-    json[r'issues'] = issues;
-    return json;
-  }
-
-  IssueAssignRequestBean copyWith({List<String>? issues}) {
-    return IssueAssignRequestBean(
-      issues: issues ?? this.issues,
-    );
-  }
-}
-
-class EpicRankRequestBean {
-  final String? rankBeforeEpic;
-  final String? rankAfterEpic;
-  final int? rankCustomFieldId;
-
-  EpicRankRequestBean(
-      {this.rankBeforeEpic, this.rankAfterEpic, this.rankCustomFieldId});
-
-  factory EpicRankRequestBean.fromJson(Map<String, Object?> json) {
-    return EpicRankRequestBean(
-      rankBeforeEpic: json[r'rankBeforeEpic'] as String?,
-      rankAfterEpic: json[r'rankAfterEpic'] as String?,
-      rankCustomFieldId: (json[r'rankCustomFieldId'] as num?)?.toInt(),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var rankBeforeEpic = this.rankBeforeEpic;
-    var rankAfterEpic = this.rankAfterEpic;
-    var rankCustomFieldId = this.rankCustomFieldId;
-
-    final json = <String, Object?>{};
-    if (rankBeforeEpic != null) {
-      json[r'rankBeforeEpic'] = rankBeforeEpic;
-    }
-    if (rankAfterEpic != null) {
-      json[r'rankAfterEpic'] = rankAfterEpic;
-    }
-    if (rankCustomFieldId != null) {
-      json[r'rankCustomFieldId'] = rankCustomFieldId;
-    }
-    return json;
-  }
-
-  EpicRankRequestBean copyWith(
-      {String? rankBeforeEpic, String? rankAfterEpic, int? rankCustomFieldId}) {
-    return EpicRankRequestBean(
-      rankBeforeEpic: rankBeforeEpic ?? this.rankBeforeEpic,
-      rankAfterEpic: rankAfterEpic ?? this.rankAfterEpic,
-      rankCustomFieldId: rankCustomFieldId ?? this.rankCustomFieldId,
-    );
-  }
-}
-
-class ColorBean {
-  final ColorBeanKey? key;
-
-  ColorBean({this.key});
-
-  factory ColorBean.fromJson(Map<String, Object?> json) {
-    return ColorBean(
-      key: json[r'key'] != null
-          ? ColorBeanKey.fromValue(json[r'key']! as String)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var key = this.key;
-
-    final json = <String, Object?>{};
-    if (key != null) {
-      json[r'key'] = key.value;
-    }
-    return json;
-  }
-
-  ColorBean copyWith({ColorBeanKey? key}) {
-    return ColorBean(
-      key: key ?? this.key,
-    );
-  }
-}
-
-class ColorBeanKey {
-  static const color1 = ColorBeanKey._('color_1');
-  static const color2 = ColorBeanKey._('color_2');
-  static const color3 = ColorBeanKey._('color_3');
-  static const color4 = ColorBeanKey._('color_4');
-  static const color5 = ColorBeanKey._('color_5');
-  static const color6 = ColorBeanKey._('color_6');
-  static const color7 = ColorBeanKey._('color_7');
-  static const color8 = ColorBeanKey._('color_8');
-  static const color9 = ColorBeanKey._('color_9');
-  static const color10 = ColorBeanKey._('color_10');
-  static const color11 = ColorBeanKey._('color_11');
-  static const color12 = ColorBeanKey._('color_12');
-  static const color13 = ColorBeanKey._('color_13');
-  static const color14 = ColorBeanKey._('color_14');
-
-  static const values = [
-    color1,
-    color2,
-    color3,
-    color4,
-    color5,
-    color6,
-    color7,
-    color8,
-    color9,
-    color10,
-    color11,
-    color12,
-    color13,
-    color14,
-  ];
-  final String value;
-
-  const ColorBeanKey._(this.value);
-
-  static ColorBeanKey fromValue(String value) => values
-      .firstWhere((e) => e.value == value, orElse: () => ColorBeanKey._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class EpicUpdateBeanColor {
-  final EpicUpdateBeanColorKey? key;
-
-  EpicUpdateBeanColor({this.key});
-
-  factory EpicUpdateBeanColor.fromJson(Map<String, Object?> json) {
-    return EpicUpdateBeanColor(
-      key: json[r'key'] != null
-          ? EpicUpdateBeanColorKey.fromValue(json[r'key']! as String)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var key = this.key;
-
-    final json = <String, Object?>{};
-    if (key != null) {
-      json[r'key'] = key.value;
-    }
-    return json;
-  }
-
-  EpicUpdateBeanColor copyWith({EpicUpdateBeanColorKey? key}) {
-    return EpicUpdateBeanColor(
-      key: key ?? this.key,
-    );
-  }
-}
-
-class EpicUpdateBeanColorKey {
-  static const color1 = EpicUpdateBeanColorKey._('color_1');
-  static const color2 = EpicUpdateBeanColorKey._('color_2');
-  static const color3 = EpicUpdateBeanColorKey._('color_3');
-  static const color4 = EpicUpdateBeanColorKey._('color_4');
-  static const color5 = EpicUpdateBeanColorKey._('color_5');
-  static const color6 = EpicUpdateBeanColorKey._('color_6');
-  static const color7 = EpicUpdateBeanColorKey._('color_7');
-  static const color8 = EpicUpdateBeanColorKey._('color_8');
-  static const color9 = EpicUpdateBeanColorKey._('color_9');
-  static const color10 = EpicUpdateBeanColorKey._('color_10');
-  static const color11 = EpicUpdateBeanColorKey._('color_11');
-  static const color12 = EpicUpdateBeanColorKey._('color_12');
-  static const color13 = EpicUpdateBeanColorKey._('color_13');
-  static const color14 = EpicUpdateBeanColorKey._('color_14');
-
-  static const values = [
-    color1,
-    color2,
-    color3,
-    color4,
-    color5,
-    color6,
-    color7,
-    color8,
-    color9,
-    color10,
-    color11,
-    color12,
-    color13,
-    color14,
-  ];
-  final String value;
-
-  const EpicUpdateBeanColorKey._(this.value);
-
-  static EpicUpdateBeanColorKey fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => EpicUpdateBeanColorKey._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class EpicUpdateBean {
+  /// This property is deprecated in favor of `accountId` because of privacy
+  /// changes. See the <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
+  /// guide</a> for details.
+  /// The username of the user.
   final String? name;
-  final String? summary;
-  final EpicUpdateBeanColor? color;
-  final bool done;
 
-  EpicUpdateBean({this.name, this.summary, this.color, bool? done})
-      : done = done ?? false;
+  /// The display name of the user. Depending on the user’s privacy setting,
+  /// this may return an alternative value.
+  final String? displayName;
 
-  factory EpicUpdateBean.fromJson(Map<String, Object?> json) {
-    return EpicUpdateBean(
+  /// Whether the user is active.
+  final bool active;
+
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, <em>5b10ac8d82e05b22cc7d4ef5</em>.
+  final String? accountId;
+
+  /// The avatars of the user.
+  final Map<String, dynamic>? avatarUrls;
+
+  BasicUser(
+      {this.key,
+      this.self,
+      this.name,
+      this.displayName,
+      bool? active,
+      this.accountId,
+      this.avatarUrls})
+      : active = active ?? false;
+
+  factory BasicUser.fromJson(Map<String, Object?> json) {
+    return BasicUser(
+      key: json[r'key'] as String?,
+      self: json[r'self'] as String?,
       name: json[r'name'] as String?,
-      summary: json[r'summary'] as String?,
-      color: json[r'color'] != null
-          ? EpicUpdateBeanColor.fromJson(
-              json[r'color']! as Map<String, Object?>)
-          : null,
-      done: json[r'done'] as bool? ?? false,
+      displayName: json[r'displayName'] as String?,
+      active: json[r'active'] as bool? ?? false,
+      accountId: json[r'accountId'] as String?,
+      avatarUrls: json[r'avatarUrls'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+    var self = this.self;
+    var name = this.name;
+    var displayName = this.displayName;
+    var active = this.active;
+    var accountId = this.accountId;
+    var avatarUrls = this.avatarUrls;
+
+    final json = <String, Object?>{};
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
+    json[r'active'] = active;
+    if (accountId != null) {
+      json[r'accountId'] = accountId;
+    }
+    if (avatarUrls != null) {
+      json[r'avatarUrls'] = avatarUrls;
+    }
+    return json;
+  }
+
+  BasicUser copyWith(
+      {String? key,
+      String? self,
+      String? name,
+      String? displayName,
+      bool? active,
+      String? accountId,
+      Map<String, dynamic>? avatarUrls}) {
+    return BasicUser(
+      key: key ?? this.key,
+      self: self ?? this.self,
+      name: name ?? this.name,
+      displayName: displayName ?? this.displayName,
+      active: active ?? this.active,
+      accountId: accountId ?? this.accountId,
+      avatarUrls: avatarUrls ?? this.avatarUrls,
+    );
+  }
+}
+
+class BoardAdminsBean {
+  final List<BoardAdminsBeanUsersItem> users;
+  final List<BoardAdminsBeanGroupsItem> groups;
+
+  BoardAdminsBean(
+      {List<BoardAdminsBeanUsersItem>? users,
+      List<BoardAdminsBeanGroupsItem>? groups})
+      : users = users ?? [],
+        groups = groups ?? [];
+
+  factory BoardAdminsBean.fromJson(Map<String, Object?> json) {
+    return BoardAdminsBean(
+      users: (json[r'users'] as List<Object?>?)
+              ?.map((i) => BoardAdminsBeanUsersItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      groups: (json[r'groups'] as List<Object?>?)
+              ?.map((i) => BoardAdminsBeanGroupsItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var users = this.users;
+    var groups = this.groups;
+
+    final json = <String, Object?>{};
+    json[r'users'] = users.map((i) => i.toJson()).toList();
+    json[r'groups'] = groups.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  BoardAdminsBean copyWith(
+      {List<BoardAdminsBeanUsersItem>? users,
+      List<BoardAdminsBeanGroupsItem>? groups}) {
+    return BoardAdminsBean(
+      users: users ?? this.users,
+      groups: groups ?? this.groups,
+    );
+  }
+}
+
+class BoardAdminsBeanGroupsItem {
+  final String? name;
+  final String? self;
+
+  BoardAdminsBeanGroupsItem({this.name, this.self});
+
+  factory BoardAdminsBeanGroupsItem.fromJson(Map<String, Object?> json) {
+    return BoardAdminsBeanGroupsItem(
+      name: json[r'name'] as String?,
+      self: json[r'self'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var name = this.name;
-    var summary = this.summary;
-    var color = this.color;
-    var done = this.done;
+    var self = this.self;
 
     final json = <String, Object?>{};
     if (name != null) {
       json[r'name'] = name;
     }
-    if (summary != null) {
-      json[r'summary'] = summary;
+    if (self != null) {
+      json[r'self'] = self;
     }
-    if (color != null) {
-      json[r'color'] = color.toJson();
-    }
-    json[r'done'] = done;
     return json;
   }
 
-  EpicUpdateBean copyWith(
-      {String? name, String? summary, EpicUpdateBeanColor? color, bool? done}) {
-    return EpicUpdateBean(
+  BoardAdminsBeanGroupsItem copyWith({String? name, String? self}) {
+    return BoardAdminsBeanGroupsItem(
       name: name ?? this.name,
-      summary: summary ?? this.summary,
-      color: color ?? this.color,
-      done: done ?? this.done,
+      self: self ?? this.self,
+    );
+  }
+}
+
+/// Details of a user's active status, identifiers, name, and avatars as
+/// permitted by the user's Atlassian Account privacy settings. However, be
+/// aware of these exceptions:<ul><li>User record deleted from Atlassian: This
+/// occurs as the result of a right to be forgotten request. In this case,
+/// `displayName` provides an indication and other parameters have default
+/// values or are blank (for example, email is blank).</li><li>User record
+/// corrupted: This occurs as a results of events such as a server import and
+/// can only happen to deleted users. In this case, `accountId` returns
+/// <em>unknown</em> and all other parameters have fallback values.</li><li>User
+/// record unavailable: This usually occurs due to an internal service outage.
+/// In this case, all parameters have fallback values.</li></ul>
+class BoardAdminsBeanUsersItem {
+  /// This property is deprecated in favor of `accountId` because of privacy
+  /// changes. See the <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
+  /// guide</a> for details.
+  /// The key of the user.
+  final String? key;
+
+  /// The URL of the user.
+  final String? self;
+
+  /// This property is deprecated in favor of `accountId` because of privacy
+  /// changes. See the <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
+  /// guide</a> for details.
+  /// The username of the user.
+  final String? name;
+
+  /// The display name of the user. Depending on the user’s privacy setting,
+  /// this may return an alternative value.
+  final String? displayName;
+
+  /// Whether the user is active.
+  final bool active;
+
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, <em>5b10ac8d82e05b22cc7d4ef5</em>.
+  final String? accountId;
+
+  /// The avatars of the user.
+  final Map<String, dynamic>? avatarUrls;
+
+  BoardAdminsBeanUsersItem(
+      {this.key,
+      this.self,
+      this.name,
+      this.displayName,
+      bool? active,
+      this.accountId,
+      this.avatarUrls})
+      : active = active ?? false;
+
+  factory BoardAdminsBeanUsersItem.fromJson(Map<String, Object?> json) {
+    return BoardAdminsBeanUsersItem(
+      key: json[r'key'] as String?,
+      self: json[r'self'] as String?,
+      name: json[r'name'] as String?,
+      displayName: json[r'displayName'] as String?,
+      active: json[r'active'] as bool? ?? false,
+      accountId: json[r'accountId'] as String?,
+      avatarUrls: json[r'avatarUrls'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+    var self = this.self;
+    var name = this.name;
+    var displayName = this.displayName;
+    var active = this.active;
+    var accountId = this.accountId;
+    var avatarUrls = this.avatarUrls;
+
+    final json = <String, Object?>{};
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
+    json[r'active'] = active;
+    if (accountId != null) {
+      json[r'accountId'] = accountId;
+    }
+    if (avatarUrls != null) {
+      json[r'avatarUrls'] = avatarUrls;
+    }
+    return json;
+  }
+
+  BoardAdminsBeanUsersItem copyWith(
+      {String? key,
+      String? self,
+      String? name,
+      String? displayName,
+      bool? active,
+      String? accountId,
+      Map<String, dynamic>? avatarUrls}) {
+    return BoardAdminsBeanUsersItem(
+      key: key ?? this.key,
+      self: self ?? this.self,
+      name: name ?? this.name,
+      displayName: displayName ?? this.displayName,
+      active: active ?? this.active,
+      accountId: accountId ?? this.accountId,
+      avatarUrls: avatarUrls ?? this.avatarUrls,
+    );
+  }
+}
+
+class BoardBean {
+  final int? id;
+  final String? self;
+  final String? name;
+  final String? type;
+  final BoardBeanAdmins? admins;
+  final BoardBeanLocation? location;
+  final bool canEdit;
+  final bool isPrivate;
+  final bool favourite;
+
+  BoardBean(
+      {this.id,
+      this.self,
+      this.name,
+      this.type,
+      this.admins,
+      this.location,
+      bool? canEdit,
+      bool? isPrivate,
+      bool? favourite})
+      : canEdit = canEdit ?? false,
+        isPrivate = isPrivate ?? false,
+        favourite = favourite ?? false;
+
+  factory BoardBean.fromJson(Map<String, Object?> json) {
+    return BoardBean(
+      id: (json[r'id'] as num?)?.toInt(),
+      self: json[r'self'] as String?,
+      name: json[r'name'] as String?,
+      type: json[r'type'] as String?,
+      admins: json[r'admins'] != null
+          ? BoardBeanAdmins.fromJson(json[r'admins']! as Map<String, Object?>)
+          : null,
+      location: json[r'location'] != null
+          ? BoardBeanLocation.fromJson(
+              json[r'location']! as Map<String, Object?>)
+          : null,
+      canEdit: json[r'canEdit'] as bool? ?? false,
+      isPrivate: json[r'isPrivate'] as bool? ?? false,
+      favourite: json[r'favourite'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var self = this.self;
+    var name = this.name;
+    var type = this.type;
+    var admins = this.admins;
+    var location = this.location;
+    var canEdit = this.canEdit;
+    var isPrivate = this.isPrivate;
+    var favourite = this.favourite;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (admins != null) {
+      json[r'admins'] = admins.toJson();
+    }
+    if (location != null) {
+      json[r'location'] = location.toJson();
+    }
+    json[r'canEdit'] = canEdit;
+    json[r'isPrivate'] = isPrivate;
+    json[r'favourite'] = favourite;
+    return json;
+  }
+
+  BoardBean copyWith(
+      {int? id,
+      String? self,
+      String? name,
+      String? type,
+      BoardBeanAdmins? admins,
+      BoardBeanLocation? location,
+      bool? canEdit,
+      bool? isPrivate,
+      bool? favourite}) {
+    return BoardBean(
+      id: id ?? this.id,
+      self: self ?? this.self,
+      name: name ?? this.name,
+      type: type ?? this.type,
+      admins: admins ?? this.admins,
+      location: location ?? this.location,
+      canEdit: canEdit ?? this.canEdit,
+      isPrivate: isPrivate ?? this.isPrivate,
+      favourite: favourite ?? this.favourite,
+    );
+  }
+}
+
+class BoardBeanAdmins {
+  final List<BoardBeanAdminsUsersItem> users;
+  final List<BoardBeanAdminsGroupsItem> groups;
+
+  BoardBeanAdmins(
+      {List<BoardBeanAdminsUsersItem>? users,
+      List<BoardBeanAdminsGroupsItem>? groups})
+      : users = users ?? [],
+        groups = groups ?? [];
+
+  factory BoardBeanAdmins.fromJson(Map<String, Object?> json) {
+    return BoardBeanAdmins(
+      users: (json[r'users'] as List<Object?>?)
+              ?.map((i) => BoardBeanAdminsUsersItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      groups: (json[r'groups'] as List<Object?>?)
+              ?.map((i) => BoardBeanAdminsGroupsItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var users = this.users;
+    var groups = this.groups;
+
+    final json = <String, Object?>{};
+    json[r'users'] = users.map((i) => i.toJson()).toList();
+    json[r'groups'] = groups.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  BoardBeanAdmins copyWith(
+      {List<BoardBeanAdminsUsersItem>? users,
+      List<BoardBeanAdminsGroupsItem>? groups}) {
+    return BoardBeanAdmins(
+      users: users ?? this.users,
+      groups: groups ?? this.groups,
+    );
+  }
+}
+
+class BoardBeanAdminsGroupsItem {
+  final String? name;
+  final String? self;
+
+  BoardBeanAdminsGroupsItem({this.name, this.self});
+
+  factory BoardBeanAdminsGroupsItem.fromJson(Map<String, Object?> json) {
+    return BoardBeanAdminsGroupsItem(
+      name: json[r'name'] as String?,
+      self: json[r'self'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var self = this.self;
+
+    final json = <String, Object?>{};
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    return json;
+  }
+
+  BoardBeanAdminsGroupsItem copyWith({String? name, String? self}) {
+    return BoardBeanAdminsGroupsItem(
+      name: name ?? this.name,
+      self: self ?? this.self,
+    );
+  }
+}
+
+/// Details of a user's active status, identifiers, name, and avatars as
+/// permitted by the user's Atlassian Account privacy settings. However, be
+/// aware of these exceptions:<ul><li>User record deleted from Atlassian: This
+/// occurs as the result of a right to be forgotten request. In this case,
+/// `displayName` provides an indication and other parameters have default
+/// values or are blank (for example, email is blank).</li><li>User record
+/// corrupted: This occurs as a results of events such as a server import and
+/// can only happen to deleted users. In this case, `accountId` returns
+/// <em>unknown</em> and all other parameters have fallback values.</li><li>User
+/// record unavailable: This usually occurs due to an internal service outage.
+/// In this case, all parameters have fallback values.</li></ul>
+class BoardBeanAdminsUsersItem {
+  /// This property is deprecated in favor of `accountId` because of privacy
+  /// changes. See the <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
+  /// guide</a> for details.
+  /// The key of the user.
+  final String? key;
+
+  /// The URL of the user.
+  final String? self;
+
+  /// This property is deprecated in favor of `accountId` because of privacy
+  /// changes. See the <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
+  /// guide</a> for details.
+  /// The username of the user.
+  final String? name;
+
+  /// The display name of the user. Depending on the user’s privacy setting,
+  /// this may return an alternative value.
+  final String? displayName;
+
+  /// Whether the user is active.
+  final bool active;
+
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, <em>5b10ac8d82e05b22cc7d4ef5</em>.
+  final String? accountId;
+
+  /// The avatars of the user.
+  final Map<String, dynamic>? avatarUrls;
+
+  BoardBeanAdminsUsersItem(
+      {this.key,
+      this.self,
+      this.name,
+      this.displayName,
+      bool? active,
+      this.accountId,
+      this.avatarUrls})
+      : active = active ?? false;
+
+  factory BoardBeanAdminsUsersItem.fromJson(Map<String, Object?> json) {
+    return BoardBeanAdminsUsersItem(
+      key: json[r'key'] as String?,
+      self: json[r'self'] as String?,
+      name: json[r'name'] as String?,
+      displayName: json[r'displayName'] as String?,
+      active: json[r'active'] as bool? ?? false,
+      accountId: json[r'accountId'] as String?,
+      avatarUrls: json[r'avatarUrls'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+    var self = this.self;
+    var name = this.name;
+    var displayName = this.displayName;
+    var active = this.active;
+    var accountId = this.accountId;
+    var avatarUrls = this.avatarUrls;
+
+    final json = <String, Object?>{};
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
+    json[r'active'] = active;
+    if (accountId != null) {
+      json[r'accountId'] = accountId;
+    }
+    if (avatarUrls != null) {
+      json[r'avatarUrls'] = avatarUrls;
+    }
+    return json;
+  }
+
+  BoardBeanAdminsUsersItem copyWith(
+      {String? key,
+      String? self,
+      String? name,
+      String? displayName,
+      bool? active,
+      String? accountId,
+      Map<String, dynamic>? avatarUrls}) {
+    return BoardBeanAdminsUsersItem(
+      key: key ?? this.key,
+      self: self ?? this.self,
+      name: name ?? this.name,
+      displayName: displayName ?? this.displayName,
+      active: active ?? this.active,
+      accountId: accountId ?? this.accountId,
+      avatarUrls: avatarUrls ?? this.avatarUrls,
+    );
+  }
+}
+
+class BoardBeanLocation {
+  final int? projectId;
+  final int? userId;
+  final String? userAccountId;
+  final String? displayName;
+  final String? projectName;
+  final String? projectKey;
+  final String? projectTypeKey;
+  final String? avatarUri;
+  final String? name;
+
+  BoardBeanLocation(
+      {this.projectId,
+      this.userId,
+      this.userAccountId,
+      this.displayName,
+      this.projectName,
+      this.projectKey,
+      this.projectTypeKey,
+      this.avatarUri,
+      this.name});
+
+  factory BoardBeanLocation.fromJson(Map<String, Object?> json) {
+    return BoardBeanLocation(
+      projectId: (json[r'projectId'] as num?)?.toInt(),
+      userId: (json[r'userId'] as num?)?.toInt(),
+      userAccountId: json[r'userAccountId'] as String?,
+      displayName: json[r'displayName'] as String?,
+      projectName: json[r'projectName'] as String?,
+      projectKey: json[r'projectKey'] as String?,
+      projectTypeKey: json[r'projectTypeKey'] as String?,
+      avatarUri: json[r'avatarURI'] as String?,
+      name: json[r'name'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var projectId = this.projectId;
+    var userId = this.userId;
+    var userAccountId = this.userAccountId;
+    var displayName = this.displayName;
+    var projectName = this.projectName;
+    var projectKey = this.projectKey;
+    var projectTypeKey = this.projectTypeKey;
+    var avatarUri = this.avatarUri;
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    if (projectId != null) {
+      json[r'projectId'] = projectId;
+    }
+    if (userId != null) {
+      json[r'userId'] = userId;
+    }
+    if (userAccountId != null) {
+      json[r'userAccountId'] = userAccountId;
+    }
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
+    if (projectName != null) {
+      json[r'projectName'] = projectName;
+    }
+    if (projectKey != null) {
+      json[r'projectKey'] = projectKey;
+    }
+    if (projectTypeKey != null) {
+      json[r'projectTypeKey'] = projectTypeKey;
+    }
+    if (avatarUri != null) {
+      json[r'avatarURI'] = avatarUri;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    return json;
+  }
+
+  BoardBeanLocation copyWith(
+      {int? projectId,
+      int? userId,
+      String? userAccountId,
+      String? displayName,
+      String? projectName,
+      String? projectKey,
+      String? projectTypeKey,
+      String? avatarUri,
+      String? name}) {
+    return BoardBeanLocation(
+      projectId: projectId ?? this.projectId,
+      userId: userId ?? this.userId,
+      userAccountId: userAccountId ?? this.userAccountId,
+      displayName: displayName ?? this.displayName,
+      projectName: projectName ?? this.projectName,
+      projectKey: projectKey ?? this.projectKey,
+      projectTypeKey: projectTypeKey ?? this.projectTypeKey,
+      avatarUri: avatarUri ?? this.avatarUri,
+      name: name ?? this.name,
+    );
+  }
+}
+
+class BoardConfigBean {
+  final int? id;
+  final String? name;
+  final String? type;
+  final String? self;
+  final BoardConfigBeanLocation? location;
+  final BoardConfigBeanFilter? filter;
+  final BoardConfigBeanSubQuery? subQuery;
+  final BoardConfigBeanColumnConfig? columnConfig;
+  final BoardConfigBeanEstimation? estimation;
+  final BoardConfigBeanRanking? ranking;
+
+  BoardConfigBean(
+      {this.id,
+      this.name,
+      this.type,
+      this.self,
+      this.location,
+      this.filter,
+      this.subQuery,
+      this.columnConfig,
+      this.estimation,
+      this.ranking});
+
+  factory BoardConfigBean.fromJson(Map<String, Object?> json) {
+    return BoardConfigBean(
+      id: (json[r'id'] as num?)?.toInt(),
+      name: json[r'name'] as String?,
+      type: json[r'type'] as String?,
+      self: json[r'self'] as String?,
+      location: json[r'location'] != null
+          ? BoardConfigBeanLocation.fromJson(
+              json[r'location']! as Map<String, Object?>)
+          : null,
+      filter: json[r'filter'] != null
+          ? BoardConfigBeanFilter.fromJson(
+              json[r'filter']! as Map<String, Object?>)
+          : null,
+      subQuery: json[r'subQuery'] != null
+          ? BoardConfigBeanSubQuery.fromJson(
+              json[r'subQuery']! as Map<String, Object?>)
+          : null,
+      columnConfig: json[r'columnConfig'] != null
+          ? BoardConfigBeanColumnConfig.fromJson(
+              json[r'columnConfig']! as Map<String, Object?>)
+          : null,
+      estimation: json[r'estimation'] != null
+          ? BoardConfigBeanEstimation.fromJson(
+              json[r'estimation']! as Map<String, Object?>)
+          : null,
+      ranking: json[r'ranking'] != null
+          ? BoardConfigBeanRanking.fromJson(
+              json[r'ranking']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+    var type = this.type;
+    var self = this.self;
+    var location = this.location;
+    var filter = this.filter;
+    var subQuery = this.subQuery;
+    var columnConfig = this.columnConfig;
+    var estimation = this.estimation;
+    var ranking = this.ranking;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (location != null) {
+      json[r'location'] = location.toJson();
+    }
+    if (filter != null) {
+      json[r'filter'] = filter.toJson();
+    }
+    if (subQuery != null) {
+      json[r'subQuery'] = subQuery.toJson();
+    }
+    if (columnConfig != null) {
+      json[r'columnConfig'] = columnConfig.toJson();
+    }
+    if (estimation != null) {
+      json[r'estimation'] = estimation.toJson();
+    }
+    if (ranking != null) {
+      json[r'ranking'] = ranking.toJson();
+    }
+    return json;
+  }
+
+  BoardConfigBean copyWith(
+      {int? id,
+      String? name,
+      String? type,
+      String? self,
+      BoardConfigBeanLocation? location,
+      BoardConfigBeanFilter? filter,
+      BoardConfigBeanSubQuery? subQuery,
+      BoardConfigBeanColumnConfig? columnConfig,
+      BoardConfigBeanEstimation? estimation,
+      BoardConfigBeanRanking? ranking}) {
+    return BoardConfigBean(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      type: type ?? this.type,
+      self: self ?? this.self,
+      location: location ?? this.location,
+      filter: filter ?? this.filter,
+      subQuery: subQuery ?? this.subQuery,
+      columnConfig: columnConfig ?? this.columnConfig,
+      estimation: estimation ?? this.estimation,
+      ranking: ranking ?? this.ranking,
+    );
+  }
+}
+
+class BoardConfigBeanColumnConfig {
+  final List<BoardConfigBeanColumnConfigColumnsItem> columns;
+  final String? constraintType;
+
+  BoardConfigBeanColumnConfig(
+      {List<BoardConfigBeanColumnConfigColumnsItem>? columns,
+      this.constraintType})
+      : columns = columns ?? [];
+
+  factory BoardConfigBeanColumnConfig.fromJson(Map<String, Object?> json) {
+    return BoardConfigBeanColumnConfig(
+      columns: (json[r'columns'] as List<Object?>?)
+              ?.map((i) => BoardConfigBeanColumnConfigColumnsItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      constraintType: json[r'constraintType'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var columns = this.columns;
+    var constraintType = this.constraintType;
+
+    final json = <String, Object?>{};
+    json[r'columns'] = columns.map((i) => i.toJson()).toList();
+    if (constraintType != null) {
+      json[r'constraintType'] = constraintType;
+    }
+    return json;
+  }
+
+  BoardConfigBeanColumnConfig copyWith(
+      {List<BoardConfigBeanColumnConfigColumnsItem>? columns,
+      String? constraintType}) {
+    return BoardConfigBeanColumnConfig(
+      columns: columns ?? this.columns,
+      constraintType: constraintType ?? this.constraintType,
+    );
+  }
+}
+
+class BoardConfigBeanColumnConfigColumnsItem {
+  final String? name;
+  final List<BoardConfigBeanColumnConfigColumnsItemStatusesItem> statuses;
+  final int? min;
+  final int? max;
+
+  BoardConfigBeanColumnConfigColumnsItem(
+      {this.name,
+      List<BoardConfigBeanColumnConfigColumnsItemStatusesItem>? statuses,
+      this.min,
+      this.max})
+      : statuses = statuses ?? [];
+
+  factory BoardConfigBeanColumnConfigColumnsItem.fromJson(
+      Map<String, Object?> json) {
+    return BoardConfigBeanColumnConfigColumnsItem(
+      name: json[r'name'] as String?,
+      statuses: (json[r'statuses'] as List<Object?>?)
+              ?.map((i) =>
+                  BoardConfigBeanColumnConfigColumnsItemStatusesItem.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      min: (json[r'min'] as num?)?.toInt(),
+      max: (json[r'max'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var statuses = this.statuses;
+    var min = this.min;
+    var max = this.max;
+
+    final json = <String, Object?>{};
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
+    if (min != null) {
+      json[r'min'] = min;
+    }
+    if (max != null) {
+      json[r'max'] = max;
+    }
+    return json;
+  }
+
+  BoardConfigBeanColumnConfigColumnsItem copyWith(
+      {String? name,
+      List<BoardConfigBeanColumnConfigColumnsItemStatusesItem>? statuses,
+      int? min,
+      int? max}) {
+    return BoardConfigBeanColumnConfigColumnsItem(
+      name: name ?? this.name,
+      statuses: statuses ?? this.statuses,
+      min: min ?? this.min,
+      max: max ?? this.max,
+    );
+  }
+}
+
+class BoardConfigBeanColumnConfigColumnsItemStatusesItem {
+  final String? id;
+  final String? self;
+
+  BoardConfigBeanColumnConfigColumnsItemStatusesItem({this.id, this.self});
+
+  factory BoardConfigBeanColumnConfigColumnsItemStatusesItem.fromJson(
+      Map<String, Object?> json) {
+    return BoardConfigBeanColumnConfigColumnsItemStatusesItem(
+      id: json[r'id'] as String?,
+      self: json[r'self'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var self = this.self;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    return json;
+  }
+
+  BoardConfigBeanColumnConfigColumnsItemStatusesItem copyWith(
+      {String? id, String? self}) {
+    return BoardConfigBeanColumnConfigColumnsItemStatusesItem(
+      id: id ?? this.id,
+      self: self ?? this.self,
+    );
+  }
+}
+
+class BoardConfigBeanEstimation {
+  final String? type;
+  final BoardConfigBeanEstimationField? field;
+
+  BoardConfigBeanEstimation({this.type, this.field});
+
+  factory BoardConfigBeanEstimation.fromJson(Map<String, Object?> json) {
+    return BoardConfigBeanEstimation(
+      type: json[r'type'] as String?,
+      field: json[r'field'] != null
+          ? BoardConfigBeanEstimationField.fromJson(
+              json[r'field']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var field = this.field;
+
+    final json = <String, Object?>{};
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (field != null) {
+      json[r'field'] = field.toJson();
+    }
+    return json;
+  }
+
+  BoardConfigBeanEstimation copyWith(
+      {String? type, BoardConfigBeanEstimationField? field}) {
+    return BoardConfigBeanEstimation(
+      type: type ?? this.type,
+      field: field ?? this.field,
+    );
+  }
+}
+
+class BoardConfigBeanEstimationField {
+  final String? fieldId;
+  final String? displayName;
+
+  BoardConfigBeanEstimationField({this.fieldId, this.displayName});
+
+  factory BoardConfigBeanEstimationField.fromJson(Map<String, Object?> json) {
+    return BoardConfigBeanEstimationField(
+      fieldId: json[r'fieldId'] as String?,
+      displayName: json[r'displayName'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fieldId = this.fieldId;
+    var displayName = this.displayName;
+
+    final json = <String, Object?>{};
+    if (fieldId != null) {
+      json[r'fieldId'] = fieldId;
+    }
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
+    return json;
+  }
+
+  BoardConfigBeanEstimationField copyWith(
+      {String? fieldId, String? displayName}) {
+    return BoardConfigBeanEstimationField(
+      fieldId: fieldId ?? this.fieldId,
+      displayName: displayName ?? this.displayName,
+    );
+  }
+}
+
+class BoardConfigBeanFilter {
+  final String? id;
+  final String? self;
+
+  BoardConfigBeanFilter({this.id, this.self});
+
+  factory BoardConfigBeanFilter.fromJson(Map<String, Object?> json) {
+    return BoardConfigBeanFilter(
+      id: json[r'id'] as String?,
+      self: json[r'self'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var self = this.self;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    return json;
+  }
+
+  BoardConfigBeanFilter copyWith({String? id, String? self}) {
+    return BoardConfigBeanFilter(
+      id: id ?? this.id,
+      self: self ?? this.self,
+    );
+  }
+}
+
+class BoardConfigBeanLocation {
+  final String? type;
+  final String? projectKeyOrId;
+
+  BoardConfigBeanLocation({this.type, this.projectKeyOrId});
+
+  factory BoardConfigBeanLocation.fromJson(Map<String, Object?> json) {
+    return BoardConfigBeanLocation(
+      type: json[r'type'] as String?,
+      projectKeyOrId: json[r'projectKeyOrId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var projectKeyOrId = this.projectKeyOrId;
+
+    final json = <String, Object?>{};
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (projectKeyOrId != null) {
+      json[r'projectKeyOrId'] = projectKeyOrId;
+    }
+    return json;
+  }
+
+  BoardConfigBeanLocation copyWith({String? type, String? projectKeyOrId}) {
+    return BoardConfigBeanLocation(
+      type: type ?? this.type,
+      projectKeyOrId: projectKeyOrId ?? this.projectKeyOrId,
+    );
+  }
+}
+
+class BoardConfigBeanRanking {
+  final int? rankCustomFieldId;
+
+  BoardConfigBeanRanking({this.rankCustomFieldId});
+
+  factory BoardConfigBeanRanking.fromJson(Map<String, Object?> json) {
+    return BoardConfigBeanRanking(
+      rankCustomFieldId: (json[r'rankCustomFieldId'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var rankCustomFieldId = this.rankCustomFieldId;
+
+    final json = <String, Object?>{};
+    if (rankCustomFieldId != null) {
+      json[r'rankCustomFieldId'] = rankCustomFieldId;
+    }
+    return json;
+  }
+
+  BoardConfigBeanRanking copyWith({int? rankCustomFieldId}) {
+    return BoardConfigBeanRanking(
+      rankCustomFieldId: rankCustomFieldId ?? this.rankCustomFieldId,
+    );
+  }
+}
+
+class BoardConfigBeanSubQuery {
+  final String? query;
+
+  BoardConfigBeanSubQuery({this.query});
+
+  factory BoardConfigBeanSubQuery.fromJson(Map<String, Object?> json) {
+    return BoardConfigBeanSubQuery(
+      query: json[r'query'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var query = this.query;
+
+    final json = <String, Object?>{};
+    if (query != null) {
+      json[r'query'] = query;
+    }
+    return json;
+  }
+
+  BoardConfigBeanSubQuery copyWith({String? query}) {
+    return BoardConfigBeanSubQuery(
+      query: query ?? this.query,
+    );
+  }
+}
+
+class BoardCreateBean {
+  final String? name;
+  final String? type;
+  final int? filterId;
+  final BoardCreateBeanLocation? location;
+
+  BoardCreateBean({this.name, this.type, this.filterId, this.location});
+
+  factory BoardCreateBean.fromJson(Map<String, Object?> json) {
+    return BoardCreateBean(
+      name: json[r'name'] as String?,
+      type: json[r'type'] as String?,
+      filterId: (json[r'filterId'] as num?)?.toInt(),
+      location: json[r'location'] != null
+          ? BoardCreateBeanLocation.fromJson(
+              json[r'location']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var type = this.type;
+    var filterId = this.filterId;
+    var location = this.location;
+
+    final json = <String, Object?>{};
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (filterId != null) {
+      json[r'filterId'] = filterId;
+    }
+    if (location != null) {
+      json[r'location'] = location.toJson();
+    }
+    return json;
+  }
+
+  BoardCreateBean copyWith(
+      {String? name,
+      String? type,
+      int? filterId,
+      BoardCreateBeanLocation? location}) {
+    return BoardCreateBean(
+      name: name ?? this.name,
+      type: type ?? this.type,
+      filterId: filterId ?? this.filterId,
+      location: location ?? this.location,
+    );
+  }
+}
+
+class BoardCreateBeanLocation {
+  final String? type;
+  final String? projectKeyOrId;
+
+  BoardCreateBeanLocation({this.type, this.projectKeyOrId});
+
+  factory BoardCreateBeanLocation.fromJson(Map<String, Object?> json) {
+    return BoardCreateBeanLocation(
+      type: json[r'type'] as String?,
+      projectKeyOrId: json[r'projectKeyOrId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var projectKeyOrId = this.projectKeyOrId;
+
+    final json = <String, Object?>{};
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (projectKeyOrId != null) {
+      json[r'projectKeyOrId'] = projectKeyOrId;
+    }
+    return json;
+  }
+
+  BoardCreateBeanLocation copyWith({String? type, String? projectKeyOrId}) {
+    return BoardCreateBeanLocation(
+      type: type ?? this.type,
+      projectKeyOrId: projectKeyOrId ?? this.projectKeyOrId,
+    );
+  }
+}
+
+class BoardFeatureBean {
+  final BoardFeatureBeanBoardFeature? boardFeature;
+  final int? boardId;
+  final BoardFeatureBeanState? state;
+  final String? localisedName;
+  final String? localisedDescription;
+  final String? learnMoreLink;
+  final String? imageUri;
+  final bool toggleLocked;
+
+  BoardFeatureBean(
+      {this.boardFeature,
+      this.boardId,
+      this.state,
+      this.localisedName,
+      this.localisedDescription,
+      this.learnMoreLink,
+      this.imageUri,
+      bool? toggleLocked})
+      : toggleLocked = toggleLocked ?? false;
+
+  factory BoardFeatureBean.fromJson(Map<String, Object?> json) {
+    return BoardFeatureBean(
+      boardFeature: json[r'boardFeature'] != null
+          ? BoardFeatureBeanBoardFeature.fromValue(
+              json[r'boardFeature']! as String)
+          : null,
+      boardId: (json[r'boardId'] as num?)?.toInt(),
+      state: json[r'state'] != null
+          ? BoardFeatureBeanState.fromValue(json[r'state']! as String)
+          : null,
+      localisedName: json[r'localisedName'] as String?,
+      localisedDescription: json[r'localisedDescription'] as String?,
+      learnMoreLink: json[r'learnMoreLink'] as String?,
+      imageUri: json[r'imageUri'] as String?,
+      toggleLocked: json[r'toggleLocked'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var boardFeature = this.boardFeature;
+    var boardId = this.boardId;
+    var state = this.state;
+    var localisedName = this.localisedName;
+    var localisedDescription = this.localisedDescription;
+    var learnMoreLink = this.learnMoreLink;
+    var imageUri = this.imageUri;
+    var toggleLocked = this.toggleLocked;
+
+    final json = <String, Object?>{};
+    if (boardFeature != null) {
+      json[r'boardFeature'] = boardFeature.value;
+    }
+    if (boardId != null) {
+      json[r'boardId'] = boardId;
+    }
+    if (state != null) {
+      json[r'state'] = state.value;
+    }
+    if (localisedName != null) {
+      json[r'localisedName'] = localisedName;
+    }
+    if (localisedDescription != null) {
+      json[r'localisedDescription'] = localisedDescription;
+    }
+    if (learnMoreLink != null) {
+      json[r'learnMoreLink'] = learnMoreLink;
+    }
+    if (imageUri != null) {
+      json[r'imageUri'] = imageUri;
+    }
+    json[r'toggleLocked'] = toggleLocked;
+    return json;
+  }
+
+  BoardFeatureBean copyWith(
+      {BoardFeatureBeanBoardFeature? boardFeature,
+      int? boardId,
+      BoardFeatureBeanState? state,
+      String? localisedName,
+      String? localisedDescription,
+      String? learnMoreLink,
+      String? imageUri,
+      bool? toggleLocked}) {
+    return BoardFeatureBean(
+      boardFeature: boardFeature ?? this.boardFeature,
+      boardId: boardId ?? this.boardId,
+      state: state ?? this.state,
+      localisedName: localisedName ?? this.localisedName,
+      localisedDescription: localisedDescription ?? this.localisedDescription,
+      learnMoreLink: learnMoreLink ?? this.learnMoreLink,
+      imageUri: imageUri ?? this.imageUri,
+      toggleLocked: toggleLocked ?? this.toggleLocked,
+    );
+  }
+}
+
+class BoardFeatureBeanBoardFeature {
+  static const simpleRoadmap = BoardFeatureBeanBoardFeature._('SIMPLE_ROADMAP');
+  static const backlog = BoardFeatureBeanBoardFeature._('BACKLOG');
+  static const sprints = BoardFeatureBeanBoardFeature._('SPRINTS');
+  static const devtools = BoardFeatureBeanBoardFeature._('DEVTOOLS');
+  static const reports = BoardFeatureBeanBoardFeature._('REPORTS');
+  static const estimation = BoardFeatureBeanBoardFeature._('ESTIMATION');
+  static const pages = BoardFeatureBeanBoardFeature._('PAGES');
+  static const code = BoardFeatureBeanBoardFeature._('CODE');
+  static const releases = BoardFeatureBeanBoardFeature._('RELEASES');
+  static const deployments = BoardFeatureBeanBoardFeature._('DEPLOYMENTS');
+  static const issueNavigator =
+      BoardFeatureBeanBoardFeature._('ISSUE_NAVIGATOR');
+  static const onCallSchedule =
+      BoardFeatureBeanBoardFeature._('ON_CALL_SCHEDULE');
+
+  static const values = [
+    simpleRoadmap,
+    backlog,
+    sprints,
+    devtools,
+    reports,
+    estimation,
+    pages,
+    code,
+    releases,
+    deployments,
+    issueNavigator,
+    onCallSchedule,
+  ];
+  final String value;
+
+  const BoardFeatureBeanBoardFeature._(this.value);
+
+  static BoardFeatureBeanBoardFeature fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => BoardFeatureBeanBoardFeature._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class BoardFeatureBeanState {
+  static const enabled = BoardFeatureBeanState._('ENABLED');
+  static const disabled = BoardFeatureBeanState._('DISABLED');
+  static const comingSoon = BoardFeatureBeanState._('COMING_SOON');
+
+  static const values = [
+    enabled,
+    disabled,
+    comingSoon,
+  ];
+  final String value;
+
+  const BoardFeatureBeanState._(this.value);
+
+  static BoardFeatureBeanState fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => BoardFeatureBeanState._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class BoardFeatureResponseBean {
+  final List<BoardFeatureResponseBeanFeaturesItem> features;
+
+  BoardFeatureResponseBean(
+      {List<BoardFeatureResponseBeanFeaturesItem>? features})
+      : features = features ?? [];
+
+  factory BoardFeatureResponseBean.fromJson(Map<String, Object?> json) {
+    return BoardFeatureResponseBean(
+      features: (json[r'features'] as List<Object?>?)
+              ?.map((i) => BoardFeatureResponseBeanFeaturesItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var features = this.features;
+
+    final json = <String, Object?>{};
+    json[r'features'] = features.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  BoardFeatureResponseBean copyWith(
+      {List<BoardFeatureResponseBeanFeaturesItem>? features}) {
+    return BoardFeatureResponseBean(
+      features: features ?? this.features,
     );
   }
 }
@@ -2586,206 +3715,6 @@ class BoardFeatureResponseBeanFeaturesItemState {
   String toString() => value;
 }
 
-class BoardFeatureResponseBean {
-  final List<BoardFeatureResponseBeanFeaturesItem> features;
-
-  BoardFeatureResponseBean(
-      {List<BoardFeatureResponseBeanFeaturesItem>? features})
-      : features = features ?? [];
-
-  factory BoardFeatureResponseBean.fromJson(Map<String, Object?> json) {
-    return BoardFeatureResponseBean(
-      features: (json[r'features'] as List<Object?>?)
-              ?.map((i) => BoardFeatureResponseBeanFeaturesItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var features = this.features;
-
-    final json = <String, Object?>{};
-    json[r'features'] = features.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  BoardFeatureResponseBean copyWith(
-      {List<BoardFeatureResponseBeanFeaturesItem>? features}) {
-    return BoardFeatureResponseBean(
-      features: features ?? this.features,
-    );
-  }
-}
-
-class BoardFeatureBean {
-  final BoardFeatureBeanBoardFeature? boardFeature;
-  final int? boardId;
-  final BoardFeatureBeanState? state;
-  final String? localisedName;
-  final String? localisedDescription;
-  final String? learnMoreLink;
-  final String? imageUri;
-  final bool toggleLocked;
-
-  BoardFeatureBean(
-      {this.boardFeature,
-      this.boardId,
-      this.state,
-      this.localisedName,
-      this.localisedDescription,
-      this.learnMoreLink,
-      this.imageUri,
-      bool? toggleLocked})
-      : toggleLocked = toggleLocked ?? false;
-
-  factory BoardFeatureBean.fromJson(Map<String, Object?> json) {
-    return BoardFeatureBean(
-      boardFeature: json[r'boardFeature'] != null
-          ? BoardFeatureBeanBoardFeature.fromValue(
-              json[r'boardFeature']! as String)
-          : null,
-      boardId: (json[r'boardId'] as num?)?.toInt(),
-      state: json[r'state'] != null
-          ? BoardFeatureBeanState.fromValue(json[r'state']! as String)
-          : null,
-      localisedName: json[r'localisedName'] as String?,
-      localisedDescription: json[r'localisedDescription'] as String?,
-      learnMoreLink: json[r'learnMoreLink'] as String?,
-      imageUri: json[r'imageUri'] as String?,
-      toggleLocked: json[r'toggleLocked'] as bool? ?? false,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var boardFeature = this.boardFeature;
-    var boardId = this.boardId;
-    var state = this.state;
-    var localisedName = this.localisedName;
-    var localisedDescription = this.localisedDescription;
-    var learnMoreLink = this.learnMoreLink;
-    var imageUri = this.imageUri;
-    var toggleLocked = this.toggleLocked;
-
-    final json = <String, Object?>{};
-    if (boardFeature != null) {
-      json[r'boardFeature'] = boardFeature.value;
-    }
-    if (boardId != null) {
-      json[r'boardId'] = boardId;
-    }
-    if (state != null) {
-      json[r'state'] = state.value;
-    }
-    if (localisedName != null) {
-      json[r'localisedName'] = localisedName;
-    }
-    if (localisedDescription != null) {
-      json[r'localisedDescription'] = localisedDescription;
-    }
-    if (learnMoreLink != null) {
-      json[r'learnMoreLink'] = learnMoreLink;
-    }
-    if (imageUri != null) {
-      json[r'imageUri'] = imageUri;
-    }
-    json[r'toggleLocked'] = toggleLocked;
-    return json;
-  }
-
-  BoardFeatureBean copyWith(
-      {BoardFeatureBeanBoardFeature? boardFeature,
-      int? boardId,
-      BoardFeatureBeanState? state,
-      String? localisedName,
-      String? localisedDescription,
-      String? learnMoreLink,
-      String? imageUri,
-      bool? toggleLocked}) {
-    return BoardFeatureBean(
-      boardFeature: boardFeature ?? this.boardFeature,
-      boardId: boardId ?? this.boardId,
-      state: state ?? this.state,
-      localisedName: localisedName ?? this.localisedName,
-      localisedDescription: localisedDescription ?? this.localisedDescription,
-      learnMoreLink: learnMoreLink ?? this.learnMoreLink,
-      imageUri: imageUri ?? this.imageUri,
-      toggleLocked: toggleLocked ?? this.toggleLocked,
-    );
-  }
-}
-
-class BoardFeatureBeanBoardFeature {
-  static const simpleRoadmap = BoardFeatureBeanBoardFeature._('SIMPLE_ROADMAP');
-  static const backlog = BoardFeatureBeanBoardFeature._('BACKLOG');
-  static const sprints = BoardFeatureBeanBoardFeature._('SPRINTS');
-  static const devtools = BoardFeatureBeanBoardFeature._('DEVTOOLS');
-  static const reports = BoardFeatureBeanBoardFeature._('REPORTS');
-  static const estimation = BoardFeatureBeanBoardFeature._('ESTIMATION');
-  static const pages = BoardFeatureBeanBoardFeature._('PAGES');
-  static const code = BoardFeatureBeanBoardFeature._('CODE');
-  static const releases = BoardFeatureBeanBoardFeature._('RELEASES');
-  static const deployments = BoardFeatureBeanBoardFeature._('DEPLOYMENTS');
-  static const issueNavigator =
-      BoardFeatureBeanBoardFeature._('ISSUE_NAVIGATOR');
-  static const onCallSchedule =
-      BoardFeatureBeanBoardFeature._('ON_CALL_SCHEDULE');
-
-  static const values = [
-    simpleRoadmap,
-    backlog,
-    sprints,
-    devtools,
-    reports,
-    estimation,
-    pages,
-    code,
-    releases,
-    deployments,
-    issueNavigator,
-    onCallSchedule,
-  ];
-  final String value;
-
-  const BoardFeatureBeanBoardFeature._(this.value);
-
-  static BoardFeatureBeanBoardFeature fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => BoardFeatureBeanBoardFeature._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class BoardFeatureBeanState {
-  static const enabled = BoardFeatureBeanState._('ENABLED');
-  static const disabled = BoardFeatureBeanState._('DISABLED');
-  static const comingSoon = BoardFeatureBeanState._('COMING_SOON');
-
-  static const values = [
-    enabled,
-    disabled,
-    comingSoon,
-  ];
-  final String value;
-
-  const BoardFeatureBeanState._(this.value);
-
-  static BoardFeatureBeanState fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => BoardFeatureBeanState._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
 class BoardFeatureToggleRequestBean {
   final int? boardId;
   final String? feature;
@@ -2828,635 +3757,18 @@ class BoardFeatureToggleRequestBean {
   }
 }
 
-class PageBeanQuickFilterBeanValuesItem {
-  final int? id;
-  final int? boardId;
-  final String? name;
-  final String? jql;
-  final String? description;
-  final int? position;
-
-  PageBeanQuickFilterBeanValuesItem(
-      {this.id,
-      this.boardId,
-      this.name,
-      this.jql,
-      this.description,
-      this.position});
-
-  factory PageBeanQuickFilterBeanValuesItem.fromJson(
-      Map<String, Object?> json) {
-    return PageBeanQuickFilterBeanValuesItem(
-      id: (json[r'id'] as num?)?.toInt(),
-      boardId: (json[r'boardId'] as num?)?.toInt(),
-      name: json[r'name'] as String?,
-      jql: json[r'jql'] as String?,
-      description: json[r'description'] as String?,
-      position: (json[r'position'] as num?)?.toInt(),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var boardId = this.boardId;
-    var name = this.name;
-    var jql = this.jql;
-    var description = this.description;
-    var position = this.position;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (boardId != null) {
-      json[r'boardId'] = boardId;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (jql != null) {
-      json[r'jql'] = jql;
-    }
-    if (description != null) {
-      json[r'description'] = description;
-    }
-    if (position != null) {
-      json[r'position'] = position;
-    }
-    return json;
-  }
-
-  PageBeanQuickFilterBeanValuesItem copyWith(
-      {int? id,
-      int? boardId,
-      String? name,
-      String? jql,
-      String? description,
-      int? position}) {
-    return PageBeanQuickFilterBeanValuesItem(
-      id: id ?? this.id,
-      boardId: boardId ?? this.boardId,
-      name: name ?? this.name,
-      jql: jql ?? this.jql,
-      description: description ?? this.description,
-      position: position ?? this.position,
-    );
-  }
-}
-
-class PageBeanQuickFilterBean {
-  final int? maxResults;
-  final int? startAt;
-  final int? total;
-  final bool isLast;
-  final List<PageBeanQuickFilterBeanValuesItem> values;
-
-  PageBeanQuickFilterBean(
-      {this.maxResults,
-      this.startAt,
-      this.total,
-      bool? isLast,
-      List<PageBeanQuickFilterBeanValuesItem>? values})
-      : isLast = isLast ?? false,
-        values = values ?? [];
-
-  factory PageBeanQuickFilterBean.fromJson(Map<String, Object?> json) {
-    return PageBeanQuickFilterBean(
-      maxResults: (json[r'maxResults'] as num?)?.toInt(),
-      startAt: (json[r'startAt'] as num?)?.toInt(),
-      total: (json[r'total'] as num?)?.toInt(),
-      isLast: json[r'isLast'] as bool? ?? false,
-      values: (json[r'values'] as List<Object?>?)
-              ?.map((i) => PageBeanQuickFilterBeanValuesItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var maxResults = this.maxResults;
-    var startAt = this.startAt;
-    var total = this.total;
-    var isLast = this.isLast;
-    var values = this.values;
-
-    final json = <String, Object?>{};
-    if (maxResults != null) {
-      json[r'maxResults'] = maxResults;
-    }
-    if (startAt != null) {
-      json[r'startAt'] = startAt;
-    }
-    if (total != null) {
-      json[r'total'] = total;
-    }
-    json[r'isLast'] = isLast;
-    json[r'values'] = values.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  PageBeanQuickFilterBean copyWith(
-      {int? maxResults,
-      int? startAt,
-      int? total,
-      bool? isLast,
-      List<PageBeanQuickFilterBeanValuesItem>? values}) {
-    return PageBeanQuickFilterBean(
-      maxResults: maxResults ?? this.maxResults,
-      startAt: startAt ?? this.startAt,
-      total: total ?? this.total,
-      isLast: isLast ?? this.isLast,
-      values: values ?? this.values,
-    );
-  }
-}
-
-class PageBean {
-  final int? maxResults;
-  final int? startAt;
-  final int? total;
-  final bool isLast;
-  final List<dynamic> values;
-
-  PageBean(
-      {this.maxResults,
-      this.startAt,
-      this.total,
-      bool? isLast,
-      List<dynamic>? values})
-      : isLast = isLast ?? false,
-        values = values ?? [];
-
-  factory PageBean.fromJson(Map<String, Object?> json) {
-    return PageBean(
-      maxResults: (json[r'maxResults'] as num?)?.toInt(),
-      startAt: (json[r'startAt'] as num?)?.toInt(),
-      total: (json[r'total'] as num?)?.toInt(),
-      isLast: json[r'isLast'] as bool? ?? false,
-      values: (json[r'values'] as List<Object?>?)?.map((i) => i).toList() ?? [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var maxResults = this.maxResults;
-    var startAt = this.startAt;
-    var total = this.total;
-    var isLast = this.isLast;
-    var values = this.values;
-
-    final json = <String, Object?>{};
-    if (maxResults != null) {
-      json[r'maxResults'] = maxResults;
-    }
-    if (startAt != null) {
-      json[r'startAt'] = startAt;
-    }
-    if (total != null) {
-      json[r'total'] = total;
-    }
-    json[r'isLast'] = isLast;
-    json[r'values'] = values;
-    return json;
-  }
-
-  PageBean copyWith(
-      {int? maxResults,
-      int? startAt,
-      int? total,
-      bool? isLast,
-      List<dynamic>? values}) {
-    return PageBean(
-      maxResults: maxResults ?? this.maxResults,
-      startAt: startAt ?? this.startAt,
-      total: total ?? this.total,
-      isLast: isLast ?? this.isLast,
-      values: values ?? this.values,
-    );
-  }
-}
-
-class QuickFilterBean {
-  final int? id;
-  final int? boardId;
-  final String? name;
-  final String? jql;
-  final String? description;
-  final int? position;
-
-  QuickFilterBean(
-      {this.id,
-      this.boardId,
-      this.name,
-      this.jql,
-      this.description,
-      this.position});
-
-  factory QuickFilterBean.fromJson(Map<String, Object?> json) {
-    return QuickFilterBean(
-      id: (json[r'id'] as num?)?.toInt(),
-      boardId: (json[r'boardId'] as num?)?.toInt(),
-      name: json[r'name'] as String?,
-      jql: json[r'jql'] as String?,
-      description: json[r'description'] as String?,
-      position: (json[r'position'] as num?)?.toInt(),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var boardId = this.boardId;
-    var name = this.name;
-    var jql = this.jql;
-    var description = this.description;
-    var position = this.position;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (boardId != null) {
-      json[r'boardId'] = boardId;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (jql != null) {
-      json[r'jql'] = jql;
-    }
-    if (description != null) {
-      json[r'description'] = description;
-    }
-    if (position != null) {
-      json[r'position'] = position;
-    }
-    return json;
-  }
-
-  QuickFilterBean copyWith(
-      {int? id,
-      int? boardId,
-      String? name,
-      String? jql,
-      String? description,
-      int? position}) {
-    return QuickFilterBean(
-      id: id ?? this.id,
-      boardId: boardId ?? this.boardId,
-      name: name ?? this.name,
-      jql: jql ?? this.jql,
-      description: description ?? this.description,
-      position: position ?? this.position,
-    );
-  }
-}
-
-/// Details of a user's active status, identifiers, name, and avatars as
-/// permitted by the user's Atlassian Account privacy settings. However, be
-/// aware of these exceptions:<ul><li>User record deleted from Atlassian: This
-/// occurs as the result of a right to be forgotten request. In this case,
-/// `displayName` provides an indication and other parameters have default
-/// values or are blank (for example, email is blank).</li><li>User record
-/// corrupted: This occurs as a results of events such as a server import and
-/// can only happen to deleted users. In this case, `accountId` returns
-/// <em>unknown</em> and all other parameters have fallback values.</li><li>User
-/// record unavailable: This usually occurs due to an internal service outage.
-/// In this case, all parameters have fallback values.</li></ul>
-class PageBeanBoardBeanValuesItemAdminsUsersItem {
-  /// This property is deprecated in favor of `accountId` because of privacy
-  /// changes. See the <a
-  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
-  /// guide</a> for details.
-  /// The key of the user.
-  final String? key;
-
-  /// The URL of the user.
-  final String? self;
-
-  /// This property is deprecated in favor of `accountId` because of privacy
-  /// changes. See the <a
-  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
-  /// guide</a> for details.
-  /// The username of the user.
-  final String? name;
-
-  /// The display name of the user. Depending on the user’s privacy setting,
-  /// this may return an alternative value.
-  final String? displayName;
-
-  /// Whether the user is active.
-  final bool active;
-
-  /// The account ID of the user, which uniquely identifies the user across all
-  /// Atlassian products. For example, <em>5b10ac8d82e05b22cc7d4ef5</em>.
-  final String? accountId;
-
-  /// The avatars of the user.
-  final Map<String, dynamic>? avatarUrls;
-
-  PageBeanBoardBeanValuesItemAdminsUsersItem(
-      {this.key,
-      this.self,
-      this.name,
-      this.displayName,
-      bool? active,
-      this.accountId,
-      this.avatarUrls})
-      : active = active ?? false;
-
-  factory PageBeanBoardBeanValuesItemAdminsUsersItem.fromJson(
-      Map<String, Object?> json) {
-    return PageBeanBoardBeanValuesItemAdminsUsersItem(
-      key: json[r'key'] as String?,
-      self: json[r'self'] as String?,
-      name: json[r'name'] as String?,
-      displayName: json[r'displayName'] as String?,
-      active: json[r'active'] as bool? ?? false,
-      accountId: json[r'accountId'] as String?,
-      avatarUrls: json[r'avatarUrls'] as Map<String, Object?>?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var key = this.key;
-    var self = this.self;
-    var name = this.name;
-    var displayName = this.displayName;
-    var active = this.active;
-    var accountId = this.accountId;
-    var avatarUrls = this.avatarUrls;
-
-    final json = <String, Object?>{};
-    if (key != null) {
-      json[r'key'] = key;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (displayName != null) {
-      json[r'displayName'] = displayName;
-    }
-    json[r'active'] = active;
-    if (accountId != null) {
-      json[r'accountId'] = accountId;
-    }
-    if (avatarUrls != null) {
-      json[r'avatarUrls'] = avatarUrls;
-    }
-    return json;
-  }
-
-  PageBeanBoardBeanValuesItemAdminsUsersItem copyWith(
-      {String? key,
-      String? self,
-      String? name,
-      String? displayName,
-      bool? active,
-      String? accountId,
-      Map<String, dynamic>? avatarUrls}) {
-    return PageBeanBoardBeanValuesItemAdminsUsersItem(
-      key: key ?? this.key,
-      self: self ?? this.self,
-      name: name ?? this.name,
-      displayName: displayName ?? this.displayName,
-      active: active ?? this.active,
-      accountId: accountId ?? this.accountId,
-      avatarUrls: avatarUrls ?? this.avatarUrls,
-    );
-  }
-}
-
-class PageBeanBoardBeanValuesItemAdminsGroupsItem {
-  final String? name;
-  final String? self;
-
-  PageBeanBoardBeanValuesItemAdminsGroupsItem({this.name, this.self});
-
-  factory PageBeanBoardBeanValuesItemAdminsGroupsItem.fromJson(
-      Map<String, Object?> json) {
-    return PageBeanBoardBeanValuesItemAdminsGroupsItem(
-      name: json[r'name'] as String?,
-      self: json[r'self'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var name = this.name;
-    var self = this.self;
-
-    final json = <String, Object?>{};
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    return json;
-  }
-
-  PageBeanBoardBeanValuesItemAdminsGroupsItem copyWith(
-      {String? name, String? self}) {
-    return PageBeanBoardBeanValuesItemAdminsGroupsItem(
-      name: name ?? this.name,
-      self: self ?? this.self,
-    );
-  }
-}
-
-class PageBeanBoardBeanValuesItemAdmins {
-  final List<PageBeanBoardBeanValuesItemAdminsUsersItem> users;
-  final List<PageBeanBoardBeanValuesItemAdminsGroupsItem> groups;
-
-  PageBeanBoardBeanValuesItemAdmins(
-      {List<PageBeanBoardBeanValuesItemAdminsUsersItem>? users,
-      List<PageBeanBoardBeanValuesItemAdminsGroupsItem>? groups})
-      : users = users ?? [],
-        groups = groups ?? [];
-
-  factory PageBeanBoardBeanValuesItemAdmins.fromJson(
-      Map<String, Object?> json) {
-    return PageBeanBoardBeanValuesItemAdmins(
-      users: (json[r'users'] as List<Object?>?)
-              ?.map((i) => PageBeanBoardBeanValuesItemAdminsUsersItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      groups: (json[r'groups'] as List<Object?>?)
-              ?.map((i) => PageBeanBoardBeanValuesItemAdminsGroupsItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var users = this.users;
-    var groups = this.groups;
-
-    final json = <String, Object?>{};
-    json[r'users'] = users.map((i) => i.toJson()).toList();
-    json[r'groups'] = groups.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  PageBeanBoardBeanValuesItemAdmins copyWith(
-      {List<PageBeanBoardBeanValuesItemAdminsUsersItem>? users,
-      List<PageBeanBoardBeanValuesItemAdminsGroupsItem>? groups}) {
-    return PageBeanBoardBeanValuesItemAdmins(
-      users: users ?? this.users,
-      groups: groups ?? this.groups,
-    );
-  }
-}
-
-class PageBeanBoardBeanValuesItemLocation {
-  final int? projectId;
-  final int? userId;
-  final String? userAccountId;
-  final String? displayName;
-  final String? projectName;
-  final String? projectKey;
-  final String? projectTypeKey;
-  final String? avatarUri;
-  final String? name;
-
-  PageBeanBoardBeanValuesItemLocation(
-      {this.projectId,
-      this.userId,
-      this.userAccountId,
-      this.displayName,
-      this.projectName,
-      this.projectKey,
-      this.projectTypeKey,
-      this.avatarUri,
-      this.name});
-
-  factory PageBeanBoardBeanValuesItemLocation.fromJson(
-      Map<String, Object?> json) {
-    return PageBeanBoardBeanValuesItemLocation(
-      projectId: (json[r'projectId'] as num?)?.toInt(),
-      userId: (json[r'userId'] as num?)?.toInt(),
-      userAccountId: json[r'userAccountId'] as String?,
-      displayName: json[r'displayName'] as String?,
-      projectName: json[r'projectName'] as String?,
-      projectKey: json[r'projectKey'] as String?,
-      projectTypeKey: json[r'projectTypeKey'] as String?,
-      avatarUri: json[r'avatarURI'] as String?,
-      name: json[r'name'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var projectId = this.projectId;
-    var userId = this.userId;
-    var userAccountId = this.userAccountId;
-    var displayName = this.displayName;
-    var projectName = this.projectName;
-    var projectKey = this.projectKey;
-    var projectTypeKey = this.projectTypeKey;
-    var avatarUri = this.avatarUri;
-    var name = this.name;
-
-    final json = <String, Object?>{};
-    if (projectId != null) {
-      json[r'projectId'] = projectId;
-    }
-    if (userId != null) {
-      json[r'userId'] = userId;
-    }
-    if (userAccountId != null) {
-      json[r'userAccountId'] = userAccountId;
-    }
-    if (displayName != null) {
-      json[r'displayName'] = displayName;
-    }
-    if (projectName != null) {
-      json[r'projectName'] = projectName;
-    }
-    if (projectKey != null) {
-      json[r'projectKey'] = projectKey;
-    }
-    if (projectTypeKey != null) {
-      json[r'projectTypeKey'] = projectTypeKey;
-    }
-    if (avatarUri != null) {
-      json[r'avatarURI'] = avatarUri;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    return json;
-  }
-
-  PageBeanBoardBeanValuesItemLocation copyWith(
-      {int? projectId,
-      int? userId,
-      String? userAccountId,
-      String? displayName,
-      String? projectName,
-      String? projectKey,
-      String? projectTypeKey,
-      String? avatarUri,
-      String? name}) {
-    return PageBeanBoardBeanValuesItemLocation(
-      projectId: projectId ?? this.projectId,
-      userId: userId ?? this.userId,
-      userAccountId: userAccountId ?? this.userAccountId,
-      displayName: displayName ?? this.displayName,
-      projectName: projectName ?? this.projectName,
-      projectKey: projectKey ?? this.projectKey,
-      projectTypeKey: projectTypeKey ?? this.projectTypeKey,
-      avatarUri: avatarUri ?? this.avatarUri,
-      name: name ?? this.name,
-    );
-  }
-}
-
-class PageBeanBoardBeanValuesItem {
+class BoardFilterBean {
   final int? id;
   final String? self;
   final String? name;
-  final String? type;
-  final PageBeanBoardBeanValuesItemAdmins? admins;
-  final PageBeanBoardBeanValuesItemLocation? location;
-  final bool canEdit;
-  final bool isPrivate;
-  final bool favourite;
 
-  PageBeanBoardBeanValuesItem(
-      {this.id,
-      this.self,
-      this.name,
-      this.type,
-      this.admins,
-      this.location,
-      bool? canEdit,
-      bool? isPrivate,
-      bool? favourite})
-      : canEdit = canEdit ?? false,
-        isPrivate = isPrivate ?? false,
-        favourite = favourite ?? false;
+  BoardFilterBean({this.id, this.self, this.name});
 
-  factory PageBeanBoardBeanValuesItem.fromJson(Map<String, Object?> json) {
-    return PageBeanBoardBeanValuesItem(
+  factory BoardFilterBean.fromJson(Map<String, Object?> json) {
+    return BoardFilterBean(
       id: (json[r'id'] as num?)?.toInt(),
       self: json[r'self'] as String?,
       name: json[r'name'] as String?,
-      type: json[r'type'] as String?,
-      admins: json[r'admins'] != null
-          ? PageBeanBoardBeanValuesItemAdmins.fromJson(
-              json[r'admins']! as Map<String, Object?>)
-          : null,
-      location: json[r'location'] != null
-          ? PageBeanBoardBeanValuesItemLocation.fromJson(
-              json[r'location']! as Map<String, Object?>)
-          : null,
-      canEdit: json[r'canEdit'] as bool? ?? false,
-      isPrivate: json[r'isPrivate'] as bool? ?? false,
-      favourite: json[r'favourite'] as bool? ?? false,
     );
   }
 
@@ -3464,12 +3776,6 @@ class PageBeanBoardBeanValuesItem {
     var id = this.id;
     var self = this.self;
     var name = this.name;
-    var type = this.type;
-    var admins = this.admins;
-    var location = this.location;
-    var canEdit = this.canEdit;
-    var isPrivate = this.isPrivate;
-    var favourite = this.favourite;
 
     final json = <String, Object?>{};
     if (id != null) {
@@ -3481,826 +3787,14 @@ class PageBeanBoardBeanValuesItem {
     if (name != null) {
       json[r'name'] = name;
     }
-    if (type != null) {
-      json[r'type'] = type;
-    }
-    if (admins != null) {
-      json[r'admins'] = admins.toJson();
-    }
-    if (location != null) {
-      json[r'location'] = location.toJson();
-    }
-    json[r'canEdit'] = canEdit;
-    json[r'isPrivate'] = isPrivate;
-    json[r'favourite'] = favourite;
     return json;
   }
 
-  PageBeanBoardBeanValuesItem copyWith(
-      {int? id,
-      String? self,
-      String? name,
-      String? type,
-      PageBeanBoardBeanValuesItemAdmins? admins,
-      PageBeanBoardBeanValuesItemLocation? location,
-      bool? canEdit,
-      bool? isPrivate,
-      bool? favourite}) {
-    return PageBeanBoardBeanValuesItem(
+  BoardFilterBean copyWith({int? id, String? self, String? name}) {
+    return BoardFilterBean(
       id: id ?? this.id,
       self: self ?? this.self,
       name: name ?? this.name,
-      type: type ?? this.type,
-      admins: admins ?? this.admins,
-      location: location ?? this.location,
-      canEdit: canEdit ?? this.canEdit,
-      isPrivate: isPrivate ?? this.isPrivate,
-      favourite: favourite ?? this.favourite,
-    );
-  }
-}
-
-class PageBeanBoardBean {
-  final int? maxResults;
-  final int? startAt;
-  final int? total;
-  final bool isLast;
-  final List<PageBeanBoardBeanValuesItem> values;
-
-  PageBeanBoardBean(
-      {this.maxResults,
-      this.startAt,
-      this.total,
-      bool? isLast,
-      List<PageBeanBoardBeanValuesItem>? values})
-      : isLast = isLast ?? false,
-        values = values ?? [];
-
-  factory PageBeanBoardBean.fromJson(Map<String, Object?> json) {
-    return PageBeanBoardBean(
-      maxResults: (json[r'maxResults'] as num?)?.toInt(),
-      startAt: (json[r'startAt'] as num?)?.toInt(),
-      total: (json[r'total'] as num?)?.toInt(),
-      isLast: json[r'isLast'] as bool? ?? false,
-      values: (json[r'values'] as List<Object?>?)
-              ?.map((i) => PageBeanBoardBeanValuesItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var maxResults = this.maxResults;
-    var startAt = this.startAt;
-    var total = this.total;
-    var isLast = this.isLast;
-    var values = this.values;
-
-    final json = <String, Object?>{};
-    if (maxResults != null) {
-      json[r'maxResults'] = maxResults;
-    }
-    if (startAt != null) {
-      json[r'startAt'] = startAt;
-    }
-    if (total != null) {
-      json[r'total'] = total;
-    }
-    json[r'isLast'] = isLast;
-    json[r'values'] = values.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  PageBeanBoardBean copyWith(
-      {int? maxResults,
-      int? startAt,
-      int? total,
-      bool? isLast,
-      List<PageBeanBoardBeanValuesItem>? values}) {
-    return PageBeanBoardBean(
-      maxResults: maxResults ?? this.maxResults,
-      startAt: startAt ?? this.startAt,
-      total: total ?? this.total,
-      isLast: isLast ?? this.isLast,
-      values: values ?? this.values,
-    );
-  }
-}
-
-/// Details of a user's active status, identifiers, name, and avatars as
-/// permitted by the user's Atlassian Account privacy settings. However, be
-/// aware of these exceptions:<ul><li>User record deleted from Atlassian: This
-/// occurs as the result of a right to be forgotten request. In this case,
-/// `displayName` provides an indication and other parameters have default
-/// values or are blank (for example, email is blank).</li><li>User record
-/// corrupted: This occurs as a results of events such as a server import and
-/// can only happen to deleted users. In this case, `accountId` returns
-/// <em>unknown</em> and all other parameters have fallback values.</li><li>User
-/// record unavailable: This usually occurs due to an internal service outage.
-/// In this case, all parameters have fallback values.</li></ul>
-class BasicUser {
-  /// This property is deprecated in favor of `accountId` because of privacy
-  /// changes. See the <a
-  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
-  /// guide</a> for details.
-  /// The key of the user.
-  final String? key;
-
-  /// The URL of the user.
-  final String? self;
-
-  /// This property is deprecated in favor of `accountId` because of privacy
-  /// changes. See the <a
-  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
-  /// guide</a> for details.
-  /// The username of the user.
-  final String? name;
-
-  /// The display name of the user. Depending on the user’s privacy setting,
-  /// this may return an alternative value.
-  final String? displayName;
-
-  /// Whether the user is active.
-  final bool active;
-
-  /// The account ID of the user, which uniquely identifies the user across all
-  /// Atlassian products. For example, <em>5b10ac8d82e05b22cc7d4ef5</em>.
-  final String? accountId;
-
-  /// The avatars of the user.
-  final Map<String, dynamic>? avatarUrls;
-
-  BasicUser(
-      {this.key,
-      this.self,
-      this.name,
-      this.displayName,
-      bool? active,
-      this.accountId,
-      this.avatarUrls})
-      : active = active ?? false;
-
-  factory BasicUser.fromJson(Map<String, Object?> json) {
-    return BasicUser(
-      key: json[r'key'] as String?,
-      self: json[r'self'] as String?,
-      name: json[r'name'] as String?,
-      displayName: json[r'displayName'] as String?,
-      active: json[r'active'] as bool? ?? false,
-      accountId: json[r'accountId'] as String?,
-      avatarUrls: json[r'avatarUrls'] as Map<String, Object?>?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var key = this.key;
-    var self = this.self;
-    var name = this.name;
-    var displayName = this.displayName;
-    var active = this.active;
-    var accountId = this.accountId;
-    var avatarUrls = this.avatarUrls;
-
-    final json = <String, Object?>{};
-    if (key != null) {
-      json[r'key'] = key;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (displayName != null) {
-      json[r'displayName'] = displayName;
-    }
-    json[r'active'] = active;
-    if (accountId != null) {
-      json[r'accountId'] = accountId;
-    }
-    if (avatarUrls != null) {
-      json[r'avatarUrls'] = avatarUrls;
-    }
-    return json;
-  }
-
-  BasicUser copyWith(
-      {String? key,
-      String? self,
-      String? name,
-      String? displayName,
-      bool? active,
-      String? accountId,
-      Map<String, dynamic>? avatarUrls}) {
-    return BasicUser(
-      key: key ?? this.key,
-      self: self ?? this.self,
-      name: name ?? this.name,
-      displayName: displayName ?? this.displayName,
-      active: active ?? this.active,
-      accountId: accountId ?? this.accountId,
-      avatarUrls: avatarUrls ?? this.avatarUrls,
-    );
-  }
-}
-
-/// Details of a user's active status, identifiers, name, and avatars as
-/// permitted by the user's Atlassian Account privacy settings. However, be
-/// aware of these exceptions:<ul><li>User record deleted from Atlassian: This
-/// occurs as the result of a right to be forgotten request. In this case,
-/// `displayName` provides an indication and other parameters have default
-/// values or are blank (for example, email is blank).</li><li>User record
-/// corrupted: This occurs as a results of events such as a server import and
-/// can only happen to deleted users. In this case, `accountId` returns
-/// <em>unknown</em> and all other parameters have fallback values.</li><li>User
-/// record unavailable: This usually occurs due to an internal service outage.
-/// In this case, all parameters have fallback values.</li></ul>
-class BoardAdminsBeanUsersItem {
-  /// This property is deprecated in favor of `accountId` because of privacy
-  /// changes. See the <a
-  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
-  /// guide</a> for details.
-  /// The key of the user.
-  final String? key;
-
-  /// The URL of the user.
-  final String? self;
-
-  /// This property is deprecated in favor of `accountId` because of privacy
-  /// changes. See the <a
-  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
-  /// guide</a> for details.
-  /// The username of the user.
-  final String? name;
-
-  /// The display name of the user. Depending on the user’s privacy setting,
-  /// this may return an alternative value.
-  final String? displayName;
-
-  /// Whether the user is active.
-  final bool active;
-
-  /// The account ID of the user, which uniquely identifies the user across all
-  /// Atlassian products. For example, <em>5b10ac8d82e05b22cc7d4ef5</em>.
-  final String? accountId;
-
-  /// The avatars of the user.
-  final Map<String, dynamic>? avatarUrls;
-
-  BoardAdminsBeanUsersItem(
-      {this.key,
-      this.self,
-      this.name,
-      this.displayName,
-      bool? active,
-      this.accountId,
-      this.avatarUrls})
-      : active = active ?? false;
-
-  factory BoardAdminsBeanUsersItem.fromJson(Map<String, Object?> json) {
-    return BoardAdminsBeanUsersItem(
-      key: json[r'key'] as String?,
-      self: json[r'self'] as String?,
-      name: json[r'name'] as String?,
-      displayName: json[r'displayName'] as String?,
-      active: json[r'active'] as bool? ?? false,
-      accountId: json[r'accountId'] as String?,
-      avatarUrls: json[r'avatarUrls'] as Map<String, Object?>?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var key = this.key;
-    var self = this.self;
-    var name = this.name;
-    var displayName = this.displayName;
-    var active = this.active;
-    var accountId = this.accountId;
-    var avatarUrls = this.avatarUrls;
-
-    final json = <String, Object?>{};
-    if (key != null) {
-      json[r'key'] = key;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (displayName != null) {
-      json[r'displayName'] = displayName;
-    }
-    json[r'active'] = active;
-    if (accountId != null) {
-      json[r'accountId'] = accountId;
-    }
-    if (avatarUrls != null) {
-      json[r'avatarUrls'] = avatarUrls;
-    }
-    return json;
-  }
-
-  BoardAdminsBeanUsersItem copyWith(
-      {String? key,
-      String? self,
-      String? name,
-      String? displayName,
-      bool? active,
-      String? accountId,
-      Map<String, dynamic>? avatarUrls}) {
-    return BoardAdminsBeanUsersItem(
-      key: key ?? this.key,
-      self: self ?? this.self,
-      name: name ?? this.name,
-      displayName: displayName ?? this.displayName,
-      active: active ?? this.active,
-      accountId: accountId ?? this.accountId,
-      avatarUrls: avatarUrls ?? this.avatarUrls,
-    );
-  }
-}
-
-class BoardAdminsBeanGroupsItem {
-  final String? name;
-  final String? self;
-
-  BoardAdminsBeanGroupsItem({this.name, this.self});
-
-  factory BoardAdminsBeanGroupsItem.fromJson(Map<String, Object?> json) {
-    return BoardAdminsBeanGroupsItem(
-      name: json[r'name'] as String?,
-      self: json[r'self'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var name = this.name;
-    var self = this.self;
-
-    final json = <String, Object?>{};
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    return json;
-  }
-
-  BoardAdminsBeanGroupsItem copyWith({String? name, String? self}) {
-    return BoardAdminsBeanGroupsItem(
-      name: name ?? this.name,
-      self: self ?? this.self,
-    );
-  }
-}
-
-class BoardAdminsBean {
-  final List<BoardAdminsBeanUsersItem> users;
-  final List<BoardAdminsBeanGroupsItem> groups;
-
-  BoardAdminsBean(
-      {List<BoardAdminsBeanUsersItem>? users,
-      List<BoardAdminsBeanGroupsItem>? groups})
-      : users = users ?? [],
-        groups = groups ?? [];
-
-  factory BoardAdminsBean.fromJson(Map<String, Object?> json) {
-    return BoardAdminsBean(
-      users: (json[r'users'] as List<Object?>?)
-              ?.map((i) => BoardAdminsBeanUsersItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      groups: (json[r'groups'] as List<Object?>?)
-              ?.map((i) => BoardAdminsBeanGroupsItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var users = this.users;
-    var groups = this.groups;
-
-    final json = <String, Object?>{};
-    json[r'users'] = users.map((i) => i.toJson()).toList();
-    json[r'groups'] = groups.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  BoardAdminsBean copyWith(
-      {List<BoardAdminsBeanUsersItem>? users,
-      List<BoardAdminsBeanGroupsItem>? groups}) {
-    return BoardAdminsBean(
-      users: users ?? this.users,
-      groups: groups ?? this.groups,
-    );
-  }
-}
-
-/// Details of a user's active status, identifiers, name, and avatars as
-/// permitted by the user's Atlassian Account privacy settings. However, be
-/// aware of these exceptions:<ul><li>User record deleted from Atlassian: This
-/// occurs as the result of a right to be forgotten request. In this case,
-/// `displayName` provides an indication and other parameters have default
-/// values or are blank (for example, email is blank).</li><li>User record
-/// corrupted: This occurs as a results of events such as a server import and
-/// can only happen to deleted users. In this case, `accountId` returns
-/// <em>unknown</em> and all other parameters have fallback values.</li><li>User
-/// record unavailable: This usually occurs due to an internal service outage.
-/// In this case, all parameters have fallback values.</li></ul>
-class BoardBeanAdminsUsersItem {
-  /// This property is deprecated in favor of `accountId` because of privacy
-  /// changes. See the <a
-  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
-  /// guide</a> for details.
-  /// The key of the user.
-  final String? key;
-
-  /// The URL of the user.
-  final String? self;
-
-  /// This property is deprecated in favor of `accountId` because of privacy
-  /// changes. See the <a
-  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
-  /// guide</a> for details.
-  /// The username of the user.
-  final String? name;
-
-  /// The display name of the user. Depending on the user’s privacy setting,
-  /// this may return an alternative value.
-  final String? displayName;
-
-  /// Whether the user is active.
-  final bool active;
-
-  /// The account ID of the user, which uniquely identifies the user across all
-  /// Atlassian products. For example, <em>5b10ac8d82e05b22cc7d4ef5</em>.
-  final String? accountId;
-
-  /// The avatars of the user.
-  final Map<String, dynamic>? avatarUrls;
-
-  BoardBeanAdminsUsersItem(
-      {this.key,
-      this.self,
-      this.name,
-      this.displayName,
-      bool? active,
-      this.accountId,
-      this.avatarUrls})
-      : active = active ?? false;
-
-  factory BoardBeanAdminsUsersItem.fromJson(Map<String, Object?> json) {
-    return BoardBeanAdminsUsersItem(
-      key: json[r'key'] as String?,
-      self: json[r'self'] as String?,
-      name: json[r'name'] as String?,
-      displayName: json[r'displayName'] as String?,
-      active: json[r'active'] as bool? ?? false,
-      accountId: json[r'accountId'] as String?,
-      avatarUrls: json[r'avatarUrls'] as Map<String, Object?>?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var key = this.key;
-    var self = this.self;
-    var name = this.name;
-    var displayName = this.displayName;
-    var active = this.active;
-    var accountId = this.accountId;
-    var avatarUrls = this.avatarUrls;
-
-    final json = <String, Object?>{};
-    if (key != null) {
-      json[r'key'] = key;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (displayName != null) {
-      json[r'displayName'] = displayName;
-    }
-    json[r'active'] = active;
-    if (accountId != null) {
-      json[r'accountId'] = accountId;
-    }
-    if (avatarUrls != null) {
-      json[r'avatarUrls'] = avatarUrls;
-    }
-    return json;
-  }
-
-  BoardBeanAdminsUsersItem copyWith(
-      {String? key,
-      String? self,
-      String? name,
-      String? displayName,
-      bool? active,
-      String? accountId,
-      Map<String, dynamic>? avatarUrls}) {
-    return BoardBeanAdminsUsersItem(
-      key: key ?? this.key,
-      self: self ?? this.self,
-      name: name ?? this.name,
-      displayName: displayName ?? this.displayName,
-      active: active ?? this.active,
-      accountId: accountId ?? this.accountId,
-      avatarUrls: avatarUrls ?? this.avatarUrls,
-    );
-  }
-}
-
-class BoardBeanAdminsGroupsItem {
-  final String? name;
-  final String? self;
-
-  BoardBeanAdminsGroupsItem({this.name, this.self});
-
-  factory BoardBeanAdminsGroupsItem.fromJson(Map<String, Object?> json) {
-    return BoardBeanAdminsGroupsItem(
-      name: json[r'name'] as String?,
-      self: json[r'self'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var name = this.name;
-    var self = this.self;
-
-    final json = <String, Object?>{};
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    return json;
-  }
-
-  BoardBeanAdminsGroupsItem copyWith({String? name, String? self}) {
-    return BoardBeanAdminsGroupsItem(
-      name: name ?? this.name,
-      self: self ?? this.self,
-    );
-  }
-}
-
-class BoardBeanAdmins {
-  final List<BoardBeanAdminsUsersItem> users;
-  final List<BoardBeanAdminsGroupsItem> groups;
-
-  BoardBeanAdmins(
-      {List<BoardBeanAdminsUsersItem>? users,
-      List<BoardBeanAdminsGroupsItem>? groups})
-      : users = users ?? [],
-        groups = groups ?? [];
-
-  factory BoardBeanAdmins.fromJson(Map<String, Object?> json) {
-    return BoardBeanAdmins(
-      users: (json[r'users'] as List<Object?>?)
-              ?.map((i) => BoardBeanAdminsUsersItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      groups: (json[r'groups'] as List<Object?>?)
-              ?.map((i) => BoardBeanAdminsGroupsItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var users = this.users;
-    var groups = this.groups;
-
-    final json = <String, Object?>{};
-    json[r'users'] = users.map((i) => i.toJson()).toList();
-    json[r'groups'] = groups.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  BoardBeanAdmins copyWith(
-      {List<BoardBeanAdminsUsersItem>? users,
-      List<BoardBeanAdminsGroupsItem>? groups}) {
-    return BoardBeanAdmins(
-      users: users ?? this.users,
-      groups: groups ?? this.groups,
-    );
-  }
-}
-
-class BoardBeanLocation {
-  final int? projectId;
-  final int? userId;
-  final String? userAccountId;
-  final String? displayName;
-  final String? projectName;
-  final String? projectKey;
-  final String? projectTypeKey;
-  final String? avatarUri;
-  final String? name;
-
-  BoardBeanLocation(
-      {this.projectId,
-      this.userId,
-      this.userAccountId,
-      this.displayName,
-      this.projectName,
-      this.projectKey,
-      this.projectTypeKey,
-      this.avatarUri,
-      this.name});
-
-  factory BoardBeanLocation.fromJson(Map<String, Object?> json) {
-    return BoardBeanLocation(
-      projectId: (json[r'projectId'] as num?)?.toInt(),
-      userId: (json[r'userId'] as num?)?.toInt(),
-      userAccountId: json[r'userAccountId'] as String?,
-      displayName: json[r'displayName'] as String?,
-      projectName: json[r'projectName'] as String?,
-      projectKey: json[r'projectKey'] as String?,
-      projectTypeKey: json[r'projectTypeKey'] as String?,
-      avatarUri: json[r'avatarURI'] as String?,
-      name: json[r'name'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var projectId = this.projectId;
-    var userId = this.userId;
-    var userAccountId = this.userAccountId;
-    var displayName = this.displayName;
-    var projectName = this.projectName;
-    var projectKey = this.projectKey;
-    var projectTypeKey = this.projectTypeKey;
-    var avatarUri = this.avatarUri;
-    var name = this.name;
-
-    final json = <String, Object?>{};
-    if (projectId != null) {
-      json[r'projectId'] = projectId;
-    }
-    if (userId != null) {
-      json[r'userId'] = userId;
-    }
-    if (userAccountId != null) {
-      json[r'userAccountId'] = userAccountId;
-    }
-    if (displayName != null) {
-      json[r'displayName'] = displayName;
-    }
-    if (projectName != null) {
-      json[r'projectName'] = projectName;
-    }
-    if (projectKey != null) {
-      json[r'projectKey'] = projectKey;
-    }
-    if (projectTypeKey != null) {
-      json[r'projectTypeKey'] = projectTypeKey;
-    }
-    if (avatarUri != null) {
-      json[r'avatarURI'] = avatarUri;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    return json;
-  }
-
-  BoardBeanLocation copyWith(
-      {int? projectId,
-      int? userId,
-      String? userAccountId,
-      String? displayName,
-      String? projectName,
-      String? projectKey,
-      String? projectTypeKey,
-      String? avatarUri,
-      String? name}) {
-    return BoardBeanLocation(
-      projectId: projectId ?? this.projectId,
-      userId: userId ?? this.userId,
-      userAccountId: userAccountId ?? this.userAccountId,
-      displayName: displayName ?? this.displayName,
-      projectName: projectName ?? this.projectName,
-      projectKey: projectKey ?? this.projectKey,
-      projectTypeKey: projectTypeKey ?? this.projectTypeKey,
-      avatarUri: avatarUri ?? this.avatarUri,
-      name: name ?? this.name,
-    );
-  }
-}
-
-class BoardBean {
-  final int? id;
-  final String? self;
-  final String? name;
-  final String? type;
-  final BoardBeanAdmins? admins;
-  final BoardBeanLocation? location;
-  final bool canEdit;
-  final bool isPrivate;
-  final bool favourite;
-
-  BoardBean(
-      {this.id,
-      this.self,
-      this.name,
-      this.type,
-      this.admins,
-      this.location,
-      bool? canEdit,
-      bool? isPrivate,
-      bool? favourite})
-      : canEdit = canEdit ?? false,
-        isPrivate = isPrivate ?? false,
-        favourite = favourite ?? false;
-
-  factory BoardBean.fromJson(Map<String, Object?> json) {
-    return BoardBean(
-      id: (json[r'id'] as num?)?.toInt(),
-      self: json[r'self'] as String?,
-      name: json[r'name'] as String?,
-      type: json[r'type'] as String?,
-      admins: json[r'admins'] != null
-          ? BoardBeanAdmins.fromJson(json[r'admins']! as Map<String, Object?>)
-          : null,
-      location: json[r'location'] != null
-          ? BoardBeanLocation.fromJson(
-              json[r'location']! as Map<String, Object?>)
-          : null,
-      canEdit: json[r'canEdit'] as bool? ?? false,
-      isPrivate: json[r'isPrivate'] as bool? ?? false,
-      favourite: json[r'favourite'] as bool? ?? false,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var self = this.self;
-    var name = this.name;
-    var type = this.type;
-    var admins = this.admins;
-    var location = this.location;
-    var canEdit = this.canEdit;
-    var isPrivate = this.isPrivate;
-    var favourite = this.favourite;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (type != null) {
-      json[r'type'] = type;
-    }
-    if (admins != null) {
-      json[r'admins'] = admins.toJson();
-    }
-    if (location != null) {
-      json[r'location'] = location.toJson();
-    }
-    json[r'canEdit'] = canEdit;
-    json[r'isPrivate'] = isPrivate;
-    json[r'favourite'] = favourite;
-    return json;
-  }
-
-  BoardBean copyWith(
-      {int? id,
-      String? self,
-      String? name,
-      String? type,
-      BoardBeanAdmins? admins,
-      BoardBeanLocation? location,
-      bool? canEdit,
-      bool? isPrivate,
-      bool? favourite}) {
-    return BoardBean(
-      id: id ?? this.id,
-      self: self ?? this.self,
-      name: name ?? this.name,
-      type: type ?? this.type,
-      admins: admins ?? this.admins,
-      location: location ?? this.location,
-      canEdit: canEdit ?? this.canEdit,
-      isPrivate: isPrivate ?? this.isPrivate,
-      favourite: favourite ?? this.favourite,
     );
   }
 }
@@ -4407,421 +3901,80 @@ class BoardLocationBean {
   }
 }
 
-class GroupBean {
-  final String? name;
-  final String? self;
+class ChangeHistoryBean {
+  /// The ID of the changelog.
+  final String? id;
 
-  GroupBean({this.name, this.self});
+  /// The user who made the change.
+  final Map<String, dynamic>? author;
 
-  factory GroupBean.fromJson(Map<String, Object?> json) {
-    return GroupBean(
-      name: json[r'name'] as String?,
-      self: json[r'self'] as String?,
-    );
-  }
+  /// The date on which the change took place.
+  final DateTime? created;
 
-  Map<String, Object?> toJson() {
-    var name = this.name;
-    var self = this.self;
+  /// The list of items changed.
+  final List<ChangeHistoryBeanItemsItem> items;
 
-    final json = <String, Object?>{};
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    return json;
-  }
+  /// The history metadata associated with the changed.
+  final Map<String, dynamic>? historyMetadata;
 
-  GroupBean copyWith({String? name, String? self}) {
-    return GroupBean(
-      name: name ?? this.name,
-      self: self ?? this.self,
-    );
-  }
-}
+  ChangeHistoryBean(
+      {this.id,
+      this.author,
+      this.created,
+      List<ChangeHistoryBeanItemsItem>? items,
+      this.historyMetadata})
+      : items = items ?? [];
 
-/// Details of a user's avatars.
-class UserAvatarUrls {
-  /// The URL of the user's 24x24 pixel avatar.
-  final String? $24X24;
-
-  /// The URL of the user's 16x16 pixel avatar.
-  final String? $16X16;
-
-  /// The URL of the user's 32x32 pixel avatar.
-  final String? $32X32;
-
-  /// The URL of the user's 48x48 pixel avatar.
-  final String? $48X48;
-
-  UserAvatarUrls({this.$24X24, this.$16X16, this.$32X32, this.$48X48});
-
-  factory UserAvatarUrls.fromJson(Map<String, Object?> json) {
-    return UserAvatarUrls(
-      $24X24: json[r'24x24'] as String?,
-      $16X16: json[r'16x16'] as String?,
-      $32X32: json[r'32x32'] as String?,
-      $48X48: json[r'48x48'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var $24X24 = this.$24X24;
-    var $16X16 = this.$16X16;
-    var $32X32 = this.$32X32;
-    var $48X48 = this.$48X48;
-
-    final json = <String, Object?>{};
-    if ($24X24 != null) {
-      json[r'24x24'] = $24X24;
-    }
-    if ($16X16 != null) {
-      json[r'16x16'] = $16X16;
-    }
-    if ($32X32 != null) {
-      json[r'32x32'] = $32X32;
-    }
-    if ($48X48 != null) {
-      json[r'48x48'] = $48X48;
-    }
-    return json;
-  }
-
-  UserAvatarUrls copyWith(
-      {String? $24X24, String? $16X16, String? $32X32, String? $48X48}) {
-    return UserAvatarUrls(
-      $24X24: $24X24 ?? this.$24X24,
-      $16X16: $16X16 ?? this.$16X16,
-      $32X32: $32X32 ?? this.$32X32,
-      $48X48: $48X48 ?? this.$48X48,
-    );
-  }
-}
-
-class PageBeanBoardFilterBeanValuesItem {
-  final int? id;
-  final String? self;
-  final String? name;
-
-  PageBeanBoardFilterBeanValuesItem({this.id, this.self, this.name});
-
-  factory PageBeanBoardFilterBeanValuesItem.fromJson(
-      Map<String, Object?> json) {
-    return PageBeanBoardFilterBeanValuesItem(
-      id: (json[r'id'] as num?)?.toInt(),
-      self: json[r'self'] as String?,
-      name: json[r'name'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var self = this.self;
-    var name = this.name;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    return json;
-  }
-
-  PageBeanBoardFilterBeanValuesItem copyWith(
-      {int? id, String? self, String? name}) {
-    return PageBeanBoardFilterBeanValuesItem(
-      id: id ?? this.id,
-      self: self ?? this.self,
-      name: name ?? this.name,
-    );
-  }
-}
-
-class PageBeanBoardFilterBean {
-  final int? maxResults;
-  final int? startAt;
-  final int? total;
-  final bool isLast;
-  final List<PageBeanBoardFilterBeanValuesItem> values;
-
-  PageBeanBoardFilterBean(
-      {this.maxResults,
-      this.startAt,
-      this.total,
-      bool? isLast,
-      List<PageBeanBoardFilterBeanValuesItem>? values})
-      : isLast = isLast ?? false,
-        values = values ?? [];
-
-  factory PageBeanBoardFilterBean.fromJson(Map<String, Object?> json) {
-    return PageBeanBoardFilterBean(
-      maxResults: (json[r'maxResults'] as num?)?.toInt(),
-      startAt: (json[r'startAt'] as num?)?.toInt(),
-      total: (json[r'total'] as num?)?.toInt(),
-      isLast: json[r'isLast'] as bool? ?? false,
-      values: (json[r'values'] as List<Object?>?)
-              ?.map((i) => PageBeanBoardFilterBeanValuesItem.fromJson(
+  factory ChangeHistoryBean.fromJson(Map<String, Object?> json) {
+    return ChangeHistoryBean(
+      id: json[r'id'] as String?,
+      author: json[r'author'] as Map<String, Object?>?,
+      created: DateTime.tryParse(json[r'created'] as String? ?? ''),
+      items: (json[r'items'] as List<Object?>?)
+              ?.map((i) => ChangeHistoryBeanItemsItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var maxResults = this.maxResults;
-    var startAt = this.startAt;
-    var total = this.total;
-    var isLast = this.isLast;
-    var values = this.values;
-
-    final json = <String, Object?>{};
-    if (maxResults != null) {
-      json[r'maxResults'] = maxResults;
-    }
-    if (startAt != null) {
-      json[r'startAt'] = startAt;
-    }
-    if (total != null) {
-      json[r'total'] = total;
-    }
-    json[r'isLast'] = isLast;
-    json[r'values'] = values.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  PageBeanBoardFilterBean copyWith(
-      {int? maxResults,
-      int? startAt,
-      int? total,
-      bool? isLast,
-      List<PageBeanBoardFilterBeanValuesItem>? values}) {
-    return PageBeanBoardFilterBean(
-      maxResults: maxResults ?? this.maxResults,
-      startAt: startAt ?? this.startAt,
-      total: total ?? this.total,
-      isLast: isLast ?? this.isLast,
-      values: values ?? this.values,
-    );
-  }
-}
-
-class BoardFilterBean {
-  final int? id;
-  final String? self;
-  final String? name;
-
-  BoardFilterBean({this.id, this.self, this.name});
-
-  factory BoardFilterBean.fromJson(Map<String, Object?> json) {
-    return BoardFilterBean(
-      id: (json[r'id'] as num?)?.toInt(),
-      self: json[r'self'] as String?,
-      name: json[r'name'] as String?,
+      historyMetadata: json[r'historyMetadata'] as Map<String, Object?>?,
     );
   }
 
   Map<String, Object?> toJson() {
     var id = this.id;
-    var self = this.self;
-    var name = this.name;
+    var author = this.author;
+    var created = this.created;
+    var items = this.items;
+    var historyMetadata = this.historyMetadata;
 
     final json = <String, Object?>{};
     if (id != null) {
       json[r'id'] = id;
     }
-    if (self != null) {
-      json[r'self'] = self;
+    if (author != null) {
+      json[r'author'] = author;
     }
-    if (name != null) {
-      json[r'name'] = name;
+    if (created != null) {
+      json[r'created'] = created.toIso8601String();
+    }
+    json[r'items'] = items.map((i) => i.toJson()).toList();
+    if (historyMetadata != null) {
+      json[r'historyMetadata'] = historyMetadata;
     }
     return json;
   }
 
-  BoardFilterBean copyWith({int? id, String? self, String? name}) {
-    return BoardFilterBean(
+  ChangeHistoryBean copyWith(
+      {String? id,
+      Map<String, dynamic>? author,
+      DateTime? created,
+      List<ChangeHistoryBeanItemsItem>? items,
+      Map<String, dynamic>? historyMetadata}) {
+    return ChangeHistoryBean(
       id: id ?? this.id,
-      self: self ?? this.self,
-      name: name ?? this.name,
-    );
-  }
-}
-
-class SearchResultsBean {
-  /// Expand options that include additional search result details in the
-  /// response.
-  final String? expand;
-
-  /// The index of the first item returned on the page.
-  final int? startAt;
-
-  /// The maximum number of results that could be on the page.
-  final int? maxResults;
-
-  /// The number of results on the page.
-  final int? total;
-
-  /// The list of issues found by the search.
-  final List<IssueBean> issues;
-
-  /// Any warnings related to the JQL query.
-  final List<String> warningMessages;
-
-  /// The ID and name of each field in the search results.
-  final Map<String, dynamic>? names;
-
-  /// The schema describing the field types in the search results.
-  final Map<String, dynamic>? schema;
-
-  SearchResultsBean(
-      {this.expand,
-      this.startAt,
-      this.maxResults,
-      this.total,
-      List<IssueBean>? issues,
-      List<String>? warningMessages,
-      this.names,
-      this.schema})
-      : issues = issues ?? [],
-        warningMessages = warningMessages ?? [];
-
-  factory SearchResultsBean.fromJson(Map<String, Object?> json) {
-    return SearchResultsBean(
-      expand: json[r'expand'] as String?,
-      startAt: (json[r'startAt'] as num?)?.toInt(),
-      maxResults: (json[r'maxResults'] as num?)?.toInt(),
-      total: (json[r'total'] as num?)?.toInt(),
-      issues: (json[r'issues'] as List<Object?>?)
-              ?.map((i) =>
-                  IssueBean.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      warningMessages: (json[r'warningMessages'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      names: json[r'names'] as Map<String, Object?>?,
-      schema: json[r'schema'] as Map<String, Object?>?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var expand = this.expand;
-    var startAt = this.startAt;
-    var maxResults = this.maxResults;
-    var total = this.total;
-    var issues = this.issues;
-    var warningMessages = this.warningMessages;
-    var names = this.names;
-    var schema = this.schema;
-
-    final json = <String, Object?>{};
-    if (expand != null) {
-      json[r'expand'] = expand;
-    }
-    if (startAt != null) {
-      json[r'startAt'] = startAt;
-    }
-    if (maxResults != null) {
-      json[r'maxResults'] = maxResults;
-    }
-    if (total != null) {
-      json[r'total'] = total;
-    }
-    json[r'issues'] = issues.map((i) => i.toJson()).toList();
-    json[r'warningMessages'] = warningMessages;
-    if (names != null) {
-      json[r'names'] = names;
-    }
-    if (schema != null) {
-      json[r'schema'] = schema;
-    }
-    return json;
-  }
-
-  SearchResultsBean copyWith(
-      {String? expand,
-      int? startAt,
-      int? maxResults,
-      int? total,
-      List<IssueBean>? issues,
-      List<String>? warningMessages,
-      Map<String, dynamic>? names,
-      Map<String, dynamic>? schema}) {
-    return SearchResultsBean(
-      expand: expand ?? this.expand,
-      startAt: startAt ?? this.startAt,
-      maxResults: maxResults ?? this.maxResults,
-      total: total ?? this.total,
-      issues: issues ?? this.issues,
-      warningMessages: warningMessages ?? this.warningMessages,
-      names: names ?? this.names,
-      schema: schema ?? this.schema,
-    );
-  }
-}
-
-/// Details about the avatars for an item.
-class AvatarUrls {
-  /// The URL of the item's 16x16 pixel avatar.
-  final String? $16X16;
-
-  /// The URL of the item's 24x24 pixel avatar.
-  final String? $24X24;
-
-  /// The URL of the item's 32x32 pixel avatar.
-  final String? $32X32;
-
-  /// The URL of the item's 48x48 pixel avatar.
-  final String? $48X48;
-
-  AvatarUrls({this.$16X16, this.$24X24, this.$32X32, this.$48X48});
-
-  factory AvatarUrls.fromJson(Map<String, Object?> json) {
-    return AvatarUrls(
-      $16X16: json[r'16x16'] as String?,
-      $24X24: json[r'24x24'] as String?,
-      $32X32: json[r'32x32'] as String?,
-      $48X48: json[r'48x48'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var $16X16 = this.$16X16;
-    var $24X24 = this.$24X24;
-    var $32X32 = this.$32X32;
-    var $48X48 = this.$48X48;
-
-    final json = <String, Object?>{};
-    if ($16X16 != null) {
-      json[r'16x16'] = $16X16;
-    }
-    if ($24X24 != null) {
-      json[r'24x24'] = $24X24;
-    }
-    if ($32X32 != null) {
-      json[r'32x32'] = $32X32;
-    }
-    if ($48X48 != null) {
-      json[r'48x48'] = $48X48;
-    }
-    return json;
-  }
-
-  AvatarUrls copyWith(
-      {String? $16X16, String? $24X24, String? $32X32, String? $48X48}) {
-    return AvatarUrls(
-      $16X16: $16X16 ?? this.$16X16,
-      $24X24: $24X24 ?? this.$24X24,
-      $32X32: $32X32 ?? this.$32X32,
-      $48X48: $48X48 ?? this.$48X48,
+      author: author ?? this.author,
+      created: created ?? this.created,
+      items: items ?? this.items,
+      historyMetadata: historyMetadata ?? this.historyMetadata,
     );
   }
 }
@@ -4923,84 +4076,6 @@ class ChangeHistoryBeanItemsItem {
   }
 }
 
-class ChangeHistoryBean {
-  /// The ID of the changelog.
-  final String? id;
-
-  /// The user who made the change.
-  final Map<String, dynamic>? author;
-
-  /// The date on which the change took place.
-  final DateTime? created;
-
-  /// The list of items changed.
-  final List<ChangeHistoryBeanItemsItem> items;
-
-  /// The history metadata associated with the changed.
-  final Map<String, dynamic>? historyMetadata;
-
-  ChangeHistoryBean(
-      {this.id,
-      this.author,
-      this.created,
-      List<ChangeHistoryBeanItemsItem>? items,
-      this.historyMetadata})
-      : items = items ?? [];
-
-  factory ChangeHistoryBean.fromJson(Map<String, Object?> json) {
-    return ChangeHistoryBean(
-      id: json[r'id'] as String?,
-      author: json[r'author'] as Map<String, Object?>?,
-      created: DateTime.tryParse(json[r'created'] as String? ?? ''),
-      items: (json[r'items'] as List<Object?>?)
-              ?.map((i) => ChangeHistoryBeanItemsItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      historyMetadata: json[r'historyMetadata'] as Map<String, Object?>?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var author = this.author;
-    var created = this.created;
-    var items = this.items;
-    var historyMetadata = this.historyMetadata;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (author != null) {
-      json[r'author'] = author;
-    }
-    if (created != null) {
-      json[r'created'] = created.toIso8601String();
-    }
-    json[r'items'] = items.map((i) => i.toJson()).toList();
-    if (historyMetadata != null) {
-      json[r'historyMetadata'] = historyMetadata;
-    }
-    return json;
-  }
-
-  ChangeHistoryBean copyWith(
-      {String? id,
-      Map<String, dynamic>? author,
-      DateTime? created,
-      List<ChangeHistoryBeanItemsItem>? items,
-      Map<String, dynamic>? historyMetadata}) {
-    return ChangeHistoryBean(
-      id: id ?? this.id,
-      author: author ?? this.author,
-      created: created ?? this.created,
-      items: items ?? this.items,
-      historyMetadata: historyMetadata ?? this.historyMetadata,
-    );
-  }
-}
-
 class ChangeItemBean {
   /// The name of the field changed.
   final String? field;
@@ -5094,6 +4169,151 @@ class ChangeItemBean {
       fromString: fromString ?? this.fromString,
       to: to ?? this.to,
       toString$: toString$ ?? this.toString$,
+    );
+  }
+}
+
+class ChangelogBean {
+  /// The index of the first item returned on the page.
+  final int? startAt;
+
+  /// The maximum number of results that could be on the page.
+  final int? maxResults;
+
+  /// The number of results on the page.
+  final int? total;
+
+  /// The list of changelogs.
+  final List<ChangelogBeanHistoriesItem> histories;
+
+  ChangelogBean(
+      {this.startAt,
+      this.maxResults,
+      this.total,
+      List<ChangelogBeanHistoriesItem>? histories})
+      : histories = histories ?? [];
+
+  factory ChangelogBean.fromJson(Map<String, Object?> json) {
+    return ChangelogBean(
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      histories: (json[r'histories'] as List<Object?>?)
+              ?.map((i) => ChangelogBeanHistoriesItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var startAt = this.startAt;
+    var maxResults = this.maxResults;
+    var total = this.total;
+    var histories = this.histories;
+
+    final json = <String, Object?>{};
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'histories'] = histories.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  ChangelogBean copyWith(
+      {int? startAt,
+      int? maxResults,
+      int? total,
+      List<ChangelogBeanHistoriesItem>? histories}) {
+    return ChangelogBean(
+      startAt: startAt ?? this.startAt,
+      maxResults: maxResults ?? this.maxResults,
+      total: total ?? this.total,
+      histories: histories ?? this.histories,
+    );
+  }
+}
+
+class ChangelogBeanHistoriesItem {
+  /// The ID of the changelog.
+  final String? id;
+
+  /// The user who made the change.
+  final Map<String, dynamic>? author;
+
+  /// The date on which the change took place.
+  final DateTime? created;
+
+  /// The list of items changed.
+  final List<ChangelogBeanHistoriesItemItemsItem> items;
+
+  /// The history metadata associated with the changed.
+  final Map<String, dynamic>? historyMetadata;
+
+  ChangelogBeanHistoriesItem(
+      {this.id,
+      this.author,
+      this.created,
+      List<ChangelogBeanHistoriesItemItemsItem>? items,
+      this.historyMetadata})
+      : items = items ?? [];
+
+  factory ChangelogBeanHistoriesItem.fromJson(Map<String, Object?> json) {
+    return ChangelogBeanHistoriesItem(
+      id: json[r'id'] as String?,
+      author: json[r'author'] as Map<String, Object?>?,
+      created: DateTime.tryParse(json[r'created'] as String? ?? ''),
+      items: (json[r'items'] as List<Object?>?)
+              ?.map((i) => ChangelogBeanHistoriesItemItemsItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      historyMetadata: json[r'historyMetadata'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var author = this.author;
+    var created = this.created;
+    var items = this.items;
+    var historyMetadata = this.historyMetadata;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (author != null) {
+      json[r'author'] = author;
+    }
+    if (created != null) {
+      json[r'created'] = created.toIso8601String();
+    }
+    json[r'items'] = items.map((i) => i.toJson()).toList();
+    if (historyMetadata != null) {
+      json[r'historyMetadata'] = historyMetadata;
+    }
+    return json;
+  }
+
+  ChangelogBeanHistoriesItem copyWith(
+      {String? id,
+      Map<String, dynamic>? author,
+      DateTime? created,
+      List<ChangelogBeanHistoriesItemItemsItem>? items,
+      Map<String, dynamic>? historyMetadata}) {
+    return ChangelogBeanHistoriesItem(
+      id: id ?? this.id,
+      author: author ?? this.author,
+      created: created ?? this.created,
+      items: items ?? this.items,
+      historyMetadata: historyMetadata ?? this.historyMetadata,
     );
   }
 }
@@ -5196,147 +4416,306 @@ class ChangelogBeanHistoriesItemItemsItem {
   }
 }
 
-class ChangelogBeanHistoriesItem {
-  /// The ID of the changelog.
-  final String? id;
+class ColorBean {
+  final ColorBeanKey? key;
 
-  /// The user who made the change.
-  final Map<String, dynamic>? author;
+  ColorBean({this.key});
 
-  /// The date on which the change took place.
-  final DateTime? created;
+  factory ColorBean.fromJson(Map<String, Object?> json) {
+    return ColorBean(
+      key: json[r'key'] != null
+          ? ColorBeanKey.fromValue(json[r'key']! as String)
+          : null,
+    );
+  }
 
-  /// The list of items changed.
-  final List<ChangelogBeanHistoriesItemItemsItem> items;
+  Map<String, Object?> toJson() {
+    var key = this.key;
 
-  /// The history metadata associated with the changed.
-  final Map<String, dynamic>? historyMetadata;
+    final json = <String, Object?>{};
+    if (key != null) {
+      json[r'key'] = key.value;
+    }
+    return json;
+  }
 
-  ChangelogBeanHistoriesItem(
-      {this.id,
-      this.author,
-      this.created,
-      List<ChangelogBeanHistoriesItemItemsItem>? items,
-      this.historyMetadata})
-      : items = items ?? [];
+  ColorBean copyWith({ColorBeanKey? key}) {
+    return ColorBean(
+      key: key ?? this.key,
+    );
+  }
+}
 
-  factory ChangelogBeanHistoriesItem.fromJson(Map<String, Object?> json) {
-    return ChangelogBeanHistoriesItem(
-      id: json[r'id'] as String?,
-      author: json[r'author'] as Map<String, Object?>?,
-      created: DateTime.tryParse(json[r'created'] as String? ?? ''),
-      items: (json[r'items'] as List<Object?>?)
-              ?.map((i) => ChangelogBeanHistoriesItemItemsItem.fromJson(
+class ColorBeanKey {
+  static const color1 = ColorBeanKey._('color_1');
+  static const color2 = ColorBeanKey._('color_2');
+  static const color3 = ColorBeanKey._('color_3');
+  static const color4 = ColorBeanKey._('color_4');
+  static const color5 = ColorBeanKey._('color_5');
+  static const color6 = ColorBeanKey._('color_6');
+  static const color7 = ColorBeanKey._('color_7');
+  static const color8 = ColorBeanKey._('color_8');
+  static const color9 = ColorBeanKey._('color_9');
+  static const color10 = ColorBeanKey._('color_10');
+  static const color11 = ColorBeanKey._('color_11');
+  static const color12 = ColorBeanKey._('color_12');
+  static const color13 = ColorBeanKey._('color_13');
+  static const color14 = ColorBeanKey._('color_14');
+
+  static const values = [
+    color1,
+    color2,
+    color3,
+    color4,
+    color5,
+    color6,
+    color7,
+    color8,
+    color9,
+    color10,
+    color11,
+    color12,
+    color13,
+    color14,
+  ];
+  final String value;
+
+  const ColorBeanKey._(this.value);
+
+  static ColorBeanKey fromValue(String value) => values
+      .firstWhere((e) => e.value == value, orElse: () => ColorBeanKey._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class ColumnBean {
+  final String? name;
+  final List<ColumnBeanStatusesItem> statuses;
+  final int? min;
+  final int? max;
+
+  ColumnBean(
+      {this.name, List<ColumnBeanStatusesItem>? statuses, this.min, this.max})
+      : statuses = statuses ?? [];
+
+  factory ColumnBean.fromJson(Map<String, Object?> json) {
+    return ColumnBean(
+      name: json[r'name'] as String?,
+      statuses: (json[r'statuses'] as List<Object?>?)
+              ?.map((i) => ColumnBeanStatusesItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      historyMetadata: json[r'historyMetadata'] as Map<String, Object?>?,
+      min: (json[r'min'] as num?)?.toInt(),
+      max: (json[r'max'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var statuses = this.statuses;
+    var min = this.min;
+    var max = this.max;
+
+    final json = <String, Object?>{};
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
+    if (min != null) {
+      json[r'min'] = min;
+    }
+    if (max != null) {
+      json[r'max'] = max;
+    }
+    return json;
+  }
+
+  ColumnBean copyWith(
+      {String? name,
+      List<ColumnBeanStatusesItem>? statuses,
+      int? min,
+      int? max}) {
+    return ColumnBean(
+      name: name ?? this.name,
+      statuses: statuses ?? this.statuses,
+      min: min ?? this.min,
+      max: max ?? this.max,
+    );
+  }
+}
+
+class ColumnBeanStatusesItem {
+  final String? id;
+  final String? self;
+
+  ColumnBeanStatusesItem({this.id, this.self});
+
+  factory ColumnBeanStatusesItem.fromJson(Map<String, Object?> json) {
+    return ColumnBeanStatusesItem(
+      id: json[r'id'] as String?,
+      self: json[r'self'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var id = this.id;
-    var author = this.author;
-    var created = this.created;
-    var items = this.items;
-    var historyMetadata = this.historyMetadata;
+    var self = this.self;
 
     final json = <String, Object?>{};
     if (id != null) {
       json[r'id'] = id;
     }
-    if (author != null) {
-      json[r'author'] = author;
-    }
-    if (created != null) {
-      json[r'created'] = created.toIso8601String();
-    }
-    json[r'items'] = items.map((i) => i.toJson()).toList();
-    if (historyMetadata != null) {
-      json[r'historyMetadata'] = historyMetadata;
+    if (self != null) {
+      json[r'self'] = self;
     }
     return json;
   }
 
-  ChangelogBeanHistoriesItem copyWith(
-      {String? id,
-      Map<String, dynamic>? author,
-      DateTime? created,
-      List<ChangelogBeanHistoriesItemItemsItem>? items,
-      Map<String, dynamic>? historyMetadata}) {
-    return ChangelogBeanHistoriesItem(
+  ColumnBeanStatusesItem copyWith({String? id, String? self}) {
+    return ColumnBeanStatusesItem(
       id: id ?? this.id,
-      author: author ?? this.author,
-      created: created ?? this.created,
-      items: items ?? this.items,
-      historyMetadata: historyMetadata ?? this.historyMetadata,
+      self: self ?? this.self,
     );
   }
 }
 
-class ChangelogBean {
-  /// The index of the first item returned on the page.
-  final int? startAt;
+class ColumnConfigBean {
+  final List<ColumnConfigBeanColumnsItem> columns;
+  final String? constraintType;
 
-  /// The maximum number of results that could be on the page.
-  final int? maxResults;
+  ColumnConfigBean(
+      {List<ColumnConfigBeanColumnsItem>? columns, this.constraintType})
+      : columns = columns ?? [];
 
-  /// The number of results on the page.
-  final int? total;
-
-  /// The list of changelogs.
-  final List<ChangelogBeanHistoriesItem> histories;
-
-  ChangelogBean(
-      {this.startAt,
-      this.maxResults,
-      this.total,
-      List<ChangelogBeanHistoriesItem>? histories})
-      : histories = histories ?? [];
-
-  factory ChangelogBean.fromJson(Map<String, Object?> json) {
-    return ChangelogBean(
-      startAt: (json[r'startAt'] as num?)?.toInt(),
-      maxResults: (json[r'maxResults'] as num?)?.toInt(),
-      total: (json[r'total'] as num?)?.toInt(),
-      histories: (json[r'histories'] as List<Object?>?)
-              ?.map((i) => ChangelogBeanHistoriesItem.fromJson(
+  factory ColumnConfigBean.fromJson(Map<String, Object?> json) {
+    return ColumnConfigBean(
+      columns: (json[r'columns'] as List<Object?>?)
+              ?.map((i) => ColumnConfigBeanColumnsItem.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
+      constraintType: json[r'constraintType'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var startAt = this.startAt;
-    var maxResults = this.maxResults;
-    var total = this.total;
-    var histories = this.histories;
+    var columns = this.columns;
+    var constraintType = this.constraintType;
 
     final json = <String, Object?>{};
-    if (startAt != null) {
-      json[r'startAt'] = startAt;
+    json[r'columns'] = columns.map((i) => i.toJson()).toList();
+    if (constraintType != null) {
+      json[r'constraintType'] = constraintType;
     }
-    if (maxResults != null) {
-      json[r'maxResults'] = maxResults;
-    }
-    if (total != null) {
-      json[r'total'] = total;
-    }
-    json[r'histories'] = histories.map((i) => i.toJson()).toList();
     return json;
   }
 
-  ChangelogBean copyWith(
-      {int? startAt,
-      int? maxResults,
-      int? total,
-      List<ChangelogBeanHistoriesItem>? histories}) {
-    return ChangelogBean(
-      startAt: startAt ?? this.startAt,
-      maxResults: maxResults ?? this.maxResults,
-      total: total ?? this.total,
-      histories: histories ?? this.histories,
+  ColumnConfigBean copyWith(
+      {List<ColumnConfigBeanColumnsItem>? columns, String? constraintType}) {
+    return ColumnConfigBean(
+      columns: columns ?? this.columns,
+      constraintType: constraintType ?? this.constraintType,
+    );
+  }
+}
+
+class ColumnConfigBeanColumnsItem {
+  final String? name;
+  final List<ColumnConfigBeanColumnsItemStatusesItem> statuses;
+  final int? min;
+  final int? max;
+
+  ColumnConfigBeanColumnsItem(
+      {this.name,
+      List<ColumnConfigBeanColumnsItemStatusesItem>? statuses,
+      this.min,
+      this.max})
+      : statuses = statuses ?? [];
+
+  factory ColumnConfigBeanColumnsItem.fromJson(Map<String, Object?> json) {
+    return ColumnConfigBeanColumnsItem(
+      name: json[r'name'] as String?,
+      statuses: (json[r'statuses'] as List<Object?>?)
+              ?.map((i) => ColumnConfigBeanColumnsItemStatusesItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      min: (json[r'min'] as num?)?.toInt(),
+      max: (json[r'max'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var statuses = this.statuses;
+    var min = this.min;
+    var max = this.max;
+
+    final json = <String, Object?>{};
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
+    if (min != null) {
+      json[r'min'] = min;
+    }
+    if (max != null) {
+      json[r'max'] = max;
+    }
+    return json;
+  }
+
+  ColumnConfigBeanColumnsItem copyWith(
+      {String? name,
+      List<ColumnConfigBeanColumnsItemStatusesItem>? statuses,
+      int? min,
+      int? max}) {
+    return ColumnConfigBeanColumnsItem(
+      name: name ?? this.name,
+      statuses: statuses ?? this.statuses,
+      min: min ?? this.min,
+      max: max ?? this.max,
+    );
+  }
+}
+
+class ColumnConfigBeanColumnsItemStatusesItem {
+  final String? id;
+  final String? self;
+
+  ColumnConfigBeanColumnsItemStatusesItem({this.id, this.self});
+
+  factory ColumnConfigBeanColumnsItemStatusesItem.fromJson(
+      Map<String, Object?> json) {
+    return ColumnConfigBeanColumnsItemStatusesItem(
+      id: json[r'id'] as String?,
+      self: json[r'self'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var self = this.self;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    return json;
+  }
+
+  ColumnConfigBeanColumnsItemStatusesItem copyWith({String? id, String? self}) {
+    return ColumnConfigBeanColumnsItemStatusesItem(
+      id: id ?? this.id,
+      self: self ?? this.self,
     );
   }
 }
@@ -5366,6 +4745,368 @@ class EditMetaBean {
   EditMetaBean copyWith({Map<String, dynamic>? fields}) {
     return EditMetaBean(
       fields: fields ?? this.fields,
+    );
+  }
+}
+
+class Entry {
+  final int? issueId;
+  final String? issueKey;
+  final int? status;
+  final List<String> errors;
+
+  Entry({this.issueId, this.issueKey, this.status, List<String>? errors})
+      : errors = errors ?? [];
+
+  factory Entry.fromJson(Map<String, Object?> json) {
+    return Entry(
+      issueId: (json[r'issueId'] as num?)?.toInt(),
+      issueKey: json[r'issueKey'] as String?,
+      status: (json[r'status'] as num?)?.toInt(),
+      errors: (json[r'errors'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueId = this.issueId;
+    var issueKey = this.issueKey;
+    var status = this.status;
+    var errors = this.errors;
+
+    final json = <String, Object?>{};
+    if (issueId != null) {
+      json[r'issueId'] = issueId;
+    }
+    if (issueKey != null) {
+      json[r'issueKey'] = issueKey;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    json[r'errors'] = errors;
+    return json;
+  }
+
+  Entry copyWith(
+      {int? issueId, String? issueKey, int? status, List<String>? errors}) {
+    return Entry(
+      issueId: issueId ?? this.issueId,
+      issueKey: issueKey ?? this.issueKey,
+      status: status ?? this.status,
+      errors: errors ?? this.errors,
+    );
+  }
+}
+
+class EpicRankRequestBean {
+  final String? rankBeforeEpic;
+  final String? rankAfterEpic;
+  final int? rankCustomFieldId;
+
+  EpicRankRequestBean(
+      {this.rankBeforeEpic, this.rankAfterEpic, this.rankCustomFieldId});
+
+  factory EpicRankRequestBean.fromJson(Map<String, Object?> json) {
+    return EpicRankRequestBean(
+      rankBeforeEpic: json[r'rankBeforeEpic'] as String?,
+      rankAfterEpic: json[r'rankAfterEpic'] as String?,
+      rankCustomFieldId: (json[r'rankCustomFieldId'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var rankBeforeEpic = this.rankBeforeEpic;
+    var rankAfterEpic = this.rankAfterEpic;
+    var rankCustomFieldId = this.rankCustomFieldId;
+
+    final json = <String, Object?>{};
+    if (rankBeforeEpic != null) {
+      json[r'rankBeforeEpic'] = rankBeforeEpic;
+    }
+    if (rankAfterEpic != null) {
+      json[r'rankAfterEpic'] = rankAfterEpic;
+    }
+    if (rankCustomFieldId != null) {
+      json[r'rankCustomFieldId'] = rankCustomFieldId;
+    }
+    return json;
+  }
+
+  EpicRankRequestBean copyWith(
+      {String? rankBeforeEpic, String? rankAfterEpic, int? rankCustomFieldId}) {
+    return EpicRankRequestBean(
+      rankBeforeEpic: rankBeforeEpic ?? this.rankBeforeEpic,
+      rankAfterEpic: rankAfterEpic ?? this.rankAfterEpic,
+      rankCustomFieldId: rankCustomFieldId ?? this.rankCustomFieldId,
+    );
+  }
+}
+
+class EpicUpdateBean {
+  final String? name;
+  final String? summary;
+  final EpicUpdateBeanColor? color;
+  final bool done;
+
+  EpicUpdateBean({this.name, this.summary, this.color, bool? done})
+      : done = done ?? false;
+
+  factory EpicUpdateBean.fromJson(Map<String, Object?> json) {
+    return EpicUpdateBean(
+      name: json[r'name'] as String?,
+      summary: json[r'summary'] as String?,
+      color: json[r'color'] != null
+          ? EpicUpdateBeanColor.fromJson(
+              json[r'color']! as Map<String, Object?>)
+          : null,
+      done: json[r'done'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var summary = this.summary;
+    var color = this.color;
+    var done = this.done;
+
+    final json = <String, Object?>{};
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (summary != null) {
+      json[r'summary'] = summary;
+    }
+    if (color != null) {
+      json[r'color'] = color.toJson();
+    }
+    json[r'done'] = done;
+    return json;
+  }
+
+  EpicUpdateBean copyWith(
+      {String? name, String? summary, EpicUpdateBeanColor? color, bool? done}) {
+    return EpicUpdateBean(
+      name: name ?? this.name,
+      summary: summary ?? this.summary,
+      color: color ?? this.color,
+      done: done ?? this.done,
+    );
+  }
+}
+
+class EpicUpdateBeanColor {
+  final EpicUpdateBeanColorKey? key;
+
+  EpicUpdateBeanColor({this.key});
+
+  factory EpicUpdateBeanColor.fromJson(Map<String, Object?> json) {
+    return EpicUpdateBeanColor(
+      key: json[r'key'] != null
+          ? EpicUpdateBeanColorKey.fromValue(json[r'key']! as String)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+
+    final json = <String, Object?>{};
+    if (key != null) {
+      json[r'key'] = key.value;
+    }
+    return json;
+  }
+
+  EpicUpdateBeanColor copyWith({EpicUpdateBeanColorKey? key}) {
+    return EpicUpdateBeanColor(
+      key: key ?? this.key,
+    );
+  }
+}
+
+class EpicUpdateBeanColorKey {
+  static const color1 = EpicUpdateBeanColorKey._('color_1');
+  static const color2 = EpicUpdateBeanColorKey._('color_2');
+  static const color3 = EpicUpdateBeanColorKey._('color_3');
+  static const color4 = EpicUpdateBeanColorKey._('color_4');
+  static const color5 = EpicUpdateBeanColorKey._('color_5');
+  static const color6 = EpicUpdateBeanColorKey._('color_6');
+  static const color7 = EpicUpdateBeanColorKey._('color_7');
+  static const color8 = EpicUpdateBeanColorKey._('color_8');
+  static const color9 = EpicUpdateBeanColorKey._('color_9');
+  static const color10 = EpicUpdateBeanColorKey._('color_10');
+  static const color11 = EpicUpdateBeanColorKey._('color_11');
+  static const color12 = EpicUpdateBeanColorKey._('color_12');
+  static const color13 = EpicUpdateBeanColorKey._('color_13');
+  static const color14 = EpicUpdateBeanColorKey._('color_14');
+
+  static const values = [
+    color1,
+    color2,
+    color3,
+    color4,
+    color5,
+    color6,
+    color7,
+    color8,
+    color9,
+    color10,
+    color11,
+    color12,
+    color13,
+    color14,
+  ];
+  final String value;
+
+  const EpicUpdateBeanColorKey._(this.value);
+
+  static EpicUpdateBeanColorKey fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => EpicUpdateBeanColorKey._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class EstimationConfigBean {
+  final String? type;
+  final EstimationConfigBeanField? field;
+
+  EstimationConfigBean({this.type, this.field});
+
+  factory EstimationConfigBean.fromJson(Map<String, Object?> json) {
+    return EstimationConfigBean(
+      type: json[r'type'] as String?,
+      field: json[r'field'] != null
+          ? EstimationConfigBeanField.fromJson(
+              json[r'field']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var field = this.field;
+
+    final json = <String, Object?>{};
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (field != null) {
+      json[r'field'] = field.toJson();
+    }
+    return json;
+  }
+
+  EstimationConfigBean copyWith(
+      {String? type, EstimationConfigBeanField? field}) {
+    return EstimationConfigBean(
+      type: type ?? this.type,
+      field: field ?? this.field,
+    );
+  }
+}
+
+class EstimationConfigBeanField {
+  final String? fieldId;
+  final String? displayName;
+
+  EstimationConfigBeanField({this.fieldId, this.displayName});
+
+  factory EstimationConfigBeanField.fromJson(Map<String, Object?> json) {
+    return EstimationConfigBeanField(
+      fieldId: json[r'fieldId'] as String?,
+      displayName: json[r'displayName'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fieldId = this.fieldId;
+    var displayName = this.displayName;
+
+    final json = <String, Object?>{};
+    if (fieldId != null) {
+      json[r'fieldId'] = fieldId;
+    }
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
+    return json;
+  }
+
+  EstimationConfigBeanField copyWith({String? fieldId, String? displayName}) {
+    return EstimationConfigBeanField(
+      fieldId: fieldId ?? this.fieldId,
+      displayName: displayName ?? this.displayName,
+    );
+  }
+}
+
+class EstimationFieldBean {
+  final String? fieldId;
+  final String? displayName;
+
+  EstimationFieldBean({this.fieldId, this.displayName});
+
+  factory EstimationFieldBean.fromJson(Map<String, Object?> json) {
+    return EstimationFieldBean(
+      fieldId: json[r'fieldId'] as String?,
+      displayName: json[r'displayName'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fieldId = this.fieldId;
+    var displayName = this.displayName;
+
+    final json = <String, Object?>{};
+    if (fieldId != null) {
+      json[r'fieldId'] = fieldId;
+    }
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
+    return json;
+  }
+
+  EstimationFieldBean copyWith({String? fieldId, String? displayName}) {
+    return EstimationFieldBean(
+      fieldId: fieldId ?? this.fieldId,
+      displayName: displayName ?? this.displayName,
+    );
+  }
+}
+
+class FieldEditBean {
+  final String? value;
+
+  FieldEditBean({this.value});
+
+  factory FieldEditBean.fromJson(Map<String, Object?> json) {
+    return FieldEditBean(
+      value: json[r'value'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    if (value != null) {
+      json[r'value'] = value;
+    }
+    return json;
+  }
+
+  FieldEditBean copyWith({String? value}) {
+    return FieldEditBean(
+      value: value ?? this.value,
     );
   }
 }
@@ -5486,6 +5227,41 @@ class FieldMetaBean {
       operations: operations ?? this.operations,
       allowedValues: allowedValues ?? this.allowedValues,
       defaultValue: defaultValue ?? this.defaultValue,
+    );
+  }
+}
+
+class GroupBean {
+  final String? name;
+  final String? self;
+
+  GroupBean({this.name, this.self});
+
+  factory GroupBean.fromJson(Map<String, Object?> json) {
+    return GroupBean(
+      name: json[r'name'] as String?,
+      self: json[r'self'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var self = this.self;
+
+    final json = <String, Object?>{};
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    return json;
+  }
+
+  GroupBean copyWith({String? name, String? self}) {
+    return GroupBean(
+      name: name ?? this.name,
+      self: self ?? this.self,
     );
   }
 }
@@ -5711,140 +5487,31 @@ class HistoryMetadataParticipant {
   }
 }
 
-class IssueBeanTransitionsItem {
-  /// The ID of the issue transition. Required when specifying a transition to
-  /// undertake.
-  final String? id;
+class IssueAssignRequestBean {
+  final List<String> issues;
 
-  /// The name of the issue transition.
-  final String? name;
+  IssueAssignRequestBean({List<String>? issues}) : issues = issues ?? [];
 
-  /// Details of the issue status after the transition.
-  final Map<String, dynamic>? to;
-
-  /// Whether there is a screen associated with the issue transition.
-  final bool hasScreen;
-
-  /// Whether the issue transition is global, that is, the transition is applied
-  /// to issues regardless of their status.
-  final bool isGlobal;
-
-  /// Whether this is the initial issue transition for the workflow.
-  final bool isInitial;
-
-  /// Whether the transition is available to be performed.
-  final bool isAvailable;
-
-  /// Whether the issue has to meet criteria before the issue transition is
-  /// applied.
-  final bool isConditional;
-
-  /// Details of the fields associated with the issue transition screen. Use
-  /// this information to populate `fields` and `update` in a transition
-  /// request.
-  final Map<String, dynamic>? fields;
-
-  /// Expand options that include additional transition details in the response.
-  final String? expand;
-  final bool looped;
-
-  IssueBeanTransitionsItem(
-      {this.id,
-      this.name,
-      this.to,
-      bool? hasScreen,
-      bool? isGlobal,
-      bool? isInitial,
-      bool? isAvailable,
-      bool? isConditional,
-      this.fields,
-      this.expand,
-      bool? looped})
-      : hasScreen = hasScreen ?? false,
-        isGlobal = isGlobal ?? false,
-        isInitial = isInitial ?? false,
-        isAvailable = isAvailable ?? false,
-        isConditional = isConditional ?? false,
-        looped = looped ?? false;
-
-  factory IssueBeanTransitionsItem.fromJson(Map<String, Object?> json) {
-    return IssueBeanTransitionsItem(
-      id: json[r'id'] as String?,
-      name: json[r'name'] as String?,
-      to: json[r'to'] as Map<String, Object?>?,
-      hasScreen: json[r'hasScreen'] as bool? ?? false,
-      isGlobal: json[r'isGlobal'] as bool? ?? false,
-      isInitial: json[r'isInitial'] as bool? ?? false,
-      isAvailable: json[r'isAvailable'] as bool? ?? false,
-      isConditional: json[r'isConditional'] as bool? ?? false,
-      fields: json[r'fields'] as Map<String, Object?>?,
-      expand: json[r'expand'] as String?,
-      looped: json[r'looped'] as bool? ?? false,
+  factory IssueAssignRequestBean.fromJson(Map<String, Object?> json) {
+    return IssueAssignRequestBean(
+      issues: (json[r'issues'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
     );
   }
 
   Map<String, Object?> toJson() {
-    var id = this.id;
-    var name = this.name;
-    var to = this.to;
-    var hasScreen = this.hasScreen;
-    var isGlobal = this.isGlobal;
-    var isInitial = this.isInitial;
-    var isAvailable = this.isAvailable;
-    var isConditional = this.isConditional;
-    var fields = this.fields;
-    var expand = this.expand;
-    var looped = this.looped;
+    var issues = this.issues;
 
     final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (to != null) {
-      json[r'to'] = to;
-    }
-    json[r'hasScreen'] = hasScreen;
-    json[r'isGlobal'] = isGlobal;
-    json[r'isInitial'] = isInitial;
-    json[r'isAvailable'] = isAvailable;
-    json[r'isConditional'] = isConditional;
-    if (fields != null) {
-      json[r'fields'] = fields;
-    }
-    if (expand != null) {
-      json[r'expand'] = expand;
-    }
-    json[r'looped'] = looped;
+    json[r'issues'] = issues;
     return json;
   }
 
-  IssueBeanTransitionsItem copyWith(
-      {String? id,
-      String? name,
-      Map<String, dynamic>? to,
-      bool? hasScreen,
-      bool? isGlobal,
-      bool? isInitial,
-      bool? isAvailable,
-      bool? isConditional,
-      Map<String, dynamic>? fields,
-      String? expand,
-      bool? looped}) {
-    return IssueBeanTransitionsItem(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      to: to ?? this.to,
-      hasScreen: hasScreen ?? this.hasScreen,
-      isGlobal: isGlobal ?? this.isGlobal,
-      isInitial: isInitial ?? this.isInitial,
-      isAvailable: isAvailable ?? this.isAvailable,
-      isConditional: isConditional ?? this.isConditional,
-      fields: fields ?? this.fields,
-      expand: expand ?? this.expand,
-      looped: looped ?? this.looped,
+  IssueAssignRequestBean copyWith({List<String>? issues}) {
+    return IssueAssignRequestBean(
+      issues: issues ?? this.issues,
     );
   }
 }
@@ -6022,6 +5689,203 @@ class IssueBean {
       versionedRepresentations:
           versionedRepresentations ?? this.versionedRepresentations,
       fields: fields ?? this.fields,
+    );
+  }
+}
+
+class IssueBeanTransitionsItem {
+  /// The ID of the issue transition. Required when specifying a transition to
+  /// undertake.
+  final String? id;
+
+  /// The name of the issue transition.
+  final String? name;
+
+  /// Details of the issue status after the transition.
+  final Map<String, dynamic>? to;
+
+  /// Whether there is a screen associated with the issue transition.
+  final bool hasScreen;
+
+  /// Whether the issue transition is global, that is, the transition is applied
+  /// to issues regardless of their status.
+  final bool isGlobal;
+
+  /// Whether this is the initial issue transition for the workflow.
+  final bool isInitial;
+
+  /// Whether the transition is available to be performed.
+  final bool isAvailable;
+
+  /// Whether the issue has to meet criteria before the issue transition is
+  /// applied.
+  final bool isConditional;
+
+  /// Details of the fields associated with the issue transition screen. Use
+  /// this information to populate `fields` and `update` in a transition
+  /// request.
+  final Map<String, dynamic>? fields;
+
+  /// Expand options that include additional transition details in the response.
+  final String? expand;
+  final bool looped;
+
+  IssueBeanTransitionsItem(
+      {this.id,
+      this.name,
+      this.to,
+      bool? hasScreen,
+      bool? isGlobal,
+      bool? isInitial,
+      bool? isAvailable,
+      bool? isConditional,
+      this.fields,
+      this.expand,
+      bool? looped})
+      : hasScreen = hasScreen ?? false,
+        isGlobal = isGlobal ?? false,
+        isInitial = isInitial ?? false,
+        isAvailable = isAvailable ?? false,
+        isConditional = isConditional ?? false,
+        looped = looped ?? false;
+
+  factory IssueBeanTransitionsItem.fromJson(Map<String, Object?> json) {
+    return IssueBeanTransitionsItem(
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      to: json[r'to'] as Map<String, Object?>?,
+      hasScreen: json[r'hasScreen'] as bool? ?? false,
+      isGlobal: json[r'isGlobal'] as bool? ?? false,
+      isInitial: json[r'isInitial'] as bool? ?? false,
+      isAvailable: json[r'isAvailable'] as bool? ?? false,
+      isConditional: json[r'isConditional'] as bool? ?? false,
+      fields: json[r'fields'] as Map<String, Object?>?,
+      expand: json[r'expand'] as String?,
+      looped: json[r'looped'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+    var to = this.to;
+    var hasScreen = this.hasScreen;
+    var isGlobal = this.isGlobal;
+    var isInitial = this.isInitial;
+    var isAvailable = this.isAvailable;
+    var isConditional = this.isConditional;
+    var fields = this.fields;
+    var expand = this.expand;
+    var looped = this.looped;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (to != null) {
+      json[r'to'] = to;
+    }
+    json[r'hasScreen'] = hasScreen;
+    json[r'isGlobal'] = isGlobal;
+    json[r'isInitial'] = isInitial;
+    json[r'isAvailable'] = isAvailable;
+    json[r'isConditional'] = isConditional;
+    if (fields != null) {
+      json[r'fields'] = fields;
+    }
+    if (expand != null) {
+      json[r'expand'] = expand;
+    }
+    json[r'looped'] = looped;
+    return json;
+  }
+
+  IssueBeanTransitionsItem copyWith(
+      {String? id,
+      String? name,
+      Map<String, dynamic>? to,
+      bool? hasScreen,
+      bool? isGlobal,
+      bool? isInitial,
+      bool? isAvailable,
+      bool? isConditional,
+      Map<String, dynamic>? fields,
+      String? expand,
+      bool? looped}) {
+    return IssueBeanTransitionsItem(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      to: to ?? this.to,
+      hasScreen: hasScreen ?? this.hasScreen,
+      isGlobal: isGlobal ?? this.isGlobal,
+      isInitial: isInitial ?? this.isInitial,
+      isAvailable: isAvailable ?? this.isAvailable,
+      isConditional: isConditional ?? this.isConditional,
+      fields: fields ?? this.fields,
+      expand: expand ?? this.expand,
+      looped: looped ?? this.looped,
+    );
+  }
+}
+
+class IssueRankRequestBean {
+  final List<String> issues;
+  final String? rankBeforeIssue;
+  final String? rankAfterIssue;
+  final int? rankCustomFieldId;
+
+  IssueRankRequestBean(
+      {List<String>? issues,
+      this.rankBeforeIssue,
+      this.rankAfterIssue,
+      this.rankCustomFieldId})
+      : issues = issues ?? [];
+
+  factory IssueRankRequestBean.fromJson(Map<String, Object?> json) {
+    return IssueRankRequestBean(
+      issues: (json[r'issues'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      rankBeforeIssue: json[r'rankBeforeIssue'] as String?,
+      rankAfterIssue: json[r'rankAfterIssue'] as String?,
+      rankCustomFieldId: (json[r'rankCustomFieldId'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issues = this.issues;
+    var rankBeforeIssue = this.rankBeforeIssue;
+    var rankAfterIssue = this.rankAfterIssue;
+    var rankCustomFieldId = this.rankCustomFieldId;
+
+    final json = <String, Object?>{};
+    json[r'issues'] = issues;
+    if (rankBeforeIssue != null) {
+      json[r'rankBeforeIssue'] = rankBeforeIssue;
+    }
+    if (rankAfterIssue != null) {
+      json[r'rankAfterIssue'] = rankAfterIssue;
+    }
+    if (rankCustomFieldId != null) {
+      json[r'rankCustomFieldId'] = rankCustomFieldId;
+    }
+    return json;
+  }
+
+  IssueRankRequestBean copyWith(
+      {List<String>? issues,
+      String? rankBeforeIssue,
+      String? rankAfterIssue,
+      int? rankCustomFieldId}) {
+    return IssueRankRequestBean(
+      issues: issues ?? this.issues,
+      rankBeforeIssue: rankBeforeIssue ?? this.rankBeforeIssue,
+      rankAfterIssue: rankAfterIssue ?? this.rankAfterIssue,
+      rankCustomFieldId: rankCustomFieldId ?? this.rankCustomFieldId,
     );
   }
 }
@@ -6251,6 +6115,90 @@ class JsonTypeBean {
   }
 }
 
+class LinkGroupBean {
+  final String? id;
+  final String? styleClass;
+  final LinkGroupBeanHeader? header;
+  final int? weight;
+  final List<LinkGroupBeanLinksItem> links;
+  final List<LinkGroupBean> groups;
+
+  LinkGroupBean(
+      {this.id,
+      this.styleClass,
+      this.header,
+      this.weight,
+      List<LinkGroupBeanLinksItem>? links,
+      List<LinkGroupBean>? groups})
+      : links = links ?? [],
+        groups = groups ?? [];
+
+  factory LinkGroupBean.fromJson(Map<String, Object?> json) {
+    return LinkGroupBean(
+      id: json[r'id'] as String?,
+      styleClass: json[r'styleClass'] as String?,
+      header: json[r'header'] != null
+          ? LinkGroupBeanHeader.fromJson(
+              json[r'header']! as Map<String, Object?>)
+          : null,
+      weight: (json[r'weight'] as num?)?.toInt(),
+      links: (json[r'links'] as List<Object?>?)
+              ?.map((i) => LinkGroupBeanLinksItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      groups: (json[r'groups'] as List<Object?>?)
+              ?.map((i) => LinkGroupBean.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var styleClass = this.styleClass;
+    var header = this.header;
+    var weight = this.weight;
+    var links = this.links;
+    var groups = this.groups;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (styleClass != null) {
+      json[r'styleClass'] = styleClass;
+    }
+    if (header != null) {
+      json[r'header'] = header.toJson();
+    }
+    if (weight != null) {
+      json[r'weight'] = weight;
+    }
+    json[r'links'] = links.map((i) => i.toJson()).toList();
+    json[r'groups'] = groups.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  LinkGroupBean copyWith(
+      {String? id,
+      String? styleClass,
+      LinkGroupBeanHeader? header,
+      int? weight,
+      List<LinkGroupBeanLinksItem>? links,
+      List<LinkGroupBean>? groups}) {
+    return LinkGroupBean(
+      id: id ?? this.id,
+      styleClass: styleClass ?? this.styleClass,
+      header: header ?? this.header,
+      weight: weight ?? this.weight,
+      links: links ?? this.links,
+      groups: groups ?? this.groups,
+    );
+  }
+}
+
 class LinkGroupBeanHeader {
   final String? id;
   final String? styleClass;
@@ -6419,86 +6367,37 @@ class LinkGroupBeanLinksItem {
   }
 }
 
-class LinkGroupBean {
-  final String? id;
-  final String? styleClass;
-  final LinkGroupBeanHeader? header;
-  final int? weight;
-  final List<LinkGroupBeanLinksItem> links;
-  final List<LinkGroupBean> groups;
+class LocationBean {
+  final String? type;
+  final String? projectKeyOrId;
 
-  LinkGroupBean(
-      {this.id,
-      this.styleClass,
-      this.header,
-      this.weight,
-      List<LinkGroupBeanLinksItem>? links,
-      List<LinkGroupBean>? groups})
-      : links = links ?? [],
-        groups = groups ?? [];
+  LocationBean({this.type, this.projectKeyOrId});
 
-  factory LinkGroupBean.fromJson(Map<String, Object?> json) {
-    return LinkGroupBean(
-      id: json[r'id'] as String?,
-      styleClass: json[r'styleClass'] as String?,
-      header: json[r'header'] != null
-          ? LinkGroupBeanHeader.fromJson(
-              json[r'header']! as Map<String, Object?>)
-          : null,
-      weight: (json[r'weight'] as num?)?.toInt(),
-      links: (json[r'links'] as List<Object?>?)
-              ?.map((i) => LinkGroupBeanLinksItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      groups: (json[r'groups'] as List<Object?>?)
-              ?.map((i) => LinkGroupBean.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+  factory LocationBean.fromJson(Map<String, Object?> json) {
+    return LocationBean(
+      type: json[r'type'] as String?,
+      projectKeyOrId: json[r'projectKeyOrId'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var id = this.id;
-    var styleClass = this.styleClass;
-    var header = this.header;
-    var weight = this.weight;
-    var links = this.links;
-    var groups = this.groups;
+    var type = this.type;
+    var projectKeyOrId = this.projectKeyOrId;
 
     final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
+    if (type != null) {
+      json[r'type'] = type;
     }
-    if (styleClass != null) {
-      json[r'styleClass'] = styleClass;
+    if (projectKeyOrId != null) {
+      json[r'projectKeyOrId'] = projectKeyOrId;
     }
-    if (header != null) {
-      json[r'header'] = header.toJson();
-    }
-    if (weight != null) {
-      json[r'weight'] = weight;
-    }
-    json[r'links'] = links.map((i) => i.toJson()).toList();
-    json[r'groups'] = groups.map((i) => i.toJson()).toList();
     return json;
   }
 
-  LinkGroupBean copyWith(
-      {String? id,
-      String? styleClass,
-      LinkGroupBeanHeader? header,
-      int? weight,
-      List<LinkGroupBeanLinksItem>? links,
-      List<LinkGroupBean>? groups}) {
-    return LinkGroupBean(
-      id: id ?? this.id,
-      styleClass: styleClass ?? this.styleClass,
-      header: header ?? this.header,
-      weight: weight ?? this.weight,
-      links: links ?? this.links,
-      groups: groups ?? this.groups,
+  LocationBean copyWith({String? type, String? projectKeyOrId}) {
+    return LocationBean(
+      type: type ?? this.type,
+      projectKeyOrId: projectKeyOrId ?? this.projectKeyOrId,
     );
   }
 }
@@ -6530,6 +6429,1182 @@ class OpsbarBean {
   OpsbarBean copyWith({List<LinkGroupBean>? linkGroups}) {
     return OpsbarBean(
       linkGroups: linkGroups ?? this.linkGroups,
+    );
+  }
+}
+
+class PageBean {
+  final int? maxResults;
+  final int? startAt;
+  final int? total;
+  final bool isLast;
+  final List<dynamic> values;
+
+  PageBean(
+      {this.maxResults,
+      this.startAt,
+      this.total,
+      bool? isLast,
+      List<dynamic>? values})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageBean.fromJson(Map<String, Object?> json) {
+    return PageBean(
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      isLast: json[r'isLast'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)?.map((i) => i).toList() ?? [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var maxResults = this.maxResults;
+    var startAt = this.startAt;
+    var total = this.total;
+    var isLast = this.isLast;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'isLast'] = isLast;
+    json[r'values'] = values;
+    return json;
+  }
+
+  PageBean copyWith(
+      {int? maxResults,
+      int? startAt,
+      int? total,
+      bool? isLast,
+      List<dynamic>? values}) {
+    return PageBean(
+      maxResults: maxResults ?? this.maxResults,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      isLast: isLast ?? this.isLast,
+      values: values ?? this.values,
+    );
+  }
+}
+
+class PageBeanBoardBean {
+  final int? maxResults;
+  final int? startAt;
+  final int? total;
+  final bool isLast;
+  final List<PageBeanBoardBeanValuesItem> values;
+
+  PageBeanBoardBean(
+      {this.maxResults,
+      this.startAt,
+      this.total,
+      bool? isLast,
+      List<PageBeanBoardBeanValuesItem>? values})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageBeanBoardBean.fromJson(Map<String, Object?> json) {
+    return PageBeanBoardBean(
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      isLast: json[r'isLast'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => PageBeanBoardBeanValuesItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var maxResults = this.maxResults;
+    var startAt = this.startAt;
+    var total = this.total;
+    var isLast = this.isLast;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'isLast'] = isLast;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageBeanBoardBean copyWith(
+      {int? maxResults,
+      int? startAt,
+      int? total,
+      bool? isLast,
+      List<PageBeanBoardBeanValuesItem>? values}) {
+    return PageBeanBoardBean(
+      maxResults: maxResults ?? this.maxResults,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      isLast: isLast ?? this.isLast,
+      values: values ?? this.values,
+    );
+  }
+}
+
+class PageBeanBoardBeanValuesItem {
+  final int? id;
+  final String? self;
+  final String? name;
+  final String? type;
+  final PageBeanBoardBeanValuesItemAdmins? admins;
+  final PageBeanBoardBeanValuesItemLocation? location;
+  final bool canEdit;
+  final bool isPrivate;
+  final bool favourite;
+
+  PageBeanBoardBeanValuesItem(
+      {this.id,
+      this.self,
+      this.name,
+      this.type,
+      this.admins,
+      this.location,
+      bool? canEdit,
+      bool? isPrivate,
+      bool? favourite})
+      : canEdit = canEdit ?? false,
+        isPrivate = isPrivate ?? false,
+        favourite = favourite ?? false;
+
+  factory PageBeanBoardBeanValuesItem.fromJson(Map<String, Object?> json) {
+    return PageBeanBoardBeanValuesItem(
+      id: (json[r'id'] as num?)?.toInt(),
+      self: json[r'self'] as String?,
+      name: json[r'name'] as String?,
+      type: json[r'type'] as String?,
+      admins: json[r'admins'] != null
+          ? PageBeanBoardBeanValuesItemAdmins.fromJson(
+              json[r'admins']! as Map<String, Object?>)
+          : null,
+      location: json[r'location'] != null
+          ? PageBeanBoardBeanValuesItemLocation.fromJson(
+              json[r'location']! as Map<String, Object?>)
+          : null,
+      canEdit: json[r'canEdit'] as bool? ?? false,
+      isPrivate: json[r'isPrivate'] as bool? ?? false,
+      favourite: json[r'favourite'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var self = this.self;
+    var name = this.name;
+    var type = this.type;
+    var admins = this.admins;
+    var location = this.location;
+    var canEdit = this.canEdit;
+    var isPrivate = this.isPrivate;
+    var favourite = this.favourite;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (admins != null) {
+      json[r'admins'] = admins.toJson();
+    }
+    if (location != null) {
+      json[r'location'] = location.toJson();
+    }
+    json[r'canEdit'] = canEdit;
+    json[r'isPrivate'] = isPrivate;
+    json[r'favourite'] = favourite;
+    return json;
+  }
+
+  PageBeanBoardBeanValuesItem copyWith(
+      {int? id,
+      String? self,
+      String? name,
+      String? type,
+      PageBeanBoardBeanValuesItemAdmins? admins,
+      PageBeanBoardBeanValuesItemLocation? location,
+      bool? canEdit,
+      bool? isPrivate,
+      bool? favourite}) {
+    return PageBeanBoardBeanValuesItem(
+      id: id ?? this.id,
+      self: self ?? this.self,
+      name: name ?? this.name,
+      type: type ?? this.type,
+      admins: admins ?? this.admins,
+      location: location ?? this.location,
+      canEdit: canEdit ?? this.canEdit,
+      isPrivate: isPrivate ?? this.isPrivate,
+      favourite: favourite ?? this.favourite,
+    );
+  }
+}
+
+class PageBeanBoardBeanValuesItemAdmins {
+  final List<PageBeanBoardBeanValuesItemAdminsUsersItem> users;
+  final List<PageBeanBoardBeanValuesItemAdminsGroupsItem> groups;
+
+  PageBeanBoardBeanValuesItemAdmins(
+      {List<PageBeanBoardBeanValuesItemAdminsUsersItem>? users,
+      List<PageBeanBoardBeanValuesItemAdminsGroupsItem>? groups})
+      : users = users ?? [],
+        groups = groups ?? [];
+
+  factory PageBeanBoardBeanValuesItemAdmins.fromJson(
+      Map<String, Object?> json) {
+    return PageBeanBoardBeanValuesItemAdmins(
+      users: (json[r'users'] as List<Object?>?)
+              ?.map((i) => PageBeanBoardBeanValuesItemAdminsUsersItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      groups: (json[r'groups'] as List<Object?>?)
+              ?.map((i) => PageBeanBoardBeanValuesItemAdminsGroupsItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var users = this.users;
+    var groups = this.groups;
+
+    final json = <String, Object?>{};
+    json[r'users'] = users.map((i) => i.toJson()).toList();
+    json[r'groups'] = groups.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageBeanBoardBeanValuesItemAdmins copyWith(
+      {List<PageBeanBoardBeanValuesItemAdminsUsersItem>? users,
+      List<PageBeanBoardBeanValuesItemAdminsGroupsItem>? groups}) {
+    return PageBeanBoardBeanValuesItemAdmins(
+      users: users ?? this.users,
+      groups: groups ?? this.groups,
+    );
+  }
+}
+
+class PageBeanBoardBeanValuesItemAdminsGroupsItem {
+  final String? name;
+  final String? self;
+
+  PageBeanBoardBeanValuesItemAdminsGroupsItem({this.name, this.self});
+
+  factory PageBeanBoardBeanValuesItemAdminsGroupsItem.fromJson(
+      Map<String, Object?> json) {
+    return PageBeanBoardBeanValuesItemAdminsGroupsItem(
+      name: json[r'name'] as String?,
+      self: json[r'self'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var self = this.self;
+
+    final json = <String, Object?>{};
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    return json;
+  }
+
+  PageBeanBoardBeanValuesItemAdminsGroupsItem copyWith(
+      {String? name, String? self}) {
+    return PageBeanBoardBeanValuesItemAdminsGroupsItem(
+      name: name ?? this.name,
+      self: self ?? this.self,
+    );
+  }
+}
+
+/// Details of a user's active status, identifiers, name, and avatars as
+/// permitted by the user's Atlassian Account privacy settings. However, be
+/// aware of these exceptions:<ul><li>User record deleted from Atlassian: This
+/// occurs as the result of a right to be forgotten request. In this case,
+/// `displayName` provides an indication and other parameters have default
+/// values or are blank (for example, email is blank).</li><li>User record
+/// corrupted: This occurs as a results of events such as a server import and
+/// can only happen to deleted users. In this case, `accountId` returns
+/// <em>unknown</em> and all other parameters have fallback values.</li><li>User
+/// record unavailable: This usually occurs due to an internal service outage.
+/// In this case, all parameters have fallback values.</li></ul>
+class PageBeanBoardBeanValuesItemAdminsUsersItem {
+  /// This property is deprecated in favor of `accountId` because of privacy
+  /// changes. See the <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
+  /// guide</a> for details.
+  /// The key of the user.
+  final String? key;
+
+  /// The URL of the user.
+  final String? self;
+
+  /// This property is deprecated in favor of `accountId` because of privacy
+  /// changes. See the <a
+  /// href="https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/">migration
+  /// guide</a> for details.
+  /// The username of the user.
+  final String? name;
+
+  /// The display name of the user. Depending on the user’s privacy setting,
+  /// this may return an alternative value.
+  final String? displayName;
+
+  /// Whether the user is active.
+  final bool active;
+
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, <em>5b10ac8d82e05b22cc7d4ef5</em>.
+  final String? accountId;
+
+  /// The avatars of the user.
+  final Map<String, dynamic>? avatarUrls;
+
+  PageBeanBoardBeanValuesItemAdminsUsersItem(
+      {this.key,
+      this.self,
+      this.name,
+      this.displayName,
+      bool? active,
+      this.accountId,
+      this.avatarUrls})
+      : active = active ?? false;
+
+  factory PageBeanBoardBeanValuesItemAdminsUsersItem.fromJson(
+      Map<String, Object?> json) {
+    return PageBeanBoardBeanValuesItemAdminsUsersItem(
+      key: json[r'key'] as String?,
+      self: json[r'self'] as String?,
+      name: json[r'name'] as String?,
+      displayName: json[r'displayName'] as String?,
+      active: json[r'active'] as bool? ?? false,
+      accountId: json[r'accountId'] as String?,
+      avatarUrls: json[r'avatarUrls'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+    var self = this.self;
+    var name = this.name;
+    var displayName = this.displayName;
+    var active = this.active;
+    var accountId = this.accountId;
+    var avatarUrls = this.avatarUrls;
+
+    final json = <String, Object?>{};
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
+    json[r'active'] = active;
+    if (accountId != null) {
+      json[r'accountId'] = accountId;
+    }
+    if (avatarUrls != null) {
+      json[r'avatarUrls'] = avatarUrls;
+    }
+    return json;
+  }
+
+  PageBeanBoardBeanValuesItemAdminsUsersItem copyWith(
+      {String? key,
+      String? self,
+      String? name,
+      String? displayName,
+      bool? active,
+      String? accountId,
+      Map<String, dynamic>? avatarUrls}) {
+    return PageBeanBoardBeanValuesItemAdminsUsersItem(
+      key: key ?? this.key,
+      self: self ?? this.self,
+      name: name ?? this.name,
+      displayName: displayName ?? this.displayName,
+      active: active ?? this.active,
+      accountId: accountId ?? this.accountId,
+      avatarUrls: avatarUrls ?? this.avatarUrls,
+    );
+  }
+}
+
+class PageBeanBoardBeanValuesItemLocation {
+  final int? projectId;
+  final int? userId;
+  final String? userAccountId;
+  final String? displayName;
+  final String? projectName;
+  final String? projectKey;
+  final String? projectTypeKey;
+  final String? avatarUri;
+  final String? name;
+
+  PageBeanBoardBeanValuesItemLocation(
+      {this.projectId,
+      this.userId,
+      this.userAccountId,
+      this.displayName,
+      this.projectName,
+      this.projectKey,
+      this.projectTypeKey,
+      this.avatarUri,
+      this.name});
+
+  factory PageBeanBoardBeanValuesItemLocation.fromJson(
+      Map<String, Object?> json) {
+    return PageBeanBoardBeanValuesItemLocation(
+      projectId: (json[r'projectId'] as num?)?.toInt(),
+      userId: (json[r'userId'] as num?)?.toInt(),
+      userAccountId: json[r'userAccountId'] as String?,
+      displayName: json[r'displayName'] as String?,
+      projectName: json[r'projectName'] as String?,
+      projectKey: json[r'projectKey'] as String?,
+      projectTypeKey: json[r'projectTypeKey'] as String?,
+      avatarUri: json[r'avatarURI'] as String?,
+      name: json[r'name'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var projectId = this.projectId;
+    var userId = this.userId;
+    var userAccountId = this.userAccountId;
+    var displayName = this.displayName;
+    var projectName = this.projectName;
+    var projectKey = this.projectKey;
+    var projectTypeKey = this.projectTypeKey;
+    var avatarUri = this.avatarUri;
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    if (projectId != null) {
+      json[r'projectId'] = projectId;
+    }
+    if (userId != null) {
+      json[r'userId'] = userId;
+    }
+    if (userAccountId != null) {
+      json[r'userAccountId'] = userAccountId;
+    }
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
+    if (projectName != null) {
+      json[r'projectName'] = projectName;
+    }
+    if (projectKey != null) {
+      json[r'projectKey'] = projectKey;
+    }
+    if (projectTypeKey != null) {
+      json[r'projectTypeKey'] = projectTypeKey;
+    }
+    if (avatarUri != null) {
+      json[r'avatarURI'] = avatarUri;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    return json;
+  }
+
+  PageBeanBoardBeanValuesItemLocation copyWith(
+      {int? projectId,
+      int? userId,
+      String? userAccountId,
+      String? displayName,
+      String? projectName,
+      String? projectKey,
+      String? projectTypeKey,
+      String? avatarUri,
+      String? name}) {
+    return PageBeanBoardBeanValuesItemLocation(
+      projectId: projectId ?? this.projectId,
+      userId: userId ?? this.userId,
+      userAccountId: userAccountId ?? this.userAccountId,
+      displayName: displayName ?? this.displayName,
+      projectName: projectName ?? this.projectName,
+      projectKey: projectKey ?? this.projectKey,
+      projectTypeKey: projectTypeKey ?? this.projectTypeKey,
+      avatarUri: avatarUri ?? this.avatarUri,
+      name: name ?? this.name,
+    );
+  }
+}
+
+class PageBeanBoardFilterBean {
+  final int? maxResults;
+  final int? startAt;
+  final int? total;
+  final bool isLast;
+  final List<PageBeanBoardFilterBeanValuesItem> values;
+
+  PageBeanBoardFilterBean(
+      {this.maxResults,
+      this.startAt,
+      this.total,
+      bool? isLast,
+      List<PageBeanBoardFilterBeanValuesItem>? values})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageBeanBoardFilterBean.fromJson(Map<String, Object?> json) {
+    return PageBeanBoardFilterBean(
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      isLast: json[r'isLast'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => PageBeanBoardFilterBeanValuesItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var maxResults = this.maxResults;
+    var startAt = this.startAt;
+    var total = this.total;
+    var isLast = this.isLast;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'isLast'] = isLast;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageBeanBoardFilterBean copyWith(
+      {int? maxResults,
+      int? startAt,
+      int? total,
+      bool? isLast,
+      List<PageBeanBoardFilterBeanValuesItem>? values}) {
+    return PageBeanBoardFilterBean(
+      maxResults: maxResults ?? this.maxResults,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      isLast: isLast ?? this.isLast,
+      values: values ?? this.values,
+    );
+  }
+}
+
+class PageBeanBoardFilterBeanValuesItem {
+  final int? id;
+  final String? self;
+  final String? name;
+
+  PageBeanBoardFilterBeanValuesItem({this.id, this.self, this.name});
+
+  factory PageBeanBoardFilterBeanValuesItem.fromJson(
+      Map<String, Object?> json) {
+    return PageBeanBoardFilterBeanValuesItem(
+      id: (json[r'id'] as num?)?.toInt(),
+      self: json[r'self'] as String?,
+      name: json[r'name'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var self = this.self;
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    return json;
+  }
+
+  PageBeanBoardFilterBeanValuesItem copyWith(
+      {int? id, String? self, String? name}) {
+    return PageBeanBoardFilterBeanValuesItem(
+      id: id ?? this.id,
+      self: self ?? this.self,
+      name: name ?? this.name,
+    );
+  }
+}
+
+class PageBeanQuickFilterBean {
+  final int? maxResults;
+  final int? startAt;
+  final int? total;
+  final bool isLast;
+  final List<PageBeanQuickFilterBeanValuesItem> values;
+
+  PageBeanQuickFilterBean(
+      {this.maxResults,
+      this.startAt,
+      this.total,
+      bool? isLast,
+      List<PageBeanQuickFilterBeanValuesItem>? values})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageBeanQuickFilterBean.fromJson(Map<String, Object?> json) {
+    return PageBeanQuickFilterBean(
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      isLast: json[r'isLast'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => PageBeanQuickFilterBeanValuesItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var maxResults = this.maxResults;
+    var startAt = this.startAt;
+    var total = this.total;
+    var isLast = this.isLast;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'isLast'] = isLast;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageBeanQuickFilterBean copyWith(
+      {int? maxResults,
+      int? startAt,
+      int? total,
+      bool? isLast,
+      List<PageBeanQuickFilterBeanValuesItem>? values}) {
+    return PageBeanQuickFilterBean(
+      maxResults: maxResults ?? this.maxResults,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      isLast: isLast ?? this.isLast,
+      values: values ?? this.values,
+    );
+  }
+}
+
+class PageBeanQuickFilterBeanValuesItem {
+  final int? id;
+  final int? boardId;
+  final String? name;
+  final String? jql;
+  final String? description;
+  final int? position;
+
+  PageBeanQuickFilterBeanValuesItem(
+      {this.id,
+      this.boardId,
+      this.name,
+      this.jql,
+      this.description,
+      this.position});
+
+  factory PageBeanQuickFilterBeanValuesItem.fromJson(
+      Map<String, Object?> json) {
+    return PageBeanQuickFilterBeanValuesItem(
+      id: (json[r'id'] as num?)?.toInt(),
+      boardId: (json[r'boardId'] as num?)?.toInt(),
+      name: json[r'name'] as String?,
+      jql: json[r'jql'] as String?,
+      description: json[r'description'] as String?,
+      position: (json[r'position'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var boardId = this.boardId;
+    var name = this.name;
+    var jql = this.jql;
+    var description = this.description;
+    var position = this.position;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (boardId != null) {
+      json[r'boardId'] = boardId;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (jql != null) {
+      json[r'jql'] = jql;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (position != null) {
+      json[r'position'] = position;
+    }
+    return json;
+  }
+
+  PageBeanQuickFilterBeanValuesItem copyWith(
+      {int? id,
+      int? boardId,
+      String? name,
+      String? jql,
+      String? description,
+      int? position}) {
+    return PageBeanQuickFilterBeanValuesItem(
+      id: id ?? this.id,
+      boardId: boardId ?? this.boardId,
+      name: name ?? this.name,
+      jql: jql ?? this.jql,
+      description: description ?? this.description,
+      position: position ?? this.position,
+    );
+  }
+}
+
+class PartialSuccessBean {
+  final List<PartialSuccessBeanEntriesItem> entries;
+
+  PartialSuccessBean({List<PartialSuccessBeanEntriesItem>? entries})
+      : entries = entries ?? [];
+
+  factory PartialSuccessBean.fromJson(Map<String, Object?> json) {
+    return PartialSuccessBean(
+      entries: (json[r'entries'] as List<Object?>?)
+              ?.map((i) => PartialSuccessBeanEntriesItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var entries = this.entries;
+
+    final json = <String, Object?>{};
+    json[r'entries'] = entries.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PartialSuccessBean copyWith({List<PartialSuccessBeanEntriesItem>? entries}) {
+    return PartialSuccessBean(
+      entries: entries ?? this.entries,
+    );
+  }
+}
+
+class PartialSuccessBeanEntriesItem {
+  final int? issueId;
+  final String? issueKey;
+  final int? status;
+  final List<String> errors;
+
+  PartialSuccessBeanEntriesItem(
+      {this.issueId, this.issueKey, this.status, List<String>? errors})
+      : errors = errors ?? [];
+
+  factory PartialSuccessBeanEntriesItem.fromJson(Map<String, Object?> json) {
+    return PartialSuccessBeanEntriesItem(
+      issueId: (json[r'issueId'] as num?)?.toInt(),
+      issueKey: json[r'issueKey'] as String?,
+      status: (json[r'status'] as num?)?.toInt(),
+      errors: (json[r'errors'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueId = this.issueId;
+    var issueKey = this.issueKey;
+    var status = this.status;
+    var errors = this.errors;
+
+    final json = <String, Object?>{};
+    if (issueId != null) {
+      json[r'issueId'] = issueId;
+    }
+    if (issueKey != null) {
+      json[r'issueKey'] = issueKey;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    json[r'errors'] = errors;
+    return json;
+  }
+
+  PartialSuccessBeanEntriesItem copyWith(
+      {int? issueId, String? issueKey, int? status, List<String>? errors}) {
+    return PartialSuccessBeanEntriesItem(
+      issueId: issueId ?? this.issueId,
+      issueKey: issueKey ?? this.issueKey,
+      status: status ?? this.status,
+      errors: errors ?? this.errors,
+    );
+  }
+}
+
+class QuickFilterBean {
+  final int? id;
+  final int? boardId;
+  final String? name;
+  final String? jql;
+  final String? description;
+  final int? position;
+
+  QuickFilterBean(
+      {this.id,
+      this.boardId,
+      this.name,
+      this.jql,
+      this.description,
+      this.position});
+
+  factory QuickFilterBean.fromJson(Map<String, Object?> json) {
+    return QuickFilterBean(
+      id: (json[r'id'] as num?)?.toInt(),
+      boardId: (json[r'boardId'] as num?)?.toInt(),
+      name: json[r'name'] as String?,
+      jql: json[r'jql'] as String?,
+      description: json[r'description'] as String?,
+      position: (json[r'position'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var boardId = this.boardId;
+    var name = this.name;
+    var jql = this.jql;
+    var description = this.description;
+    var position = this.position;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (boardId != null) {
+      json[r'boardId'] = boardId;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (jql != null) {
+      json[r'jql'] = jql;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (position != null) {
+      json[r'position'] = position;
+    }
+    return json;
+  }
+
+  QuickFilterBean copyWith(
+      {int? id,
+      int? boardId,
+      String? name,
+      String? jql,
+      String? description,
+      int? position}) {
+    return QuickFilterBean(
+      id: id ?? this.id,
+      boardId: boardId ?? this.boardId,
+      name: name ?? this.name,
+      jql: jql ?? this.jql,
+      description: description ?? this.description,
+      position: position ?? this.position,
+    );
+  }
+}
+
+class RankingConfigBean {
+  final int? rankCustomFieldId;
+
+  RankingConfigBean({this.rankCustomFieldId});
+
+  factory RankingConfigBean.fromJson(Map<String, Object?> json) {
+    return RankingConfigBean(
+      rankCustomFieldId: (json[r'rankCustomFieldId'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var rankCustomFieldId = this.rankCustomFieldId;
+
+    final json = <String, Object?>{};
+    if (rankCustomFieldId != null) {
+      json[r'rankCustomFieldId'] = rankCustomFieldId;
+    }
+    return json;
+  }
+
+  RankingConfigBean copyWith({int? rankCustomFieldId}) {
+    return RankingConfigBean(
+      rankCustomFieldId: rankCustomFieldId ?? this.rankCustomFieldId,
+    );
+  }
+}
+
+class RelationBean {
+  final String? id;
+  final String? self;
+
+  RelationBean({this.id, this.self});
+
+  factory RelationBean.fromJson(Map<String, Object?> json) {
+    return RelationBean(
+      id: json[r'id'] as String?,
+      self: json[r'self'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var self = this.self;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    return json;
+  }
+
+  RelationBean copyWith({String? id, String? self}) {
+    return RelationBean(
+      id: id ?? this.id,
+      self: self ?? this.self,
+    );
+  }
+}
+
+class ReportBean {
+  ReportBean();
+
+  factory ReportBean.fromJson(Map<String, Object?> json) {
+    return ReportBean();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+class ReportsResponseBean {
+  final List<Map<String, dynamic>> reports;
+
+  ReportsResponseBean({List<Map<String, dynamic>>? reports})
+      : reports = reports ?? [];
+
+  factory ReportsResponseBean.fromJson(Map<String, Object?> json) {
+    return ReportsResponseBean(
+      reports: (json[r'reports'] as List<Object?>?)
+              ?.map((i) => i as Map<String, Object?>? ?? {})
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var reports = this.reports;
+
+    final json = <String, Object?>{};
+    json[r'reports'] = reports;
+    return json;
+  }
+
+  ReportsResponseBean copyWith({List<Map<String, dynamic>>? reports}) {
+    return ReportsResponseBean(
+      reports: reports ?? this.reports,
+    );
+  }
+}
+
+class SearchResultsBean {
+  /// Expand options that include additional search result details in the
+  /// response.
+  final String? expand;
+
+  /// The index of the first item returned on the page.
+  final int? startAt;
+
+  /// The maximum number of results that could be on the page.
+  final int? maxResults;
+
+  /// The number of results on the page.
+  final int? total;
+
+  /// The list of issues found by the search.
+  final List<IssueBean> issues;
+
+  /// Any warnings related to the JQL query.
+  final List<String> warningMessages;
+
+  /// The ID and name of each field in the search results.
+  final Map<String, dynamic>? names;
+
+  /// The schema describing the field types in the search results.
+  final Map<String, dynamic>? schema;
+
+  SearchResultsBean(
+      {this.expand,
+      this.startAt,
+      this.maxResults,
+      this.total,
+      List<IssueBean>? issues,
+      List<String>? warningMessages,
+      this.names,
+      this.schema})
+      : issues = issues ?? [],
+        warningMessages = warningMessages ?? [];
+
+  factory SearchResultsBean.fromJson(Map<String, Object?> json) {
+    return SearchResultsBean(
+      expand: json[r'expand'] as String?,
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      issues: (json[r'issues'] as List<Object?>?)
+              ?.map((i) =>
+                  IssueBean.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      warningMessages: (json[r'warningMessages'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      names: json[r'names'] as Map<String, Object?>?,
+      schema: json[r'schema'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var expand = this.expand;
+    var startAt = this.startAt;
+    var maxResults = this.maxResults;
+    var total = this.total;
+    var issues = this.issues;
+    var warningMessages = this.warningMessages;
+    var names = this.names;
+    var schema = this.schema;
+
+    final json = <String, Object?>{};
+    if (expand != null) {
+      json[r'expand'] = expand;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'issues'] = issues.map((i) => i.toJson()).toList();
+    json[r'warningMessages'] = warningMessages;
+    if (names != null) {
+      json[r'names'] = names;
+    }
+    if (schema != null) {
+      json[r'schema'] = schema;
+    }
+    return json;
+  }
+
+  SearchResultsBean copyWith(
+      {String? expand,
+      int? startAt,
+      int? maxResults,
+      int? total,
+      List<IssueBean>? issues,
+      List<String>? warningMessages,
+      Map<String, dynamic>? names,
+      Map<String, dynamic>? schema}) {
+    return SearchResultsBean(
+      expand: expand ?? this.expand,
+      startAt: startAt ?? this.startAt,
+      maxResults: maxResults ?? this.maxResults,
+      total: total ?? this.total,
+      issues: issues ?? this.issues,
+      warningMessages: warningMessages ?? this.warningMessages,
+      names: names ?? this.names,
+      schema: schema ?? this.schema,
     );
   }
 }
@@ -6614,6 +7689,198 @@ class SimpleLinkBean {
       title: title ?? this.title,
       href: href ?? this.href,
       weight: weight ?? this.weight,
+    );
+  }
+}
+
+class SprintBean {
+  final int? id;
+  final String? self;
+  final String? state;
+  final String? name;
+  final String? startDate;
+  final String? endDate;
+  final String? completeDate;
+  final int? originBoardId;
+  final String? goal;
+
+  SprintBean(
+      {this.id,
+      this.self,
+      this.state,
+      this.name,
+      this.startDate,
+      this.endDate,
+      this.completeDate,
+      this.originBoardId,
+      this.goal});
+
+  factory SprintBean.fromJson(Map<String, Object?> json) {
+    return SprintBean(
+      id: (json[r'id'] as num?)?.toInt(),
+      self: json[r'self'] as String?,
+      state: json[r'state'] as String?,
+      name: json[r'name'] as String?,
+      startDate: json[r'startDate'] as String?,
+      endDate: json[r'endDate'] as String?,
+      completeDate: json[r'completeDate'] as String?,
+      originBoardId: (json[r'originBoardId'] as num?)?.toInt(),
+      goal: json[r'goal'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var self = this.self;
+    var state = this.state;
+    var name = this.name;
+    var startDate = this.startDate;
+    var endDate = this.endDate;
+    var completeDate = this.completeDate;
+    var originBoardId = this.originBoardId;
+    var goal = this.goal;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (state != null) {
+      json[r'state'] = state;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (startDate != null) {
+      json[r'startDate'] = startDate;
+    }
+    if (endDate != null) {
+      json[r'endDate'] = endDate;
+    }
+    if (completeDate != null) {
+      json[r'completeDate'] = completeDate;
+    }
+    if (originBoardId != null) {
+      json[r'originBoardId'] = originBoardId;
+    }
+    if (goal != null) {
+      json[r'goal'] = goal;
+    }
+    return json;
+  }
+
+  SprintBean copyWith(
+      {int? id,
+      String? self,
+      String? state,
+      String? name,
+      String? startDate,
+      String? endDate,
+      String? completeDate,
+      int? originBoardId,
+      String? goal}) {
+    return SprintBean(
+      id: id ?? this.id,
+      self: self ?? this.self,
+      state: state ?? this.state,
+      name: name ?? this.name,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      completeDate: completeDate ?? this.completeDate,
+      originBoardId: originBoardId ?? this.originBoardId,
+      goal: goal ?? this.goal,
+    );
+  }
+}
+
+class SprintCreateBean {
+  final String? name;
+  final String? startDate;
+  final String? endDate;
+  final int? originBoardId;
+  final String? goal;
+
+  SprintCreateBean(
+      {this.name, this.startDate, this.endDate, this.originBoardId, this.goal});
+
+  factory SprintCreateBean.fromJson(Map<String, Object?> json) {
+    return SprintCreateBean(
+      name: json[r'name'] as String?,
+      startDate: json[r'startDate'] as String?,
+      endDate: json[r'endDate'] as String?,
+      originBoardId: (json[r'originBoardId'] as num?)?.toInt(),
+      goal: json[r'goal'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var startDate = this.startDate;
+    var endDate = this.endDate;
+    var originBoardId = this.originBoardId;
+    var goal = this.goal;
+
+    final json = <String, Object?>{};
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (startDate != null) {
+      json[r'startDate'] = startDate;
+    }
+    if (endDate != null) {
+      json[r'endDate'] = endDate;
+    }
+    if (originBoardId != null) {
+      json[r'originBoardId'] = originBoardId;
+    }
+    if (goal != null) {
+      json[r'goal'] = goal;
+    }
+    return json;
+  }
+
+  SprintCreateBean copyWith(
+      {String? name,
+      String? startDate,
+      String? endDate,
+      int? originBoardId,
+      String? goal}) {
+    return SprintCreateBean(
+      name: name ?? this.name,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      originBoardId: originBoardId ?? this.originBoardId,
+      goal: goal ?? this.goal,
+    );
+  }
+}
+
+class SprintSwapBean {
+  final int? sprintToSwapWith;
+
+  SprintSwapBean({this.sprintToSwapWith});
+
+  factory SprintSwapBean.fromJson(Map<String, Object?> json) {
+    return SprintSwapBean(
+      sprintToSwapWith: (json[r'sprintToSwapWith'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var sprintToSwapWith = this.sprintToSwapWith;
+
+    final json = <String, Object?>{};
+    if (sprintToSwapWith != null) {
+      json[r'sprintToSwapWith'] = sprintToSwapWith;
+    }
+    return json;
+  }
+
+  SprintSwapBean copyWith({int? sprintToSwapWith}) {
+    return SprintSwapBean(
+      sprintToSwapWith: sprintToSwapWith ?? this.sprintToSwapWith,
     );
   }
 }
@@ -6780,6 +8047,92 @@ class StatusJsonBean {
   }
 }
 
+class SubqueryBean {
+  final String? query;
+
+  SubqueryBean({this.query});
+
+  factory SubqueryBean.fromJson(Map<String, Object?> json) {
+    return SubqueryBean(
+      query: json[r'query'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var query = this.query;
+
+    final json = <String, Object?>{};
+    if (query != null) {
+      json[r'query'] = query;
+    }
+    return json;
+  }
+
+  SubqueryBean copyWith({String? query}) {
+    return SubqueryBean(
+      query: query ?? this.query,
+    );
+  }
+}
+
+/// Details of a user's avatars.
+class UserAvatarUrls {
+  /// The URL of the user's 24x24 pixel avatar.
+  final String? $24X24;
+
+  /// The URL of the user's 16x16 pixel avatar.
+  final String? $16X16;
+
+  /// The URL of the user's 32x32 pixel avatar.
+  final String? $32X32;
+
+  /// The URL of the user's 48x48 pixel avatar.
+  final String? $48X48;
+
+  UserAvatarUrls({this.$24X24, this.$16X16, this.$32X32, this.$48X48});
+
+  factory UserAvatarUrls.fromJson(Map<String, Object?> json) {
+    return UserAvatarUrls(
+      $24X24: json[r'24x24'] as String?,
+      $16X16: json[r'16x16'] as String?,
+      $32X32: json[r'32x32'] as String?,
+      $48X48: json[r'48x48'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var $24X24 = this.$24X24;
+    var $16X16 = this.$16X16;
+    var $32X32 = this.$32X32;
+    var $48X48 = this.$48X48;
+
+    final json = <String, Object?>{};
+    if ($24X24 != null) {
+      json[r'24x24'] = $24X24;
+    }
+    if ($16X16 != null) {
+      json[r'16x16'] = $16X16;
+    }
+    if ($32X32 != null) {
+      json[r'32x32'] = $32X32;
+    }
+    if ($48X48 != null) {
+      json[r'48x48'] = $48X48;
+    }
+    return json;
+  }
+
+  UserAvatarUrls copyWith(
+      {String? $24X24, String? $16X16, String? $32X32, String? $48X48}) {
+    return UserAvatarUrls(
+      $24X24: $24X24 ?? this.$24X24,
+      $16X16: $16X16 ?? this.$16X16,
+      $32X32: $32X32 ?? this.$32X32,
+      $48X48: $48X48 ?? this.$48X48,
+    );
+  }
+}
+
 class UserJsonBean {
   /// The URL of the user.
   final String? self;
@@ -6917,1359 +8270,6 @@ class UserJsonBean {
       active: active ?? this.active,
       timeZone: timeZone ?? this.timeZone,
       accountType: accountType ?? this.accountType,
-    );
-  }
-}
-
-class PartialSuccessBeanEntriesItem {
-  final int? issueId;
-  final String? issueKey;
-  final int? status;
-  final List<String> errors;
-
-  PartialSuccessBeanEntriesItem(
-      {this.issueId, this.issueKey, this.status, List<String>? errors})
-      : errors = errors ?? [];
-
-  factory PartialSuccessBeanEntriesItem.fromJson(Map<String, Object?> json) {
-    return PartialSuccessBeanEntriesItem(
-      issueId: (json[r'issueId'] as num?)?.toInt(),
-      issueKey: json[r'issueKey'] as String?,
-      status: (json[r'status'] as num?)?.toInt(),
-      errors: (json[r'errors'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var issueId = this.issueId;
-    var issueKey = this.issueKey;
-    var status = this.status;
-    var errors = this.errors;
-
-    final json = <String, Object?>{};
-    if (issueId != null) {
-      json[r'issueId'] = issueId;
-    }
-    if (issueKey != null) {
-      json[r'issueKey'] = issueKey;
-    }
-    if (status != null) {
-      json[r'status'] = status;
-    }
-    json[r'errors'] = errors;
-    return json;
-  }
-
-  PartialSuccessBeanEntriesItem copyWith(
-      {int? issueId, String? issueKey, int? status, List<String>? errors}) {
-    return PartialSuccessBeanEntriesItem(
-      issueId: issueId ?? this.issueId,
-      issueKey: issueKey ?? this.issueKey,
-      status: status ?? this.status,
-      errors: errors ?? this.errors,
-    );
-  }
-}
-
-class PartialSuccessBean {
-  final List<PartialSuccessBeanEntriesItem> entries;
-
-  PartialSuccessBean({List<PartialSuccessBeanEntriesItem>? entries})
-      : entries = entries ?? [];
-
-  factory PartialSuccessBean.fromJson(Map<String, Object?> json) {
-    return PartialSuccessBean(
-      entries: (json[r'entries'] as List<Object?>?)
-              ?.map((i) => PartialSuccessBeanEntriesItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var entries = this.entries;
-
-    final json = <String, Object?>{};
-    json[r'entries'] = entries.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  PartialSuccessBean copyWith({List<PartialSuccessBeanEntriesItem>? entries}) {
-    return PartialSuccessBean(
-      entries: entries ?? this.entries,
-    );
-  }
-}
-
-class Entry {
-  final int? issueId;
-  final String? issueKey;
-  final int? status;
-  final List<String> errors;
-
-  Entry({this.issueId, this.issueKey, this.status, List<String>? errors})
-      : errors = errors ?? [];
-
-  factory Entry.fromJson(Map<String, Object?> json) {
-    return Entry(
-      issueId: (json[r'issueId'] as num?)?.toInt(),
-      issueKey: json[r'issueKey'] as String?,
-      status: (json[r'status'] as num?)?.toInt(),
-      errors: (json[r'errors'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var issueId = this.issueId;
-    var issueKey = this.issueKey;
-    var status = this.status;
-    var errors = this.errors;
-
-    final json = <String, Object?>{};
-    if (issueId != null) {
-      json[r'issueId'] = issueId;
-    }
-    if (issueKey != null) {
-      json[r'issueKey'] = issueKey;
-    }
-    if (status != null) {
-      json[r'status'] = status;
-    }
-    json[r'errors'] = errors;
-    return json;
-  }
-
-  Entry copyWith(
-      {int? issueId, String? issueKey, int? status, List<String>? errors}) {
-    return Entry(
-      issueId: issueId ?? this.issueId,
-      issueKey: issueKey ?? this.issueKey,
-      status: status ?? this.status,
-      errors: errors ?? this.errors,
-    );
-  }
-}
-
-class BoardConfigBeanLocation {
-  final String? type;
-  final String? projectKeyOrId;
-
-  BoardConfigBeanLocation({this.type, this.projectKeyOrId});
-
-  factory BoardConfigBeanLocation.fromJson(Map<String, Object?> json) {
-    return BoardConfigBeanLocation(
-      type: json[r'type'] as String?,
-      projectKeyOrId: json[r'projectKeyOrId'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var type = this.type;
-    var projectKeyOrId = this.projectKeyOrId;
-
-    final json = <String, Object?>{};
-    if (type != null) {
-      json[r'type'] = type;
-    }
-    if (projectKeyOrId != null) {
-      json[r'projectKeyOrId'] = projectKeyOrId;
-    }
-    return json;
-  }
-
-  BoardConfigBeanLocation copyWith({String? type, String? projectKeyOrId}) {
-    return BoardConfigBeanLocation(
-      type: type ?? this.type,
-      projectKeyOrId: projectKeyOrId ?? this.projectKeyOrId,
-    );
-  }
-}
-
-class BoardConfigBeanFilter {
-  final String? id;
-  final String? self;
-
-  BoardConfigBeanFilter({this.id, this.self});
-
-  factory BoardConfigBeanFilter.fromJson(Map<String, Object?> json) {
-    return BoardConfigBeanFilter(
-      id: json[r'id'] as String?,
-      self: json[r'self'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var self = this.self;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    return json;
-  }
-
-  BoardConfigBeanFilter copyWith({String? id, String? self}) {
-    return BoardConfigBeanFilter(
-      id: id ?? this.id,
-      self: self ?? this.self,
-    );
-  }
-}
-
-class BoardConfigBeanSubQuery {
-  final String? query;
-
-  BoardConfigBeanSubQuery({this.query});
-
-  factory BoardConfigBeanSubQuery.fromJson(Map<String, Object?> json) {
-    return BoardConfigBeanSubQuery(
-      query: json[r'query'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var query = this.query;
-
-    final json = <String, Object?>{};
-    if (query != null) {
-      json[r'query'] = query;
-    }
-    return json;
-  }
-
-  BoardConfigBeanSubQuery copyWith({String? query}) {
-    return BoardConfigBeanSubQuery(
-      query: query ?? this.query,
-    );
-  }
-}
-
-class BoardConfigBeanColumnConfigColumnsItemStatusesItem {
-  final String? id;
-  final String? self;
-
-  BoardConfigBeanColumnConfigColumnsItemStatusesItem({this.id, this.self});
-
-  factory BoardConfigBeanColumnConfigColumnsItemStatusesItem.fromJson(
-      Map<String, Object?> json) {
-    return BoardConfigBeanColumnConfigColumnsItemStatusesItem(
-      id: json[r'id'] as String?,
-      self: json[r'self'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var self = this.self;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    return json;
-  }
-
-  BoardConfigBeanColumnConfigColumnsItemStatusesItem copyWith(
-      {String? id, String? self}) {
-    return BoardConfigBeanColumnConfigColumnsItemStatusesItem(
-      id: id ?? this.id,
-      self: self ?? this.self,
-    );
-  }
-}
-
-class BoardConfigBeanColumnConfigColumnsItem {
-  final String? name;
-  final List<BoardConfigBeanColumnConfigColumnsItemStatusesItem> statuses;
-  final int? min;
-  final int? max;
-
-  BoardConfigBeanColumnConfigColumnsItem(
-      {this.name,
-      List<BoardConfigBeanColumnConfigColumnsItemStatusesItem>? statuses,
-      this.min,
-      this.max})
-      : statuses = statuses ?? [];
-
-  factory BoardConfigBeanColumnConfigColumnsItem.fromJson(
-      Map<String, Object?> json) {
-    return BoardConfigBeanColumnConfigColumnsItem(
-      name: json[r'name'] as String?,
-      statuses: (json[r'statuses'] as List<Object?>?)
-              ?.map((i) =>
-                  BoardConfigBeanColumnConfigColumnsItemStatusesItem.fromJson(
-                      i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      min: (json[r'min'] as num?)?.toInt(),
-      max: (json[r'max'] as num?)?.toInt(),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var name = this.name;
-    var statuses = this.statuses;
-    var min = this.min;
-    var max = this.max;
-
-    final json = <String, Object?>{};
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
-    if (min != null) {
-      json[r'min'] = min;
-    }
-    if (max != null) {
-      json[r'max'] = max;
-    }
-    return json;
-  }
-
-  BoardConfigBeanColumnConfigColumnsItem copyWith(
-      {String? name,
-      List<BoardConfigBeanColumnConfigColumnsItemStatusesItem>? statuses,
-      int? min,
-      int? max}) {
-    return BoardConfigBeanColumnConfigColumnsItem(
-      name: name ?? this.name,
-      statuses: statuses ?? this.statuses,
-      min: min ?? this.min,
-      max: max ?? this.max,
-    );
-  }
-}
-
-class BoardConfigBeanColumnConfig {
-  final List<BoardConfigBeanColumnConfigColumnsItem> columns;
-  final String? constraintType;
-
-  BoardConfigBeanColumnConfig(
-      {List<BoardConfigBeanColumnConfigColumnsItem>? columns,
-      this.constraintType})
-      : columns = columns ?? [];
-
-  factory BoardConfigBeanColumnConfig.fromJson(Map<String, Object?> json) {
-    return BoardConfigBeanColumnConfig(
-      columns: (json[r'columns'] as List<Object?>?)
-              ?.map((i) => BoardConfigBeanColumnConfigColumnsItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      constraintType: json[r'constraintType'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var columns = this.columns;
-    var constraintType = this.constraintType;
-
-    final json = <String, Object?>{};
-    json[r'columns'] = columns.map((i) => i.toJson()).toList();
-    if (constraintType != null) {
-      json[r'constraintType'] = constraintType;
-    }
-    return json;
-  }
-
-  BoardConfigBeanColumnConfig copyWith(
-      {List<BoardConfigBeanColumnConfigColumnsItem>? columns,
-      String? constraintType}) {
-    return BoardConfigBeanColumnConfig(
-      columns: columns ?? this.columns,
-      constraintType: constraintType ?? this.constraintType,
-    );
-  }
-}
-
-class BoardConfigBeanEstimationField {
-  final String? fieldId;
-  final String? displayName;
-
-  BoardConfigBeanEstimationField({this.fieldId, this.displayName});
-
-  factory BoardConfigBeanEstimationField.fromJson(Map<String, Object?> json) {
-    return BoardConfigBeanEstimationField(
-      fieldId: json[r'fieldId'] as String?,
-      displayName: json[r'displayName'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var fieldId = this.fieldId;
-    var displayName = this.displayName;
-
-    final json = <String, Object?>{};
-    if (fieldId != null) {
-      json[r'fieldId'] = fieldId;
-    }
-    if (displayName != null) {
-      json[r'displayName'] = displayName;
-    }
-    return json;
-  }
-
-  BoardConfigBeanEstimationField copyWith(
-      {String? fieldId, String? displayName}) {
-    return BoardConfigBeanEstimationField(
-      fieldId: fieldId ?? this.fieldId,
-      displayName: displayName ?? this.displayName,
-    );
-  }
-}
-
-class BoardConfigBeanEstimation {
-  final String? type;
-  final BoardConfigBeanEstimationField? field;
-
-  BoardConfigBeanEstimation({this.type, this.field});
-
-  factory BoardConfigBeanEstimation.fromJson(Map<String, Object?> json) {
-    return BoardConfigBeanEstimation(
-      type: json[r'type'] as String?,
-      field: json[r'field'] != null
-          ? BoardConfigBeanEstimationField.fromJson(
-              json[r'field']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var type = this.type;
-    var field = this.field;
-
-    final json = <String, Object?>{};
-    if (type != null) {
-      json[r'type'] = type;
-    }
-    if (field != null) {
-      json[r'field'] = field.toJson();
-    }
-    return json;
-  }
-
-  BoardConfigBeanEstimation copyWith(
-      {String? type, BoardConfigBeanEstimationField? field}) {
-    return BoardConfigBeanEstimation(
-      type: type ?? this.type,
-      field: field ?? this.field,
-    );
-  }
-}
-
-class BoardConfigBeanRanking {
-  final int? rankCustomFieldId;
-
-  BoardConfigBeanRanking({this.rankCustomFieldId});
-
-  factory BoardConfigBeanRanking.fromJson(Map<String, Object?> json) {
-    return BoardConfigBeanRanking(
-      rankCustomFieldId: (json[r'rankCustomFieldId'] as num?)?.toInt(),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var rankCustomFieldId = this.rankCustomFieldId;
-
-    final json = <String, Object?>{};
-    if (rankCustomFieldId != null) {
-      json[r'rankCustomFieldId'] = rankCustomFieldId;
-    }
-    return json;
-  }
-
-  BoardConfigBeanRanking copyWith({int? rankCustomFieldId}) {
-    return BoardConfigBeanRanking(
-      rankCustomFieldId: rankCustomFieldId ?? this.rankCustomFieldId,
-    );
-  }
-}
-
-class BoardConfigBean {
-  final int? id;
-  final String? name;
-  final String? type;
-  final String? self;
-  final BoardConfigBeanLocation? location;
-  final BoardConfigBeanFilter? filter;
-  final BoardConfigBeanSubQuery? subQuery;
-  final BoardConfigBeanColumnConfig? columnConfig;
-  final BoardConfigBeanEstimation? estimation;
-  final BoardConfigBeanRanking? ranking;
-
-  BoardConfigBean(
-      {this.id,
-      this.name,
-      this.type,
-      this.self,
-      this.location,
-      this.filter,
-      this.subQuery,
-      this.columnConfig,
-      this.estimation,
-      this.ranking});
-
-  factory BoardConfigBean.fromJson(Map<String, Object?> json) {
-    return BoardConfigBean(
-      id: (json[r'id'] as num?)?.toInt(),
-      name: json[r'name'] as String?,
-      type: json[r'type'] as String?,
-      self: json[r'self'] as String?,
-      location: json[r'location'] != null
-          ? BoardConfigBeanLocation.fromJson(
-              json[r'location']! as Map<String, Object?>)
-          : null,
-      filter: json[r'filter'] != null
-          ? BoardConfigBeanFilter.fromJson(
-              json[r'filter']! as Map<String, Object?>)
-          : null,
-      subQuery: json[r'subQuery'] != null
-          ? BoardConfigBeanSubQuery.fromJson(
-              json[r'subQuery']! as Map<String, Object?>)
-          : null,
-      columnConfig: json[r'columnConfig'] != null
-          ? BoardConfigBeanColumnConfig.fromJson(
-              json[r'columnConfig']! as Map<String, Object?>)
-          : null,
-      estimation: json[r'estimation'] != null
-          ? BoardConfigBeanEstimation.fromJson(
-              json[r'estimation']! as Map<String, Object?>)
-          : null,
-      ranking: json[r'ranking'] != null
-          ? BoardConfigBeanRanking.fromJson(
-              json[r'ranking']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var name = this.name;
-    var type = this.type;
-    var self = this.self;
-    var location = this.location;
-    var filter = this.filter;
-    var subQuery = this.subQuery;
-    var columnConfig = this.columnConfig;
-    var estimation = this.estimation;
-    var ranking = this.ranking;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (type != null) {
-      json[r'type'] = type;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (location != null) {
-      json[r'location'] = location.toJson();
-    }
-    if (filter != null) {
-      json[r'filter'] = filter.toJson();
-    }
-    if (subQuery != null) {
-      json[r'subQuery'] = subQuery.toJson();
-    }
-    if (columnConfig != null) {
-      json[r'columnConfig'] = columnConfig.toJson();
-    }
-    if (estimation != null) {
-      json[r'estimation'] = estimation.toJson();
-    }
-    if (ranking != null) {
-      json[r'ranking'] = ranking.toJson();
-    }
-    return json;
-  }
-
-  BoardConfigBean copyWith(
-      {int? id,
-      String? name,
-      String? type,
-      String? self,
-      BoardConfigBeanLocation? location,
-      BoardConfigBeanFilter? filter,
-      BoardConfigBeanSubQuery? subQuery,
-      BoardConfigBeanColumnConfig? columnConfig,
-      BoardConfigBeanEstimation? estimation,
-      BoardConfigBeanRanking? ranking}) {
-    return BoardConfigBean(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      type: type ?? this.type,
-      self: self ?? this.self,
-      location: location ?? this.location,
-      filter: filter ?? this.filter,
-      subQuery: subQuery ?? this.subQuery,
-      columnConfig: columnConfig ?? this.columnConfig,
-      estimation: estimation ?? this.estimation,
-      ranking: ranking ?? this.ranking,
-    );
-  }
-}
-
-class ColumnBeanStatusesItem {
-  final String? id;
-  final String? self;
-
-  ColumnBeanStatusesItem({this.id, this.self});
-
-  factory ColumnBeanStatusesItem.fromJson(Map<String, Object?> json) {
-    return ColumnBeanStatusesItem(
-      id: json[r'id'] as String?,
-      self: json[r'self'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var self = this.self;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    return json;
-  }
-
-  ColumnBeanStatusesItem copyWith({String? id, String? self}) {
-    return ColumnBeanStatusesItem(
-      id: id ?? this.id,
-      self: self ?? this.self,
-    );
-  }
-}
-
-class ColumnBean {
-  final String? name;
-  final List<ColumnBeanStatusesItem> statuses;
-  final int? min;
-  final int? max;
-
-  ColumnBean(
-      {this.name, List<ColumnBeanStatusesItem>? statuses, this.min, this.max})
-      : statuses = statuses ?? [];
-
-  factory ColumnBean.fromJson(Map<String, Object?> json) {
-    return ColumnBean(
-      name: json[r'name'] as String?,
-      statuses: (json[r'statuses'] as List<Object?>?)
-              ?.map((i) => ColumnBeanStatusesItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      min: (json[r'min'] as num?)?.toInt(),
-      max: (json[r'max'] as num?)?.toInt(),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var name = this.name;
-    var statuses = this.statuses;
-    var min = this.min;
-    var max = this.max;
-
-    final json = <String, Object?>{};
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
-    if (min != null) {
-      json[r'min'] = min;
-    }
-    if (max != null) {
-      json[r'max'] = max;
-    }
-    return json;
-  }
-
-  ColumnBean copyWith(
-      {String? name,
-      List<ColumnBeanStatusesItem>? statuses,
-      int? min,
-      int? max}) {
-    return ColumnBean(
-      name: name ?? this.name,
-      statuses: statuses ?? this.statuses,
-      min: min ?? this.min,
-      max: max ?? this.max,
-    );
-  }
-}
-
-class ColumnConfigBeanColumnsItemStatusesItem {
-  final String? id;
-  final String? self;
-
-  ColumnConfigBeanColumnsItemStatusesItem({this.id, this.self});
-
-  factory ColumnConfigBeanColumnsItemStatusesItem.fromJson(
-      Map<String, Object?> json) {
-    return ColumnConfigBeanColumnsItemStatusesItem(
-      id: json[r'id'] as String?,
-      self: json[r'self'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var self = this.self;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    return json;
-  }
-
-  ColumnConfigBeanColumnsItemStatusesItem copyWith({String? id, String? self}) {
-    return ColumnConfigBeanColumnsItemStatusesItem(
-      id: id ?? this.id,
-      self: self ?? this.self,
-    );
-  }
-}
-
-class ColumnConfigBeanColumnsItem {
-  final String? name;
-  final List<ColumnConfigBeanColumnsItemStatusesItem> statuses;
-  final int? min;
-  final int? max;
-
-  ColumnConfigBeanColumnsItem(
-      {this.name,
-      List<ColumnConfigBeanColumnsItemStatusesItem>? statuses,
-      this.min,
-      this.max})
-      : statuses = statuses ?? [];
-
-  factory ColumnConfigBeanColumnsItem.fromJson(Map<String, Object?> json) {
-    return ColumnConfigBeanColumnsItem(
-      name: json[r'name'] as String?,
-      statuses: (json[r'statuses'] as List<Object?>?)
-              ?.map((i) => ColumnConfigBeanColumnsItemStatusesItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      min: (json[r'min'] as num?)?.toInt(),
-      max: (json[r'max'] as num?)?.toInt(),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var name = this.name;
-    var statuses = this.statuses;
-    var min = this.min;
-    var max = this.max;
-
-    final json = <String, Object?>{};
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
-    if (min != null) {
-      json[r'min'] = min;
-    }
-    if (max != null) {
-      json[r'max'] = max;
-    }
-    return json;
-  }
-
-  ColumnConfigBeanColumnsItem copyWith(
-      {String? name,
-      List<ColumnConfigBeanColumnsItemStatusesItem>? statuses,
-      int? min,
-      int? max}) {
-    return ColumnConfigBeanColumnsItem(
-      name: name ?? this.name,
-      statuses: statuses ?? this.statuses,
-      min: min ?? this.min,
-      max: max ?? this.max,
-    );
-  }
-}
-
-class ColumnConfigBean {
-  final List<ColumnConfigBeanColumnsItem> columns;
-  final String? constraintType;
-
-  ColumnConfigBean(
-      {List<ColumnConfigBeanColumnsItem>? columns, this.constraintType})
-      : columns = columns ?? [];
-
-  factory ColumnConfigBean.fromJson(Map<String, Object?> json) {
-    return ColumnConfigBean(
-      columns: (json[r'columns'] as List<Object?>?)
-              ?.map((i) => ColumnConfigBeanColumnsItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      constraintType: json[r'constraintType'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var columns = this.columns;
-    var constraintType = this.constraintType;
-
-    final json = <String, Object?>{};
-    json[r'columns'] = columns.map((i) => i.toJson()).toList();
-    if (constraintType != null) {
-      json[r'constraintType'] = constraintType;
-    }
-    return json;
-  }
-
-  ColumnConfigBean copyWith(
-      {List<ColumnConfigBeanColumnsItem>? columns, String? constraintType}) {
-    return ColumnConfigBean(
-      columns: columns ?? this.columns,
-      constraintType: constraintType ?? this.constraintType,
-    );
-  }
-}
-
-class EstimationConfigBeanField {
-  final String? fieldId;
-  final String? displayName;
-
-  EstimationConfigBeanField({this.fieldId, this.displayName});
-
-  factory EstimationConfigBeanField.fromJson(Map<String, Object?> json) {
-    return EstimationConfigBeanField(
-      fieldId: json[r'fieldId'] as String?,
-      displayName: json[r'displayName'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var fieldId = this.fieldId;
-    var displayName = this.displayName;
-
-    final json = <String, Object?>{};
-    if (fieldId != null) {
-      json[r'fieldId'] = fieldId;
-    }
-    if (displayName != null) {
-      json[r'displayName'] = displayName;
-    }
-    return json;
-  }
-
-  EstimationConfigBeanField copyWith({String? fieldId, String? displayName}) {
-    return EstimationConfigBeanField(
-      fieldId: fieldId ?? this.fieldId,
-      displayName: displayName ?? this.displayName,
-    );
-  }
-}
-
-class EstimationConfigBean {
-  final String? type;
-  final EstimationConfigBeanField? field;
-
-  EstimationConfigBean({this.type, this.field});
-
-  factory EstimationConfigBean.fromJson(Map<String, Object?> json) {
-    return EstimationConfigBean(
-      type: json[r'type'] as String?,
-      field: json[r'field'] != null
-          ? EstimationConfigBeanField.fromJson(
-              json[r'field']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var type = this.type;
-    var field = this.field;
-
-    final json = <String, Object?>{};
-    if (type != null) {
-      json[r'type'] = type;
-    }
-    if (field != null) {
-      json[r'field'] = field.toJson();
-    }
-    return json;
-  }
-
-  EstimationConfigBean copyWith(
-      {String? type, EstimationConfigBeanField? field}) {
-    return EstimationConfigBean(
-      type: type ?? this.type,
-      field: field ?? this.field,
-    );
-  }
-}
-
-class EstimationFieldBean {
-  final String? fieldId;
-  final String? displayName;
-
-  EstimationFieldBean({this.fieldId, this.displayName});
-
-  factory EstimationFieldBean.fromJson(Map<String, Object?> json) {
-    return EstimationFieldBean(
-      fieldId: json[r'fieldId'] as String?,
-      displayName: json[r'displayName'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var fieldId = this.fieldId;
-    var displayName = this.displayName;
-
-    final json = <String, Object?>{};
-    if (fieldId != null) {
-      json[r'fieldId'] = fieldId;
-    }
-    if (displayName != null) {
-      json[r'displayName'] = displayName;
-    }
-    return json;
-  }
-
-  EstimationFieldBean copyWith({String? fieldId, String? displayName}) {
-    return EstimationFieldBean(
-      fieldId: fieldId ?? this.fieldId,
-      displayName: displayName ?? this.displayName,
-    );
-  }
-}
-
-class LocationBean {
-  final String? type;
-  final String? projectKeyOrId;
-
-  LocationBean({this.type, this.projectKeyOrId});
-
-  factory LocationBean.fromJson(Map<String, Object?> json) {
-    return LocationBean(
-      type: json[r'type'] as String?,
-      projectKeyOrId: json[r'projectKeyOrId'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var type = this.type;
-    var projectKeyOrId = this.projectKeyOrId;
-
-    final json = <String, Object?>{};
-    if (type != null) {
-      json[r'type'] = type;
-    }
-    if (projectKeyOrId != null) {
-      json[r'projectKeyOrId'] = projectKeyOrId;
-    }
-    return json;
-  }
-
-  LocationBean copyWith({String? type, String? projectKeyOrId}) {
-    return LocationBean(
-      type: type ?? this.type,
-      projectKeyOrId: projectKeyOrId ?? this.projectKeyOrId,
-    );
-  }
-}
-
-class RankingConfigBean {
-  final int? rankCustomFieldId;
-
-  RankingConfigBean({this.rankCustomFieldId});
-
-  factory RankingConfigBean.fromJson(Map<String, Object?> json) {
-    return RankingConfigBean(
-      rankCustomFieldId: (json[r'rankCustomFieldId'] as num?)?.toInt(),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var rankCustomFieldId = this.rankCustomFieldId;
-
-    final json = <String, Object?>{};
-    if (rankCustomFieldId != null) {
-      json[r'rankCustomFieldId'] = rankCustomFieldId;
-    }
-    return json;
-  }
-
-  RankingConfigBean copyWith({int? rankCustomFieldId}) {
-    return RankingConfigBean(
-      rankCustomFieldId: rankCustomFieldId ?? this.rankCustomFieldId,
-    );
-  }
-}
-
-class RelationBean {
-  final String? id;
-  final String? self;
-
-  RelationBean({this.id, this.self});
-
-  factory RelationBean.fromJson(Map<String, Object?> json) {
-    return RelationBean(
-      id: json[r'id'] as String?,
-      self: json[r'self'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var self = this.self;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    return json;
-  }
-
-  RelationBean copyWith({String? id, String? self}) {
-    return RelationBean(
-      id: id ?? this.id,
-      self: self ?? this.self,
-    );
-  }
-}
-
-class SubqueryBean {
-  final String? query;
-
-  SubqueryBean({this.query});
-
-  factory SubqueryBean.fromJson(Map<String, Object?> json) {
-    return SubqueryBean(
-      query: json[r'query'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var query = this.query;
-
-    final json = <String, Object?>{};
-    if (query != null) {
-      json[r'query'] = query;
-    }
-    return json;
-  }
-
-  SubqueryBean copyWith({String? query}) {
-    return SubqueryBean(
-      query: query ?? this.query,
-    );
-  }
-}
-
-class BoardCreateBeanLocation {
-  final String? type;
-  final String? projectKeyOrId;
-
-  BoardCreateBeanLocation({this.type, this.projectKeyOrId});
-
-  factory BoardCreateBeanLocation.fromJson(Map<String, Object?> json) {
-    return BoardCreateBeanLocation(
-      type: json[r'type'] as String?,
-      projectKeyOrId: json[r'projectKeyOrId'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var type = this.type;
-    var projectKeyOrId = this.projectKeyOrId;
-
-    final json = <String, Object?>{};
-    if (type != null) {
-      json[r'type'] = type;
-    }
-    if (projectKeyOrId != null) {
-      json[r'projectKeyOrId'] = projectKeyOrId;
-    }
-    return json;
-  }
-
-  BoardCreateBeanLocation copyWith({String? type, String? projectKeyOrId}) {
-    return BoardCreateBeanLocation(
-      type: type ?? this.type,
-      projectKeyOrId: projectKeyOrId ?? this.projectKeyOrId,
-    );
-  }
-}
-
-class BoardCreateBean {
-  final String? name;
-  final String? type;
-  final int? filterId;
-  final BoardCreateBeanLocation? location;
-
-  BoardCreateBean({this.name, this.type, this.filterId, this.location});
-
-  factory BoardCreateBean.fromJson(Map<String, Object?> json) {
-    return BoardCreateBean(
-      name: json[r'name'] as String?,
-      type: json[r'type'] as String?,
-      filterId: (json[r'filterId'] as num?)?.toInt(),
-      location: json[r'location'] != null
-          ? BoardCreateBeanLocation.fromJson(
-              json[r'location']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var name = this.name;
-    var type = this.type;
-    var filterId = this.filterId;
-    var location = this.location;
-
-    final json = <String, Object?>{};
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (type != null) {
-      json[r'type'] = type;
-    }
-    if (filterId != null) {
-      json[r'filterId'] = filterId;
-    }
-    if (location != null) {
-      json[r'location'] = location.toJson();
-    }
-    return json;
-  }
-
-  BoardCreateBean copyWith(
-      {String? name,
-      String? type,
-      int? filterId,
-      BoardCreateBeanLocation? location}) {
-    return BoardCreateBean(
-      name: name ?? this.name,
-      type: type ?? this.type,
-      filterId: filterId ?? this.filterId,
-      location: location ?? this.location,
-    );
-  }
-}
-
-class SprintCreateBean {
-  final String? name;
-  final String? startDate;
-  final String? endDate;
-  final int? originBoardId;
-  final String? goal;
-
-  SprintCreateBean(
-      {this.name, this.startDate, this.endDate, this.originBoardId, this.goal});
-
-  factory SprintCreateBean.fromJson(Map<String, Object?> json) {
-    return SprintCreateBean(
-      name: json[r'name'] as String?,
-      startDate: json[r'startDate'] as String?,
-      endDate: json[r'endDate'] as String?,
-      originBoardId: (json[r'originBoardId'] as num?)?.toInt(),
-      goal: json[r'goal'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var name = this.name;
-    var startDate = this.startDate;
-    var endDate = this.endDate;
-    var originBoardId = this.originBoardId;
-    var goal = this.goal;
-
-    final json = <String, Object?>{};
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (startDate != null) {
-      json[r'startDate'] = startDate;
-    }
-    if (endDate != null) {
-      json[r'endDate'] = endDate;
-    }
-    if (originBoardId != null) {
-      json[r'originBoardId'] = originBoardId;
-    }
-    if (goal != null) {
-      json[r'goal'] = goal;
-    }
-    return json;
-  }
-
-  SprintCreateBean copyWith(
-      {String? name,
-      String? startDate,
-      String? endDate,
-      int? originBoardId,
-      String? goal}) {
-    return SprintCreateBean(
-      name: name ?? this.name,
-      startDate: startDate ?? this.startDate,
-      endDate: endDate ?? this.endDate,
-      originBoardId: originBoardId ?? this.originBoardId,
-      goal: goal ?? this.goal,
-    );
-  }
-}
-
-class SprintBean {
-  final int? id;
-  final String? self;
-  final String? state;
-  final String? name;
-  final String? startDate;
-  final String? endDate;
-  final String? completeDate;
-  final int? originBoardId;
-  final String? goal;
-
-  SprintBean(
-      {this.id,
-      this.self,
-      this.state,
-      this.name,
-      this.startDate,
-      this.endDate,
-      this.completeDate,
-      this.originBoardId,
-      this.goal});
-
-  factory SprintBean.fromJson(Map<String, Object?> json) {
-    return SprintBean(
-      id: (json[r'id'] as num?)?.toInt(),
-      self: json[r'self'] as String?,
-      state: json[r'state'] as String?,
-      name: json[r'name'] as String?,
-      startDate: json[r'startDate'] as String?,
-      endDate: json[r'endDate'] as String?,
-      completeDate: json[r'completeDate'] as String?,
-      originBoardId: (json[r'originBoardId'] as num?)?.toInt(),
-      goal: json[r'goal'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var self = this.self;
-    var state = this.state;
-    var name = this.name;
-    var startDate = this.startDate;
-    var endDate = this.endDate;
-    var completeDate = this.completeDate;
-    var originBoardId = this.originBoardId;
-    var goal = this.goal;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (state != null) {
-      json[r'state'] = state;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (startDate != null) {
-      json[r'startDate'] = startDate;
-    }
-    if (endDate != null) {
-      json[r'endDate'] = endDate;
-    }
-    if (completeDate != null) {
-      json[r'completeDate'] = completeDate;
-    }
-    if (originBoardId != null) {
-      json[r'originBoardId'] = originBoardId;
-    }
-    if (goal != null) {
-      json[r'goal'] = goal;
-    }
-    return json;
-  }
-
-  SprintBean copyWith(
-      {int? id,
-      String? self,
-      String? state,
-      String? name,
-      String? startDate,
-      String? endDate,
-      String? completeDate,
-      int? originBoardId,
-      String? goal}) {
-    return SprintBean(
-      id: id ?? this.id,
-      self: self ?? this.self,
-      state: state ?? this.state,
-      name: name ?? this.name,
-      startDate: startDate ?? this.startDate,
-      endDate: endDate ?? this.endDate,
-      completeDate: completeDate ?? this.completeDate,
-      originBoardId: originBoardId ?? this.originBoardId,
-      goal: goal ?? this.goal,
-    );
-  }
-}
-
-class SprintSwapBean {
-  final int? sprintToSwapWith;
-
-  SprintSwapBean({this.sprintToSwapWith});
-
-  factory SprintSwapBean.fromJson(Map<String, Object?> json) {
-    return SprintSwapBean(
-      sprintToSwapWith: (json[r'sprintToSwapWith'] as num?)?.toInt(),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var sprintToSwapWith = this.sprintToSwapWith;
-
-    final json = <String, Object?>{};
-    if (sprintToSwapWith != null) {
-      json[r'sprintToSwapWith'] = sprintToSwapWith;
-    }
-    return json;
-  }
-
-  SprintSwapBean copyWith({int? sprintToSwapWith}) {
-    return SprintSwapBean(
-      sprintToSwapWith: sprintToSwapWith ?? this.sprintToSwapWith,
     );
   }
 }

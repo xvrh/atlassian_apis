@@ -9,6 +9,13 @@ class AdminUserProvisioningApi {
 
   AdminUserProvisioningApi(this._client);
 
+  late final groups = GroupsApi(_client);
+
+  late final schemas = SchemasApi(_client);
+
+  late final serviceProviderConfiguration =
+      ServiceProviderConfigurationApi(_client);
+
   /// The following user attributes can be updated through the user provisioning
   /// API.
   ///
@@ -23,137 +30,7 @@ class AdminUserProvisioningApi {
   /// | Preferred language | preferredLanguage | Singular       | false    |
   late final users = UsersApi(_client);
 
-  late final groups = GroupsApi(_client);
-
-  late final schemas = SchemasApi(_client);
-
-  late final serviceProviderConfiguration =
-      ServiceProviderConfigurationApi(_client);
-
   void close() => _client.close();
-}
-
-/// Rest APIs
-
-class UsersApi {
-  final ApiClient _client;
-
-  UsersApi(this._client);
-
-  /// Get a user from a directory by `userId`.
-  Future<ScimUser> getaUserFromActiveDirectory(
-      {required String directoryId,
-      required String userId,
-      String? attributes,
-      String? excludedAttributes}) async {
-    return ScimUser.fromJson(await _client.send(
-      'get',
-      'scim/directory/{directoryId}/Users/{userId}',
-      pathParameters: {
-        'directoryId': directoryId,
-        'userId': userId,
-      },
-      queryParameters: {
-        if (attributes != null) 'attributes': attributes,
-        if (excludedAttributes != null)
-          'excludedAttributes': excludedAttributes,
-      },
-    ));
-  }
-
-  /// Updates a user's information in a directory by `userId` via user
-  /// attributes. User information  is replaced attribute-by-attribute, with the
-  /// exception of immutable and read-only  attributes. Existing values of
-  /// unspecified attributes are cleaned.
-  Future<ScimUser> updateUserInformationInAnActiveDirectory(
-      {required String directoryId,
-      required String userId,
-      String? attributes,
-      String? excludedAttributes,
-      required ScimUser body}) async {
-    return ScimUser.fromJson(await _client.send(
-      'put',
-      'scim/directory/{directoryId}/Users/{userId}',
-      pathParameters: {
-        'directoryId': directoryId,
-        'userId': userId,
-      },
-      queryParameters: {
-        if (attributes != null) 'attributes': attributes,
-        if (excludedAttributes != null)
-          'excludedAttributes': excludedAttributes,
-      },
-      body: body.toJson(),
-    ));
-  }
-
-  /// Deactivate a user by `userId`. The user is not available for future
-  /// requests until  activated again. Any future operation for the deactivated
-  /// user returns the 404  (resource not found) error.
-  Future<void> deleteaUserFromAnActiveDirectory(
-      {required String directoryId, required String userId}) async {
-    await _client.send(
-      'delete',
-      'scim/directory/{directoryId}/Users/{userId}',
-      pathParameters: {
-        'directoryId': directoryId,
-        'userId': userId,
-      },
-    );
-  }
-
-  /// Get users from the specified directory. Filtering is supported with a
-  /// single exact match  (`eq`) against the `userName` and `externalId`
-  /// attributes. Pagination is supported. Sorting  is not supported.
-  Future<ScimUserListResponse> getUsersFromAnActiveDirectory(
-      {required String directoryId,
-      String? attributes,
-      String? excludedAttributes,
-      String? filter,
-      int? startIndex,
-      int? count}) async {
-    return ScimUserListResponse.fromJson(await _client.send(
-      'get',
-      'scim/directory/{directoryId}/Users',
-      pathParameters: {
-        'directoryId': directoryId,
-      },
-      queryParameters: {
-        if (attributes != null) 'attributes': attributes,
-        if (excludedAttributes != null)
-          'excludedAttributes': excludedAttributes,
-        if (filter != null) 'filter': filter,
-        if (startIndex != null) 'startIndex': '$startIndex',
-        if (count != null) 'count': '$count',
-      },
-    ));
-  }
-
-  /// Create a user in a directory. An attempt to create an existing user fails
-  /// with a 409 (Conflict) error. A user account can only be created if it has
-  /// an email address on a verified domain. If a managed Atlassian account
-  /// already exists on the Atlassian platform for the specified email address,
-  /// the user in your identity provider is linked to the user in your Atlassian
-  /// organization.
-  Future<ScimUser> createaUserInAnActiveDirectory(
-      {required String directoryId,
-      String? attributes,
-      String? excludedAttributes,
-      required ScimUser body}) async {
-    return ScimUser.fromJson(await _client.send(
-      'post',
-      'scim/directory/{directoryId}/Users',
-      pathParameters: {
-        'directoryId': directoryId,
-      },
-      queryParameters: {
-        if (attributes != null) 'attributes': attributes,
-        if (excludedAttributes != null)
-          'excludedAttributes': excludedAttributes,
-      },
-      body: body.toJson(),
-    ));
-  }
 }
 
 /// Rest APIs
@@ -352,960 +229,126 @@ class ServiceProviderConfigurationApi {
   }
 }
 
-class Failure {
-  /// Human readable error message
-  final String? error;
+/// Rest APIs
 
-  /// Trace ID that can be used to find log messages
-  final String? traceId;
+class UsersApi {
+  final ApiClient _client;
 
-  Failure({this.error, this.traceId});
+  UsersApi(this._client);
 
-  factory Failure.fromJson(Map<String, Object?> json) {
-    return Failure(
-      error: json[r'error'] as String?,
-      traceId: json[r'traceId'] as String?,
+  /// Get a user from a directory by `userId`.
+  Future<ScimUser> getaUserFromActiveDirectory(
+      {required String directoryId,
+      required String userId,
+      String? attributes,
+      String? excludedAttributes}) async {
+    return ScimUser.fromJson(await _client.send(
+      'get',
+      'scim/directory/{directoryId}/Users/{userId}',
+      pathParameters: {
+        'directoryId': directoryId,
+        'userId': userId,
+      },
+      queryParameters: {
+        if (attributes != null) 'attributes': attributes,
+        if (excludedAttributes != null)
+          'excludedAttributes': excludedAttributes,
+      },
+    ));
+  }
+
+  /// Updates a user's information in a directory by `userId` via user
+  /// attributes. User information  is replaced attribute-by-attribute, with the
+  /// exception of immutable and read-only  attributes. Existing values of
+  /// unspecified attributes are cleaned.
+  Future<ScimUser> updateUserInformationInAnActiveDirectory(
+      {required String directoryId,
+      required String userId,
+      String? attributes,
+      String? excludedAttributes,
+      required ScimUser body}) async {
+    return ScimUser.fromJson(await _client.send(
+      'put',
+      'scim/directory/{directoryId}/Users/{userId}',
+      pathParameters: {
+        'directoryId': directoryId,
+        'userId': userId,
+      },
+      queryParameters: {
+        if (attributes != null) 'attributes': attributes,
+        if (excludedAttributes != null)
+          'excludedAttributes': excludedAttributes,
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Deactivate a user by `userId`. The user is not available for future
+  /// requests until  activated again. Any future operation for the deactivated
+  /// user returns the 404  (resource not found) error.
+  Future<void> deleteaUserFromAnActiveDirectory(
+      {required String directoryId, required String userId}) async {
+    await _client.send(
+      'delete',
+      'scim/directory/{directoryId}/Users/{userId}',
+      pathParameters: {
+        'directoryId': directoryId,
+        'userId': userId,
+      },
     );
   }
 
-  Map<String, Object?> toJson() {
-    var error = this.error;
-    var traceId = this.traceId;
-
-    final json = <String, Object?>{};
-    if (error != null) {
-      json[r'error'] = error;
-    }
-    if (traceId != null) {
-      json[r'traceId'] = traceId;
-    }
-    return json;
+  /// Get users from the specified directory. Filtering is supported with a
+  /// single exact match  (`eq`) against the `userName` and `externalId`
+  /// attributes. Pagination is supported. Sorting  is not supported.
+  Future<ScimUserListResponse> getUsersFromAnActiveDirectory(
+      {required String directoryId,
+      String? attributes,
+      String? excludedAttributes,
+      String? filter,
+      int? startIndex,
+      int? count}) async {
+    return ScimUserListResponse.fromJson(await _client.send(
+      'get',
+      'scim/directory/{directoryId}/Users',
+      pathParameters: {
+        'directoryId': directoryId,
+      },
+      queryParameters: {
+        if (attributes != null) 'attributes': attributes,
+        if (excludedAttributes != null)
+          'excludedAttributes': excludedAttributes,
+        if (filter != null) 'filter': filter,
+        if (startIndex != null) 'startIndex': '$startIndex',
+        if (count != null) 'count': '$count',
+      },
+    ));
   }
 
-  Failure copyWith({String? error, String? traceId}) {
-    return Failure(
-      error: error ?? this.error,
-      traceId: traceId ?? this.traceId,
-    );
-  }
-}
-
-/// SCIM Error
-class ScimError {
-  /// SCIM error schemas.
-  final List<String> schemas;
-
-  /// The HTTP status code.
-  final String? status;
-
-  /// Keyword for SCIM detail error.
-  final ScimErrorScimType? scimType;
-
-  /// Detailed human-readable message.
-  final String? detail;
-
-  ScimError({List<String>? schemas, this.status, this.scimType, this.detail})
-      : schemas = schemas ?? [];
-
-  factory ScimError.fromJson(Map<String, Object?> json) {
-    return ScimError(
-      schemas: (json[r'schemas'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      status: json[r'status'] as String?,
-      scimType: json[r'scimType'] != null
-          ? ScimErrorScimType.fromValue(json[r'scimType']! as String)
-          : null,
-      detail: json[r'detail'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var schemas = this.schemas;
-    var status = this.status;
-    var scimType = this.scimType;
-    var detail = this.detail;
-
-    final json = <String, Object?>{};
-    json[r'schemas'] = schemas;
-    if (status != null) {
-      json[r'status'] = status;
-    }
-    if (scimType != null) {
-      json[r'scimType'] = scimType.value;
-    }
-    if (detail != null) {
-      json[r'detail'] = detail;
-    }
-    return json;
-  }
-
-  ScimError copyWith(
-      {List<String>? schemas,
-      String? status,
-      ScimErrorScimType? scimType,
-      String? detail}) {
-    return ScimError(
-      schemas: schemas ?? this.schemas,
-      status: status ?? this.status,
-      scimType: scimType ?? this.scimType,
-      detail: detail ?? this.detail,
-    );
-  }
-}
-
-class ScimErrorScimType {
-  static const invalidFilter = ScimErrorScimType._('invalidFilter');
-  static const tooMany = ScimErrorScimType._('tooMany');
-  static const uniqueness = ScimErrorScimType._('uniqueness');
-  static const mutability = ScimErrorScimType._('mutability');
-  static const invalidSyntax = ScimErrorScimType._('invalidSyntax');
-  static const invalidPath = ScimErrorScimType._('invalidPath');
-  static const noTarget = ScimErrorScimType._('noTarget');
-  static const invalidValue = ScimErrorScimType._('invalidValue');
-  static const invalidVers = ScimErrorScimType._('invalidVers');
-  static const sensitive = ScimErrorScimType._('sensitive');
-
-  static const values = [
-    invalidFilter,
-    tooMany,
-    uniqueness,
-    mutability,
-    invalidSyntax,
-    invalidPath,
-    noTarget,
-    invalidValue,
-    invalidVers,
-    sensitive,
-  ];
-  final String value;
-
-  const ScimErrorScimType._(this.value);
-
-  static ScimErrorScimType fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => ScimErrorScimType._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-/// SCIM group
-class ScimGroup {
-  /// SCIM schemas that define the attributes present in the current JSON
-  /// structure. This field  is required during user creation or modification.
-  final List<String> schemas;
-
-  /// Unique identifier defined by Atlassian SCIM Service. This field is
-  /// read-only and case-sensitive.  It is ignored if specified in the payload
-  /// during user creation or modification.
-  final String? id;
-
-  /// Identifier defined by provisioning client. CaseExact. Uniqueness is
-  /// controlled by client.
-  final String? externalId;
-
-  /// Group display name. This field is immutable, required, and read-only.
-  final String? displayName;
-
-  /// Group members
-  final List<ScimGroupMember> members;
-
-  /// Group metadata information.
-  final ScimMetadata? meta;
-
-  ScimGroup(
-      {List<String>? schemas,
-      this.id,
-      this.externalId,
-      this.displayName,
-      List<ScimGroupMember>? members,
-      this.meta})
-      : schemas = schemas ?? [],
-        members = members ?? [];
-
-  factory ScimGroup.fromJson(Map<String, Object?> json) {
-    return ScimGroup(
-      schemas: (json[r'schemas'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      id: json[r'id'] as String?,
-      externalId: json[r'externalId'] as String?,
-      displayName: json[r'displayName'] as String?,
-      members: (json[r'members'] as List<Object?>?)
-              ?.map((i) => ScimGroupMember.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      meta: json[r'meta'] != null
-          ? ScimMetadata.fromJson(json[r'meta']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var schemas = this.schemas;
-    var id = this.id;
-    var externalId = this.externalId;
-    var displayName = this.displayName;
-    var members = this.members;
-    var meta = this.meta;
-
-    final json = <String, Object?>{};
-    json[r'schemas'] = schemas;
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (externalId != null) {
-      json[r'externalId'] = externalId;
-    }
-    if (displayName != null) {
-      json[r'displayName'] = displayName;
-    }
-    json[r'members'] = members.map((i) => i.toJson()).toList();
-    if (meta != null) {
-      json[r'meta'] = meta.toJson();
-    }
-    return json;
-  }
-
-  ScimGroup copyWith(
-      {List<String>? schemas,
-      String? id,
-      String? externalId,
-      String? displayName,
-      List<ScimGroupMember>? members,
-      ScimMetadata? meta}) {
-    return ScimGroup(
-      schemas: schemas ?? this.schemas,
-      id: id ?? this.id,
-      externalId: externalId ?? this.externalId,
-      displayName: displayName ?? this.displayName,
-      members: members ?? this.members,
-      meta: meta ?? this.meta,
-    );
-  }
-}
-
-/// SCIM group member
-class ScimGroupMember {
-  final String? type;
-  final String? value;
-  final String? display;
-  final String? ref;
-
-  ScimGroupMember({this.type, this.value, this.display, this.ref});
-
-  factory ScimGroupMember.fromJson(Map<String, Object?> json) {
-    return ScimGroupMember(
-      type: json[r'type'] as String?,
-      value: json[r'value'] as String?,
-      display: json[r'display'] as String?,
-      ref: json[r'$ref'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var type = this.type;
-    var value = this.value;
-    var display = this.display;
-    var ref = this.ref;
-
-    final json = <String, Object?>{};
-    if (type != null) {
-      json[r'type'] = type;
-    }
-    if (value != null) {
-      json[r'value'] = value;
-    }
-    if (display != null) {
-      json[r'display'] = display;
-    }
-    if (ref != null) {
-      json[r'$ref'] = ref;
-    }
-    return json;
-  }
-
-  ScimGroupMember copyWith(
-      {String? type, String? value, String? display, String? ref}) {
-    return ScimGroupMember(
-      type: type ?? this.type,
-      value: value ?? this.value,
-      display: display ?? this.display,
-      ref: ref ?? this.ref,
-    );
-  }
-}
-
-/// SCIM metadata
-class ScimMetadata {
-  /// The name of the resource type of the resource. This field is read-only and
-  ///  case-sensitive.
-  final ScimMetadataResourceType? resourceType;
-
-  /// The URI of the resource being returned. This field is read-only.
-  final String? location;
-
-  /// The most recent DateTime that the details of this resource were updated.
-  /// This  field is read-only.
-  final DateTime? lastModified;
-
-  /// The DateTime that the resource was added to Atlassian SCIM service. This
-  /// field  is read-only.
-  final DateTime? created;
-
-  ScimMetadata(
-      {this.resourceType, this.location, this.lastModified, this.created});
-
-  factory ScimMetadata.fromJson(Map<String, Object?> json) {
-    return ScimMetadata(
-      resourceType: json[r'resourceType'] != null
-          ? ScimMetadataResourceType.fromValue(json[r'resourceType']! as String)
-          : null,
-      location: json[r'location'] as String?,
-      lastModified: DateTime.tryParse(json[r'lastModified'] as String? ?? ''),
-      created: DateTime.tryParse(json[r'created'] as String? ?? ''),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var resourceType = this.resourceType;
-    var location = this.location;
-    var lastModified = this.lastModified;
-    var created = this.created;
-
-    final json = <String, Object?>{};
-    if (resourceType != null) {
-      json[r'resourceType'] = resourceType.value;
-    }
-    if (location != null) {
-      json[r'location'] = location;
-    }
-    if (lastModified != null) {
-      json[r'lastModified'] = lastModified.toIso8601String();
-    }
-    if (created != null) {
-      json[r'created'] = created.toIso8601String();
-    }
-    return json;
-  }
-
-  ScimMetadata copyWith(
-      {ScimMetadataResourceType? resourceType,
-      String? location,
-      DateTime? lastModified,
-      DateTime? created}) {
-    return ScimMetadata(
-      resourceType: resourceType ?? this.resourceType,
-      location: location ?? this.location,
-      lastModified: lastModified ?? this.lastModified,
-      created: created ?? this.created,
-    );
-  }
-}
-
-class ScimMetadataResourceType {
-  static const user = ScimMetadataResourceType._('USER');
-  static const group = ScimMetadataResourceType._('GROUP');
-  static const directory = ScimMetadataResourceType._('DIRECTORY');
-
-  static const values = [
-    user,
-    group,
-    directory,
-  ];
-  final String value;
-
-  const ScimMetadataResourceType._(this.value);
-
-  static ScimMetadataResourceType fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => ScimMetadataResourceType._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-/// SCIM enterprise user extension
-class EnterpriseUserExtension {
-  /// Organization the user belongs to.
-  final String? organization;
-
-  /// Department the user belongs to.
-  final String? department;
-
-  EnterpriseUserExtension({this.organization, this.department});
-
-  factory EnterpriseUserExtension.fromJson(Map<String, Object?> json) {
-    return EnterpriseUserExtension(
-      organization: json[r'organization'] as String?,
-      department: json[r'department'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var organization = this.organization;
-    var department = this.department;
-
-    final json = <String, Object?>{};
-    if (organization != null) {
-      json[r'organization'] = organization;
-    }
-    if (department != null) {
-      json[r'department'] = department;
-    }
-    return json;
-  }
-
-  EnterpriseUserExtension copyWith({String? organization, String? department}) {
-    return EnterpriseUserExtension(
-      organization: organization ?? this.organization,
-      department: department ?? this.department,
-    );
-  }
-}
-
-class ExternalAtlassianScimExtension {
-  final String? atlassianAccountId;
-
-  ExternalAtlassianScimExtension({this.atlassianAccountId});
-
-  factory ExternalAtlassianScimExtension.fromJson(Map<String, Object?> json) {
-    return ExternalAtlassianScimExtension(
-      atlassianAccountId: json[r'atlassianAccountId'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var atlassianAccountId = this.atlassianAccountId;
-
-    final json = <String, Object?>{};
-    if (atlassianAccountId != null) {
-      json[r'atlassianAccountId'] = atlassianAccountId;
-    }
-    return json;
-  }
-
-  ExternalAtlassianScimExtension copyWith({String? atlassianAccountId}) {
-    return ExternalAtlassianScimExtension(
-      atlassianAccountId: atlassianAccountId ?? this.atlassianAccountId,
-    );
-  }
-}
-
-/// SCIM group for user
-class ScimGroupForUser {
-  final String? type;
-  final String? value;
-  final String? display;
-  final String? ref;
-
-  ScimGroupForUser({this.type, this.value, this.display, this.ref});
-
-  factory ScimGroupForUser.fromJson(Map<String, Object?> json) {
-    return ScimGroupForUser(
-      type: json[r'type'] as String?,
-      value: json[r'value'] as String?,
-      display: json[r'display'] as String?,
-      ref: json[r'$ref'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var type = this.type;
-    var value = this.value;
-    var display = this.display;
-    var ref = this.ref;
-
-    final json = <String, Object?>{};
-    if (type != null) {
-      json[r'type'] = type;
-    }
-    if (value != null) {
-      json[r'value'] = value;
-    }
-    if (display != null) {
-      json[r'display'] = display;
-    }
-    if (ref != null) {
-      json[r'$ref'] = ref;
-    }
-    return json;
-  }
-
-  ScimGroupForUser copyWith(
-      {String? type, String? value, String? display, String? ref}) {
-    return ScimGroupForUser(
-      type: type ?? this.type,
-      value: value ?? this.value,
-      display: display ?? this.display,
-      ref: ref ?? this.ref,
-    );
-  }
-}
-
-/// SCIM user email
-class ScimUserEmail {
-  /// Email address.
-  final String? value;
-
-  /// Type of email address, for example "work" or "personal".
-  final String? type;
-
-  /// Boolean value indicating whether this is the primary email address.
-  final bool primary;
-
-  ScimUserEmail({this.value, this.type, bool? primary})
-      : primary = primary ?? false;
-
-  factory ScimUserEmail.fromJson(Map<String, Object?> json) {
-    return ScimUserEmail(
-      value: json[r'value'] as String?,
-      type: json[r'type'] as String?,
-      primary: json[r'primary'] as bool? ?? false,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var value = this.value;
-    var type = this.type;
-    var primary = this.primary;
-
-    final json = <String, Object?>{};
-    if (value != null) {
-      json[r'value'] = value;
-    }
-    if (type != null) {
-      json[r'type'] = type;
-    }
-    json[r'primary'] = primary;
-    return json;
-  }
-
-  ScimUserEmail copyWith({String? value, String? type, bool? primary}) {
-    return ScimUserEmail(
-      value: value ?? this.value,
-      type: type ?? this.type,
-      primary: primary ?? this.primary,
-    );
-  }
-}
-
-/// SCIM user
-class ScimUser {
-  /// SCIM schemas that define the attributes present in the current JSON
-  /// structure This field is required during user creation or modification.
-  final List<String> schemas;
-
-  /// Unique identifier defined by the provisioning client. Atlassian SCIM
-  /// service will verify  the value and guarantee its uniqueness. This field is
-  /// required during  user creation or modification.
-  final String? userName;
-
-  /// Email addresses for the User. This field is required during user creation
-  /// or modification.  One value must be marked as primary.
-  final List<ScimUserEmail> emails;
-
-  /// Unique identifier defined by Atlassian SCIM Service. CaseExact. This field
-  /// is read-only and is be ignored during user creation or modification if
-  /// specified in the payload.
-  final String? id;
-
-  /// Identifier defined by provisioning client. This field is case-sensitive.
-  /// Uniqueness is  controlled by client.
-  final String? externalId;
-
-  /// The components of the user's name.
-  final ScimUserName? name;
-
-  /// User display name.
-  final String? displayName;
-
-  /// User nickname.
-  final String? nickName;
-
-  /// User title.
-  final String? title;
-
-  /// User preferred language.
-  final String? preferredLanguage;
-
-  /// User department.
-  final String? department;
-
-  /// User organization.
-  final String? organization;
-
-  /// User timezone. e.g. America/Los_Angeles .
-  final String? timezone;
-
-  /// Phone numbers for the user.
-  final List<ScimUserPhoneNumber> phoneNumbers;
-
-  /// User metadata information.
-  final ScimMetadata? meta;
-
-  /// SCIM groups user belongs to.
-  final List<ScimGroupForUser> groups;
-
-  /// Enterprise user information
-  final EnterpriseUserExtension?
-      urnIetfParamsScimSchemasExtensionEnterprise20User;
-
-  /// Atlassian specific SCIM Extension
-  final ExternalAtlassianScimExtension?
-      urnScimSchemasExtensionAtlassianExternal10;
-
-  /// A Boolean value indicating the user's administrative status.
-  final bool active;
-
-  ScimUser(
-      {List<String>? schemas,
-      this.userName,
-      List<ScimUserEmail>? emails,
-      this.id,
-      this.externalId,
-      this.name,
-      this.displayName,
-      this.nickName,
-      this.title,
-      this.preferredLanguage,
-      this.department,
-      this.organization,
-      this.timezone,
-      List<ScimUserPhoneNumber>? phoneNumbers,
-      this.meta,
-      List<ScimGroupForUser>? groups,
-      this.urnIetfParamsScimSchemasExtensionEnterprise20User,
-      this.urnScimSchemasExtensionAtlassianExternal10,
-      bool? active})
-      : schemas = schemas ?? [],
-        emails = emails ?? [],
-        phoneNumbers = phoneNumbers ?? [],
-        groups = groups ?? [],
-        active = active ?? false;
-
-  factory ScimUser.fromJson(Map<String, Object?> json) {
-    return ScimUser(
-      schemas: (json[r'schemas'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      userName: json[r'userName'] as String?,
-      emails: (json[r'emails'] as List<Object?>?)
-              ?.map((i) => ScimUserEmail.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      id: json[r'id'] as String?,
-      externalId: json[r'externalId'] as String?,
-      name: json[r'name'] != null
-          ? ScimUserName.fromJson(json[r'name']! as Map<String, Object?>)
-          : null,
-      displayName: json[r'displayName'] as String?,
-      nickName: json[r'nickName'] as String?,
-      title: json[r'title'] as String?,
-      preferredLanguage: json[r'preferredLanguage'] as String?,
-      department: json[r'department'] as String?,
-      organization: json[r'organization'] as String?,
-      timezone: json[r'timezone'] as String?,
-      phoneNumbers: (json[r'phoneNumbers'] as List<Object?>?)
-              ?.map((i) => ScimUserPhoneNumber.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      meta: json[r'meta'] != null
-          ? ScimMetadata.fromJson(json[r'meta']! as Map<String, Object?>)
-          : null,
-      groups: (json[r'groups'] as List<Object?>?)
-              ?.map((i) => ScimGroupForUser.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      urnIetfParamsScimSchemasExtensionEnterprise20User: json[
-                  r'urn:ietf:params:scim:schemas:extension:enterprise:2.0:User'] !=
-              null
-          ? EnterpriseUserExtension.fromJson(json[
-                  r'urn:ietf:params:scim:schemas:extension:enterprise:2.0:User']!
-              as Map<String, Object?>)
-          : null,
-      urnScimSchemasExtensionAtlassianExternal10:
-          json[r'urn:scim:schemas:extension:atlassian-external:1.0'] != null
-              ? ExternalAtlassianScimExtension.fromJson(
-                  json[r'urn:scim:schemas:extension:atlassian-external:1.0']!
-                      as Map<String, Object?>)
-              : null,
-      active: json[r'active'] as bool? ?? false,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var schemas = this.schemas;
-    var userName = this.userName;
-    var emails = this.emails;
-    var id = this.id;
-    var externalId = this.externalId;
-    var name = this.name;
-    var displayName = this.displayName;
-    var nickName = this.nickName;
-    var title = this.title;
-    var preferredLanguage = this.preferredLanguage;
-    var department = this.department;
-    var organization = this.organization;
-    var timezone = this.timezone;
-    var phoneNumbers = this.phoneNumbers;
-    var meta = this.meta;
-    var groups = this.groups;
-    var urnIetfParamsScimSchemasExtensionEnterprise20User =
-        this.urnIetfParamsScimSchemasExtensionEnterprise20User;
-    var urnScimSchemasExtensionAtlassianExternal10 =
-        this.urnScimSchemasExtensionAtlassianExternal10;
-    var active = this.active;
-
-    final json = <String, Object?>{};
-    json[r'schemas'] = schemas;
-    if (userName != null) {
-      json[r'userName'] = userName;
-    }
-    json[r'emails'] = emails.map((i) => i.toJson()).toList();
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (externalId != null) {
-      json[r'externalId'] = externalId;
-    }
-    if (name != null) {
-      json[r'name'] = name.toJson();
-    }
-    if (displayName != null) {
-      json[r'displayName'] = displayName;
-    }
-    if (nickName != null) {
-      json[r'nickName'] = nickName;
-    }
-    if (title != null) {
-      json[r'title'] = title;
-    }
-    if (preferredLanguage != null) {
-      json[r'preferredLanguage'] = preferredLanguage;
-    }
-    if (department != null) {
-      json[r'department'] = department;
-    }
-    if (organization != null) {
-      json[r'organization'] = organization;
-    }
-    if (timezone != null) {
-      json[r'timezone'] = timezone;
-    }
-    json[r'phoneNumbers'] = phoneNumbers.map((i) => i.toJson()).toList();
-    if (meta != null) {
-      json[r'meta'] = meta.toJson();
-    }
-    json[r'groups'] = groups.map((i) => i.toJson()).toList();
-    if (urnIetfParamsScimSchemasExtensionEnterprise20User != null) {
-      json[r'urn:ietf:params:scim:schemas:extension:enterprise:2.0:User'] =
-          urnIetfParamsScimSchemasExtensionEnterprise20User.toJson();
-    }
-    if (urnScimSchemasExtensionAtlassianExternal10 != null) {
-      json[r'urn:scim:schemas:extension:atlassian-external:1.0'] =
-          urnScimSchemasExtensionAtlassianExternal10.toJson();
-    }
-    json[r'active'] = active;
-    return json;
-  }
-
-  ScimUser copyWith(
-      {List<String>? schemas,
-      String? userName,
-      List<ScimUserEmail>? emails,
-      String? id,
-      String? externalId,
-      ScimUserName? name,
-      String? displayName,
-      String? nickName,
-      String? title,
-      String? preferredLanguage,
-      String? department,
-      String? organization,
-      String? timezone,
-      List<ScimUserPhoneNumber>? phoneNumbers,
-      ScimMetadata? meta,
-      List<ScimGroupForUser>? groups,
-      EnterpriseUserExtension?
-          urnIetfParamsScimSchemasExtensionEnterprise20User,
-      ExternalAtlassianScimExtension?
-          urnScimSchemasExtensionAtlassianExternal10,
-      bool? active}) {
-    return ScimUser(
-      schemas: schemas ?? this.schemas,
-      userName: userName ?? this.userName,
-      emails: emails ?? this.emails,
-      id: id ?? this.id,
-      externalId: externalId ?? this.externalId,
-      name: name ?? this.name,
-      displayName: displayName ?? this.displayName,
-      nickName: nickName ?? this.nickName,
-      title: title ?? this.title,
-      preferredLanguage: preferredLanguage ?? this.preferredLanguage,
-      department: department ?? this.department,
-      organization: organization ?? this.organization,
-      timezone: timezone ?? this.timezone,
-      phoneNumbers: phoneNumbers ?? this.phoneNumbers,
-      meta: meta ?? this.meta,
-      groups: groups ?? this.groups,
-      urnIetfParamsScimSchemasExtensionEnterprise20User:
-          urnIetfParamsScimSchemasExtensionEnterprise20User ??
-              this.urnIetfParamsScimSchemasExtensionEnterprise20User,
-      urnScimSchemasExtensionAtlassianExternal10:
-          urnScimSchemasExtensionAtlassianExternal10 ??
-              this.urnScimSchemasExtensionAtlassianExternal10,
-      active: active ?? this.active,
-    );
-  }
-}
-
-/// SCIM user name
-class ScimUserName {
-  /// The full name, including all middle names, titles, and suffixes as
-  /// appropriate, formatted for display.
-  final String? formatted;
-
-  /// The family name of the User.
-  final String? familyName;
-
-  /// The given name of the User.
-  final String? givenName;
-
-  /// The middle name(s) of the User.
-  final String? middleName;
-
-  /// The honorific prefix(es) of the User, or title in most Western languages.
-  final String? honorificPrefix;
-
-  /// The honorific suffix(es) of the User, or suffix in most Western languages.
-  final String? honorificSuffix;
-
-  ScimUserName(
-      {this.formatted,
-      this.familyName,
-      this.givenName,
-      this.middleName,
-      this.honorificPrefix,
-      this.honorificSuffix});
-
-  factory ScimUserName.fromJson(Map<String, Object?> json) {
-    return ScimUserName(
-      formatted: json[r'formatted'] as String?,
-      familyName: json[r'familyName'] as String?,
-      givenName: json[r'givenName'] as String?,
-      middleName: json[r'middleName'] as String?,
-      honorificPrefix: json[r'honorificPrefix'] as String?,
-      honorificSuffix: json[r'honorificSuffix'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var formatted = this.formatted;
-    var familyName = this.familyName;
-    var givenName = this.givenName;
-    var middleName = this.middleName;
-    var honorificPrefix = this.honorificPrefix;
-    var honorificSuffix = this.honorificSuffix;
-
-    final json = <String, Object?>{};
-    if (formatted != null) {
-      json[r'formatted'] = formatted;
-    }
-    if (familyName != null) {
-      json[r'familyName'] = familyName;
-    }
-    if (givenName != null) {
-      json[r'givenName'] = givenName;
-    }
-    if (middleName != null) {
-      json[r'middleName'] = middleName;
-    }
-    if (honorificPrefix != null) {
-      json[r'honorificPrefix'] = honorificPrefix;
-    }
-    if (honorificSuffix != null) {
-      json[r'honorificSuffix'] = honorificSuffix;
-    }
-    return json;
-  }
-
-  ScimUserName copyWith(
-      {String? formatted,
-      String? familyName,
-      String? givenName,
-      String? middleName,
-      String? honorificPrefix,
-      String? honorificSuffix}) {
-    return ScimUserName(
-      formatted: formatted ?? this.formatted,
-      familyName: familyName ?? this.familyName,
-      givenName: givenName ?? this.givenName,
-      middleName: middleName ?? this.middleName,
-      honorificPrefix: honorificPrefix ?? this.honorificPrefix,
-      honorificSuffix: honorificSuffix ?? this.honorificSuffix,
-    );
-  }
-}
-
-/// SCIM user phone number
-class ScimUserPhoneNumber {
-  /// Phone number.
-  final String? value;
-
-  /// Type of phone number, for example `work` or `personal`
-  final String? type;
-
-  /// Boolean value indicating whether phone number is primary.
-  final bool primary;
-
-  ScimUserPhoneNumber({this.value, this.type, bool? primary})
-      : primary = primary ?? false;
-
-  factory ScimUserPhoneNumber.fromJson(Map<String, Object?> json) {
-    return ScimUserPhoneNumber(
-      value: json[r'value'] as String?,
-      type: json[r'type'] as String?,
-      primary: json[r'primary'] as bool? ?? false,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var value = this.value;
-    var type = this.type;
-    var primary = this.primary;
-
-    final json = <String, Object?>{};
-    if (value != null) {
-      json[r'value'] = value;
-    }
-    if (type != null) {
-      json[r'type'] = type;
-    }
-    json[r'primary'] = primary;
-    return json;
-  }
-
-  ScimUserPhoneNumber copyWith({String? value, String? type, bool? primary}) {
-    return ScimUserPhoneNumber(
-      value: value ?? this.value,
-      type: type ?? this.type,
-      primary: primary ?? this.primary,
-    );
+  /// Create a user in a directory. An attempt to create an existing user fails
+  /// with a 409 (Conflict) error. A user account can only be created if it has
+  /// an email address on a verified domain. If a managed Atlassian account
+  /// already exists on the Atlassian platform for the specified email address,
+  /// the user in your identity provider is linked to the user in your Atlassian
+  /// organization.
+  Future<ScimUser> createaUserInAnActiveDirectory(
+      {required String directoryId,
+      String? attributes,
+      String? excludedAttributes,
+      required ScimUser body}) async {
+    return ScimUser.fromJson(await _client.send(
+      'post',
+      'scim/directory/{directoryId}/Users',
+      pathParameters: {
+        'directoryId': directoryId,
+      },
+      queryParameters: {
+        if (attributes != null) 'attributes': attributes,
+        if (excludedAttributes != null)
+          'excludedAttributes': excludedAttributes,
+      },
+      body: body.toJson(),
+    ));
   }
 }
 
@@ -1563,141 +606,107 @@ class BadRequestExceptionScimErrorType {
   String toString() => value;
 }
 
-class StackTraceElement {
-  final String? methodName;
-  final String? fileName;
-  final int? lineNumber;
-  final String? className;
-  final bool nativeMethod;
+/// SCIM enterprise user extension
+class EnterpriseUserExtension {
+  /// Organization the user belongs to.
+  final String? organization;
 
-  StackTraceElement(
-      {this.methodName,
-      this.fileName,
-      this.lineNumber,
-      this.className,
-      bool? nativeMethod})
-      : nativeMethod = nativeMethod ?? false;
+  /// Department the user belongs to.
+  final String? department;
 
-  factory StackTraceElement.fromJson(Map<String, Object?> json) {
-    return StackTraceElement(
-      methodName: json[r'methodName'] as String?,
-      fileName: json[r'fileName'] as String?,
-      lineNumber: (json[r'lineNumber'] as num?)?.toInt(),
-      className: json[r'className'] as String?,
-      nativeMethod: json[r'nativeMethod'] as bool? ?? false,
+  EnterpriseUserExtension({this.organization, this.department});
+
+  factory EnterpriseUserExtension.fromJson(Map<String, Object?> json) {
+    return EnterpriseUserExtension(
+      organization: json[r'organization'] as String?,
+      department: json[r'department'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var methodName = this.methodName;
-    var fileName = this.fileName;
-    var lineNumber = this.lineNumber;
-    var className = this.className;
-    var nativeMethod = this.nativeMethod;
+    var organization = this.organization;
+    var department = this.department;
 
     final json = <String, Object?>{};
-    if (methodName != null) {
-      json[r'methodName'] = methodName;
+    if (organization != null) {
+      json[r'organization'] = organization;
     }
-    if (fileName != null) {
-      json[r'fileName'] = fileName;
+    if (department != null) {
+      json[r'department'] = department;
     }
-    if (lineNumber != null) {
-      json[r'lineNumber'] = lineNumber;
-    }
-    if (className != null) {
-      json[r'className'] = className;
-    }
-    json[r'nativeMethod'] = nativeMethod;
     return json;
   }
 
-  StackTraceElement copyWith(
-      {String? methodName,
-      String? fileName,
-      int? lineNumber,
-      String? className,
-      bool? nativeMethod}) {
-    return StackTraceElement(
-      methodName: methodName ?? this.methodName,
-      fileName: fileName ?? this.fileName,
-      lineNumber: lineNumber ?? this.lineNumber,
-      className: className ?? this.className,
-      nativeMethod: nativeMethod ?? this.nativeMethod,
+  EnterpriseUserExtension copyWith({String? organization, String? department}) {
+    return EnterpriseUserExtension(
+      organization: organization ?? this.organization,
+      department: department ?? this.department,
     );
   }
 }
 
-class Throwable {
-  final Throwable? cause;
-  final List<StackTraceElement> stackTrace;
-  final String? message;
-  final String? localizedMessage;
-  final List<Throwable> suppressed;
+class ExternalAtlassianScimExtension {
+  final String? atlassianAccountId;
 
-  Throwable(
-      {this.cause,
-      List<StackTraceElement>? stackTrace,
-      this.message,
-      this.localizedMessage,
-      List<Throwable>? suppressed})
-      : stackTrace = stackTrace ?? [],
-        suppressed = suppressed ?? [];
+  ExternalAtlassianScimExtension({this.atlassianAccountId});
 
-  factory Throwable.fromJson(Map<String, Object?> json) {
-    return Throwable(
-      cause: json[r'cause'] != null
-          ? Throwable.fromJson(json[r'cause']! as Map<String, Object?>)
-          : null,
-      stackTrace: (json[r'stackTrace'] as List<Object?>?)
-              ?.map((i) => StackTraceElement.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      message: json[r'message'] as String?,
-      localizedMessage: json[r'localizedMessage'] as String?,
-      suppressed: (json[r'suppressed'] as List<Object?>?)
-              ?.map((i) =>
-                  Throwable.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+  factory ExternalAtlassianScimExtension.fromJson(Map<String, Object?> json) {
+    return ExternalAtlassianScimExtension(
+      atlassianAccountId: json[r'atlassianAccountId'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var cause = this.cause;
-    var stackTrace = this.stackTrace;
-    var message = this.message;
-    var localizedMessage = this.localizedMessage;
-    var suppressed = this.suppressed;
+    var atlassianAccountId = this.atlassianAccountId;
 
     final json = <String, Object?>{};
-    if (cause != null) {
-      json[r'cause'] = cause.toJson();
+    if (atlassianAccountId != null) {
+      json[r'atlassianAccountId'] = atlassianAccountId;
     }
-    json[r'stackTrace'] = stackTrace.map((i) => i.toJson()).toList();
-    if (message != null) {
-      json[r'message'] = message;
-    }
-    if (localizedMessage != null) {
-      json[r'localizedMessage'] = localizedMessage;
-    }
-    json[r'suppressed'] = suppressed.map((i) => i.toJson()).toList();
     return json;
   }
 
-  Throwable copyWith(
-      {Throwable? cause,
-      List<StackTraceElement>? stackTrace,
-      String? message,
-      String? localizedMessage,
-      List<Throwable>? suppressed}) {
-    return Throwable(
-      cause: cause ?? this.cause,
-      stackTrace: stackTrace ?? this.stackTrace,
-      message: message ?? this.message,
-      localizedMessage: localizedMessage ?? this.localizedMessage,
-      suppressed: suppressed ?? this.suppressed,
+  ExternalAtlassianScimExtension copyWith({String? atlassianAccountId}) {
+    return ExternalAtlassianScimExtension(
+      atlassianAccountId: atlassianAccountId ?? this.atlassianAccountId,
+    );
+  }
+}
+
+class Failure {
+  /// Human readable error message
+  final String? error;
+
+  /// Trace ID that can be used to find log messages
+  final String? traceId;
+
+  Failure({this.error, this.traceId});
+
+  factory Failure.fromJson(Map<String, Object?> json) {
+    return Failure(
+      error: json[r'error'] as String?,
+      traceId: json[r'traceId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var error = this.error;
+    var traceId = this.traceId;
+
+    final json = <String, Object?>{};
+    if (error != null) {
+      json[r'error'] = error;
+    }
+    if (traceId != null) {
+      json[r'traceId'] = traceId;
+    }
+    return json;
+  }
+
+  Failure copyWith({String? error, String? traceId}) {
+    return Failure(
+      error: error ?? this.error,
+      traceId: traceId ?? this.traceId,
     );
   }
 }
@@ -2022,6 +1031,259 @@ class RequestPayloadToPatch {
   }
 }
 
+/// SCIM Error
+class ScimError {
+  /// SCIM error schemas.
+  final List<String> schemas;
+
+  /// The HTTP status code.
+  final String? status;
+
+  /// Keyword for SCIM detail error.
+  final ScimErrorScimType? scimType;
+
+  /// Detailed human-readable message.
+  final String? detail;
+
+  ScimError({List<String>? schemas, this.status, this.scimType, this.detail})
+      : schemas = schemas ?? [];
+
+  factory ScimError.fromJson(Map<String, Object?> json) {
+    return ScimError(
+      schemas: (json[r'schemas'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      status: json[r'status'] as String?,
+      scimType: json[r'scimType'] != null
+          ? ScimErrorScimType.fromValue(json[r'scimType']! as String)
+          : null,
+      detail: json[r'detail'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var schemas = this.schemas;
+    var status = this.status;
+    var scimType = this.scimType;
+    var detail = this.detail;
+
+    final json = <String, Object?>{};
+    json[r'schemas'] = schemas;
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (scimType != null) {
+      json[r'scimType'] = scimType.value;
+    }
+    if (detail != null) {
+      json[r'detail'] = detail;
+    }
+    return json;
+  }
+
+  ScimError copyWith(
+      {List<String>? schemas,
+      String? status,
+      ScimErrorScimType? scimType,
+      String? detail}) {
+    return ScimError(
+      schemas: schemas ?? this.schemas,
+      status: status ?? this.status,
+      scimType: scimType ?? this.scimType,
+      detail: detail ?? this.detail,
+    );
+  }
+}
+
+class ScimErrorScimType {
+  static const invalidFilter = ScimErrorScimType._('invalidFilter');
+  static const tooMany = ScimErrorScimType._('tooMany');
+  static const uniqueness = ScimErrorScimType._('uniqueness');
+  static const mutability = ScimErrorScimType._('mutability');
+  static const invalidSyntax = ScimErrorScimType._('invalidSyntax');
+  static const invalidPath = ScimErrorScimType._('invalidPath');
+  static const noTarget = ScimErrorScimType._('noTarget');
+  static const invalidValue = ScimErrorScimType._('invalidValue');
+  static const invalidVers = ScimErrorScimType._('invalidVers');
+  static const sensitive = ScimErrorScimType._('sensitive');
+
+  static const values = [
+    invalidFilter,
+    tooMany,
+    uniqueness,
+    mutability,
+    invalidSyntax,
+    invalidPath,
+    noTarget,
+    invalidValue,
+    invalidVers,
+    sensitive,
+  ];
+  final String value;
+
+  const ScimErrorScimType._(this.value);
+
+  static ScimErrorScimType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ScimErrorScimType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// SCIM group
+class ScimGroup {
+  /// SCIM schemas that define the attributes present in the current JSON
+  /// structure. This field  is required during user creation or modification.
+  final List<String> schemas;
+
+  /// Unique identifier defined by Atlassian SCIM Service. This field is
+  /// read-only and case-sensitive.  It is ignored if specified in the payload
+  /// during user creation or modification.
+  final String? id;
+
+  /// Identifier defined by provisioning client. CaseExact. Uniqueness is
+  /// controlled by client.
+  final String? externalId;
+
+  /// Group display name. This field is immutable, required, and read-only.
+  final String? displayName;
+
+  /// Group members
+  final List<ScimGroupMember> members;
+
+  /// Group metadata information.
+  final ScimMetadata? meta;
+
+  ScimGroup(
+      {List<String>? schemas,
+      this.id,
+      this.externalId,
+      this.displayName,
+      List<ScimGroupMember>? members,
+      this.meta})
+      : schemas = schemas ?? [],
+        members = members ?? [];
+
+  factory ScimGroup.fromJson(Map<String, Object?> json) {
+    return ScimGroup(
+      schemas: (json[r'schemas'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      id: json[r'id'] as String?,
+      externalId: json[r'externalId'] as String?,
+      displayName: json[r'displayName'] as String?,
+      members: (json[r'members'] as List<Object?>?)
+              ?.map((i) => ScimGroupMember.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? ScimMetadata.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var schemas = this.schemas;
+    var id = this.id;
+    var externalId = this.externalId;
+    var displayName = this.displayName;
+    var members = this.members;
+    var meta = this.meta;
+
+    final json = <String, Object?>{};
+    json[r'schemas'] = schemas;
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (externalId != null) {
+      json[r'externalId'] = externalId;
+    }
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
+    json[r'members'] = members.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    return json;
+  }
+
+  ScimGroup copyWith(
+      {List<String>? schemas,
+      String? id,
+      String? externalId,
+      String? displayName,
+      List<ScimGroupMember>? members,
+      ScimMetadata? meta}) {
+    return ScimGroup(
+      schemas: schemas ?? this.schemas,
+      id: id ?? this.id,
+      externalId: externalId ?? this.externalId,
+      displayName: displayName ?? this.displayName,
+      members: members ?? this.members,
+      meta: meta ?? this.meta,
+    );
+  }
+}
+
+/// SCIM group for user
+class ScimGroupForUser {
+  final String? type;
+  final String? value;
+  final String? display;
+  final String? ref;
+
+  ScimGroupForUser({this.type, this.value, this.display, this.ref});
+
+  factory ScimGroupForUser.fromJson(Map<String, Object?> json) {
+    return ScimGroupForUser(
+      type: json[r'type'] as String?,
+      value: json[r'value'] as String?,
+      display: json[r'display'] as String?,
+      ref: json[r'$ref'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var value = this.value;
+    var display = this.display;
+    var ref = this.ref;
+
+    final json = <String, Object?>{};
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (value != null) {
+      json[r'value'] = value;
+    }
+    if (display != null) {
+      json[r'display'] = display;
+    }
+    if (ref != null) {
+      json[r'$ref'] = ref;
+    }
+    return json;
+  }
+
+  ScimGroupForUser copyWith(
+      {String? type, String? value, String? display, String? ref}) {
+    return ScimGroupForUser(
+      type: type ?? this.type,
+      value: value ?? this.value,
+      display: display ?? this.display,
+      ref: ref ?? this.ref,
+    );
+  }
+}
+
 /// SCIM group list response
 class ScimGroupListResponse {
   /// SCIM schemas that define list of response.
@@ -2105,6 +1367,470 @@ class ScimGroupListResponse {
   }
 }
 
+/// SCIM group member
+class ScimGroupMember {
+  final String? type;
+  final String? value;
+  final String? display;
+  final String? ref;
+
+  ScimGroupMember({this.type, this.value, this.display, this.ref});
+
+  factory ScimGroupMember.fromJson(Map<String, Object?> json) {
+    return ScimGroupMember(
+      type: json[r'type'] as String?,
+      value: json[r'value'] as String?,
+      display: json[r'display'] as String?,
+      ref: json[r'$ref'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var value = this.value;
+    var display = this.display;
+    var ref = this.ref;
+
+    final json = <String, Object?>{};
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (value != null) {
+      json[r'value'] = value;
+    }
+    if (display != null) {
+      json[r'display'] = display;
+    }
+    if (ref != null) {
+      json[r'$ref'] = ref;
+    }
+    return json;
+  }
+
+  ScimGroupMember copyWith(
+      {String? type, String? value, String? display, String? ref}) {
+    return ScimGroupMember(
+      type: type ?? this.type,
+      value: value ?? this.value,
+      display: display ?? this.display,
+      ref: ref ?? this.ref,
+    );
+  }
+}
+
+/// SCIM metadata
+class ScimMetadata {
+  /// The name of the resource type of the resource. This field is read-only and
+  ///  case-sensitive.
+  final ScimMetadataResourceType? resourceType;
+
+  /// The URI of the resource being returned. This field is read-only.
+  final String? location;
+
+  /// The most recent DateTime that the details of this resource were updated.
+  /// This  field is read-only.
+  final DateTime? lastModified;
+
+  /// The DateTime that the resource was added to Atlassian SCIM service. This
+  /// field  is read-only.
+  final DateTime? created;
+
+  ScimMetadata(
+      {this.resourceType, this.location, this.lastModified, this.created});
+
+  factory ScimMetadata.fromJson(Map<String, Object?> json) {
+    return ScimMetadata(
+      resourceType: json[r'resourceType'] != null
+          ? ScimMetadataResourceType.fromValue(json[r'resourceType']! as String)
+          : null,
+      location: json[r'location'] as String?,
+      lastModified: DateTime.tryParse(json[r'lastModified'] as String? ?? ''),
+      created: DateTime.tryParse(json[r'created'] as String? ?? ''),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var resourceType = this.resourceType;
+    var location = this.location;
+    var lastModified = this.lastModified;
+    var created = this.created;
+
+    final json = <String, Object?>{};
+    if (resourceType != null) {
+      json[r'resourceType'] = resourceType.value;
+    }
+    if (location != null) {
+      json[r'location'] = location;
+    }
+    if (lastModified != null) {
+      json[r'lastModified'] = lastModified.toIso8601String();
+    }
+    if (created != null) {
+      json[r'created'] = created.toIso8601String();
+    }
+    return json;
+  }
+
+  ScimMetadata copyWith(
+      {ScimMetadataResourceType? resourceType,
+      String? location,
+      DateTime? lastModified,
+      DateTime? created}) {
+    return ScimMetadata(
+      resourceType: resourceType ?? this.resourceType,
+      location: location ?? this.location,
+      lastModified: lastModified ?? this.lastModified,
+      created: created ?? this.created,
+    );
+  }
+}
+
+class ScimMetadataResourceType {
+  static const user = ScimMetadataResourceType._('USER');
+  static const group = ScimMetadataResourceType._('GROUP');
+  static const directory = ScimMetadataResourceType._('DIRECTORY');
+
+  static const values = [
+    user,
+    group,
+    directory,
+  ];
+  final String value;
+
+  const ScimMetadataResourceType._(this.value);
+
+  static ScimMetadataResourceType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ScimMetadataResourceType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// SCIM user
+class ScimUser {
+  /// SCIM schemas that define the attributes present in the current JSON
+  /// structure This field is required during user creation or modification.
+  final List<String> schemas;
+
+  /// Unique identifier defined by the provisioning client. Atlassian SCIM
+  /// service will verify  the value and guarantee its uniqueness. This field is
+  /// required during  user creation or modification.
+  final String? userName;
+
+  /// Email addresses for the User. This field is required during user creation
+  /// or modification.  One value must be marked as primary.
+  final List<ScimUserEmail> emails;
+
+  /// Unique identifier defined by Atlassian SCIM Service. CaseExact. This field
+  /// is read-only and is be ignored during user creation or modification if
+  /// specified in the payload.
+  final String? id;
+
+  /// Identifier defined by provisioning client. This field is case-sensitive.
+  /// Uniqueness is  controlled by client.
+  final String? externalId;
+
+  /// The components of the user's name.
+  final ScimUserName? name;
+
+  /// User display name.
+  final String? displayName;
+
+  /// User nickname.
+  final String? nickName;
+
+  /// User title.
+  final String? title;
+
+  /// User preferred language.
+  final String? preferredLanguage;
+
+  /// User department.
+  final String? department;
+
+  /// User organization.
+  final String? organization;
+
+  /// User timezone. e.g. America/Los_Angeles .
+  final String? timezone;
+
+  /// Phone numbers for the user.
+  final List<ScimUserPhoneNumber> phoneNumbers;
+
+  /// User metadata information.
+  final ScimMetadata? meta;
+
+  /// SCIM groups user belongs to.
+  final List<ScimGroupForUser> groups;
+
+  /// Enterprise user information
+  final EnterpriseUserExtension?
+      urnIetfParamsScimSchemasExtensionEnterprise20User;
+
+  /// Atlassian specific SCIM Extension
+  final ExternalAtlassianScimExtension?
+      urnScimSchemasExtensionAtlassianExternal10;
+
+  /// A Boolean value indicating the user's administrative status.
+  final bool active;
+
+  ScimUser(
+      {List<String>? schemas,
+      this.userName,
+      List<ScimUserEmail>? emails,
+      this.id,
+      this.externalId,
+      this.name,
+      this.displayName,
+      this.nickName,
+      this.title,
+      this.preferredLanguage,
+      this.department,
+      this.organization,
+      this.timezone,
+      List<ScimUserPhoneNumber>? phoneNumbers,
+      this.meta,
+      List<ScimGroupForUser>? groups,
+      this.urnIetfParamsScimSchemasExtensionEnterprise20User,
+      this.urnScimSchemasExtensionAtlassianExternal10,
+      bool? active})
+      : schemas = schemas ?? [],
+        emails = emails ?? [],
+        phoneNumbers = phoneNumbers ?? [],
+        groups = groups ?? [],
+        active = active ?? false;
+
+  factory ScimUser.fromJson(Map<String, Object?> json) {
+    return ScimUser(
+      schemas: (json[r'schemas'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      userName: json[r'userName'] as String?,
+      emails: (json[r'emails'] as List<Object?>?)
+              ?.map((i) => ScimUserEmail.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      id: json[r'id'] as String?,
+      externalId: json[r'externalId'] as String?,
+      name: json[r'name'] != null
+          ? ScimUserName.fromJson(json[r'name']! as Map<String, Object?>)
+          : null,
+      displayName: json[r'displayName'] as String?,
+      nickName: json[r'nickName'] as String?,
+      title: json[r'title'] as String?,
+      preferredLanguage: json[r'preferredLanguage'] as String?,
+      department: json[r'department'] as String?,
+      organization: json[r'organization'] as String?,
+      timezone: json[r'timezone'] as String?,
+      phoneNumbers: (json[r'phoneNumbers'] as List<Object?>?)
+              ?.map((i) => ScimUserPhoneNumber.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? ScimMetadata.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      groups: (json[r'groups'] as List<Object?>?)
+              ?.map((i) => ScimGroupForUser.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      urnIetfParamsScimSchemasExtensionEnterprise20User: json[
+                  r'urn:ietf:params:scim:schemas:extension:enterprise:2.0:User'] !=
+              null
+          ? EnterpriseUserExtension.fromJson(json[
+                  r'urn:ietf:params:scim:schemas:extension:enterprise:2.0:User']!
+              as Map<String, Object?>)
+          : null,
+      urnScimSchemasExtensionAtlassianExternal10:
+          json[r'urn:scim:schemas:extension:atlassian-external:1.0'] != null
+              ? ExternalAtlassianScimExtension.fromJson(
+                  json[r'urn:scim:schemas:extension:atlassian-external:1.0']!
+                      as Map<String, Object?>)
+              : null,
+      active: json[r'active'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var schemas = this.schemas;
+    var userName = this.userName;
+    var emails = this.emails;
+    var id = this.id;
+    var externalId = this.externalId;
+    var name = this.name;
+    var displayName = this.displayName;
+    var nickName = this.nickName;
+    var title = this.title;
+    var preferredLanguage = this.preferredLanguage;
+    var department = this.department;
+    var organization = this.organization;
+    var timezone = this.timezone;
+    var phoneNumbers = this.phoneNumbers;
+    var meta = this.meta;
+    var groups = this.groups;
+    var urnIetfParamsScimSchemasExtensionEnterprise20User =
+        this.urnIetfParamsScimSchemasExtensionEnterprise20User;
+    var urnScimSchemasExtensionAtlassianExternal10 =
+        this.urnScimSchemasExtensionAtlassianExternal10;
+    var active = this.active;
+
+    final json = <String, Object?>{};
+    json[r'schemas'] = schemas;
+    if (userName != null) {
+      json[r'userName'] = userName;
+    }
+    json[r'emails'] = emails.map((i) => i.toJson()).toList();
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (externalId != null) {
+      json[r'externalId'] = externalId;
+    }
+    if (name != null) {
+      json[r'name'] = name.toJson();
+    }
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
+    if (nickName != null) {
+      json[r'nickName'] = nickName;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (preferredLanguage != null) {
+      json[r'preferredLanguage'] = preferredLanguage;
+    }
+    if (department != null) {
+      json[r'department'] = department;
+    }
+    if (organization != null) {
+      json[r'organization'] = organization;
+    }
+    if (timezone != null) {
+      json[r'timezone'] = timezone;
+    }
+    json[r'phoneNumbers'] = phoneNumbers.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    json[r'groups'] = groups.map((i) => i.toJson()).toList();
+    if (urnIetfParamsScimSchemasExtensionEnterprise20User != null) {
+      json[r'urn:ietf:params:scim:schemas:extension:enterprise:2.0:User'] =
+          urnIetfParamsScimSchemasExtensionEnterprise20User.toJson();
+    }
+    if (urnScimSchemasExtensionAtlassianExternal10 != null) {
+      json[r'urn:scim:schemas:extension:atlassian-external:1.0'] =
+          urnScimSchemasExtensionAtlassianExternal10.toJson();
+    }
+    json[r'active'] = active;
+    return json;
+  }
+
+  ScimUser copyWith(
+      {List<String>? schemas,
+      String? userName,
+      List<ScimUserEmail>? emails,
+      String? id,
+      String? externalId,
+      ScimUserName? name,
+      String? displayName,
+      String? nickName,
+      String? title,
+      String? preferredLanguage,
+      String? department,
+      String? organization,
+      String? timezone,
+      List<ScimUserPhoneNumber>? phoneNumbers,
+      ScimMetadata? meta,
+      List<ScimGroupForUser>? groups,
+      EnterpriseUserExtension?
+          urnIetfParamsScimSchemasExtensionEnterprise20User,
+      ExternalAtlassianScimExtension?
+          urnScimSchemasExtensionAtlassianExternal10,
+      bool? active}) {
+    return ScimUser(
+      schemas: schemas ?? this.schemas,
+      userName: userName ?? this.userName,
+      emails: emails ?? this.emails,
+      id: id ?? this.id,
+      externalId: externalId ?? this.externalId,
+      name: name ?? this.name,
+      displayName: displayName ?? this.displayName,
+      nickName: nickName ?? this.nickName,
+      title: title ?? this.title,
+      preferredLanguage: preferredLanguage ?? this.preferredLanguage,
+      department: department ?? this.department,
+      organization: organization ?? this.organization,
+      timezone: timezone ?? this.timezone,
+      phoneNumbers: phoneNumbers ?? this.phoneNumbers,
+      meta: meta ?? this.meta,
+      groups: groups ?? this.groups,
+      urnIetfParamsScimSchemasExtensionEnterprise20User:
+          urnIetfParamsScimSchemasExtensionEnterprise20User ??
+              this.urnIetfParamsScimSchemasExtensionEnterprise20User,
+      urnScimSchemasExtensionAtlassianExternal10:
+          urnScimSchemasExtensionAtlassianExternal10 ??
+              this.urnScimSchemasExtensionAtlassianExternal10,
+      active: active ?? this.active,
+    );
+  }
+}
+
+/// SCIM user email
+class ScimUserEmail {
+  /// Email address.
+  final String? value;
+
+  /// Type of email address, for example "work" or "personal".
+  final String? type;
+
+  /// Boolean value indicating whether this is the primary email address.
+  final bool primary;
+
+  ScimUserEmail({this.value, this.type, bool? primary})
+      : primary = primary ?? false;
+
+  factory ScimUserEmail.fromJson(Map<String, Object?> json) {
+    return ScimUserEmail(
+      value: json[r'value'] as String?,
+      type: json[r'type'] as String?,
+      primary: json[r'primary'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var value = this.value;
+    var type = this.type;
+    var primary = this.primary;
+
+    final json = <String, Object?>{};
+    if (value != null) {
+      json[r'value'] = value;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    json[r'primary'] = primary;
+    return json;
+  }
+
+  ScimUserEmail copyWith({String? value, String? type, bool? primary}) {
+    return ScimUserEmail(
+      value: value ?? this.value,
+      type: type ?? this.type,
+      primary: primary ?? this.primary,
+    );
+  }
+}
+
 /// SCIM user list response
 class ScimUserListResponse {
   /// SCIM schemas that define list of response.
@@ -2184,6 +1910,280 @@ class ScimUserListResponse {
       startIndex: startIndex ?? this.startIndex,
       itemsPerPage: itemsPerPage ?? this.itemsPerPage,
       resources: resources ?? this.resources,
+    );
+  }
+}
+
+/// SCIM user name
+class ScimUserName {
+  /// The full name, including all middle names, titles, and suffixes as
+  /// appropriate, formatted for display.
+  final String? formatted;
+
+  /// The family name of the User.
+  final String? familyName;
+
+  /// The given name of the User.
+  final String? givenName;
+
+  /// The middle name(s) of the User.
+  final String? middleName;
+
+  /// The honorific prefix(es) of the User, or title in most Western languages.
+  final String? honorificPrefix;
+
+  /// The honorific suffix(es) of the User, or suffix in most Western languages.
+  final String? honorificSuffix;
+
+  ScimUserName(
+      {this.formatted,
+      this.familyName,
+      this.givenName,
+      this.middleName,
+      this.honorificPrefix,
+      this.honorificSuffix});
+
+  factory ScimUserName.fromJson(Map<String, Object?> json) {
+    return ScimUserName(
+      formatted: json[r'formatted'] as String?,
+      familyName: json[r'familyName'] as String?,
+      givenName: json[r'givenName'] as String?,
+      middleName: json[r'middleName'] as String?,
+      honorificPrefix: json[r'honorificPrefix'] as String?,
+      honorificSuffix: json[r'honorificSuffix'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var formatted = this.formatted;
+    var familyName = this.familyName;
+    var givenName = this.givenName;
+    var middleName = this.middleName;
+    var honorificPrefix = this.honorificPrefix;
+    var honorificSuffix = this.honorificSuffix;
+
+    final json = <String, Object?>{};
+    if (formatted != null) {
+      json[r'formatted'] = formatted;
+    }
+    if (familyName != null) {
+      json[r'familyName'] = familyName;
+    }
+    if (givenName != null) {
+      json[r'givenName'] = givenName;
+    }
+    if (middleName != null) {
+      json[r'middleName'] = middleName;
+    }
+    if (honorificPrefix != null) {
+      json[r'honorificPrefix'] = honorificPrefix;
+    }
+    if (honorificSuffix != null) {
+      json[r'honorificSuffix'] = honorificSuffix;
+    }
+    return json;
+  }
+
+  ScimUserName copyWith(
+      {String? formatted,
+      String? familyName,
+      String? givenName,
+      String? middleName,
+      String? honorificPrefix,
+      String? honorificSuffix}) {
+    return ScimUserName(
+      formatted: formatted ?? this.formatted,
+      familyName: familyName ?? this.familyName,
+      givenName: givenName ?? this.givenName,
+      middleName: middleName ?? this.middleName,
+      honorificPrefix: honorificPrefix ?? this.honorificPrefix,
+      honorificSuffix: honorificSuffix ?? this.honorificSuffix,
+    );
+  }
+}
+
+/// SCIM user phone number
+class ScimUserPhoneNumber {
+  /// Phone number.
+  final String? value;
+
+  /// Type of phone number, for example `work` or `personal`
+  final String? type;
+
+  /// Boolean value indicating whether phone number is primary.
+  final bool primary;
+
+  ScimUserPhoneNumber({this.value, this.type, bool? primary})
+      : primary = primary ?? false;
+
+  factory ScimUserPhoneNumber.fromJson(Map<String, Object?> json) {
+    return ScimUserPhoneNumber(
+      value: json[r'value'] as String?,
+      type: json[r'type'] as String?,
+      primary: json[r'primary'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var value = this.value;
+    var type = this.type;
+    var primary = this.primary;
+
+    final json = <String, Object?>{};
+    if (value != null) {
+      json[r'value'] = value;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    json[r'primary'] = primary;
+    return json;
+  }
+
+  ScimUserPhoneNumber copyWith({String? value, String? type, bool? primary}) {
+    return ScimUserPhoneNumber(
+      value: value ?? this.value,
+      type: type ?? this.type,
+      primary: primary ?? this.primary,
+    );
+  }
+}
+
+class StackTraceElement {
+  final String? methodName;
+  final String? fileName;
+  final int? lineNumber;
+  final String? className;
+  final bool nativeMethod;
+
+  StackTraceElement(
+      {this.methodName,
+      this.fileName,
+      this.lineNumber,
+      this.className,
+      bool? nativeMethod})
+      : nativeMethod = nativeMethod ?? false;
+
+  factory StackTraceElement.fromJson(Map<String, Object?> json) {
+    return StackTraceElement(
+      methodName: json[r'methodName'] as String?,
+      fileName: json[r'fileName'] as String?,
+      lineNumber: (json[r'lineNumber'] as num?)?.toInt(),
+      className: json[r'className'] as String?,
+      nativeMethod: json[r'nativeMethod'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var methodName = this.methodName;
+    var fileName = this.fileName;
+    var lineNumber = this.lineNumber;
+    var className = this.className;
+    var nativeMethod = this.nativeMethod;
+
+    final json = <String, Object?>{};
+    if (methodName != null) {
+      json[r'methodName'] = methodName;
+    }
+    if (fileName != null) {
+      json[r'fileName'] = fileName;
+    }
+    if (lineNumber != null) {
+      json[r'lineNumber'] = lineNumber;
+    }
+    if (className != null) {
+      json[r'className'] = className;
+    }
+    json[r'nativeMethod'] = nativeMethod;
+    return json;
+  }
+
+  StackTraceElement copyWith(
+      {String? methodName,
+      String? fileName,
+      int? lineNumber,
+      String? className,
+      bool? nativeMethod}) {
+    return StackTraceElement(
+      methodName: methodName ?? this.methodName,
+      fileName: fileName ?? this.fileName,
+      lineNumber: lineNumber ?? this.lineNumber,
+      className: className ?? this.className,
+      nativeMethod: nativeMethod ?? this.nativeMethod,
+    );
+  }
+}
+
+class Throwable {
+  final Throwable? cause;
+  final List<StackTraceElement> stackTrace;
+  final String? message;
+  final String? localizedMessage;
+  final List<Throwable> suppressed;
+
+  Throwable(
+      {this.cause,
+      List<StackTraceElement>? stackTrace,
+      this.message,
+      this.localizedMessage,
+      List<Throwable>? suppressed})
+      : stackTrace = stackTrace ?? [],
+        suppressed = suppressed ?? [];
+
+  factory Throwable.fromJson(Map<String, Object?> json) {
+    return Throwable(
+      cause: json[r'cause'] != null
+          ? Throwable.fromJson(json[r'cause']! as Map<String, Object?>)
+          : null,
+      stackTrace: (json[r'stackTrace'] as List<Object?>?)
+              ?.map((i) => StackTraceElement.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      message: json[r'message'] as String?,
+      localizedMessage: json[r'localizedMessage'] as String?,
+      suppressed: (json[r'suppressed'] as List<Object?>?)
+              ?.map((i) =>
+                  Throwable.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var cause = this.cause;
+    var stackTrace = this.stackTrace;
+    var message = this.message;
+    var localizedMessage = this.localizedMessage;
+    var suppressed = this.suppressed;
+
+    final json = <String, Object?>{};
+    if (cause != null) {
+      json[r'cause'] = cause.toJson();
+    }
+    json[r'stackTrace'] = stackTrace.map((i) => i.toJson()).toList();
+    if (message != null) {
+      json[r'message'] = message;
+    }
+    if (localizedMessage != null) {
+      json[r'localizedMessage'] = localizedMessage;
+    }
+    json[r'suppressed'] = suppressed.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  Throwable copyWith(
+      {Throwable? cause,
+      List<StackTraceElement>? stackTrace,
+      String? message,
+      String? localizedMessage,
+      List<Throwable>? suppressed}) {
+    return Throwable(
+      cause: cause ?? this.cause,
+      stackTrace: stackTrace ?? this.stackTrace,
+      message: message ?? this.message,
+      localizedMessage: localizedMessage ?? this.localizedMessage,
+      suppressed: suppressed ?? this.suppressed,
     );
   }
 }

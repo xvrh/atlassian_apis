@@ -1487,922 +1487,6 @@ class ServicedeskApi {
   }
 }
 
-class OrganizationDTO {
-  /// A unique system generated ID for the organization.
-  final String? id;
-
-  /// Name of the organization.
-  final String? name;
-
-  /// REST API URL to the organization.
-  final SelfLinkDTO? links;
-
-  OrganizationDTO({this.id, this.name, this.links});
-
-  factory OrganizationDTO.fromJson(Map<String, Object?> json) {
-    return OrganizationDTO(
-      id: json[r'id'] as String?,
-      name: json[r'name'] as String?,
-      links: json[r'_links'] != null
-          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var name = this.name;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  OrganizationDTO copyWith({String? id, String? name, SelfLinkDTO? links}) {
-    return OrganizationDTO(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class SelfLinkDTO {
-  final String? self;
-
-  SelfLinkDTO({this.self});
-
-  factory SelfLinkDTO.fromJson(Map<String, Object?> json) {
-    return SelfLinkDTO(
-      self: json[r'self'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var self = this.self;
-
-    final json = <String, Object?>{};
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    return json;
-  }
-
-  SelfLinkDTO copyWith({String? self}) {
-    return SelfLinkDTO(
-      self: self ?? this.self,
-    );
-  }
-}
-
-class Linkable {
-  final SelfLinkDTO? links;
-
-  Linkable({this.links});
-
-  factory Linkable.fromJson(Map<String, Object?> json) {
-    return Linkable(
-      links: json[r'_links'] != null
-          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  Linkable copyWith({SelfLinkDTO? links}) {
-    return Linkable(
-      links: links ?? this.links,
-    );
-  }
-}
-
-class ErrorResponse {
-  final String? errorMessage;
-  final I18nErrorMessage? i18nErrorMessage;
-
-  ErrorResponse({this.errorMessage, this.i18nErrorMessage});
-
-  factory ErrorResponse.fromJson(Map<String, Object?> json) {
-    return ErrorResponse(
-      errorMessage: json[r'errorMessage'] as String?,
-      i18nErrorMessage: json[r'i18nErrorMessage'] != null
-          ? I18nErrorMessage.fromJson(
-              json[r'i18nErrorMessage']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var errorMessage = this.errorMessage;
-    var i18nErrorMessage = this.i18nErrorMessage;
-
-    final json = <String, Object?>{};
-    if (errorMessage != null) {
-      json[r'errorMessage'] = errorMessage;
-    }
-    if (i18nErrorMessage != null) {
-      json[r'i18nErrorMessage'] = i18nErrorMessage.toJson();
-    }
-    return json;
-  }
-
-  ErrorResponse copyWith(
-      {String? errorMessage, I18nErrorMessage? i18nErrorMessage}) {
-    return ErrorResponse(
-      errorMessage: errorMessage ?? this.errorMessage,
-      i18nErrorMessage: i18nErrorMessage ?? this.i18nErrorMessage,
-    );
-  }
-}
-
-class I18nErrorMessage {
-  final String? i18nKey;
-  final List<String> parameters;
-
-  I18nErrorMessage({this.i18nKey, List<String>? parameters})
-      : parameters = parameters ?? [];
-
-  factory I18nErrorMessage.fromJson(Map<String, Object?> json) {
-    return I18nErrorMessage(
-      i18nKey: json[r'i18nKey'] as String?,
-      parameters: (json[r'parameters'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var i18nKey = this.i18nKey;
-    var parameters = this.parameters;
-
-    final json = <String, Object?>{};
-    if (i18nKey != null) {
-      json[r'i18nKey'] = i18nKey;
-    }
-    json[r'parameters'] = parameters;
-    return json;
-  }
-
-  I18nErrorMessage copyWith({String? i18nKey, List<String>? parameters}) {
-    return I18nErrorMessage(
-      i18nKey: i18nKey ?? this.i18nKey,
-      parameters: parameters ?? this.parameters,
-    );
-  }
-}
-
-class PagedDTOOrganizationDTO {
-  /// Number of items returned in the page.
-  final int? size;
-
-  /// Index of the first item returned in the page.
-  final int? start;
-
-  /// Number of items to be returned per page, up to the maximum set for these
-  /// objects in the current implementation.
-  final int? limit;
-
-  /// Indicates if this is the last page of records (true) or not (false).
-  final bool isLastPage;
-
-  /// Details of the items included in the page.
-  final List<OrganizationDTO> values;
-  final List<String> expands;
-
-  /// List of the links relating to the page.
-  final PagedLinkDTO? links;
-
-  PagedDTOOrganizationDTO(
-      {this.size,
-      this.start,
-      this.limit,
-      bool? isLastPage,
-      List<OrganizationDTO>? values,
-      List<String>? expands,
-      this.links})
-      : isLastPage = isLastPage ?? false,
-        values = values ?? [],
-        expands = expands ?? [];
-
-  factory PagedDTOOrganizationDTO.fromJson(Map<String, Object?> json) {
-    return PagedDTOOrganizationDTO(
-      size: (json[r'size'] as num?)?.toInt(),
-      start: (json[r'start'] as num?)?.toInt(),
-      limit: (json[r'limit'] as num?)?.toInt(),
-      isLastPage: json[r'isLastPage'] as bool? ?? false,
-      values: (json[r'values'] as List<Object?>?)
-              ?.map((i) => OrganizationDTO.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      expands: (json[r'_expands'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      links: json[r'_links'] != null
-          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var size = this.size;
-    var start = this.start;
-    var limit = this.limit;
-    var isLastPage = this.isLastPage;
-    var values = this.values;
-    var expands = this.expands;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (size != null) {
-      json[r'size'] = size;
-    }
-    if (start != null) {
-      json[r'start'] = start;
-    }
-    if (limit != null) {
-      json[r'limit'] = limit;
-    }
-    json[r'isLastPage'] = isLastPage;
-    json[r'values'] = values.map((i) => i.toJson()).toList();
-    json[r'_expands'] = expands;
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  PagedDTOOrganizationDTO copyWith(
-      {int? size,
-      int? start,
-      int? limit,
-      bool? isLastPage,
-      List<OrganizationDTO>? values,
-      List<String>? expands,
-      PagedLinkDTO? links}) {
-    return PagedDTOOrganizationDTO(
-      size: size ?? this.size,
-      start: start ?? this.start,
-      limit: limit ?? this.limit,
-      isLastPage: isLastPage ?? this.isLastPage,
-      values: values ?? this.values,
-      expands: expands ?? this.expands,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class PagedLinkDTO {
-  /// REST API URL for the current page.
-  final String? self;
-
-  /// Base URL for the REST API calls.
-  final String? base;
-  final String? context;
-
-  /// REST API URL for the next page, if there is one.
-  final String? next;
-
-  /// REST API URL for the previous page, if there is one.
-  final String? prev;
-
-  PagedLinkDTO({this.self, this.base, this.context, this.next, this.prev});
-
-  factory PagedLinkDTO.fromJson(Map<String, Object?> json) {
-    return PagedLinkDTO(
-      self: json[r'self'] as String?,
-      base: json[r'base'] as String?,
-      context: json[r'context'] as String?,
-      next: json[r'next'] as String?,
-      prev: json[r'prev'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var self = this.self;
-    var base = this.base;
-    var context = this.context;
-    var next = this.next;
-    var prev = this.prev;
-
-    final json = <String, Object?>{};
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (base != null) {
-      json[r'base'] = base;
-    }
-    if (context != null) {
-      json[r'context'] = context;
-    }
-    if (next != null) {
-      json[r'next'] = next;
-    }
-    if (prev != null) {
-      json[r'prev'] = prev;
-    }
-    return json;
-  }
-
-  PagedLinkDTO copyWith(
-      {String? self,
-      String? base,
-      String? context,
-      String? next,
-      String? prev}) {
-    return PagedLinkDTO(
-      self: self ?? this.self,
-      base: base ?? this.base,
-      context: context ?? this.context,
-      next: next ?? this.next,
-      prev: prev ?? this.prev,
-    );
-  }
-}
-
-class OrganizationCreateDTO {
-  /// Name of the organization.
-  final String? name;
-
-  OrganizationCreateDTO({this.name});
-
-  factory OrganizationCreateDTO.fromJson(Map<String, Object?> json) {
-    return OrganizationCreateDTO(
-      name: json[r'name'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var name = this.name;
-
-    final json = <String, Object?>{};
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    return json;
-  }
-
-  OrganizationCreateDTO copyWith({String? name}) {
-    return OrganizationCreateDTO(
-      name: name ?? this.name,
-    );
-  }
-}
-
-class PagedDTOUserDTO {
-  /// Number of items returned in the page.
-  final int? size;
-
-  /// Index of the first item returned in the page.
-  final int? start;
-
-  /// Number of items to be returned per page, up to the maximum set for these
-  /// objects in the current implementation.
-  final int? limit;
-
-  /// Indicates if this is the last page of records (true) or not (false).
-  final bool isLastPage;
-
-  /// Details of the items included in the page.
-  final List<UserDTO> values;
-  final List<String> expands;
-
-  /// List of the links relating to the page.
-  final PagedLinkDTO? links;
-
-  PagedDTOUserDTO(
-      {this.size,
-      this.start,
-      this.limit,
-      bool? isLastPage,
-      List<UserDTO>? values,
-      List<String>? expands,
-      this.links})
-      : isLastPage = isLastPage ?? false,
-        values = values ?? [],
-        expands = expands ?? [];
-
-  factory PagedDTOUserDTO.fromJson(Map<String, Object?> json) {
-    return PagedDTOUserDTO(
-      size: (json[r'size'] as num?)?.toInt(),
-      start: (json[r'start'] as num?)?.toInt(),
-      limit: (json[r'limit'] as num?)?.toInt(),
-      isLastPage: json[r'isLastPage'] as bool? ?? false,
-      values: (json[r'values'] as List<Object?>?)
-              ?.map((i) =>
-                  UserDTO.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      expands: (json[r'_expands'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      links: json[r'_links'] != null
-          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var size = this.size;
-    var start = this.start;
-    var limit = this.limit;
-    var isLastPage = this.isLastPage;
-    var values = this.values;
-    var expands = this.expands;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (size != null) {
-      json[r'size'] = size;
-    }
-    if (start != null) {
-      json[r'start'] = start;
-    }
-    if (limit != null) {
-      json[r'limit'] = limit;
-    }
-    json[r'isLastPage'] = isLastPage;
-    json[r'values'] = values.map((i) => i.toJson()).toList();
-    json[r'_expands'] = expands;
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  PagedDTOUserDTO copyWith(
-      {int? size,
-      int? start,
-      int? limit,
-      bool? isLastPage,
-      List<UserDTO>? values,
-      List<String>? expands,
-      PagedLinkDTO? links}) {
-    return PagedDTOUserDTO(
-      size: size ?? this.size,
-      start: start ?? this.start,
-      limit: limit ?? this.limit,
-      isLastPage: isLastPage ?? this.isLastPage,
-      values: values ?? this.values,
-      expands: expands ?? this.expands,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class UserDTO {
-  /// The accountId of the user, which uniquely identifies the user across all
-  /// Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
-  final String? accountId;
-
-  /// This property is no longer available and will be removed from the
-  /// documentation soon. See the
-  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
-  /// for details.
-  final String? name;
-
-  /// This property is no longer available and will be removed from the
-  /// documentation soon. See the
-  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
-  /// for details.
-  final String? key;
-
-  /// Customer's email address. Depending on the customer’s privacy settings,
-  /// this may be returned as null.
-  final String? emailAddress;
-
-  /// Customer's name for display in a UI. Depending on the customer’s privacy
-  /// settings, this may return an alternative value.
-  final String? displayName;
-
-  /// Indicates if the customer is active (true) or inactive (false)
-  final bool active;
-
-  /// Customer time zone. Depending on the customer’s privacy settings, this may
-  /// be returned as null.
-  final String? timeZone;
-
-  /// URLs for the customer record and related items.
-  final UserLinkDTO? links;
-
-  UserDTO(
-      {this.accountId,
-      this.name,
-      this.key,
-      this.emailAddress,
-      this.displayName,
-      bool? active,
-      this.timeZone,
-      this.links})
-      : active = active ?? false;
-
-  factory UserDTO.fromJson(Map<String, Object?> json) {
-    return UserDTO(
-      accountId: json[r'accountId'] as String?,
-      name: json[r'name'] as String?,
-      key: json[r'key'] as String?,
-      emailAddress: json[r'emailAddress'] as String?,
-      displayName: json[r'displayName'] as String?,
-      active: json[r'active'] as bool? ?? false,
-      timeZone: json[r'timeZone'] as String?,
-      links: json[r'_links'] != null
-          ? UserLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var accountId = this.accountId;
-    var name = this.name;
-    var key = this.key;
-    var emailAddress = this.emailAddress;
-    var displayName = this.displayName;
-    var active = this.active;
-    var timeZone = this.timeZone;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (accountId != null) {
-      json[r'accountId'] = accountId;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (key != null) {
-      json[r'key'] = key;
-    }
-    if (emailAddress != null) {
-      json[r'emailAddress'] = emailAddress;
-    }
-    if (displayName != null) {
-      json[r'displayName'] = displayName;
-    }
-    json[r'active'] = active;
-    if (timeZone != null) {
-      json[r'timeZone'] = timeZone;
-    }
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  UserDTO copyWith(
-      {String? accountId,
-      String? name,
-      String? key,
-      String? emailAddress,
-      String? displayName,
-      bool? active,
-      String? timeZone,
-      UserLinkDTO? links}) {
-    return UserDTO(
-      accountId: accountId ?? this.accountId,
-      name: name ?? this.name,
-      key: key ?? this.key,
-      emailAddress: emailAddress ?? this.emailAddress,
-      displayName: displayName ?? this.displayName,
-      active: active ?? this.active,
-      timeZone: timeZone ?? this.timeZone,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class UserLinkDTO {
-  final String? self;
-
-  /// REST API URL for the customer.
-  final String? jiraRest;
-
-  /// Links to the various sizes of the customer's avatar. Note that this
-  /// property is deprecated, and will be removed in future versions.
-  final Map<String, dynamic>? avatarUrls;
-
-  UserLinkDTO({this.self, this.jiraRest, this.avatarUrls});
-
-  factory UserLinkDTO.fromJson(Map<String, Object?> json) {
-    return UserLinkDTO(
-      self: json[r'self'] as String?,
-      jiraRest: json[r'jiraRest'] as String?,
-      avatarUrls: json[r'avatarUrls'] as Map<String, Object?>?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var self = this.self;
-    var jiraRest = this.jiraRest;
-    var avatarUrls = this.avatarUrls;
-
-    final json = <String, Object?>{};
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (jiraRest != null) {
-      json[r'jiraRest'] = jiraRest;
-    }
-    if (avatarUrls != null) {
-      json[r'avatarUrls'] = avatarUrls;
-    }
-    return json;
-  }
-
-  UserLinkDTO copyWith(
-      {String? self, String? jiraRest, Map<String, dynamic>? avatarUrls}) {
-    return UserLinkDTO(
-      self: self ?? this.self,
-      jiraRest: jiraRest ?? this.jiraRest,
-      avatarUrls: avatarUrls ?? this.avatarUrls,
-    );
-  }
-}
-
-class LinkableUserLinkDTO {
-  final UserLinkDTO? links;
-
-  LinkableUserLinkDTO({this.links});
-
-  factory LinkableUserLinkDTO.fromJson(Map<String, Object?> json) {
-    return LinkableUserLinkDTO(
-      links: json[r'_links'] != null
-          ? UserLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  LinkableUserLinkDTO copyWith({UserLinkDTO? links}) {
-    return LinkableUserLinkDTO(
-      links: links ?? this.links,
-    );
-  }
-}
-
-class UsersOrganizationUpdateDTO {
-  /// This property is no longer available and will be removed from the
-  /// documentation soon. See the
-  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
-  /// for details. Use `accountIds` instead.
-  final List<String> usernames;
-
-  /// List of customers, specific by account IDs, to add to or remove from the
-  /// organization.
-  final List<String> accountIds;
-
-  UsersOrganizationUpdateDTO(
-      {List<String>? usernames, List<String>? accountIds})
-      : usernames = usernames ?? [],
-        accountIds = accountIds ?? [];
-
-  factory UsersOrganizationUpdateDTO.fromJson(Map<String, Object?> json) {
-    return UsersOrganizationUpdateDTO(
-      usernames: (json[r'usernames'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      accountIds: (json[r'accountIds'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var usernames = this.usernames;
-    var accountIds = this.accountIds;
-
-    final json = <String, Object?>{};
-    json[r'usernames'] = usernames;
-    json[r'accountIds'] = accountIds;
-    return json;
-  }
-
-  UsersOrganizationUpdateDTO copyWith(
-      {List<String>? usernames, List<String>? accountIds}) {
-    return UsersOrganizationUpdateDTO(
-      usernames: usernames ?? this.usernames,
-      accountIds: accountIds ?? this.accountIds,
-    );
-  }
-}
-
-class ServiceDeskCustomerDTO {
-  /// This property is no longer available and will be removed from the
-  /// documentation soon. See the
-  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
-  /// for details. Use `accountIds` instead.
-  final List<String> usernames;
-
-  /// List of users, specified by account IDs, to add to or remove from a
-  /// service desk.
-  final List<String> accountIds;
-
-  ServiceDeskCustomerDTO({List<String>? usernames, List<String>? accountIds})
-      : usernames = usernames ?? [],
-        accountIds = accountIds ?? [];
-
-  factory ServiceDeskCustomerDTO.fromJson(Map<String, Object?> json) {
-    return ServiceDeskCustomerDTO(
-      usernames: (json[r'usernames'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      accountIds: (json[r'accountIds'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var usernames = this.usernames;
-    var accountIds = this.accountIds;
-
-    final json = <String, Object?>{};
-    json[r'usernames'] = usernames;
-    json[r'accountIds'] = accountIds;
-    return json;
-  }
-
-  ServiceDeskCustomerDTO copyWith(
-      {List<String>? usernames, List<String>? accountIds}) {
-    return ServiceDeskCustomerDTO(
-      usernames: usernames ?? this.usernames,
-      accountIds: accountIds ?? this.accountIds,
-    );
-  }
-}
-
-class CustomerTransitionDTO {
-  /// ID of the transition.
-  final String? id;
-
-  /// Name of the transition.
-  final String? name;
-
-  CustomerTransitionDTO({this.id, this.name});
-
-  factory CustomerTransitionDTO.fromJson(Map<String, Object?> json) {
-    return CustomerTransitionDTO(
-      id: json[r'id'] as String?,
-      name: json[r'name'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var name = this.name;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    return json;
-  }
-
-  CustomerTransitionDTO copyWith({String? id, String? name}) {
-    return CustomerTransitionDTO(
-      id: id ?? this.id,
-      name: name ?? this.name,
-    );
-  }
-}
-
-class PagedDTOCustomerTransitionDTO {
-  /// Number of items returned in the page.
-  final int? size;
-
-  /// Index of the first item returned in the page.
-  final int? start;
-
-  /// Number of items to be returned per page, up to the maximum set for these
-  /// objects in the current implementation.
-  final int? limit;
-
-  /// Indicates if this is the last page of records (true) or not (false).
-  final bool isLastPage;
-
-  /// Details of the items included in the page.
-  final List<CustomerTransitionDTO> values;
-  final List<String> expands;
-
-  /// List of the links relating to the page.
-  final PagedLinkDTO? links;
-
-  PagedDTOCustomerTransitionDTO(
-      {this.size,
-      this.start,
-      this.limit,
-      bool? isLastPage,
-      List<CustomerTransitionDTO>? values,
-      List<String>? expands,
-      this.links})
-      : isLastPage = isLastPage ?? false,
-        values = values ?? [],
-        expands = expands ?? [];
-
-  factory PagedDTOCustomerTransitionDTO.fromJson(Map<String, Object?> json) {
-    return PagedDTOCustomerTransitionDTO(
-      size: (json[r'size'] as num?)?.toInt(),
-      start: (json[r'start'] as num?)?.toInt(),
-      limit: (json[r'limit'] as num?)?.toInt(),
-      isLastPage: json[r'isLastPage'] as bool? ?? false,
-      values: (json[r'values'] as List<Object?>?)
-              ?.map((i) => CustomerTransitionDTO.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      expands: (json[r'_expands'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      links: json[r'_links'] != null
-          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var size = this.size;
-    var start = this.start;
-    var limit = this.limit;
-    var isLastPage = this.isLastPage;
-    var values = this.values;
-    var expands = this.expands;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (size != null) {
-      json[r'size'] = size;
-    }
-    if (start != null) {
-      json[r'start'] = start;
-    }
-    if (limit != null) {
-      json[r'limit'] = limit;
-    }
-    json[r'isLastPage'] = isLastPage;
-    json[r'values'] = values.map((i) => i.toJson()).toList();
-    json[r'_expands'] = expands;
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  PagedDTOCustomerTransitionDTO copyWith(
-      {int? size,
-      int? start,
-      int? limit,
-      bool? isLastPage,
-      List<CustomerTransitionDTO>? values,
-      List<String>? expands,
-      PagedLinkDTO? links}) {
-    return PagedDTOCustomerTransitionDTO(
-      size: size ?? this.size,
-      start: start ?? this.start,
-      limit: limit ?? this.limit,
-      isLastPage: isLastPage ?? this.isLastPage,
-      values: values ?? this.values,
-      expands: expands ?? this.expands,
-      links: links ?? this.links,
-    );
-  }
-}
-
 class AdditionalCommentDTO {
   /// Content of the comment.
   final String? body;
@@ -2428,948 +1512,6 @@ class AdditionalCommentDTO {
   AdditionalCommentDTO copyWith({String? body}) {
     return AdditionalCommentDTO(
       body: body ?? this.body,
-    );
-  }
-}
-
-class CustomerTransitionExecutionDTO {
-  /// ID of the transition to be performed.
-  final String? id;
-
-  /// Comment explaining the reason for the transition.
-  final AdditionalCommentDTO? additionalComment;
-
-  CustomerTransitionExecutionDTO({this.id, this.additionalComment});
-
-  factory CustomerTransitionExecutionDTO.fromJson(Map<String, Object?> json) {
-    return CustomerTransitionExecutionDTO(
-      id: json[r'id'] as String?,
-      additionalComment: json[r'additionalComment'] != null
-          ? AdditionalCommentDTO.fromJson(
-              json[r'additionalComment']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var additionalComment = this.additionalComment;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (additionalComment != null) {
-      json[r'additionalComment'] = additionalComment.toJson();
-    }
-    return json;
-  }
-
-  CustomerTransitionExecutionDTO copyWith(
-      {String? id, AdditionalCommentDTO? additionalComment}) {
-    return CustomerTransitionExecutionDTO(
-      id: id ?? this.id,
-      additionalComment: additionalComment ?? this.additionalComment,
-    );
-  }
-}
-
-class DateDTO {
-  /// Date in ISO8601 format.
-  final String? iso8601;
-
-  /// Date in the format used in the Jira REST APIs, which is ISO8601 format but
-  /// extended with milliseconds. For example, 2016-09-28T23:08:32.097+1000.
-  final String? jira;
-
-  /// Date in a user-friendly text format.
-  final String? friendly;
-
-  /// Date as the number of milliseconds that have elapsed since 00:00:00
-  /// Coordinated Universal Time (UTC), 1 January 1970.
-  final int? epochMillis;
-
-  DateDTO({this.iso8601, this.jira, this.friendly, this.epochMillis});
-
-  factory DateDTO.fromJson(Map<String, Object?> json) {
-    return DateDTO(
-      iso8601: json[r'iso8601'] as String?,
-      jira: json[r'jira'] as String?,
-      friendly: json[r'friendly'] as String?,
-      epochMillis: (json[r'epochMillis'] as num?)?.toInt(),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var iso8601 = this.iso8601;
-    var jira = this.jira;
-    var friendly = this.friendly;
-    var epochMillis = this.epochMillis;
-
-    final json = <String, Object?>{};
-    if (iso8601 != null) {
-      json[r'iso8601'] = iso8601;
-    }
-    if (jira != null) {
-      json[r'jira'] = jira;
-    }
-    if (friendly != null) {
-      json[r'friendly'] = friendly;
-    }
-    if (epochMillis != null) {
-      json[r'epochMillis'] = epochMillis;
-    }
-    return json;
-  }
-
-  DateDTO copyWith(
-      {String? iso8601, String? jira, String? friendly, int? epochMillis}) {
-    return DateDTO(
-      iso8601: iso8601 ?? this.iso8601,
-      jira: jira ?? this.jira,
-      friendly: friendly ?? this.friendly,
-      epochMillis: epochMillis ?? this.epochMillis,
-    );
-  }
-}
-
-class DurationDTO {
-  /// Duration in milliseconds.
-  final int? millis;
-
-  /// Duration in a user-friendly text format.
-  final String? friendly;
-
-  DurationDTO({this.millis, this.friendly});
-
-  factory DurationDTO.fromJson(Map<String, Object?> json) {
-    return DurationDTO(
-      millis: (json[r'millis'] as num?)?.toInt(),
-      friendly: json[r'friendly'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var millis = this.millis;
-    var friendly = this.friendly;
-
-    final json = <String, Object?>{};
-    if (millis != null) {
-      json[r'millis'] = millis;
-    }
-    if (friendly != null) {
-      json[r'friendly'] = friendly;
-    }
-    return json;
-  }
-
-  DurationDTO copyWith({int? millis, String? friendly}) {
-    return DurationDTO(
-      millis: millis ?? this.millis,
-      friendly: friendly ?? this.friendly,
-    );
-  }
-}
-
-class PagedDTOSlaInformationDTO {
-  /// Number of items returned in the page.
-  final int? size;
-
-  /// Index of the first item returned in the page.
-  final int? start;
-
-  /// Number of items to be returned per page, up to the maximum set for these
-  /// objects in the current implementation.
-  final int? limit;
-
-  /// Indicates if this is the last page of records (true) or not (false).
-  final bool isLastPage;
-
-  /// Details of the items included in the page.
-  final List<SlaInformationDTO> values;
-  final List<String> expands;
-
-  /// List of the links relating to the page.
-  final PagedLinkDTO? links;
-
-  PagedDTOSlaInformationDTO(
-      {this.size,
-      this.start,
-      this.limit,
-      bool? isLastPage,
-      List<SlaInformationDTO>? values,
-      List<String>? expands,
-      this.links})
-      : isLastPage = isLastPage ?? false,
-        values = values ?? [],
-        expands = expands ?? [];
-
-  factory PagedDTOSlaInformationDTO.fromJson(Map<String, Object?> json) {
-    return PagedDTOSlaInformationDTO(
-      size: (json[r'size'] as num?)?.toInt(),
-      start: (json[r'start'] as num?)?.toInt(),
-      limit: (json[r'limit'] as num?)?.toInt(),
-      isLastPage: json[r'isLastPage'] as bool? ?? false,
-      values: (json[r'values'] as List<Object?>?)
-              ?.map((i) => SlaInformationDTO.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      expands: (json[r'_expands'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      links: json[r'_links'] != null
-          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var size = this.size;
-    var start = this.start;
-    var limit = this.limit;
-    var isLastPage = this.isLastPage;
-    var values = this.values;
-    var expands = this.expands;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (size != null) {
-      json[r'size'] = size;
-    }
-    if (start != null) {
-      json[r'start'] = start;
-    }
-    if (limit != null) {
-      json[r'limit'] = limit;
-    }
-    json[r'isLastPage'] = isLastPage;
-    json[r'values'] = values.map((i) => i.toJson()).toList();
-    json[r'_expands'] = expands;
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  PagedDTOSlaInformationDTO copyWith(
-      {int? size,
-      int? start,
-      int? limit,
-      bool? isLastPage,
-      List<SlaInformationDTO>? values,
-      List<String>? expands,
-      PagedLinkDTO? links}) {
-    return PagedDTOSlaInformationDTO(
-      size: size ?? this.size,
-      start: start ?? this.start,
-      limit: limit ?? this.limit,
-      isLastPage: isLastPage ?? this.isLastPage,
-      values: values ?? this.values,
-      expands: expands ?? this.expands,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class SlaInformationCompletedCycleDTO {
-  /// Time and date at which the SLA cycle started.
-  final DateDTO? startTime;
-
-  /// Time and date at which the SLA cycle completed.
-  final DateDTO? stopTime;
-
-  /// Indicates if the SLA (duration) was exceeded (true) or not (false).
-  final bool breached;
-
-  /// Duration within which the service should have been completed.
-  final DurationDTO? goalDuration;
-
-  /// Duration in which the service was completed.
-  final DurationDTO? elapsedTime;
-
-  /// Duration remaining after the service was completed.
-  final DurationDTO? remainingTime;
-
-  SlaInformationCompletedCycleDTO(
-      {this.startTime,
-      this.stopTime,
-      bool? breached,
-      this.goalDuration,
-      this.elapsedTime,
-      this.remainingTime})
-      : breached = breached ?? false;
-
-  factory SlaInformationCompletedCycleDTO.fromJson(Map<String, Object?> json) {
-    return SlaInformationCompletedCycleDTO(
-      startTime: json[r'startTime'] != null
-          ? DateDTO.fromJson(json[r'startTime']! as Map<String, Object?>)
-          : null,
-      stopTime: json[r'stopTime'] != null
-          ? DateDTO.fromJson(json[r'stopTime']! as Map<String, Object?>)
-          : null,
-      breached: json[r'breached'] as bool? ?? false,
-      goalDuration: json[r'goalDuration'] != null
-          ? DurationDTO.fromJson(json[r'goalDuration']! as Map<String, Object?>)
-          : null,
-      elapsedTime: json[r'elapsedTime'] != null
-          ? DurationDTO.fromJson(json[r'elapsedTime']! as Map<String, Object?>)
-          : null,
-      remainingTime: json[r'remainingTime'] != null
-          ? DurationDTO.fromJson(
-              json[r'remainingTime']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var startTime = this.startTime;
-    var stopTime = this.stopTime;
-    var breached = this.breached;
-    var goalDuration = this.goalDuration;
-    var elapsedTime = this.elapsedTime;
-    var remainingTime = this.remainingTime;
-
-    final json = <String, Object?>{};
-    if (startTime != null) {
-      json[r'startTime'] = startTime.toJson();
-    }
-    if (stopTime != null) {
-      json[r'stopTime'] = stopTime.toJson();
-    }
-    json[r'breached'] = breached;
-    if (goalDuration != null) {
-      json[r'goalDuration'] = goalDuration.toJson();
-    }
-    if (elapsedTime != null) {
-      json[r'elapsedTime'] = elapsedTime.toJson();
-    }
-    if (remainingTime != null) {
-      json[r'remainingTime'] = remainingTime.toJson();
-    }
-    return json;
-  }
-
-  SlaInformationCompletedCycleDTO copyWith(
-      {DateDTO? startTime,
-      DateDTO? stopTime,
-      bool? breached,
-      DurationDTO? goalDuration,
-      DurationDTO? elapsedTime,
-      DurationDTO? remainingTime}) {
-    return SlaInformationCompletedCycleDTO(
-      startTime: startTime ?? this.startTime,
-      stopTime: stopTime ?? this.stopTime,
-      breached: breached ?? this.breached,
-      goalDuration: goalDuration ?? this.goalDuration,
-      elapsedTime: elapsedTime ?? this.elapsedTime,
-      remainingTime: remainingTime ?? this.remainingTime,
-    );
-  }
-}
-
-class SlaInformationDTO {
-  /// ID of the Service Level Agreement (SLA).
-  final String? id;
-
-  /// Description of the SLA.
-  final String? name;
-
-  /// List of completed cycles for the SLA.
-  final List<SlaInformationCompletedCycleDTO> completedCycles;
-
-  /// Details of the active cycle for the SLA.
-  final SlaInformationOngoingCycleDTO? ongoingCycle;
-
-  /// REST API URL for the SLA.
-  final SelfLinkDTO? links;
-
-  SlaInformationDTO(
-      {this.id,
-      this.name,
-      List<SlaInformationCompletedCycleDTO>? completedCycles,
-      this.ongoingCycle,
-      this.links})
-      : completedCycles = completedCycles ?? [];
-
-  factory SlaInformationDTO.fromJson(Map<String, Object?> json) {
-    return SlaInformationDTO(
-      id: json[r'id'] as String?,
-      name: json[r'name'] as String?,
-      completedCycles: (json[r'completedCycles'] as List<Object?>?)
-              ?.map((i) => SlaInformationCompletedCycleDTO.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      ongoingCycle: json[r'ongoingCycle'] != null
-          ? SlaInformationOngoingCycleDTO.fromJson(
-              json[r'ongoingCycle']! as Map<String, Object?>)
-          : null,
-      links: json[r'_links'] != null
-          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var name = this.name;
-    var completedCycles = this.completedCycles;
-    var ongoingCycle = this.ongoingCycle;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    json[r'completedCycles'] = completedCycles.map((i) => i.toJson()).toList();
-    if (ongoingCycle != null) {
-      json[r'ongoingCycle'] = ongoingCycle.toJson();
-    }
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  SlaInformationDTO copyWith(
-      {String? id,
-      String? name,
-      List<SlaInformationCompletedCycleDTO>? completedCycles,
-      SlaInformationOngoingCycleDTO? ongoingCycle,
-      SelfLinkDTO? links}) {
-    return SlaInformationDTO(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      completedCycles: completedCycles ?? this.completedCycles,
-      ongoingCycle: ongoingCycle ?? this.ongoingCycle,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class SlaInformationOngoingCycleDTO {
-  /// Time and date at which the SLA cycle started.
-  final DateDTO? startTime;
-
-  /// Time and date at which the SLA cycle would have breached its limit.
-  final DateDTO? breachTime;
-
-  /// Indicates whether the SLA has been breached (true) or not (false).
-  final bool breached;
-
-  /// Indicates whether the SLA is paused (true) or not (false).
-  final bool paused;
-
-  /// Indicates whether the SLA it timed during calendared working hours only
-  /// (true) or not (false).
-  final bool withinCalendarHours;
-
-  /// Duration within which the service should be completed.
-  final DurationDTO? goalDuration;
-
-  /// Duration of the service.
-  final DurationDTO? elapsedTime;
-
-  /// Duration remaining in which to complete the service.
-  final DurationDTO? remainingTime;
-
-  SlaInformationOngoingCycleDTO(
-      {this.startTime,
-      this.breachTime,
-      bool? breached,
-      bool? paused,
-      bool? withinCalendarHours,
-      this.goalDuration,
-      this.elapsedTime,
-      this.remainingTime})
-      : breached = breached ?? false,
-        paused = paused ?? false,
-        withinCalendarHours = withinCalendarHours ?? false;
-
-  factory SlaInformationOngoingCycleDTO.fromJson(Map<String, Object?> json) {
-    return SlaInformationOngoingCycleDTO(
-      startTime: json[r'startTime'] != null
-          ? DateDTO.fromJson(json[r'startTime']! as Map<String, Object?>)
-          : null,
-      breachTime: json[r'breachTime'] != null
-          ? DateDTO.fromJson(json[r'breachTime']! as Map<String, Object?>)
-          : null,
-      breached: json[r'breached'] as bool? ?? false,
-      paused: json[r'paused'] as bool? ?? false,
-      withinCalendarHours: json[r'withinCalendarHours'] as bool? ?? false,
-      goalDuration: json[r'goalDuration'] != null
-          ? DurationDTO.fromJson(json[r'goalDuration']! as Map<String, Object?>)
-          : null,
-      elapsedTime: json[r'elapsedTime'] != null
-          ? DurationDTO.fromJson(json[r'elapsedTime']! as Map<String, Object?>)
-          : null,
-      remainingTime: json[r'remainingTime'] != null
-          ? DurationDTO.fromJson(
-              json[r'remainingTime']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var startTime = this.startTime;
-    var breachTime = this.breachTime;
-    var breached = this.breached;
-    var paused = this.paused;
-    var withinCalendarHours = this.withinCalendarHours;
-    var goalDuration = this.goalDuration;
-    var elapsedTime = this.elapsedTime;
-    var remainingTime = this.remainingTime;
-
-    final json = <String, Object?>{};
-    if (startTime != null) {
-      json[r'startTime'] = startTime.toJson();
-    }
-    if (breachTime != null) {
-      json[r'breachTime'] = breachTime.toJson();
-    }
-    json[r'breached'] = breached;
-    json[r'paused'] = paused;
-    json[r'withinCalendarHours'] = withinCalendarHours;
-    if (goalDuration != null) {
-      json[r'goalDuration'] = goalDuration.toJson();
-    }
-    if (elapsedTime != null) {
-      json[r'elapsedTime'] = elapsedTime.toJson();
-    }
-    if (remainingTime != null) {
-      json[r'remainingTime'] = remainingTime.toJson();
-    }
-    return json;
-  }
-
-  SlaInformationOngoingCycleDTO copyWith(
-      {DateDTO? startTime,
-      DateDTO? breachTime,
-      bool? breached,
-      bool? paused,
-      bool? withinCalendarHours,
-      DurationDTO? goalDuration,
-      DurationDTO? elapsedTime,
-      DurationDTO? remainingTime}) {
-    return SlaInformationOngoingCycleDTO(
-      startTime: startTime ?? this.startTime,
-      breachTime: breachTime ?? this.breachTime,
-      breached: breached ?? this.breached,
-      paused: paused ?? this.paused,
-      withinCalendarHours: withinCalendarHours ?? this.withinCalendarHours,
-      goalDuration: goalDuration ?? this.goalDuration,
-      elapsedTime: elapsedTime ?? this.elapsedTime,
-      remainingTime: remainingTime ?? this.remainingTime,
-    );
-  }
-}
-
-class RequestParticipantUpdateDTO {
-  /// This property is no longer available and will be removed from the
-  /// documentation soon. See the
-  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
-  /// for details. Use `accountIds` instead.
-  final List<String> usernames;
-
-  /// List of users, specified by account IDs, to add to or remove as
-  /// participants in the request.
-  final List<String> accountIds;
-
-  RequestParticipantUpdateDTO(
-      {List<String>? usernames, List<String>? accountIds})
-      : usernames = usernames ?? [],
-        accountIds = accountIds ?? [];
-
-  factory RequestParticipantUpdateDTO.fromJson(Map<String, Object?> json) {
-    return RequestParticipantUpdateDTO(
-      usernames: (json[r'usernames'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      accountIds: (json[r'accountIds'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var usernames = this.usernames;
-    var accountIds = this.accountIds;
-
-    final json = <String, Object?>{};
-    json[r'usernames'] = usernames;
-    json[r'accountIds'] = accountIds;
-    return json;
-  }
-
-  RequestParticipantUpdateDTO copyWith(
-      {List<String>? usernames, List<String>? accountIds}) {
-    return RequestParticipantUpdateDTO(
-      usernames: usernames ?? this.usernames,
-      accountIds: accountIds ?? this.accountIds,
-    );
-  }
-}
-
-class ArticleDTO {
-  /// Title of the article.
-  final String? title;
-
-  /// Excerpt of the article which matches the given query string.
-  final String? excerpt;
-
-  /// Source of the article.
-  final SourceDTO? source;
-  final ContentDTO? content;
-
-  ArticleDTO({this.title, this.excerpt, this.source, this.content});
-
-  factory ArticleDTO.fromJson(Map<String, Object?> json) {
-    return ArticleDTO(
-      title: json[r'title'] as String?,
-      excerpt: json[r'excerpt'] as String?,
-      source: json[r'source'] != null
-          ? SourceDTO.fromJson(json[r'source']! as Map<String, Object?>)
-          : null,
-      content: json[r'content'] != null
-          ? ContentDTO.fromJson(json[r'content']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var title = this.title;
-    var excerpt = this.excerpt;
-    var source = this.source;
-    var content = this.content;
-
-    final json = <String, Object?>{};
-    if (title != null) {
-      json[r'title'] = title;
-    }
-    if (excerpt != null) {
-      json[r'excerpt'] = excerpt;
-    }
-    if (source != null) {
-      json[r'source'] = source.toJson();
-    }
-    if (content != null) {
-      json[r'content'] = content.toJson();
-    }
-    return json;
-  }
-
-  ArticleDTO copyWith(
-      {String? title,
-      String? excerpt,
-      SourceDTO? source,
-      ContentDTO? content}) {
-    return ArticleDTO(
-      title: title ?? this.title,
-      excerpt: excerpt ?? this.excerpt,
-      source: source ?? this.source,
-      content: content ?? this.content,
-    );
-  }
-}
-
-class ContentDTO {
-  /// Url containing the body of the article (without title), suitable for
-  /// rendering in an iframe
-  final String? iframeSrc;
-
-  ContentDTO({this.iframeSrc});
-
-  factory ContentDTO.fromJson(Map<String, Object?> json) {
-    return ContentDTO(
-      iframeSrc: json[r'iframeSrc'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var iframeSrc = this.iframeSrc;
-
-    final json = <String, Object?>{};
-    if (iframeSrc != null) {
-      json[r'iframeSrc'] = iframeSrc;
-    }
-    return json;
-  }
-
-  ContentDTO copyWith({String? iframeSrc}) {
-    return ContentDTO(
-      iframeSrc: iframeSrc ?? this.iframeSrc,
-    );
-  }
-}
-
-class PagedDTOArticleDTO {
-  /// Number of items returned in the page.
-  final int? size;
-
-  /// Index of the first item returned in the page.
-  final int? start;
-
-  /// Number of items to be returned per page, up to the maximum set for these
-  /// objects in the current implementation.
-  final int? limit;
-
-  /// Indicates if this is the last page of records (true) or not (false).
-  final bool isLastPage;
-
-  /// Details of the items included in the page.
-  final List<ArticleDTO> values;
-  final List<String> expands;
-
-  /// List of the links relating to the page.
-  final PagedLinkDTO? links;
-
-  PagedDTOArticleDTO(
-      {this.size,
-      this.start,
-      this.limit,
-      bool? isLastPage,
-      List<ArticleDTO>? values,
-      List<String>? expands,
-      this.links})
-      : isLastPage = isLastPage ?? false,
-        values = values ?? [],
-        expands = expands ?? [];
-
-  factory PagedDTOArticleDTO.fromJson(Map<String, Object?> json) {
-    return PagedDTOArticleDTO(
-      size: (json[r'size'] as num?)?.toInt(),
-      start: (json[r'start'] as num?)?.toInt(),
-      limit: (json[r'limit'] as num?)?.toInt(),
-      isLastPage: json[r'isLastPage'] as bool? ?? false,
-      values: (json[r'values'] as List<Object?>?)
-              ?.map((i) =>
-                  ArticleDTO.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      expands: (json[r'_expands'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      links: json[r'_links'] != null
-          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var size = this.size;
-    var start = this.start;
-    var limit = this.limit;
-    var isLastPage = this.isLastPage;
-    var values = this.values;
-    var expands = this.expands;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (size != null) {
-      json[r'size'] = size;
-    }
-    if (start != null) {
-      json[r'start'] = start;
-    }
-    if (limit != null) {
-      json[r'limit'] = limit;
-    }
-    json[r'isLastPage'] = isLastPage;
-    json[r'values'] = values.map((i) => i.toJson()).toList();
-    json[r'_expands'] = expands;
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  PagedDTOArticleDTO copyWith(
-      {int? size,
-      int? start,
-      int? limit,
-      bool? isLastPage,
-      List<ArticleDTO>? values,
-      List<String>? expands,
-      PagedLinkDTO? links}) {
-    return PagedDTOArticleDTO(
-      size: size ?? this.size,
-      start: start ?? this.start,
-      limit: limit ?? this.limit,
-      isLastPage: isLastPage ?? this.isLastPage,
-      values: values ?? this.values,
-      expands: expands ?? this.expands,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class SourceDTO {
-  /// Type of the knowledge base source
-  final SourceDTOType? type;
-
-  SourceDTO({this.type});
-
-  factory SourceDTO.fromJson(Map<String, Object?> json) {
-    return SourceDTO(
-      type: json[r'type'] != null
-          ? SourceDTOType.fromValue(json[r'type']! as String)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var type = this.type;
-
-    final json = <String, Object?>{};
-    if (type != null) {
-      json[r'type'] = type.value;
-    }
-    return json;
-  }
-
-  SourceDTO copyWith({SourceDTOType? type}) {
-    return SourceDTO(
-      type: type ?? this.type,
-    );
-  }
-}
-
-class SourceDTOType {
-  static const confluence = SourceDTOType._('confluence');
-
-  static const values = [
-    confluence,
-  ];
-  final String value;
-
-  const SourceDTOType._(this.value);
-
-  static SourceDTOType fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => SourceDTOType._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-/// Property key details.
-class PropertyKey {
-  /// The URL of the property.
-  final String? self;
-
-  /// The key of the property.
-  final String? key;
-
-  PropertyKey({this.self, this.key});
-
-  factory PropertyKey.fromJson(Map<String, Object?> json) {
-    return PropertyKey(
-      self: json[r'self'] as String?,
-      key: json[r'key'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var self = this.self;
-    var key = this.key;
-
-    final json = <String, Object?>{};
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (key != null) {
-      json[r'key'] = key;
-    }
-    return json;
-  }
-
-  PropertyKey copyWith({String? self, String? key}) {
-    return PropertyKey(
-      self: self ?? this.self,
-      key: key ?? this.key,
-    );
-  }
-}
-
-/// List of property keys.
-class PropertyKeys {
-  /// Property key details.
-  final List<PropertyKey> keys;
-
-  PropertyKeys({List<PropertyKey>? keys}) : keys = keys ?? [];
-
-  factory PropertyKeys.fromJson(Map<String, Object?> json) {
-    return PropertyKeys(
-      keys: (json[r'keys'] as List<Object?>?)
-              ?.map((i) =>
-                  PropertyKey.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var keys = this.keys;
-
-    final json = <String, Object?>{};
-    json[r'keys'] = keys.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  PropertyKeys copyWith({List<PropertyKey>? keys}) {
-    return PropertyKeys(
-      keys: keys ?? this.keys,
-    );
-  }
-}
-
-/// An entity property, for more information see
-/// [Entity properties](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
-class EntityProperty {
-  /// The key of the property. Required on create and update.
-  final String? key;
-
-  /// The value of the property. Required on create and update.
-  final dynamic value;
-
-  EntityProperty({this.key, this.value});
-
-  factory EntityProperty.fromJson(Map<String, Object?> json) {
-    return EntityProperty(
-      key: json[r'key'] as String?,
-      value: json[r'value'],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var key = this.key;
-    var value = this.value;
-
-    final json = <String, Object?>{};
-    if (key != null) {
-      json[r'key'] = key;
-    }
-    if (value != null) {
-      json[r'value'] = value;
-    }
-    return json;
-  }
-
-  EntityProperty copyWith({String? key, dynamic value}) {
-    return EntityProperty(
-      key: key ?? this.key,
-      value: value ?? this.value,
     );
   }
 }
@@ -3519,6 +1661,62 @@ class ApprovalDTOFinalDecision {
   String toString() => value;
 }
 
+class ApprovalDecisionRequestDTO {
+  /// Response to the approval request.
+  final ApprovalDecisionRequestDTODecision? decision;
+
+  ApprovalDecisionRequestDTO({this.decision});
+
+  factory ApprovalDecisionRequestDTO.fromJson(Map<String, Object?> json) {
+    return ApprovalDecisionRequestDTO(
+      decision: json[r'decision'] != null
+          ? ApprovalDecisionRequestDTODecision.fromValue(
+              json[r'decision']! as String)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var decision = this.decision;
+
+    final json = <String, Object?>{};
+    if (decision != null) {
+      json[r'decision'] = decision.value;
+    }
+    return json;
+  }
+
+  ApprovalDecisionRequestDTO copyWith(
+      {ApprovalDecisionRequestDTODecision? decision}) {
+    return ApprovalDecisionRequestDTO(
+      decision: decision ?? this.decision,
+    );
+  }
+}
+
+class ApprovalDecisionRequestDTODecision {
+  static const approve = ApprovalDecisionRequestDTODecision._('approve');
+  static const decline = ApprovalDecisionRequestDTODecision._('decline');
+
+  static const values = [
+    approve,
+    decline,
+  ];
+  final String value;
+
+  const ApprovalDecisionRequestDTODecision._(this.value);
+
+  static ApprovalDecisionRequestDTODecision fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ApprovalDecisionRequestDTODecision._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 class ApproverDTO {
   /// Details of the User who is providing approval.
   final UserDTO? approver;
@@ -3588,825 +1786,64 @@ class ApproverDTOApproverDecision {
   String toString() => value;
 }
 
-class ApprovalDecisionRequestDTO {
-  /// Response to the approval request.
-  final ApprovalDecisionRequestDTODecision? decision;
+class ArticleDTO {
+  /// Title of the article.
+  final String? title;
 
-  ApprovalDecisionRequestDTO({this.decision});
+  /// Excerpt of the article which matches the given query string.
+  final String? excerpt;
 
-  factory ApprovalDecisionRequestDTO.fromJson(Map<String, Object?> json) {
-    return ApprovalDecisionRequestDTO(
-      decision: json[r'decision'] != null
-          ? ApprovalDecisionRequestDTODecision.fromValue(
-              json[r'decision']! as String)
+  /// Source of the article.
+  final SourceDTO? source;
+  final ContentDTO? content;
+
+  ArticleDTO({this.title, this.excerpt, this.source, this.content});
+
+  factory ArticleDTO.fromJson(Map<String, Object?> json) {
+    return ArticleDTO(
+      title: json[r'title'] as String?,
+      excerpt: json[r'excerpt'] as String?,
+      source: json[r'source'] != null
+          ? SourceDTO.fromJson(json[r'source']! as Map<String, Object?>)
+          : null,
+      content: json[r'content'] != null
+          ? ContentDTO.fromJson(json[r'content']! as Map<String, Object?>)
           : null,
     );
   }
 
   Map<String, Object?> toJson() {
-    var decision = this.decision;
+    var title = this.title;
+    var excerpt = this.excerpt;
+    var source = this.source;
+    var content = this.content;
 
     final json = <String, Object?>{};
-    if (decision != null) {
-      json[r'decision'] = decision.value;
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (excerpt != null) {
+      json[r'excerpt'] = excerpt;
+    }
+    if (source != null) {
+      json[r'source'] = source.toJson();
+    }
+    if (content != null) {
+      json[r'content'] = content.toJson();
     }
     return json;
   }
 
-  ApprovalDecisionRequestDTO copyWith(
-      {ApprovalDecisionRequestDTODecision? decision}) {
-    return ApprovalDecisionRequestDTO(
-      decision: decision ?? this.decision,
-    );
-  }
-}
-
-class ApprovalDecisionRequestDTODecision {
-  static const approve = ApprovalDecisionRequestDTODecision._('approve');
-  static const decline = ApprovalDecisionRequestDTODecision._('decline');
-
-  static const values = [
-    approve,
-    decline,
-  ];
-  final String value;
-
-  const ApprovalDecisionRequestDTODecision._(this.value);
-
-  static ApprovalDecisionRequestDTODecision fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => ApprovalDecisionRequestDTODecision._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class PagedDTOApprovalDTO {
-  /// Number of items returned in the page.
-  final int? size;
-
-  /// Index of the first item returned in the page.
-  final int? start;
-
-  /// Number of items to be returned per page, up to the maximum set for these
-  /// objects in the current implementation.
-  final int? limit;
-
-  /// Indicates if this is the last page of records (true) or not (false).
-  final bool isLastPage;
-
-  /// Details of the items included in the page.
-  final List<ApprovalDTO> values;
-  final List<String> expands;
-
-  /// List of the links relating to the page.
-  final PagedLinkDTO? links;
-
-  PagedDTOApprovalDTO(
-      {this.size,
-      this.start,
-      this.limit,
-      bool? isLastPage,
-      List<ApprovalDTO>? values,
-      List<String>? expands,
-      this.links})
-      : isLastPage = isLastPage ?? false,
-        values = values ?? [],
-        expands = expands ?? [];
-
-  factory PagedDTOApprovalDTO.fromJson(Map<String, Object?> json) {
-    return PagedDTOApprovalDTO(
-      size: (json[r'size'] as num?)?.toInt(),
-      start: (json[r'start'] as num?)?.toInt(),
-      limit: (json[r'limit'] as num?)?.toInt(),
-      isLastPage: json[r'isLastPage'] as bool? ?? false,
-      values: (json[r'values'] as List<Object?>?)
-              ?.map((i) =>
-                  ApprovalDTO.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      expands: (json[r'_expands'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      links: json[r'_links'] != null
-          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var size = this.size;
-    var start = this.start;
-    var limit = this.limit;
-    var isLastPage = this.isLastPage;
-    var values = this.values;
-    var expands = this.expands;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (size != null) {
-      json[r'size'] = size;
-    }
-    if (start != null) {
-      json[r'start'] = start;
-    }
-    if (limit != null) {
-      json[r'limit'] = limit;
-    }
-    json[r'isLastPage'] = isLastPage;
-    json[r'values'] = values.map((i) => i.toJson()).toList();
-    json[r'_expands'] = expands;
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  PagedDTOApprovalDTO copyWith(
-      {int? size,
-      int? start,
-      int? limit,
-      bool? isLastPage,
-      List<ApprovalDTO>? values,
-      List<String>? expands,
-      PagedLinkDTO? links}) {
-    return PagedDTOApprovalDTO(
-      size: size ?? this.size,
-      start: start ?? this.start,
-      limit: limit ?? this.limit,
-      isLastPage: isLastPage ?? this.isLastPage,
-      values: values ?? this.values,
-      expands: expands ?? this.expands,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class CustomerRequestCreateMetaDTO {
-  /// List of the fields included in this request.
-  final List<RequestTypeFieldDTO> requestTypeFields;
-
-  /// Flag indicating if a request can be raised on behalf of another user
-  /// (true) or not.
-  final bool canRaiseOnBehalfOf;
-
-  /// Flag indicating if participants can be added to a request (true) or not.
-  final bool canAddRequestParticipants;
-
-  CustomerRequestCreateMetaDTO(
-      {List<RequestTypeFieldDTO>? requestTypeFields,
-      bool? canRaiseOnBehalfOf,
-      bool? canAddRequestParticipants})
-      : requestTypeFields = requestTypeFields ?? [],
-        canRaiseOnBehalfOf = canRaiseOnBehalfOf ?? false,
-        canAddRequestParticipants = canAddRequestParticipants ?? false;
-
-  factory CustomerRequestCreateMetaDTO.fromJson(Map<String, Object?> json) {
-    return CustomerRequestCreateMetaDTO(
-      requestTypeFields: (json[r'requestTypeFields'] as List<Object?>?)
-              ?.map((i) => RequestTypeFieldDTO.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      canRaiseOnBehalfOf: json[r'canRaiseOnBehalfOf'] as bool? ?? false,
-      canAddRequestParticipants:
-          json[r'canAddRequestParticipants'] as bool? ?? false,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var requestTypeFields = this.requestTypeFields;
-    var canRaiseOnBehalfOf = this.canRaiseOnBehalfOf;
-    var canAddRequestParticipants = this.canAddRequestParticipants;
-
-    final json = <String, Object?>{};
-    json[r'requestTypeFields'] =
-        requestTypeFields.map((i) => i.toJson()).toList();
-    json[r'canRaiseOnBehalfOf'] = canRaiseOnBehalfOf;
-    json[r'canAddRequestParticipants'] = canAddRequestParticipants;
-    return json;
-  }
-
-  CustomerRequestCreateMetaDTO copyWith(
-      {List<RequestTypeFieldDTO>? requestTypeFields,
-      bool? canRaiseOnBehalfOf,
-      bool? canAddRequestParticipants}) {
-    return CustomerRequestCreateMetaDTO(
-      requestTypeFields: requestTypeFields ?? this.requestTypeFields,
-      canRaiseOnBehalfOf: canRaiseOnBehalfOf ?? this.canRaiseOnBehalfOf,
-      canAddRequestParticipants:
-          canAddRequestParticipants ?? this.canAddRequestParticipants,
-    );
-  }
-}
-
-/// The schema of a field.
-class JsonTypeBean {
-  /// The data type of the field.
-  final String type;
-
-  /// When the data type is an array, the name of the field items within the
-  /// array.
-  final String? items;
-
-  /// If the field is a system field, the name of the field.
-  final String? system;
-
-  /// If the field is a custom field, the URI of the field.
-  final String? custom;
-
-  /// If the field is a custom field, the custom ID of the field.
-  final int? customId;
-
-  /// If the field is a custom field, the configuration of the field.
-  final Map<String, dynamic>? configuration;
-
-  JsonTypeBean(
-      {required this.type,
-      this.items,
-      this.system,
-      this.custom,
-      this.customId,
-      this.configuration});
-
-  factory JsonTypeBean.fromJson(Map<String, Object?> json) {
-    return JsonTypeBean(
-      type: json[r'type'] as String? ?? '',
-      items: json[r'items'] as String?,
-      system: json[r'system'] as String?,
-      custom: json[r'custom'] as String?,
-      customId: (json[r'customId'] as num?)?.toInt(),
-      configuration: json[r'configuration'] as Map<String, Object?>?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var type = this.type;
-    var items = this.items;
-    var system = this.system;
-    var custom = this.custom;
-    var customId = this.customId;
-    var configuration = this.configuration;
-
-    final json = <String, Object?>{};
-    json[r'type'] = type;
-    if (items != null) {
-      json[r'items'] = items;
-    }
-    if (system != null) {
-      json[r'system'] = system;
-    }
-    if (custom != null) {
-      json[r'custom'] = custom;
-    }
-    if (customId != null) {
-      json[r'customId'] = customId;
-    }
-    if (configuration != null) {
-      json[r'configuration'] = configuration;
-    }
-    return json;
-  }
-
-  JsonTypeBean copyWith(
-      {String? type,
-      String? items,
-      String? system,
-      String? custom,
-      int? customId,
-      Map<String, dynamic>? configuration}) {
-    return JsonTypeBean(
-      type: type ?? this.type,
-      items: items ?? this.items,
-      system: system ?? this.system,
-      custom: custom ?? this.custom,
-      customId: customId ?? this.customId,
-      configuration: configuration ?? this.configuration,
-    );
-  }
-}
-
-class PagedDTORequestTypeDTO {
-  /// Number of items returned in the page.
-  final int? size;
-
-  /// Index of the first item returned in the page.
-  final int? start;
-
-  /// Number of items to be returned per page, up to the maximum set for these
-  /// objects in the current implementation.
-  final int? limit;
-
-  /// Indicates if this is the last page of records (true) or not (false).
-  final bool isLastPage;
-
-  /// Details of the items included in the page.
-  final List<RequestTypeDTO> values;
-  final List<String> expands;
-
-  /// List of the links relating to the page.
-  final PagedLinkDTO? links;
-
-  PagedDTORequestTypeDTO(
-      {this.size,
-      this.start,
-      this.limit,
-      bool? isLastPage,
-      List<RequestTypeDTO>? values,
-      List<String>? expands,
-      this.links})
-      : isLastPage = isLastPage ?? false,
-        values = values ?? [],
-        expands = expands ?? [];
-
-  factory PagedDTORequestTypeDTO.fromJson(Map<String, Object?> json) {
-    return PagedDTORequestTypeDTO(
-      size: (json[r'size'] as num?)?.toInt(),
-      start: (json[r'start'] as num?)?.toInt(),
-      limit: (json[r'limit'] as num?)?.toInt(),
-      isLastPage: json[r'isLastPage'] as bool? ?? false,
-      values: (json[r'values'] as List<Object?>?)
-              ?.map((i) => RequestTypeDTO.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      expands: (json[r'_expands'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      links: json[r'_links'] != null
-          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var size = this.size;
-    var start = this.start;
-    var limit = this.limit;
-    var isLastPage = this.isLastPage;
-    var values = this.values;
-    var expands = this.expands;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (size != null) {
-      json[r'size'] = size;
-    }
-    if (start != null) {
-      json[r'start'] = start;
-    }
-    if (limit != null) {
-      json[r'limit'] = limit;
-    }
-    json[r'isLastPage'] = isLastPage;
-    json[r'values'] = values.map((i) => i.toJson()).toList();
-    json[r'_expands'] = expands;
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  PagedDTORequestTypeDTO copyWith(
-      {int? size,
-      int? start,
-      int? limit,
-      bool? isLastPage,
-      List<RequestTypeDTO>? values,
-      List<String>? expands,
-      PagedLinkDTO? links}) {
-    return PagedDTORequestTypeDTO(
-      size: size ?? this.size,
-      start: start ?? this.start,
-      limit: limit ?? this.limit,
-      isLastPage: isLastPage ?? this.isLastPage,
-      values: values ?? this.values,
-      expands: expands ?? this.expands,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class RequestTypeDTO {
-  /// ID for the request type.
-  final String? id;
-
-  /// Short name for the request type.
-  final String? name;
-
-  /// Description of the request type.
-  final String? description;
-
-  /// Help text for the request type.
-  final String? helpText;
-
-  /// ID of the issue type the request type is based upon.
-  final String? issueTypeId;
-
-  /// ID of the service desk the request type belongs to.
-  final String? serviceDeskId;
-
-  /// List of the request type groups the request type belongs to.
-  final List<String> groupIds;
-
-  /// Links to the request type's icons.
-  final RequestTypeIconDTO? icon;
-
-  /// Fields and additional metadata for creating a request that uses the
-  /// request type
-  final CustomerRequestCreateMetaDTO? fields;
-
-  /// List of items that can be expanded in the response by specifying the
-  /// expand query parameter.
-  final List<String> expands;
-
-  /// REST API URL for the request type.
-  final SelfLinkDTO? links;
-
-  RequestTypeDTO(
-      {this.id,
-      this.name,
-      this.description,
-      this.helpText,
-      this.issueTypeId,
-      this.serviceDeskId,
-      List<String>? groupIds,
-      this.icon,
-      this.fields,
-      List<String>? expands,
-      this.links})
-      : groupIds = groupIds ?? [],
-        expands = expands ?? [];
-
-  factory RequestTypeDTO.fromJson(Map<String, Object?> json) {
-    return RequestTypeDTO(
-      id: json[r'id'] as String?,
-      name: json[r'name'] as String?,
-      description: json[r'description'] as String?,
-      helpText: json[r'helpText'] as String?,
-      issueTypeId: json[r'issueTypeId'] as String?,
-      serviceDeskId: json[r'serviceDeskId'] as String?,
-      groupIds: (json[r'groupIds'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      icon: json[r'icon'] != null
-          ? RequestTypeIconDTO.fromJson(json[r'icon']! as Map<String, Object?>)
-          : null,
-      fields: json[r'fields'] != null
-          ? CustomerRequestCreateMetaDTO.fromJson(
-              json[r'fields']! as Map<String, Object?>)
-          : null,
-      expands: (json[r'_expands'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      links: json[r'_links'] != null
-          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var name = this.name;
-    var description = this.description;
-    var helpText = this.helpText;
-    var issueTypeId = this.issueTypeId;
-    var serviceDeskId = this.serviceDeskId;
-    var groupIds = this.groupIds;
-    var icon = this.icon;
-    var fields = this.fields;
-    var expands = this.expands;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (description != null) {
-      json[r'description'] = description;
-    }
-    if (helpText != null) {
-      json[r'helpText'] = helpText;
-    }
-    if (issueTypeId != null) {
-      json[r'issueTypeId'] = issueTypeId;
-    }
-    if (serviceDeskId != null) {
-      json[r'serviceDeskId'] = serviceDeskId;
-    }
-    json[r'groupIds'] = groupIds;
-    if (icon != null) {
-      json[r'icon'] = icon.toJson();
-    }
-    if (fields != null) {
-      json[r'fields'] = fields.toJson();
-    }
-    json[r'_expands'] = expands;
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  RequestTypeDTO copyWith(
-      {String? id,
-      String? name,
-      String? description,
-      String? helpText,
-      String? issueTypeId,
-      String? serviceDeskId,
-      List<String>? groupIds,
-      RequestTypeIconDTO? icon,
-      CustomerRequestCreateMetaDTO? fields,
-      List<String>? expands,
-      SelfLinkDTO? links}) {
-    return RequestTypeDTO(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      description: description ?? this.description,
-      helpText: helpText ?? this.helpText,
-      issueTypeId: issueTypeId ?? this.issueTypeId,
-      serviceDeskId: serviceDeskId ?? this.serviceDeskId,
-      groupIds: groupIds ?? this.groupIds,
-      icon: icon ?? this.icon,
-      fields: fields ?? this.fields,
-      expands: expands ?? this.expands,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class RequestTypeFieldDTO {
-  /// ID of the field.
-  final String? fieldId;
-
-  /// Name of the field.
-  final String? name;
-
-  /// Description of the field.
-  final String? description;
-
-  /// Indicates if the field is required (true) or not (false).
-  final bool required;
-
-  /// List of default values for the field.
-  final List<RequestTypeFieldValueDTO> defaultValues;
-
-  /// List of valid values for the field.
-  final List<RequestTypeFieldValueDTO> validValues;
-
-  /// Jira specific implementation details for the field in the UI.
-  final JsonTypeBean? jiraSchema;
-  final bool visible;
-
-  RequestTypeFieldDTO(
-      {this.fieldId,
-      this.name,
-      this.description,
-      bool? required,
-      List<RequestTypeFieldValueDTO>? defaultValues,
-      List<RequestTypeFieldValueDTO>? validValues,
-      this.jiraSchema,
-      bool? visible})
-      : required = required ?? false,
-        defaultValues = defaultValues ?? [],
-        validValues = validValues ?? [],
-        visible = visible ?? false;
-
-  factory RequestTypeFieldDTO.fromJson(Map<String, Object?> json) {
-    return RequestTypeFieldDTO(
-      fieldId: json[r'fieldId'] as String?,
-      name: json[r'name'] as String?,
-      description: json[r'description'] as String?,
-      required: json[r'required'] as bool? ?? false,
-      defaultValues: (json[r'defaultValues'] as List<Object?>?)
-              ?.map((i) => RequestTypeFieldValueDTO.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      validValues: (json[r'validValues'] as List<Object?>?)
-              ?.map((i) => RequestTypeFieldValueDTO.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      jiraSchema: json[r'jiraSchema'] != null
-          ? JsonTypeBean.fromJson(json[r'jiraSchema']! as Map<String, Object?>)
-          : null,
-      visible: json[r'visible'] as bool? ?? false,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var fieldId = this.fieldId;
-    var name = this.name;
-    var description = this.description;
-    var required = this.required;
-    var defaultValues = this.defaultValues;
-    var validValues = this.validValues;
-    var jiraSchema = this.jiraSchema;
-    var visible = this.visible;
-
-    final json = <String, Object?>{};
-    if (fieldId != null) {
-      json[r'fieldId'] = fieldId;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (description != null) {
-      json[r'description'] = description;
-    }
-    json[r'required'] = required;
-    json[r'defaultValues'] = defaultValues.map((i) => i.toJson()).toList();
-    json[r'validValues'] = validValues.map((i) => i.toJson()).toList();
-    if (jiraSchema != null) {
-      json[r'jiraSchema'] = jiraSchema.toJson();
-    }
-    json[r'visible'] = visible;
-    return json;
-  }
-
-  RequestTypeFieldDTO copyWith(
-      {String? fieldId,
-      String? name,
-      String? description,
-      bool? required,
-      List<RequestTypeFieldValueDTO>? defaultValues,
-      List<RequestTypeFieldValueDTO>? validValues,
-      JsonTypeBean? jiraSchema,
-      bool? visible}) {
-    return RequestTypeFieldDTO(
-      fieldId: fieldId ?? this.fieldId,
-      name: name ?? this.name,
-      description: description ?? this.description,
-      required: required ?? this.required,
-      defaultValues: defaultValues ?? this.defaultValues,
-      validValues: validValues ?? this.validValues,
-      jiraSchema: jiraSchema ?? this.jiraSchema,
-      visible: visible ?? this.visible,
-    );
-  }
-}
-
-class RequestTypeFieldValueDTO {
-  /// Value of the field.
-  final String? value;
-
-  /// Label for the field.
-  final String? label;
-
-  /// List of child fields.
-  final List<RequestTypeFieldValueDTO> children;
-
-  RequestTypeFieldValueDTO(
-      {this.value, this.label, List<RequestTypeFieldValueDTO>? children})
-      : children = children ?? [];
-
-  factory RequestTypeFieldValueDTO.fromJson(Map<String, Object?> json) {
-    return RequestTypeFieldValueDTO(
-      value: json[r'value'] as String?,
-      label: json[r'label'] as String?,
-      children: (json[r'children'] as List<Object?>?)
-              ?.map((i) => RequestTypeFieldValueDTO.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var value = this.value;
-    var label = this.label;
-    var children = this.children;
-
-    final json = <String, Object?>{};
-    if (value != null) {
-      json[r'value'] = value;
-    }
-    if (label != null) {
-      json[r'label'] = label;
-    }
-    json[r'children'] = children.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  RequestTypeFieldValueDTO copyWith(
-      {String? value,
-      String? label,
-      List<RequestTypeFieldValueDTO>? children}) {
-    return RequestTypeFieldValueDTO(
-      value: value ?? this.value,
-      label: label ?? this.label,
-      children: children ?? this.children,
-    );
-  }
-}
-
-class RequestTypeIconDTO {
-  /// ID of the request type icon.
-  final String? id;
-
-  /// Map of the URLs for the request type icons.
-  final RequestTypeIconLinkDTO? links;
-
-  RequestTypeIconDTO({this.id, this.links});
-
-  factory RequestTypeIconDTO.fromJson(Map<String, Object?> json) {
-    return RequestTypeIconDTO(
-      id: json[r'id'] as String?,
-      links: json[r'_links'] != null
-          ? RequestTypeIconLinkDTO.fromJson(
-              json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  RequestTypeIconDTO copyWith({String? id, RequestTypeIconLinkDTO? links}) {
-    return RequestTypeIconDTO(
-      id: id ?? this.id,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class RequestTypeIconLinkDTO {
-  /// URLs for the request type icons.
-  final Map<String, dynamic>? iconUrls;
-
-  RequestTypeIconLinkDTO({this.iconUrls});
-
-  factory RequestTypeIconLinkDTO.fromJson(Map<String, Object?> json) {
-    return RequestTypeIconLinkDTO(
-      iconUrls: json[r'iconUrls'] as Map<String, Object?>?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var iconUrls = this.iconUrls;
-
-    final json = <String, Object?>{};
-    if (iconUrls != null) {
-      json[r'iconUrls'] = iconUrls;
-    }
-    return json;
-  }
-
-  RequestTypeIconLinkDTO copyWith({Map<String, dynamic>? iconUrls}) {
-    return RequestTypeIconLinkDTO(
-      iconUrls: iconUrls ?? this.iconUrls,
-    );
-  }
-}
-
-class Expandable {
-  final List<String> expands;
-
-  Expandable({List<String>? expands}) : expands = expands ?? [];
-
-  factory Expandable.fromJson(Map<String, Object?> json) {
-    return Expandable(
-      expands: (json[r'_expands'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var expands = this.expands;
-
-    final json = <String, Object?>{};
-    json[r'_expands'] = expands;
-    return json;
-  }
-
-  Expandable copyWith({List<String>? expands}) {
-    return Expandable(
-      expands: expands ?? this.expands,
+  ArticleDTO copyWith(
+      {String? title,
+      String? excerpt,
+      SourceDTO? source,
+      ContentDTO? content}) {
+    return ArticleDTO(
+      title: title ?? this.title,
+      excerpt: excerpt ?? this.excerpt,
+      source: source ?? this.source,
+      content: content ?? this.content,
     );
   }
 }
@@ -4664,492 +2101,6 @@ class AttachmentLinkDTO {
   }
 }
 
-class CommentDTO {
-  /// ID of the comment.
-  final String? id;
-
-  /// Content of the comment.
-  final String? body;
-
-  /// The rendered body of the comment.
-  final RenderedValueDTO? renderedBody;
-
-  /// Details of the customer who authored the comment.
-  final UserDTO? author;
-
-  /// Date the comment was created.
-  final DateDTO? created;
-
-  /// List of the attachments included in the comment.
-  final PagedDTOAttachmentDTO? attachments;
-
-  /// List of items that can be expanded in the response by specifying the
-  /// expand query parameter.
-  final List<String> expands;
-
-  /// Indicates whether the comment is public (true) or private/internal
-  /// (false).
-  final bool public;
-
-  /// REST API URL link to the comment.
-  final SelfLinkDTO? links;
-
-  CommentDTO(
-      {this.id,
-      this.body,
-      this.renderedBody,
-      this.author,
-      this.created,
-      this.attachments,
-      List<String>? expands,
-      bool? public,
-      this.links})
-      : expands = expands ?? [],
-        public = public ?? false;
-
-  factory CommentDTO.fromJson(Map<String, Object?> json) {
-    return CommentDTO(
-      id: json[r'id'] as String?,
-      body: json[r'body'] as String?,
-      renderedBody: json[r'renderedBody'] != null
-          ? RenderedValueDTO.fromJson(
-              json[r'renderedBody']! as Map<String, Object?>)
-          : null,
-      author: json[r'author'] != null
-          ? UserDTO.fromJson(json[r'author']! as Map<String, Object?>)
-          : null,
-      created: json[r'created'] != null
-          ? DateDTO.fromJson(json[r'created']! as Map<String, Object?>)
-          : null,
-      attachments: json[r'attachments'] != null
-          ? PagedDTOAttachmentDTO.fromJson(
-              json[r'attachments']! as Map<String, Object?>)
-          : null,
-      expands: (json[r'_expands'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      public: json[r'public'] as bool? ?? false,
-      links: json[r'_links'] != null
-          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var body = this.body;
-    var renderedBody = this.renderedBody;
-    var author = this.author;
-    var created = this.created;
-    var attachments = this.attachments;
-    var expands = this.expands;
-    var public = this.public;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (body != null) {
-      json[r'body'] = body;
-    }
-    if (renderedBody != null) {
-      json[r'renderedBody'] = renderedBody.toJson();
-    }
-    if (author != null) {
-      json[r'author'] = author.toJson();
-    }
-    if (created != null) {
-      json[r'created'] = created.toJson();
-    }
-    if (attachments != null) {
-      json[r'attachments'] = attachments.toJson();
-    }
-    json[r'_expands'] = expands;
-    json[r'public'] = public;
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  CommentDTO copyWith(
-      {String? id,
-      String? body,
-      RenderedValueDTO? renderedBody,
-      UserDTO? author,
-      DateDTO? created,
-      PagedDTOAttachmentDTO? attachments,
-      List<String>? expands,
-      bool? public,
-      SelfLinkDTO? links}) {
-    return CommentDTO(
-      id: id ?? this.id,
-      body: body ?? this.body,
-      renderedBody: renderedBody ?? this.renderedBody,
-      author: author ?? this.author,
-      created: created ?? this.created,
-      attachments: attachments ?? this.attachments,
-      expands: expands ?? this.expands,
-      public: public ?? this.public,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class PagedDTOAttachmentDTO {
-  /// Number of items returned in the page.
-  final int? size;
-
-  /// Index of the first item returned in the page.
-  final int? start;
-
-  /// Number of items to be returned per page, up to the maximum set for these
-  /// objects in the current implementation.
-  final int? limit;
-
-  /// Indicates if this is the last page of records (true) or not (false).
-  final bool isLastPage;
-
-  /// Details of the items included in the page.
-  final List<AttachmentDTO> values;
-  final List<String> expands;
-
-  /// List of the links relating to the page.
-  final PagedLinkDTO? links;
-
-  PagedDTOAttachmentDTO(
-      {this.size,
-      this.start,
-      this.limit,
-      bool? isLastPage,
-      List<AttachmentDTO>? values,
-      List<String>? expands,
-      this.links})
-      : isLastPage = isLastPage ?? false,
-        values = values ?? [],
-        expands = expands ?? [];
-
-  factory PagedDTOAttachmentDTO.fromJson(Map<String, Object?> json) {
-    return PagedDTOAttachmentDTO(
-      size: (json[r'size'] as num?)?.toInt(),
-      start: (json[r'start'] as num?)?.toInt(),
-      limit: (json[r'limit'] as num?)?.toInt(),
-      isLastPage: json[r'isLastPage'] as bool? ?? false,
-      values: (json[r'values'] as List<Object?>?)
-              ?.map((i) => AttachmentDTO.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      expands: (json[r'_expands'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      links: json[r'_links'] != null
-          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var size = this.size;
-    var start = this.start;
-    var limit = this.limit;
-    var isLastPage = this.isLastPage;
-    var values = this.values;
-    var expands = this.expands;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (size != null) {
-      json[r'size'] = size;
-    }
-    if (start != null) {
-      json[r'start'] = start;
-    }
-    if (limit != null) {
-      json[r'limit'] = limit;
-    }
-    json[r'isLastPage'] = isLastPage;
-    json[r'values'] = values.map((i) => i.toJson()).toList();
-    json[r'_expands'] = expands;
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  PagedDTOAttachmentDTO copyWith(
-      {int? size,
-      int? start,
-      int? limit,
-      bool? isLastPage,
-      List<AttachmentDTO>? values,
-      List<String>? expands,
-      PagedLinkDTO? links}) {
-    return PagedDTOAttachmentDTO(
-      size: size ?? this.size,
-      start: start ?? this.start,
-      limit: limit ?? this.limit,
-      isLastPage: isLastPage ?? this.isLastPage,
-      values: values ?? this.values,
-      expands: expands ?? this.expands,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class RenderedValueDTO {
-  final String? html;
-
-  RenderedValueDTO({this.html});
-
-  factory RenderedValueDTO.fromJson(Map<String, Object?> json) {
-    return RenderedValueDTO(
-      html: json[r'html'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var html = this.html;
-
-    final json = <String, Object?>{};
-    if (html != null) {
-      json[r'html'] = html;
-    }
-    return json;
-  }
-
-  RenderedValueDTO copyWith({String? html}) {
-    return RenderedValueDTO(
-      html: html ?? this.html,
-    );
-  }
-}
-
-class LinkableAttachmentLinkDTO {
-  final AttachmentLinkDTO? links;
-
-  LinkableAttachmentLinkDTO({this.links});
-
-  factory LinkableAttachmentLinkDTO.fromJson(Map<String, Object?> json) {
-    return LinkableAttachmentLinkDTO(
-      links: json[r'_links'] != null
-          ? AttachmentLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  LinkableAttachmentLinkDTO copyWith({AttachmentLinkDTO? links}) {
-    return LinkableAttachmentLinkDTO(
-      links: links ?? this.links,
-    );
-  }
-}
-
-class PagedDTOQueueDTO {
-  /// Number of items returned in the page.
-  final int? size;
-
-  /// Index of the first item returned in the page.
-  final int? start;
-
-  /// Number of items to be returned per page, up to the maximum set for these
-  /// objects in the current implementation.
-  final int? limit;
-
-  /// Indicates if this is the last page of records (true) or not (false).
-  final bool isLastPage;
-
-  /// Details of the items included in the page.
-  final List<QueueDTO> values;
-  final List<String> expands;
-
-  /// List of the links relating to the page.
-  final PagedLinkDTO? links;
-
-  PagedDTOQueueDTO(
-      {this.size,
-      this.start,
-      this.limit,
-      bool? isLastPage,
-      List<QueueDTO>? values,
-      List<String>? expands,
-      this.links})
-      : isLastPage = isLastPage ?? false,
-        values = values ?? [],
-        expands = expands ?? [];
-
-  factory PagedDTOQueueDTO.fromJson(Map<String, Object?> json) {
-    return PagedDTOQueueDTO(
-      size: (json[r'size'] as num?)?.toInt(),
-      start: (json[r'start'] as num?)?.toInt(),
-      limit: (json[r'limit'] as num?)?.toInt(),
-      isLastPage: json[r'isLastPage'] as bool? ?? false,
-      values: (json[r'values'] as List<Object?>?)
-              ?.map((i) =>
-                  QueueDTO.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      expands: (json[r'_expands'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      links: json[r'_links'] != null
-          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var size = this.size;
-    var start = this.start;
-    var limit = this.limit;
-    var isLastPage = this.isLastPage;
-    var values = this.values;
-    var expands = this.expands;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (size != null) {
-      json[r'size'] = size;
-    }
-    if (start != null) {
-      json[r'start'] = start;
-    }
-    if (limit != null) {
-      json[r'limit'] = limit;
-    }
-    json[r'isLastPage'] = isLastPage;
-    json[r'values'] = values.map((i) => i.toJson()).toList();
-    json[r'_expands'] = expands;
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  PagedDTOQueueDTO copyWith(
-      {int? size,
-      int? start,
-      int? limit,
-      bool? isLastPage,
-      List<QueueDTO>? values,
-      List<String>? expands,
-      PagedLinkDTO? links}) {
-    return PagedDTOQueueDTO(
-      size: size ?? this.size,
-      start: start ?? this.start,
-      limit: limit ?? this.limit,
-      isLastPage: isLastPage ?? this.isLastPage,
-      values: values ?? this.values,
-      expands: expands ?? this.expands,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class QueueDTO {
-  /// ID for the queue.
-  final String? id;
-
-  /// Short name for the queue.
-  final String? name;
-
-  /// JQL query that filters reqeusts for the queue.
-  final String? jql;
-
-  /// Fields returned for each request in the queue.
-  final List<String> fields;
-
-  /// The count of customer requests in the queue.
-  final int? issueCount;
-
-  /// REST API URL to the queue.
-  final SelfLinkDTO? links;
-
-  QueueDTO(
-      {this.id,
-      this.name,
-      this.jql,
-      List<String>? fields,
-      this.issueCount,
-      this.links})
-      : fields = fields ?? [];
-
-  factory QueueDTO.fromJson(Map<String, Object?> json) {
-    return QueueDTO(
-      id: json[r'id'] as String?,
-      name: json[r'name'] as String?,
-      jql: json[r'jql'] as String?,
-      fields: (json[r'fields'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      issueCount: (json[r'issueCount'] as num?)?.toInt(),
-      links: json[r'_links'] != null
-          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var name = this.name;
-    var jql = this.jql;
-    var fields = this.fields;
-    var issueCount = this.issueCount;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (jql != null) {
-      json[r'jql'] = jql;
-    }
-    json[r'fields'] = fields;
-    if (issueCount != null) {
-      json[r'issueCount'] = issueCount;
-    }
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  QueueDTO copyWith(
-      {String? id,
-      String? name,
-      String? jql,
-      List<String>? fields,
-      int? issueCount,
-      SelfLinkDTO? links}) {
-    return QueueDTO(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      jql: jql ?? this.jql,
-      fields: fields ?? this.fields,
-      issueCount: issueCount ?? this.issueCount,
-      links: links ?? this.links,
-    );
-  }
-}
-
 class AvatarUrlsBean {
   /// The URL of the item's 16x16 pixel avatar.
   final String? $16X16;
@@ -5203,6 +2154,58 @@ class AvatarUrlsBean {
       $24X24: $24X24 ?? this.$24X24,
       $32X32: $32X32 ?? this.$32X32,
       $48X48: $48X48 ?? this.$48X48,
+    );
+  }
+}
+
+class CSATFeedbackFullDTO {
+  /// Indicates the type of feedback, supported values: `csat`.
+  final String? type;
+
+  /// A numeric representation of the rating, this must be an integer value
+  /// between 1 and 5.
+  final int? rating;
+
+  /// (Optional) The comment provided with this feedback.
+  final AdditionalCommentDTO? comment;
+
+  CSATFeedbackFullDTO({this.type, this.rating, this.comment});
+
+  factory CSATFeedbackFullDTO.fromJson(Map<String, Object?> json) {
+    return CSATFeedbackFullDTO(
+      type: json[r'type'] as String?,
+      rating: (json[r'rating'] as num?)?.toInt(),
+      comment: json[r'comment'] != null
+          ? AdditionalCommentDTO.fromJson(
+              json[r'comment']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var rating = this.rating;
+    var comment = this.comment;
+
+    final json = <String, Object?>{};
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (rating != null) {
+      json[r'rating'] = rating;
+    }
+    if (comment != null) {
+      json[r'comment'] = comment.toJson();
+    }
+    return json;
+  }
+
+  CSATFeedbackFullDTO copyWith(
+      {String? type, int? rating, AdditionalCommentDTO? comment}) {
+    return CSATFeedbackFullDTO(
+      type: type ?? this.type,
+      rating: rating ?? this.rating,
+      comment: comment ?? this.comment,
     );
   }
 }
@@ -5389,1512 +2392,6 @@ class Changelog {
   }
 }
 
-/// The metadata describing an issue field.
-class FieldMetadata {
-  /// Whether the field is required.
-  final bool required;
-
-  /// The data type of the field.
-  final JsonTypeBean schema;
-
-  /// The name of the field.
-  final String name;
-
-  /// The key of the field.
-  final String key;
-
-  /// The URL that can be used to automatically complete the field.
-  final String? autoCompleteUrl;
-
-  /// Whether the field has a default value.
-  final bool hasDefaultValue;
-
-  /// The list of operations that can be performed on the field.
-  final List<String> operations;
-
-  /// The list of values allowed in the field.
-  final List<dynamic> allowedValues;
-
-  /// The default value of the field.
-  final dynamic defaultValue;
-
-  FieldMetadata(
-      {required this.required,
-      required this.schema,
-      required this.name,
-      required this.key,
-      this.autoCompleteUrl,
-      bool? hasDefaultValue,
-      required this.operations,
-      List<dynamic>? allowedValues,
-      this.defaultValue})
-      : hasDefaultValue = hasDefaultValue ?? false,
-        allowedValues = allowedValues ?? [];
-
-  factory FieldMetadata.fromJson(Map<String, Object?> json) {
-    return FieldMetadata(
-      required: json[r'required'] as bool? ?? false,
-      schema: JsonTypeBean.fromJson(
-          json[r'schema'] as Map<String, Object?>? ?? const {}),
-      name: json[r'name'] as String? ?? '',
-      key: json[r'key'] as String? ?? '',
-      autoCompleteUrl: json[r'autoCompleteUrl'] as String?,
-      hasDefaultValue: json[r'hasDefaultValue'] as bool? ?? false,
-      operations: (json[r'operations'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      allowedValues:
-          (json[r'allowedValues'] as List<Object?>?)?.map((i) => i).toList() ??
-              [],
-      defaultValue: json[r'defaultValue'],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var required = this.required;
-    var schema = this.schema;
-    var name = this.name;
-    var key = this.key;
-    var autoCompleteUrl = this.autoCompleteUrl;
-    var hasDefaultValue = this.hasDefaultValue;
-    var operations = this.operations;
-    var allowedValues = this.allowedValues;
-    var defaultValue = this.defaultValue;
-
-    final json = <String, Object?>{};
-    json[r'required'] = required;
-    json[r'schema'] = schema.toJson();
-    json[r'name'] = name;
-    json[r'key'] = key;
-    if (autoCompleteUrl != null) {
-      json[r'autoCompleteUrl'] = autoCompleteUrl;
-    }
-    json[r'hasDefaultValue'] = hasDefaultValue;
-    json[r'operations'] = operations;
-    json[r'allowedValues'] = allowedValues;
-    if (defaultValue != null) {
-      json[r'defaultValue'] = defaultValue;
-    }
-    return json;
-  }
-
-  FieldMetadata copyWith(
-      {bool? required,
-      JsonTypeBean? schema,
-      String? name,
-      String? key,
-      String? autoCompleteUrl,
-      bool? hasDefaultValue,
-      List<String>? operations,
-      List<dynamic>? allowedValues,
-      dynamic defaultValue}) {
-    return FieldMetadata(
-      required: required ?? this.required,
-      schema: schema ?? this.schema,
-      name: name ?? this.name,
-      key: key ?? this.key,
-      autoCompleteUrl: autoCompleteUrl ?? this.autoCompleteUrl,
-      hasDefaultValue: hasDefaultValue ?? this.hasDefaultValue,
-      operations: operations ?? this.operations,
-      allowedValues: allowedValues ?? this.allowedValues,
-      defaultValue: defaultValue ?? this.defaultValue,
-    );
-  }
-}
-
-/// Details of issue history metadata.
-class HistoryMetadata {
-  /// The type of the history record.
-  final String? type;
-
-  /// The description of the history record.
-  final String? description;
-
-  /// The description key of the history record.
-  final String? descriptionKey;
-
-  /// The activity described in the history record.
-  final String? activityDescription;
-
-  /// The key of the activity described in the history record.
-  final String? activityDescriptionKey;
-
-  /// The description of the email address associated the history record.
-  final String? emailDescription;
-
-  /// The description key of the email address associated the history record.
-  final String? emailDescriptionKey;
-
-  /// Details of the user whose action created the history record.
-  final HistoryMetadataParticipant? actor;
-
-  /// Details of the system that generated the history record.
-  final HistoryMetadataParticipant? generator;
-
-  /// Details of the cause that triggered the creation the history record.
-  final HistoryMetadataParticipant? cause;
-
-  /// Additional arbitrary information about the history record.
-  final Map<String, dynamic>? extraData;
-
-  HistoryMetadata(
-      {this.type,
-      this.description,
-      this.descriptionKey,
-      this.activityDescription,
-      this.activityDescriptionKey,
-      this.emailDescription,
-      this.emailDescriptionKey,
-      this.actor,
-      this.generator,
-      this.cause,
-      this.extraData});
-
-  factory HistoryMetadata.fromJson(Map<String, Object?> json) {
-    return HistoryMetadata(
-      type: json[r'type'] as String?,
-      description: json[r'description'] as String?,
-      descriptionKey: json[r'descriptionKey'] as String?,
-      activityDescription: json[r'activityDescription'] as String?,
-      activityDescriptionKey: json[r'activityDescriptionKey'] as String?,
-      emailDescription: json[r'emailDescription'] as String?,
-      emailDescriptionKey: json[r'emailDescriptionKey'] as String?,
-      actor: json[r'actor'] != null
-          ? HistoryMetadataParticipant.fromJson(
-              json[r'actor']! as Map<String, Object?>)
-          : null,
-      generator: json[r'generator'] != null
-          ? HistoryMetadataParticipant.fromJson(
-              json[r'generator']! as Map<String, Object?>)
-          : null,
-      cause: json[r'cause'] != null
-          ? HistoryMetadataParticipant.fromJson(
-              json[r'cause']! as Map<String, Object?>)
-          : null,
-      extraData: json[r'extraData'] as Map<String, Object?>?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var type = this.type;
-    var description = this.description;
-    var descriptionKey = this.descriptionKey;
-    var activityDescription = this.activityDescription;
-    var activityDescriptionKey = this.activityDescriptionKey;
-    var emailDescription = this.emailDescription;
-    var emailDescriptionKey = this.emailDescriptionKey;
-    var actor = this.actor;
-    var generator = this.generator;
-    var cause = this.cause;
-    var extraData = this.extraData;
-
-    final json = <String, Object?>{};
-    if (type != null) {
-      json[r'type'] = type;
-    }
-    if (description != null) {
-      json[r'description'] = description;
-    }
-    if (descriptionKey != null) {
-      json[r'descriptionKey'] = descriptionKey;
-    }
-    if (activityDescription != null) {
-      json[r'activityDescription'] = activityDescription;
-    }
-    if (activityDescriptionKey != null) {
-      json[r'activityDescriptionKey'] = activityDescriptionKey;
-    }
-    if (emailDescription != null) {
-      json[r'emailDescription'] = emailDescription;
-    }
-    if (emailDescriptionKey != null) {
-      json[r'emailDescriptionKey'] = emailDescriptionKey;
-    }
-    if (actor != null) {
-      json[r'actor'] = actor.toJson();
-    }
-    if (generator != null) {
-      json[r'generator'] = generator.toJson();
-    }
-    if (cause != null) {
-      json[r'cause'] = cause.toJson();
-    }
-    if (extraData != null) {
-      json[r'extraData'] = extraData;
-    }
-    return json;
-  }
-
-  HistoryMetadata copyWith(
-      {String? type,
-      String? description,
-      String? descriptionKey,
-      String? activityDescription,
-      String? activityDescriptionKey,
-      String? emailDescription,
-      String? emailDescriptionKey,
-      HistoryMetadataParticipant? actor,
-      HistoryMetadataParticipant? generator,
-      HistoryMetadataParticipant? cause,
-      Map<String, dynamic>? extraData}) {
-    return HistoryMetadata(
-      type: type ?? this.type,
-      description: description ?? this.description,
-      descriptionKey: descriptionKey ?? this.descriptionKey,
-      activityDescription: activityDescription ?? this.activityDescription,
-      activityDescriptionKey:
-          activityDescriptionKey ?? this.activityDescriptionKey,
-      emailDescription: emailDescription ?? this.emailDescription,
-      emailDescriptionKey: emailDescriptionKey ?? this.emailDescriptionKey,
-      actor: actor ?? this.actor,
-      generator: generator ?? this.generator,
-      cause: cause ?? this.cause,
-      extraData: extraData ?? this.extraData,
-    );
-  }
-}
-
-/// Details of user or system associated with a issue history metadata item.
-class HistoryMetadataParticipant {
-  /// The ID of the user or system associated with a history record.
-  final String? id;
-
-  /// The display name of the user or system associated with a history record.
-  final String? displayName;
-
-  /// The key of the display name of the user or system associated with a
-  /// history record.
-  final String? displayNameKey;
-
-  /// The type of the user or system associated with a history record.
-  final String? type;
-
-  /// The URL to an avatar for the user or system associated with a history
-  /// record.
-  final String? avatarUrl;
-
-  /// The URL of the user or system associated with a history record.
-  final String? url;
-
-  HistoryMetadataParticipant(
-      {this.id,
-      this.displayName,
-      this.displayNameKey,
-      this.type,
-      this.avatarUrl,
-      this.url});
-
-  factory HistoryMetadataParticipant.fromJson(Map<String, Object?> json) {
-    return HistoryMetadataParticipant(
-      id: json[r'id'] as String?,
-      displayName: json[r'displayName'] as String?,
-      displayNameKey: json[r'displayNameKey'] as String?,
-      type: json[r'type'] as String?,
-      avatarUrl: json[r'avatarUrl'] as String?,
-      url: json[r'url'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var displayName = this.displayName;
-    var displayNameKey = this.displayNameKey;
-    var type = this.type;
-    var avatarUrl = this.avatarUrl;
-    var url = this.url;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (displayName != null) {
-      json[r'displayName'] = displayName;
-    }
-    if (displayNameKey != null) {
-      json[r'displayNameKey'] = displayNameKey;
-    }
-    if (type != null) {
-      json[r'type'] = type;
-    }
-    if (avatarUrl != null) {
-      json[r'avatarUrl'] = avatarUrl;
-    }
-    if (url != null) {
-      json[r'url'] = url;
-    }
-    return json;
-  }
-
-  HistoryMetadataParticipant copyWith(
-      {String? id,
-      String? displayName,
-      String? displayNameKey,
-      String? type,
-      String? avatarUrl,
-      String? url}) {
-    return HistoryMetadataParticipant(
-      id: id ?? this.id,
-      displayName: displayName ?? this.displayName,
-      displayNameKey: displayNameKey ?? this.displayNameKey,
-      type: type ?? this.type,
-      avatarUrl: avatarUrl ?? this.avatarUrl,
-      url: url ?? this.url,
-    );
-  }
-}
-
-class IncludedFields {
-  final List<String> included;
-  final List<String> actuallyIncluded;
-  final List<String> excluded;
-
-  IncludedFields(
-      {List<String>? included,
-      List<String>? actuallyIncluded,
-      List<String>? excluded})
-      : included = included ?? [],
-        actuallyIncluded = actuallyIncluded ?? [],
-        excluded = excluded ?? [];
-
-  factory IncludedFields.fromJson(Map<String, Object?> json) {
-    return IncludedFields(
-      included: (json[r'included'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      excluded: (json[r'excluded'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var included = this.included;
-    var actuallyIncluded = this.actuallyIncluded;
-    var excluded = this.excluded;
-
-    final json = <String, Object?>{};
-    json[r'included'] = included;
-    json[r'actuallyIncluded'] = actuallyIncluded;
-    json[r'excluded'] = excluded;
-    return json;
-  }
-
-  IncludedFields copyWith(
-      {List<String>? included,
-      List<String>? actuallyIncluded,
-      List<String>? excluded}) {
-    return IncludedFields(
-      included: included ?? this.included,
-      actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
-      excluded: excluded ?? this.excluded,
-    );
-  }
-}
-
-class IssueBean {
-  /// Expand options that include additional issue details in the response.
-  final String? expand;
-
-  /// The ID of the issue.
-  final String? id;
-
-  /// The URL of the issue details.
-  final String? self;
-
-  /// The key of the issue.
-  final String? key;
-
-  /// The rendered value of each field present on the issue.
-  final Map<String, dynamic>? renderedFields;
-
-  /// Details of the issue properties identified in the request.
-  final Map<String, dynamic>? properties;
-
-  /// The ID and name of each field present on the issue.
-  final Map<String, dynamic>? names;
-
-  /// The schema describing each field present on the issue.
-  final Map<String, dynamic>? schema;
-
-  /// The transitions that can be performed on the issue.
-  final List<IssueTransition> transitions;
-
-  /// The operations that can be performed on the issue.
-  final Operations? operations;
-
-  /// The metadata for the fields on the issue that can be amended.
-  final IssueUpdateMetadata? editmeta;
-
-  /// Details of changelogs associated with the issue.
-  final PageOfChangelogs? changelog;
-
-  /// The versions of each field on the issue.
-  final Map<String, dynamic>? versionedRepresentations;
-  final IncludedFields? fieldsToInclude;
-  final Map<String, dynamic>? fields;
-
-  IssueBean(
-      {this.expand,
-      this.id,
-      this.self,
-      this.key,
-      this.renderedFields,
-      this.properties,
-      this.names,
-      this.schema,
-      List<IssueTransition>? transitions,
-      this.operations,
-      this.editmeta,
-      this.changelog,
-      this.versionedRepresentations,
-      this.fieldsToInclude,
-      this.fields})
-      : transitions = transitions ?? [];
-
-  factory IssueBean.fromJson(Map<String, Object?> json) {
-    return IssueBean(
-      expand: json[r'expand'] as String?,
-      id: json[r'id'] as String?,
-      self: json[r'self'] as String?,
-      key: json[r'key'] as String?,
-      renderedFields: json[r'renderedFields'] as Map<String, Object?>?,
-      properties: json[r'properties'] as Map<String, Object?>?,
-      names: json[r'names'] as Map<String, Object?>?,
-      schema: json[r'schema'] as Map<String, Object?>?,
-      transitions: (json[r'transitions'] as List<Object?>?)
-              ?.map((i) => IssueTransition.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      operations: json[r'operations'] != null
-          ? Operations.fromJson(json[r'operations']! as Map<String, Object?>)
-          : null,
-      editmeta: json[r'editmeta'] != null
-          ? IssueUpdateMetadata.fromJson(
-              json[r'editmeta']! as Map<String, Object?>)
-          : null,
-      changelog: json[r'changelog'] != null
-          ? PageOfChangelogs.fromJson(
-              json[r'changelog']! as Map<String, Object?>)
-          : null,
-      versionedRepresentations:
-          json[r'versionedRepresentations'] as Map<String, Object?>?,
-      fieldsToInclude: json[r'fieldsToInclude'] != null
-          ? IncludedFields.fromJson(
-              json[r'fieldsToInclude']! as Map<String, Object?>)
-          : null,
-      fields: json[r'fields'] as Map<String, Object?>?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var expand = this.expand;
-    var id = this.id;
-    var self = this.self;
-    var key = this.key;
-    var renderedFields = this.renderedFields;
-    var properties = this.properties;
-    var names = this.names;
-    var schema = this.schema;
-    var transitions = this.transitions;
-    var operations = this.operations;
-    var editmeta = this.editmeta;
-    var changelog = this.changelog;
-    var versionedRepresentations = this.versionedRepresentations;
-    var fieldsToInclude = this.fieldsToInclude;
-    var fields = this.fields;
-
-    final json = <String, Object?>{};
-    if (expand != null) {
-      json[r'expand'] = expand;
-    }
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (key != null) {
-      json[r'key'] = key;
-    }
-    if (renderedFields != null) {
-      json[r'renderedFields'] = renderedFields;
-    }
-    if (properties != null) {
-      json[r'properties'] = properties;
-    }
-    if (names != null) {
-      json[r'names'] = names;
-    }
-    if (schema != null) {
-      json[r'schema'] = schema;
-    }
-    json[r'transitions'] = transitions.map((i) => i.toJson()).toList();
-    if (operations != null) {
-      json[r'operations'] = operations.toJson();
-    }
-    if (editmeta != null) {
-      json[r'editmeta'] = editmeta.toJson();
-    }
-    if (changelog != null) {
-      json[r'changelog'] = changelog.toJson();
-    }
-    if (versionedRepresentations != null) {
-      json[r'versionedRepresentations'] = versionedRepresentations;
-    }
-    if (fieldsToInclude != null) {
-      json[r'fieldsToInclude'] = fieldsToInclude.toJson();
-    }
-    if (fields != null) {
-      json[r'fields'] = fields;
-    }
-    return json;
-  }
-
-  IssueBean copyWith(
-      {String? expand,
-      String? id,
-      String? self,
-      String? key,
-      Map<String, dynamic>? renderedFields,
-      Map<String, dynamic>? properties,
-      Map<String, dynamic>? names,
-      Map<String, dynamic>? schema,
-      List<IssueTransition>? transitions,
-      Operations? operations,
-      IssueUpdateMetadata? editmeta,
-      PageOfChangelogs? changelog,
-      Map<String, dynamic>? versionedRepresentations,
-      IncludedFields? fieldsToInclude,
-      Map<String, dynamic>? fields}) {
-    return IssueBean(
-      expand: expand ?? this.expand,
-      id: id ?? this.id,
-      self: self ?? this.self,
-      key: key ?? this.key,
-      renderedFields: renderedFields ?? this.renderedFields,
-      properties: properties ?? this.properties,
-      names: names ?? this.names,
-      schema: schema ?? this.schema,
-      transitions: transitions ?? this.transitions,
-      operations: operations ?? this.operations,
-      editmeta: editmeta ?? this.editmeta,
-      changelog: changelog ?? this.changelog,
-      versionedRepresentations:
-          versionedRepresentations ?? this.versionedRepresentations,
-      fieldsToInclude: fieldsToInclude ?? this.fieldsToInclude,
-      fields: fields ?? this.fields,
-    );
-  }
-}
-
-/// Details of an issue transition.
-class IssueTransition {
-  /// The ID of the issue transition. Required when specifying a transition to
-  /// undertake.
-  final String? id;
-
-  /// The name of the issue transition.
-  final String? name;
-
-  /// Details of the issue status after the transition.
-  final StatusDetails? to;
-
-  /// Whether there is a screen associated with the issue transition.
-  final bool hasScreen;
-
-  /// Whether the issue transition is global, that is, the transition is applied
-  /// to issues regardless of their status.
-  final bool isGlobal;
-
-  /// Whether this is the initial issue transition for the workflow.
-  final bool isInitial;
-
-  /// Whether the transition is available to be performed.
-  final bool isAvailable;
-
-  /// Whether the issue has to meet criteria before the issue transition is
-  /// applied.
-  final bool isConditional;
-
-  /// Details of the fields associated with the issue transition screen. Use
-  /// this information to populate `fields` and `update` in a transition
-  /// request.
-  final Map<String, dynamic>? fields;
-
-  /// Expand options that include additional transition details in the response.
-  final String? expand;
-  final bool looped;
-
-  IssueTransition(
-      {this.id,
-      this.name,
-      this.to,
-      bool? hasScreen,
-      bool? isGlobal,
-      bool? isInitial,
-      bool? isAvailable,
-      bool? isConditional,
-      this.fields,
-      this.expand,
-      bool? looped})
-      : hasScreen = hasScreen ?? false,
-        isGlobal = isGlobal ?? false,
-        isInitial = isInitial ?? false,
-        isAvailable = isAvailable ?? false,
-        isConditional = isConditional ?? false,
-        looped = looped ?? false;
-
-  factory IssueTransition.fromJson(Map<String, Object?> json) {
-    return IssueTransition(
-      id: json[r'id'] as String?,
-      name: json[r'name'] as String?,
-      to: json[r'to'] != null
-          ? StatusDetails.fromJson(json[r'to']! as Map<String, Object?>)
-          : null,
-      hasScreen: json[r'hasScreen'] as bool? ?? false,
-      isGlobal: json[r'isGlobal'] as bool? ?? false,
-      isInitial: json[r'isInitial'] as bool? ?? false,
-      isAvailable: json[r'isAvailable'] as bool? ?? false,
-      isConditional: json[r'isConditional'] as bool? ?? false,
-      fields: json[r'fields'] as Map<String, Object?>?,
-      expand: json[r'expand'] as String?,
-      looped: json[r'looped'] as bool? ?? false,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var name = this.name;
-    var to = this.to;
-    var hasScreen = this.hasScreen;
-    var isGlobal = this.isGlobal;
-    var isInitial = this.isInitial;
-    var isAvailable = this.isAvailable;
-    var isConditional = this.isConditional;
-    var fields = this.fields;
-    var expand = this.expand;
-    var looped = this.looped;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (to != null) {
-      json[r'to'] = to.toJson();
-    }
-    json[r'hasScreen'] = hasScreen;
-    json[r'isGlobal'] = isGlobal;
-    json[r'isInitial'] = isInitial;
-    json[r'isAvailable'] = isAvailable;
-    json[r'isConditional'] = isConditional;
-    if (fields != null) {
-      json[r'fields'] = fields;
-    }
-    if (expand != null) {
-      json[r'expand'] = expand;
-    }
-    json[r'looped'] = looped;
-    return json;
-  }
-
-  IssueTransition copyWith(
-      {String? id,
-      String? name,
-      StatusDetails? to,
-      bool? hasScreen,
-      bool? isGlobal,
-      bool? isInitial,
-      bool? isAvailable,
-      bool? isConditional,
-      Map<String, dynamic>? fields,
-      String? expand,
-      bool? looped}) {
-    return IssueTransition(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      to: to ?? this.to,
-      hasScreen: hasScreen ?? this.hasScreen,
-      isGlobal: isGlobal ?? this.isGlobal,
-      isInitial: isInitial ?? this.isInitial,
-      isAvailable: isAvailable ?? this.isAvailable,
-      isConditional: isConditional ?? this.isConditional,
-      fields: fields ?? this.fields,
-      expand: expand ?? this.expand,
-      looped: looped ?? this.looped,
-    );
-  }
-}
-
-/// A list of editable field details.
-class IssueUpdateMetadata {
-  final Map<String, dynamic>? fields;
-
-  IssueUpdateMetadata({this.fields});
-
-  factory IssueUpdateMetadata.fromJson(Map<String, Object?> json) {
-    return IssueUpdateMetadata(
-      fields: json[r'fields'] as Map<String, Object?>?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var fields = this.fields;
-
-    final json = <String, Object?>{};
-    if (fields != null) {
-      json[r'fields'] = fields;
-    }
-    return json;
-  }
-
-  IssueUpdateMetadata copyWith({Map<String, dynamic>? fields}) {
-    return IssueUpdateMetadata(
-      fields: fields ?? this.fields,
-    );
-  }
-}
-
-/// Details a link group, which defines issue operations.
-class LinkGroup {
-  final String? id;
-  final String? styleClass;
-  final SimpleLink? header;
-  final int? weight;
-  final List<SimpleLink> links;
-  final List<LinkGroup> groups;
-
-  LinkGroup(
-      {this.id,
-      this.styleClass,
-      this.header,
-      this.weight,
-      List<SimpleLink>? links,
-      List<LinkGroup>? groups})
-      : links = links ?? [],
-        groups = groups ?? [];
-
-  factory LinkGroup.fromJson(Map<String, Object?> json) {
-    return LinkGroup(
-      id: json[r'id'] as String?,
-      styleClass: json[r'styleClass'] as String?,
-      header: json[r'header'] != null
-          ? SimpleLink.fromJson(json[r'header']! as Map<String, Object?>)
-          : null,
-      weight: (json[r'weight'] as num?)?.toInt(),
-      links: (json[r'links'] as List<Object?>?)
-              ?.map((i) =>
-                  SimpleLink.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      groups: (json[r'groups'] as List<Object?>?)
-              ?.map((i) =>
-                  LinkGroup.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var styleClass = this.styleClass;
-    var header = this.header;
-    var weight = this.weight;
-    var links = this.links;
-    var groups = this.groups;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (styleClass != null) {
-      json[r'styleClass'] = styleClass;
-    }
-    if (header != null) {
-      json[r'header'] = header.toJson();
-    }
-    if (weight != null) {
-      json[r'weight'] = weight;
-    }
-    json[r'links'] = links.map((i) => i.toJson()).toList();
-    json[r'groups'] = groups.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  LinkGroup copyWith(
-      {String? id,
-      String? styleClass,
-      SimpleLink? header,
-      int? weight,
-      List<SimpleLink>? links,
-      List<LinkGroup>? groups}) {
-    return LinkGroup(
-      id: id ?? this.id,
-      styleClass: styleClass ?? this.styleClass,
-      header: header ?? this.header,
-      weight: weight ?? this.weight,
-      links: links ?? this.links,
-      groups: groups ?? this.groups,
-    );
-  }
-}
-
-/// Details of the operations that can be performed on the issue.
-class Operations {
-  /// Details of the link groups defining issue operations.
-  final List<LinkGroup> linkGroups;
-
-  Operations({List<LinkGroup>? linkGroups}) : linkGroups = linkGroups ?? [];
-
-  factory Operations.fromJson(Map<String, Object?> json) {
-    return Operations(
-      linkGroups: (json[r'linkGroups'] as List<Object?>?)
-              ?.map((i) =>
-                  LinkGroup.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var linkGroups = this.linkGroups;
-
-    final json = <String, Object?>{};
-    json[r'linkGroups'] = linkGroups.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  Operations copyWith({List<LinkGroup>? linkGroups}) {
-    return Operations(
-      linkGroups: linkGroups ?? this.linkGroups,
-    );
-  }
-}
-
-/// A page of changelogs.
-class PageOfChangelogs {
-  /// The index of the first item returned on the page.
-  final int? startAt;
-
-  /// The maximum number of results that could be on the page.
-  final int? maxResults;
-
-  /// The number of results on the page.
-  final int? total;
-
-  /// The list of changelogs.
-  final List<Changelog> histories;
-
-  PageOfChangelogs(
-      {this.startAt, this.maxResults, this.total, List<Changelog>? histories})
-      : histories = histories ?? [];
-
-  factory PageOfChangelogs.fromJson(Map<String, Object?> json) {
-    return PageOfChangelogs(
-      startAt: (json[r'startAt'] as num?)?.toInt(),
-      maxResults: (json[r'maxResults'] as num?)?.toInt(),
-      total: (json[r'total'] as num?)?.toInt(),
-      histories: (json[r'histories'] as List<Object?>?)
-              ?.map((i) =>
-                  Changelog.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var startAt = this.startAt;
-    var maxResults = this.maxResults;
-    var total = this.total;
-    var histories = this.histories;
-
-    final json = <String, Object?>{};
-    if (startAt != null) {
-      json[r'startAt'] = startAt;
-    }
-    if (maxResults != null) {
-      json[r'maxResults'] = maxResults;
-    }
-    if (total != null) {
-      json[r'total'] = total;
-    }
-    json[r'histories'] = histories.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  PageOfChangelogs copyWith(
-      {int? startAt, int? maxResults, int? total, List<Changelog>? histories}) {
-    return PageOfChangelogs(
-      startAt: startAt ?? this.startAt,
-      maxResults: maxResults ?? this.maxResults,
-      total: total ?? this.total,
-      histories: histories ?? this.histories,
-    );
-  }
-}
-
-class PagedDTOIssueBean {
-  /// Number of items returned in the page.
-  final int? size;
-
-  /// Index of the first item returned in the page.
-  final int? start;
-
-  /// Number of items to be returned per page, up to the maximum set for these
-  /// objects in the current implementation.
-  final int? limit;
-
-  /// Indicates if this is the last page of records (true) or not (false).
-  final bool isLastPage;
-
-  /// Details of the items included in the page.
-  final List<IssueBean> values;
-  final List<String> expands;
-
-  /// List of the links relating to the page.
-  final PagedLinkDTO? links;
-
-  PagedDTOIssueBean(
-      {this.size,
-      this.start,
-      this.limit,
-      bool? isLastPage,
-      List<IssueBean>? values,
-      List<String>? expands,
-      this.links})
-      : isLastPage = isLastPage ?? false,
-        values = values ?? [],
-        expands = expands ?? [];
-
-  factory PagedDTOIssueBean.fromJson(Map<String, Object?> json) {
-    return PagedDTOIssueBean(
-      size: (json[r'size'] as num?)?.toInt(),
-      start: (json[r'start'] as num?)?.toInt(),
-      limit: (json[r'limit'] as num?)?.toInt(),
-      isLastPage: json[r'isLastPage'] as bool? ?? false,
-      values: (json[r'values'] as List<Object?>?)
-              ?.map((i) =>
-                  IssueBean.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      expands: (json[r'_expands'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      links: json[r'_links'] != null
-          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var size = this.size;
-    var start = this.start;
-    var limit = this.limit;
-    var isLastPage = this.isLastPage;
-    var values = this.values;
-    var expands = this.expands;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (size != null) {
-      json[r'size'] = size;
-    }
-    if (start != null) {
-      json[r'start'] = start;
-    }
-    if (limit != null) {
-      json[r'limit'] = limit;
-    }
-    json[r'isLastPage'] = isLastPage;
-    json[r'values'] = values.map((i) => i.toJson()).toList();
-    json[r'_expands'] = expands;
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  PagedDTOIssueBean copyWith(
-      {int? size,
-      int? start,
-      int? limit,
-      bool? isLastPage,
-      List<IssueBean>? values,
-      List<String>? expands,
-      PagedLinkDTO? links}) {
-    return PagedDTOIssueBean(
-      size: size ?? this.size,
-      start: start ?? this.start,
-      limit: limit ?? this.limit,
-      isLastPage: isLastPage ?? this.isLastPage,
-      values: values ?? this.values,
-      expands: expands ?? this.expands,
-      links: links ?? this.links,
-    );
-  }
-}
-
-/// Details about the operations available in this version.
-class SimpleLink {
-  final String? id;
-  final String? styleClass;
-  final String? iconClass;
-  final String? label;
-  final String? title;
-  final String? href;
-  final int? weight;
-
-  SimpleLink(
-      {this.id,
-      this.styleClass,
-      this.iconClass,
-      this.label,
-      this.title,
-      this.href,
-      this.weight});
-
-  factory SimpleLink.fromJson(Map<String, Object?> json) {
-    return SimpleLink(
-      id: json[r'id'] as String?,
-      styleClass: json[r'styleClass'] as String?,
-      iconClass: json[r'iconClass'] as String?,
-      label: json[r'label'] as String?,
-      title: json[r'title'] as String?,
-      href: json[r'href'] as String?,
-      weight: (json[r'weight'] as num?)?.toInt(),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var styleClass = this.styleClass;
-    var iconClass = this.iconClass;
-    var label = this.label;
-    var title = this.title;
-    var href = this.href;
-    var weight = this.weight;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (styleClass != null) {
-      json[r'styleClass'] = styleClass;
-    }
-    if (iconClass != null) {
-      json[r'iconClass'] = iconClass;
-    }
-    if (label != null) {
-      json[r'label'] = label;
-    }
-    if (title != null) {
-      json[r'title'] = title;
-    }
-    if (href != null) {
-      json[r'href'] = href;
-    }
-    if (weight != null) {
-      json[r'weight'] = weight;
-    }
-    return json;
-  }
-
-  SimpleLink copyWith(
-      {String? id,
-      String? styleClass,
-      String? iconClass,
-      String? label,
-      String? title,
-      String? href,
-      int? weight}) {
-    return SimpleLink(
-      id: id ?? this.id,
-      styleClass: styleClass ?? this.styleClass,
-      iconClass: iconClass ?? this.iconClass,
-      label: label ?? this.label,
-      title: title ?? this.title,
-      href: href ?? this.href,
-      weight: weight ?? this.weight,
-    );
-  }
-}
-
-/// A status category.
-class StatusCategory {
-  /// The URL of the status category.
-  final String? self;
-
-  /// The ID of the status category.
-  final int? id;
-
-  /// The key of the status category.
-  final String? key;
-
-  /// The name of the color used to represent the status category.
-  final String? colorName;
-
-  /// The name of the status category.
-  final String? name;
-
-  StatusCategory({this.self, this.id, this.key, this.colorName, this.name});
-
-  factory StatusCategory.fromJson(Map<String, Object?> json) {
-    return StatusCategory(
-      self: json[r'self'] as String?,
-      id: (json[r'id'] as num?)?.toInt(),
-      key: json[r'key'] as String?,
-      colorName: json[r'colorName'] as String?,
-      name: json[r'name'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var self = this.self;
-    var id = this.id;
-    var key = this.key;
-    var colorName = this.colorName;
-    var name = this.name;
-
-    final json = <String, Object?>{};
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (key != null) {
-      json[r'key'] = key;
-    }
-    if (colorName != null) {
-      json[r'colorName'] = colorName;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    return json;
-  }
-
-  StatusCategory copyWith(
-      {String? self, int? id, String? key, String? colorName, String? name}) {
-    return StatusCategory(
-      self: self ?? this.self,
-      id: id ?? this.id,
-      key: key ?? this.key,
-      colorName: colorName ?? this.colorName,
-      name: name ?? this.name,
-    );
-  }
-}
-
-/// A status.
-class StatusDetails {
-  /// The URL of the status.
-  final String? self;
-
-  /// The description of the status.
-  final String? description;
-
-  /// The URL of the icon used to represent the status.
-  final String? iconUrl;
-
-  /// The name of the status.
-  final String? name;
-
-  /// The ID of the status.
-  final String? id;
-
-  /// The category assigned to the status.
-  final StatusCategory? statusCategory;
-
-  StatusDetails(
-      {this.self,
-      this.description,
-      this.iconUrl,
-      this.name,
-      this.id,
-      this.statusCategory});
-
-  factory StatusDetails.fromJson(Map<String, Object?> json) {
-    return StatusDetails(
-      self: json[r'self'] as String?,
-      description: json[r'description'] as String?,
-      iconUrl: json[r'iconUrl'] as String?,
-      name: json[r'name'] as String?,
-      id: json[r'id'] as String?,
-      statusCategory: json[r'statusCategory'] != null
-          ? StatusCategory.fromJson(
-              json[r'statusCategory']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var self = this.self;
-    var description = this.description;
-    var iconUrl = this.iconUrl;
-    var name = this.name;
-    var id = this.id;
-    var statusCategory = this.statusCategory;
-
-    final json = <String, Object?>{};
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (description != null) {
-      json[r'description'] = description;
-    }
-    if (iconUrl != null) {
-      json[r'iconUrl'] = iconUrl;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (statusCategory != null) {
-      json[r'statusCategory'] = statusCategory.toJson();
-    }
-    return json;
-  }
-
-  StatusDetails copyWith(
-      {String? self,
-      String? description,
-      String? iconUrl,
-      String? name,
-      String? id,
-      StatusCategory? statusCategory}) {
-    return StatusDetails(
-      self: self ?? this.self,
-      description: description ?? this.description,
-      iconUrl: iconUrl ?? this.iconUrl,
-      name: name ?? this.name,
-      id: id ?? this.id,
-      statusCategory: statusCategory ?? this.statusCategory,
-    );
-  }
-}
-
-/// User details permitted by the user's Atlassian Account privacy settings.
-/// However, be aware of these exceptions:
-///
-///  *  User record deleted from Atlassian: This occurs as the result of a right
-/// to be forgotten request. In this case, `displayName` provides an indication
-/// and other parameters have default values or are blank (for example, email is
-/// blank).
-///  *  User record corrupted: This occurs as a results of events such as a
-/// server import and can only happen to deleted users. In this case,
-/// `accountId` returns *unknown* and all other parameters have fallback values.
-///  *  User record unavailable: This usually occurs due to an internal service
-/// outage. In this case, all parameters have fallback values.
-class UserDetails {
-  /// The URL of the user.
-  final String? self;
-
-  /// This property is no longer available and will be removed from the
-  /// documentation soon. See the
-  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
-  /// for details.
-  final String? name;
-
-  /// This property is no longer available and will be removed from the
-  /// documentation soon. See the
-  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
-  /// for details.
-  final String? key;
-
-  /// The account ID of the user, which uniquely identifies the user across all
-  /// Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
-  final String? accountId;
-
-  /// The email address of the user. Depending on the user’s privacy settings,
-  /// this may be returned as null.
-  final String? emailAddress;
-
-  /// The avatars of the user.
-  final AvatarUrlsBean? avatarUrls;
-
-  /// The display name of the user. Depending on the user’s privacy settings,
-  /// this may return an alternative value.
-  final String? displayName;
-
-  /// Whether the user is active.
-  final bool active;
-
-  /// The time zone specified in the user's profile. Depending on the user’s
-  /// privacy settings, this may be returned as null.
-  final String? timeZone;
-
-  /// The type of account represented by this user. This will be one of
-  /// 'atlassian' (normal users), 'app' (application user) or 'customer' (Jira
-  /// Service Desk customer user)
-  final String? accountType;
-
-  UserDetails(
-      {this.self,
-      this.name,
-      this.key,
-      this.accountId,
-      this.emailAddress,
-      this.avatarUrls,
-      this.displayName,
-      bool? active,
-      this.timeZone,
-      this.accountType})
-      : active = active ?? false;
-
-  factory UserDetails.fromJson(Map<String, Object?> json) {
-    return UserDetails(
-      self: json[r'self'] as String?,
-      name: json[r'name'] as String?,
-      key: json[r'key'] as String?,
-      accountId: json[r'accountId'] as String?,
-      emailAddress: json[r'emailAddress'] as String?,
-      avatarUrls: json[r'avatarUrls'] != null
-          ? AvatarUrlsBean.fromJson(
-              json[r'avatarUrls']! as Map<String, Object?>)
-          : null,
-      displayName: json[r'displayName'] as String?,
-      active: json[r'active'] as bool? ?? false,
-      timeZone: json[r'timeZone'] as String?,
-      accountType: json[r'accountType'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var self = this.self;
-    var name = this.name;
-    var key = this.key;
-    var accountId = this.accountId;
-    var emailAddress = this.emailAddress;
-    var avatarUrls = this.avatarUrls;
-    var displayName = this.displayName;
-    var active = this.active;
-    var timeZone = this.timeZone;
-    var accountType = this.accountType;
-
-    final json = <String, Object?>{};
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (key != null) {
-      json[r'key'] = key;
-    }
-    if (accountId != null) {
-      json[r'accountId'] = accountId;
-    }
-    if (emailAddress != null) {
-      json[r'emailAddress'] = emailAddress;
-    }
-    if (avatarUrls != null) {
-      json[r'avatarUrls'] = avatarUrls.toJson();
-    }
-    if (displayName != null) {
-      json[r'displayName'] = displayName;
-    }
-    json[r'active'] = active;
-    if (timeZone != null) {
-      json[r'timeZone'] = timeZone;
-    }
-    if (accountType != null) {
-      json[r'accountType'] = accountType;
-    }
-    return json;
-  }
-
-  UserDetails copyWith(
-      {String? self,
-      String? name,
-      String? key,
-      String? accountId,
-      String? emailAddress,
-      AvatarUrlsBean? avatarUrls,
-      String? displayName,
-      bool? active,
-      String? timeZone,
-      String? accountType}) {
-    return UserDetails(
-      self: self ?? this.self,
-      name: name ?? this.name,
-      key: key ?? this.key,
-      accountId: accountId ?? this.accountId,
-      emailAddress: emailAddress ?? this.emailAddress,
-      avatarUrls: avatarUrls ?? this.avatarUrls,
-      displayName: displayName ?? this.displayName,
-      active: active ?? this.active,
-      timeZone: timeZone ?? this.timeZone,
-      accountType: accountType ?? this.accountType,
-    );
-  }
-}
-
-class CSATFeedbackFullDTO {
-  /// Indicates the type of feedback, supported values: `csat`.
-  final String? type;
-
-  /// A numeric representation of the rating, this must be an integer value
-  /// between 1 and 5.
-  final int? rating;
-
-  /// (Optional) The comment provided with this feedback.
-  final AdditionalCommentDTO? comment;
-
-  CSATFeedbackFullDTO({this.type, this.rating, this.comment});
-
-  factory CSATFeedbackFullDTO.fromJson(Map<String, Object?> json) {
-    return CSATFeedbackFullDTO(
-      type: json[r'type'] as String?,
-      rating: (json[r'rating'] as num?)?.toInt(),
-      comment: json[r'comment'] != null
-          ? AdditionalCommentDTO.fromJson(
-              json[r'comment']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var type = this.type;
-    var rating = this.rating;
-    var comment = this.comment;
-
-    final json = <String, Object?>{};
-    if (type != null) {
-      json[r'type'] = type;
-    }
-    if (rating != null) {
-      json[r'rating'] = rating;
-    }
-    if (comment != null) {
-      json[r'comment'] = comment.toJson();
-    }
-    return json;
-  }
-
-  CSATFeedbackFullDTO copyWith(
-      {String? type, int? rating, AdditionalCommentDTO? comment}) {
-    return CSATFeedbackFullDTO(
-      type: type ?? this.type,
-      rating: rating ?? this.rating,
-      comment: comment ?? this.comment,
-    );
-  }
-}
-
 class CommentCreateDTO {
   /// Content of the comment.
   final String? body;
@@ -6932,195 +2429,214 @@ class CommentCreateDTO {
   }
 }
 
-class PagedDTOCommentDTO {
-  /// Number of items returned in the page.
-  final int? size;
+class CommentDTO {
+  /// ID of the comment.
+  final String? id;
 
-  /// Index of the first item returned in the page.
-  final int? start;
+  /// Content of the comment.
+  final String? body;
 
-  /// Number of items to be returned per page, up to the maximum set for these
-  /// objects in the current implementation.
-  final int? limit;
+  /// The rendered body of the comment.
+  final RenderedValueDTO? renderedBody;
 
-  /// Indicates if this is the last page of records (true) or not (false).
-  final bool isLastPage;
+  /// Details of the customer who authored the comment.
+  final UserDTO? author;
 
-  /// Details of the items included in the page.
-  final List<CommentDTO> values;
+  /// Date the comment was created.
+  final DateDTO? created;
+
+  /// List of the attachments included in the comment.
+  final PagedDTOAttachmentDTO? attachments;
+
+  /// List of items that can be expanded in the response by specifying the
+  /// expand query parameter.
   final List<String> expands;
 
-  /// List of the links relating to the page.
-  final PagedLinkDTO? links;
+  /// Indicates whether the comment is public (true) or private/internal
+  /// (false).
+  final bool public;
 
-  PagedDTOCommentDTO(
-      {this.size,
-      this.start,
-      this.limit,
-      bool? isLastPage,
-      List<CommentDTO>? values,
+  /// REST API URL link to the comment.
+  final SelfLinkDTO? links;
+
+  CommentDTO(
+      {this.id,
+      this.body,
+      this.renderedBody,
+      this.author,
+      this.created,
+      this.attachments,
       List<String>? expands,
+      bool? public,
       this.links})
-      : isLastPage = isLastPage ?? false,
-        values = values ?? [],
-        expands = expands ?? [];
+      : expands = expands ?? [],
+        public = public ?? false;
 
-  factory PagedDTOCommentDTO.fromJson(Map<String, Object?> json) {
-    return PagedDTOCommentDTO(
-      size: (json[r'size'] as num?)?.toInt(),
-      start: (json[r'start'] as num?)?.toInt(),
-      limit: (json[r'limit'] as num?)?.toInt(),
-      isLastPage: json[r'isLastPage'] as bool? ?? false,
-      values: (json[r'values'] as List<Object?>?)
-              ?.map((i) =>
-                  CommentDTO.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+  factory CommentDTO.fromJson(Map<String, Object?> json) {
+    return CommentDTO(
+      id: json[r'id'] as String?,
+      body: json[r'body'] as String?,
+      renderedBody: json[r'renderedBody'] != null
+          ? RenderedValueDTO.fromJson(
+              json[r'renderedBody']! as Map<String, Object?>)
+          : null,
+      author: json[r'author'] != null
+          ? UserDTO.fromJson(json[r'author']! as Map<String, Object?>)
+          : null,
+      created: json[r'created'] != null
+          ? DateDTO.fromJson(json[r'created']! as Map<String, Object?>)
+          : null,
+      attachments: json[r'attachments'] != null
+          ? PagedDTOAttachmentDTO.fromJson(
+              json[r'attachments']! as Map<String, Object?>)
+          : null,
       expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
+      public: json[r'public'] as bool? ?? false,
       links: json[r'_links'] != null
-          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
 
   Map<String, Object?> toJson() {
-    var size = this.size;
-    var start = this.start;
-    var limit = this.limit;
-    var isLastPage = this.isLastPage;
-    var values = this.values;
+    var id = this.id;
+    var body = this.body;
+    var renderedBody = this.renderedBody;
+    var author = this.author;
+    var created = this.created;
+    var attachments = this.attachments;
     var expands = this.expands;
+    var public = this.public;
     var links = this.links;
 
     final json = <String, Object?>{};
-    if (size != null) {
-      json[r'size'] = size;
+    if (id != null) {
+      json[r'id'] = id;
     }
-    if (start != null) {
-      json[r'start'] = start;
+    if (body != null) {
+      json[r'body'] = body;
     }
-    if (limit != null) {
-      json[r'limit'] = limit;
+    if (renderedBody != null) {
+      json[r'renderedBody'] = renderedBody.toJson();
     }
-    json[r'isLastPage'] = isLastPage;
-    json[r'values'] = values.map((i) => i.toJson()).toList();
+    if (author != null) {
+      json[r'author'] = author.toJson();
+    }
+    if (created != null) {
+      json[r'created'] = created.toJson();
+    }
+    if (attachments != null) {
+      json[r'attachments'] = attachments.toJson();
+    }
     json[r'_expands'] = expands;
+    json[r'public'] = public;
     if (links != null) {
       json[r'_links'] = links.toJson();
     }
     return json;
   }
 
-  PagedDTOCommentDTO copyWith(
-      {int? size,
-      int? start,
-      int? limit,
-      bool? isLastPage,
-      List<CommentDTO>? values,
+  CommentDTO copyWith(
+      {String? id,
+      String? body,
+      RenderedValueDTO? renderedBody,
+      UserDTO? author,
+      DateDTO? created,
+      PagedDTOAttachmentDTO? attachments,
       List<String>? expands,
-      PagedLinkDTO? links}) {
-    return PagedDTOCommentDTO(
-      size: size ?? this.size,
-      start: start ?? this.start,
-      limit: limit ?? this.limit,
-      isLastPage: isLastPage ?? this.isLastPage,
-      values: values ?? this.values,
+      bool? public,
+      SelfLinkDTO? links}) {
+    return CommentDTO(
+      id: id ?? this.id,
+      body: body ?? this.body,
+      renderedBody: renderedBody ?? this.renderedBody,
+      author: author ?? this.author,
+      created: created ?? this.created,
+      attachments: attachments ?? this.attachments,
       expands: expands ?? this.expands,
+      public: public ?? this.public,
       links: links ?? this.links,
     );
   }
 }
 
-class RequestCreateDTO {
-  /// ID of the service desk in which to create the request.
-  final String? serviceDeskId;
+class ContentDTO {
+  /// Url containing the body of the article (without title), suitable for
+  /// rendering in an iframe
+  final String? iframeSrc;
 
-  /// ID of the request type for the request.
-  final String? requestTypeId;
+  ContentDTO({this.iframeSrc});
 
-  /// JSON map of Jira field IDs and their values representing the content of
-  /// the request.
-  final Map<String, dynamic>? requestFieldValues;
-
-  /// List of customers to participate in the request, as a list of `accountId`
-  /// values.
-  final List<String> requestParticipants;
-
-  /// The `accountId` of the customer that the request is being raised on behalf
-  /// of.
-  final String? raiseOnBehalfOf;
-
-  /// (Experimental) Shows extra information for the request channel.
-  final String? channel;
-
-  RequestCreateDTO(
-      {this.serviceDeskId,
-      this.requestTypeId,
-      this.requestFieldValues,
-      List<String>? requestParticipants,
-      this.raiseOnBehalfOf,
-      this.channel})
-      : requestParticipants = requestParticipants ?? [];
-
-  factory RequestCreateDTO.fromJson(Map<String, Object?> json) {
-    return RequestCreateDTO(
-      serviceDeskId: json[r'serviceDeskId'] as String?,
-      requestTypeId: json[r'requestTypeId'] as String?,
-      requestFieldValues: json[r'requestFieldValues'] as Map<String, Object?>?,
-      requestParticipants: (json[r'requestParticipants'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      raiseOnBehalfOf: json[r'raiseOnBehalfOf'] as String?,
-      channel: json[r'channel'] as String?,
+  factory ContentDTO.fromJson(Map<String, Object?> json) {
+    return ContentDTO(
+      iframeSrc: json[r'iframeSrc'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var serviceDeskId = this.serviceDeskId;
-    var requestTypeId = this.requestTypeId;
-    var requestFieldValues = this.requestFieldValues;
-    var requestParticipants = this.requestParticipants;
-    var raiseOnBehalfOf = this.raiseOnBehalfOf;
-    var channel = this.channel;
+    var iframeSrc = this.iframeSrc;
 
     final json = <String, Object?>{};
-    if (serviceDeskId != null) {
-      json[r'serviceDeskId'] = serviceDeskId;
-    }
-    if (requestTypeId != null) {
-      json[r'requestTypeId'] = requestTypeId;
-    }
-    if (requestFieldValues != null) {
-      json[r'requestFieldValues'] = requestFieldValues;
-    }
-    json[r'requestParticipants'] = requestParticipants;
-    if (raiseOnBehalfOf != null) {
-      json[r'raiseOnBehalfOf'] = raiseOnBehalfOf;
-    }
-    if (channel != null) {
-      json[r'channel'] = channel;
+    if (iframeSrc != null) {
+      json[r'iframeSrc'] = iframeSrc;
     }
     return json;
   }
 
-  RequestCreateDTO copyWith(
-      {String? serviceDeskId,
-      String? requestTypeId,
-      Map<String, dynamic>? requestFieldValues,
-      List<String>? requestParticipants,
-      String? raiseOnBehalfOf,
-      String? channel}) {
-    return RequestCreateDTO(
-      serviceDeskId: serviceDeskId ?? this.serviceDeskId,
-      requestTypeId: requestTypeId ?? this.requestTypeId,
-      requestFieldValues: requestFieldValues ?? this.requestFieldValues,
-      requestParticipants: requestParticipants ?? this.requestParticipants,
-      raiseOnBehalfOf: raiseOnBehalfOf ?? this.raiseOnBehalfOf,
-      channel: channel ?? this.channel,
+  ContentDTO copyWith({String? iframeSrc}) {
+    return ContentDTO(
+      iframeSrc: iframeSrc ?? this.iframeSrc,
+    );
+  }
+}
+
+class CustomerCreateDTO {
+  /// Customer's email address.
+  final String? email;
+
+  /// Deprecated, please use 'displayName'.
+  final String? fullName;
+
+  /// Customer's name for display in the UI.
+  final String? displayName;
+
+  CustomerCreateDTO({this.email, this.fullName, this.displayName});
+
+  factory CustomerCreateDTO.fromJson(Map<String, Object?> json) {
+    return CustomerCreateDTO(
+      email: json[r'email'] as String?,
+      fullName: json[r'fullName'] as String?,
+      displayName: json[r'displayName'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var email = this.email;
+    var fullName = this.fullName;
+    var displayName = this.displayName;
+
+    final json = <String, Object?>{};
+    if (email != null) {
+      json[r'email'] = email;
+    }
+    if (fullName != null) {
+      json[r'fullName'] = fullName;
+    }
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
+    return json;
+  }
+
+  CustomerCreateDTO copyWith(
+      {String? email, String? fullName, String? displayName}) {
+    return CustomerCreateDTO(
+      email: email ?? this.email,
+      fullName: fullName ?? this.fullName,
+      displayName: displayName ?? this.displayName,
     );
   }
 }
@@ -7224,6 +2740,64 @@ class CustomerRequestActionsDTO {
       addComment: addComment ?? this.addComment,
       addParticipant: addParticipant ?? this.addParticipant,
       removeParticipant: removeParticipant ?? this.removeParticipant,
+    );
+  }
+}
+
+class CustomerRequestCreateMetaDTO {
+  /// List of the fields included in this request.
+  final List<RequestTypeFieldDTO> requestTypeFields;
+
+  /// Flag indicating if a request can be raised on behalf of another user
+  /// (true) or not.
+  final bool canRaiseOnBehalfOf;
+
+  /// Flag indicating if participants can be added to a request (true) or not.
+  final bool canAddRequestParticipants;
+
+  CustomerRequestCreateMetaDTO(
+      {List<RequestTypeFieldDTO>? requestTypeFields,
+      bool? canRaiseOnBehalfOf,
+      bool? canAddRequestParticipants})
+      : requestTypeFields = requestTypeFields ?? [],
+        canRaiseOnBehalfOf = canRaiseOnBehalfOf ?? false,
+        canAddRequestParticipants = canAddRequestParticipants ?? false;
+
+  factory CustomerRequestCreateMetaDTO.fromJson(Map<String, Object?> json) {
+    return CustomerRequestCreateMetaDTO(
+      requestTypeFields: (json[r'requestTypeFields'] as List<Object?>?)
+              ?.map((i) => RequestTypeFieldDTO.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      canRaiseOnBehalfOf: json[r'canRaiseOnBehalfOf'] as bool? ?? false,
+      canAddRequestParticipants:
+          json[r'canAddRequestParticipants'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var requestTypeFields = this.requestTypeFields;
+    var canRaiseOnBehalfOf = this.canRaiseOnBehalfOf;
+    var canAddRequestParticipants = this.canAddRequestParticipants;
+
+    final json = <String, Object?>{};
+    json[r'requestTypeFields'] =
+        requestTypeFields.map((i) => i.toJson()).toList();
+    json[r'canRaiseOnBehalfOf'] = canRaiseOnBehalfOf;
+    json[r'canAddRequestParticipants'] = canAddRequestParticipants;
+    return json;
+  }
+
+  CustomerRequestCreateMetaDTO copyWith(
+      {List<RequestTypeFieldDTO>? requestTypeFields,
+      bool? canRaiseOnBehalfOf,
+      bool? canAddRequestParticipants}) {
+    return CustomerRequestCreateMetaDTO(
+      requestTypeFields: requestTypeFields ?? this.requestTypeFields,
+      canRaiseOnBehalfOf: canRaiseOnBehalfOf ?? this.canRaiseOnBehalfOf,
+      canAddRequestParticipants:
+          canAddRequestParticipants ?? this.canAddRequestParticipants,
     );
   }
 }
@@ -7689,6 +3263,2107 @@ class CustomerRequestStatusDTOStatusCategory {
   String toString() => value;
 }
 
+class CustomerTransitionDTO {
+  /// ID of the transition.
+  final String? id;
+
+  /// Name of the transition.
+  final String? name;
+
+  CustomerTransitionDTO({this.id, this.name});
+
+  factory CustomerTransitionDTO.fromJson(Map<String, Object?> json) {
+    return CustomerTransitionDTO(
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    return json;
+  }
+
+  CustomerTransitionDTO copyWith({String? id, String? name}) {
+    return CustomerTransitionDTO(
+      id: id ?? this.id,
+      name: name ?? this.name,
+    );
+  }
+}
+
+class CustomerTransitionExecutionDTO {
+  /// ID of the transition to be performed.
+  final String? id;
+
+  /// Comment explaining the reason for the transition.
+  final AdditionalCommentDTO? additionalComment;
+
+  CustomerTransitionExecutionDTO({this.id, this.additionalComment});
+
+  factory CustomerTransitionExecutionDTO.fromJson(Map<String, Object?> json) {
+    return CustomerTransitionExecutionDTO(
+      id: json[r'id'] as String?,
+      additionalComment: json[r'additionalComment'] != null
+          ? AdditionalCommentDTO.fromJson(
+              json[r'additionalComment']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var additionalComment = this.additionalComment;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (additionalComment != null) {
+      json[r'additionalComment'] = additionalComment.toJson();
+    }
+    return json;
+  }
+
+  CustomerTransitionExecutionDTO copyWith(
+      {String? id, AdditionalCommentDTO? additionalComment}) {
+    return CustomerTransitionExecutionDTO(
+      id: id ?? this.id,
+      additionalComment: additionalComment ?? this.additionalComment,
+    );
+  }
+}
+
+class DateDTO {
+  /// Date in ISO8601 format.
+  final String? iso8601;
+
+  /// Date in the format used in the Jira REST APIs, which is ISO8601 format but
+  /// extended with milliseconds. For example, 2016-09-28T23:08:32.097+1000.
+  final String? jira;
+
+  /// Date in a user-friendly text format.
+  final String? friendly;
+
+  /// Date as the number of milliseconds that have elapsed since 00:00:00
+  /// Coordinated Universal Time (UTC), 1 January 1970.
+  final int? epochMillis;
+
+  DateDTO({this.iso8601, this.jira, this.friendly, this.epochMillis});
+
+  factory DateDTO.fromJson(Map<String, Object?> json) {
+    return DateDTO(
+      iso8601: json[r'iso8601'] as String?,
+      jira: json[r'jira'] as String?,
+      friendly: json[r'friendly'] as String?,
+      epochMillis: (json[r'epochMillis'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var iso8601 = this.iso8601;
+    var jira = this.jira;
+    var friendly = this.friendly;
+    var epochMillis = this.epochMillis;
+
+    final json = <String, Object?>{};
+    if (iso8601 != null) {
+      json[r'iso8601'] = iso8601;
+    }
+    if (jira != null) {
+      json[r'jira'] = jira;
+    }
+    if (friendly != null) {
+      json[r'friendly'] = friendly;
+    }
+    if (epochMillis != null) {
+      json[r'epochMillis'] = epochMillis;
+    }
+    return json;
+  }
+
+  DateDTO copyWith(
+      {String? iso8601, String? jira, String? friendly, int? epochMillis}) {
+    return DateDTO(
+      iso8601: iso8601 ?? this.iso8601,
+      jira: jira ?? this.jira,
+      friendly: friendly ?? this.friendly,
+      epochMillis: epochMillis ?? this.epochMillis,
+    );
+  }
+}
+
+class DurationDTO {
+  /// Duration in milliseconds.
+  final int? millis;
+
+  /// Duration in a user-friendly text format.
+  final String? friendly;
+
+  DurationDTO({this.millis, this.friendly});
+
+  factory DurationDTO.fromJson(Map<String, Object?> json) {
+    return DurationDTO(
+      millis: (json[r'millis'] as num?)?.toInt(),
+      friendly: json[r'friendly'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var millis = this.millis;
+    var friendly = this.friendly;
+
+    final json = <String, Object?>{};
+    if (millis != null) {
+      json[r'millis'] = millis;
+    }
+    if (friendly != null) {
+      json[r'friendly'] = friendly;
+    }
+    return json;
+  }
+
+  DurationDTO copyWith({int? millis, String? friendly}) {
+    return DurationDTO(
+      millis: millis ?? this.millis,
+      friendly: friendly ?? this.friendly,
+    );
+  }
+}
+
+/// An entity property, for more information see
+/// [Entity properties](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
+class EntityProperty {
+  /// The key of the property. Required on create and update.
+  final String? key;
+
+  /// The value of the property. Required on create and update.
+  final dynamic value;
+
+  EntityProperty({this.key, this.value});
+
+  factory EntityProperty.fromJson(Map<String, Object?> json) {
+    return EntityProperty(
+      key: json[r'key'] as String?,
+      value: json[r'value'],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    if (value != null) {
+      json[r'value'] = value;
+    }
+    return json;
+  }
+
+  EntityProperty copyWith({String? key, dynamic value}) {
+    return EntityProperty(
+      key: key ?? this.key,
+      value: value ?? this.value,
+    );
+  }
+}
+
+class ErrorResponse {
+  final String? errorMessage;
+  final I18nErrorMessage? i18nErrorMessage;
+
+  ErrorResponse({this.errorMessage, this.i18nErrorMessage});
+
+  factory ErrorResponse.fromJson(Map<String, Object?> json) {
+    return ErrorResponse(
+      errorMessage: json[r'errorMessage'] as String?,
+      i18nErrorMessage: json[r'i18nErrorMessage'] != null
+          ? I18nErrorMessage.fromJson(
+              json[r'i18nErrorMessage']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var errorMessage = this.errorMessage;
+    var i18nErrorMessage = this.i18nErrorMessage;
+
+    final json = <String, Object?>{};
+    if (errorMessage != null) {
+      json[r'errorMessage'] = errorMessage;
+    }
+    if (i18nErrorMessage != null) {
+      json[r'i18nErrorMessage'] = i18nErrorMessage.toJson();
+    }
+    return json;
+  }
+
+  ErrorResponse copyWith(
+      {String? errorMessage, I18nErrorMessage? i18nErrorMessage}) {
+    return ErrorResponse(
+      errorMessage: errorMessage ?? this.errorMessage,
+      i18nErrorMessage: i18nErrorMessage ?? this.i18nErrorMessage,
+    );
+  }
+}
+
+class Expandable {
+  final List<String> expands;
+
+  Expandable({List<String>? expands}) : expands = expands ?? [];
+
+  factory Expandable.fromJson(Map<String, Object?> json) {
+    return Expandable(
+      expands: (json[r'_expands'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var expands = this.expands;
+
+    final json = <String, Object?>{};
+    json[r'_expands'] = expands;
+    return json;
+  }
+
+  Expandable copyWith({List<String>? expands}) {
+    return Expandable(
+      expands: expands ?? this.expands,
+    );
+  }
+}
+
+/// The metadata describing an issue field.
+class FieldMetadata {
+  /// Whether the field is required.
+  final bool required;
+
+  /// The data type of the field.
+  final JsonTypeBean schema;
+
+  /// The name of the field.
+  final String name;
+
+  /// The key of the field.
+  final String key;
+
+  /// The URL that can be used to automatically complete the field.
+  final String? autoCompleteUrl;
+
+  /// Whether the field has a default value.
+  final bool hasDefaultValue;
+
+  /// The list of operations that can be performed on the field.
+  final List<String> operations;
+
+  /// The list of values allowed in the field.
+  final List<dynamic> allowedValues;
+
+  /// The default value of the field.
+  final dynamic defaultValue;
+
+  FieldMetadata(
+      {required this.required,
+      required this.schema,
+      required this.name,
+      required this.key,
+      this.autoCompleteUrl,
+      bool? hasDefaultValue,
+      required this.operations,
+      List<dynamic>? allowedValues,
+      this.defaultValue})
+      : hasDefaultValue = hasDefaultValue ?? false,
+        allowedValues = allowedValues ?? [];
+
+  factory FieldMetadata.fromJson(Map<String, Object?> json) {
+    return FieldMetadata(
+      required: json[r'required'] as bool? ?? false,
+      schema: JsonTypeBean.fromJson(
+          json[r'schema'] as Map<String, Object?>? ?? const {}),
+      name: json[r'name'] as String? ?? '',
+      key: json[r'key'] as String? ?? '',
+      autoCompleteUrl: json[r'autoCompleteUrl'] as String?,
+      hasDefaultValue: json[r'hasDefaultValue'] as bool? ?? false,
+      operations: (json[r'operations'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      allowedValues:
+          (json[r'allowedValues'] as List<Object?>?)?.map((i) => i).toList() ??
+              [],
+      defaultValue: json[r'defaultValue'],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var required = this.required;
+    var schema = this.schema;
+    var name = this.name;
+    var key = this.key;
+    var autoCompleteUrl = this.autoCompleteUrl;
+    var hasDefaultValue = this.hasDefaultValue;
+    var operations = this.operations;
+    var allowedValues = this.allowedValues;
+    var defaultValue = this.defaultValue;
+
+    final json = <String, Object?>{};
+    json[r'required'] = required;
+    json[r'schema'] = schema.toJson();
+    json[r'name'] = name;
+    json[r'key'] = key;
+    if (autoCompleteUrl != null) {
+      json[r'autoCompleteUrl'] = autoCompleteUrl;
+    }
+    json[r'hasDefaultValue'] = hasDefaultValue;
+    json[r'operations'] = operations;
+    json[r'allowedValues'] = allowedValues;
+    if (defaultValue != null) {
+      json[r'defaultValue'] = defaultValue;
+    }
+    return json;
+  }
+
+  FieldMetadata copyWith(
+      {bool? required,
+      JsonTypeBean? schema,
+      String? name,
+      String? key,
+      String? autoCompleteUrl,
+      bool? hasDefaultValue,
+      List<String>? operations,
+      List<dynamic>? allowedValues,
+      dynamic defaultValue}) {
+    return FieldMetadata(
+      required: required ?? this.required,
+      schema: schema ?? this.schema,
+      name: name ?? this.name,
+      key: key ?? this.key,
+      autoCompleteUrl: autoCompleteUrl ?? this.autoCompleteUrl,
+      hasDefaultValue: hasDefaultValue ?? this.hasDefaultValue,
+      operations: operations ?? this.operations,
+      allowedValues: allowedValues ?? this.allowedValues,
+      defaultValue: defaultValue ?? this.defaultValue,
+    );
+  }
+}
+
+/// Details of issue history metadata.
+class HistoryMetadata {
+  /// The type of the history record.
+  final String? type;
+
+  /// The description of the history record.
+  final String? description;
+
+  /// The description key of the history record.
+  final String? descriptionKey;
+
+  /// The activity described in the history record.
+  final String? activityDescription;
+
+  /// The key of the activity described in the history record.
+  final String? activityDescriptionKey;
+
+  /// The description of the email address associated the history record.
+  final String? emailDescription;
+
+  /// The description key of the email address associated the history record.
+  final String? emailDescriptionKey;
+
+  /// Details of the user whose action created the history record.
+  final HistoryMetadataParticipant? actor;
+
+  /// Details of the system that generated the history record.
+  final HistoryMetadataParticipant? generator;
+
+  /// Details of the cause that triggered the creation the history record.
+  final HistoryMetadataParticipant? cause;
+
+  /// Additional arbitrary information about the history record.
+  final Map<String, dynamic>? extraData;
+
+  HistoryMetadata(
+      {this.type,
+      this.description,
+      this.descriptionKey,
+      this.activityDescription,
+      this.activityDescriptionKey,
+      this.emailDescription,
+      this.emailDescriptionKey,
+      this.actor,
+      this.generator,
+      this.cause,
+      this.extraData});
+
+  factory HistoryMetadata.fromJson(Map<String, Object?> json) {
+    return HistoryMetadata(
+      type: json[r'type'] as String?,
+      description: json[r'description'] as String?,
+      descriptionKey: json[r'descriptionKey'] as String?,
+      activityDescription: json[r'activityDescription'] as String?,
+      activityDescriptionKey: json[r'activityDescriptionKey'] as String?,
+      emailDescription: json[r'emailDescription'] as String?,
+      emailDescriptionKey: json[r'emailDescriptionKey'] as String?,
+      actor: json[r'actor'] != null
+          ? HistoryMetadataParticipant.fromJson(
+              json[r'actor']! as Map<String, Object?>)
+          : null,
+      generator: json[r'generator'] != null
+          ? HistoryMetadataParticipant.fromJson(
+              json[r'generator']! as Map<String, Object?>)
+          : null,
+      cause: json[r'cause'] != null
+          ? HistoryMetadataParticipant.fromJson(
+              json[r'cause']! as Map<String, Object?>)
+          : null,
+      extraData: json[r'extraData'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var description = this.description;
+    var descriptionKey = this.descriptionKey;
+    var activityDescription = this.activityDescription;
+    var activityDescriptionKey = this.activityDescriptionKey;
+    var emailDescription = this.emailDescription;
+    var emailDescriptionKey = this.emailDescriptionKey;
+    var actor = this.actor;
+    var generator = this.generator;
+    var cause = this.cause;
+    var extraData = this.extraData;
+
+    final json = <String, Object?>{};
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (descriptionKey != null) {
+      json[r'descriptionKey'] = descriptionKey;
+    }
+    if (activityDescription != null) {
+      json[r'activityDescription'] = activityDescription;
+    }
+    if (activityDescriptionKey != null) {
+      json[r'activityDescriptionKey'] = activityDescriptionKey;
+    }
+    if (emailDescription != null) {
+      json[r'emailDescription'] = emailDescription;
+    }
+    if (emailDescriptionKey != null) {
+      json[r'emailDescriptionKey'] = emailDescriptionKey;
+    }
+    if (actor != null) {
+      json[r'actor'] = actor.toJson();
+    }
+    if (generator != null) {
+      json[r'generator'] = generator.toJson();
+    }
+    if (cause != null) {
+      json[r'cause'] = cause.toJson();
+    }
+    if (extraData != null) {
+      json[r'extraData'] = extraData;
+    }
+    return json;
+  }
+
+  HistoryMetadata copyWith(
+      {String? type,
+      String? description,
+      String? descriptionKey,
+      String? activityDescription,
+      String? activityDescriptionKey,
+      String? emailDescription,
+      String? emailDescriptionKey,
+      HistoryMetadataParticipant? actor,
+      HistoryMetadataParticipant? generator,
+      HistoryMetadataParticipant? cause,
+      Map<String, dynamic>? extraData}) {
+    return HistoryMetadata(
+      type: type ?? this.type,
+      description: description ?? this.description,
+      descriptionKey: descriptionKey ?? this.descriptionKey,
+      activityDescription: activityDescription ?? this.activityDescription,
+      activityDescriptionKey:
+          activityDescriptionKey ?? this.activityDescriptionKey,
+      emailDescription: emailDescription ?? this.emailDescription,
+      emailDescriptionKey: emailDescriptionKey ?? this.emailDescriptionKey,
+      actor: actor ?? this.actor,
+      generator: generator ?? this.generator,
+      cause: cause ?? this.cause,
+      extraData: extraData ?? this.extraData,
+    );
+  }
+}
+
+/// Details of user or system associated with a issue history metadata item.
+class HistoryMetadataParticipant {
+  /// The ID of the user or system associated with a history record.
+  final String? id;
+
+  /// The display name of the user or system associated with a history record.
+  final String? displayName;
+
+  /// The key of the display name of the user or system associated with a
+  /// history record.
+  final String? displayNameKey;
+
+  /// The type of the user or system associated with a history record.
+  final String? type;
+
+  /// The URL to an avatar for the user or system associated with a history
+  /// record.
+  final String? avatarUrl;
+
+  /// The URL of the user or system associated with a history record.
+  final String? url;
+
+  HistoryMetadataParticipant(
+      {this.id,
+      this.displayName,
+      this.displayNameKey,
+      this.type,
+      this.avatarUrl,
+      this.url});
+
+  factory HistoryMetadataParticipant.fromJson(Map<String, Object?> json) {
+    return HistoryMetadataParticipant(
+      id: json[r'id'] as String?,
+      displayName: json[r'displayName'] as String?,
+      displayNameKey: json[r'displayNameKey'] as String?,
+      type: json[r'type'] as String?,
+      avatarUrl: json[r'avatarUrl'] as String?,
+      url: json[r'url'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var displayName = this.displayName;
+    var displayNameKey = this.displayNameKey;
+    var type = this.type;
+    var avatarUrl = this.avatarUrl;
+    var url = this.url;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
+    if (displayNameKey != null) {
+      json[r'displayNameKey'] = displayNameKey;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (avatarUrl != null) {
+      json[r'avatarUrl'] = avatarUrl;
+    }
+    if (url != null) {
+      json[r'url'] = url;
+    }
+    return json;
+  }
+
+  HistoryMetadataParticipant copyWith(
+      {String? id,
+      String? displayName,
+      String? displayNameKey,
+      String? type,
+      String? avatarUrl,
+      String? url}) {
+    return HistoryMetadataParticipant(
+      id: id ?? this.id,
+      displayName: displayName ?? this.displayName,
+      displayNameKey: displayNameKey ?? this.displayNameKey,
+      type: type ?? this.type,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      url: url ?? this.url,
+    );
+  }
+}
+
+class I18nErrorMessage {
+  final String? i18nKey;
+  final List<String> parameters;
+
+  I18nErrorMessage({this.i18nKey, List<String>? parameters})
+      : parameters = parameters ?? [];
+
+  factory I18nErrorMessage.fromJson(Map<String, Object?> json) {
+    return I18nErrorMessage(
+      i18nKey: json[r'i18nKey'] as String?,
+      parameters: (json[r'parameters'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var i18nKey = this.i18nKey;
+    var parameters = this.parameters;
+
+    final json = <String, Object?>{};
+    if (i18nKey != null) {
+      json[r'i18nKey'] = i18nKey;
+    }
+    json[r'parameters'] = parameters;
+    return json;
+  }
+
+  I18nErrorMessage copyWith({String? i18nKey, List<String>? parameters}) {
+    return I18nErrorMessage(
+      i18nKey: i18nKey ?? this.i18nKey,
+      parameters: parameters ?? this.parameters,
+    );
+  }
+}
+
+class IncludedFields {
+  final List<String> included;
+  final List<String> actuallyIncluded;
+  final List<String> excluded;
+
+  IncludedFields(
+      {List<String>? included,
+      List<String>? actuallyIncluded,
+      List<String>? excluded})
+      : included = included ?? [],
+        actuallyIncluded = actuallyIncluded ?? [],
+        excluded = excluded ?? [];
+
+  factory IncludedFields.fromJson(Map<String, Object?> json) {
+    return IncludedFields(
+      included: (json[r'included'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      excluded: (json[r'excluded'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var included = this.included;
+    var actuallyIncluded = this.actuallyIncluded;
+    var excluded = this.excluded;
+
+    final json = <String, Object?>{};
+    json[r'included'] = included;
+    json[r'actuallyIncluded'] = actuallyIncluded;
+    json[r'excluded'] = excluded;
+    return json;
+  }
+
+  IncludedFields copyWith(
+      {List<String>? included,
+      List<String>? actuallyIncluded,
+      List<String>? excluded}) {
+    return IncludedFields(
+      included: included ?? this.included,
+      actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
+      excluded: excluded ?? this.excluded,
+    );
+  }
+}
+
+class IssueBean {
+  /// Expand options that include additional issue details in the response.
+  final String? expand;
+
+  /// The ID of the issue.
+  final String? id;
+
+  /// The URL of the issue details.
+  final String? self;
+
+  /// The key of the issue.
+  final String? key;
+
+  /// The rendered value of each field present on the issue.
+  final Map<String, dynamic>? renderedFields;
+
+  /// Details of the issue properties identified in the request.
+  final Map<String, dynamic>? properties;
+
+  /// The ID and name of each field present on the issue.
+  final Map<String, dynamic>? names;
+
+  /// The schema describing each field present on the issue.
+  final Map<String, dynamic>? schema;
+
+  /// The transitions that can be performed on the issue.
+  final List<IssueTransition> transitions;
+
+  /// The operations that can be performed on the issue.
+  final Operations? operations;
+
+  /// The metadata for the fields on the issue that can be amended.
+  final IssueUpdateMetadata? editmeta;
+
+  /// Details of changelogs associated with the issue.
+  final PageOfChangelogs? changelog;
+
+  /// The versions of each field on the issue.
+  final Map<String, dynamic>? versionedRepresentations;
+  final IncludedFields? fieldsToInclude;
+  final Map<String, dynamic>? fields;
+
+  IssueBean(
+      {this.expand,
+      this.id,
+      this.self,
+      this.key,
+      this.renderedFields,
+      this.properties,
+      this.names,
+      this.schema,
+      List<IssueTransition>? transitions,
+      this.operations,
+      this.editmeta,
+      this.changelog,
+      this.versionedRepresentations,
+      this.fieldsToInclude,
+      this.fields})
+      : transitions = transitions ?? [];
+
+  factory IssueBean.fromJson(Map<String, Object?> json) {
+    return IssueBean(
+      expand: json[r'expand'] as String?,
+      id: json[r'id'] as String?,
+      self: json[r'self'] as String?,
+      key: json[r'key'] as String?,
+      renderedFields: json[r'renderedFields'] as Map<String, Object?>?,
+      properties: json[r'properties'] as Map<String, Object?>?,
+      names: json[r'names'] as Map<String, Object?>?,
+      schema: json[r'schema'] as Map<String, Object?>?,
+      transitions: (json[r'transitions'] as List<Object?>?)
+              ?.map((i) => IssueTransition.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      operations: json[r'operations'] != null
+          ? Operations.fromJson(json[r'operations']! as Map<String, Object?>)
+          : null,
+      editmeta: json[r'editmeta'] != null
+          ? IssueUpdateMetadata.fromJson(
+              json[r'editmeta']! as Map<String, Object?>)
+          : null,
+      changelog: json[r'changelog'] != null
+          ? PageOfChangelogs.fromJson(
+              json[r'changelog']! as Map<String, Object?>)
+          : null,
+      versionedRepresentations:
+          json[r'versionedRepresentations'] as Map<String, Object?>?,
+      fieldsToInclude: json[r'fieldsToInclude'] != null
+          ? IncludedFields.fromJson(
+              json[r'fieldsToInclude']! as Map<String, Object?>)
+          : null,
+      fields: json[r'fields'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var expand = this.expand;
+    var id = this.id;
+    var self = this.self;
+    var key = this.key;
+    var renderedFields = this.renderedFields;
+    var properties = this.properties;
+    var names = this.names;
+    var schema = this.schema;
+    var transitions = this.transitions;
+    var operations = this.operations;
+    var editmeta = this.editmeta;
+    var changelog = this.changelog;
+    var versionedRepresentations = this.versionedRepresentations;
+    var fieldsToInclude = this.fieldsToInclude;
+    var fields = this.fields;
+
+    final json = <String, Object?>{};
+    if (expand != null) {
+      json[r'expand'] = expand;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    if (renderedFields != null) {
+      json[r'renderedFields'] = renderedFields;
+    }
+    if (properties != null) {
+      json[r'properties'] = properties;
+    }
+    if (names != null) {
+      json[r'names'] = names;
+    }
+    if (schema != null) {
+      json[r'schema'] = schema;
+    }
+    json[r'transitions'] = transitions.map((i) => i.toJson()).toList();
+    if (operations != null) {
+      json[r'operations'] = operations.toJson();
+    }
+    if (editmeta != null) {
+      json[r'editmeta'] = editmeta.toJson();
+    }
+    if (changelog != null) {
+      json[r'changelog'] = changelog.toJson();
+    }
+    if (versionedRepresentations != null) {
+      json[r'versionedRepresentations'] = versionedRepresentations;
+    }
+    if (fieldsToInclude != null) {
+      json[r'fieldsToInclude'] = fieldsToInclude.toJson();
+    }
+    if (fields != null) {
+      json[r'fields'] = fields;
+    }
+    return json;
+  }
+
+  IssueBean copyWith(
+      {String? expand,
+      String? id,
+      String? self,
+      String? key,
+      Map<String, dynamic>? renderedFields,
+      Map<String, dynamic>? properties,
+      Map<String, dynamic>? names,
+      Map<String, dynamic>? schema,
+      List<IssueTransition>? transitions,
+      Operations? operations,
+      IssueUpdateMetadata? editmeta,
+      PageOfChangelogs? changelog,
+      Map<String, dynamic>? versionedRepresentations,
+      IncludedFields? fieldsToInclude,
+      Map<String, dynamic>? fields}) {
+    return IssueBean(
+      expand: expand ?? this.expand,
+      id: id ?? this.id,
+      self: self ?? this.self,
+      key: key ?? this.key,
+      renderedFields: renderedFields ?? this.renderedFields,
+      properties: properties ?? this.properties,
+      names: names ?? this.names,
+      schema: schema ?? this.schema,
+      transitions: transitions ?? this.transitions,
+      operations: operations ?? this.operations,
+      editmeta: editmeta ?? this.editmeta,
+      changelog: changelog ?? this.changelog,
+      versionedRepresentations:
+          versionedRepresentations ?? this.versionedRepresentations,
+      fieldsToInclude: fieldsToInclude ?? this.fieldsToInclude,
+      fields: fields ?? this.fields,
+    );
+  }
+}
+
+/// Details of an issue transition.
+class IssueTransition {
+  /// The ID of the issue transition. Required when specifying a transition to
+  /// undertake.
+  final String? id;
+
+  /// The name of the issue transition.
+  final String? name;
+
+  /// Details of the issue status after the transition.
+  final StatusDetails? to;
+
+  /// Whether there is a screen associated with the issue transition.
+  final bool hasScreen;
+
+  /// Whether the issue transition is global, that is, the transition is applied
+  /// to issues regardless of their status.
+  final bool isGlobal;
+
+  /// Whether this is the initial issue transition for the workflow.
+  final bool isInitial;
+
+  /// Whether the transition is available to be performed.
+  final bool isAvailable;
+
+  /// Whether the issue has to meet criteria before the issue transition is
+  /// applied.
+  final bool isConditional;
+
+  /// Details of the fields associated with the issue transition screen. Use
+  /// this information to populate `fields` and `update` in a transition
+  /// request.
+  final Map<String, dynamic>? fields;
+
+  /// Expand options that include additional transition details in the response.
+  final String? expand;
+  final bool looped;
+
+  IssueTransition(
+      {this.id,
+      this.name,
+      this.to,
+      bool? hasScreen,
+      bool? isGlobal,
+      bool? isInitial,
+      bool? isAvailable,
+      bool? isConditional,
+      this.fields,
+      this.expand,
+      bool? looped})
+      : hasScreen = hasScreen ?? false,
+        isGlobal = isGlobal ?? false,
+        isInitial = isInitial ?? false,
+        isAvailable = isAvailable ?? false,
+        isConditional = isConditional ?? false,
+        looped = looped ?? false;
+
+  factory IssueTransition.fromJson(Map<String, Object?> json) {
+    return IssueTransition(
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      to: json[r'to'] != null
+          ? StatusDetails.fromJson(json[r'to']! as Map<String, Object?>)
+          : null,
+      hasScreen: json[r'hasScreen'] as bool? ?? false,
+      isGlobal: json[r'isGlobal'] as bool? ?? false,
+      isInitial: json[r'isInitial'] as bool? ?? false,
+      isAvailable: json[r'isAvailable'] as bool? ?? false,
+      isConditional: json[r'isConditional'] as bool? ?? false,
+      fields: json[r'fields'] as Map<String, Object?>?,
+      expand: json[r'expand'] as String?,
+      looped: json[r'looped'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+    var to = this.to;
+    var hasScreen = this.hasScreen;
+    var isGlobal = this.isGlobal;
+    var isInitial = this.isInitial;
+    var isAvailable = this.isAvailable;
+    var isConditional = this.isConditional;
+    var fields = this.fields;
+    var expand = this.expand;
+    var looped = this.looped;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (to != null) {
+      json[r'to'] = to.toJson();
+    }
+    json[r'hasScreen'] = hasScreen;
+    json[r'isGlobal'] = isGlobal;
+    json[r'isInitial'] = isInitial;
+    json[r'isAvailable'] = isAvailable;
+    json[r'isConditional'] = isConditional;
+    if (fields != null) {
+      json[r'fields'] = fields;
+    }
+    if (expand != null) {
+      json[r'expand'] = expand;
+    }
+    json[r'looped'] = looped;
+    return json;
+  }
+
+  IssueTransition copyWith(
+      {String? id,
+      String? name,
+      StatusDetails? to,
+      bool? hasScreen,
+      bool? isGlobal,
+      bool? isInitial,
+      bool? isAvailable,
+      bool? isConditional,
+      Map<String, dynamic>? fields,
+      String? expand,
+      bool? looped}) {
+    return IssueTransition(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      to: to ?? this.to,
+      hasScreen: hasScreen ?? this.hasScreen,
+      isGlobal: isGlobal ?? this.isGlobal,
+      isInitial: isInitial ?? this.isInitial,
+      isAvailable: isAvailable ?? this.isAvailable,
+      isConditional: isConditional ?? this.isConditional,
+      fields: fields ?? this.fields,
+      expand: expand ?? this.expand,
+      looped: looped ?? this.looped,
+    );
+  }
+}
+
+/// A list of editable field details.
+class IssueUpdateMetadata {
+  final Map<String, dynamic>? fields;
+
+  IssueUpdateMetadata({this.fields});
+
+  factory IssueUpdateMetadata.fromJson(Map<String, Object?> json) {
+    return IssueUpdateMetadata(
+      fields: json[r'fields'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fields = this.fields;
+
+    final json = <String, Object?>{};
+    if (fields != null) {
+      json[r'fields'] = fields;
+    }
+    return json;
+  }
+
+  IssueUpdateMetadata copyWith({Map<String, dynamic>? fields}) {
+    return IssueUpdateMetadata(
+      fields: fields ?? this.fields,
+    );
+  }
+}
+
+/// The schema of a field.
+class JsonTypeBean {
+  /// The data type of the field.
+  final String type;
+
+  /// When the data type is an array, the name of the field items within the
+  /// array.
+  final String? items;
+
+  /// If the field is a system field, the name of the field.
+  final String? system;
+
+  /// If the field is a custom field, the URI of the field.
+  final String? custom;
+
+  /// If the field is a custom field, the custom ID of the field.
+  final int? customId;
+
+  /// If the field is a custom field, the configuration of the field.
+  final Map<String, dynamic>? configuration;
+
+  JsonTypeBean(
+      {required this.type,
+      this.items,
+      this.system,
+      this.custom,
+      this.customId,
+      this.configuration});
+
+  factory JsonTypeBean.fromJson(Map<String, Object?> json) {
+    return JsonTypeBean(
+      type: json[r'type'] as String? ?? '',
+      items: json[r'items'] as String?,
+      system: json[r'system'] as String?,
+      custom: json[r'custom'] as String?,
+      customId: (json[r'customId'] as num?)?.toInt(),
+      configuration: json[r'configuration'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var items = this.items;
+    var system = this.system;
+    var custom = this.custom;
+    var customId = this.customId;
+    var configuration = this.configuration;
+
+    final json = <String, Object?>{};
+    json[r'type'] = type;
+    if (items != null) {
+      json[r'items'] = items;
+    }
+    if (system != null) {
+      json[r'system'] = system;
+    }
+    if (custom != null) {
+      json[r'custom'] = custom;
+    }
+    if (customId != null) {
+      json[r'customId'] = customId;
+    }
+    if (configuration != null) {
+      json[r'configuration'] = configuration;
+    }
+    return json;
+  }
+
+  JsonTypeBean copyWith(
+      {String? type,
+      String? items,
+      String? system,
+      String? custom,
+      int? customId,
+      Map<String, dynamic>? configuration}) {
+    return JsonTypeBean(
+      type: type ?? this.type,
+      items: items ?? this.items,
+      system: system ?? this.system,
+      custom: custom ?? this.custom,
+      customId: customId ?? this.customId,
+      configuration: configuration ?? this.configuration,
+    );
+  }
+}
+
+/// Details a link group, which defines issue operations.
+class LinkGroup {
+  final String? id;
+  final String? styleClass;
+  final SimpleLink? header;
+  final int? weight;
+  final List<SimpleLink> links;
+  final List<LinkGroup> groups;
+
+  LinkGroup(
+      {this.id,
+      this.styleClass,
+      this.header,
+      this.weight,
+      List<SimpleLink>? links,
+      List<LinkGroup>? groups})
+      : links = links ?? [],
+        groups = groups ?? [];
+
+  factory LinkGroup.fromJson(Map<String, Object?> json) {
+    return LinkGroup(
+      id: json[r'id'] as String?,
+      styleClass: json[r'styleClass'] as String?,
+      header: json[r'header'] != null
+          ? SimpleLink.fromJson(json[r'header']! as Map<String, Object?>)
+          : null,
+      weight: (json[r'weight'] as num?)?.toInt(),
+      links: (json[r'links'] as List<Object?>?)
+              ?.map((i) =>
+                  SimpleLink.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      groups: (json[r'groups'] as List<Object?>?)
+              ?.map((i) =>
+                  LinkGroup.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var styleClass = this.styleClass;
+    var header = this.header;
+    var weight = this.weight;
+    var links = this.links;
+    var groups = this.groups;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (styleClass != null) {
+      json[r'styleClass'] = styleClass;
+    }
+    if (header != null) {
+      json[r'header'] = header.toJson();
+    }
+    if (weight != null) {
+      json[r'weight'] = weight;
+    }
+    json[r'links'] = links.map((i) => i.toJson()).toList();
+    json[r'groups'] = groups.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  LinkGroup copyWith(
+      {String? id,
+      String? styleClass,
+      SimpleLink? header,
+      int? weight,
+      List<SimpleLink>? links,
+      List<LinkGroup>? groups}) {
+    return LinkGroup(
+      id: id ?? this.id,
+      styleClass: styleClass ?? this.styleClass,
+      header: header ?? this.header,
+      weight: weight ?? this.weight,
+      links: links ?? this.links,
+      groups: groups ?? this.groups,
+    );
+  }
+}
+
+class Linkable {
+  final SelfLinkDTO? links;
+
+  Linkable({this.links});
+
+  factory Linkable.fromJson(Map<String, Object?> json) {
+    return Linkable(
+      links: json[r'_links'] != null
+          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  Linkable copyWith({SelfLinkDTO? links}) {
+    return Linkable(
+      links: links ?? this.links,
+    );
+  }
+}
+
+class LinkableAttachmentLinkDTO {
+  final AttachmentLinkDTO? links;
+
+  LinkableAttachmentLinkDTO({this.links});
+
+  factory LinkableAttachmentLinkDTO.fromJson(Map<String, Object?> json) {
+    return LinkableAttachmentLinkDTO(
+      links: json[r'_links'] != null
+          ? AttachmentLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  LinkableAttachmentLinkDTO copyWith({AttachmentLinkDTO? links}) {
+    return LinkableAttachmentLinkDTO(
+      links: links ?? this.links,
+    );
+  }
+}
+
+class LinkableCustomerRequestLinkDTO {
+  final CustomerRequestLinkDTO? links;
+
+  LinkableCustomerRequestLinkDTO({this.links});
+
+  factory LinkableCustomerRequestLinkDTO.fromJson(Map<String, Object?> json) {
+    return LinkableCustomerRequestLinkDTO(
+      links: json[r'_links'] != null
+          ? CustomerRequestLinkDTO.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  LinkableCustomerRequestLinkDTO copyWith({CustomerRequestLinkDTO? links}) {
+    return LinkableCustomerRequestLinkDTO(
+      links: links ?? this.links,
+    );
+  }
+}
+
+class LinkableUserLinkDTO {
+  final UserLinkDTO? links;
+
+  LinkableUserLinkDTO({this.links});
+
+  factory LinkableUserLinkDTO.fromJson(Map<String, Object?> json) {
+    return LinkableUserLinkDTO(
+      links: json[r'_links'] != null
+          ? UserLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  LinkableUserLinkDTO copyWith({UserLinkDTO? links}) {
+    return LinkableUserLinkDTO(
+      links: links ?? this.links,
+    );
+  }
+}
+
+/// Details of the operations that can be performed on the issue.
+class Operations {
+  /// Details of the link groups defining issue operations.
+  final List<LinkGroup> linkGroups;
+
+  Operations({List<LinkGroup>? linkGroups}) : linkGroups = linkGroups ?? [];
+
+  factory Operations.fromJson(Map<String, Object?> json) {
+    return Operations(
+      linkGroups: (json[r'linkGroups'] as List<Object?>?)
+              ?.map((i) =>
+                  LinkGroup.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var linkGroups = this.linkGroups;
+
+    final json = <String, Object?>{};
+    json[r'linkGroups'] = linkGroups.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  Operations copyWith({List<LinkGroup>? linkGroups}) {
+    return Operations(
+      linkGroups: linkGroups ?? this.linkGroups,
+    );
+  }
+}
+
+class OrganizationCreateDTO {
+  /// Name of the organization.
+  final String? name;
+
+  OrganizationCreateDTO({this.name});
+
+  factory OrganizationCreateDTO.fromJson(Map<String, Object?> json) {
+    return OrganizationCreateDTO(
+      name: json[r'name'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    return json;
+  }
+
+  OrganizationCreateDTO copyWith({String? name}) {
+    return OrganizationCreateDTO(
+      name: name ?? this.name,
+    );
+  }
+}
+
+class OrganizationDTO {
+  /// A unique system generated ID for the organization.
+  final String? id;
+
+  /// Name of the organization.
+  final String? name;
+
+  /// REST API URL to the organization.
+  final SelfLinkDTO? links;
+
+  OrganizationDTO({this.id, this.name, this.links});
+
+  factory OrganizationDTO.fromJson(Map<String, Object?> json) {
+    return OrganizationDTO(
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      links: json[r'_links'] != null
+          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  OrganizationDTO copyWith({String? id, String? name, SelfLinkDTO? links}) {
+    return OrganizationDTO(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class OrganizationServiceDeskUpdateDTO {
+  /// List of organizations, specified by 'ID' field values, to add to or remove
+  /// from the service desk.
+  final int? organizationId;
+
+  OrganizationServiceDeskUpdateDTO({this.organizationId});
+
+  factory OrganizationServiceDeskUpdateDTO.fromJson(Map<String, Object?> json) {
+    return OrganizationServiceDeskUpdateDTO(
+      organizationId: (json[r'organizationId'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var organizationId = this.organizationId;
+
+    final json = <String, Object?>{};
+    if (organizationId != null) {
+      json[r'organizationId'] = organizationId;
+    }
+    return json;
+  }
+
+  OrganizationServiceDeskUpdateDTO copyWith({int? organizationId}) {
+    return OrganizationServiceDeskUpdateDTO(
+      organizationId: organizationId ?? this.organizationId,
+    );
+  }
+}
+
+/// A page of changelogs.
+class PageOfChangelogs {
+  /// The index of the first item returned on the page.
+  final int? startAt;
+
+  /// The maximum number of results that could be on the page.
+  final int? maxResults;
+
+  /// The number of results on the page.
+  final int? total;
+
+  /// The list of changelogs.
+  final List<Changelog> histories;
+
+  PageOfChangelogs(
+      {this.startAt, this.maxResults, this.total, List<Changelog>? histories})
+      : histories = histories ?? [];
+
+  factory PageOfChangelogs.fromJson(Map<String, Object?> json) {
+    return PageOfChangelogs(
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      histories: (json[r'histories'] as List<Object?>?)
+              ?.map((i) =>
+                  Changelog.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var startAt = this.startAt;
+    var maxResults = this.maxResults;
+    var total = this.total;
+    var histories = this.histories;
+
+    final json = <String, Object?>{};
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'histories'] = histories.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageOfChangelogs copyWith(
+      {int? startAt, int? maxResults, int? total, List<Changelog>? histories}) {
+    return PageOfChangelogs(
+      startAt: startAt ?? this.startAt,
+      maxResults: maxResults ?? this.maxResults,
+      total: total ?? this.total,
+      histories: histories ?? this.histories,
+    );
+  }
+}
+
+class PagedDTOApprovalDTO {
+  /// Number of items returned in the page.
+  final int? size;
+
+  /// Index of the first item returned in the page.
+  final int? start;
+
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
+  final int? limit;
+
+  /// Indicates if this is the last page of records (true) or not (false).
+  final bool isLastPage;
+
+  /// Details of the items included in the page.
+  final List<ApprovalDTO> values;
+  final List<String> expands;
+
+  /// List of the links relating to the page.
+  final PagedLinkDTO? links;
+
+  PagedDTOApprovalDTO(
+      {this.size,
+      this.start,
+      this.limit,
+      bool? isLastPage,
+      List<ApprovalDTO>? values,
+      List<String>? expands,
+      this.links})
+      : isLastPage = isLastPage ?? false,
+        values = values ?? [],
+        expands = expands ?? [];
+
+  factory PagedDTOApprovalDTO.fromJson(Map<String, Object?> json) {
+    return PagedDTOApprovalDTO(
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) =>
+                  ApprovalDTO.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      expands: (json[r'_expands'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var size = this.size;
+    var start = this.start;
+    var limit = this.limit;
+    var isLastPage = this.isLastPage;
+    var values = this.values;
+    var expands = this.expands;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (size != null) {
+      json[r'size'] = size;
+    }
+    if (start != null) {
+      json[r'start'] = start;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PagedDTOApprovalDTO copyWith(
+      {int? size,
+      int? start,
+      int? limit,
+      bool? isLastPage,
+      List<ApprovalDTO>? values,
+      List<String>? expands,
+      PagedLinkDTO? links}) {
+    return PagedDTOApprovalDTO(
+      size: size ?? this.size,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
+      isLastPage: isLastPage ?? this.isLastPage,
+      values: values ?? this.values,
+      expands: expands ?? this.expands,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class PagedDTOArticleDTO {
+  /// Number of items returned in the page.
+  final int? size;
+
+  /// Index of the first item returned in the page.
+  final int? start;
+
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
+  final int? limit;
+
+  /// Indicates if this is the last page of records (true) or not (false).
+  final bool isLastPage;
+
+  /// Details of the items included in the page.
+  final List<ArticleDTO> values;
+  final List<String> expands;
+
+  /// List of the links relating to the page.
+  final PagedLinkDTO? links;
+
+  PagedDTOArticleDTO(
+      {this.size,
+      this.start,
+      this.limit,
+      bool? isLastPage,
+      List<ArticleDTO>? values,
+      List<String>? expands,
+      this.links})
+      : isLastPage = isLastPage ?? false,
+        values = values ?? [],
+        expands = expands ?? [];
+
+  factory PagedDTOArticleDTO.fromJson(Map<String, Object?> json) {
+    return PagedDTOArticleDTO(
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) =>
+                  ArticleDTO.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      expands: (json[r'_expands'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var size = this.size;
+    var start = this.start;
+    var limit = this.limit;
+    var isLastPage = this.isLastPage;
+    var values = this.values;
+    var expands = this.expands;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (size != null) {
+      json[r'size'] = size;
+    }
+    if (start != null) {
+      json[r'start'] = start;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PagedDTOArticleDTO copyWith(
+      {int? size,
+      int? start,
+      int? limit,
+      bool? isLastPage,
+      List<ArticleDTO>? values,
+      List<String>? expands,
+      PagedLinkDTO? links}) {
+    return PagedDTOArticleDTO(
+      size: size ?? this.size,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
+      isLastPage: isLastPage ?? this.isLastPage,
+      values: values ?? this.values,
+      expands: expands ?? this.expands,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class PagedDTOAttachmentDTO {
+  /// Number of items returned in the page.
+  final int? size;
+
+  /// Index of the first item returned in the page.
+  final int? start;
+
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
+  final int? limit;
+
+  /// Indicates if this is the last page of records (true) or not (false).
+  final bool isLastPage;
+
+  /// Details of the items included in the page.
+  final List<AttachmentDTO> values;
+  final List<String> expands;
+
+  /// List of the links relating to the page.
+  final PagedLinkDTO? links;
+
+  PagedDTOAttachmentDTO(
+      {this.size,
+      this.start,
+      this.limit,
+      bool? isLastPage,
+      List<AttachmentDTO>? values,
+      List<String>? expands,
+      this.links})
+      : isLastPage = isLastPage ?? false,
+        values = values ?? [],
+        expands = expands ?? [];
+
+  factory PagedDTOAttachmentDTO.fromJson(Map<String, Object?> json) {
+    return PagedDTOAttachmentDTO(
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => AttachmentDTO.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      expands: (json[r'_expands'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var size = this.size;
+    var start = this.start;
+    var limit = this.limit;
+    var isLastPage = this.isLastPage;
+    var values = this.values;
+    var expands = this.expands;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (size != null) {
+      json[r'size'] = size;
+    }
+    if (start != null) {
+      json[r'start'] = start;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PagedDTOAttachmentDTO copyWith(
+      {int? size,
+      int? start,
+      int? limit,
+      bool? isLastPage,
+      List<AttachmentDTO>? values,
+      List<String>? expands,
+      PagedLinkDTO? links}) {
+    return PagedDTOAttachmentDTO(
+      size: size ?? this.size,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
+      isLastPage: isLastPage ?? this.isLastPage,
+      values: values ?? this.values,
+      expands: expands ?? this.expands,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class PagedDTOCommentDTO {
+  /// Number of items returned in the page.
+  final int? size;
+
+  /// Index of the first item returned in the page.
+  final int? start;
+
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
+  final int? limit;
+
+  /// Indicates if this is the last page of records (true) or not (false).
+  final bool isLastPage;
+
+  /// Details of the items included in the page.
+  final List<CommentDTO> values;
+  final List<String> expands;
+
+  /// List of the links relating to the page.
+  final PagedLinkDTO? links;
+
+  PagedDTOCommentDTO(
+      {this.size,
+      this.start,
+      this.limit,
+      bool? isLastPage,
+      List<CommentDTO>? values,
+      List<String>? expands,
+      this.links})
+      : isLastPage = isLastPage ?? false,
+        values = values ?? [],
+        expands = expands ?? [];
+
+  factory PagedDTOCommentDTO.fromJson(Map<String, Object?> json) {
+    return PagedDTOCommentDTO(
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) =>
+                  CommentDTO.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      expands: (json[r'_expands'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var size = this.size;
+    var start = this.start;
+    var limit = this.limit;
+    var isLastPage = this.isLastPage;
+    var values = this.values;
+    var expands = this.expands;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (size != null) {
+      json[r'size'] = size;
+    }
+    if (start != null) {
+      json[r'start'] = start;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PagedDTOCommentDTO copyWith(
+      {int? size,
+      int? start,
+      int? limit,
+      bool? isLastPage,
+      List<CommentDTO>? values,
+      List<String>? expands,
+      PagedLinkDTO? links}) {
+    return PagedDTOCommentDTO(
+      size: size ?? this.size,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
+      isLastPage: isLastPage ?? this.isLastPage,
+      values: values ?? this.values,
+      expands: expands ?? this.expands,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class PagedDTOCustomerRequestDTO {
+  /// Number of items returned in the page.
+  final int? size;
+
+  /// Index of the first item returned in the page.
+  final int? start;
+
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
+  final int? limit;
+
+  /// Indicates if this is the last page of records (true) or not (false).
+  final bool isLastPage;
+
+  /// Details of the items included in the page.
+  final List<CustomerRequestDTO> values;
+  final List<String> expands;
+
+  /// List of the links relating to the page.
+  final PagedLinkDTO? links;
+
+  PagedDTOCustomerRequestDTO(
+      {this.size,
+      this.start,
+      this.limit,
+      bool? isLastPage,
+      List<CustomerRequestDTO>? values,
+      List<String>? expands,
+      this.links})
+      : isLastPage = isLastPage ?? false,
+        values = values ?? [],
+        expands = expands ?? [];
+
+  factory PagedDTOCustomerRequestDTO.fromJson(Map<String, Object?> json) {
+    return PagedDTOCustomerRequestDTO(
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => CustomerRequestDTO.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      expands: (json[r'_expands'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var size = this.size;
+    var start = this.start;
+    var limit = this.limit;
+    var isLastPage = this.isLastPage;
+    var values = this.values;
+    var expands = this.expands;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (size != null) {
+      json[r'size'] = size;
+    }
+    if (start != null) {
+      json[r'start'] = start;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PagedDTOCustomerRequestDTO copyWith(
+      {int? size,
+      int? start,
+      int? limit,
+      bool? isLastPage,
+      List<CustomerRequestDTO>? values,
+      List<String>? expands,
+      PagedLinkDTO? links}) {
+    return PagedDTOCustomerRequestDTO(
+      size: size ?? this.size,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
+      isLastPage: isLastPage ?? this.isLastPage,
+      values: values ?? this.values,
+      expands: expands ?? this.expands,
+      links: links ?? this.links,
+    );
+  }
+}
+
 class PagedDTOCustomerRequestStatusDTO {
   /// Number of items returned in the page.
   final int? size;
@@ -7791,111 +5466,7 @@ class PagedDTOCustomerRequestStatusDTO {
   }
 }
 
-class ServiceDeskDTO {
-  /// ID of the service desk.
-  final String? id;
-
-  /// ID of the peer project for the service desk.
-  final String? projectId;
-
-  /// Name of the project and service desk.
-  final String? projectName;
-
-  /// Key of the peer project of the service desk.
-  final String? projectKey;
-
-  /// REST API URL to the service desk.
-  final SelfLinkDTO? links;
-
-  ServiceDeskDTO(
-      {this.id, this.projectId, this.projectName, this.projectKey, this.links});
-
-  factory ServiceDeskDTO.fromJson(Map<String, Object?> json) {
-    return ServiceDeskDTO(
-      id: json[r'id'] as String?,
-      projectId: json[r'projectId'] as String?,
-      projectName: json[r'projectName'] as String?,
-      projectKey: json[r'projectKey'] as String?,
-      links: json[r'_links'] != null
-          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var projectId = this.projectId;
-    var projectName = this.projectName;
-    var projectKey = this.projectKey;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (projectId != null) {
-      json[r'projectId'] = projectId;
-    }
-    if (projectName != null) {
-      json[r'projectName'] = projectName;
-    }
-    if (projectKey != null) {
-      json[r'projectKey'] = projectKey;
-    }
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  ServiceDeskDTO copyWith(
-      {String? id,
-      String? projectId,
-      String? projectName,
-      String? projectKey,
-      SelfLinkDTO? links}) {
-    return ServiceDeskDTO(
-      id: id ?? this.id,
-      projectId: projectId ?? this.projectId,
-      projectName: projectName ?? this.projectName,
-      projectKey: projectKey ?? this.projectKey,
-      links: links ?? this.links,
-    );
-  }
-}
-
-class LinkableCustomerRequestLinkDTO {
-  final CustomerRequestLinkDTO? links;
-
-  LinkableCustomerRequestLinkDTO({this.links});
-
-  factory LinkableCustomerRequestLinkDTO.fromJson(Map<String, Object?> json) {
-    return LinkableCustomerRequestLinkDTO(
-      links: json[r'_links'] != null
-          ? CustomerRequestLinkDTO.fromJson(
-              json[r'_links']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    if (links != null) {
-      json[r'_links'] = links.toJson();
-    }
-    return json;
-  }
-
-  LinkableCustomerRequestLinkDTO copyWith({CustomerRequestLinkDTO? links}) {
-    return LinkableCustomerRequestLinkDTO(
-      links: links ?? this.links,
-    );
-  }
-}
-
-class PagedDTOCustomerRequestDTO {
+class PagedDTOCustomerTransitionDTO {
   /// Number of items returned in the page.
   final int? size;
 
@@ -7910,32 +5481,32 @@ class PagedDTOCustomerRequestDTO {
   final bool isLastPage;
 
   /// Details of the items included in the page.
-  final List<CustomerRequestDTO> values;
+  final List<CustomerTransitionDTO> values;
   final List<String> expands;
 
   /// List of the links relating to the page.
   final PagedLinkDTO? links;
 
-  PagedDTOCustomerRequestDTO(
+  PagedDTOCustomerTransitionDTO(
       {this.size,
       this.start,
       this.limit,
       bool? isLastPage,
-      List<CustomerRequestDTO>? values,
+      List<CustomerTransitionDTO>? values,
       List<String>? expands,
       this.links})
       : isLastPage = isLastPage ?? false,
         values = values ?? [],
         expands = expands ?? [];
 
-  factory PagedDTOCustomerRequestDTO.fromJson(Map<String, Object?> json) {
-    return PagedDTOCustomerRequestDTO(
+  factory PagedDTOCustomerTransitionDTO.fromJson(Map<String, Object?> json) {
+    return PagedDTOCustomerTransitionDTO(
       size: (json[r'size'] as num?)?.toInt(),
       start: (json[r'start'] as num?)?.toInt(),
       limit: (json[r'limit'] as num?)?.toInt(),
       isLastPage: json[r'isLastPage'] as bool? ?? false,
       values: (json[r'values'] as List<Object?>?)
-              ?.map((i) => CustomerRequestDTO.fromJson(
+              ?.map((i) => CustomerTransitionDTO.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
@@ -7977,15 +5548,423 @@ class PagedDTOCustomerRequestDTO {
     return json;
   }
 
-  PagedDTOCustomerRequestDTO copyWith(
+  PagedDTOCustomerTransitionDTO copyWith(
       {int? size,
       int? start,
       int? limit,
       bool? isLastPage,
-      List<CustomerRequestDTO>? values,
+      List<CustomerTransitionDTO>? values,
       List<String>? expands,
       PagedLinkDTO? links}) {
-    return PagedDTOCustomerRequestDTO(
+    return PagedDTOCustomerTransitionDTO(
+      size: size ?? this.size,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
+      isLastPage: isLastPage ?? this.isLastPage,
+      values: values ?? this.values,
+      expands: expands ?? this.expands,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class PagedDTOIssueBean {
+  /// Number of items returned in the page.
+  final int? size;
+
+  /// Index of the first item returned in the page.
+  final int? start;
+
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
+  final int? limit;
+
+  /// Indicates if this is the last page of records (true) or not (false).
+  final bool isLastPage;
+
+  /// Details of the items included in the page.
+  final List<IssueBean> values;
+  final List<String> expands;
+
+  /// List of the links relating to the page.
+  final PagedLinkDTO? links;
+
+  PagedDTOIssueBean(
+      {this.size,
+      this.start,
+      this.limit,
+      bool? isLastPage,
+      List<IssueBean>? values,
+      List<String>? expands,
+      this.links})
+      : isLastPage = isLastPage ?? false,
+        values = values ?? [],
+        expands = expands ?? [];
+
+  factory PagedDTOIssueBean.fromJson(Map<String, Object?> json) {
+    return PagedDTOIssueBean(
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) =>
+                  IssueBean.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      expands: (json[r'_expands'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var size = this.size;
+    var start = this.start;
+    var limit = this.limit;
+    var isLastPage = this.isLastPage;
+    var values = this.values;
+    var expands = this.expands;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (size != null) {
+      json[r'size'] = size;
+    }
+    if (start != null) {
+      json[r'start'] = start;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PagedDTOIssueBean copyWith(
+      {int? size,
+      int? start,
+      int? limit,
+      bool? isLastPage,
+      List<IssueBean>? values,
+      List<String>? expands,
+      PagedLinkDTO? links}) {
+    return PagedDTOIssueBean(
+      size: size ?? this.size,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
+      isLastPage: isLastPage ?? this.isLastPage,
+      values: values ?? this.values,
+      expands: expands ?? this.expands,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class PagedDTOOrganizationDTO {
+  /// Number of items returned in the page.
+  final int? size;
+
+  /// Index of the first item returned in the page.
+  final int? start;
+
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
+  final int? limit;
+
+  /// Indicates if this is the last page of records (true) or not (false).
+  final bool isLastPage;
+
+  /// Details of the items included in the page.
+  final List<OrganizationDTO> values;
+  final List<String> expands;
+
+  /// List of the links relating to the page.
+  final PagedLinkDTO? links;
+
+  PagedDTOOrganizationDTO(
+      {this.size,
+      this.start,
+      this.limit,
+      bool? isLastPage,
+      List<OrganizationDTO>? values,
+      List<String>? expands,
+      this.links})
+      : isLastPage = isLastPage ?? false,
+        values = values ?? [],
+        expands = expands ?? [];
+
+  factory PagedDTOOrganizationDTO.fromJson(Map<String, Object?> json) {
+    return PagedDTOOrganizationDTO(
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => OrganizationDTO.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      expands: (json[r'_expands'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var size = this.size;
+    var start = this.start;
+    var limit = this.limit;
+    var isLastPage = this.isLastPage;
+    var values = this.values;
+    var expands = this.expands;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (size != null) {
+      json[r'size'] = size;
+    }
+    if (start != null) {
+      json[r'start'] = start;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PagedDTOOrganizationDTO copyWith(
+      {int? size,
+      int? start,
+      int? limit,
+      bool? isLastPage,
+      List<OrganizationDTO>? values,
+      List<String>? expands,
+      PagedLinkDTO? links}) {
+    return PagedDTOOrganizationDTO(
+      size: size ?? this.size,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
+      isLastPage: isLastPage ?? this.isLastPage,
+      values: values ?? this.values,
+      expands: expands ?? this.expands,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class PagedDTOQueueDTO {
+  /// Number of items returned in the page.
+  final int? size;
+
+  /// Index of the first item returned in the page.
+  final int? start;
+
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
+  final int? limit;
+
+  /// Indicates if this is the last page of records (true) or not (false).
+  final bool isLastPage;
+
+  /// Details of the items included in the page.
+  final List<QueueDTO> values;
+  final List<String> expands;
+
+  /// List of the links relating to the page.
+  final PagedLinkDTO? links;
+
+  PagedDTOQueueDTO(
+      {this.size,
+      this.start,
+      this.limit,
+      bool? isLastPage,
+      List<QueueDTO>? values,
+      List<String>? expands,
+      this.links})
+      : isLastPage = isLastPage ?? false,
+        values = values ?? [],
+        expands = expands ?? [];
+
+  factory PagedDTOQueueDTO.fromJson(Map<String, Object?> json) {
+    return PagedDTOQueueDTO(
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) =>
+                  QueueDTO.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      expands: (json[r'_expands'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var size = this.size;
+    var start = this.start;
+    var limit = this.limit;
+    var isLastPage = this.isLastPage;
+    var values = this.values;
+    var expands = this.expands;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (size != null) {
+      json[r'size'] = size;
+    }
+    if (start != null) {
+      json[r'start'] = start;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PagedDTOQueueDTO copyWith(
+      {int? size,
+      int? start,
+      int? limit,
+      bool? isLastPage,
+      List<QueueDTO>? values,
+      List<String>? expands,
+      PagedLinkDTO? links}) {
+    return PagedDTOQueueDTO(
+      size: size ?? this.size,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
+      isLastPage: isLastPage ?? this.isLastPage,
+      values: values ?? this.values,
+      expands: expands ?? this.expands,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class PagedDTORequestTypeDTO {
+  /// Number of items returned in the page.
+  final int? size;
+
+  /// Index of the first item returned in the page.
+  final int? start;
+
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
+  final int? limit;
+
+  /// Indicates if this is the last page of records (true) or not (false).
+  final bool isLastPage;
+
+  /// Details of the items included in the page.
+  final List<RequestTypeDTO> values;
+  final List<String> expands;
+
+  /// List of the links relating to the page.
+  final PagedLinkDTO? links;
+
+  PagedDTORequestTypeDTO(
+      {this.size,
+      this.start,
+      this.limit,
+      bool? isLastPage,
+      List<RequestTypeDTO>? values,
+      List<String>? expands,
+      this.links})
+      : isLastPage = isLastPage ?? false,
+        values = values ?? [],
+        expands = expands ?? [];
+
+  factory PagedDTORequestTypeDTO.fromJson(Map<String, Object?> json) {
+    return PagedDTORequestTypeDTO(
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => RequestTypeDTO.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      expands: (json[r'_expands'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var size = this.size;
+    var start = this.start;
+    var limit = this.limit;
+    var isLastPage = this.isLastPage;
+    var values = this.values;
+    var expands = this.expands;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (size != null) {
+      json[r'size'] = size;
+    }
+    if (start != null) {
+      json[r'start'] = start;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PagedDTORequestTypeDTO copyWith(
+      {int? size,
+      int? start,
+      int? limit,
+      bool? isLastPage,
+      List<RequestTypeDTO>? values,
+      List<String>? expands,
+      PagedLinkDTO? links}) {
+    return PagedDTORequestTypeDTO(
       size: size ?? this.size,
       start: start ?? this.start,
       limit: limit ?? this.limit,
@@ -8099,122 +6078,6 @@ class PagedDTORequestTypeGroupDTO {
   }
 }
 
-class RequestTypeGroupDTO {
-  /// ID of the request type group
-  final String? id;
-
-  /// Name of the request type group.
-  final String? name;
-
-  RequestTypeGroupDTO({this.id, this.name});
-
-  factory RequestTypeGroupDTO.fromJson(Map<String, Object?> json) {
-    return RequestTypeGroupDTO(
-      id: json[r'id'] as String?,
-      name: json[r'name'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var name = this.name;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    return json;
-  }
-
-  RequestTypeGroupDTO copyWith({String? id, String? name}) {
-    return RequestTypeGroupDTO(
-      id: id ?? this.id,
-      name: name ?? this.name,
-    );
-  }
-}
-
-class CustomerCreateDTO {
-  /// Customer's email address.
-  final String? email;
-
-  /// Deprecated, please use 'displayName'.
-  final String? fullName;
-
-  /// Customer's name for display in the UI.
-  final String? displayName;
-
-  CustomerCreateDTO({this.email, this.fullName, this.displayName});
-
-  factory CustomerCreateDTO.fromJson(Map<String, Object?> json) {
-    return CustomerCreateDTO(
-      email: json[r'email'] as String?,
-      fullName: json[r'fullName'] as String?,
-      displayName: json[r'displayName'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var email = this.email;
-    var fullName = this.fullName;
-    var displayName = this.displayName;
-
-    final json = <String, Object?>{};
-    if (email != null) {
-      json[r'email'] = email;
-    }
-    if (fullName != null) {
-      json[r'fullName'] = fullName;
-    }
-    if (displayName != null) {
-      json[r'displayName'] = displayName;
-    }
-    return json;
-  }
-
-  CustomerCreateDTO copyWith(
-      {String? email, String? fullName, String? displayName}) {
-    return CustomerCreateDTO(
-      email: email ?? this.email,
-      fullName: fullName ?? this.fullName,
-      displayName: displayName ?? this.displayName,
-    );
-  }
-}
-
-class RequestNotificationSubscriptionDTO {
-  /// Indicates whether the user is subscribed (true) or not (false) to the
-  /// request's notifications.
-  final bool subscribed;
-
-  RequestNotificationSubscriptionDTO({bool? subscribed})
-      : subscribed = subscribed ?? false;
-
-  factory RequestNotificationSubscriptionDTO.fromJson(
-      Map<String, Object?> json) {
-    return RequestNotificationSubscriptionDTO(
-      subscribed: json[r'subscribed'] as bool? ?? false,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var subscribed = this.subscribed;
-
-    final json = <String, Object?>{};
-    json[r'subscribed'] = subscribed;
-    return json;
-  }
-
-  RequestNotificationSubscriptionDTO copyWith({bool? subscribed}) {
-    return RequestNotificationSubscriptionDTO(
-      subscribed: subscribed ?? this.subscribed,
-    );
-  }
-}
-
 class PagedDTOServiceDeskDTO {
   /// Number of items returned in the page.
   final int? size;
@@ -8317,6 +6180,1654 @@ class PagedDTOServiceDeskDTO {
   }
 }
 
+class PagedDTOSlaInformationDTO {
+  /// Number of items returned in the page.
+  final int? size;
+
+  /// Index of the first item returned in the page.
+  final int? start;
+
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
+  final int? limit;
+
+  /// Indicates if this is the last page of records (true) or not (false).
+  final bool isLastPage;
+
+  /// Details of the items included in the page.
+  final List<SlaInformationDTO> values;
+  final List<String> expands;
+
+  /// List of the links relating to the page.
+  final PagedLinkDTO? links;
+
+  PagedDTOSlaInformationDTO(
+      {this.size,
+      this.start,
+      this.limit,
+      bool? isLastPage,
+      List<SlaInformationDTO>? values,
+      List<String>? expands,
+      this.links})
+      : isLastPage = isLastPage ?? false,
+        values = values ?? [],
+        expands = expands ?? [];
+
+  factory PagedDTOSlaInformationDTO.fromJson(Map<String, Object?> json) {
+    return PagedDTOSlaInformationDTO(
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => SlaInformationDTO.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      expands: (json[r'_expands'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var size = this.size;
+    var start = this.start;
+    var limit = this.limit;
+    var isLastPage = this.isLastPage;
+    var values = this.values;
+    var expands = this.expands;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (size != null) {
+      json[r'size'] = size;
+    }
+    if (start != null) {
+      json[r'start'] = start;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PagedDTOSlaInformationDTO copyWith(
+      {int? size,
+      int? start,
+      int? limit,
+      bool? isLastPage,
+      List<SlaInformationDTO>? values,
+      List<String>? expands,
+      PagedLinkDTO? links}) {
+    return PagedDTOSlaInformationDTO(
+      size: size ?? this.size,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
+      isLastPage: isLastPage ?? this.isLastPage,
+      values: values ?? this.values,
+      expands: expands ?? this.expands,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class PagedDTOUserDTO {
+  /// Number of items returned in the page.
+  final int? size;
+
+  /// Index of the first item returned in the page.
+  final int? start;
+
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
+  final int? limit;
+
+  /// Indicates if this is the last page of records (true) or not (false).
+  final bool isLastPage;
+
+  /// Details of the items included in the page.
+  final List<UserDTO> values;
+  final List<String> expands;
+
+  /// List of the links relating to the page.
+  final PagedLinkDTO? links;
+
+  PagedDTOUserDTO(
+      {this.size,
+      this.start,
+      this.limit,
+      bool? isLastPage,
+      List<UserDTO>? values,
+      List<String>? expands,
+      this.links})
+      : isLastPage = isLastPage ?? false,
+        values = values ?? [],
+        expands = expands ?? [];
+
+  factory PagedDTOUserDTO.fromJson(Map<String, Object?> json) {
+    return PagedDTOUserDTO(
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) =>
+                  UserDTO.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      expands: (json[r'_expands'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var size = this.size;
+    var start = this.start;
+    var limit = this.limit;
+    var isLastPage = this.isLastPage;
+    var values = this.values;
+    var expands = this.expands;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (size != null) {
+      json[r'size'] = size;
+    }
+    if (start != null) {
+      json[r'start'] = start;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PagedDTOUserDTO copyWith(
+      {int? size,
+      int? start,
+      int? limit,
+      bool? isLastPage,
+      List<UserDTO>? values,
+      List<String>? expands,
+      PagedLinkDTO? links}) {
+    return PagedDTOUserDTO(
+      size: size ?? this.size,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
+      isLastPage: isLastPage ?? this.isLastPage,
+      values: values ?? this.values,
+      expands: expands ?? this.expands,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class PagedLinkDTO {
+  /// REST API URL for the current page.
+  final String? self;
+
+  /// Base URL for the REST API calls.
+  final String? base;
+  final String? context;
+
+  /// REST API URL for the next page, if there is one.
+  final String? next;
+
+  /// REST API URL for the previous page, if there is one.
+  final String? prev;
+
+  PagedLinkDTO({this.self, this.base, this.context, this.next, this.prev});
+
+  factory PagedLinkDTO.fromJson(Map<String, Object?> json) {
+    return PagedLinkDTO(
+      self: json[r'self'] as String?,
+      base: json[r'base'] as String?,
+      context: json[r'context'] as String?,
+      next: json[r'next'] as String?,
+      prev: json[r'prev'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var self = this.self;
+    var base = this.base;
+    var context = this.context;
+    var next = this.next;
+    var prev = this.prev;
+
+    final json = <String, Object?>{};
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (base != null) {
+      json[r'base'] = base;
+    }
+    if (context != null) {
+      json[r'context'] = context;
+    }
+    if (next != null) {
+      json[r'next'] = next;
+    }
+    if (prev != null) {
+      json[r'prev'] = prev;
+    }
+    return json;
+  }
+
+  PagedLinkDTO copyWith(
+      {String? self,
+      String? base,
+      String? context,
+      String? next,
+      String? prev}) {
+    return PagedLinkDTO(
+      self: self ?? this.self,
+      base: base ?? this.base,
+      context: context ?? this.context,
+      next: next ?? this.next,
+      prev: prev ?? this.prev,
+    );
+  }
+}
+
+/// Property key details.
+class PropertyKey {
+  /// The URL of the property.
+  final String? self;
+
+  /// The key of the property.
+  final String? key;
+
+  PropertyKey({this.self, this.key});
+
+  factory PropertyKey.fromJson(Map<String, Object?> json) {
+    return PropertyKey(
+      self: json[r'self'] as String?,
+      key: json[r'key'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var self = this.self;
+    var key = this.key;
+
+    final json = <String, Object?>{};
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    return json;
+  }
+
+  PropertyKey copyWith({String? self, String? key}) {
+    return PropertyKey(
+      self: self ?? this.self,
+      key: key ?? this.key,
+    );
+  }
+}
+
+/// List of property keys.
+class PropertyKeys {
+  /// Property key details.
+  final List<PropertyKey> keys;
+
+  PropertyKeys({List<PropertyKey>? keys}) : keys = keys ?? [];
+
+  factory PropertyKeys.fromJson(Map<String, Object?> json) {
+    return PropertyKeys(
+      keys: (json[r'keys'] as List<Object?>?)
+              ?.map((i) =>
+                  PropertyKey.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var keys = this.keys;
+
+    final json = <String, Object?>{};
+    json[r'keys'] = keys.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PropertyKeys copyWith({List<PropertyKey>? keys}) {
+    return PropertyKeys(
+      keys: keys ?? this.keys,
+    );
+  }
+}
+
+class QueueDTO {
+  /// ID for the queue.
+  final String? id;
+
+  /// Short name for the queue.
+  final String? name;
+
+  /// JQL query that filters reqeusts for the queue.
+  final String? jql;
+
+  /// Fields returned for each request in the queue.
+  final List<String> fields;
+
+  /// The count of customer requests in the queue.
+  final int? issueCount;
+
+  /// REST API URL to the queue.
+  final SelfLinkDTO? links;
+
+  QueueDTO(
+      {this.id,
+      this.name,
+      this.jql,
+      List<String>? fields,
+      this.issueCount,
+      this.links})
+      : fields = fields ?? [];
+
+  factory QueueDTO.fromJson(Map<String, Object?> json) {
+    return QueueDTO(
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      jql: json[r'jql'] as String?,
+      fields: (json[r'fields'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      issueCount: (json[r'issueCount'] as num?)?.toInt(),
+      links: json[r'_links'] != null
+          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+    var jql = this.jql;
+    var fields = this.fields;
+    var issueCount = this.issueCount;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (jql != null) {
+      json[r'jql'] = jql;
+    }
+    json[r'fields'] = fields;
+    if (issueCount != null) {
+      json[r'issueCount'] = issueCount;
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  QueueDTO copyWith(
+      {String? id,
+      String? name,
+      String? jql,
+      List<String>? fields,
+      int? issueCount,
+      SelfLinkDTO? links}) {
+    return QueueDTO(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      jql: jql ?? this.jql,
+      fields: fields ?? this.fields,
+      issueCount: issueCount ?? this.issueCount,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class RenderedValueDTO {
+  final String? html;
+
+  RenderedValueDTO({this.html});
+
+  factory RenderedValueDTO.fromJson(Map<String, Object?> json) {
+    return RenderedValueDTO(
+      html: json[r'html'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var html = this.html;
+
+    final json = <String, Object?>{};
+    if (html != null) {
+      json[r'html'] = html;
+    }
+    return json;
+  }
+
+  RenderedValueDTO copyWith({String? html}) {
+    return RenderedValueDTO(
+      html: html ?? this.html,
+    );
+  }
+}
+
+class RequestCreateDTO {
+  /// ID of the service desk in which to create the request.
+  final String? serviceDeskId;
+
+  /// ID of the request type for the request.
+  final String? requestTypeId;
+
+  /// JSON map of Jira field IDs and their values representing the content of
+  /// the request.
+  final Map<String, dynamic>? requestFieldValues;
+
+  /// List of customers to participate in the request, as a list of `accountId`
+  /// values.
+  final List<String> requestParticipants;
+
+  /// The `accountId` of the customer that the request is being raised on behalf
+  /// of.
+  final String? raiseOnBehalfOf;
+
+  /// (Experimental) Shows extra information for the request channel.
+  final String? channel;
+
+  RequestCreateDTO(
+      {this.serviceDeskId,
+      this.requestTypeId,
+      this.requestFieldValues,
+      List<String>? requestParticipants,
+      this.raiseOnBehalfOf,
+      this.channel})
+      : requestParticipants = requestParticipants ?? [];
+
+  factory RequestCreateDTO.fromJson(Map<String, Object?> json) {
+    return RequestCreateDTO(
+      serviceDeskId: json[r'serviceDeskId'] as String?,
+      requestTypeId: json[r'requestTypeId'] as String?,
+      requestFieldValues: json[r'requestFieldValues'] as Map<String, Object?>?,
+      requestParticipants: (json[r'requestParticipants'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      raiseOnBehalfOf: json[r'raiseOnBehalfOf'] as String?,
+      channel: json[r'channel'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var serviceDeskId = this.serviceDeskId;
+    var requestTypeId = this.requestTypeId;
+    var requestFieldValues = this.requestFieldValues;
+    var requestParticipants = this.requestParticipants;
+    var raiseOnBehalfOf = this.raiseOnBehalfOf;
+    var channel = this.channel;
+
+    final json = <String, Object?>{};
+    if (serviceDeskId != null) {
+      json[r'serviceDeskId'] = serviceDeskId;
+    }
+    if (requestTypeId != null) {
+      json[r'requestTypeId'] = requestTypeId;
+    }
+    if (requestFieldValues != null) {
+      json[r'requestFieldValues'] = requestFieldValues;
+    }
+    json[r'requestParticipants'] = requestParticipants;
+    if (raiseOnBehalfOf != null) {
+      json[r'raiseOnBehalfOf'] = raiseOnBehalfOf;
+    }
+    if (channel != null) {
+      json[r'channel'] = channel;
+    }
+    return json;
+  }
+
+  RequestCreateDTO copyWith(
+      {String? serviceDeskId,
+      String? requestTypeId,
+      Map<String, dynamic>? requestFieldValues,
+      List<String>? requestParticipants,
+      String? raiseOnBehalfOf,
+      String? channel}) {
+    return RequestCreateDTO(
+      serviceDeskId: serviceDeskId ?? this.serviceDeskId,
+      requestTypeId: requestTypeId ?? this.requestTypeId,
+      requestFieldValues: requestFieldValues ?? this.requestFieldValues,
+      requestParticipants: requestParticipants ?? this.requestParticipants,
+      raiseOnBehalfOf: raiseOnBehalfOf ?? this.raiseOnBehalfOf,
+      channel: channel ?? this.channel,
+    );
+  }
+}
+
+class RequestNotificationSubscriptionDTO {
+  /// Indicates whether the user is subscribed (true) or not (false) to the
+  /// request's notifications.
+  final bool subscribed;
+
+  RequestNotificationSubscriptionDTO({bool? subscribed})
+      : subscribed = subscribed ?? false;
+
+  factory RequestNotificationSubscriptionDTO.fromJson(
+      Map<String, Object?> json) {
+    return RequestNotificationSubscriptionDTO(
+      subscribed: json[r'subscribed'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var subscribed = this.subscribed;
+
+    final json = <String, Object?>{};
+    json[r'subscribed'] = subscribed;
+    return json;
+  }
+
+  RequestNotificationSubscriptionDTO copyWith({bool? subscribed}) {
+    return RequestNotificationSubscriptionDTO(
+      subscribed: subscribed ?? this.subscribed,
+    );
+  }
+}
+
+class RequestParticipantUpdateDTO {
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details. Use `accountIds` instead.
+  final List<String> usernames;
+
+  /// List of users, specified by account IDs, to add to or remove as
+  /// participants in the request.
+  final List<String> accountIds;
+
+  RequestParticipantUpdateDTO(
+      {List<String>? usernames, List<String>? accountIds})
+      : usernames = usernames ?? [],
+        accountIds = accountIds ?? [];
+
+  factory RequestParticipantUpdateDTO.fromJson(Map<String, Object?> json) {
+    return RequestParticipantUpdateDTO(
+      usernames: (json[r'usernames'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      accountIds: (json[r'accountIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var usernames = this.usernames;
+    var accountIds = this.accountIds;
+
+    final json = <String, Object?>{};
+    json[r'usernames'] = usernames;
+    json[r'accountIds'] = accountIds;
+    return json;
+  }
+
+  RequestParticipantUpdateDTO copyWith(
+      {List<String>? usernames, List<String>? accountIds}) {
+    return RequestParticipantUpdateDTO(
+      usernames: usernames ?? this.usernames,
+      accountIds: accountIds ?? this.accountIds,
+    );
+  }
+}
+
+class RequestTypeCreateDTO {
+  /// ID of the request type to add to the service desk.
+  final String? issueTypeId;
+
+  /// Name of the request type on the service desk.
+  final String? name;
+
+  /// Description of the request type on the service desk.
+  final String? description;
+
+  /// Help text for the request type on the service desk.
+  final String? helpText;
+
+  RequestTypeCreateDTO(
+      {this.issueTypeId, this.name, this.description, this.helpText});
+
+  factory RequestTypeCreateDTO.fromJson(Map<String, Object?> json) {
+    return RequestTypeCreateDTO(
+      issueTypeId: json[r'issueTypeId'] as String?,
+      name: json[r'name'] as String?,
+      description: json[r'description'] as String?,
+      helpText: json[r'helpText'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueTypeId = this.issueTypeId;
+    var name = this.name;
+    var description = this.description;
+    var helpText = this.helpText;
+
+    final json = <String, Object?>{};
+    if (issueTypeId != null) {
+      json[r'issueTypeId'] = issueTypeId;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (helpText != null) {
+      json[r'helpText'] = helpText;
+    }
+    return json;
+  }
+
+  RequestTypeCreateDTO copyWith(
+      {String? issueTypeId,
+      String? name,
+      String? description,
+      String? helpText}) {
+    return RequestTypeCreateDTO(
+      issueTypeId: issueTypeId ?? this.issueTypeId,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      helpText: helpText ?? this.helpText,
+    );
+  }
+}
+
+class RequestTypeDTO {
+  /// ID for the request type.
+  final String? id;
+
+  /// Short name for the request type.
+  final String? name;
+
+  /// Description of the request type.
+  final String? description;
+
+  /// Help text for the request type.
+  final String? helpText;
+
+  /// ID of the issue type the request type is based upon.
+  final String? issueTypeId;
+
+  /// ID of the service desk the request type belongs to.
+  final String? serviceDeskId;
+
+  /// List of the request type groups the request type belongs to.
+  final List<String> groupIds;
+
+  /// Links to the request type's icons.
+  final RequestTypeIconDTO? icon;
+
+  /// Fields and additional metadata for creating a request that uses the
+  /// request type
+  final CustomerRequestCreateMetaDTO? fields;
+
+  /// List of items that can be expanded in the response by specifying the
+  /// expand query parameter.
+  final List<String> expands;
+
+  /// REST API URL for the request type.
+  final SelfLinkDTO? links;
+
+  RequestTypeDTO(
+      {this.id,
+      this.name,
+      this.description,
+      this.helpText,
+      this.issueTypeId,
+      this.serviceDeskId,
+      List<String>? groupIds,
+      this.icon,
+      this.fields,
+      List<String>? expands,
+      this.links})
+      : groupIds = groupIds ?? [],
+        expands = expands ?? [];
+
+  factory RequestTypeDTO.fromJson(Map<String, Object?> json) {
+    return RequestTypeDTO(
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      description: json[r'description'] as String?,
+      helpText: json[r'helpText'] as String?,
+      issueTypeId: json[r'issueTypeId'] as String?,
+      serviceDeskId: json[r'serviceDeskId'] as String?,
+      groupIds: (json[r'groupIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      icon: json[r'icon'] != null
+          ? RequestTypeIconDTO.fromJson(json[r'icon']! as Map<String, Object?>)
+          : null,
+      fields: json[r'fields'] != null
+          ? CustomerRequestCreateMetaDTO.fromJson(
+              json[r'fields']! as Map<String, Object?>)
+          : null,
+      expands: (json[r'_expands'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      links: json[r'_links'] != null
+          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+    var description = this.description;
+    var helpText = this.helpText;
+    var issueTypeId = this.issueTypeId;
+    var serviceDeskId = this.serviceDeskId;
+    var groupIds = this.groupIds;
+    var icon = this.icon;
+    var fields = this.fields;
+    var expands = this.expands;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (helpText != null) {
+      json[r'helpText'] = helpText;
+    }
+    if (issueTypeId != null) {
+      json[r'issueTypeId'] = issueTypeId;
+    }
+    if (serviceDeskId != null) {
+      json[r'serviceDeskId'] = serviceDeskId;
+    }
+    json[r'groupIds'] = groupIds;
+    if (icon != null) {
+      json[r'icon'] = icon.toJson();
+    }
+    if (fields != null) {
+      json[r'fields'] = fields.toJson();
+    }
+    json[r'_expands'] = expands;
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  RequestTypeDTO copyWith(
+      {String? id,
+      String? name,
+      String? description,
+      String? helpText,
+      String? issueTypeId,
+      String? serviceDeskId,
+      List<String>? groupIds,
+      RequestTypeIconDTO? icon,
+      CustomerRequestCreateMetaDTO? fields,
+      List<String>? expands,
+      SelfLinkDTO? links}) {
+    return RequestTypeDTO(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      helpText: helpText ?? this.helpText,
+      issueTypeId: issueTypeId ?? this.issueTypeId,
+      serviceDeskId: serviceDeskId ?? this.serviceDeskId,
+      groupIds: groupIds ?? this.groupIds,
+      icon: icon ?? this.icon,
+      fields: fields ?? this.fields,
+      expands: expands ?? this.expands,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class RequestTypeFieldDTO {
+  /// ID of the field.
+  final String? fieldId;
+
+  /// Name of the field.
+  final String? name;
+
+  /// Description of the field.
+  final String? description;
+
+  /// Indicates if the field is required (true) or not (false).
+  final bool required;
+
+  /// List of default values for the field.
+  final List<RequestTypeFieldValueDTO> defaultValues;
+
+  /// List of valid values for the field.
+  final List<RequestTypeFieldValueDTO> validValues;
+
+  /// Jira specific implementation details for the field in the UI.
+  final JsonTypeBean? jiraSchema;
+  final bool visible;
+
+  RequestTypeFieldDTO(
+      {this.fieldId,
+      this.name,
+      this.description,
+      bool? required,
+      List<RequestTypeFieldValueDTO>? defaultValues,
+      List<RequestTypeFieldValueDTO>? validValues,
+      this.jiraSchema,
+      bool? visible})
+      : required = required ?? false,
+        defaultValues = defaultValues ?? [],
+        validValues = validValues ?? [],
+        visible = visible ?? false;
+
+  factory RequestTypeFieldDTO.fromJson(Map<String, Object?> json) {
+    return RequestTypeFieldDTO(
+      fieldId: json[r'fieldId'] as String?,
+      name: json[r'name'] as String?,
+      description: json[r'description'] as String?,
+      required: json[r'required'] as bool? ?? false,
+      defaultValues: (json[r'defaultValues'] as List<Object?>?)
+              ?.map((i) => RequestTypeFieldValueDTO.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      validValues: (json[r'validValues'] as List<Object?>?)
+              ?.map((i) => RequestTypeFieldValueDTO.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      jiraSchema: json[r'jiraSchema'] != null
+          ? JsonTypeBean.fromJson(json[r'jiraSchema']! as Map<String, Object?>)
+          : null,
+      visible: json[r'visible'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fieldId = this.fieldId;
+    var name = this.name;
+    var description = this.description;
+    var required = this.required;
+    var defaultValues = this.defaultValues;
+    var validValues = this.validValues;
+    var jiraSchema = this.jiraSchema;
+    var visible = this.visible;
+
+    final json = <String, Object?>{};
+    if (fieldId != null) {
+      json[r'fieldId'] = fieldId;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    json[r'required'] = required;
+    json[r'defaultValues'] = defaultValues.map((i) => i.toJson()).toList();
+    json[r'validValues'] = validValues.map((i) => i.toJson()).toList();
+    if (jiraSchema != null) {
+      json[r'jiraSchema'] = jiraSchema.toJson();
+    }
+    json[r'visible'] = visible;
+    return json;
+  }
+
+  RequestTypeFieldDTO copyWith(
+      {String? fieldId,
+      String? name,
+      String? description,
+      bool? required,
+      List<RequestTypeFieldValueDTO>? defaultValues,
+      List<RequestTypeFieldValueDTO>? validValues,
+      JsonTypeBean? jiraSchema,
+      bool? visible}) {
+    return RequestTypeFieldDTO(
+      fieldId: fieldId ?? this.fieldId,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      required: required ?? this.required,
+      defaultValues: defaultValues ?? this.defaultValues,
+      validValues: validValues ?? this.validValues,
+      jiraSchema: jiraSchema ?? this.jiraSchema,
+      visible: visible ?? this.visible,
+    );
+  }
+}
+
+class RequestTypeFieldValueDTO {
+  /// Value of the field.
+  final String? value;
+
+  /// Label for the field.
+  final String? label;
+
+  /// List of child fields.
+  final List<RequestTypeFieldValueDTO> children;
+
+  RequestTypeFieldValueDTO(
+      {this.value, this.label, List<RequestTypeFieldValueDTO>? children})
+      : children = children ?? [];
+
+  factory RequestTypeFieldValueDTO.fromJson(Map<String, Object?> json) {
+    return RequestTypeFieldValueDTO(
+      value: json[r'value'] as String?,
+      label: json[r'label'] as String?,
+      children: (json[r'children'] as List<Object?>?)
+              ?.map((i) => RequestTypeFieldValueDTO.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var value = this.value;
+    var label = this.label;
+    var children = this.children;
+
+    final json = <String, Object?>{};
+    if (value != null) {
+      json[r'value'] = value;
+    }
+    if (label != null) {
+      json[r'label'] = label;
+    }
+    json[r'children'] = children.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  RequestTypeFieldValueDTO copyWith(
+      {String? value,
+      String? label,
+      List<RequestTypeFieldValueDTO>? children}) {
+    return RequestTypeFieldValueDTO(
+      value: value ?? this.value,
+      label: label ?? this.label,
+      children: children ?? this.children,
+    );
+  }
+}
+
+class RequestTypeGroupDTO {
+  /// ID of the request type group
+  final String? id;
+
+  /// Name of the request type group.
+  final String? name;
+
+  RequestTypeGroupDTO({this.id, this.name});
+
+  factory RequestTypeGroupDTO.fromJson(Map<String, Object?> json) {
+    return RequestTypeGroupDTO(
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    return json;
+  }
+
+  RequestTypeGroupDTO copyWith({String? id, String? name}) {
+    return RequestTypeGroupDTO(
+      id: id ?? this.id,
+      name: name ?? this.name,
+    );
+  }
+}
+
+class RequestTypeIconDTO {
+  /// ID of the request type icon.
+  final String? id;
+
+  /// Map of the URLs for the request type icons.
+  final RequestTypeIconLinkDTO? links;
+
+  RequestTypeIconDTO({this.id, this.links});
+
+  factory RequestTypeIconDTO.fromJson(Map<String, Object?> json) {
+    return RequestTypeIconDTO(
+      id: json[r'id'] as String?,
+      links: json[r'_links'] != null
+          ? RequestTypeIconLinkDTO.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  RequestTypeIconDTO copyWith({String? id, RequestTypeIconLinkDTO? links}) {
+    return RequestTypeIconDTO(
+      id: id ?? this.id,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class RequestTypeIconLinkDTO {
+  /// URLs for the request type icons.
+  final Map<String, dynamic>? iconUrls;
+
+  RequestTypeIconLinkDTO({this.iconUrls});
+
+  factory RequestTypeIconLinkDTO.fromJson(Map<String, Object?> json) {
+    return RequestTypeIconLinkDTO(
+      iconUrls: json[r'iconUrls'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var iconUrls = this.iconUrls;
+
+    final json = <String, Object?>{};
+    if (iconUrls != null) {
+      json[r'iconUrls'] = iconUrls;
+    }
+    return json;
+  }
+
+  RequestTypeIconLinkDTO copyWith({Map<String, dynamic>? iconUrls}) {
+    return RequestTypeIconLinkDTO(
+      iconUrls: iconUrls ?? this.iconUrls,
+    );
+  }
+}
+
+class SelfLinkDTO {
+  final String? self;
+
+  SelfLinkDTO({this.self});
+
+  factory SelfLinkDTO.fromJson(Map<String, Object?> json) {
+    return SelfLinkDTO(
+      self: json[r'self'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var self = this.self;
+
+    final json = <String, Object?>{};
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    return json;
+  }
+
+  SelfLinkDTO copyWith({String? self}) {
+    return SelfLinkDTO(
+      self: self ?? this.self,
+    );
+  }
+}
+
+class ServiceDeskCustomerDTO {
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details. Use `accountIds` instead.
+  final List<String> usernames;
+
+  /// List of users, specified by account IDs, to add to or remove from a
+  /// service desk.
+  final List<String> accountIds;
+
+  ServiceDeskCustomerDTO({List<String>? usernames, List<String>? accountIds})
+      : usernames = usernames ?? [],
+        accountIds = accountIds ?? [];
+
+  factory ServiceDeskCustomerDTO.fromJson(Map<String, Object?> json) {
+    return ServiceDeskCustomerDTO(
+      usernames: (json[r'usernames'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      accountIds: (json[r'accountIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var usernames = this.usernames;
+    var accountIds = this.accountIds;
+
+    final json = <String, Object?>{};
+    json[r'usernames'] = usernames;
+    json[r'accountIds'] = accountIds;
+    return json;
+  }
+
+  ServiceDeskCustomerDTO copyWith(
+      {List<String>? usernames, List<String>? accountIds}) {
+    return ServiceDeskCustomerDTO(
+      usernames: usernames ?? this.usernames,
+      accountIds: accountIds ?? this.accountIds,
+    );
+  }
+}
+
+class ServiceDeskDTO {
+  /// ID of the service desk.
+  final String? id;
+
+  /// ID of the peer project for the service desk.
+  final String? projectId;
+
+  /// Name of the project and service desk.
+  final String? projectName;
+
+  /// Key of the peer project of the service desk.
+  final String? projectKey;
+
+  /// REST API URL to the service desk.
+  final SelfLinkDTO? links;
+
+  ServiceDeskDTO(
+      {this.id, this.projectId, this.projectName, this.projectKey, this.links});
+
+  factory ServiceDeskDTO.fromJson(Map<String, Object?> json) {
+    return ServiceDeskDTO(
+      id: json[r'id'] as String?,
+      projectId: json[r'projectId'] as String?,
+      projectName: json[r'projectName'] as String?,
+      projectKey: json[r'projectKey'] as String?,
+      links: json[r'_links'] != null
+          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var projectId = this.projectId;
+    var projectName = this.projectName;
+    var projectKey = this.projectKey;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (projectId != null) {
+      json[r'projectId'] = projectId;
+    }
+    if (projectName != null) {
+      json[r'projectName'] = projectName;
+    }
+    if (projectKey != null) {
+      json[r'projectKey'] = projectKey;
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  ServiceDeskDTO copyWith(
+      {String? id,
+      String? projectId,
+      String? projectName,
+      String? projectKey,
+      SelfLinkDTO? links}) {
+    return ServiceDeskDTO(
+      id: id ?? this.id,
+      projectId: projectId ?? this.projectId,
+      projectName: projectName ?? this.projectName,
+      projectKey: projectKey ?? this.projectKey,
+      links: links ?? this.links,
+    );
+  }
+}
+
+/// Details about the operations available in this version.
+class SimpleLink {
+  final String? id;
+  final String? styleClass;
+  final String? iconClass;
+  final String? label;
+  final String? title;
+  final String? href;
+  final int? weight;
+
+  SimpleLink(
+      {this.id,
+      this.styleClass,
+      this.iconClass,
+      this.label,
+      this.title,
+      this.href,
+      this.weight});
+
+  factory SimpleLink.fromJson(Map<String, Object?> json) {
+    return SimpleLink(
+      id: json[r'id'] as String?,
+      styleClass: json[r'styleClass'] as String?,
+      iconClass: json[r'iconClass'] as String?,
+      label: json[r'label'] as String?,
+      title: json[r'title'] as String?,
+      href: json[r'href'] as String?,
+      weight: (json[r'weight'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var styleClass = this.styleClass;
+    var iconClass = this.iconClass;
+    var label = this.label;
+    var title = this.title;
+    var href = this.href;
+    var weight = this.weight;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (styleClass != null) {
+      json[r'styleClass'] = styleClass;
+    }
+    if (iconClass != null) {
+      json[r'iconClass'] = iconClass;
+    }
+    if (label != null) {
+      json[r'label'] = label;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (href != null) {
+      json[r'href'] = href;
+    }
+    if (weight != null) {
+      json[r'weight'] = weight;
+    }
+    return json;
+  }
+
+  SimpleLink copyWith(
+      {String? id,
+      String? styleClass,
+      String? iconClass,
+      String? label,
+      String? title,
+      String? href,
+      int? weight}) {
+    return SimpleLink(
+      id: id ?? this.id,
+      styleClass: styleClass ?? this.styleClass,
+      iconClass: iconClass ?? this.iconClass,
+      label: label ?? this.label,
+      title: title ?? this.title,
+      href: href ?? this.href,
+      weight: weight ?? this.weight,
+    );
+  }
+}
+
+class SlaInformationCompletedCycleDTO {
+  /// Time and date at which the SLA cycle started.
+  final DateDTO? startTime;
+
+  /// Time and date at which the SLA cycle completed.
+  final DateDTO? stopTime;
+
+  /// Indicates if the SLA (duration) was exceeded (true) or not (false).
+  final bool breached;
+
+  /// Duration within which the service should have been completed.
+  final DurationDTO? goalDuration;
+
+  /// Duration in which the service was completed.
+  final DurationDTO? elapsedTime;
+
+  /// Duration remaining after the service was completed.
+  final DurationDTO? remainingTime;
+
+  SlaInformationCompletedCycleDTO(
+      {this.startTime,
+      this.stopTime,
+      bool? breached,
+      this.goalDuration,
+      this.elapsedTime,
+      this.remainingTime})
+      : breached = breached ?? false;
+
+  factory SlaInformationCompletedCycleDTO.fromJson(Map<String, Object?> json) {
+    return SlaInformationCompletedCycleDTO(
+      startTime: json[r'startTime'] != null
+          ? DateDTO.fromJson(json[r'startTime']! as Map<String, Object?>)
+          : null,
+      stopTime: json[r'stopTime'] != null
+          ? DateDTO.fromJson(json[r'stopTime']! as Map<String, Object?>)
+          : null,
+      breached: json[r'breached'] as bool? ?? false,
+      goalDuration: json[r'goalDuration'] != null
+          ? DurationDTO.fromJson(json[r'goalDuration']! as Map<String, Object?>)
+          : null,
+      elapsedTime: json[r'elapsedTime'] != null
+          ? DurationDTO.fromJson(json[r'elapsedTime']! as Map<String, Object?>)
+          : null,
+      remainingTime: json[r'remainingTime'] != null
+          ? DurationDTO.fromJson(
+              json[r'remainingTime']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var startTime = this.startTime;
+    var stopTime = this.stopTime;
+    var breached = this.breached;
+    var goalDuration = this.goalDuration;
+    var elapsedTime = this.elapsedTime;
+    var remainingTime = this.remainingTime;
+
+    final json = <String, Object?>{};
+    if (startTime != null) {
+      json[r'startTime'] = startTime.toJson();
+    }
+    if (stopTime != null) {
+      json[r'stopTime'] = stopTime.toJson();
+    }
+    json[r'breached'] = breached;
+    if (goalDuration != null) {
+      json[r'goalDuration'] = goalDuration.toJson();
+    }
+    if (elapsedTime != null) {
+      json[r'elapsedTime'] = elapsedTime.toJson();
+    }
+    if (remainingTime != null) {
+      json[r'remainingTime'] = remainingTime.toJson();
+    }
+    return json;
+  }
+
+  SlaInformationCompletedCycleDTO copyWith(
+      {DateDTO? startTime,
+      DateDTO? stopTime,
+      bool? breached,
+      DurationDTO? goalDuration,
+      DurationDTO? elapsedTime,
+      DurationDTO? remainingTime}) {
+    return SlaInformationCompletedCycleDTO(
+      startTime: startTime ?? this.startTime,
+      stopTime: stopTime ?? this.stopTime,
+      breached: breached ?? this.breached,
+      goalDuration: goalDuration ?? this.goalDuration,
+      elapsedTime: elapsedTime ?? this.elapsedTime,
+      remainingTime: remainingTime ?? this.remainingTime,
+    );
+  }
+}
+
+class SlaInformationDTO {
+  /// ID of the Service Level Agreement (SLA).
+  final String? id;
+
+  /// Description of the SLA.
+  final String? name;
+
+  /// List of completed cycles for the SLA.
+  final List<SlaInformationCompletedCycleDTO> completedCycles;
+
+  /// Details of the active cycle for the SLA.
+  final SlaInformationOngoingCycleDTO? ongoingCycle;
+
+  /// REST API URL for the SLA.
+  final SelfLinkDTO? links;
+
+  SlaInformationDTO(
+      {this.id,
+      this.name,
+      List<SlaInformationCompletedCycleDTO>? completedCycles,
+      this.ongoingCycle,
+      this.links})
+      : completedCycles = completedCycles ?? [];
+
+  factory SlaInformationDTO.fromJson(Map<String, Object?> json) {
+    return SlaInformationDTO(
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      completedCycles: (json[r'completedCycles'] as List<Object?>?)
+              ?.map((i) => SlaInformationCompletedCycleDTO.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      ongoingCycle: json[r'ongoingCycle'] != null
+          ? SlaInformationOngoingCycleDTO.fromJson(
+              json[r'ongoingCycle']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+    var completedCycles = this.completedCycles;
+    var ongoingCycle = this.ongoingCycle;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    json[r'completedCycles'] = completedCycles.map((i) => i.toJson()).toList();
+    if (ongoingCycle != null) {
+      json[r'ongoingCycle'] = ongoingCycle.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  SlaInformationDTO copyWith(
+      {String? id,
+      String? name,
+      List<SlaInformationCompletedCycleDTO>? completedCycles,
+      SlaInformationOngoingCycleDTO? ongoingCycle,
+      SelfLinkDTO? links}) {
+    return SlaInformationDTO(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      completedCycles: completedCycles ?? this.completedCycles,
+      ongoingCycle: ongoingCycle ?? this.ongoingCycle,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class SlaInformationOngoingCycleDTO {
+  /// Time and date at which the SLA cycle started.
+  final DateDTO? startTime;
+
+  /// Time and date at which the SLA cycle would have breached its limit.
+  final DateDTO? breachTime;
+
+  /// Indicates whether the SLA has been breached (true) or not (false).
+  final bool breached;
+
+  /// Indicates whether the SLA is paused (true) or not (false).
+  final bool paused;
+
+  /// Indicates whether the SLA it timed during calendared working hours only
+  /// (true) or not (false).
+  final bool withinCalendarHours;
+
+  /// Duration within which the service should be completed.
+  final DurationDTO? goalDuration;
+
+  /// Duration of the service.
+  final DurationDTO? elapsedTime;
+
+  /// Duration remaining in which to complete the service.
+  final DurationDTO? remainingTime;
+
+  SlaInformationOngoingCycleDTO(
+      {this.startTime,
+      this.breachTime,
+      bool? breached,
+      bool? paused,
+      bool? withinCalendarHours,
+      this.goalDuration,
+      this.elapsedTime,
+      this.remainingTime})
+      : breached = breached ?? false,
+        paused = paused ?? false,
+        withinCalendarHours = withinCalendarHours ?? false;
+
+  factory SlaInformationOngoingCycleDTO.fromJson(Map<String, Object?> json) {
+    return SlaInformationOngoingCycleDTO(
+      startTime: json[r'startTime'] != null
+          ? DateDTO.fromJson(json[r'startTime']! as Map<String, Object?>)
+          : null,
+      breachTime: json[r'breachTime'] != null
+          ? DateDTO.fromJson(json[r'breachTime']! as Map<String, Object?>)
+          : null,
+      breached: json[r'breached'] as bool? ?? false,
+      paused: json[r'paused'] as bool? ?? false,
+      withinCalendarHours: json[r'withinCalendarHours'] as bool? ?? false,
+      goalDuration: json[r'goalDuration'] != null
+          ? DurationDTO.fromJson(json[r'goalDuration']! as Map<String, Object?>)
+          : null,
+      elapsedTime: json[r'elapsedTime'] != null
+          ? DurationDTO.fromJson(json[r'elapsedTime']! as Map<String, Object?>)
+          : null,
+      remainingTime: json[r'remainingTime'] != null
+          ? DurationDTO.fromJson(
+              json[r'remainingTime']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var startTime = this.startTime;
+    var breachTime = this.breachTime;
+    var breached = this.breached;
+    var paused = this.paused;
+    var withinCalendarHours = this.withinCalendarHours;
+    var goalDuration = this.goalDuration;
+    var elapsedTime = this.elapsedTime;
+    var remainingTime = this.remainingTime;
+
+    final json = <String, Object?>{};
+    if (startTime != null) {
+      json[r'startTime'] = startTime.toJson();
+    }
+    if (breachTime != null) {
+      json[r'breachTime'] = breachTime.toJson();
+    }
+    json[r'breached'] = breached;
+    json[r'paused'] = paused;
+    json[r'withinCalendarHours'] = withinCalendarHours;
+    if (goalDuration != null) {
+      json[r'goalDuration'] = goalDuration.toJson();
+    }
+    if (elapsedTime != null) {
+      json[r'elapsedTime'] = elapsedTime.toJson();
+    }
+    if (remainingTime != null) {
+      json[r'remainingTime'] = remainingTime.toJson();
+    }
+    return json;
+  }
+
+  SlaInformationOngoingCycleDTO copyWith(
+      {DateDTO? startTime,
+      DateDTO? breachTime,
+      bool? breached,
+      bool? paused,
+      bool? withinCalendarHours,
+      DurationDTO? goalDuration,
+      DurationDTO? elapsedTime,
+      DurationDTO? remainingTime}) {
+    return SlaInformationOngoingCycleDTO(
+      startTime: startTime ?? this.startTime,
+      breachTime: breachTime ?? this.breachTime,
+      breached: breached ?? this.breached,
+      paused: paused ?? this.paused,
+      withinCalendarHours: withinCalendarHours ?? this.withinCalendarHours,
+      goalDuration: goalDuration ?? this.goalDuration,
+      elapsedTime: elapsedTime ?? this.elapsedTime,
+      remainingTime: remainingTime ?? this.remainingTime,
+    );
+  }
+}
+
 class SoftwareInfoDTO {
   /// Jira Service Management version.
   final String? version;
@@ -8406,126 +7917,211 @@ class SoftwareInfoDTO {
   }
 }
 
-class RequestTypeCreateDTO {
-  /// ID of the request type to add to the service desk.
-  final String? issueTypeId;
+class SourceDTO {
+  /// Type of the knowledge base source
+  final SourceDTOType? type;
 
-  /// Name of the request type on the service desk.
-  final String? name;
+  SourceDTO({this.type});
 
-  /// Description of the request type on the service desk.
-  final String? description;
-
-  /// Help text for the request type on the service desk.
-  final String? helpText;
-
-  RequestTypeCreateDTO(
-      {this.issueTypeId, this.name, this.description, this.helpText});
-
-  factory RequestTypeCreateDTO.fromJson(Map<String, Object?> json) {
-    return RequestTypeCreateDTO(
-      issueTypeId: json[r'issueTypeId'] as String?,
-      name: json[r'name'] as String?,
-      description: json[r'description'] as String?,
-      helpText: json[r'helpText'] as String?,
+  factory SourceDTO.fromJson(Map<String, Object?> json) {
+    return SourceDTO(
+      type: json[r'type'] != null
+          ? SourceDTOType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
   Map<String, Object?> toJson() {
-    var issueTypeId = this.issueTypeId;
-    var name = this.name;
-    var description = this.description;
-    var helpText = this.helpText;
+    var type = this.type;
 
     final json = <String, Object?>{};
-    if (issueTypeId != null) {
-      json[r'issueTypeId'] = issueTypeId;
+    if (type != null) {
+      json[r'type'] = type.value;
+    }
+    return json;
+  }
+
+  SourceDTO copyWith({SourceDTOType? type}) {
+    return SourceDTO(
+      type: type ?? this.type,
+    );
+  }
+}
+
+class SourceDTOType {
+  static const confluence = SourceDTOType._('confluence');
+
+  static const values = [
+    confluence,
+  ];
+  final String value;
+
+  const SourceDTOType._(this.value);
+
+  static SourceDTOType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => SourceDTOType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// A status category.
+class StatusCategory {
+  /// The URL of the status category.
+  final String? self;
+
+  /// The ID of the status category.
+  final int? id;
+
+  /// The key of the status category.
+  final String? key;
+
+  /// The name of the color used to represent the status category.
+  final String? colorName;
+
+  /// The name of the status category.
+  final String? name;
+
+  StatusCategory({this.self, this.id, this.key, this.colorName, this.name});
+
+  factory StatusCategory.fromJson(Map<String, Object?> json) {
+    return StatusCategory(
+      self: json[r'self'] as String?,
+      id: (json[r'id'] as num?)?.toInt(),
+      key: json[r'key'] as String?,
+      colorName: json[r'colorName'] as String?,
+      name: json[r'name'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var self = this.self;
+    var id = this.id;
+    var key = this.key;
+    var colorName = this.colorName;
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    if (colorName != null) {
+      json[r'colorName'] = colorName;
     }
     if (name != null) {
       json[r'name'] = name;
     }
+    return json;
+  }
+
+  StatusCategory copyWith(
+      {String? self, int? id, String? key, String? colorName, String? name}) {
+    return StatusCategory(
+      self: self ?? this.self,
+      id: id ?? this.id,
+      key: key ?? this.key,
+      colorName: colorName ?? this.colorName,
+      name: name ?? this.name,
+    );
+  }
+}
+
+/// A status.
+class StatusDetails {
+  /// The URL of the status.
+  final String? self;
+
+  /// The description of the status.
+  final String? description;
+
+  /// The URL of the icon used to represent the status.
+  final String? iconUrl;
+
+  /// The name of the status.
+  final String? name;
+
+  /// The ID of the status.
+  final String? id;
+
+  /// The category assigned to the status.
+  final StatusCategory? statusCategory;
+
+  StatusDetails(
+      {this.self,
+      this.description,
+      this.iconUrl,
+      this.name,
+      this.id,
+      this.statusCategory});
+
+  factory StatusDetails.fromJson(Map<String, Object?> json) {
+    return StatusDetails(
+      self: json[r'self'] as String?,
+      description: json[r'description'] as String?,
+      iconUrl: json[r'iconUrl'] as String?,
+      name: json[r'name'] as String?,
+      id: json[r'id'] as String?,
+      statusCategory: json[r'statusCategory'] != null
+          ? StatusCategory.fromJson(
+              json[r'statusCategory']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var self = this.self;
+    var description = this.description;
+    var iconUrl = this.iconUrl;
+    var name = this.name;
+    var id = this.id;
+    var statusCategory = this.statusCategory;
+
+    final json = <String, Object?>{};
+    if (self != null) {
+      json[r'self'] = self;
+    }
     if (description != null) {
       json[r'description'] = description;
     }
-    if (helpText != null) {
-      json[r'helpText'] = helpText;
+    if (iconUrl != null) {
+      json[r'iconUrl'] = iconUrl;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (statusCategory != null) {
+      json[r'statusCategory'] = statusCategory.toJson();
     }
     return json;
   }
 
-  RequestTypeCreateDTO copyWith(
-      {String? issueTypeId,
-      String? name,
+  StatusDetails copyWith(
+      {String? self,
       String? description,
-      String? helpText}) {
-    return RequestTypeCreateDTO(
-      issueTypeId: issueTypeId ?? this.issueTypeId,
-      name: name ?? this.name,
+      String? iconUrl,
+      String? name,
+      String? id,
+      StatusCategory? statusCategory}) {
+    return StatusDetails(
+      self: self ?? this.self,
       description: description ?? this.description,
-      helpText: helpText ?? this.helpText,
-    );
-  }
-}
-
-class OrganizationServiceDeskUpdateDTO {
-  /// List of organizations, specified by 'ID' field values, to add to or remove
-  /// from the service desk.
-  final int? organizationId;
-
-  OrganizationServiceDeskUpdateDTO({this.organizationId});
-
-  factory OrganizationServiceDeskUpdateDTO.fromJson(Map<String, Object?> json) {
-    return OrganizationServiceDeskUpdateDTO(
-      organizationId: (json[r'organizationId'] as num?)?.toInt(),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var organizationId = this.organizationId;
-
-    final json = <String, Object?>{};
-    if (organizationId != null) {
-      json[r'organizationId'] = organizationId;
-    }
-    return json;
-  }
-
-  OrganizationServiceDeskUpdateDTO copyWith({int? organizationId}) {
-    return OrganizationServiceDeskUpdateDTO(
-      organizationId: organizationId ?? this.organizationId,
-    );
-  }
-}
-
-class TemporaryAttachments {
-  final List<TemporaryAttachment> temporaryAttachments;
-
-  TemporaryAttachments({List<TemporaryAttachment>? temporaryAttachments})
-      : temporaryAttachments = temporaryAttachments ?? [];
-
-  factory TemporaryAttachments.fromJson(Map<String, Object?> json) {
-    return TemporaryAttachments(
-      temporaryAttachments: (json[r'temporaryAttachments'] as List<Object?>?)
-              ?.map((i) => TemporaryAttachment.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var temporaryAttachments = this.temporaryAttachments;
-
-    final json = <String, Object?>{};
-    json[r'temporaryAttachments'] =
-        temporaryAttachments.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  TemporaryAttachments copyWith(
-      {List<TemporaryAttachment>? temporaryAttachments}) {
-    return TemporaryAttachments(
-      temporaryAttachments: temporaryAttachments ?? this.temporaryAttachments,
+      iconUrl: iconUrl ?? this.iconUrl,
+      name: name ?? this.name,
+      id: id ?? this.id,
+      statusCategory: statusCategory ?? this.statusCategory,
     );
   }
 }
@@ -8563,6 +8159,410 @@ class TemporaryAttachment {
       temporaryAttachmentId:
           temporaryAttachmentId ?? this.temporaryAttachmentId,
       fileName: fileName ?? this.fileName,
+    );
+  }
+}
+
+class TemporaryAttachments {
+  final List<TemporaryAttachment> temporaryAttachments;
+
+  TemporaryAttachments({List<TemporaryAttachment>? temporaryAttachments})
+      : temporaryAttachments = temporaryAttachments ?? [];
+
+  factory TemporaryAttachments.fromJson(Map<String, Object?> json) {
+    return TemporaryAttachments(
+      temporaryAttachments: (json[r'temporaryAttachments'] as List<Object?>?)
+              ?.map((i) => TemporaryAttachment.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var temporaryAttachments = this.temporaryAttachments;
+
+    final json = <String, Object?>{};
+    json[r'temporaryAttachments'] =
+        temporaryAttachments.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  TemporaryAttachments copyWith(
+      {List<TemporaryAttachment>? temporaryAttachments}) {
+    return TemporaryAttachments(
+      temporaryAttachments: temporaryAttachments ?? this.temporaryAttachments,
+    );
+  }
+}
+
+class UserDTO {
+  /// The accountId of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
+  final String? accountId;
+
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
+  final String? name;
+
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
+  final String? key;
+
+  /// Customer's email address. Depending on the customer’s privacy settings,
+  /// this may be returned as null.
+  final String? emailAddress;
+
+  /// Customer's name for display in a UI. Depending on the customer’s privacy
+  /// settings, this may return an alternative value.
+  final String? displayName;
+
+  /// Indicates if the customer is active (true) or inactive (false)
+  final bool active;
+
+  /// Customer time zone. Depending on the customer’s privacy settings, this may
+  /// be returned as null.
+  final String? timeZone;
+
+  /// URLs for the customer record and related items.
+  final UserLinkDTO? links;
+
+  UserDTO(
+      {this.accountId,
+      this.name,
+      this.key,
+      this.emailAddress,
+      this.displayName,
+      bool? active,
+      this.timeZone,
+      this.links})
+      : active = active ?? false;
+
+  factory UserDTO.fromJson(Map<String, Object?> json) {
+    return UserDTO(
+      accountId: json[r'accountId'] as String?,
+      name: json[r'name'] as String?,
+      key: json[r'key'] as String?,
+      emailAddress: json[r'emailAddress'] as String?,
+      displayName: json[r'displayName'] as String?,
+      active: json[r'active'] as bool? ?? false,
+      timeZone: json[r'timeZone'] as String?,
+      links: json[r'_links'] != null
+          ? UserLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var accountId = this.accountId;
+    var name = this.name;
+    var key = this.key;
+    var emailAddress = this.emailAddress;
+    var displayName = this.displayName;
+    var active = this.active;
+    var timeZone = this.timeZone;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (accountId != null) {
+      json[r'accountId'] = accountId;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    if (emailAddress != null) {
+      json[r'emailAddress'] = emailAddress;
+    }
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
+    json[r'active'] = active;
+    if (timeZone != null) {
+      json[r'timeZone'] = timeZone;
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  UserDTO copyWith(
+      {String? accountId,
+      String? name,
+      String? key,
+      String? emailAddress,
+      String? displayName,
+      bool? active,
+      String? timeZone,
+      UserLinkDTO? links}) {
+    return UserDTO(
+      accountId: accountId ?? this.accountId,
+      name: name ?? this.name,
+      key: key ?? this.key,
+      emailAddress: emailAddress ?? this.emailAddress,
+      displayName: displayName ?? this.displayName,
+      active: active ?? this.active,
+      timeZone: timeZone ?? this.timeZone,
+      links: links ?? this.links,
+    );
+  }
+}
+
+/// User details permitted by the user's Atlassian Account privacy settings.
+/// However, be aware of these exceptions:
+///
+///  *  User record deleted from Atlassian: This occurs as the result of a right
+/// to be forgotten request. In this case, `displayName` provides an indication
+/// and other parameters have default values or are blank (for example, email is
+/// blank).
+///  *  User record corrupted: This occurs as a results of events such as a
+/// server import and can only happen to deleted users. In this case,
+/// `accountId` returns *unknown* and all other parameters have fallback values.
+///  *  User record unavailable: This usually occurs due to an internal service
+/// outage. In this case, all parameters have fallback values.
+class UserDetails {
+  /// The URL of the user.
+  final String? self;
+
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
+  final String? name;
+
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
+  final String? key;
+
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
+  final String? accountId;
+
+  /// The email address of the user. Depending on the user’s privacy settings,
+  /// this may be returned as null.
+  final String? emailAddress;
+
+  /// The avatars of the user.
+  final AvatarUrlsBean? avatarUrls;
+
+  /// The display name of the user. Depending on the user’s privacy settings,
+  /// this may return an alternative value.
+  final String? displayName;
+
+  /// Whether the user is active.
+  final bool active;
+
+  /// The time zone specified in the user's profile. Depending on the user’s
+  /// privacy settings, this may be returned as null.
+  final String? timeZone;
+
+  /// The type of account represented by this user. This will be one of
+  /// 'atlassian' (normal users), 'app' (application user) or 'customer' (Jira
+  /// Service Desk customer user)
+  final String? accountType;
+
+  UserDetails(
+      {this.self,
+      this.name,
+      this.key,
+      this.accountId,
+      this.emailAddress,
+      this.avatarUrls,
+      this.displayName,
+      bool? active,
+      this.timeZone,
+      this.accountType})
+      : active = active ?? false;
+
+  factory UserDetails.fromJson(Map<String, Object?> json) {
+    return UserDetails(
+      self: json[r'self'] as String?,
+      name: json[r'name'] as String?,
+      key: json[r'key'] as String?,
+      accountId: json[r'accountId'] as String?,
+      emailAddress: json[r'emailAddress'] as String?,
+      avatarUrls: json[r'avatarUrls'] != null
+          ? AvatarUrlsBean.fromJson(
+              json[r'avatarUrls']! as Map<String, Object?>)
+          : null,
+      displayName: json[r'displayName'] as String?,
+      active: json[r'active'] as bool? ?? false,
+      timeZone: json[r'timeZone'] as String?,
+      accountType: json[r'accountType'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var self = this.self;
+    var name = this.name;
+    var key = this.key;
+    var accountId = this.accountId;
+    var emailAddress = this.emailAddress;
+    var avatarUrls = this.avatarUrls;
+    var displayName = this.displayName;
+    var active = this.active;
+    var timeZone = this.timeZone;
+    var accountType = this.accountType;
+
+    final json = <String, Object?>{};
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    if (accountId != null) {
+      json[r'accountId'] = accountId;
+    }
+    if (emailAddress != null) {
+      json[r'emailAddress'] = emailAddress;
+    }
+    if (avatarUrls != null) {
+      json[r'avatarUrls'] = avatarUrls.toJson();
+    }
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
+    json[r'active'] = active;
+    if (timeZone != null) {
+      json[r'timeZone'] = timeZone;
+    }
+    if (accountType != null) {
+      json[r'accountType'] = accountType;
+    }
+    return json;
+  }
+
+  UserDetails copyWith(
+      {String? self,
+      String? name,
+      String? key,
+      String? accountId,
+      String? emailAddress,
+      AvatarUrlsBean? avatarUrls,
+      String? displayName,
+      bool? active,
+      String? timeZone,
+      String? accountType}) {
+    return UserDetails(
+      self: self ?? this.self,
+      name: name ?? this.name,
+      key: key ?? this.key,
+      accountId: accountId ?? this.accountId,
+      emailAddress: emailAddress ?? this.emailAddress,
+      avatarUrls: avatarUrls ?? this.avatarUrls,
+      displayName: displayName ?? this.displayName,
+      active: active ?? this.active,
+      timeZone: timeZone ?? this.timeZone,
+      accountType: accountType ?? this.accountType,
+    );
+  }
+}
+
+class UserLinkDTO {
+  final String? self;
+
+  /// REST API URL for the customer.
+  final String? jiraRest;
+
+  /// Links to the various sizes of the customer's avatar. Note that this
+  /// property is deprecated, and will be removed in future versions.
+  final Map<String, dynamic>? avatarUrls;
+
+  UserLinkDTO({this.self, this.jiraRest, this.avatarUrls});
+
+  factory UserLinkDTO.fromJson(Map<String, Object?> json) {
+    return UserLinkDTO(
+      self: json[r'self'] as String?,
+      jiraRest: json[r'jiraRest'] as String?,
+      avatarUrls: json[r'avatarUrls'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var self = this.self;
+    var jiraRest = this.jiraRest;
+    var avatarUrls = this.avatarUrls;
+
+    final json = <String, Object?>{};
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (jiraRest != null) {
+      json[r'jiraRest'] = jiraRest;
+    }
+    if (avatarUrls != null) {
+      json[r'avatarUrls'] = avatarUrls;
+    }
+    return json;
+  }
+
+  UserLinkDTO copyWith(
+      {String? self, String? jiraRest, Map<String, dynamic>? avatarUrls}) {
+    return UserLinkDTO(
+      self: self ?? this.self,
+      jiraRest: jiraRest ?? this.jiraRest,
+      avatarUrls: avatarUrls ?? this.avatarUrls,
+    );
+  }
+}
+
+class UsersOrganizationUpdateDTO {
+  /// This property is no longer available and will be removed from the
+  /// documentation soon. See the
+  /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details. Use `accountIds` instead.
+  final List<String> usernames;
+
+  /// List of customers, specific by account IDs, to add to or remove from the
+  /// organization.
+  final List<String> accountIds;
+
+  UsersOrganizationUpdateDTO(
+      {List<String>? usernames, List<String>? accountIds})
+      : usernames = usernames ?? [],
+        accountIds = accountIds ?? [];
+
+  factory UsersOrganizationUpdateDTO.fromJson(Map<String, Object?> json) {
+    return UsersOrganizationUpdateDTO(
+      usernames: (json[r'usernames'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      accountIds: (json[r'accountIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var usernames = this.usernames;
+    var accountIds = this.accountIds;
+
+    final json = <String, Object?>{};
+    json[r'usernames'] = usernames;
+    json[r'accountIds'] = accountIds;
+    return json;
+  }
+
+  UsersOrganizationUpdateDTO copyWith(
+      {List<String>? usernames, List<String>? accountIds}) {
+    return UsersOrganizationUpdateDTO(
+      usernames: usernames ?? this.usernames,
+      accountIds: accountIds ?? this.accountIds,
     );
   }
 }
