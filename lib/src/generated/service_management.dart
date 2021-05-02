@@ -3941,20 +3941,24 @@ class I18nErrorMessage {
 }
 
 class IncludedFields {
+  final List<String> excluded;
   final List<String> included;
   final List<String> actuallyIncluded;
-  final List<String> excluded;
 
   IncludedFields(
-      {List<String>? included,
-      List<String>? actuallyIncluded,
-      List<String>? excluded})
-      : included = included ?? [],
-        actuallyIncluded = actuallyIncluded ?? [],
-        excluded = excluded ?? [];
+      {List<String>? excluded,
+      List<String>? included,
+      List<String>? actuallyIncluded})
+      : excluded = excluded ?? [],
+        included = included ?? [],
+        actuallyIncluded = actuallyIncluded ?? [];
 
   factory IncludedFields.fromJson(Map<String, Object?> json) {
     return IncludedFields(
+      excluded: (json[r'excluded'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
       included: (json[r'included'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -3963,33 +3967,29 @@ class IncludedFields {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      excluded: (json[r'excluded'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
     );
   }
 
   Map<String, Object?> toJson() {
+    var excluded = this.excluded;
     var included = this.included;
     var actuallyIncluded = this.actuallyIncluded;
-    var excluded = this.excluded;
 
     final json = <String, Object?>{};
+    json[r'excluded'] = excluded;
     json[r'included'] = included;
     json[r'actuallyIncluded'] = actuallyIncluded;
-    json[r'excluded'] = excluded;
     return json;
   }
 
   IncludedFields copyWith(
-      {List<String>? included,
-      List<String>? actuallyIncluded,
-      List<String>? excluded}) {
+      {List<String>? excluded,
+      List<String>? included,
+      List<String>? actuallyIncluded}) {
     return IncludedFields(
+      excluded: excluded ?? this.excluded,
       included: included ?? this.included,
       actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
-      excluded: excluded ?? this.excluded,
     );
   }
 }

@@ -894,6 +894,7 @@ class ContentChildrenAndDescendantsApi {
   Future<ContentArray> descendantsOfType(
       {required String id,
       required String type,
+      String? depth,
       List<String>? expand,
       int? start,
       int? limit}) async {
@@ -905,6 +906,7 @@ class ContentChildrenAndDescendantsApi {
         'type': type,
       },
       queryParameters: {
+        if (depth != null) 'depth': depth,
         if (expand != null) 'expand': '$expand',
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
@@ -2970,6 +2972,23 @@ class SettingsApi {
       queryParameters: {
         if (spaceKey != null) 'spaceKey': spaceKey,
       },
+    ));
+  }
+
+  /// Sets the look and feel settings to the default (global) settings, the
+  /// custom settings, or the current theme's settings for a space.
+  /// The custom and theme settings can only be selected if there is already
+  /// a theme set for a space. Note, the default space settings are inherited
+  /// from the current global settings.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Admin' permission for the space.
+  Future<LookAndFeelSelection> updateLookAndFeel(
+      {required LookAndFeelSelection body}) async {
+    return LookAndFeelSelection.fromJson(await _client.send(
+      'put',
+      'api/settings/lookandfeel',
+      body: body.toJson(),
     ));
   }
 
@@ -6895,8 +6914,20 @@ class ContentCreate {
   /// The status of the new content.
   final ContentCreateStatus? status;
 
-  /// The parent content of the new content. Only one parent content
-  /// `id` can be specified.
+  /// The container of the content. Required if type is `comment` or certain
+  /// types of
+  /// custom content. If you are trying to create a comment that is a child of
+  /// another comment,
+  /// specify the parent comment in the ancestors field, not in this field.
+  final ContentCreateContainer? container;
+
+  /// The parent content of the new content.  If you are creating a top-level
+  /// `page` or `comment`,
+  /// this can be left blank. If you are creating a child page, this is where
+  /// the parent page id goes.
+  /// If you are creating a child comment, this is where the parent comment id
+  /// goes. Only one parent
+  /// content id can be specified.
   final List<ContentCreateAncestorsItem> ancestors;
 
   /// The body of the new content. Does not apply to attachments.
@@ -6915,6 +6946,7 @@ class ContentCreate {
       required this.type,
       required this.space,
       this.status,
+      this.container,
       List<ContentCreateAncestorsItem>? ancestors,
       required this.body})
       : ancestors = ancestors ?? [];
@@ -6928,6 +6960,10 @@ class ContentCreate {
           json[r'space'] as Map<String, Object?>? ?? const {}),
       status: json[r'status'] != null
           ? ContentCreateStatus.fromValue(json[r'status']! as String)
+          : null,
+      container: json[r'container'] != null
+          ? ContentCreateContainer.fromJson(
+              json[r'container']! as Map<String, Object?>)
           : null,
       ancestors: (json[r'ancestors'] as List<Object?>?)
               ?.map((i) => ContentCreateAncestorsItem.fromJson(
@@ -6945,6 +6981,7 @@ class ContentCreate {
     var type = this.type;
     var space = this.space;
     var status = this.status;
+    var container = this.container;
     var ancestors = this.ancestors;
     var body = this.body;
 
@@ -6958,6 +6995,9 @@ class ContentCreate {
     if (status != null) {
       json[r'status'] = status.value;
     }
+    if (container != null) {
+      json[r'container'] = container.toJson();
+    }
     json[r'ancestors'] = ancestors.map((i) => i.toJson()).toList();
     json[r'body'] = body.toJson();
     return json;
@@ -6969,6 +7009,7 @@ class ContentCreate {
       ContentCreateType? type,
       ContentCreateSpace? space,
       ContentCreateStatus? status,
+      ContentCreateContainer? container,
       List<ContentCreateAncestorsItem>? ancestors,
       ContentCreateBody? body}) {
     return ContentCreate(
@@ -6977,6 +7018,7 @@ class ContentCreate {
       type: type ?? this.type,
       space: space ?? this.space,
       status: status ?? this.status,
+      container: container ?? this.container,
       ancestors: ancestors ?? this.ancestors,
       body: body ?? this.body,
     );
@@ -6987,13 +7029,11 @@ class ContentCreateType {
   static const page = ContentCreateType._('page');
   static const blogpost = ContentCreateType._('blogpost');
   static const comment = ContentCreateType._('comment');
-  static const attachment = ContentCreateType._('attachment');
 
   static const values = [
     page,
     blogpost,
     comment,
-    attachment,
   ];
   final String value;
 
@@ -7159,6 +7199,45 @@ class ContentCreateBody {
       storage: storage ?? this.storage,
       editor2: editor2 ?? this.editor2,
       anonymousExportView: anonymousExportView ?? this.anonymousExportView,
+    );
+  }
+}
+
+/// The container of the content. Required if type is `comment` or certain types
+/// of
+/// custom content. If you are trying to create a comment that is a child of
+/// another comment,
+/// specify the parent comment in the ancestors field, not in this field.
+class ContentCreateContainer {
+  /// The `id` of the container.
+  final String id;
+
+  /// The `type` of the container.
+  final String type;
+
+  ContentCreateContainer({required this.id, required this.type});
+
+  factory ContentCreateContainer.fromJson(Map<String, Object?> json) {
+    return ContentCreateContainer(
+      id: json[r'id'] as String? ?? '',
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    json[r'type'] = type;
+    return json;
+  }
+
+  ContentCreateContainer copyWith({String? id, String? type}) {
+    return ContentCreateContainer(
+      id: id ?? this.id,
+      type: type ?? this.type,
     );
   }
 }
@@ -11128,6 +11207,68 @@ class LookAndFeelLinks {
       color: color ?? this.color,
     );
   }
+}
+
+/// Look and feel selection
+class LookAndFeelSelection {
+  /// The key of the space for which the look and feel settings will be
+  /// set.
+  final String spaceKey;
+  final LookAndFeelSelectionLookAndFeelType lookAndFeelType;
+
+  LookAndFeelSelection({required this.spaceKey, required this.lookAndFeelType});
+
+  factory LookAndFeelSelection.fromJson(Map<String, Object?> json) {
+    return LookAndFeelSelection(
+      spaceKey: json[r'spaceKey'] as String? ?? '',
+      lookAndFeelType: LookAndFeelSelectionLookAndFeelType.fromValue(
+          json[r'lookAndFeelType'] as String? ?? ''),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var spaceKey = this.spaceKey;
+    var lookAndFeelType = this.lookAndFeelType;
+
+    final json = <String, Object?>{};
+    json[r'spaceKey'] = spaceKey;
+    json[r'lookAndFeelType'] = lookAndFeelType.value;
+    return json;
+  }
+
+  LookAndFeelSelection copyWith(
+      {String? spaceKey,
+      LookAndFeelSelectionLookAndFeelType? lookAndFeelType}) {
+    return LookAndFeelSelection(
+      spaceKey: spaceKey ?? this.spaceKey,
+      lookAndFeelType: lookAndFeelType ?? this.lookAndFeelType,
+    );
+  }
+}
+
+class LookAndFeelSelectionLookAndFeelType {
+  static const global = LookAndFeelSelectionLookAndFeelType._('global');
+  static const custom = LookAndFeelSelectionLookAndFeelType._('custom');
+  static const theme = LookAndFeelSelectionLookAndFeelType._('theme');
+
+  static const values = [
+    global,
+    custom,
+    theme,
+  ];
+  final String value;
+
+  const LookAndFeelSelectionLookAndFeelType._(this.value);
+
+  static LookAndFeelSelectionLookAndFeelType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => LookAndFeelSelectionLookAndFeelType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 class LookAndFeelSettings {
