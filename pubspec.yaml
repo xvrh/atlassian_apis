@@ -11,9 +11,13 @@ dependencies:
   path: ^1.8.0
 
 dev_dependencies:
+  analyzer:
   build_runner:
+  collection:
   dart_style:
   json_annotation:
   json_serializable:
   pedantic:
+  pub_semver:
   test:
+  yaml:

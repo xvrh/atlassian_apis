@@ -9,7 +9,7 @@ packages:
     source: hosted
     version: "21.0.0"
   analyzer:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: analyzer
       url: "https://pub.dartlang.org"
@@ -121,7 +121,7 @@ packages:
     source: hosted
     version: "4.0.0"
   collection:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: collection
       url: "https://pub.dartlang.org"
@@ -303,7 +303,7 @@ packages:
     source: hosted
     version: "1.5.0"
   pub_semver:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: pub_semver
       url: "https://pub.dartlang.org"
@@ -471,7 +471,7 @@ packages:
     source: hosted
     version: "1.0.0"
   yaml:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: yaml
       url: "https://pub.dartlang.org"
