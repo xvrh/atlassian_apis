@@ -67,12 +67,23 @@ class Api {
       }
     }
 
+    // Search for top-level enum first
+    for (var definition in _spec.components.schemas.entries) {
+      var schema = definition.value;
+      if (schema.enums != null) {
+        var enumName = definition.key;
+        _topLevelEnums[enumName] = EnumDartType(this, null, enumName, schema);
+      }
+    }
+
     for (var definitionEntry in _spec.components.schemas.entries) {
       var definitionName = definitionEntry.key;
       var definition = definitionEntry.value;
 
-      _complexTypes.add(
-          ComplexType(this, _typeNameToDartType(definitionName), definition));
+      if (definition.type != 'string') {
+        _complexTypes.add(
+            ComplexType(this, _typeNameToDartType(definitionName), definition));
+      }
     }
   }
 
@@ -94,7 +105,13 @@ class Api {
         return typeFromSchema(response.content.entries.first.value.schema!);
       }
 
-      return parseDartType(ref.replaceAll('#/components/schemas/', ''));
+      var typeName = ref.replaceAll('#/components/schemas/', '');
+      var complexType = _spec.components.schemas[typeName]!;
+      if (const ['string'].contains(complexType.type)) {
+        return parseDartType(complexType.type!);
+      } else {
+        return parseDartType(typeName);
+      }
     } else if (type == 'array') {
       return ListDartType(this, typeFromSchema(schema.items!));
     } else if (type == 'object') {
@@ -165,7 +182,7 @@ import '../api_utils.dart';
 ''');
 
     var sortedTaggedServices =
-        _taggedServices.mergeSortedBy((e) => e.tag!.name);
+        _taggedServices.stableSortedBy((e) => e.tag!.name);
 
     if (_untaggedService == null) {
       buffer.writeln('''
@@ -203,11 +220,11 @@ class $className {
 
     var generatedClasses = <String>[];
     for (var topLevelEnum
-        in _topLevelEnums.values.mergeSortedBy((e) => e.name)) {
+        in _topLevelEnums.values.stableSortedBy((e) => e.name)) {
       buffer.writeln(topLevelEnum.toCode());
       buffer.writeln();
     }
-    for (var complexType in _complexTypes.mergeSortedBy((e) => e.className)) {
+    for (var complexType in _complexTypes.stableSortedBy((e) => e.className)) {
       if (!generatedClasses.contains(complexType.className)) {
         generatedClasses.add(complexType.className);
         buffer.writeln(complexType.toCode());
@@ -1088,7 +1105,7 @@ bool _isObsolete(String? comment) =>
     comment != null && comment.toLowerCase().contains('obsolete');
 
 extension<T> on Iterable<T> {
-  List<T> mergeSortedBy<K extends Comparable<K>>(K Function(T element) keyOf) {
+  List<T> stableSortedBy<K extends Comparable<K>>(K Function(T element) keyOf) {
     var elements = [...this];
     mergeSort(elements,
         compare: (a, b) => keyOf(a as T).compareTo(keyOf(b as T)));

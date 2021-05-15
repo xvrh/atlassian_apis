@@ -3852,6 +3852,33 @@ class UsersApi {
   }
 }
 
+class LabeledContentType {
+  static const page = LabeledContentType._('page');
+  static const blogpost = LabeledContentType._('blogpost');
+  static const attachment = LabeledContentType._('attachment');
+  static const pageTemplate = LabeledContentType._('page_template');
+
+  static const values = [
+    page,
+    blogpost,
+    attachment,
+    pageTemplate,
+  ];
+  final String value;
+
+  const LabeledContentType._(this.value);
+
+  static LabeledContentType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => LabeledContentType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 class AccountId {
   final String accountId;
 
@@ -7650,19 +7677,6 @@ class ContentHistoryExpandable {
   }
 }
 
-class ContentId {
-  ContentId();
-
-  factory ContentId.fromJson(Map<String, Object?> json) {
-    return ContentId();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
 class ContentLookAndFeel {
   final ScreenLookAndFeel screen;
   final ContainerLookAndFeel container;
@@ -9874,7 +9888,7 @@ class CopyPageHierarchyRequest {
 
   /// If set to `true`, custom contents are copied to the destination page.
   final bool copyCustomContents;
-  final ContentId destinationPageId;
+  final String destinationPageId;
   final CopyPageHierarchyTitleOptions? titleOptions;
 
   CopyPageHierarchyRequest(
@@ -9898,8 +9912,7 @@ class CopyPageHierarchyRequest {
       copyProperties: json[r'copyProperties'] as bool? ?? false,
       copyLabels: json[r'copyLabels'] as bool? ?? false,
       copyCustomContents: json[r'copyCustomContents'] as bool? ?? false,
-      destinationPageId: ContentId.fromJson(
-          json[r'destinationPageId'] as Map<String, Object?>? ?? const {}),
+      destinationPageId: json[r'destinationPageId'] as String? ?? '',
       titleOptions: json[r'titleOptions'] != null
           ? CopyPageHierarchyTitleOptions.fromJson(
               json[r'titleOptions']! as Map<String, Object?>)
@@ -9922,7 +9935,7 @@ class CopyPageHierarchyRequest {
     json[r'copyProperties'] = copyProperties;
     json[r'copyLabels'] = copyLabels;
     json[r'copyCustomContents'] = copyCustomContents;
-    json[r'destinationPageId'] = destinationPageId.toJson();
+    json[r'destinationPageId'] = destinationPageId;
     if (titleOptions != null) {
       json[r'titleOptions'] = titleOptions.toJson();
     }
@@ -9935,7 +9948,7 @@ class CopyPageHierarchyRequest {
       bool? copyProperties,
       bool? copyLabels,
       bool? copyCustomContents,
-      ContentId? destinationPageId,
+      String? destinationPageId,
       CopyPageHierarchyTitleOptions? titleOptions}) {
     return CopyPageHierarchyRequest(
       copyAttachments: copyAttachments ?? this.copyAttachments,
@@ -10778,7 +10791,7 @@ class LabelDetails {
 }
 
 class LabeledContent {
-  final LabeledContentType contentType;
+  final String contentType;
   final int contentId;
 
   /// Title of the content.
@@ -10791,8 +10804,7 @@ class LabeledContent {
 
   factory LabeledContent.fromJson(Map<String, Object?> json) {
     return LabeledContent(
-      contentType: LabeledContentType.fromJson(
-          json[r'contentType'] as Map<String, Object?>? ?? const {}),
+      contentType: json[r'contentType'] as String? ?? '',
       contentId: (json[r'contentId'] as num?)?.toInt() ?? 0,
       title: json[r'title'] as String? ?? '',
     );
@@ -10804,14 +10816,14 @@ class LabeledContent {
     var title = this.title;
 
     final json = <String, Object?>{};
-    json[r'contentType'] = contentType.toJson();
+    json[r'contentType'] = contentType;
     json[r'contentId'] = contentId;
     json[r'title'] = title;
     return json;
   }
 
   LabeledContent copyWith(
-      {LabeledContentType? contentType, int? contentId, String? title}) {
+      {String? contentType, int? contentId, String? title}) {
     return LabeledContent(
       contentType: contentType ?? this.contentType,
       contentId: contentId ?? this.contentId,
@@ -10868,19 +10880,6 @@ class LabeledContentPageResponse {
       limit: limit ?? this.limit,
       size: size ?? this.size,
     );
-  }
-}
-
-class LabeledContentType {
-  LabeledContentType();
-
-  factory LabeledContentType.fromJson(Map<String, Object?> json) {
-    return LabeledContentType();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
   }
 }
 

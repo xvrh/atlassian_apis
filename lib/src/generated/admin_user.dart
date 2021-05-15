@@ -12,12 +12,12 @@ class AdminUserApi {
   /// Returns the set of permissions you have for managing the specified
   /// Atlassian account
   Future<Map<String, dynamic>> getUserManagementPermissions(
-      {required AccountId accountId, List<String>? privileges}) async {
+      {required String accountId, List<String>? privileges}) async {
     return await _client.send(
       'get',
       'users/{account_id}/manage',
       pathParameters: {
-        'account_id': '$accountId',
+        'account_id': accountId,
       },
       queryParameters: {
         if (privileges != null) 'privileges': '$privileges',
@@ -26,12 +26,12 @@ class AdminUserApi {
   }
 
   /// Returns information about a single Atlassian account by ID
-  Future<Map<String, dynamic>> getProfile(AccountId accountId) async {
+  Future<Map<String, dynamic>> getProfile(String accountId) async {
     return await _client.send(
       'get',
       'users/{account_id}/manage/profile',
       pathParameters: {
-        'account_id': '$accountId',
+        'account_id': accountId,
       },
     ) as Map<String, Object?>;
   }
@@ -43,25 +43,24 @@ class AdminUserApi {
   /// privilege.
   /// This call invalidates all active sessions.
   Future<void> setEmail(
-      {required AccountId accountId,
-      required Map<String, dynamic> body}) async {
+      {required String accountId, required Map<String, dynamic> body}) async {
     await _client.send(
       'put',
       'users/{account_id}/manage/email',
       pathParameters: {
-        'account_id': '$accountId',
+        'account_id': accountId,
       },
       body: body,
     );
   }
 
   /// Gets the API tokens owned by the specified user.
-  Future<List<Map<String, dynamic>>> getAPITokens(AccountId accountId) async {
+  Future<List<Map<String, dynamic>>> getAPITokens(String accountId) async {
     return (await _client.send(
       'get',
       'users/{accountId}/manage/api-tokens',
       pathParameters: {
-        'account_id': '$accountId',
+        'account_id': accountId,
       },
     ) as List<Object?>)
         .map((i) => i as Map<String, Object?>? ?? {})
@@ -70,12 +69,12 @@ class AdminUserApi {
 
   /// Deletes a specifid API token by ID.
   Future<void> deleteAPIToken(
-      {required AccountId accountId, required String tokenId}) async {
+      {required String accountId, required String tokenId}) async {
     await _client.send(
       'delete',
       'users/{accountId}/manage/api-tokens/{tokenId}',
       pathParameters: {
-        'account_id': '$accountId',
+        'account_id': accountId,
         'tokenId': tokenId,
       },
     );
@@ -88,13 +87,12 @@ class AdminUserApi {
   /// shown to the user on attempted authentication. If none is supplied, a
   /// default message will be used.
   Future<void> disableAUser(
-      {required AccountId accountId,
-      required Map<String, dynamic> body}) async {
+      {required String accountId, required Map<String, dynamic> body}) async {
     await _client.send(
       'post',
       'users/{account_id}/manage/lifecycle/disable',
       pathParameters: {
-        'account_id': '$accountId',
+        'account_id': accountId,
       },
       body: body,
     );
@@ -106,15 +104,64 @@ class AdminUserApi {
   /// You can optionally set a message associated with the block that will be
   /// shown to the user on attempted authentication. If none is supplied, a
   /// default message will be used.
-  Future<void> enableAUser(AccountId accountId) async {
+  Future<void> enableAUser(String accountId) async {
     await _client.send(
       'post',
       'users/{account_id}/manage/lifecycle/enable',
       pathParameters: {
-        'account_id': '$accountId',
+        'account_id': accountId,
       },
     );
   }
+}
+
+class AccountStatus {
+  static const active = AccountStatus._('active');
+  static const inactive = AccountStatus._('inactive');
+  static const closed = AccountStatus._('closed');
+
+  static const values = [
+    active,
+    inactive,
+    closed,
+  ];
+  final String value;
+
+  const AccountStatus._(this.value);
+
+  static AccountStatus fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => AccountStatus._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class AccountType {
+  static const atlassian = AccountType._('atlassian');
+  static const customer = AccountType._('customer');
+  static const app = AccountType._('app');
+
+  static const values = [
+    atlassian,
+    customer,
+    app,
+  ];
+  final String value;
+
+  const AccountType._(this.value);
+
+  static AccountType fromValue(String value) => values
+      .firstWhere((e) => e.value == value, orElse: () => AccountType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 class AccountCharacteristics {
@@ -144,48 +191,6 @@ class AccountCharacteristics {
   }
 }
 
-/// A unique account identifier
-class AccountId {
-  AccountId();
-
-  factory AccountId.fromJson(Map<String, Object?> json) {
-    return AccountId();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-/// The lifecycle status of the account
-class AccountStatus {
-  AccountStatus();
-
-  factory AccountStatus.fromJson(Map<String, Object?> json) {
-    return AccountStatus();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-/// The type of account
-class AccountType {
-  AccountType();
-
-  factory AccountType.fromJson(Map<String, Object?> json) {
-    return AccountType();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
 class AtlassianAccountUser {
   AtlassianAccountUser();
 
@@ -199,77 +204,21 @@ class AtlassianAccountUser {
   }
 }
 
-/// The absolute URI (RFC3986) to the avatar name of the user.
-class Avatar {
-  Avatar();
-
-  factory Avatar.fromJson(Map<String, Object?> json) {
-    return Avatar();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-/// The department in which the user works
-class Department {
-  Department();
-
-  factory Department.fromJson(Map<String, Object?> json) {
-    return Department();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-/// The email address of the user.
-///
-/// _Constraints_
-/// - `partMaxLength`: The maximum length of the user part and of any
-///   subdomain is 255 characters.
-/// - `validCharacters`: Control and null characters are not allowed
-class Email {
-  Email();
-
-  factory Email.fromJson(Map<String, Object?> json) {
-    return Email();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
 class ExtendedProfile {
-  final JobTitle? jobTitle;
-  final Organization? organization;
-  final Department? department;
-  final Location? location;
+  final String? jobTitle;
+  final String? organization;
+  final String? department;
+  final String? location;
 
   ExtendedProfile(
       {this.jobTitle, this.organization, this.department, this.location});
 
   factory ExtendedProfile.fromJson(Map<String, Object?> json) {
     return ExtendedProfile(
-      jobTitle: json[r'job_title'] != null
-          ? JobTitle.fromJson(json[r'job_title']! as Map<String, Object?>)
-          : null,
-      organization: json[r'organization'] != null
-          ? Organization.fromJson(
-              json[r'organization']! as Map<String, Object?>)
-          : null,
-      department: json[r'department'] != null
-          ? Department.fromJson(json[r'department']! as Map<String, Object?>)
-          : null,
-      location: json[r'location'] != null
-          ? Location.fromJson(json[r'location']! as Map<String, Object?>)
-          : null,
+      jobTitle: json[r'job_title'] as String?,
+      organization: json[r'organization'] as String?,
+      department: json[r'department'] as String?,
+      location: json[r'location'] as String?,
     );
   }
 
@@ -281,73 +230,31 @@ class ExtendedProfile {
 
     final json = <String, Object?>{};
     if (jobTitle != null) {
-      json[r'job_title'] = jobTitle.toJson();
+      json[r'job_title'] = jobTitle;
     }
     if (organization != null) {
-      json[r'organization'] = organization.toJson();
+      json[r'organization'] = organization;
     }
     if (department != null) {
-      json[r'department'] = department.toJson();
+      json[r'department'] = department;
     }
     if (location != null) {
-      json[r'location'] = location.toJson();
+      json[r'location'] = location;
     }
     return json;
   }
 
   ExtendedProfile copyWith(
-      {JobTitle? jobTitle,
-      Organization? organization,
-      Department? department,
-      Location? location}) {
+      {String? jobTitle,
+      String? organization,
+      String? department,
+      String? location}) {
     return ExtendedProfile(
       jobTitle: jobTitle ?? this.jobTitle,
       organization: organization ?? this.organization,
       department: department ?? this.department,
       location: location ?? this.location,
     );
-  }
-}
-
-/// The job title of the user
-class JobTitle {
-  JobTitle();
-
-  factory JobTitle.fromJson(Map<String, Object?> json) {
-    return JobTitle();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-/// An IETF BCP 47 locale string
-class Locale {
-  Locale();
-
-  factory Locale.fromJson(Map<String, Object?> json) {
-    return Locale();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-/// The physical location of the user
-class Location {
-  Location();
-
-  factory Location.fromJson(Map<String, Object?> json) {
-    return Location();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
   }
 }
 
@@ -522,71 +429,6 @@ class ManageabilityUnallowed {
       allowed: allowed ?? this.allowed,
       reason: reason ?? this.reason,
     );
-  }
-}
-
-/// The display name of the user. Should be used for contextual rendering of
-/// content authorship.
-///
-/// _Constraints_
-/// - `maxLength`: The maximum display name length is 100 characters
-/// - `validCharacters`: Control and null characters are not allowed
-class Name {
-  Name();
-
-  factory Name.fromJson(Map<String, Object?> json) {
-    return Name();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-/// A nickname for the user in content references to the user.
-///
-/// _Constraints_
-/// - `maxLength`: The maximum nickname length is 30 characters
-/// - `validCharacters`: Control and null characters are not allowed
-class Nickname {
-  Nickname();
-
-  factory Nickname.fromJson(Map<String, Object?> json) {
-    return Nickname();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-/// The organisation to which the user belongs
-class Organization {
-  Organization();
-
-  factory Organization.fromJson(Map<String, Object?> json) {
-    return Organization();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
-}
-
-/// A secret for use by the user in basic authentication flows
-class Password {
-  Password();
-
-  factory Password.fromJson(Map<String, Object?> json) {
-    return Password();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
   }
 }
 
@@ -1019,12 +861,12 @@ class ResponseForbiddenUnclaimedDomainContext {
 }
 
 class User {
-  final AccountId accountId;
-  final AccountType accountType;
-  final AccountStatus accountStatus;
-  final Name name;
-  final Avatar picture;
-  final Email email;
+  final String accountId;
+  final String accountType;
+  final String accountStatus;
+  final String name;
+  final String picture;
+  final String email;
   final AccountCharacteristics? characteristics;
 
   User(
@@ -1038,17 +880,12 @@ class User {
 
   factory User.fromJson(Map<String, Object?> json) {
     return User(
-      accountId: AccountId.fromJson(
-          json[r'account_id'] as Map<String, Object?>? ?? const {}),
-      accountType: AccountType.fromJson(
-          json[r'account_type'] as Map<String, Object?>? ?? const {}),
-      accountStatus: AccountStatus.fromJson(
-          json[r'account_status'] as Map<String, Object?>? ?? const {}),
-      name: Name.fromJson(json[r'name'] as Map<String, Object?>? ?? const {}),
-      picture: Avatar.fromJson(
-          json[r'picture'] as Map<String, Object?>? ?? const {}),
-      email:
-          Email.fromJson(json[r'email'] as Map<String, Object?>? ?? const {}),
+      accountId: json[r'account_id'] as String? ?? '',
+      accountType: json[r'account_type'] as String? ?? '',
+      accountStatus: json[r'account_status'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      picture: json[r'picture'] as String? ?? '',
+      email: json[r'email'] as String? ?? '',
       characteristics: json[r'characteristics'] != null
           ? AccountCharacteristics.fromJson(
               json[r'characteristics']! as Map<String, Object?>)
@@ -1066,12 +903,12 @@ class User {
     var characteristics = this.characteristics;
 
     final json = <String, Object?>{};
-    json[r'account_id'] = accountId.toJson();
-    json[r'account_type'] = accountType.toJson();
-    json[r'account_status'] = accountStatus.toJson();
-    json[r'name'] = name.toJson();
-    json[r'picture'] = picture.toJson();
-    json[r'email'] = email.toJson();
+    json[r'account_id'] = accountId;
+    json[r'account_type'] = accountType;
+    json[r'account_status'] = accountStatus;
+    json[r'name'] = name;
+    json[r'picture'] = picture;
+    json[r'email'] = email;
     if (characteristics != null) {
       json[r'characteristics'] = characteristics.toJson();
     }
@@ -1079,12 +916,12 @@ class User {
   }
 
   User copyWith(
-      {AccountId? accountId,
-      AccountType? accountType,
-      AccountStatus? accountStatus,
-      Name? name,
-      Avatar? picture,
-      Email? email,
+      {String? accountId,
+      String? accountType,
+      String? accountStatus,
+      String? name,
+      String? picture,
+      String? email,
       AccountCharacteristics? characteristics}) {
     return User(
       accountId: accountId ?? this.accountId,
@@ -1095,19 +932,5 @@ class User {
       email: email ?? this.email,
       characteristics: characteristics ?? this.characteristics,
     );
-  }
-}
-
-/// A unix zoneinfo string describing the local timezone of the user
-class ZoneInfo {
-  ZoneInfo();
-
-  factory ZoneInfo.fromJson(Map<String, Object?> json) {
-    return ZoneInfo();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
   }
 }
