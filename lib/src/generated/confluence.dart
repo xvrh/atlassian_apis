@@ -15658,6 +15658,9 @@ class Version {
   final VersionExpandable expandable;
   final GenericLinks links;
 
+  /// True if content type is modifed in this version (e.g. page to blog)
+  final bool contentTypeModified;
+
   Version(
       {required this.by,
       required this.when,
@@ -15668,7 +15671,9 @@ class Version {
       this.content,
       this.collaborators,
       required this.expandable,
-      required this.links});
+      required this.links,
+      bool? contentTypeModified})
+      : contentTypeModified = contentTypeModified ?? false;
 
   factory Version.fromJson(Map<String, Object?> json) {
     return Version(
@@ -15689,6 +15694,7 @@ class Version {
           json[r'_expandable'] as Map<String, Object?>? ?? const {}),
       links: GenericLinks.fromJson(
           json[r'_links'] as Map<String, Object?>? ?? const {}),
+      contentTypeModified: json[r'contentTypeModified'] as bool? ?? false,
     );
   }
 
@@ -15703,6 +15709,7 @@ class Version {
     var collaborators = this.collaborators;
     var expandable = this.expandable;
     var links = this.links;
+    var contentTypeModified = this.contentTypeModified;
 
     final json = <String, Object?>{};
     json[r'by'] = by.toJson();
@@ -15719,6 +15726,7 @@ class Version {
     }
     json[r'_expandable'] = expandable.toJson();
     json[r'_links'] = links.toJson();
+    json[r'contentTypeModified'] = contentTypeModified;
     return json;
   }
 
@@ -15732,7 +15740,8 @@ class Version {
       Content? content,
       UsersUserKeys? collaborators,
       VersionExpandable? expandable,
-      GenericLinks? links}) {
+      GenericLinks? links,
+      bool? contentTypeModified}) {
     return Version(
       by: by ?? this.by,
       when: when ?? this.when,
@@ -15744,6 +15753,7 @@ class Version {
       collaborators: collaborators ?? this.collaborators,
       expandable: expandable ?? this.expandable,
       links: links ?? this.links,
+      contentTypeModified: contentTypeModified ?? this.contentTypeModified,
     );
   }
 }

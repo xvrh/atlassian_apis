@@ -15081,6 +15081,10 @@
           },
           "_links": {
             "$ref": "#/components/schemas/GenericLinks"
+          },
+          "contentTypeModified": {
+            "type": "boolean",
+            "description": "True if content type is modifed in this version (e.g. page to blog)"
           }
         }
       },
