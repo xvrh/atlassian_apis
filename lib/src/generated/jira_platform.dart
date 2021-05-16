@@ -32288,7 +32288,7 @@ class ProjectFeature {
   final int? projectId;
 
   /// The state of the feature.
-  final ProjectFeatureState? state;
+  final ProjectFeatureStateState? state;
 
   /// Whether the state of the feature can be updated.
   final bool toggleLocked;
@@ -32328,7 +32328,7 @@ class ProjectFeature {
     return ProjectFeature(
       projectId: (json[r'projectId'] as num?)?.toInt(),
       state: json[r'state'] != null
-          ? ProjectFeatureState.fromValue(json[r'state']! as String)
+          ? ProjectFeatureStateState.fromValue(json[r'state']! as String)
           : null,
       toggleLocked: json[r'toggleLocked'] as bool? ?? false,
       feature: json[r'feature'] as String?,
@@ -32383,7 +32383,7 @@ class ProjectFeature {
 
   ProjectFeature copyWith(
       {int? projectId,
-      ProjectFeatureState? state,
+      ProjectFeatureStateState? state,
       bool? toggleLocked,
       String? feature,
       String? featureCategory,
@@ -32403,31 +32403,6 @@ class ProjectFeature {
       imageUri: imageUri ?? this.imageUri,
     );
   }
-}
-
-class ProjectFeatureState {
-  static const enabled = ProjectFeatureState._('ENABLED');
-  static const disabled = ProjectFeatureState._('DISABLED');
-  static const comingSoon = ProjectFeatureState._('COMING_SOON');
-
-  static const values = [
-    enabled,
-    disabled,
-    comingSoon,
-  ];
-  final String value;
-
-  const ProjectFeatureState._(this.value);
-
-  static ProjectFeatureState fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => ProjectFeatureState._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
 }
 
 /// Details of the feature state.
