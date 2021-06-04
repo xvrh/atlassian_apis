@@ -40,6 +40,9 @@ class Api {
         if (httpMethod != null) {
           var path =
               sw.Path.fromJson(methodEntry.value! as Map<String, Object?>);
+          if (path.tags.isEmpty) {
+            continue;
+          }
           var service = _untaggedService ??
               _taggedServices.firstWhere(
                   (s) => path.tags.any((t) => t == s.tag!.name),

@@ -2392,6 +2392,35 @@ class Changelog {
   }
 }
 
+class CmdbWorkspaceDTO {
+  /// The workspace id used as an identifier to access Insight API
+  final String? workspaceId;
+
+  CmdbWorkspaceDTO({this.workspaceId});
+
+  factory CmdbWorkspaceDTO.fromJson(Map<String, Object?> json) {
+    return CmdbWorkspaceDTO(
+      workspaceId: json[r'workspaceId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var workspaceId = this.workspaceId;
+
+    final json = <String, Object?>{};
+    if (workspaceId != null) {
+      json[r'workspaceId'] = workspaceId;
+    }
+    return json;
+  }
+
+  CmdbWorkspaceDTO copyWith({String? workspaceId}) {
+    return CmdbWorkspaceDTO(
+      workspaceId: workspaceId ?? this.workspaceId,
+    );
+  }
+}
+
 class CommentCreateDTO {
   /// Content of the comment.
   final String? body;
@@ -6448,6 +6477,47 @@ class PagedLinkDTO {
       context: context ?? this.context,
       next: next ?? this.next,
       prev: prev ?? this.prev,
+    );
+  }
+}
+
+class PagedRestResponseCmdbWorkspaceDTO {
+  final int? size;
+  final List<CmdbWorkspaceDTO> results;
+
+  PagedRestResponseCmdbWorkspaceDTO(
+      {this.size, List<CmdbWorkspaceDTO>? results})
+      : results = results ?? [];
+
+  factory PagedRestResponseCmdbWorkspaceDTO.fromJson(
+      Map<String, Object?> json) {
+    return PagedRestResponseCmdbWorkspaceDTO(
+      size: (json[r'size'] as num?)?.toInt(),
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) => CmdbWorkspaceDTO.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var size = this.size;
+    var results = this.results;
+
+    final json = <String, Object?>{};
+    if (size != null) {
+      json[r'size'] = size;
+    }
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PagedRestResponseCmdbWorkspaceDTO copyWith(
+      {int? size, List<CmdbWorkspaceDTO>? results}) {
+    return PagedRestResponseCmdbWorkspaceDTO(
+      size: size ?? this.size,
+      results: results ?? this.results,
     );
   }
 }

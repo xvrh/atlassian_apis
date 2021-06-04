@@ -8691,7 +8691,7 @@ class ProjectsApi {
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ProjectIdentifiers> createProject(
-      {required ProjectInputBean body}) async {
+      {required CreateProjectDetails body}) async {
     return ProjectIdentifiers.fromJson(await _client.send(
       'post',
       'rest/api/3/project',
@@ -8780,7 +8780,7 @@ class ProjectsApi {
   Future<Project> updateProject(
       {required String projectIdOrKey,
       String? expand,
-      required ProjectInputBean body}) async {
+      required UpdateProjectDetails body}) async {
     return Project.fromJson(await _client.send(
       'put',
       'rest/api/3/project/{projectIdOrKey}',
@@ -12028,14 +12028,14 @@ class Attachment {
 
 class AttachmentArchive {
   final bool moreAvailable;
-  final int? totalEntryCount;
   final int? totalNumberOfEntriesAvailable;
+  final int? totalEntryCount;
   final List<AttachmentArchiveEntry> entries;
 
   AttachmentArchive(
       {bool? moreAvailable,
-      this.totalEntryCount,
       this.totalNumberOfEntriesAvailable,
+      this.totalEntryCount,
       List<AttachmentArchiveEntry>? entries})
       : moreAvailable = moreAvailable ?? false,
         entries = entries ?? [];
@@ -12043,9 +12043,9 @@ class AttachmentArchive {
   factory AttachmentArchive.fromJson(Map<String, Object?> json) {
     return AttachmentArchive(
       moreAvailable: json[r'moreAvailable'] as bool? ?? false,
-      totalEntryCount: (json[r'totalEntryCount'] as num?)?.toInt(),
       totalNumberOfEntriesAvailable:
           (json[r'totalNumberOfEntriesAvailable'] as num?)?.toInt(),
+      totalEntryCount: (json[r'totalEntryCount'] as num?)?.toInt(),
       entries: (json[r'entries'] as List<Object?>?)
               ?.map((i) => AttachmentArchiveEntry.fromJson(
                   i as Map<String, Object?>? ?? const {}))
@@ -12056,17 +12056,17 @@ class AttachmentArchive {
 
   Map<String, Object?> toJson() {
     var moreAvailable = this.moreAvailable;
-    var totalEntryCount = this.totalEntryCount;
     var totalNumberOfEntriesAvailable = this.totalNumberOfEntriesAvailable;
+    var totalEntryCount = this.totalEntryCount;
     var entries = this.entries;
 
     final json = <String, Object?>{};
     json[r'moreAvailable'] = moreAvailable;
-    if (totalEntryCount != null) {
-      json[r'totalEntryCount'] = totalEntryCount;
-    }
     if (totalNumberOfEntriesAvailable != null) {
       json[r'totalNumberOfEntriesAvailable'] = totalNumberOfEntriesAvailable;
+    }
+    if (totalEntryCount != null) {
+      json[r'totalEntryCount'] = totalEntryCount;
     }
     json[r'entries'] = entries.map((i) => i.toJson()).toList();
     return json;
@@ -12074,59 +12074,59 @@ class AttachmentArchive {
 
   AttachmentArchive copyWith(
       {bool? moreAvailable,
-      int? totalEntryCount,
       int? totalNumberOfEntriesAvailable,
+      int? totalEntryCount,
       List<AttachmentArchiveEntry>? entries}) {
     return AttachmentArchive(
       moreAvailable: moreAvailable ?? this.moreAvailable,
-      totalEntryCount: totalEntryCount ?? this.totalEntryCount,
       totalNumberOfEntriesAvailable:
           totalNumberOfEntriesAvailable ?? this.totalNumberOfEntriesAvailable,
+      totalEntryCount: totalEntryCount ?? this.totalEntryCount,
       entries: entries ?? this.entries,
     );
   }
 }
 
 class AttachmentArchiveEntry {
-  final String? mediaType;
   final int? entryIndex;
   final String? abbreviatedName;
+  final String? mediaType;
   final String? name;
   final int? size;
 
   AttachmentArchiveEntry(
-      {this.mediaType,
-      this.entryIndex,
+      {this.entryIndex,
       this.abbreviatedName,
+      this.mediaType,
       this.name,
       this.size});
 
   factory AttachmentArchiveEntry.fromJson(Map<String, Object?> json) {
     return AttachmentArchiveEntry(
-      mediaType: json[r'mediaType'] as String?,
       entryIndex: (json[r'entryIndex'] as num?)?.toInt(),
       abbreviatedName: json[r'abbreviatedName'] as String?,
+      mediaType: json[r'mediaType'] as String?,
       name: json[r'name'] as String?,
       size: (json[r'size'] as num?)?.toInt(),
     );
   }
 
   Map<String, Object?> toJson() {
-    var mediaType = this.mediaType;
     var entryIndex = this.entryIndex;
     var abbreviatedName = this.abbreviatedName;
+    var mediaType = this.mediaType;
     var name = this.name;
     var size = this.size;
 
     final json = <String, Object?>{};
-    if (mediaType != null) {
-      json[r'mediaType'] = mediaType;
-    }
     if (entryIndex != null) {
       json[r'entryIndex'] = entryIndex;
     }
     if (abbreviatedName != null) {
       json[r'abbreviatedName'] = abbreviatedName;
+    }
+    if (mediaType != null) {
+      json[r'mediaType'] = mediaType;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -12138,15 +12138,15 @@ class AttachmentArchiveEntry {
   }
 
   AttachmentArchiveEntry copyWith(
-      {String? mediaType,
-      int? entryIndex,
+      {int? entryIndex,
       String? abbreviatedName,
+      String? mediaType,
       String? name,
       int? size}) {
     return AttachmentArchiveEntry(
-      mediaType: mediaType ?? this.mediaType,
       entryIndex: entryIndex ?? this.entryIndex,
       abbreviatedName: abbreviatedName ?? this.abbreviatedName,
+      mediaType: mediaType ?? this.mediaType,
       name: name ?? this.name,
       size: size ?? this.size,
     );
@@ -14012,22 +14012,11 @@ class ComponentWithIssueCount {
   /// Count of issues for the component.
   final int? issueCount;
 
-  /// The description for the component.
-  final String? description;
-
-  /// The URL for this count of the issues contained in the component.
-  final String? self;
-
   /// The key of the project to which the component is assigned.
   final String? project;
 
-  /// Not used.
-  final int? projectId;
-
-  /// The details of the user associated with `assigneeType`, if any. See
-  /// `realAssignee` for details of the user assigned to issues created with
-  /// this component.
-  final User? assignee;
+  /// The description for the component.
+  final String? description;
 
   /// The user details for the component's lead user.
   final User? lead;
@@ -14047,6 +14036,17 @@ class ComponentWithIssueCount {
   /// component is nominally the default assignee for the project that the
   /// component is in.
   final ComponentWithIssueCountAssigneeType? assigneeType;
+
+  /// The URL for this count of the issues contained in the component.
+  final String? self;
+
+  /// The details of the user associated with `assigneeType`, if any. See
+  /// `realAssignee` for details of the user assigned to issues created with
+  /// this component.
+  final User? assignee;
+
+  /// Not used.
+  final int? projectId;
 
   /// The user assigned to issues created with this component, when
   /// `assigneeType` does not identify a valid assignee.
@@ -14081,13 +14081,13 @@ class ComponentWithIssueCount {
 
   ComponentWithIssueCount(
       {this.issueCount,
-      this.description,
-      this.self,
       this.project,
-      this.projectId,
-      this.assignee,
+      this.description,
       this.lead,
       this.assigneeType,
+      this.self,
+      this.assignee,
+      this.projectId,
       this.realAssignee,
       bool? isAssigneeTypeValid,
       this.realAssigneeType,
@@ -14098,13 +14098,8 @@ class ComponentWithIssueCount {
   factory ComponentWithIssueCount.fromJson(Map<String, Object?> json) {
     return ComponentWithIssueCount(
       issueCount: (json[r'issueCount'] as num?)?.toInt(),
-      description: json[r'description'] as String?,
-      self: json[r'self'] as String?,
       project: json[r'project'] as String?,
-      projectId: (json[r'projectId'] as num?)?.toInt(),
-      assignee: json[r'assignee'] != null
-          ? User.fromJson(json[r'assignee']! as Map<String, Object?>)
-          : null,
+      description: json[r'description'] as String?,
       lead: json[r'lead'] != null
           ? User.fromJson(json[r'lead']! as Map<String, Object?>)
           : null,
@@ -14112,6 +14107,11 @@ class ComponentWithIssueCount {
           ? ComponentWithIssueCountAssigneeType.fromValue(
               json[r'assigneeType']! as String)
           : null,
+      self: json[r'self'] as String?,
+      assignee: json[r'assignee'] != null
+          ? User.fromJson(json[r'assignee']! as Map<String, Object?>)
+          : null,
+      projectId: (json[r'projectId'] as num?)?.toInt(),
       realAssignee: json[r'realAssignee'] != null
           ? User.fromJson(json[r'realAssignee']! as Map<String, Object?>)
           : null,
@@ -14127,13 +14127,13 @@ class ComponentWithIssueCount {
 
   Map<String, Object?> toJson() {
     var issueCount = this.issueCount;
-    var description = this.description;
-    var self = this.self;
     var project = this.project;
-    var projectId = this.projectId;
-    var assignee = this.assignee;
+    var description = this.description;
     var lead = this.lead;
     var assigneeType = this.assigneeType;
+    var self = this.self;
+    var assignee = this.assignee;
+    var projectId = this.projectId;
     var realAssignee = this.realAssignee;
     var isAssigneeTypeValid = this.isAssigneeTypeValid;
     var realAssigneeType = this.realAssigneeType;
@@ -14144,26 +14144,26 @@ class ComponentWithIssueCount {
     if (issueCount != null) {
       json[r'issueCount'] = issueCount;
     }
-    if (description != null) {
-      json[r'description'] = description;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
     if (project != null) {
       json[r'project'] = project;
     }
-    if (projectId != null) {
-      json[r'projectId'] = projectId;
-    }
-    if (assignee != null) {
-      json[r'assignee'] = assignee.toJson();
+    if (description != null) {
+      json[r'description'] = description;
     }
     if (lead != null) {
       json[r'lead'] = lead.toJson();
     }
     if (assigneeType != null) {
       json[r'assigneeType'] = assigneeType.value;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (assignee != null) {
+      json[r'assignee'] = assignee.toJson();
+    }
+    if (projectId != null) {
+      json[r'projectId'] = projectId;
     }
     if (realAssignee != null) {
       json[r'realAssignee'] = realAssignee.toJson();
@@ -14183,13 +14183,13 @@ class ComponentWithIssueCount {
 
   ComponentWithIssueCount copyWith(
       {int? issueCount,
-      String? description,
-      String? self,
       String? project,
-      int? projectId,
-      User? assignee,
+      String? description,
       User? lead,
       ComponentWithIssueCountAssigneeType? assigneeType,
+      String? self,
+      User? assignee,
+      int? projectId,
       User? realAssignee,
       bool? isAssigneeTypeValid,
       ComponentWithIssueCountRealAssigneeType? realAssigneeType,
@@ -14197,13 +14197,13 @@ class ComponentWithIssueCount {
       String? id}) {
     return ComponentWithIssueCount(
       issueCount: issueCount ?? this.issueCount,
-      description: description ?? this.description,
-      self: self ?? this.self,
       project: project ?? this.project,
-      projectId: projectId ?? this.projectId,
-      assignee: assignee ?? this.assignee,
+      description: description ?? this.description,
       lead: lead ?? this.lead,
       assigneeType: assigneeType ?? this.assigneeType,
+      self: self ?? this.self,
+      assignee: assignee ?? this.assignee,
+      projectId: projectId ?? this.projectId,
       realAssignee: realAssignee ?? this.realAssignee,
       isAssigneeTypeValid: isAssigneeTypeValid ?? this.isAssigneeTypeValid,
       realAssigneeType: realAssigneeType ?? this.realAssigneeType,
@@ -14961,6 +14961,408 @@ class CreateCustomFieldContext {
       issueTypeIds: issueTypeIds ?? this.issueTypeIds,
     );
   }
+}
+
+/// Details about the project.
+class CreateProjectDetails {
+  /// Project keys must be unique and start with an uppercase letter followed by
+  /// one or more uppercase alphanumeric characters. The maximum length is 10
+  /// characters.
+  final String key;
+
+  /// The name of the project.
+  final String name;
+
+  /// A brief description of the project.
+  final String? description;
+
+  /// This parameter is deprecated because of privacy changes. Use
+  /// `leadAccountId` instead. See the
+  /// [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details. The user name of the project lead. Either `lead` or
+  /// `leadAccountId` must be set when creating a project. Cannot be provided
+  /// with `leadAccountId`.
+  final String? lead;
+
+  /// The account ID of the project lead. Either `lead` or `leadAccountId` must
+  /// be set when creating a project. Cannot be provided with `lead`.
+  final String? leadAccountId;
+
+  /// A link to information about this project, such as project documentation
+  final String? url;
+
+  /// The default assignee when creating issues for this project.
+  final CreateProjectDetailsAssigneeType? assigneeType;
+
+  /// An integer value for the project's avatar.
+  final int? avatarId;
+
+  /// The ID of the issue security scheme for the project, which enables you to
+  /// control who can and cannot view issues. Use the
+  /// [Get issue security schemes](#api-rest-api-3-issuesecurityschemes-get)
+  /// resource to get all issue security scheme IDs.
+  final int? issueSecurityScheme;
+
+  /// The ID of the permission scheme for the project. Use the
+  /// [Get all permission schemes](#api-rest-api-3-permissionscheme-get)
+  /// resource to see a list of all permission scheme IDs.
+  final int? permissionScheme;
+
+  /// The ID of the notification scheme for the project. Use the
+  /// [Get notification schemes](#api-rest-api-3-notificationscheme-get)
+  /// resource to get a list of notification scheme IDs.
+  final int? notificationScheme;
+
+  /// The ID of the project's category. A complete list of category IDs is found
+  /// using the
+  /// [Get all project categories](#api-rest-api-3-projectCategory-get)
+  /// operation.
+  final int? categoryId;
+
+  /// The
+  /// [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes),
+  /// which defines the application-specific feature set. If you don't specify
+  /// the project template you have to specify the project type.
+  final CreateProjectDetailsProjectTypeKey? projectTypeKey;
+
+  /// A predefined configuration for a project. The type of the
+  /// `projectTemplateKey` must match with the type of the `projectTypeKey`.
+  final CreateProjectDetailsProjectTemplateKey? projectTemplateKey;
+
+  /// The ID of the workflow scheme for the project. Use the
+  /// [Get all workflow schemes](#api-rest-api-3-workflowscheme-get) operation
+  /// to get a list of workflow scheme IDs. If you specify the workflow scheme
+  /// you cannot specify the project template key.
+  final int? workflowScheme;
+
+  /// The ID of the issue type screen scheme for the project. Use the
+  /// [Get all issue type screen schemes](#api-rest-api-3-issuetypescreenscheme-get)
+  /// operation to get a list of issue type screen scheme IDs. If you specify
+  /// the issue type screen scheme you cannot specify the project template key.
+  final int? issueTypeScreenScheme;
+
+  /// The ID of the issue type scheme for the project. Use the
+  /// [Get all issue type schemes](#api-rest-api-3-issuetypescheme-get)
+  /// operation to get a list of issue type scheme IDs. If you specify the issue
+  /// type scheme you cannot specify the project template key.
+  final int? issueTypeScheme;
+
+  /// The ID of the field configuration scheme for the project. Use the
+  /// [Get all field configuration schemes](#api-rest-api-3-fieldconfigurationscheme-get)
+  /// operation to get a list of field configuration scheme IDs. If you specify
+  /// the field configuration scheme you cannot specify the project template
+  /// key.
+  final int? fieldConfigurationScheme;
+
+  CreateProjectDetails(
+      {required this.key,
+      required this.name,
+      this.description,
+      this.lead,
+      this.leadAccountId,
+      this.url,
+      this.assigneeType,
+      this.avatarId,
+      this.issueSecurityScheme,
+      this.permissionScheme,
+      this.notificationScheme,
+      this.categoryId,
+      this.projectTypeKey,
+      this.projectTemplateKey,
+      this.workflowScheme,
+      this.issueTypeScreenScheme,
+      this.issueTypeScheme,
+      this.fieldConfigurationScheme});
+
+  factory CreateProjectDetails.fromJson(Map<String, Object?> json) {
+    return CreateProjectDetails(
+      key: json[r'key'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      description: json[r'description'] as String?,
+      lead: json[r'lead'] as String?,
+      leadAccountId: json[r'leadAccountId'] as String?,
+      url: json[r'url'] as String?,
+      assigneeType: json[r'assigneeType'] != null
+          ? CreateProjectDetailsAssigneeType.fromValue(
+              json[r'assigneeType']! as String)
+          : null,
+      avatarId: (json[r'avatarId'] as num?)?.toInt(),
+      issueSecurityScheme: (json[r'issueSecurityScheme'] as num?)?.toInt(),
+      permissionScheme: (json[r'permissionScheme'] as num?)?.toInt(),
+      notificationScheme: (json[r'notificationScheme'] as num?)?.toInt(),
+      categoryId: (json[r'categoryId'] as num?)?.toInt(),
+      projectTypeKey: json[r'projectTypeKey'] != null
+          ? CreateProjectDetailsProjectTypeKey.fromValue(
+              json[r'projectTypeKey']! as String)
+          : null,
+      projectTemplateKey: json[r'projectTemplateKey'] != null
+          ? CreateProjectDetailsProjectTemplateKey.fromValue(
+              json[r'projectTemplateKey']! as String)
+          : null,
+      workflowScheme: (json[r'workflowScheme'] as num?)?.toInt(),
+      issueTypeScreenScheme: (json[r'issueTypeScreenScheme'] as num?)?.toInt(),
+      issueTypeScheme: (json[r'issueTypeScheme'] as num?)?.toInt(),
+      fieldConfigurationScheme:
+          (json[r'fieldConfigurationScheme'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+    var name = this.name;
+    var description = this.description;
+    var lead = this.lead;
+    var leadAccountId = this.leadAccountId;
+    var url = this.url;
+    var assigneeType = this.assigneeType;
+    var avatarId = this.avatarId;
+    var issueSecurityScheme = this.issueSecurityScheme;
+    var permissionScheme = this.permissionScheme;
+    var notificationScheme = this.notificationScheme;
+    var categoryId = this.categoryId;
+    var projectTypeKey = this.projectTypeKey;
+    var projectTemplateKey = this.projectTemplateKey;
+    var workflowScheme = this.workflowScheme;
+    var issueTypeScreenScheme = this.issueTypeScreenScheme;
+    var issueTypeScheme = this.issueTypeScheme;
+    var fieldConfigurationScheme = this.fieldConfigurationScheme;
+
+    final json = <String, Object?>{};
+    json[r'key'] = key;
+    json[r'name'] = name;
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (lead != null) {
+      json[r'lead'] = lead;
+    }
+    if (leadAccountId != null) {
+      json[r'leadAccountId'] = leadAccountId;
+    }
+    if (url != null) {
+      json[r'url'] = url;
+    }
+    if (assigneeType != null) {
+      json[r'assigneeType'] = assigneeType.value;
+    }
+    if (avatarId != null) {
+      json[r'avatarId'] = avatarId;
+    }
+    if (issueSecurityScheme != null) {
+      json[r'issueSecurityScheme'] = issueSecurityScheme;
+    }
+    if (permissionScheme != null) {
+      json[r'permissionScheme'] = permissionScheme;
+    }
+    if (notificationScheme != null) {
+      json[r'notificationScheme'] = notificationScheme;
+    }
+    if (categoryId != null) {
+      json[r'categoryId'] = categoryId;
+    }
+    if (projectTypeKey != null) {
+      json[r'projectTypeKey'] = projectTypeKey.value;
+    }
+    if (projectTemplateKey != null) {
+      json[r'projectTemplateKey'] = projectTemplateKey.value;
+    }
+    if (workflowScheme != null) {
+      json[r'workflowScheme'] = workflowScheme;
+    }
+    if (issueTypeScreenScheme != null) {
+      json[r'issueTypeScreenScheme'] = issueTypeScreenScheme;
+    }
+    if (issueTypeScheme != null) {
+      json[r'issueTypeScheme'] = issueTypeScheme;
+    }
+    if (fieldConfigurationScheme != null) {
+      json[r'fieldConfigurationScheme'] = fieldConfigurationScheme;
+    }
+    return json;
+  }
+
+  CreateProjectDetails copyWith(
+      {String? key,
+      String? name,
+      String? description,
+      String? lead,
+      String? leadAccountId,
+      String? url,
+      CreateProjectDetailsAssigneeType? assigneeType,
+      int? avatarId,
+      int? issueSecurityScheme,
+      int? permissionScheme,
+      int? notificationScheme,
+      int? categoryId,
+      CreateProjectDetailsProjectTypeKey? projectTypeKey,
+      CreateProjectDetailsProjectTemplateKey? projectTemplateKey,
+      int? workflowScheme,
+      int? issueTypeScreenScheme,
+      int? issueTypeScheme,
+      int? fieldConfigurationScheme}) {
+    return CreateProjectDetails(
+      key: key ?? this.key,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      lead: lead ?? this.lead,
+      leadAccountId: leadAccountId ?? this.leadAccountId,
+      url: url ?? this.url,
+      assigneeType: assigneeType ?? this.assigneeType,
+      avatarId: avatarId ?? this.avatarId,
+      issueSecurityScheme: issueSecurityScheme ?? this.issueSecurityScheme,
+      permissionScheme: permissionScheme ?? this.permissionScheme,
+      notificationScheme: notificationScheme ?? this.notificationScheme,
+      categoryId: categoryId ?? this.categoryId,
+      projectTypeKey: projectTypeKey ?? this.projectTypeKey,
+      projectTemplateKey: projectTemplateKey ?? this.projectTemplateKey,
+      workflowScheme: workflowScheme ?? this.workflowScheme,
+      issueTypeScreenScheme:
+          issueTypeScreenScheme ?? this.issueTypeScreenScheme,
+      issueTypeScheme: issueTypeScheme ?? this.issueTypeScheme,
+      fieldConfigurationScheme:
+          fieldConfigurationScheme ?? this.fieldConfigurationScheme,
+    );
+  }
+}
+
+class CreateProjectDetailsAssigneeType {
+  static const projectLead = CreateProjectDetailsAssigneeType._('PROJECT_LEAD');
+  static const unassigned = CreateProjectDetailsAssigneeType._('UNASSIGNED');
+
+  static const values = [
+    projectLead,
+    unassigned,
+  ];
+  final String value;
+
+  const CreateProjectDetailsAssigneeType._(this.value);
+
+  static CreateProjectDetailsAssigneeType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => CreateProjectDetailsAssigneeType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class CreateProjectDetailsProjectTypeKey {
+  static const software = CreateProjectDetailsProjectTypeKey._('software');
+  static const serviceDesk =
+      CreateProjectDetailsProjectTypeKey._('service_desk');
+  static const business = CreateProjectDetailsProjectTypeKey._('business');
+
+  static const values = [
+    software,
+    serviceDesk,
+    business,
+  ];
+  final String value;
+
+  const CreateProjectDetailsProjectTypeKey._(this.value);
+
+  static CreateProjectDetailsProjectTypeKey fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => CreateProjectDetailsProjectTypeKey._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class CreateProjectDetailsProjectTemplateKey {
+  static const comPyxisGreenhopperJiraGhSimplifiedAgilityKanban =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.pyxis.greenhopper.jira:gh-simplified-agility-kanban');
+  static const comPyxisGreenhopperJiraGhSimplifiedAgilityScrum =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.pyxis.greenhopper.jira:gh-simplified-agility-scrum');
+  static const comPyxisGreenhopperJiraGhSimplifiedBasic =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.pyxis.greenhopper.jira:gh-simplified-basic');
+  static const comPyxisGreenhopperJiraGhSimplifiedKanbanClassic =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.pyxis.greenhopper.jira:gh-simplified-kanban-classic');
+  static const comPyxisGreenhopperJiraGhSimplifiedScrumClassic =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.pyxis.greenhopper.jira:gh-simplified-scrum-classic');
+  static const comAtlassianServicedeskSimplifiedItServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:simplified-it-service-desk');
+  static const comAtlassianServicedeskSimplifiedInternalServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:simplified-internal-service-desk');
+  static const comAtlassianServicedeskSimplifiedExternalServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:simplified-external-service-desk');
+  static const comAtlassianServicedeskSimplifiedHrServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:simplified-hr-service-desk');
+  static const comAtlassianServicedeskSimplifiedFacilitiesServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:simplified-facilities-service-desk');
+  static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedContentManagement =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.jira-core-project-templates:jira-core-simplified-content-management');
+  static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedDocumentApproval =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.jira-core-project-templates:jira-core-simplified-document-approval');
+  static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedLeadTracking =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.jira-core-project-templates:jira-core-simplified-lead-tracking');
+  static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedProcessControl =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.jira-core-project-templates:jira-core-simplified-process-control');
+  static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedProcurement =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.jira-core-project-templates:jira-core-simplified-procurement');
+  static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedProjectManagement =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.jira-core-project-templates:jira-core-simplified-project-management');
+  static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedRecruitment =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.jira-core-project-templates:jira-core-simplified-recruitment');
+  static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedTask =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.jira-core-project-templates:jira-core-simplified-task-');
+
+  static const values = [
+    comPyxisGreenhopperJiraGhSimplifiedAgilityKanban,
+    comPyxisGreenhopperJiraGhSimplifiedAgilityScrum,
+    comPyxisGreenhopperJiraGhSimplifiedBasic,
+    comPyxisGreenhopperJiraGhSimplifiedKanbanClassic,
+    comPyxisGreenhopperJiraGhSimplifiedScrumClassic,
+    comAtlassianServicedeskSimplifiedItServiceDesk,
+    comAtlassianServicedeskSimplifiedInternalServiceDesk,
+    comAtlassianServicedeskSimplifiedExternalServiceDesk,
+    comAtlassianServicedeskSimplifiedHrServiceDesk,
+    comAtlassianServicedeskSimplifiedFacilitiesServiceDesk,
+    comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedContentManagement,
+    comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedDocumentApproval,
+    comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedLeadTracking,
+    comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedProcessControl,
+    comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedProcurement,
+    comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedProjectManagement,
+    comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedRecruitment,
+    comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedTask,
+  ];
+  final String value;
+
+  const CreateProjectDetailsProjectTemplateKey._(this.value);
+
+  static CreateProjectDetailsProjectTemplateKey fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => CreateProjectDetailsProjectTemplateKey._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 class CreateUpdateRoleRequestBean {
@@ -20262,21 +20664,21 @@ class IdOrKeyBean {
 }
 
 class IncludedFields {
-  final List<String> included;
-  final List<String> excluded;
   final List<String> actuallyIncluded;
+  final List<String> excluded;
+  final List<String> included;
 
   IncludedFields(
-      {List<String>? included,
+      {List<String>? actuallyIncluded,
       List<String>? excluded,
-      List<String>? actuallyIncluded})
-      : included = included ?? [],
+      List<String>? included})
+      : actuallyIncluded = actuallyIncluded ?? [],
         excluded = excluded ?? [],
-        actuallyIncluded = actuallyIncluded ?? [];
+        included = included ?? [];
 
   factory IncludedFields.fromJson(Map<String, Object?> json) {
     return IncludedFields(
-      included: (json[r'included'] as List<Object?>?)
+      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -20284,7 +20686,7 @@ class IncludedFields {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
+      included: (json[r'included'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -20292,25 +20694,25 @@ class IncludedFields {
   }
 
   Map<String, Object?> toJson() {
-    var included = this.included;
-    var excluded = this.excluded;
     var actuallyIncluded = this.actuallyIncluded;
+    var excluded = this.excluded;
+    var included = this.included;
 
     final json = <String, Object?>{};
-    json[r'included'] = included;
-    json[r'excluded'] = excluded;
     json[r'actuallyIncluded'] = actuallyIncluded;
+    json[r'excluded'] = excluded;
+    json[r'included'] = included;
     return json;
   }
 
   IncludedFields copyWith(
-      {List<String>? included,
+      {List<String>? actuallyIncluded,
       List<String>? excluded,
-      List<String>? actuallyIncluded}) {
+      List<String>? included}) {
     return IncludedFields(
-      included: included ?? this.included,
-      excluded: excluded ?? this.excluded,
       actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
+      excluded: excluded ?? this.excluded,
+      included: included ?? this.included,
     );
   }
 }
@@ -24642,6 +25044,7 @@ class JqlQueryUnitaryOperand {
 
 class JsonNode {
   final Map<String, dynamic>? elements;
+  final bool floatingPointNumber;
   final bool pojo;
   final bool containerNode;
   final bool missingNode;
@@ -24649,7 +25052,6 @@ class JsonNode {
   final bool valueNode;
   final bool number;
   final bool integralNumber;
-  final bool floatingPointNumber;
   final bool int$;
   final bool long;
   final bool double$;
@@ -24680,6 +25082,7 @@ class JsonNode {
 
   JsonNode(
       {this.elements,
+      bool? floatingPointNumber,
       bool? pojo,
       bool? containerNode,
       bool? missingNode,
@@ -24687,7 +25090,6 @@ class JsonNode {
       bool? valueNode,
       bool? number,
       bool? integralNumber,
-      bool? floatingPointNumber,
       bool? int$,
       bool? long,
       bool? double$,
@@ -24715,14 +25117,14 @@ class JsonNode {
       bool? array,
       this.fields,
       bool? null$})
-      : pojo = pojo ?? false,
+      : floatingPointNumber = floatingPointNumber ?? false,
+        pojo = pojo ?? false,
         containerNode = containerNode ?? false,
         missingNode = missingNode ?? false,
         object = object ?? false,
         valueNode = valueNode ?? false,
         number = number ?? false,
         integralNumber = integralNumber ?? false,
-        floatingPointNumber = floatingPointNumber ?? false,
         int$ = int$ ?? false,
         long = long ?? false,
         double$ = double$ ?? false,
@@ -24740,6 +25142,7 @@ class JsonNode {
   factory JsonNode.fromJson(Map<String, Object?> json) {
     return JsonNode(
       elements: json[r'elements'] as Map<String, Object?>?,
+      floatingPointNumber: json[r'floatingPointNumber'] as bool? ?? false,
       pojo: json[r'pojo'] as bool? ?? false,
       containerNode: json[r'containerNode'] as bool? ?? false,
       missingNode: json[r'missingNode'] as bool? ?? false,
@@ -24747,7 +25150,6 @@ class JsonNode {
       valueNode: json[r'valueNode'] as bool? ?? false,
       number: json[r'number'] as bool? ?? false,
       integralNumber: json[r'integralNumber'] as bool? ?? false,
-      floatingPointNumber: json[r'floatingPointNumber'] as bool? ?? false,
       int$: json[r'int'] as bool? ?? false,
       long: json[r'long'] as bool? ?? false,
       double$: json[r'double'] as bool? ?? false,
@@ -24785,6 +25187,7 @@ class JsonNode {
 
   Map<String, Object?> toJson() {
     var elements = this.elements;
+    var floatingPointNumber = this.floatingPointNumber;
     var pojo = this.pojo;
     var containerNode = this.containerNode;
     var missingNode = this.missingNode;
@@ -24792,7 +25195,6 @@ class JsonNode {
     var valueNode = this.valueNode;
     var number = this.number;
     var integralNumber = this.integralNumber;
-    var floatingPointNumber = this.floatingPointNumber;
     var int$ = this.int$;
     var long = this.long;
     var double$ = this.double$;
@@ -24825,6 +25227,7 @@ class JsonNode {
     if (elements != null) {
       json[r'elements'] = elements;
     }
+    json[r'floatingPointNumber'] = floatingPointNumber;
     json[r'pojo'] = pojo;
     json[r'containerNode'] = containerNode;
     json[r'missingNode'] = missingNode;
@@ -24832,7 +25235,6 @@ class JsonNode {
     json[r'valueNode'] = valueNode;
     json[r'number'] = number;
     json[r'integralNumber'] = integralNumber;
-    json[r'floatingPointNumber'] = floatingPointNumber;
     json[r'int'] = int$;
     json[r'long'] = long;
     json[r'double'] = double$;
@@ -24893,6 +25295,7 @@ class JsonNode {
 
   JsonNode copyWith(
       {Map<String, dynamic>? elements,
+      bool? floatingPointNumber,
       bool? pojo,
       bool? containerNode,
       bool? missingNode,
@@ -24900,7 +25303,6 @@ class JsonNode {
       bool? valueNode,
       bool? number,
       bool? integralNumber,
-      bool? floatingPointNumber,
       bool? int$,
       bool? long,
       bool? double$,
@@ -24930,6 +25332,7 @@ class JsonNode {
       bool? null$}) {
     return JsonNode(
       elements: elements ?? this.elements,
+      floatingPointNumber: floatingPointNumber ?? this.floatingPointNumber,
       pojo: pojo ?? this.pojo,
       containerNode: containerNode ?? this.containerNode,
       missingNode: missingNode ?? this.missingNode,
@@ -24937,7 +25340,6 @@ class JsonNode {
       valueNode: valueNode ?? this.valueNode,
       number: number ?? this.number,
       integralNumber: integralNumber ?? this.integralNumber,
-      floatingPointNumber: floatingPointNumber ?? this.floatingPointNumber,
       int$: int$ ?? this.int$,
       long: long ?? this.long,
       double$: double$ ?? this.double$,
@@ -30758,19 +31160,19 @@ class PagedListUserDetailsApplicationUser {
 
 class PaginatedResponseComment {
   final int? total;
-  final int? maxResults;
   final int? startAt;
+  final int? maxResults;
   final List<Comment> results;
 
   PaginatedResponseComment(
-      {this.total, this.maxResults, this.startAt, List<Comment>? results})
+      {this.total, this.startAt, this.maxResults, List<Comment>? results})
       : results = results ?? [];
 
   factory PaginatedResponseComment.fromJson(Map<String, Object?> json) {
     return PaginatedResponseComment(
       total: (json[r'total'] as num?)?.toInt(),
-      maxResults: (json[r'maxResults'] as num?)?.toInt(),
       startAt: (json[r'startAt'] as num?)?.toInt(),
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
       results: (json[r'results'] as List<Object?>?)
               ?.map((i) =>
                   Comment.fromJson(i as Map<String, Object?>? ?? const {}))
@@ -30781,30 +31183,30 @@ class PaginatedResponseComment {
 
   Map<String, Object?> toJson() {
     var total = this.total;
-    var maxResults = this.maxResults;
     var startAt = this.startAt;
+    var maxResults = this.maxResults;
     var results = this.results;
 
     final json = <String, Object?>{};
     if (total != null) {
       json[r'total'] = total;
     }
-    if (maxResults != null) {
-      json[r'maxResults'] = maxResults;
-    }
     if (startAt != null) {
       json[r'startAt'] = startAt;
+    }
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
     }
     json[r'results'] = results.map((i) => i.toJson()).toList();
     return json;
   }
 
   PaginatedResponseComment copyWith(
-      {int? total, int? maxResults, int? startAt, List<Comment>? results}) {
+      {int? total, int? startAt, int? maxResults, List<Comment>? results}) {
     return PaginatedResponseComment(
       total: total ?? this.total,
-      maxResults: maxResults ?? this.maxResults,
       startAt: startAt ?? this.startAt,
+      maxResults: maxResults ?? this.maxResults,
       results: results ?? this.results,
     );
   }
@@ -31479,6 +31881,9 @@ class Project {
   /// The user who archived the project.
   final User? archivedBy;
 
+  /// The project landing page info.
+  final ProjectLandingPageInfo? landingPageInfo;
+
   Project(
       {this.expand,
       this.self,
@@ -31512,7 +31917,8 @@ class Project {
       this.deletedBy,
       bool? archived,
       this.archivedDate,
-      this.archivedBy})
+      this.archivedBy,
+      this.landingPageInfo})
       : components = components ?? [],
         issueTypes = issueTypes ?? [],
         versions = versions ?? [],
@@ -31596,6 +32002,10 @@ class Project {
       archivedBy: json[r'archivedBy'] != null
           ? User.fromJson(json[r'archivedBy']! as Map<String, Object?>)
           : null,
+      landingPageInfo: json[r'landingPageInfo'] != null
+          ? ProjectLandingPageInfo.fromJson(
+              json[r'landingPageInfo']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -31633,6 +32043,7 @@ class Project {
     var archived = this.archived;
     var archivedDate = this.archivedDate;
     var archivedBy = this.archivedBy;
+    var landingPageInfo = this.landingPageInfo;
 
     final json = <String, Object?>{};
     if (expand != null) {
@@ -31718,6 +32129,9 @@ class Project {
     if (archivedBy != null) {
       json[r'archivedBy'] = archivedBy.toJson();
     }
+    if (landingPageInfo != null) {
+      json[r'landingPageInfo'] = landingPageInfo.toJson();
+    }
     return json;
   }
 
@@ -31754,7 +32168,8 @@ class Project {
       User? deletedBy,
       bool? archived,
       DateTime? archivedDate,
-      User? archivedBy}) {
+      User? archivedBy,
+      ProjectLandingPageInfo? landingPageInfo}) {
     return Project(
       expand: expand ?? this.expand,
       self: self ?? this.self,
@@ -31789,6 +32204,7 @@ class Project {
       archived: archived ?? this.archived,
       archivedDate: archivedDate ?? this.archivedDate,
       archivedBy: archivedBy ?? this.archivedBy,
+      landingPageInfo: landingPageInfo ?? this.landingPageInfo,
     );
   }
 }
@@ -32405,6 +32821,32 @@ class ProjectFeature {
   }
 }
 
+/*
+class ProjectFeatureState {
+  static const enabled = ProjectFeatureState._('ENABLED');
+  static const disabled = ProjectFeatureState._('DISABLED');
+  static const comingSoon = ProjectFeatureState._('COMING_SOON');
+
+  static const values = [
+    enabled,
+    disabled,
+    comingSoon,
+  ];
+  final String value;
+
+  const ProjectFeatureState._(this.value);
+
+  static ProjectFeatureState fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ProjectFeatureState._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+*/
 /// Details of the feature state.
 class ProjectFeatureState {
   /// The feature state.
@@ -32716,355 +33158,6 @@ class ProjectIds {
       projectIds: projectIds ?? this.projectIds,
     );
   }
-}
-
-class ProjectInputBean {
-  /// Project keys must be unique and start with an uppercase letter followed by
-  /// one or more uppercase alphanumeric characters. The maximum length is 10
-  /// characters. Required when creating a project. Optional when updating a
-  /// project.
-  final String? key;
-
-  /// The name of the project. Required when creating a project. Optional when
-  /// updating a project.
-  final String? name;
-
-  /// The
-  /// [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes),
-  /// which dictates the application-specific feature set. Required when
-  /// creating a project. Not applicable for the Update project resource.
-  final ProjectInputBeanProjectTypeKey? projectTypeKey;
-
-  /// A prebuilt configuration for a project. The type of the
-  /// `projectTemplateKey` must match with the type of the `projectTypeKey`.
-  /// Required when creating a project. Not applicable for the Update project
-  /// resource.
-  final ProjectInputBeanProjectTemplateKey? projectTemplateKey;
-
-  /// A brief description of the project.
-  final String? description;
-
-  /// This parameter is deprecated because of privacy changes. Use
-  /// `leadAccountId` instead. See the
-  /// [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
-  /// for details. The user name of the project lead. Either `lead` or
-  /// `leadAccountId` must be set when creating a project. Optional when
-  /// updating a project. Cannot be provided with `leadAccountId`.
-  final String? lead;
-
-  /// The account ID of the project lead. Either `lead` or `leadAccountId` must
-  /// be set when creating a project. Optional when updating a project. Cannot
-  /// be provided with `lead`.
-  final String? leadAccountId;
-
-  /// A link to information about this project, such as project documentation
-  final String? url;
-
-  /// The default assignee when creating issues for this project.
-  final ProjectInputBeanAssigneeType? assigneeType;
-
-  /// An integer value for the project's avatar.
-  final int? avatarId;
-
-  /// The ID of the issue security scheme for the project, which enables you to
-  /// control who can and cannot view issues. Use the
-  /// [Get issue security schemes](#api-rest-api-3-issuesecurityschemes-get)
-  /// resource to get all issue security scheme IDs.
-  final int? issueSecurityScheme;
-
-  /// The ID of the permission scheme for the project. Use the
-  /// [Get all permission schemes](#api-rest-api-3-permissionscheme-get)
-  /// resource to see a list of all permission scheme IDs.
-  final int? permissionScheme;
-
-  /// The ID of the notification scheme for the project. Use the
-  /// [Get notification schemes](#api-rest-api-3-notificationscheme-get)
-  /// resource to get a list of notification scheme IDs.
-  final int? notificationScheme;
-
-  /// The ID of the project's category. A complete list of category IDs is found
-  /// using the
-  /// [Get all project categories](#api-rest-api-3-projectCategory-get)
-  /// operation.
-  final int? categoryId;
-
-  ProjectInputBean(
-      {this.key,
-      this.name,
-      this.projectTypeKey,
-      this.projectTemplateKey,
-      this.description,
-      this.lead,
-      this.leadAccountId,
-      this.url,
-      this.assigneeType,
-      this.avatarId,
-      this.issueSecurityScheme,
-      this.permissionScheme,
-      this.notificationScheme,
-      this.categoryId});
-
-  factory ProjectInputBean.fromJson(Map<String, Object?> json) {
-    return ProjectInputBean(
-      key: json[r'key'] as String?,
-      name: json[r'name'] as String?,
-      projectTypeKey: json[r'projectTypeKey'] != null
-          ? ProjectInputBeanProjectTypeKey.fromValue(
-              json[r'projectTypeKey']! as String)
-          : null,
-      projectTemplateKey: json[r'projectTemplateKey'] != null
-          ? ProjectInputBeanProjectTemplateKey.fromValue(
-              json[r'projectTemplateKey']! as String)
-          : null,
-      description: json[r'description'] as String?,
-      lead: json[r'lead'] as String?,
-      leadAccountId: json[r'leadAccountId'] as String?,
-      url: json[r'url'] as String?,
-      assigneeType: json[r'assigneeType'] != null
-          ? ProjectInputBeanAssigneeType.fromValue(
-              json[r'assigneeType']! as String)
-          : null,
-      avatarId: (json[r'avatarId'] as num?)?.toInt(),
-      issueSecurityScheme: (json[r'issueSecurityScheme'] as num?)?.toInt(),
-      permissionScheme: (json[r'permissionScheme'] as num?)?.toInt(),
-      notificationScheme: (json[r'notificationScheme'] as num?)?.toInt(),
-      categoryId: (json[r'categoryId'] as num?)?.toInt(),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var key = this.key;
-    var name = this.name;
-    var projectTypeKey = this.projectTypeKey;
-    var projectTemplateKey = this.projectTemplateKey;
-    var description = this.description;
-    var lead = this.lead;
-    var leadAccountId = this.leadAccountId;
-    var url = this.url;
-    var assigneeType = this.assigneeType;
-    var avatarId = this.avatarId;
-    var issueSecurityScheme = this.issueSecurityScheme;
-    var permissionScheme = this.permissionScheme;
-    var notificationScheme = this.notificationScheme;
-    var categoryId = this.categoryId;
-
-    final json = <String, Object?>{};
-    if (key != null) {
-      json[r'key'] = key;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (projectTypeKey != null) {
-      json[r'projectTypeKey'] = projectTypeKey.value;
-    }
-    if (projectTemplateKey != null) {
-      json[r'projectTemplateKey'] = projectTemplateKey.value;
-    }
-    if (description != null) {
-      json[r'description'] = description;
-    }
-    if (lead != null) {
-      json[r'lead'] = lead;
-    }
-    if (leadAccountId != null) {
-      json[r'leadAccountId'] = leadAccountId;
-    }
-    if (url != null) {
-      json[r'url'] = url;
-    }
-    if (assigneeType != null) {
-      json[r'assigneeType'] = assigneeType.value;
-    }
-    if (avatarId != null) {
-      json[r'avatarId'] = avatarId;
-    }
-    if (issueSecurityScheme != null) {
-      json[r'issueSecurityScheme'] = issueSecurityScheme;
-    }
-    if (permissionScheme != null) {
-      json[r'permissionScheme'] = permissionScheme;
-    }
-    if (notificationScheme != null) {
-      json[r'notificationScheme'] = notificationScheme;
-    }
-    if (categoryId != null) {
-      json[r'categoryId'] = categoryId;
-    }
-    return json;
-  }
-
-  ProjectInputBean copyWith(
-      {String? key,
-      String? name,
-      ProjectInputBeanProjectTypeKey? projectTypeKey,
-      ProjectInputBeanProjectTemplateKey? projectTemplateKey,
-      String? description,
-      String? lead,
-      String? leadAccountId,
-      String? url,
-      ProjectInputBeanAssigneeType? assigneeType,
-      int? avatarId,
-      int? issueSecurityScheme,
-      int? permissionScheme,
-      int? notificationScheme,
-      int? categoryId}) {
-    return ProjectInputBean(
-      key: key ?? this.key,
-      name: name ?? this.name,
-      projectTypeKey: projectTypeKey ?? this.projectTypeKey,
-      projectTemplateKey: projectTemplateKey ?? this.projectTemplateKey,
-      description: description ?? this.description,
-      lead: lead ?? this.lead,
-      leadAccountId: leadAccountId ?? this.leadAccountId,
-      url: url ?? this.url,
-      assigneeType: assigneeType ?? this.assigneeType,
-      avatarId: avatarId ?? this.avatarId,
-      issueSecurityScheme: issueSecurityScheme ?? this.issueSecurityScheme,
-      permissionScheme: permissionScheme ?? this.permissionScheme,
-      notificationScheme: notificationScheme ?? this.notificationScheme,
-      categoryId: categoryId ?? this.categoryId,
-    );
-  }
-}
-
-class ProjectInputBeanProjectTypeKey {
-  static const software = ProjectInputBeanProjectTypeKey._('software');
-  static const serviceDesk = ProjectInputBeanProjectTypeKey._('service_desk');
-  static const business = ProjectInputBeanProjectTypeKey._('business');
-
-  static const values = [
-    software,
-    serviceDesk,
-    business,
-  ];
-  final String value;
-
-  const ProjectInputBeanProjectTypeKey._(this.value);
-
-  static ProjectInputBeanProjectTypeKey fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => ProjectInputBeanProjectTypeKey._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class ProjectInputBeanProjectTemplateKey {
-  static const comPyxisGreenhopperJiraGhSimplifiedAgilityKanban =
-      ProjectInputBeanProjectTemplateKey._(
-          'com.pyxis.greenhopper.jira:gh-simplified-agility-kanban');
-  static const comPyxisGreenhopperJiraGhSimplifiedAgilityScrum =
-      ProjectInputBeanProjectTemplateKey._(
-          'com.pyxis.greenhopper.jira:gh-simplified-agility-scrum');
-  static const comPyxisGreenhopperJiraGhSimplifiedBasic =
-      ProjectInputBeanProjectTemplateKey._(
-          'com.pyxis.greenhopper.jira:gh-simplified-basic');
-  static const comPyxisGreenhopperJiraGhSimplifiedKanbanClassic =
-      ProjectInputBeanProjectTemplateKey._(
-          'com.pyxis.greenhopper.jira:gh-simplified-kanban-classic');
-  static const comPyxisGreenhopperJiraGhSimplifiedScrumClassic =
-      ProjectInputBeanProjectTemplateKey._(
-          'com.pyxis.greenhopper.jira:gh-simplified-scrum-classic');
-  static const comAtlassianServicedeskSimplifiedItServiceDesk =
-      ProjectInputBeanProjectTemplateKey._(
-          'com.atlassian.servicedesk:simplified-it-service-desk');
-  static const comAtlassianServicedeskSimplifiedInternalServiceDesk =
-      ProjectInputBeanProjectTemplateKey._(
-          'com.atlassian.servicedesk:simplified-internal-service-desk');
-  static const comAtlassianServicedeskSimplifiedExternalServiceDesk =
-      ProjectInputBeanProjectTemplateKey._(
-          'com.atlassian.servicedesk:simplified-external-service-desk');
-  static const comAtlassianServicedeskSimplifiedHrServiceDesk =
-      ProjectInputBeanProjectTemplateKey._(
-          'com.atlassian.servicedesk:simplified-hr-service-desk');
-  static const comAtlassianServicedeskSimplifiedFacilitiesServiceDesk =
-      ProjectInputBeanProjectTemplateKey._(
-          'com.atlassian.servicedesk:simplified-facilities-service-desk');
-  static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedContentManagement =
-      ProjectInputBeanProjectTemplateKey._(
-          'com.atlassian.jira-core-project-templates:jira-core-simplified-content-management');
-  static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedDocumentApproval =
-      ProjectInputBeanProjectTemplateKey._(
-          'com.atlassian.jira-core-project-templates:jira-core-simplified-document-approval');
-  static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedLeadTracking =
-      ProjectInputBeanProjectTemplateKey._(
-          'com.atlassian.jira-core-project-templates:jira-core-simplified-lead-tracking');
-  static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedProcessControl =
-      ProjectInputBeanProjectTemplateKey._(
-          'com.atlassian.jira-core-project-templates:jira-core-simplified-process-control');
-  static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedProcurement =
-      ProjectInputBeanProjectTemplateKey._(
-          'com.atlassian.jira-core-project-templates:jira-core-simplified-procurement');
-  static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedProjectManagement =
-      ProjectInputBeanProjectTemplateKey._(
-          'com.atlassian.jira-core-project-templates:jira-core-simplified-project-management');
-  static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedRecruitment =
-      ProjectInputBeanProjectTemplateKey._(
-          'com.atlassian.jira-core-project-templates:jira-core-simplified-recruitment');
-  static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedTask =
-      ProjectInputBeanProjectTemplateKey._(
-          'com.atlassian.jira-core-project-templates:jira-core-simplified-task-');
-
-  static const values = [
-    comPyxisGreenhopperJiraGhSimplifiedAgilityKanban,
-    comPyxisGreenhopperJiraGhSimplifiedAgilityScrum,
-    comPyxisGreenhopperJiraGhSimplifiedBasic,
-    comPyxisGreenhopperJiraGhSimplifiedKanbanClassic,
-    comPyxisGreenhopperJiraGhSimplifiedScrumClassic,
-    comAtlassianServicedeskSimplifiedItServiceDesk,
-    comAtlassianServicedeskSimplifiedInternalServiceDesk,
-    comAtlassianServicedeskSimplifiedExternalServiceDesk,
-    comAtlassianServicedeskSimplifiedHrServiceDesk,
-    comAtlassianServicedeskSimplifiedFacilitiesServiceDesk,
-    comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedContentManagement,
-    comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedDocumentApproval,
-    comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedLeadTracking,
-    comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedProcessControl,
-    comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedProcurement,
-    comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedProjectManagement,
-    comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedRecruitment,
-    comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedTask,
-  ];
-  final String value;
-
-  const ProjectInputBeanProjectTemplateKey._(this.value);
-
-  static ProjectInputBeanProjectTemplateKey fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => ProjectInputBeanProjectTemplateKey._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class ProjectInputBeanAssigneeType {
-  static const projectLead = ProjectInputBeanAssigneeType._('PROJECT_LEAD');
-  static const unassigned = ProjectInputBeanAssigneeType._('UNASSIGNED');
-
-  static const values = [
-    projectLead,
-    unassigned,
-  ];
-  final String value;
-
-  const ProjectInputBeanAssigneeType._(this.value);
-
-  static ProjectInputBeanAssigneeType fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => ProjectInputBeanAssigneeType._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
 }
 
 /// Additional details about a project.
@@ -33419,6 +33512,71 @@ class ProjectIssueTypesHierarchyLevel {
       level: level ?? this.level,
       name: name ?? this.name,
       issueTypes: issueTypes ?? this.issueTypes,
+    );
+  }
+}
+
+class ProjectLandingPageInfo {
+  final String? url;
+  final String? projectKey;
+  final String? projectType;
+  final int? boardId;
+  final bool simplified;
+
+  ProjectLandingPageInfo(
+      {this.url,
+      this.projectKey,
+      this.projectType,
+      this.boardId,
+      bool? simplified})
+      : simplified = simplified ?? false;
+
+  factory ProjectLandingPageInfo.fromJson(Map<String, Object?> json) {
+    return ProjectLandingPageInfo(
+      url: json[r'url'] as String?,
+      projectKey: json[r'projectKey'] as String?,
+      projectType: json[r'projectType'] as String?,
+      boardId: (json[r'boardId'] as num?)?.toInt(),
+      simplified: json[r'simplified'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var url = this.url;
+    var projectKey = this.projectKey;
+    var projectType = this.projectType;
+    var boardId = this.boardId;
+    var simplified = this.simplified;
+
+    final json = <String, Object?>{};
+    if (url != null) {
+      json[r'url'] = url;
+    }
+    if (projectKey != null) {
+      json[r'projectKey'] = projectKey;
+    }
+    if (projectType != null) {
+      json[r'projectType'] = projectType;
+    }
+    if (boardId != null) {
+      json[r'boardId'] = boardId;
+    }
+    json[r'simplified'] = simplified;
+    return json;
+  }
+
+  ProjectLandingPageInfo copyWith(
+      {String? url,
+      String? projectKey,
+      String? projectType,
+      int? boardId,
+      bool? simplified}) {
+    return ProjectLandingPageInfo(
+      url: url ?? this.url,
+      projectKey: projectKey ?? this.projectKey,
+      projectType: projectType ?? this.projectType,
+      boardId: boardId ?? this.boardId,
+      simplified: simplified ?? this.simplified,
     );
   }
 }
@@ -34573,40 +34731,40 @@ class RestrictedPermission {
 }
 
 class RichText {
-  final bool emptyAdf;
-  final bool valueSet;
   final bool finalised;
+  final bool valueSet;
+  final bool emptyAdf;
 
-  RichText({bool? emptyAdf, bool? valueSet, bool? finalised})
-      : emptyAdf = emptyAdf ?? false,
+  RichText({bool? finalised, bool? valueSet, bool? emptyAdf})
+      : finalised = finalised ?? false,
         valueSet = valueSet ?? false,
-        finalised = finalised ?? false;
+        emptyAdf = emptyAdf ?? false;
 
   factory RichText.fromJson(Map<String, Object?> json) {
     return RichText(
-      emptyAdf: json[r'emptyAdf'] as bool? ?? false,
-      valueSet: json[r'valueSet'] as bool? ?? false,
       finalised: json[r'finalised'] as bool? ?? false,
+      valueSet: json[r'valueSet'] as bool? ?? false,
+      emptyAdf: json[r'emptyAdf'] as bool? ?? false,
     );
   }
 
   Map<String, Object?> toJson() {
-    var emptyAdf = this.emptyAdf;
-    var valueSet = this.valueSet;
     var finalised = this.finalised;
+    var valueSet = this.valueSet;
+    var emptyAdf = this.emptyAdf;
 
     final json = <String, Object?>{};
-    json[r'emptyAdf'] = emptyAdf;
-    json[r'valueSet'] = valueSet;
     json[r'finalised'] = finalised;
+    json[r'valueSet'] = valueSet;
+    json[r'emptyAdf'] = emptyAdf;
     return json;
   }
 
-  RichText copyWith({bool? emptyAdf, bool? valueSet, bool? finalised}) {
+  RichText copyWith({bool? finalised, bool? valueSet, bool? emptyAdf}) {
     return RichText(
-      emptyAdf: emptyAdf ?? this.emptyAdf,
-      valueSet: valueSet ?? this.valueSet,
       finalised: finalised ?? this.finalised,
+      valueSet: valueSet ?? this.valueSet,
+      emptyAdf: emptyAdf ?? this.emptyAdf,
     );
   }
 }
@@ -37913,6 +38071,201 @@ class UpdateDefaultScreenScheme {
   }
 }
 
+/// Details about the project.
+class UpdateProjectDetails {
+  /// Project keys must be unique and start with an uppercase letter followed by
+  /// one or more uppercase alphanumeric characters. The maximum length is 10
+  /// characters.
+  final String? key;
+
+  /// The name of the project.
+  final String? name;
+
+  /// A brief description of the project.
+  final String? description;
+
+  /// This parameter is deprecated because of privacy changes. Use
+  /// `leadAccountId` instead. See the
+  /// [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details. The user name of the project lead. Cannot be provided with
+  /// `leadAccountId`.
+  final String? lead;
+
+  /// The account ID of the project lead. Cannot be provided with `lead`.
+  final String? leadAccountId;
+
+  /// A link to information about this project, such as project documentation
+  final String? url;
+
+  /// The default assignee when creating issues for this project.
+  final UpdateProjectDetailsAssigneeType? assigneeType;
+
+  /// An integer value for the project's avatar.
+  final int? avatarId;
+
+  /// The ID of the issue security scheme for the project, which enables you to
+  /// control who can and cannot view issues. Use the
+  /// [Get issue security schemes](#api-rest-api-3-issuesecurityschemes-get)
+  /// resource to get all issue security scheme IDs.
+  final int? issueSecurityScheme;
+
+  /// The ID of the permission scheme for the project. Use the
+  /// [Get all permission schemes](#api-rest-api-3-permissionscheme-get)
+  /// resource to see a list of all permission scheme IDs.
+  final int? permissionScheme;
+
+  /// The ID of the notification scheme for the project. Use the
+  /// [Get notification schemes](#api-rest-api-3-notificationscheme-get)
+  /// resource to get a list of notification scheme IDs.
+  final int? notificationScheme;
+
+  /// The ID of the project's category. A complete list of category IDs is found
+  /// using the
+  /// [Get all project categories](#api-rest-api-3-projectCategory-get)
+  /// operation.
+  final int? categoryId;
+
+  UpdateProjectDetails(
+      {this.key,
+      this.name,
+      this.description,
+      this.lead,
+      this.leadAccountId,
+      this.url,
+      this.assigneeType,
+      this.avatarId,
+      this.issueSecurityScheme,
+      this.permissionScheme,
+      this.notificationScheme,
+      this.categoryId});
+
+  factory UpdateProjectDetails.fromJson(Map<String, Object?> json) {
+    return UpdateProjectDetails(
+      key: json[r'key'] as String?,
+      name: json[r'name'] as String?,
+      description: json[r'description'] as String?,
+      lead: json[r'lead'] as String?,
+      leadAccountId: json[r'leadAccountId'] as String?,
+      url: json[r'url'] as String?,
+      assigneeType: json[r'assigneeType'] != null
+          ? UpdateProjectDetailsAssigneeType.fromValue(
+              json[r'assigneeType']! as String)
+          : null,
+      avatarId: (json[r'avatarId'] as num?)?.toInt(),
+      issueSecurityScheme: (json[r'issueSecurityScheme'] as num?)?.toInt(),
+      permissionScheme: (json[r'permissionScheme'] as num?)?.toInt(),
+      notificationScheme: (json[r'notificationScheme'] as num?)?.toInt(),
+      categoryId: (json[r'categoryId'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+    var name = this.name;
+    var description = this.description;
+    var lead = this.lead;
+    var leadAccountId = this.leadAccountId;
+    var url = this.url;
+    var assigneeType = this.assigneeType;
+    var avatarId = this.avatarId;
+    var issueSecurityScheme = this.issueSecurityScheme;
+    var permissionScheme = this.permissionScheme;
+    var notificationScheme = this.notificationScheme;
+    var categoryId = this.categoryId;
+
+    final json = <String, Object?>{};
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (lead != null) {
+      json[r'lead'] = lead;
+    }
+    if (leadAccountId != null) {
+      json[r'leadAccountId'] = leadAccountId;
+    }
+    if (url != null) {
+      json[r'url'] = url;
+    }
+    if (assigneeType != null) {
+      json[r'assigneeType'] = assigneeType.value;
+    }
+    if (avatarId != null) {
+      json[r'avatarId'] = avatarId;
+    }
+    if (issueSecurityScheme != null) {
+      json[r'issueSecurityScheme'] = issueSecurityScheme;
+    }
+    if (permissionScheme != null) {
+      json[r'permissionScheme'] = permissionScheme;
+    }
+    if (notificationScheme != null) {
+      json[r'notificationScheme'] = notificationScheme;
+    }
+    if (categoryId != null) {
+      json[r'categoryId'] = categoryId;
+    }
+    return json;
+  }
+
+  UpdateProjectDetails copyWith(
+      {String? key,
+      String? name,
+      String? description,
+      String? lead,
+      String? leadAccountId,
+      String? url,
+      UpdateProjectDetailsAssigneeType? assigneeType,
+      int? avatarId,
+      int? issueSecurityScheme,
+      int? permissionScheme,
+      int? notificationScheme,
+      int? categoryId}) {
+    return UpdateProjectDetails(
+      key: key ?? this.key,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      lead: lead ?? this.lead,
+      leadAccountId: leadAccountId ?? this.leadAccountId,
+      url: url ?? this.url,
+      assigneeType: assigneeType ?? this.assigneeType,
+      avatarId: avatarId ?? this.avatarId,
+      issueSecurityScheme: issueSecurityScheme ?? this.issueSecurityScheme,
+      permissionScheme: permissionScheme ?? this.permissionScheme,
+      notificationScheme: notificationScheme ?? this.notificationScheme,
+      categoryId: categoryId ?? this.categoryId,
+    );
+  }
+}
+
+class UpdateProjectDetailsAssigneeType {
+  static const projectLead = UpdateProjectDetailsAssigneeType._('PROJECT_LEAD');
+  static const unassigned = UpdateProjectDetailsAssigneeType._('UNASSIGNED');
+
+  static const values = [
+    projectLead,
+    unassigned,
+  ];
+  final String value;
+
+  const UpdateProjectDetailsAssigneeType._(this.value);
+
+  static UpdateProjectDetailsAssigneeType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => UpdateProjectDetailsAssigneeType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 /// Details of a screen.
 class UpdateScreenDetails {
   /// The name of the screen. The name must be unique. The maximum length is 255
@@ -38525,28 +38878,28 @@ class UserBeanAvatarUrls {
   /// The URL of the user's 32x32 pixel avatar.
   final String? $32X32;
 
-  /// The URL of the user's 48x48 pixel avatar.
-  final String? $48X48;
-
   /// The URL of the user's 16x16 pixel avatar.
   final String? $16X16;
 
-  UserBeanAvatarUrls({this.$24X24, this.$32X32, this.$48X48, this.$16X16});
+  /// The URL of the user's 48x48 pixel avatar.
+  final String? $48X48;
+
+  UserBeanAvatarUrls({this.$24X24, this.$32X32, this.$16X16, this.$48X48});
 
   factory UserBeanAvatarUrls.fromJson(Map<String, Object?> json) {
     return UserBeanAvatarUrls(
       $24X24: json[r'24x24'] as String?,
       $32X32: json[r'32x32'] as String?,
-      $48X48: json[r'48x48'] as String?,
       $16X16: json[r'16x16'] as String?,
+      $48X48: json[r'48x48'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var $24X24 = this.$24X24;
     var $32X32 = this.$32X32;
-    var $48X48 = this.$48X48;
     var $16X16 = this.$16X16;
+    var $48X48 = this.$48X48;
 
     final json = <String, Object?>{};
     if ($24X24 != null) {
@@ -38555,22 +38908,22 @@ class UserBeanAvatarUrls {
     if ($32X32 != null) {
       json[r'32x32'] = $32X32;
     }
-    if ($48X48 != null) {
-      json[r'48x48'] = $48X48;
-    }
     if ($16X16 != null) {
       json[r'16x16'] = $16X16;
+    }
+    if ($48X48 != null) {
+      json[r'48x48'] = $48X48;
     }
     return json;
   }
 
   UserBeanAvatarUrls copyWith(
-      {String? $24X24, String? $32X32, String? $48X48, String? $16X16}) {
+      {String? $24X24, String? $32X32, String? $16X16, String? $48X48}) {
     return UserBeanAvatarUrls(
       $24X24: $24X24 ?? this.$24X24,
       $32X32: $32X32 ?? this.$32X32,
-      $48X48: $48X48 ?? this.$48X48,
       $16X16: $16X16 ?? this.$16X16,
+      $48X48: $48X48 ?? this.$48X48,
     );
   }
 }
