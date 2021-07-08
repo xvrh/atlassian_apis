@@ -1679,28 +1679,58 @@ class Links {
 
 class Meta {
   final String? scheduledDate;
+  final String? migrationStartDateTime;
+  final String? migrationEndDataTime;
+  final String? atlassianAccountId;
 
-  Meta({this.scheduledDate});
+  Meta(
+      {this.scheduledDate,
+      this.migrationStartDateTime,
+      this.migrationEndDataTime,
+      this.atlassianAccountId});
 
   factory Meta.fromJson(Map<String, Object?> json) {
     return Meta(
       scheduledDate: json[r'scheduledDate'] as String?,
+      migrationStartDateTime: json[r'migrationStartDateTime'] as String?,
+      migrationEndDataTime: json[r'migrationEndDataTime'] as String?,
+      atlassianAccountId: json[r'atlassianAccountId'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var scheduledDate = this.scheduledDate;
+    var migrationStartDateTime = this.migrationStartDateTime;
+    var migrationEndDataTime = this.migrationEndDataTime;
+    var atlassianAccountId = this.atlassianAccountId;
 
     final json = <String, Object?>{};
     if (scheduledDate != null) {
       json[r'scheduledDate'] = scheduledDate;
     }
+    if (migrationStartDateTime != null) {
+      json[r'migrationStartDateTime'] = migrationStartDateTime;
+    }
+    if (migrationEndDataTime != null) {
+      json[r'migrationEndDataTime'] = migrationEndDataTime;
+    }
+    if (atlassianAccountId != null) {
+      json[r'atlassianAccountId'] = atlassianAccountId;
+    }
     return json;
   }
 
-  Meta copyWith({String? scheduledDate}) {
+  Meta copyWith(
+      {String? scheduledDate,
+      String? migrationStartDateTime,
+      String? migrationEndDataTime,
+      String? atlassianAccountId}) {
     return Meta(
       scheduledDate: scheduledDate ?? this.scheduledDate,
+      migrationStartDateTime:
+          migrationStartDateTime ?? this.migrationStartDateTime,
+      migrationEndDataTime: migrationEndDataTime ?? this.migrationEndDataTime,
+      atlassianAccountId: atlassianAccountId ?? this.atlassianAccountId,
     );
   }
 }

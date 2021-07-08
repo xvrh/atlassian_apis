@@ -914,6 +914,22 @@
             "$ref": "#/components/schemas/Manageability.Rule.ObjectMutability"
           }
         }
+      },
+      "Response.Forbidden.TargetUnverified": {
+        "description": "Cannot manage an unverified target account\n",
+        "type": "object",
+        "required": [
+          "key"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "enum": [
+              "forbidden.targetUnverified"
+            ],
+            "example": "forbidden.targetUnverified"
+          }
+        }
       }
     },
     "responses": {
@@ -1014,12 +1030,16 @@
               "oneOf": [
                 {
                   "$ref": "#/components/schemas/Response.Forbidden.Basic"
+                },
+                {
+                  "$ref": "#/components/schemas/Response.Forbidden.TargetUnverified"
                 }
               ],
               "discriminator": {
                 "propertyName": "key",
                 "mapping": {
-                  "forbidden": "#/components/schemas/Response.Forbidden.Basic"
+                  "forbidden": "#/components/schemas/Response.Forbidden.Basic",
+                  "forbidden.targetUnverified": "#/components/schemas/Response.Forbidden.TargetUnverified"
                 }
               },
               "example": {
@@ -1041,13 +1061,17 @@
                 },
                 {
                   "$ref": "#/components/schemas/Response.Forbidden.Action"
+                },
+                {
+                  "$ref": "#/components/schemas/Response.Forbidden.TargetUnverified"
                 }
               ],
               "discriminator": {
                 "propertyName": "key",
                 "mapping": {
                   "forbidden": "#/components/schemas/Response.Forbidden.Basic",
-                  "forbidden.action": "#/components/schemas/Response.Forbidden.Action"
+                  "forbidden.action": "#/components/schemas/Response.Forbidden.Action",
+                  "forbidden.targetUnverified": "#/components/schemas/Response.Forbidden.TargetUnverified"
                 }
               },
               "example": {
@@ -1072,6 +1096,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/Response.Forbidden.UnclaimedDomain"
+                },
+                {
+                  "$ref": "#/components/schemas/Response.Forbidden.TargetUnverified"
                 }
               ],
               "discriminator": {
@@ -1079,7 +1106,8 @@
                 "mapping": {
                   "forbidden": "#/components/schemas/Response.Forbidden.Basic",
                   "forbidden.action": "#/components/schemas/Response.Forbidden.Action",
-                  "forbidden.unclaimedDomain": "#/components/schemas/Response.Forbidden.UnclaimedDomain"
+                  "forbidden.unclaimedDomain": "#/components/schemas/Response.Forbidden.UnclaimedDomain",
+                  "forbidden.targetUnverified": "#/components/schemas/Response.Forbidden.TargetUnverified"
                 }
               },
               "example": {
@@ -1100,13 +1128,17 @@
                 },
                 {
                   "$ref": "#/components/schemas/Response.Forbidden.ObjectMutability"
+                },
+                {
+                  "$ref": "#/components/schemas/Response.Forbidden.TargetUnverified"
                 }
               ],
               "discriminator": {
                 "propertyName": "key",
                 "mapping": {
                   "forbidden": "#/components/schemas/Response.Forbidden.Basic",
-                  "forbidden.fieldMutation": "#/components/schemas/Response.Forbidden.ObjectMutability"
+                  "forbidden.fieldMutation": "#/components/schemas/Response.Forbidden.ObjectMutability",
+                  "forbidden.targetUnverified": "#/components/schemas/Response.Forbidden.TargetUnverified"
                 }
               },
               "example": {

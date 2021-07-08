@@ -3332,431 +3332,6 @@ class BoardCreateBeanLocation {
   }
 }
 
-class BoardFeatureBean {
-  final BoardFeatureBeanBoardFeature? boardFeature;
-  final int? boardId;
-  final BoardFeatureBeanState? state;
-  final String? localisedName;
-  final String? localisedDescription;
-  final String? learnMoreLink;
-  final String? imageUri;
-  final bool toggleLocked;
-
-  BoardFeatureBean(
-      {this.boardFeature,
-      this.boardId,
-      this.state,
-      this.localisedName,
-      this.localisedDescription,
-      this.learnMoreLink,
-      this.imageUri,
-      bool? toggleLocked})
-      : toggleLocked = toggleLocked ?? false;
-
-  factory BoardFeatureBean.fromJson(Map<String, Object?> json) {
-    return BoardFeatureBean(
-      boardFeature: json[r'boardFeature'] != null
-          ? BoardFeatureBeanBoardFeature.fromValue(
-              json[r'boardFeature']! as String)
-          : null,
-      boardId: (json[r'boardId'] as num?)?.toInt(),
-      state: json[r'state'] != null
-          ? BoardFeatureBeanState.fromValue(json[r'state']! as String)
-          : null,
-      localisedName: json[r'localisedName'] as String?,
-      localisedDescription: json[r'localisedDescription'] as String?,
-      learnMoreLink: json[r'learnMoreLink'] as String?,
-      imageUri: json[r'imageUri'] as String?,
-      toggleLocked: json[r'toggleLocked'] as bool? ?? false,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var boardFeature = this.boardFeature;
-    var boardId = this.boardId;
-    var state = this.state;
-    var localisedName = this.localisedName;
-    var localisedDescription = this.localisedDescription;
-    var learnMoreLink = this.learnMoreLink;
-    var imageUri = this.imageUri;
-    var toggleLocked = this.toggleLocked;
-
-    final json = <String, Object?>{};
-    if (boardFeature != null) {
-      json[r'boardFeature'] = boardFeature.value;
-    }
-    if (boardId != null) {
-      json[r'boardId'] = boardId;
-    }
-    if (state != null) {
-      json[r'state'] = state.value;
-    }
-    if (localisedName != null) {
-      json[r'localisedName'] = localisedName;
-    }
-    if (localisedDescription != null) {
-      json[r'localisedDescription'] = localisedDescription;
-    }
-    if (learnMoreLink != null) {
-      json[r'learnMoreLink'] = learnMoreLink;
-    }
-    if (imageUri != null) {
-      json[r'imageUri'] = imageUri;
-    }
-    json[r'toggleLocked'] = toggleLocked;
-    return json;
-  }
-
-  BoardFeatureBean copyWith(
-      {BoardFeatureBeanBoardFeature? boardFeature,
-      int? boardId,
-      BoardFeatureBeanState? state,
-      String? localisedName,
-      String? localisedDescription,
-      String? learnMoreLink,
-      String? imageUri,
-      bool? toggleLocked}) {
-    return BoardFeatureBean(
-      boardFeature: boardFeature ?? this.boardFeature,
-      boardId: boardId ?? this.boardId,
-      state: state ?? this.state,
-      localisedName: localisedName ?? this.localisedName,
-      localisedDescription: localisedDescription ?? this.localisedDescription,
-      learnMoreLink: learnMoreLink ?? this.learnMoreLink,
-      imageUri: imageUri ?? this.imageUri,
-      toggleLocked: toggleLocked ?? this.toggleLocked,
-    );
-  }
-}
-
-class BoardFeatureBeanBoardFeature {
-  static const simpleRoadmap = BoardFeatureBeanBoardFeature._('SIMPLE_ROADMAP');
-  static const backlog = BoardFeatureBeanBoardFeature._('BACKLOG');
-  static const sprints = BoardFeatureBeanBoardFeature._('SPRINTS');
-  static const devtools = BoardFeatureBeanBoardFeature._('DEVTOOLS');
-  static const reports = BoardFeatureBeanBoardFeature._('REPORTS');
-  static const estimation = BoardFeatureBeanBoardFeature._('ESTIMATION');
-  static const pages = BoardFeatureBeanBoardFeature._('PAGES');
-  static const code = BoardFeatureBeanBoardFeature._('CODE');
-  static const releases = BoardFeatureBeanBoardFeature._('RELEASES');
-  static const deployments = BoardFeatureBeanBoardFeature._('DEPLOYMENTS');
-  static const issueNavigator =
-      BoardFeatureBeanBoardFeature._('ISSUE_NAVIGATOR');
-  static const onCallSchedule =
-      BoardFeatureBeanBoardFeature._('ON_CALL_SCHEDULE');
-
-  static const values = [
-    simpleRoadmap,
-    backlog,
-    sprints,
-    devtools,
-    reports,
-    estimation,
-    pages,
-    code,
-    releases,
-    deployments,
-    issueNavigator,
-    onCallSchedule,
-  ];
-  final String value;
-
-  const BoardFeatureBeanBoardFeature._(this.value);
-
-  static BoardFeatureBeanBoardFeature fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => BoardFeatureBeanBoardFeature._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class BoardFeatureBeanState {
-  static const enabled = BoardFeatureBeanState._('ENABLED');
-  static const disabled = BoardFeatureBeanState._('DISABLED');
-  static const comingSoon = BoardFeatureBeanState._('COMING_SOON');
-
-  static const values = [
-    enabled,
-    disabled,
-    comingSoon,
-  ];
-  final String value;
-
-  const BoardFeatureBeanState._(this.value);
-
-  static BoardFeatureBeanState fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => BoardFeatureBeanState._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class BoardFeatureResponseBean {
-  final List<BoardFeatureResponseBeanFeaturesItem> features;
-
-  BoardFeatureResponseBean(
-      {List<BoardFeatureResponseBeanFeaturesItem>? features})
-      : features = features ?? [];
-
-  factory BoardFeatureResponseBean.fromJson(Map<String, Object?> json) {
-    return BoardFeatureResponseBean(
-      features: (json[r'features'] as List<Object?>?)
-              ?.map((i) => BoardFeatureResponseBeanFeaturesItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var features = this.features;
-
-    final json = <String, Object?>{};
-    json[r'features'] = features.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  BoardFeatureResponseBean copyWith(
-      {List<BoardFeatureResponseBeanFeaturesItem>? features}) {
-    return BoardFeatureResponseBean(
-      features: features ?? this.features,
-    );
-  }
-}
-
-class BoardFeatureResponseBeanFeaturesItem {
-  final BoardFeatureResponseBeanFeaturesItemBoardFeature? boardFeature;
-  final int? boardId;
-  final BoardFeatureResponseBeanFeaturesItemState? state;
-  final String? localisedName;
-  final String? localisedDescription;
-  final String? learnMoreLink;
-  final String? imageUri;
-  final bool toggleLocked;
-
-  BoardFeatureResponseBeanFeaturesItem(
-      {this.boardFeature,
-      this.boardId,
-      this.state,
-      this.localisedName,
-      this.localisedDescription,
-      this.learnMoreLink,
-      this.imageUri,
-      bool? toggleLocked})
-      : toggleLocked = toggleLocked ?? false;
-
-  factory BoardFeatureResponseBeanFeaturesItem.fromJson(
-      Map<String, Object?> json) {
-    return BoardFeatureResponseBeanFeaturesItem(
-      boardFeature: json[r'boardFeature'] != null
-          ? BoardFeatureResponseBeanFeaturesItemBoardFeature.fromValue(
-              json[r'boardFeature']! as String)
-          : null,
-      boardId: (json[r'boardId'] as num?)?.toInt(),
-      state: json[r'state'] != null
-          ? BoardFeatureResponseBeanFeaturesItemState.fromValue(
-              json[r'state']! as String)
-          : null,
-      localisedName: json[r'localisedName'] as String?,
-      localisedDescription: json[r'localisedDescription'] as String?,
-      learnMoreLink: json[r'learnMoreLink'] as String?,
-      imageUri: json[r'imageUri'] as String?,
-      toggleLocked: json[r'toggleLocked'] as bool? ?? false,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var boardFeature = this.boardFeature;
-    var boardId = this.boardId;
-    var state = this.state;
-    var localisedName = this.localisedName;
-    var localisedDescription = this.localisedDescription;
-    var learnMoreLink = this.learnMoreLink;
-    var imageUri = this.imageUri;
-    var toggleLocked = this.toggleLocked;
-
-    final json = <String, Object?>{};
-    if (boardFeature != null) {
-      json[r'boardFeature'] = boardFeature.value;
-    }
-    if (boardId != null) {
-      json[r'boardId'] = boardId;
-    }
-    if (state != null) {
-      json[r'state'] = state.value;
-    }
-    if (localisedName != null) {
-      json[r'localisedName'] = localisedName;
-    }
-    if (localisedDescription != null) {
-      json[r'localisedDescription'] = localisedDescription;
-    }
-    if (learnMoreLink != null) {
-      json[r'learnMoreLink'] = learnMoreLink;
-    }
-    if (imageUri != null) {
-      json[r'imageUri'] = imageUri;
-    }
-    json[r'toggleLocked'] = toggleLocked;
-    return json;
-  }
-
-  BoardFeatureResponseBeanFeaturesItem copyWith(
-      {BoardFeatureResponseBeanFeaturesItemBoardFeature? boardFeature,
-      int? boardId,
-      BoardFeatureResponseBeanFeaturesItemState? state,
-      String? localisedName,
-      String? localisedDescription,
-      String? learnMoreLink,
-      String? imageUri,
-      bool? toggleLocked}) {
-    return BoardFeatureResponseBeanFeaturesItem(
-      boardFeature: boardFeature ?? this.boardFeature,
-      boardId: boardId ?? this.boardId,
-      state: state ?? this.state,
-      localisedName: localisedName ?? this.localisedName,
-      localisedDescription: localisedDescription ?? this.localisedDescription,
-      learnMoreLink: learnMoreLink ?? this.learnMoreLink,
-      imageUri: imageUri ?? this.imageUri,
-      toggleLocked: toggleLocked ?? this.toggleLocked,
-    );
-  }
-}
-
-class BoardFeatureResponseBeanFeaturesItemBoardFeature {
-  static const simpleRoadmap =
-      BoardFeatureResponseBeanFeaturesItemBoardFeature._('SIMPLE_ROADMAP');
-  static const backlog =
-      BoardFeatureResponseBeanFeaturesItemBoardFeature._('BACKLOG');
-  static const sprints =
-      BoardFeatureResponseBeanFeaturesItemBoardFeature._('SPRINTS');
-  static const devtools =
-      BoardFeatureResponseBeanFeaturesItemBoardFeature._('DEVTOOLS');
-  static const reports =
-      BoardFeatureResponseBeanFeaturesItemBoardFeature._('REPORTS');
-  static const estimation =
-      BoardFeatureResponseBeanFeaturesItemBoardFeature._('ESTIMATION');
-  static const pages =
-      BoardFeatureResponseBeanFeaturesItemBoardFeature._('PAGES');
-  static const code =
-      BoardFeatureResponseBeanFeaturesItemBoardFeature._('CODE');
-  static const releases =
-      BoardFeatureResponseBeanFeaturesItemBoardFeature._('RELEASES');
-  static const deployments =
-      BoardFeatureResponseBeanFeaturesItemBoardFeature._('DEPLOYMENTS');
-  static const issueNavigator =
-      BoardFeatureResponseBeanFeaturesItemBoardFeature._('ISSUE_NAVIGATOR');
-  static const onCallSchedule =
-      BoardFeatureResponseBeanFeaturesItemBoardFeature._('ON_CALL_SCHEDULE');
-
-  static const values = [
-    simpleRoadmap,
-    backlog,
-    sprints,
-    devtools,
-    reports,
-    estimation,
-    pages,
-    code,
-    releases,
-    deployments,
-    issueNavigator,
-    onCallSchedule,
-  ];
-  final String value;
-
-  const BoardFeatureResponseBeanFeaturesItemBoardFeature._(this.value);
-
-  static BoardFeatureResponseBeanFeaturesItemBoardFeature fromValue(
-          String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () =>
-              BoardFeatureResponseBeanFeaturesItemBoardFeature._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class BoardFeatureResponseBeanFeaturesItemState {
-  static const enabled = BoardFeatureResponseBeanFeaturesItemState._('ENABLED');
-  static const disabled =
-      BoardFeatureResponseBeanFeaturesItemState._('DISABLED');
-  static const comingSoon =
-      BoardFeatureResponseBeanFeaturesItemState._('COMING_SOON');
-
-  static const values = [
-    enabled,
-    disabled,
-    comingSoon,
-  ];
-  final String value;
-
-  const BoardFeatureResponseBeanFeaturesItemState._(this.value);
-
-  static BoardFeatureResponseBeanFeaturesItemState fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => BoardFeatureResponseBeanFeaturesItemState._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class BoardFeatureToggleRequestBean {
-  final int? boardId;
-  final String? feature;
-  final bool enabling;
-
-  BoardFeatureToggleRequestBean({this.boardId, this.feature, bool? enabling})
-      : enabling = enabling ?? false;
-
-  factory BoardFeatureToggleRequestBean.fromJson(Map<String, Object?> json) {
-    return BoardFeatureToggleRequestBean(
-      boardId: (json[r'boardId'] as num?)?.toInt(),
-      feature: json[r'feature'] as String?,
-      enabling: json[r'enabling'] as bool? ?? false,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var boardId = this.boardId;
-    var feature = this.feature;
-    var enabling = this.enabling;
-
-    final json = <String, Object?>{};
-    if (boardId != null) {
-      json[r'boardId'] = boardId;
-    }
-    if (feature != null) {
-      json[r'feature'] = feature;
-    }
-    json[r'enabling'] = enabling;
-    return json;
-  }
-
-  BoardFeatureToggleRequestBean copyWith(
-      {int? boardId, String? feature, bool? enabling}) {
-    return BoardFeatureToggleRequestBean(
-      boardId: boardId ?? this.boardId,
-      feature: feature ?? this.feature,
-      enabling: enabling ?? this.enabling,
-    );
-  }
-}
-
 class BoardFilterBean {
   final int? id;
   final String? self;
@@ -5079,6 +4654,425 @@ class EstimationFieldBean {
     return EstimationFieldBean(
       fieldId: fieldId ?? this.fieldId,
       displayName: displayName ?? this.displayName,
+    );
+  }
+}
+
+class FeatureBean {
+  final FeatureBeanBoardFeature? boardFeature;
+  final int? boardId;
+  final FeatureBeanState? state;
+  final String? localisedName;
+  final String? localisedDescription;
+  final String? learnMoreLink;
+  final String? imageUri;
+  final bool toggleLocked;
+
+  FeatureBean(
+      {this.boardFeature,
+      this.boardId,
+      this.state,
+      this.localisedName,
+      this.localisedDescription,
+      this.learnMoreLink,
+      this.imageUri,
+      bool? toggleLocked})
+      : toggleLocked = toggleLocked ?? false;
+
+  factory FeatureBean.fromJson(Map<String, Object?> json) {
+    return FeatureBean(
+      boardFeature: json[r'boardFeature'] != null
+          ? FeatureBeanBoardFeature.fromValue(json[r'boardFeature']! as String)
+          : null,
+      boardId: (json[r'boardId'] as num?)?.toInt(),
+      state: json[r'state'] != null
+          ? FeatureBeanState.fromValue(json[r'state']! as String)
+          : null,
+      localisedName: json[r'localisedName'] as String?,
+      localisedDescription: json[r'localisedDescription'] as String?,
+      learnMoreLink: json[r'learnMoreLink'] as String?,
+      imageUri: json[r'imageUri'] as String?,
+      toggleLocked: json[r'toggleLocked'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var boardFeature = this.boardFeature;
+    var boardId = this.boardId;
+    var state = this.state;
+    var localisedName = this.localisedName;
+    var localisedDescription = this.localisedDescription;
+    var learnMoreLink = this.learnMoreLink;
+    var imageUri = this.imageUri;
+    var toggleLocked = this.toggleLocked;
+
+    final json = <String, Object?>{};
+    if (boardFeature != null) {
+      json[r'boardFeature'] = boardFeature.value;
+    }
+    if (boardId != null) {
+      json[r'boardId'] = boardId;
+    }
+    if (state != null) {
+      json[r'state'] = state.value;
+    }
+    if (localisedName != null) {
+      json[r'localisedName'] = localisedName;
+    }
+    if (localisedDescription != null) {
+      json[r'localisedDescription'] = localisedDescription;
+    }
+    if (learnMoreLink != null) {
+      json[r'learnMoreLink'] = learnMoreLink;
+    }
+    if (imageUri != null) {
+      json[r'imageUri'] = imageUri;
+    }
+    json[r'toggleLocked'] = toggleLocked;
+    return json;
+  }
+
+  FeatureBean copyWith(
+      {FeatureBeanBoardFeature? boardFeature,
+      int? boardId,
+      FeatureBeanState? state,
+      String? localisedName,
+      String? localisedDescription,
+      String? learnMoreLink,
+      String? imageUri,
+      bool? toggleLocked}) {
+    return FeatureBean(
+      boardFeature: boardFeature ?? this.boardFeature,
+      boardId: boardId ?? this.boardId,
+      state: state ?? this.state,
+      localisedName: localisedName ?? this.localisedName,
+      localisedDescription: localisedDescription ?? this.localisedDescription,
+      learnMoreLink: learnMoreLink ?? this.learnMoreLink,
+      imageUri: imageUri ?? this.imageUri,
+      toggleLocked: toggleLocked ?? this.toggleLocked,
+    );
+  }
+}
+
+class FeatureBeanBoardFeature {
+  static const simpleRoadmap = FeatureBeanBoardFeature._('SIMPLE_ROADMAP');
+  static const backlog = FeatureBeanBoardFeature._('BACKLOG');
+  static const sprints = FeatureBeanBoardFeature._('SPRINTS');
+  static const devtools = FeatureBeanBoardFeature._('DEVTOOLS');
+  static const reports = FeatureBeanBoardFeature._('REPORTS');
+  static const estimation = FeatureBeanBoardFeature._('ESTIMATION');
+  static const pages = FeatureBeanBoardFeature._('PAGES');
+  static const code = FeatureBeanBoardFeature._('CODE');
+  static const releases = FeatureBeanBoardFeature._('RELEASES');
+  static const deployments = FeatureBeanBoardFeature._('DEPLOYMENTS');
+  static const issueNavigator = FeatureBeanBoardFeature._('ISSUE_NAVIGATOR');
+  static const onCallSchedule = FeatureBeanBoardFeature._('ON_CALL_SCHEDULE');
+  static const board = FeatureBeanBoardFeature._('BOARD');
+
+  static const values = [
+    simpleRoadmap,
+    backlog,
+    sprints,
+    devtools,
+    reports,
+    estimation,
+    pages,
+    code,
+    releases,
+    deployments,
+    issueNavigator,
+    onCallSchedule,
+    board,
+  ];
+  final String value;
+
+  const FeatureBeanBoardFeature._(this.value);
+
+  static FeatureBeanBoardFeature fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => FeatureBeanBoardFeature._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class FeatureBeanState {
+  static const enabled = FeatureBeanState._('ENABLED');
+  static const disabled = FeatureBeanState._('DISABLED');
+  static const comingSoon = FeatureBeanState._('COMING_SOON');
+
+  static const values = [
+    enabled,
+    disabled,
+    comingSoon,
+  ];
+  final String value;
+
+  const FeatureBeanState._(this.value);
+
+  static FeatureBeanState fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => FeatureBeanState._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class FeatureResponseBean {
+  final List<FeatureResponseBeanFeaturesItem> features;
+
+  FeatureResponseBean({List<FeatureResponseBeanFeaturesItem>? features})
+      : features = features ?? [];
+
+  factory FeatureResponseBean.fromJson(Map<String, Object?> json) {
+    return FeatureResponseBean(
+      features: (json[r'features'] as List<Object?>?)
+              ?.map((i) => FeatureResponseBeanFeaturesItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var features = this.features;
+
+    final json = <String, Object?>{};
+    json[r'features'] = features.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  FeatureResponseBean copyWith(
+      {List<FeatureResponseBeanFeaturesItem>? features}) {
+    return FeatureResponseBean(
+      features: features ?? this.features,
+    );
+  }
+}
+
+class FeatureResponseBeanFeaturesItem {
+  final FeatureResponseBeanFeaturesItemBoardFeature? boardFeature;
+  final int? boardId;
+  final FeatureResponseBeanFeaturesItemState? state;
+  final String? localisedName;
+  final String? localisedDescription;
+  final String? learnMoreLink;
+  final String? imageUri;
+  final bool toggleLocked;
+
+  FeatureResponseBeanFeaturesItem(
+      {this.boardFeature,
+      this.boardId,
+      this.state,
+      this.localisedName,
+      this.localisedDescription,
+      this.learnMoreLink,
+      this.imageUri,
+      bool? toggleLocked})
+      : toggleLocked = toggleLocked ?? false;
+
+  factory FeatureResponseBeanFeaturesItem.fromJson(Map<String, Object?> json) {
+    return FeatureResponseBeanFeaturesItem(
+      boardFeature: json[r'boardFeature'] != null
+          ? FeatureResponseBeanFeaturesItemBoardFeature.fromValue(
+              json[r'boardFeature']! as String)
+          : null,
+      boardId: (json[r'boardId'] as num?)?.toInt(),
+      state: json[r'state'] != null
+          ? FeatureResponseBeanFeaturesItemState.fromValue(
+              json[r'state']! as String)
+          : null,
+      localisedName: json[r'localisedName'] as String?,
+      localisedDescription: json[r'localisedDescription'] as String?,
+      learnMoreLink: json[r'learnMoreLink'] as String?,
+      imageUri: json[r'imageUri'] as String?,
+      toggleLocked: json[r'toggleLocked'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var boardFeature = this.boardFeature;
+    var boardId = this.boardId;
+    var state = this.state;
+    var localisedName = this.localisedName;
+    var localisedDescription = this.localisedDescription;
+    var learnMoreLink = this.learnMoreLink;
+    var imageUri = this.imageUri;
+    var toggleLocked = this.toggleLocked;
+
+    final json = <String, Object?>{};
+    if (boardFeature != null) {
+      json[r'boardFeature'] = boardFeature.value;
+    }
+    if (boardId != null) {
+      json[r'boardId'] = boardId;
+    }
+    if (state != null) {
+      json[r'state'] = state.value;
+    }
+    if (localisedName != null) {
+      json[r'localisedName'] = localisedName;
+    }
+    if (localisedDescription != null) {
+      json[r'localisedDescription'] = localisedDescription;
+    }
+    if (learnMoreLink != null) {
+      json[r'learnMoreLink'] = learnMoreLink;
+    }
+    if (imageUri != null) {
+      json[r'imageUri'] = imageUri;
+    }
+    json[r'toggleLocked'] = toggleLocked;
+    return json;
+  }
+
+  FeatureResponseBeanFeaturesItem copyWith(
+      {FeatureResponseBeanFeaturesItemBoardFeature? boardFeature,
+      int? boardId,
+      FeatureResponseBeanFeaturesItemState? state,
+      String? localisedName,
+      String? localisedDescription,
+      String? learnMoreLink,
+      String? imageUri,
+      bool? toggleLocked}) {
+    return FeatureResponseBeanFeaturesItem(
+      boardFeature: boardFeature ?? this.boardFeature,
+      boardId: boardId ?? this.boardId,
+      state: state ?? this.state,
+      localisedName: localisedName ?? this.localisedName,
+      localisedDescription: localisedDescription ?? this.localisedDescription,
+      learnMoreLink: learnMoreLink ?? this.learnMoreLink,
+      imageUri: imageUri ?? this.imageUri,
+      toggleLocked: toggleLocked ?? this.toggleLocked,
+    );
+  }
+}
+
+class FeatureResponseBeanFeaturesItemBoardFeature {
+  static const simpleRoadmap =
+      FeatureResponseBeanFeaturesItemBoardFeature._('SIMPLE_ROADMAP');
+  static const backlog =
+      FeatureResponseBeanFeaturesItemBoardFeature._('BACKLOG');
+  static const sprints =
+      FeatureResponseBeanFeaturesItemBoardFeature._('SPRINTS');
+  static const devtools =
+      FeatureResponseBeanFeaturesItemBoardFeature._('DEVTOOLS');
+  static const reports =
+      FeatureResponseBeanFeaturesItemBoardFeature._('REPORTS');
+  static const estimation =
+      FeatureResponseBeanFeaturesItemBoardFeature._('ESTIMATION');
+  static const pages = FeatureResponseBeanFeaturesItemBoardFeature._('PAGES');
+  static const code = FeatureResponseBeanFeaturesItemBoardFeature._('CODE');
+  static const releases =
+      FeatureResponseBeanFeaturesItemBoardFeature._('RELEASES');
+  static const deployments =
+      FeatureResponseBeanFeaturesItemBoardFeature._('DEPLOYMENTS');
+  static const issueNavigator =
+      FeatureResponseBeanFeaturesItemBoardFeature._('ISSUE_NAVIGATOR');
+  static const onCallSchedule =
+      FeatureResponseBeanFeaturesItemBoardFeature._('ON_CALL_SCHEDULE');
+  static const board = FeatureResponseBeanFeaturesItemBoardFeature._('BOARD');
+
+  static const values = [
+    simpleRoadmap,
+    backlog,
+    sprints,
+    devtools,
+    reports,
+    estimation,
+    pages,
+    code,
+    releases,
+    deployments,
+    issueNavigator,
+    onCallSchedule,
+    board,
+  ];
+  final String value;
+
+  const FeatureResponseBeanFeaturesItemBoardFeature._(this.value);
+
+  static FeatureResponseBeanFeaturesItemBoardFeature fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => FeatureResponseBeanFeaturesItemBoardFeature._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class FeatureResponseBeanFeaturesItemState {
+  static const enabled = FeatureResponseBeanFeaturesItemState._('ENABLED');
+  static const disabled = FeatureResponseBeanFeaturesItemState._('DISABLED');
+  static const comingSoon =
+      FeatureResponseBeanFeaturesItemState._('COMING_SOON');
+
+  static const values = [
+    enabled,
+    disabled,
+    comingSoon,
+  ];
+  final String value;
+
+  const FeatureResponseBeanFeaturesItemState._(this.value);
+
+  static FeatureResponseBeanFeaturesItemState fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => FeatureResponseBeanFeaturesItemState._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class FeatureToggleRequestBean {
+  final int? boardId;
+  final String? feature;
+  final bool enabling;
+
+  FeatureToggleRequestBean({this.boardId, this.feature, bool? enabling})
+      : enabling = enabling ?? false;
+
+  factory FeatureToggleRequestBean.fromJson(Map<String, Object?> json) {
+    return FeatureToggleRequestBean(
+      boardId: (json[r'boardId'] as num?)?.toInt(),
+      feature: json[r'feature'] as String?,
+      enabling: json[r'enabling'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var boardId = this.boardId;
+    var feature = this.feature;
+    var enabling = this.enabling;
+
+    final json = <String, Object?>{};
+    if (boardId != null) {
+      json[r'boardId'] = boardId;
+    }
+    if (feature != null) {
+      json[r'feature'] = feature;
+    }
+    json[r'enabling'] = enabling;
+    return json;
+  }
+
+  FeatureToggleRequestBean copyWith(
+      {int? boardId, String? feature, bool? enabling}) {
+    return FeatureToggleRequestBean(
+      boardId: boardId ?? this.boardId,
+      feature: feature ?? this.feature,
+      enabling: enabling ?? this.enabling,
     );
   }
 }

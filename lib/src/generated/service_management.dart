@@ -13,6 +13,8 @@ class ServiceManagementApi {
 
   late final info = InfoApi(_client);
 
+  late final insight = InsightApi(_client);
+
   late final knowledgebase = KnowledgebaseApi(_client);
 
   late final organization = OrganizationApi(_client);
@@ -65,6 +67,31 @@ class InfoApi {
     return SoftwareInfoDTO.fromJson(await _client.send(
       'get',
       'rest/servicedeskapi/info',
+    ));
+  }
+}
+
+/// Public REST API for Jira Service Management
+
+class InsightApi {
+  final ApiClient _client;
+
+  InsightApi(this._client);
+
+  /// Returns a list of Insight workspace IDs. Include a workspace ID in the
+  /// path to access the
+  /// [Insight REST APIs](https://developer.atlassian.com/cloud/insight/rest).
+  ///
+  /// **[Permissions](#permissions) required**: Any
+  Future<PagedDTOInsightWorkspaceDTO> getInsightWorkspaces(
+      {int? start, int? limit}) async {
+    return PagedDTOInsightWorkspaceDTO.fromJson(await _client.send(
+      'get',
+      'rest/servicedeskapi/insight/workspace',
+      queryParameters: {
+        if (start != null) 'start': '$start',
+        if (limit != null) 'limit': '$limit',
+      },
     ));
   }
 }
@@ -2392,35 +2419,6 @@ class Changelog {
   }
 }
 
-class CmdbWorkspaceDTO {
-  /// The workspace id used as an identifier to access Insight API
-  final String? workspaceId;
-
-  CmdbWorkspaceDTO({this.workspaceId});
-
-  factory CmdbWorkspaceDTO.fromJson(Map<String, Object?> json) {
-    return CmdbWorkspaceDTO(
-      workspaceId: json[r'workspaceId'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var workspaceId = this.workspaceId;
-
-    final json = <String, Object?>{};
-    if (workspaceId != null) {
-      json[r'workspaceId'] = workspaceId;
-    }
-    return json;
-  }
-
-  CmdbWorkspaceDTO copyWith({String? workspaceId}) {
-    return CmdbWorkspaceDTO(
-      workspaceId: workspaceId ?? this.workspaceId,
-    );
-  }
-}
-
 class CommentCreateDTO {
   /// Content of the comment.
   final String? body;
@@ -4023,6 +4021,36 @@ class IncludedFields {
   }
 }
 
+/// Details of an insight workspace ID.
+class InsightWorkspaceDTO {
+  /// The workspace ID used as the identifier to access the Insight REST API.
+  final String? workspaceId;
+
+  InsightWorkspaceDTO({this.workspaceId});
+
+  factory InsightWorkspaceDTO.fromJson(Map<String, Object?> json) {
+    return InsightWorkspaceDTO(
+      workspaceId: json[r'workspaceId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var workspaceId = this.workspaceId;
+
+    final json = <String, Object?>{};
+    if (workspaceId != null) {
+      json[r'workspaceId'] = workspaceId;
+    }
+    return json;
+  }
+
+  InsightWorkspaceDTO copyWith({String? workspaceId}) {
+    return InsightWorkspaceDTO(
+      workspaceId: workspaceId ?? this.workspaceId,
+    );
+  }
+}
+
 class IssueBean {
   /// Expand options that include additional issue details in the response.
   final String? expand;
@@ -5597,6 +5625,108 @@ class PagedDTOCustomerTransitionDTO {
   }
 }
 
+class PagedDTOInsightWorkspaceDTO {
+  /// Number of items returned in the page.
+  final int? size;
+
+  /// Index of the first item returned in the page.
+  final int? start;
+
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
+  final int? limit;
+
+  /// Indicates if this is the last page of records (true) or not (false).
+  final bool isLastPage;
+
+  /// Details of the items included in the page.
+  final List<InsightWorkspaceDTO> values;
+  final List<String> expands;
+
+  /// List of the links relating to the page.
+  final PagedLinkDTO? links;
+
+  PagedDTOInsightWorkspaceDTO(
+      {this.size,
+      this.start,
+      this.limit,
+      bool? isLastPage,
+      List<InsightWorkspaceDTO>? values,
+      List<String>? expands,
+      this.links})
+      : isLastPage = isLastPage ?? false,
+        values = values ?? [],
+        expands = expands ?? [];
+
+  factory PagedDTOInsightWorkspaceDTO.fromJson(Map<String, Object?> json) {
+    return PagedDTOInsightWorkspaceDTO(
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => InsightWorkspaceDTO.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      expands: (json[r'_expands'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var size = this.size;
+    var start = this.start;
+    var limit = this.limit;
+    var isLastPage = this.isLastPage;
+    var values = this.values;
+    var expands = this.expands;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (size != null) {
+      json[r'size'] = size;
+    }
+    if (start != null) {
+      json[r'start'] = start;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PagedDTOInsightWorkspaceDTO copyWith(
+      {int? size,
+      int? start,
+      int? limit,
+      bool? isLastPage,
+      List<InsightWorkspaceDTO>? values,
+      List<String>? expands,
+      PagedLinkDTO? links}) {
+    return PagedDTOInsightWorkspaceDTO(
+      size: size ?? this.size,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
+      isLastPage: isLastPage ?? this.isLastPage,
+      values: values ?? this.values,
+      expands: expands ?? this.expands,
+      links: links ?? this.links,
+    );
+  }
+}
+
 class PagedDTOIssueBean {
   /// Number of items returned in the page.
   final int? size;
@@ -6481,47 +6611,6 @@ class PagedLinkDTO {
   }
 }
 
-class PagedRestResponseCmdbWorkspaceDTO {
-  final int? size;
-  final List<CmdbWorkspaceDTO> results;
-
-  PagedRestResponseCmdbWorkspaceDTO(
-      {this.size, List<CmdbWorkspaceDTO>? results})
-      : results = results ?? [];
-
-  factory PagedRestResponseCmdbWorkspaceDTO.fromJson(
-      Map<String, Object?> json) {
-    return PagedRestResponseCmdbWorkspaceDTO(
-      size: (json[r'size'] as num?)?.toInt(),
-      results: (json[r'results'] as List<Object?>?)
-              ?.map((i) => CmdbWorkspaceDTO.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var size = this.size;
-    var results = this.results;
-
-    final json = <String, Object?>{};
-    if (size != null) {
-      json[r'size'] = size;
-    }
-    json[r'results'] = results.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  PagedRestResponseCmdbWorkspaceDTO copyWith(
-      {int? size, List<CmdbWorkspaceDTO>? results}) {
-    return PagedRestResponseCmdbWorkspaceDTO(
-      size: size ?? this.size,
-      results: results ?? this.results,
-    );
-  }
-}
-
 /// Property key details.
 class PropertyKey {
   /// The URL of the property.
@@ -6970,6 +7059,9 @@ class RequestTypeDTO {
   /// request type
   final CustomerRequestCreateMetaDTO? fields;
 
+  /// The request type's practice
+  final String? practice;
+
   /// List of items that can be expanded in the response by specifying the
   /// expand query parameter.
   final List<String> expands;
@@ -6987,6 +7079,7 @@ class RequestTypeDTO {
       List<String>? groupIds,
       this.icon,
       this.fields,
+      this.practice,
       List<String>? expands,
       this.links})
       : groupIds = groupIds ?? [],
@@ -7011,6 +7104,7 @@ class RequestTypeDTO {
           ? CustomerRequestCreateMetaDTO.fromJson(
               json[r'fields']! as Map<String, Object?>)
           : null,
+      practice: json[r'practice'] as String?,
       expands: (json[r'_expands'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -7031,6 +7125,7 @@ class RequestTypeDTO {
     var groupIds = this.groupIds;
     var icon = this.icon;
     var fields = this.fields;
+    var practice = this.practice;
     var expands = this.expands;
     var links = this.links;
 
@@ -7060,6 +7155,9 @@ class RequestTypeDTO {
     if (fields != null) {
       json[r'fields'] = fields.toJson();
     }
+    if (practice != null) {
+      json[r'practice'] = practice;
+    }
     json[r'_expands'] = expands;
     if (links != null) {
       json[r'_links'] = links.toJson();
@@ -7077,6 +7175,7 @@ class RequestTypeDTO {
       List<String>? groupIds,
       RequestTypeIconDTO? icon,
       CustomerRequestCreateMetaDTO? fields,
+      String? practice,
       List<String>? expands,
       SelfLinkDTO? links}) {
     return RequestTypeDTO(
@@ -7089,6 +7188,7 @@ class RequestTypeDTO {
       groupIds: groupIds ?? this.groupIds,
       icon: icon ?? this.icon,
       fields: fields ?? this.fields,
+      practice: practice ?? this.practice,
       expands: expands ?? this.expands,
       links: links ?? this.links,
     );

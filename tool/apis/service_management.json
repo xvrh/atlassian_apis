@@ -19,6 +19,9 @@
       "name": "Info"
     },
     {
+      "name": "Insight"
+    },
+    {
       "name": "Knowledgebase"
     },
     {
@@ -164,14 +167,17 @@
     },
     "/rest/servicedeskapi/insight/workspace": {
       "get": {
-        "summary": "Get workspaces",
-        "description": "This method returns a list of Insight workspace ids. The workspace id is required in the path to access the Insight REST API.",
-        "operationId": "getWorkspaces",
+        "tags": [
+          "Insight"
+        ],
+        "summary": "Get insight workspaces",
+        "description": "Returns a list of Insight workspace IDs. Include a workspace ID in the path to access the [Insight REST APIs](https://developer.atlassian.com/cloud/insight/rest).\n\n**[Permissions](#permissions) required**: Any",
+        "operationId": "getInsightWorkspaces",
         "parameters": [
           {
             "name": "start",
             "in": "query",
-            "description": "The starting index of the returned workspace ids. Base index: 0 See the [Pagination](#pagination) section for more details.",
+            "description": "The starting index of the returned workspace IDs. Base index: 0 See the [Pagination](#pagination) section for more details.",
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -181,7 +187,7 @@
           {
             "name": "limit",
             "in": "query",
-            "description": "The maximum number of comments to return per page. Default: 50 See the [Pagination](#pagination) section for more details.",
+            "description": "The maximum number of workspace IDs to return per page. Default: 50 See the [Pagination](#pagination) section for more details.",
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -191,17 +197,18 @@
         ],
         "responses": {
           "200": {
-            "description": "Returns the workspaces. Returns empty list when Insight is unavailable.",
+            "description": "Returned if the request is successful.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PagedRestResponseCmdbWorkspaceDTO"
-                }
+                  "$ref": "#/components/schemas/PagedDTOInsightWorkspaceDTO"
+                },
+                "example": "{\"_expands\":[],\"size\":1,\"start\":1,\"limit\":1,\"isLastPage\":true,\"_links\":{\"base\":\"https://your-domain.atlassian.net/rest/servicedeskapi\",\"context\":\"context\",\"next\":\"https://your-domain.atlassian.net/rest/servicedeskapi/rest/servicedeskapi/insight/workspace?start=2&limit=1\",\"prev\":\"https://your-domain.atlassian.net/rest/servicedeskapi/rest/servicedeskapi/insight/workspace?start=0&limit=1\"},\"values\":[{\"workspaceId\":\"1060ba0e-178b-4e0e-g0h1-jedb02cccb5f\"}]}"
               }
             }
           },
           "401": {
-            "description": "Returned if the user is not logged in.",
+            "description": "Returned if the authentication credentials are incorrect or missing.",
             "content": {
               "application/json": {
                 "schema": {
@@ -211,7 +218,7 @@
             }
           },
           "403": {
-            "description": "Returned if the user does not have permission to complete this request.",
+            "description": "Returned if the user does not have the necessary permission.",
             "content": {
               "application/json": {
                 "schema": {
@@ -6475,380 +6482,6 @@
   },
   "components": {
     "schemas": {
-      "AdditionalCommentDTO": {
-        "type": "object",
-        "properties": {
-          "body": {
-            "type": "string",
-            "description": "Content of the comment."
-          }
-        },
-        "additionalProperties": false
-      },
-      "CSATFeedbackFullDTO": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "description": "Indicates the type of feedback, supported values: `csat`."
-          },
-          "rating": {
-            "type": "integer",
-            "description": "A numeric representation of the rating, this must be an integer value between 1 and 5.",
-            "format": "int32"
-          },
-          "comment": {
-            "description": "(Optional) The comment provided with this feedback.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/AdditionalCommentDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "ErrorResponse": {
-        "type": "object",
-        "properties": {
-          "errorMessage": {
-            "type": "string"
-          },
-          "i18nErrorMessage": {
-            "$ref": "#/components/schemas/I18nErrorMessage"
-          }
-        },
-        "additionalProperties": false
-      },
-      "I18nErrorMessage": {
-        "type": "object",
-        "properties": {
-          "i18nKey": {
-            "type": "string"
-          },
-          "parameters": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedDTOUserDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/UserDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedLinkDTO": {
-        "type": "object",
-        "properties": {
-          "self": {
-            "type": "string",
-            "description": "REST API URL for the current page.",
-            "format": "uri"
-          },
-          "base": {
-            "type": "string",
-            "description": "Base URL for the REST API calls.",
-            "format": "uri"
-          },
-          "context": {
-            "type": "string"
-          },
-          "next": {
-            "type": "string",
-            "description": "REST API URL for the next page, if there is one.",
-            "format": "uri"
-          },
-          "prev": {
-            "type": "string",
-            "description": "REST API URL for the previous page, if there is one.",
-            "format": "uri"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserDTO": {
-        "type": "object",
-        "properties": {
-          "accountId": {
-            "type": "string",
-            "description": "The accountId of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*."
-          },
-          "name": {
-            "type": "string",
-            "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details."
-          },
-          "key": {
-            "type": "string",
-            "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details."
-          },
-          "emailAddress": {
-            "type": "string",
-            "description": "Customer's email address. Depending on the customer’s privacy settings, this may be returned as null."
-          },
-          "displayName": {
-            "type": "string",
-            "description": "Customer's name for display in a UI. Depending on the customer’s privacy settings, this may return an alternative value."
-          },
-          "active": {
-            "type": "boolean",
-            "description": "Indicates if the customer is active (true) or inactive (false)"
-          },
-          "timeZone": {
-            "type": "string",
-            "description": "Customer time zone. Depending on the customer’s privacy settings, this may be returned as null."
-          },
-          "_links": {
-            "description": "URLs for the customer record and related items.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/UserLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserLinkDTO": {
-        "type": "object",
-        "properties": {
-          "self": {
-            "type": "string",
-            "format": "uri"
-          },
-          "jiraRest": {
-            "type": "string",
-            "description": "REST API URL for the customer.",
-            "format": "uri"
-          },
-          "avatarUrls": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            },
-            "description": "Links to the various sizes of the customer's avatar. Note that this property is deprecated, and will be removed in future versions."
-          }
-        },
-        "additionalProperties": false
-      },
-      "LinkableUserLinkDTO": {
-        "type": "object",
-        "properties": {
-          "_links": {
-            "$ref": "#/components/schemas/UserLinkDTO"
-          }
-        },
-        "additionalProperties": false
-      },
-      "ServiceDeskCustomerDTO": {
-        "type": "object",
-        "properties": {
-          "usernames": {
-            "uniqueItems": true,
-            "type": "array",
-            "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details. Use `accountIds` instead.",
-            "items": {
-              "type": "string"
-            }
-          },
-          "accountIds": {
-            "uniqueItems": true,
-            "type": "array",
-            "description": "List of users, specified by account IDs, to add to or remove from a service desk.",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "additionalProperties": false
-      },
-      "PropertyKey": {
-        "type": "object",
-        "properties": {
-          "self": {
-            "type": "string",
-            "description": "The URL of the property.",
-            "readOnly": true
-          },
-          "key": {
-            "type": "string",
-            "description": "The key of the property.",
-            "readOnly": true
-          }
-        },
-        "additionalProperties": false,
-        "description": "Property key details."
-      },
-      "PropertyKeys": {
-        "type": "object",
-        "properties": {
-          "keys": {
-            "type": "array",
-            "description": "Property key details.",
-            "readOnly": true,
-            "items": {
-              "$ref": "#/components/schemas/PropertyKey"
-            }
-          }
-        },
-        "additionalProperties": false,
-        "description": "List of property keys."
-      },
-      "EntityProperty": {
-        "type": "object",
-        "properties": {
-          "key": {
-            "type": "string",
-            "description": "The key of the property. Required on create and update."
-          },
-          "value": {
-            "description": "The value of the property. Required on create and update."
-          }
-        },
-        "additionalProperties": false,
-        "description": "An entity property, for more information see [Entity properties](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/)."
-      },
-      "CustomerCreateDTO": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "description": "Customer's email address."
-          },
-          "fullName": {
-            "type": "string",
-            "description": "Deprecated, please use 'displayName'."
-          },
-          "displayName": {
-            "type": "string",
-            "description": "Customer's name for display in the UI."
-          }
-        },
-        "additionalProperties": false
-      },
-      "DateDTO": {
-        "type": "object",
-        "properties": {
-          "iso8601": {
-            "type": "string",
-            "description": "Date in ISO8601 format."
-          },
-          "jira": {
-            "type": "string",
-            "description": "Date in the format used in the Jira REST APIs, which is ISO8601 format but extended with milliseconds. For example, 2016-09-28T23:08:32.097+1000."
-          },
-          "friendly": {
-            "type": "string",
-            "description": "Date in a user-friendly text format."
-          },
-          "epochMillis": {
-            "type": "integer",
-            "description": "Date as the number of milliseconds that have elapsed since 00:00:00 Coordinated Universal Time (UTC), 1 January 1970.",
-            "format": "int64"
-          }
-        },
-        "additionalProperties": false
-      },
-      "SelfLinkDTO": {
-        "type": "object",
-        "properties": {
-          "self": {
-            "type": "string",
-            "format": "uri"
-          }
-        },
-        "additionalProperties": false
-      },
-      "SoftwareInfoDTO": {
-        "type": "object",
-        "properties": {
-          "version": {
-            "type": "string",
-            "description": "Jira Service Management version."
-          },
-          "platformVersion": {
-            "type": "string",
-            "description": "Jira Platform version upon which Service Desk is based."
-          },
-          "buildDate": {
-            "description": "Date of the current build.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DateDTO"
-              }
-            ]
-          },
-          "buildChangeSet": {
-            "type": "string",
-            "description": "Reference of the change set included in the build."
-          },
-          "isLicensedForUse": {
-            "type": "boolean",
-            "description": "Indicates whether the instance is licensed (true) or not (false)."
-          },
-          "_links": {
-            "description": "REST API URL of the instance.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/SelfLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "Linkable": {
-        "type": "object",
-        "properties": {
-          "_links": {
-            "$ref": "#/components/schemas/SelfLinkDTO"
-          }
-        },
-        "additionalProperties": false
-      },
       "CustomerRequestCreateMetaDTO": {
         "type": "object",
         "properties": {
@@ -6960,6 +6593,35 @@
         },
         "additionalProperties": false
       },
+      "PagedLinkDTO": {
+        "type": "object",
+        "properties": {
+          "self": {
+            "type": "string",
+            "description": "REST API URL for the current page.",
+            "format": "uri"
+          },
+          "base": {
+            "type": "string",
+            "description": "Base URL for the REST API calls.",
+            "format": "uri"
+          },
+          "context": {
+            "type": "string"
+          },
+          "next": {
+            "type": "string",
+            "description": "REST API URL for the next page, if there is one.",
+            "format": "uri"
+          },
+          "prev": {
+            "type": "string",
+            "description": "REST API URL for the previous page, if there is one.",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
+      },
       "RequestTypeDTO": {
         "type": "object",
         "properties": {
@@ -7009,6 +6671,10 @@
                 "$ref": "#/components/schemas/CustomerRequestCreateMetaDTO"
               }
             ]
+          },
+          "practice": {
+            "type": "string",
+            "description": "The request type's practice"
           },
           "_expands": {
             "type": "array",
@@ -7128,6 +6794,25 @@
         },
         "additionalProperties": false
       },
+      "SelfLinkDTO": {
+        "type": "object",
+        "properties": {
+          "self": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Linkable": {
+        "type": "object",
+        "properties": {
+          "_links": {
+            "$ref": "#/components/schemas/SelfLinkDTO"
+          }
+        },
+        "additionalProperties": false
+      },
       "Expandable": {
         "type": "object",
         "properties": {
@@ -7140,42 +6825,56 @@
         },
         "additionalProperties": false
       },
-      "ArticleDTO": {
+      "ErrorResponse": {
         "type": "object",
         "properties": {
-          "title": {
-            "type": "string",
-            "description": "Title of the article."
+          "errorMessage": {
+            "type": "string"
           },
-          "excerpt": {
-            "type": "string",
-            "description": "Excerpt of the article which matches the given query string."
-          },
-          "source": {
-            "description": "Source of the article.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/SourceDTO"
-              }
-            ]
-          },
-          "content": {
-            "$ref": "#/components/schemas/ContentDTO"
+          "i18nErrorMessage": {
+            "$ref": "#/components/schemas/I18nErrorMessage"
           }
         },
         "additionalProperties": false
       },
-      "ContentDTO": {
+      "I18nErrorMessage": {
         "type": "object",
         "properties": {
-          "iframeSrc": {
-            "type": "string",
-            "description": "Url containing the body of the article (without title), suitable for rendering in an iframe"
+          "i18nKey": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "additionalProperties": false
       },
-      "PagedDTOArticleDTO": {
+      "RequestTypeCreateDTO": {
+        "type": "object",
+        "properties": {
+          "issueTypeId": {
+            "type": "string",
+            "description": "ID of the request type to add to the service desk."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the request type on the service desk."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the request type on the service desk."
+          },
+          "helpText": {
+            "type": "string",
+            "description": "Help text for the request type on the service desk."
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedDTOUserDTO": {
         "type": "object",
         "properties": {
           "size": {
@@ -7201,7 +6900,7 @@
             "type": "array",
             "description": "Details of the items included in the page.",
             "items": {
-              "$ref": "#/components/schemas/ArticleDTO"
+              "$ref": "#/components/schemas/UserDTO"
             }
           },
           "_expands": {
@@ -7221,49 +6920,383 @@
         },
         "additionalProperties": false
       },
-      "SourceDTO": {
+      "UserDTO": {
         "type": "object",
         "properties": {
-          "type": {
+          "accountId": {
             "type": "string",
-            "description": "Type of the knowledge base source",
-            "enum": [
-              "confluence"
+            "description": "The accountId of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*."
+          },
+          "name": {
+            "type": "string",
+            "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details."
+          },
+          "key": {
+            "type": "string",
+            "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details."
+          },
+          "emailAddress": {
+            "type": "string",
+            "description": "Customer's email address. Depending on the customer’s privacy settings, this may be returned as null."
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Customer's name for display in a UI. Depending on the customer’s privacy settings, this may return an alternative value."
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Indicates if the customer is active (true) or inactive (false)"
+          },
+          "timeZone": {
+            "type": "string",
+            "description": "Customer time zone. Depending on the customer’s privacy settings, this may be returned as null."
+          },
+          "_links": {
+            "description": "URLs for the customer record and related items.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserLinkDTO"
+              }
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "RequestCreateDTO": {
+      "UserLinkDTO": {
         "type": "object",
         "properties": {
-          "serviceDeskId": {
+          "self": {
             "type": "string",
-            "description": "ID of the service desk in which to create the request."
+            "format": "uri"
           },
-          "requestTypeId": {
+          "jiraRest": {
             "type": "string",
-            "description": "ID of the request type for the request."
+            "description": "REST API URL for the customer.",
+            "format": "uri"
           },
-          "requestFieldValues": {
+          "avatarUrls": {
             "type": "object",
-            "additionalProperties": {},
-            "description": "JSON map of Jira field IDs and their values representing the content of the request."
-          },
-          "requestParticipants": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Links to the various sizes of the customer's avatar. Note that this property is deprecated, and will be removed in future versions."
+          }
+        },
+        "additionalProperties": false
+      },
+      "LinkableUserLinkDTO": {
+        "type": "object",
+        "properties": {
+          "_links": {
+            "$ref": "#/components/schemas/UserLinkDTO"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RequestParticipantUpdateDTO": {
+        "type": "object",
+        "properties": {
+          "usernames": {
             "type": "array",
-            "description": "List of customers to participate in the request, as a list of `accountId` values.",
+            "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details. Use `accountIds` instead.",
             "items": {
               "type": "string"
             }
           },
-          "raiseOnBehalfOf": {
+          "accountIds": {
+            "type": "array",
+            "description": "List of users, specified by account IDs, to add to or remove as participants in the request.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdditionalCommentDTO": {
+        "type": "object",
+        "properties": {
+          "body": {
             "type": "string",
-            "description": "The `accountId` of the customer that the request is being raised on behalf of."
+            "description": "Content of the comment."
+          }
+        },
+        "additionalProperties": false
+      },
+      "CSATFeedbackFullDTO": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Indicates the type of feedback, supported values: `csat`."
           },
-          "channel": {
+          "rating": {
+            "type": "integer",
+            "description": "A numeric representation of the rating, this must be an integer value between 1 and 5.",
+            "format": "int32"
+          },
+          "comment": {
+            "description": "(Optional) The comment provided with this feedback.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AdditionalCommentDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "InsightWorkspaceDTO": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
             "type": "string",
-            "description": "(Experimental) Shows extra information for the request channel."
+            "description": "The workspace ID used as the identifier to access the Insight REST API."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Details of an insight workspace ID."
+      },
+      "PagedDTOInsightWorkspaceDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/InsightWorkspaceDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "PropertyKey": {
+        "type": "object",
+        "properties": {
+          "self": {
+            "type": "string",
+            "description": "The URL of the property.",
+            "readOnly": true
+          },
+          "key": {
+            "type": "string",
+            "description": "The key of the property.",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Property key details."
+      },
+      "PropertyKeys": {
+        "type": "object",
+        "properties": {
+          "keys": {
+            "type": "array",
+            "description": "Property key details.",
+            "readOnly": true,
+            "items": {
+              "$ref": "#/components/schemas/PropertyKey"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "description": "List of property keys."
+      },
+      "EntityProperty": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The key of the property. Required on create and update."
+          },
+          "value": {
+            "description": "The value of the property. Required on create and update."
+          }
+        },
+        "additionalProperties": false,
+        "description": "An entity property, for more information see [Entity properties](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/)."
+      },
+      "PagedDTORequestTypeGroupDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/RequestTypeGroupDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "RequestTypeGroupDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the request type group"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the request type group."
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerTransitionDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the transition."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the transition."
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedDTOCustomerTransitionDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/CustomerTransitionDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerTransitionExecutionDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the transition to be performed."
+          },
+          "additionalComment": {
+            "description": "Comment explaining the reason for the transition.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AdditionalCommentDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommentCreateDTO": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "description": "Content of the comment."
+          },
+          "public": {
+            "type": "boolean",
+            "description": "Indicates whether the comment is public (true) or private/internal (false)."
           }
         },
         "additionalProperties": false
@@ -7401,271 +7434,25 @@
         },
         "additionalProperties": false
       },
-      "CustomerRequestActionDTO": {
+      "DateDTO": {
         "type": "object",
         "properties": {
-          "allowed": {
-            "type": "boolean",
-            "description": "Indicates whether the user can undertake the action (true) or not (false)."
-          }
-        },
-        "additionalProperties": false
-      },
-      "CustomerRequestActionsDTO": {
-        "type": "object",
-        "properties": {
-          "addAttachment": {
-            "description": "Action of adding attachments to a request.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CustomerRequestActionDTO"
-              }
-            ]
-          },
-          "addComment": {
-            "description": "Action of adding comments to a request.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CustomerRequestActionDTO"
-              }
-            ]
-          },
-          "addParticipant": {
-            "description": "Action of adding participants to a request.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CustomerRequestActionDTO"
-              }
-            ]
-          },
-          "removeParticipant": {
-            "description": "Action of removing participants from a request.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CustomerRequestActionDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "CustomerRequestDTO": {
-        "type": "object",
-        "properties": {
-          "issueId": {
+          "iso8601": {
             "type": "string",
-            "description": "ID of the request, as the peer issue ID."
+            "description": "Date in ISO8601 format."
           },
-          "issueKey": {
+          "jira": {
             "type": "string",
-            "description": "Key of the request, as the peer issue key."
-          },
-          "requestTypeId": {
-            "type": "string",
-            "description": "ID of the request type for the request."
-          },
-          "requestType": {
-            "description": "Expandable details of the request type.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/RequestTypeDTO"
-              }
-            ]
-          },
-          "serviceDeskId": {
-            "type": "string",
-            "description": "ID of the service desk the request belongs to."
-          },
-          "serviceDesk": {
-            "description": "Expandable details of the service desk.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ServiceDeskDTO"
-              }
-            ]
-          },
-          "createdDate": {
-            "description": "Date on which the request was created.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DateDTO"
-              }
-            ]
-          },
-          "reporter": {
-            "description": "Details of the customer reporting the request.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/UserDTO"
-              }
-            ]
-          },
-          "requestFieldValues": {
-            "type": "array",
-            "description": "JSON map of Jira field IDs and their values representing the content of the request.",
-            "items": {
-              "$ref": "#/components/schemas/CustomerRequestFieldValueDTO"
-            }
-          },
-          "currentStatus": {
-            "description": "Status of the request.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CustomerRequestStatusDTO"
-              }
-            ]
-          },
-          "status": {
-            "description": "Expandable details of the request's status history.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedDTOCustomerRequestStatusDTO"
-              }
-            ]
-          },
-          "participants": {
-            "description": "Expandable details of the customers participating in the request.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedDTOUserDTO"
-              }
-            ]
-          },
-          "sla": {
-            "description": "Expandable details of the SLAs relating to the request.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedDTOSlaInformationDTO"
-              }
-            ]
-          },
-          "attachments": {
-            "description": "List of attachments included with the request.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedDTOAttachmentDTO"
-              }
-            ]
-          },
-          "comments": {
-            "description": "List of comments included with the request.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedDTOCommentDTO"
-              }
-            ]
-          },
-          "actions": {
-            "description": "List of actions that the user can take on the request.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CustomerRequestActionsDTO"
-              }
-            ]
-          },
-          "_expands": {
-            "type": "array",
-            "description": "List of items that can be expanded in the response by specifying the expand query parameter.",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of links associated with the request.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CustomerRequestLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "CustomerRequestFieldValueDTO": {
-        "type": "object",
-        "properties": {
-          "fieldId": {
-            "type": "string",
-            "description": "ID of the field."
-          },
-          "label": {
-            "type": "string",
-            "description": "Text label for the field."
-          },
-          "value": {
-            "description": "Value of the field."
-          },
-          "renderedValue": {
-            "type": "object",
-            "description": "Value of the field rendered in the UI."
-          }
-        },
-        "additionalProperties": false
-      },
-      "CustomerRequestLinkDTO": {
-        "type": "object",
-        "properties": {
-          "self": {
-            "type": "string",
-            "format": "uri"
-          },
-          "jiraRest": {
-            "type": "string",
-            "description": "REST API URL for the request.",
-            "format": "uri"
-          },
-          "web": {
-            "type": "string",
-            "description": "Web URL for the request.",
-            "format": "uri"
-          },
-          "agent": {
-            "type": "string",
-            "description": "Jira agent view URL for the request.",
-            "format": "uri"
-          }
-        },
-        "additionalProperties": false
-      },
-      "CustomerRequestStatusDTO": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "description": "Name of the status condition."
-          },
-          "statusCategory": {
-            "type": "string",
-            "description": "Status category the status belongs to.",
-            "enum": [
-              "UNDEFINED",
-              "NEW",
-              "INDETERMINATE",
-              "DONE"
-            ]
-          },
-          "statusDate": {
-            "description": "Date on which the status was attained.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DateDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "DurationDTO": {
-        "type": "object",
-        "properties": {
-          "millis": {
-            "type": "integer",
-            "description": "Duration in milliseconds.",
-            "format": "int64"
+            "description": "Date in the format used in the Jira REST APIs, which is ISO8601 format but extended with milliseconds. For example, 2016-09-28T23:08:32.097+1000."
           },
           "friendly": {
             "type": "string",
-            "description": "Duration in a user-friendly text format."
+            "description": "Date in a user-friendly text format."
+          },
+          "epochMillis": {
+            "type": "integer",
+            "description": "Date as the number of milliseconds that have elapsed since 00:00:00 Coordinated Universal Time (UTC), 1 January 1970.",
+            "format": "int64"
           }
         },
         "additionalProperties": false
@@ -7716,6 +7503,15 @@
         },
         "additionalProperties": false
       },
+      "RenderedValueDTO": {
+        "type": "object",
+        "properties": {
+          "html": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
       "PagedDTOCommentDTO": {
         "type": "object",
         "properties": {
@@ -7762,7 +7558,16 @@
         },
         "additionalProperties": false
       },
-      "PagedDTOCustomerRequestStatusDTO": {
+      "LinkableAttachmentLinkDTO": {
+        "type": "object",
+        "properties": {
+          "_links": {
+            "$ref": "#/components/schemas/AttachmentLinkDTO"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedDTOServiceDeskDTO": {
         "type": "object",
         "properties": {
           "size": {
@@ -7788,7 +7593,7 @@
             "type": "array",
             "description": "Details of the items included in the page.",
             "items": {
-              "$ref": "#/components/schemas/CustomerRequestStatusDTO"
+              "$ref": "#/components/schemas/ServiceDeskDTO"
             }
           },
           "_expands": {
@@ -7804,61 +7609,6 @@
                 "$ref": "#/components/schemas/PagedLinkDTO"
               }
             ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedDTOSlaInformationDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/SlaInformationDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "RenderedValueDTO": {
-        "type": "object",
-        "properties": {
-          "html": {
-            "type": "string"
           }
         },
         "additionalProperties": false
@@ -7893,161 +7643,42 @@
         },
         "additionalProperties": false
       },
-      "SlaInformationCompletedCycleDTO": {
+      "ArticleDTO": {
         "type": "object",
         "properties": {
-          "startTime": {
-            "description": "Time and date at which the SLA cycle started.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DateDTO"
-              }
-            ]
-          },
-          "stopTime": {
-            "description": "Time and date at which the SLA cycle completed.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DateDTO"
-              }
-            ]
-          },
-          "breached": {
-            "type": "boolean",
-            "description": "Indicates if the SLA (duration) was exceeded (true) or not (false)."
-          },
-          "goalDuration": {
-            "description": "Duration within which the service should have been completed.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DurationDTO"
-              }
-            ]
-          },
-          "elapsedTime": {
-            "description": "Duration in which the service was completed.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DurationDTO"
-              }
-            ]
-          },
-          "remainingTime": {
-            "description": "Duration remaining after the service was completed.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DurationDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "SlaInformationDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
+          "title": {
             "type": "string",
-            "description": "ID of the Service Level Agreement (SLA)."
+            "description": "Title of the article."
           },
-          "name": {
+          "excerpt": {
             "type": "string",
-            "description": "Description of the SLA."
+            "description": "Excerpt of the article which matches the given query string."
           },
-          "completedCycles": {
-            "type": "array",
-            "description": "List of completed cycles for the SLA.",
-            "items": {
-              "$ref": "#/components/schemas/SlaInformationCompletedCycleDTO"
-            }
-          },
-          "ongoingCycle": {
-            "description": "Details of the active cycle for the SLA.",
+          "source": {
+            "description": "Source of the article.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/SlaInformationOngoingCycleDTO"
+                "$ref": "#/components/schemas/SourceDTO"
               }
             ]
           },
-          "_links": {
-            "description": "REST API URL for the SLA.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/SelfLinkDTO"
-              }
-            ]
+          "content": {
+            "$ref": "#/components/schemas/ContentDTO"
           }
         },
         "additionalProperties": false
       },
-      "SlaInformationOngoingCycleDTO": {
+      "ContentDTO": {
         "type": "object",
         "properties": {
-          "startTime": {
-            "description": "Time and date at which the SLA cycle started.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DateDTO"
-              }
-            ]
-          },
-          "breachTime": {
-            "description": "Time and date at which the SLA cycle would have breached its limit.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DateDTO"
-              }
-            ]
-          },
-          "breached": {
-            "type": "boolean",
-            "description": "Indicates whether the SLA has been breached (true) or not (false)."
-          },
-          "paused": {
-            "type": "boolean",
-            "description": "Indicates whether the SLA is paused (true) or not (false)."
-          },
-          "withinCalendarHours": {
-            "type": "boolean",
-            "description": "Indicates whether the SLA it timed during calendared working hours only (true) or not (false)."
-          },
-          "goalDuration": {
-            "description": "Duration within which the service should be completed.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DurationDTO"
-              }
-            ]
-          },
-          "elapsedTime": {
-            "description": "Duration of the service.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DurationDTO"
-              }
-            ]
-          },
-          "remainingTime": {
-            "description": "Duration remaining in which to complete the service.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DurationDTO"
-              }
-            ]
+          "iframeSrc": {
+            "type": "string",
+            "description": "Url containing the body of the article (without title), suitable for rendering in an iframe"
           }
         },
         "additionalProperties": false
       },
-      "LinkableCustomerRequestLinkDTO": {
-        "type": "object",
-        "properties": {
-          "_links": {
-            "$ref": "#/components/schemas/CustomerRequestLinkDTO"
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedDTOCustomerRequestDTO": {
+      "PagedDTOArticleDTO": {
         "type": "object",
         "properties": {
           "size": {
@@ -8073,7 +7704,7 @@
             "type": "array",
             "description": "Details of the items included in the page.",
             "items": {
-              "$ref": "#/components/schemas/CustomerRequestDTO"
+              "$ref": "#/components/schemas/ArticleDTO"
             }
           },
           "_expands": {
@@ -8087,6 +7718,122 @@
             "allOf": [
               {
                 "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "SourceDTO": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Type of the knowledge base source",
+            "enum": [
+              "confluence"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "CustomerCreateDTO": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Customer's email address."
+          },
+          "fullName": {
+            "type": "string",
+            "description": "Deprecated, please use 'displayName'."
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Customer's name for display in the UI."
+          }
+        },
+        "additionalProperties": false
+      },
+      "AttachmentCreateDTO": {
+        "type": "object",
+        "properties": {
+          "temporaryAttachmentIds": {
+            "type": "array",
+            "description": "List of IDs for the temporary attachments to be added to the customer request.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "additionalComment": {
+            "description": "Comment about the attachments.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AdditionalCommentDTO"
+              }
+            ]
+          },
+          "public": {
+            "type": "boolean",
+            "description": "Indicates whether the attachments are to be public (true) or private/internal (false)."
+          }
+        },
+        "additionalProperties": false
+      },
+      "AttachmentCreateResultDTO": {
+        "type": "object",
+        "properties": {
+          "comment": {
+            "description": "Details of the comment included with the attachments.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CommentDTO"
+              }
+            ]
+          },
+          "attachments": {
+            "description": "List of the attachments added.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedDTOAttachmentDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "SoftwareInfoDTO": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Jira Service Management version."
+          },
+          "platformVersion": {
+            "type": "string",
+            "description": "Jira Platform version upon which Service Desk is based."
+          },
+          "buildDate": {
+            "description": "Date of the current build.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DateDTO"
+              }
+            ]
+          },
+          "buildChangeSet": {
+            "type": "string",
+            "description": "Reference of the change set included in the build."
+          },
+          "isLicensedForUse": {
+            "type": "boolean",
+            "description": "Indicates whether the instance is licensed (true) or not (false)."
+          },
+          "_links": {
+            "description": "REST API URL of the instance.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SelfLinkDTO"
               }
             ]
           }
@@ -8161,20 +7908,22 @@
         },
         "additionalProperties": false
       },
-      "OrganizationCreateDTO": {
+      "OrganizationServiceDeskUpdateDTO": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "description": "Name of the organization."
+          "organizationId": {
+            "type": "integer",
+            "description": "List of organizations, specified by 'ID' field values, to add to or remove from the service desk.",
+            "format": "int32"
           }
         },
         "additionalProperties": false
       },
-      "UsersOrganizationUpdateDTO": {
+      "ServiceDeskCustomerDTO": {
         "type": "object",
         "properties": {
           "usernames": {
+            "uniqueItems": true,
             "type": "array",
             "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details. Use `accountIds` instead.",
             "items": {
@@ -8182,105 +7931,11 @@
             }
           },
           "accountIds": {
+            "uniqueItems": true,
             "type": "array",
-            "description": "List of customers, specific by account IDs, to add to or remove from the organization.",
+            "description": "List of users, specified by account IDs, to add to or remove from a service desk.",
             "items": {
               "type": "string"
-            }
-          }
-        },
-        "additionalProperties": false
-      },
-      "CommentCreateDTO": {
-        "type": "object",
-        "properties": {
-          "body": {
-            "type": "string",
-            "description": "Content of the comment."
-          },
-          "public": {
-            "type": "boolean",
-            "description": "Indicates whether the comment is public (true) or private/internal (false)."
-          }
-        },
-        "additionalProperties": false
-      },
-      "LinkableAttachmentLinkDTO": {
-        "type": "object",
-        "properties": {
-          "_links": {
-            "$ref": "#/components/schemas/AttachmentLinkDTO"
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedDTOServiceDeskDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/ServiceDeskDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "CmdbWorkspaceDTO": {
-        "type": "object",
-        "properties": {
-          "workspaceId": {
-            "type": "string",
-            "description": "The workspace id used as an identifier to access Insight API"
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedRestResponseCmdbWorkspaceDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "results": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CmdbWorkspaceDTO"
             }
           }
         },
@@ -9311,7 +8966,35 @@
         },
         "additionalProperties": false
       },
-      "PagedDTORequestTypeGroupDTO": {
+      "CustomerRequestStatusDTO": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Name of the status condition."
+          },
+          "statusCategory": {
+            "type": "string",
+            "description": "Status category the status belongs to.",
+            "enum": [
+              "UNDEFINED",
+              "NEW",
+              "INDETERMINATE",
+              "DONE"
+            ]
+          },
+          "statusDate": {
+            "description": "Date on which the status was attained.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DateDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedDTOCustomerRequestStatusDTO": {
         "type": "object",
         "properties": {
           "size": {
@@ -9337,7 +9020,7 @@
             "type": "array",
             "description": "Details of the items included in the page.",
             "items": {
-              "$ref": "#/components/schemas/RequestTypeGroupDTO"
+              "$ref": "#/components/schemas/CustomerRequestStatusDTO"
             }
           },
           "_expands": {
@@ -9357,77 +9040,22 @@
         },
         "additionalProperties": false
       },
-      "RequestTypeGroupDTO": {
+      "DurationDTO": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "description": "ID of the request type group"
+          "millis": {
+            "type": "integer",
+            "description": "Duration in milliseconds.",
+            "format": "int64"
           },
-          "name": {
+          "friendly": {
             "type": "string",
-            "description": "Name of the request type group."
+            "description": "Duration in a user-friendly text format."
           }
         },
         "additionalProperties": false
       },
-      "RequestParticipantUpdateDTO": {
-        "type": "object",
-        "properties": {
-          "usernames": {
-            "type": "array",
-            "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details. Use `accountIds` instead.",
-            "items": {
-              "type": "string"
-            }
-          },
-          "accountIds": {
-            "type": "array",
-            "description": "List of users, specified by account IDs, to add to or remove as participants in the request.",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "additionalProperties": false
-      },
-      "RequestTypeCreateDTO": {
-        "type": "object",
-        "properties": {
-          "issueTypeId": {
-            "type": "string",
-            "description": "ID of the request type to add to the service desk."
-          },
-          "name": {
-            "type": "string",
-            "description": "Name of the request type on the service desk."
-          },
-          "description": {
-            "type": "string",
-            "description": "Description of the request type on the service desk."
-          },
-          "helpText": {
-            "type": "string",
-            "description": "Help text for the request type on the service desk."
-          }
-        },
-        "additionalProperties": false
-      },
-      "CustomerTransitionDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "ID of the transition."
-          },
-          "name": {
-            "type": "string",
-            "description": "Name of the transition."
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedDTOCustomerTransitionDTO": {
+      "PagedDTOSlaInformationDTO": {
         "type": "object",
         "properties": {
           "size": {
@@ -9453,7 +9081,7 @@
             "type": "array",
             "description": "Details of the items included in the page.",
             "items": {
-              "$ref": "#/components/schemas/CustomerTransitionDTO"
+              "$ref": "#/components/schemas/SlaInformationDTO"
             }
           },
           "_expands": {
@@ -9473,31 +9101,462 @@
         },
         "additionalProperties": false
       },
-      "CustomerTransitionExecutionDTO": {
+      "SlaInformationCompletedCycleDTO": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "description": "ID of the transition to be performed."
-          },
-          "additionalComment": {
-            "description": "Comment explaining the reason for the transition.",
+          "startTime": {
+            "description": "Time and date at which the SLA cycle started.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/AdditionalCommentDTO"
+                "$ref": "#/components/schemas/DateDTO"
+              }
+            ]
+          },
+          "stopTime": {
+            "description": "Time and date at which the SLA cycle completed.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DateDTO"
+              }
+            ]
+          },
+          "breached": {
+            "type": "boolean",
+            "description": "Indicates if the SLA (duration) was exceeded (true) or not (false)."
+          },
+          "goalDuration": {
+            "description": "Duration within which the service should have been completed.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DurationDTO"
+              }
+            ]
+          },
+          "elapsedTime": {
+            "description": "Duration in which the service was completed.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DurationDTO"
+              }
+            ]
+          },
+          "remainingTime": {
+            "description": "Duration remaining after the service was completed.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DurationDTO"
               }
             ]
           }
         },
         "additionalProperties": false
       },
-      "OrganizationServiceDeskUpdateDTO": {
+      "SlaInformationDTO": {
         "type": "object",
         "properties": {
-          "organizationId": {
+          "id": {
+            "type": "string",
+            "description": "ID of the Service Level Agreement (SLA)."
+          },
+          "name": {
+            "type": "string",
+            "description": "Description of the SLA."
+          },
+          "completedCycles": {
+            "type": "array",
+            "description": "List of completed cycles for the SLA.",
+            "items": {
+              "$ref": "#/components/schemas/SlaInformationCompletedCycleDTO"
+            }
+          },
+          "ongoingCycle": {
+            "description": "Details of the active cycle for the SLA.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SlaInformationOngoingCycleDTO"
+              }
+            ]
+          },
+          "_links": {
+            "description": "REST API URL for the SLA.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SelfLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "SlaInformationOngoingCycleDTO": {
+        "type": "object",
+        "properties": {
+          "startTime": {
+            "description": "Time and date at which the SLA cycle started.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DateDTO"
+              }
+            ]
+          },
+          "breachTime": {
+            "description": "Time and date at which the SLA cycle would have breached its limit.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DateDTO"
+              }
+            ]
+          },
+          "breached": {
+            "type": "boolean",
+            "description": "Indicates whether the SLA has been breached (true) or not (false)."
+          },
+          "paused": {
+            "type": "boolean",
+            "description": "Indicates whether the SLA is paused (true) or not (false)."
+          },
+          "withinCalendarHours": {
+            "type": "boolean",
+            "description": "Indicates whether the SLA it timed during calendared working hours only (true) or not (false)."
+          },
+          "goalDuration": {
+            "description": "Duration within which the service should be completed.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DurationDTO"
+              }
+            ]
+          },
+          "elapsedTime": {
+            "description": "Duration of the service.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DurationDTO"
+              }
+            ]
+          },
+          "remainingTime": {
+            "description": "Duration remaining in which to complete the service.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DurationDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "RequestCreateDTO": {
+        "type": "object",
+        "properties": {
+          "serviceDeskId": {
+            "type": "string",
+            "description": "ID of the service desk in which to create the request."
+          },
+          "requestTypeId": {
+            "type": "string",
+            "description": "ID of the request type for the request."
+          },
+          "requestFieldValues": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "JSON map of Jira field IDs and their values representing the content of the request."
+          },
+          "requestParticipants": {
+            "type": "array",
+            "description": "List of customers to participate in the request, as a list of `accountId` values.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "raiseOnBehalfOf": {
+            "type": "string",
+            "description": "The `accountId` of the customer that the request is being raised on behalf of."
+          },
+          "channel": {
+            "type": "string",
+            "description": "(Experimental) Shows extra information for the request channel."
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerRequestActionDTO": {
+        "type": "object",
+        "properties": {
+          "allowed": {
+            "type": "boolean",
+            "description": "Indicates whether the user can undertake the action (true) or not (false)."
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerRequestActionsDTO": {
+        "type": "object",
+        "properties": {
+          "addAttachment": {
+            "description": "Action of adding attachments to a request.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CustomerRequestActionDTO"
+              }
+            ]
+          },
+          "addComment": {
+            "description": "Action of adding comments to a request.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CustomerRequestActionDTO"
+              }
+            ]
+          },
+          "addParticipant": {
+            "description": "Action of adding participants to a request.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CustomerRequestActionDTO"
+              }
+            ]
+          },
+          "removeParticipant": {
+            "description": "Action of removing participants from a request.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CustomerRequestActionDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerRequestDTO": {
+        "type": "object",
+        "properties": {
+          "issueId": {
+            "type": "string",
+            "description": "ID of the request, as the peer issue ID."
+          },
+          "issueKey": {
+            "type": "string",
+            "description": "Key of the request, as the peer issue key."
+          },
+          "requestTypeId": {
+            "type": "string",
+            "description": "ID of the request type for the request."
+          },
+          "requestType": {
+            "description": "Expandable details of the request type.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RequestTypeDTO"
+              }
+            ]
+          },
+          "serviceDeskId": {
+            "type": "string",
+            "description": "ID of the service desk the request belongs to."
+          },
+          "serviceDesk": {
+            "description": "Expandable details of the service desk.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ServiceDeskDTO"
+              }
+            ]
+          },
+          "createdDate": {
+            "description": "Date on which the request was created.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DateDTO"
+              }
+            ]
+          },
+          "reporter": {
+            "description": "Details of the customer reporting the request.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserDTO"
+              }
+            ]
+          },
+          "requestFieldValues": {
+            "type": "array",
+            "description": "JSON map of Jira field IDs and their values representing the content of the request.",
+            "items": {
+              "$ref": "#/components/schemas/CustomerRequestFieldValueDTO"
+            }
+          },
+          "currentStatus": {
+            "description": "Status of the request.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CustomerRequestStatusDTO"
+              }
+            ]
+          },
+          "status": {
+            "description": "Expandable details of the request's status history.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedDTOCustomerRequestStatusDTO"
+              }
+            ]
+          },
+          "participants": {
+            "description": "Expandable details of the customers participating in the request.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedDTOUserDTO"
+              }
+            ]
+          },
+          "sla": {
+            "description": "Expandable details of the SLAs relating to the request.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedDTOSlaInformationDTO"
+              }
+            ]
+          },
+          "attachments": {
+            "description": "List of attachments included with the request.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedDTOAttachmentDTO"
+              }
+            ]
+          },
+          "comments": {
+            "description": "List of comments included with the request.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedDTOCommentDTO"
+              }
+            ]
+          },
+          "actions": {
+            "description": "List of actions that the user can take on the request.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CustomerRequestActionsDTO"
+              }
+            ]
+          },
+          "_expands": {
+            "type": "array",
+            "description": "List of items that can be expanded in the response by specifying the expand query parameter.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of links associated with the request.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CustomerRequestLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerRequestFieldValueDTO": {
+        "type": "object",
+        "properties": {
+          "fieldId": {
+            "type": "string",
+            "description": "ID of the field."
+          },
+          "label": {
+            "type": "string",
+            "description": "Text label for the field."
+          },
+          "value": {
+            "description": "Value of the field."
+          },
+          "renderedValue": {
+            "type": "object",
+            "description": "Value of the field rendered in the UI."
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerRequestLinkDTO": {
+        "type": "object",
+        "properties": {
+          "self": {
+            "type": "string",
+            "format": "uri"
+          },
+          "jiraRest": {
+            "type": "string",
+            "description": "REST API URL for the request.",
+            "format": "uri"
+          },
+          "web": {
+            "type": "string",
+            "description": "Web URL for the request.",
+            "format": "uri"
+          },
+          "agent": {
+            "type": "string",
+            "description": "Jira agent view URL for the request.",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LinkableCustomerRequestLinkDTO": {
+        "type": "object",
+        "properties": {
+          "_links": {
+            "$ref": "#/components/schemas/CustomerRequestLinkDTO"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedDTOCustomerRequestDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
             "type": "integer",
-            "description": "List of organizations, specified by 'ID' field values, to add to or remove from the service desk.",
+            "description": "Number of items returned in the page.",
             "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/CustomerRequestDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
           }
         },
         "additionalProperties": false
@@ -9512,49 +9571,32 @@
         },
         "additionalProperties": false
       },
-      "AttachmentCreateDTO": {
+      "OrganizationCreateDTO": {
         "type": "object",
         "properties": {
-          "temporaryAttachmentIds": {
-            "type": "array",
-            "description": "List of IDs for the temporary attachments to be added to the customer request.",
-            "items": {
-              "type": "string"
-            }
-          },
-          "additionalComment": {
-            "description": "Comment about the attachments.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/AdditionalCommentDTO"
-              }
-            ]
-          },
-          "public": {
-            "type": "boolean",
-            "description": "Indicates whether the attachments are to be public (true) or private/internal (false)."
+          "name": {
+            "type": "string",
+            "description": "Name of the organization."
           }
         },
         "additionalProperties": false
       },
-      "AttachmentCreateResultDTO": {
+      "UsersOrganizationUpdateDTO": {
         "type": "object",
         "properties": {
-          "comment": {
-            "description": "Details of the comment included with the attachments.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CommentDTO"
-              }
-            ]
+          "usernames": {
+            "type": "array",
+            "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details. Use `accountIds` instead.",
+            "items": {
+              "type": "string"
+            }
           },
-          "attachments": {
-            "description": "List of the attachments added.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedDTOAttachmentDTO"
-              }
-            ]
+          "accountIds": {
+            "type": "array",
+            "description": "List of customers, specific by account IDs, to add to or remove from the organization.",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "additionalProperties": false

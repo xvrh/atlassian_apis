@@ -772,6 +772,58 @@ class ResponseForbiddenObjectMutabilityKey {
   String toString() => value;
 }
 
+/// Cannot manage an unverified target account
+class ResponseForbiddenTargetUnverified {
+  final ResponseForbiddenTargetUnverifiedKey key;
+
+  ResponseForbiddenTargetUnverified({required this.key});
+
+  factory ResponseForbiddenTargetUnverified.fromJson(
+      Map<String, Object?> json) {
+    return ResponseForbiddenTargetUnverified(
+      key: ResponseForbiddenTargetUnverifiedKey.fromValue(
+          json[r'key'] as String? ?? ''),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+
+    final json = <String, Object?>{};
+    json[r'key'] = key.value;
+    return json;
+  }
+
+  ResponseForbiddenTargetUnverified copyWith(
+      {ResponseForbiddenTargetUnverifiedKey? key}) {
+    return ResponseForbiddenTargetUnverified(
+      key: key ?? this.key,
+    );
+  }
+}
+
+class ResponseForbiddenTargetUnverifiedKey {
+  static const forbiddenTargetUnverified =
+      ResponseForbiddenTargetUnverifiedKey._('forbidden.targetUnverified');
+
+  static const values = [
+    forbiddenTargetUnverified,
+  ];
+  final String value;
+
+  const ResponseForbiddenTargetUnverifiedKey._(this.value);
+
+  static ResponseForbiddenTargetUnverifiedKey fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ResponseForbiddenTargetUnverifiedKey._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 class ResponseForbiddenUnclaimedDomain {
   final ResponseForbiddenUnclaimedDomainKey key;
   final ResponseForbiddenUnclaimedDomainContext? context;

@@ -46,6 +46,10 @@ class Api {
       Uri.https('developer.atlassian.com',
           'cloud/admin/user-provisioning/swagger.v3.json'),
     ),
+    //Api(
+    //  'bitbucket',
+    //  Uri.https('bitbucket.org', 'api/swagger.json'),
+    //),
   ];
 }
 

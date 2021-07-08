@@ -184,8 +184,9 @@ import '../api_utils.dart';
 // ignore_for_file: deprecated_member_use_from_same_package
 ''');
 
-    var sortedTaggedServices =
-        _taggedServices.stableSortedBy((e) => e.tag!.name);
+    var sortedTaggedServices = _taggedServices
+        .where((t) => t.operations.isNotEmpty)
+        .stableSortedBy((e) => e.tag!.name);
 
     if (_untaggedService == null) {
       buffer.writeln('''

@@ -1202,7 +1202,7 @@
         "x-atlassian-connect-scope": "READ"
       }
     },
-    "/api/content/{id}/move/{position}/{targetId}": {
+    "/api/content/{pageId}/move/{position}/{targetId}": {
       "put": {
         "tags": [
           "Content - children and descendants"
@@ -1219,7 +1219,7 @@
         "operationId": "com.atlassian.confluence.plugins.restapi.resources.movePage_put",
         "parameters": [
           {
-            "name": "id",
+            "name": "pageId",
             "in": "path",
             "description": "The ID of the page to be moved",
             "required": true,
@@ -1378,7 +1378,7 @@
             ]
           }
         ],
-        "description": "Adds an attachment to a piece of content. This method only adds a new\nattachment. If you want to update an existing attachment, use\n[Create or update attachments](#api-content-id-child-attachment-put).\n\nNote, you must set a `X-Atlassian-Token: nocheck` header on the request\nfor this method, otherwise it will be blocked. This protects against XSRF\nattacks, which is necessary as this method accepts multipart/form-data.\n\nThe media type 'multipart/form-data' is defined in [RFC 7578](https://www.ietf.org/rfc/rfc7578.txt).\nMost client libraries have classes that make it easier to implement\nmultipart posts, like the [MultipartEntityBuilder](http://hc.apache.org/httpcomponents-client-5.0.x/current/httpclient5/apidocs/)\nJava class provided by Apache HTTP Components.\n\nNote, according to [RFC 7578](https://tools.ietf.org/html/rfc7578#section-4.5), \nin the case where the form data is text,\nthe charset parameter for the \"text/plain\" Content-Type may be used to\nindicate the character encoding used in that part. In the case of this\nAPI endpoint, the `comment` body parameter should be sent with `type=text/plain`\nand `charset=utf-8` values. This will force the charset to be UTF-8.\n\nExample: This curl command attaches a file ('example.txt') to a container\n(id='123') with a comment and `minorEdits`=true.\n\n``` bash\ncurl -D- \\\n  -u admin:admin \\\n  -X POST \\\n  -H 'X-Atlassian-Token: nocheck' \\\n  -F 'file=@\"example.txt\"' \\\n  -F 'minorEdit=\"true\"' \\\n  -F 'comment=\"Example attachment comment\"; type=text/plain; charset=utf-8' \\\n  http://myhost/rest/api/content/123/child/attachment\n```\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the content.",
+        "description": "Adds an attachment to a piece of content. This method only adds a new\nattachment. If you want to update an existing attachment, use\n[Create or update attachments](#api-content-id-child-attachment-put).\n\nNote, you must set a `X-Atlassian-Token: nocheck` header on the request\nfor this method, otherwise it will be blocked. This protects against XSRF\nattacks, which is necessary as this method accepts multipart/form-data.\n\nThe media type 'multipart/form-data' is defined in [RFC 7578](https://www.ietf.org/rfc/rfc7578.txt).\nMost client libraries have classes that make it easier to implement\nmultipart posts, like the [MultipartEntityBuilder](http://hc.apache.org/httpcomponents-client-5.0.x/current/httpclient5/apidocs/)\nJava class provided by Apache HTTP Components.\n\nNote, according to [RFC 7578](https://tools.ietf.org/html/rfc7578#section-4.5),\nin the case where the form data is text,\nthe charset parameter for the \"text/plain\" Content-Type may be used to\nindicate the character encoding used in that part. In the case of this\nAPI endpoint, the `comment` body parameter should be sent with `type=text/plain`\nand `charset=utf-8` values. This will force the charset to be UTF-8.\n\nExample: This curl command attaches a file ('example.txt') to a container\n(id='123') with a comment and `minorEdits`=true.\n\n``` bash\ncurl -D- \\\n  -u admin:admin \\\n  -X POST \\\n  -H 'X-Atlassian-Token: nocheck' \\\n  -F 'file=@\"example.txt\"' \\\n  -F 'minorEdit=\"true\"' \\\n  -F 'comment=\"Example attachment comment\"; type=text/plain; charset=utf-8' \\\n  http://myhost/rest/api/content/123/child/attachment\n```\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the content.",
         "operationId": "com.atlassian.confluence.plugins.restapi.resources.AttachmentResource.createAttachments_post",
         "parameters": [
           {
@@ -1443,7 +1443,7 @@
             ]
           }
         ],
-        "description": "Adds an attachment to a piece of content. If the attachment already exists\nfor the content, then the attachment is updated (i.e. a new version of the\nattachment is created).\n\nNote, you must set a `X-Atlassian-Token: nocheck` header on the request\nfor this method, otherwise it will be blocked. This protects against XSRF\nattacks, which is necessary as this method accepts multipart/form-data.\n\nThe media type 'multipart/form-data' is defined in [RFC 7578](https://www.ietf.org/rfc/rfc7578.txt).\nMost client libraries have classes that make it easier to implement\nmultipart posts, like the [MultipartEntityBuilder](http://hc.apache.org/httpcomponents-client-5.0.x/current/httpclient5/apidocs/)\nJava class provided by Apache HTTP Components.\n\nNote, according to [RFC 7578](https://tools.ietf.org/html/rfc7578#section-4.5), \nin the case where the form data is text,\nthe charset parameter for the \"text/plain\" Content-Type may be used to\nindicate the character encoding used in that part. In the case of this\nAPI endpoint, the `comment` body parameter should be sent with `type=text/plain`\nand `charset=utf-8` values. This will force the charset to be UTF-8.\n\nExample: This curl command attaches a file ('example.txt') to a piece of\ncontent (id='123') with a comment and `minorEdits`=true. If the 'example.txt'\nfile already exists, it will update it with a new version of the attachment.\n\n``` bash\ncurl -D- \\\n  -u admin:admin \\\n  -X PUT \\\n  -H 'X-Atlassian-Token: nocheck' \\\n  -F 'file=@\"example.txt\"' \\\n  -F 'minorEdit=\"true\"' \\\n  -F 'comment=\"Example attachment comment\"; type=text/plain; charset=utf-8' \\\n  http://myhost/rest/api/content/123/child/attachment\n```\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the content.",
+        "description": "Adds an attachment to a piece of content. If the attachment already exists\nfor the content, then the attachment is updated (i.e. a new version of the\nattachment is created).\n\nNote, you must set a `X-Atlassian-Token: nocheck` header on the request\nfor this method, otherwise it will be blocked. This protects against XSRF\nattacks, which is necessary as this method accepts multipart/form-data.\n\nThe media type 'multipart/form-data' is defined in [RFC 7578](https://www.ietf.org/rfc/rfc7578.txt).\nMost client libraries have classes that make it easier to implement\nmultipart posts, like the [MultipartEntityBuilder](http://hc.apache.org/httpcomponents-client-5.0.x/current/httpclient5/apidocs/)\nJava class provided by Apache HTTP Components.\n\nNote, according to [RFC 7578](https://tools.ietf.org/html/rfc7578#section-4.5),\nin the case where the form data is text,\nthe charset parameter for the \"text/plain\" Content-Type may be used to\nindicate the character encoding used in that part. In the case of this\nAPI endpoint, the `comment` body parameter should be sent with `type=text/plain`\nand `charset=utf-8` values. This will force the charset to be UTF-8.\n\nExample: This curl command attaches a file ('example.txt') to a piece of\ncontent (id='123') with a comment and `minorEdits`=true. If the 'example.txt'\nfile already exists, it will update it with a new version of the attachment.\n\n``` bash\ncurl -D- \\\n  -u admin:admin \\\n  -X PUT \\\n  -H 'X-Atlassian-Token: nocheck' \\\n  -F 'file=@\"example.txt\"' \\\n  -F 'minorEdit=\"true\"' \\\n  -F 'comment=\"Example attachment comment\"; type=text/plain; charset=utf-8' \\\n  http://myhost/rest/api/content/123/child/attachment\n```\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the content.",
         "operationId": "com.atlassian.confluence.plugins.restapi.resources.AttachmentResource.createOrUpdateAttachments_put",
         "parameters": [
           {
@@ -1581,7 +1581,7 @@
             ]
           }
         ],
-        "description": "Updates the binary data of an attachment, given the attachment ID, and\noptionally the comment and the minor edit field.\n\nThis method is essentially the same as [Create or update attachments](#api-content-id-child-attachment-put),\nexcept that it matches the attachment ID rather than the name.\n\nNote, you must set a `X-Atlassian-Token: nocheck` header on the request\nfor this method, otherwise it will be blocked. This protects against XSRF\nattacks, which is necessary as this method accepts multipart/form-data.\n\nThe media type 'multipart/form-data' is defined in [RFC 7578](https://www.ietf.org/rfc/rfc7578.txt).\nMost client libraries have classes that make it easier to implement\nmultipart posts, like the [MultipartEntityBuilder](http://hc.apache.org/httpcomponents-client-5.0.x/current/httpclient5/apidocs/)\nJava class provided by Apache HTTP Components.\n\nNote, according to [RFC 7578](https://tools.ietf.org/html/rfc7578#section-4.5), \nin the case where the form data is text,\nthe charset parameter for the \"text/plain\" Content-Type may be used to\nindicate the character encoding used in that part. In the case of this\nAPI endpoint, the `comment` body parameter should be sent with `type=text/plain`\nand `charset=utf-8` values. This will force the charset to be UTF-8.\n\nExample: This curl command updates an attachment (id='att456') that is attached\nto a piece of content (id='123') with a comment and `minorEdits`=true.\n\n``` bash\ncurl -D- \\\n  -u admin:admin \\\n  -X POST \\\n  -H 'X-Atlassian-Token: nocheck' \\\n  -F 'file=@\"example.txt\"' \\\n  -F 'minorEdit=\"true\"' \\\n  -F 'comment=\"Example attachment comment\"; type=text/plain; charset=utf-8' \\\n  http://myhost/rest/api/content/123/child/attachment/att456/data\n```\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the content.",
+        "description": "Updates the binary data of an attachment, given the attachment ID, and\noptionally the comment and the minor edit field.\n\nThis method is essentially the same as [Create or update attachments](#api-content-id-child-attachment-put),\nexcept that it matches the attachment ID rather than the name.\n\nNote, you must set a `X-Atlassian-Token: nocheck` header on the request\nfor this method, otherwise it will be blocked. This protects against XSRF\nattacks, which is necessary as this method accepts multipart/form-data.\n\nThe media type 'multipart/form-data' is defined in [RFC 7578](https://www.ietf.org/rfc/rfc7578.txt).\nMost client libraries have classes that make it easier to implement\nmultipart posts, like the [MultipartEntityBuilder](http://hc.apache.org/httpcomponents-client-5.0.x/current/httpclient5/apidocs/)\nJava class provided by Apache HTTP Components.\n\nNote, according to [RFC 7578](https://tools.ietf.org/html/rfc7578#section-4.5),\nin the case where the form data is text,\nthe charset parameter for the \"text/plain\" Content-Type may be used to\nindicate the character encoding used in that part. In the case of this\nAPI endpoint, the `comment` body parameter should be sent with `type=text/plain`\nand `charset=utf-8` values. This will force the charset to be UTF-8.\n\nExample: This curl command updates an attachment (id='att456') that is attached\nto a piece of content (id='123') with a comment and `minorEdits`=true.\n\n``` bash\ncurl -D- \\\n  -u admin:admin \\\n  -X POST \\\n  -H 'X-Atlassian-Token: nocheck' \\\n  -F 'file=@\"example.txt\"' \\\n  -F 'minorEdit=\"true\"' \\\n  -F 'comment=\"Example attachment comment\"; type=text/plain; charset=utf-8' \\\n  http://myhost/rest/api/content/123/child/attachment/att456/data\n```\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the content.",
         "operationId": "com.atlassian.confluence.plugins.restapi.resources.AttachmentResource.updateAttachmentData_post",
         "parameters": [
           {
@@ -3947,24 +3947,6 @@
             }
           },
           {
-            "name": "key",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "userName",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "accountId",
             "in": "query",
             "description": "The account ID of the user to be queried for whether the content restriction applies to it. The accountId\nuniquely identifies the user across all Atlassian products. For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.",
@@ -4013,24 +3995,6 @@
             "in": "path",
             "description": "The operation that the restriction applies to.",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "key",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "userName",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
             "schema": {
               "type": "string"
             }
@@ -4090,24 +4054,6 @@
                 "read",
                 "update"
               ]
-            }
-          },
-          {
-            "name": "key",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "userName",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
             }
           },
           {
@@ -5006,6 +4952,50 @@
           }
         },
         "x-atlassian-connect-scope": "READ"
+      },
+      "delete": {
+        "tags": [
+          "Group"
+        ],
+        "summary": "Delete user group",
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "write:confluence-groups"
+            ]
+          }
+        ],
+        "description": "Delete user group.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nUser must be a site admin.",
+        "operationId": "com.atlassian.confluence.plugins.restapi.resources.GroupResource.removeGroupById_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id of the group to delete.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Returned if the group was removed successfully."
+          },
+          "400": {
+            "description": "Returned if the id is missing or invalid."
+          },
+          "401": {
+            "description": "Returned if the calling user is not logged in to Confluence."
+          },
+          "403": {
+            "description": "Returned if the user is not a site admin."
+          },
+          "404": {
+            "description": "If no user group by the given id exists."
+          }
+        },
+        "x-atlassian-connect-scope": "INACCESSIBLE"
       }
     },
     "/api/group/{groupName}": {
@@ -7469,6 +7459,56 @@
         "x-atlassian-connect-scope": "INACCESSIBLE"
       }
     },
+    "/api/space/{spaceKey}/permission/custom-content": {
+      "post": {
+        "tags": [
+          "Space permissions"
+        ],
+        "summary": "Add new custom content permission to space",
+        "description": "Adds new custom content permission to space.\n\nIf the permission to be added is a group permission, the group can be identified\nby its group name or group id.\n\nNote: Only apps can access this REST resource and only make changes to the respective app permissions.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Admin' permission for the space.",
+        "operationId": "com.atlassian.confluence.plugins.restapi.resources.SpacePermissionResource.addCustomContentPermissions",
+        "parameters": [
+          {
+            "name": "spaceKey",
+            "in": "path",
+            "description": "The key of the space to be queried for its content.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SpacePermissionCustomContent"
+              }
+            }
+          },
+          "description": "The permissions to be created.",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Returned if the requested content is returned."
+          },
+          "400": {
+            "description": "Used for various errors. Such as:\n- Permission already exists for the given user or group.\n- 'read space' permission doesn't exist for the given user or group.\n- No group found with the given groupName or groupId"
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request."
+          },
+          "403": {
+            "description": "Returned if the user isn't authorized."
+          },
+          "404": {
+            "description": "Returned if any of the following is true:\n- There is no space with the given key.\n- The calling user does not have permission to view the space."
+          }
+        },
+        "x-atlassian-connect-scope": "WRITE"
+      }
+    },
     "/api/space/{spaceKey}/permission/{id}": {
       "delete": {
         "tags": [
@@ -8661,24 +8701,6 @@
         "operationId": "com.atlassian.confluence.plugins.restapi.resources.UserResource.getUser_get",
         "parameters": [
           {
-            "name": "key",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "accountId",
             "in": "query",
             "description": "The account ID of the user, which uniquely identifies the user across all Atlassian products.\nFor example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.",
@@ -8690,7 +8712,7 @@
           {
             "name": "expand",
             "in": "query",
-            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - `details.personal` returns the 'Personal' details in the user's profile, like the 'Email' and 'Phone'.\n  Note that these fields have been deprecated due to privacy changes. See the\n  [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)\n  for details.\n  - `details.business` returns the 'Company' details in the user's profile, like the 'Position' and 'Department'.\n  Note that these fields have been deprecated due to privacy changes. See the\n  [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)\n  for details.\n  - personalSpace returns the user's personal space, if it exists.\n  - `isExternalCollaborator` returns whether the user is an external collaborator user",
+            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - personalSpace returns the user's personal space, if it exists.\n  - `isExternalCollaborator` returns whether the user is an external collaborator user",
             "required": false,
             "style": "form",
             "explode": false,
@@ -8700,8 +8722,6 @@
                 "type": "string",
                 "enum": [
                   "operations",
-                  "details.personal",
-                  "details.business",
                   "personalSpace"
                 ]
               }
@@ -8803,7 +8823,7 @@
           {
             "name": "expand",
             "in": "query",
-            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - `details.personal` returns the 'Personal' details in the user's profile, like the 'Email' and 'Phone'.\n  Note that these fields have been deprecated due to privacy changes. See the\n  [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)\n  for details.\n  - `details.business` returns the 'Company' details in the user's profile, like the 'Position' and 'Department'.\n  Note that these fields have been deprecated due to privacy changes. See the\n  [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)\n  for details.\n  - personalSpace returns the user's personal space, if it exists.",
+            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - personalSpace returns the user's personal space, if it exists.",
             "required": false,
             "style": "form",
             "explode": false,
@@ -8813,8 +8833,6 @@
                 "type": "string",
                 "enum": [
                   "operations",
-                  "details.personal",
-                  "details.business",
                   "personalSpace"
                 ]
               }
@@ -8855,24 +8873,6 @@
         "description": "Returns the groups that a user is a member of.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
         "operationId": "com.atlassian.confluence.plugins.restapi.resources.UserResource.getGroupMembershipsForUser_get",
         "parameters": [
-          {
-            "name": "key",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "accountId",
             "in": "query",
@@ -8953,7 +8953,7 @@
           {
             "name": "expand",
             "in": "query",
-            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - `details.personal` returns the 'Personal' details in the user's profile, like the 'Email' and 'Phone'.\n  Note that these fields have been deprecated due to privacy changes. See the\n  [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)\n  for details.\n  - `details.business` returns the 'Company' details in the user's profile, like the 'Position' and 'Department'.\n  Note that these fields have been deprecated due to privacy changes. See the\n  [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)\n  for details.\n  - personalSpace returns the user's personal space, if it exists.",
+            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - personalSpace returns the user's personal space, if it exists.",
             "required": false,
             "style": "form",
             "explode": false,
@@ -8963,8 +8963,6 @@
                 "type": "string",
                 "enum": [
                   "operations",
-                  "details.personal",
-                  "details.business",
                   "personalSpace"
                 ]
               }
@@ -9027,24 +9025,6 @@
             }
           },
           {
-            "name": "key",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "accountId",
             "in": "query",
             "description": "The `accountId` of the user to be queried for whether they are watching the content. The accountId uniquely\nidentifies the user across all Atlassian products. For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.",
@@ -9094,24 +9074,6 @@
             "in": "path",
             "description": "The ID of the content to add the watcher to.",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "key",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
             "schema": {
               "type": "string"
             }
@@ -9174,24 +9136,6 @@
             }
           },
           {
-            "name": "key",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "accountId",
             "in": "query",
             "description": "The `accountId` of the user to be removed as a watcher. The accountId uniquely identifies the user across all Atlassian products.\nFor example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.",
@@ -9236,24 +9180,6 @@
             "in": "path",
             "description": "The name of the label to be queried for whether the specified user is\nwatching it.",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "key",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
             "schema": {
               "type": "string"
             }
@@ -9323,24 +9249,6 @@
             }
           },
           {
-            "name": "key",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "accountId",
             "in": "query",
             "description": "The `accountId` of the user to be added as a watcher. The accountId uniquely identifies the user across all Atlassian products.\nFor example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.",
@@ -9383,24 +9291,6 @@
             "in": "path",
             "description": "The name of the label to remove the watcher from.",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "key",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
             "schema": {
               "type": "string"
             }
@@ -9450,24 +9340,6 @@
             "in": "path",
             "description": "The key of the space to be queried for whether the specified user is\nwatching it.",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "key",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
             "schema": {
               "type": "string"
             }
@@ -9537,24 +9409,6 @@
             }
           },
           {
-            "name": "key",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "accountId",
             "in": "query",
             "description": "The `accountId` of the user to be added as a watcher. The accountId uniquely identifies the user across all\nAtlassian products. For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.",
@@ -9597,24 +9451,6 @@
             "in": "path",
             "description": "The key of the space to remove the watcher from.",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "key",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "This parameter is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.",
-            "required": false,
             "schema": {
               "type": "string"
             }
@@ -14015,7 +13851,7 @@
           },
           "permissions": {
             "type": "array",
-            "description": "The permissions for the new space. If no permissions are provided, the\n[Confluence default space permissions](https://confluence.atlassian.com/x/UAgzKw#CreateaSpace-Spacepermissions)\nare applied. Note that if permissions are provided, the space is \ncreated with only the provided set of permissions, not \nincluding the default space permissions. Space permissions \ncan be modified after creation using the space permissions \nendpoints, and a private space can be created using the \ncreate private space endpoint.",
+            "description": "The permissions for the new space. If no permissions are provided, the\n[Confluence default space permissions](https://confluence.atlassian.com/x/UAgzKw#CreateaSpace-Spacepermissions)\nare applied. Note that if permissions are provided, the space is\ncreated with only the provided set of permissions, not\nincluding the default space permissions. Space permissions\ncan be modified after creation using the space permissions\nendpoints, and a private space can be created using the\ncreate private space endpoint.",
             "items": {
               "$ref": "#/components/schemas/SpacePermission"
             }
@@ -15408,6 +15244,51 @@
           },
           "_links": {
             "$ref": "#/components/schemas/GenericLinks"
+          }
+        }
+      },
+      "SpacePermissionCustomContent": {
+        "type": "object",
+        "description": "This object represents a list of space permissions for custom content type for an individual user. Permissions consist of\na subjects object and a list with at least one operation object.",
+        "required": [
+          "subject",
+          "operations"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "subject": {
+            "$ref": "#/components/schemas/PermissionSubject"
+          },
+          "operations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "key",
+                "target",
+                "access"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "enum": [
+                    "read",
+                    "create",
+                    "delete"
+                  ],
+                  "description": "The operation type"
+                },
+                "target": {
+                  "type": "string",
+                  "description": "The custom content type"
+                },
+                "access": {
+                  "type": "boolean",
+                  "description": "Grant or restrict access"
+                }
+              }
+            }
           }
         }
       },
