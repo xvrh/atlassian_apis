@@ -40,6 +40,9 @@ class Api {
         if (httpMethod != null) {
           var path =
               sw.Path.fromJson(methodEntry.value! as Map<String, Object?>);
+          if (path.tags.isEmpty) {
+            continue;
+          }
           var service = _untaggedService ??
               _taggedServices.firstWhere(
                   (s) => path.tags.any((t) => t == s.tag!.name),
@@ -181,8 +184,9 @@ import '../api_utils.dart';
 // ignore_for_file: deprecated_member_use_from_same_package
 ''');
 
-    var sortedTaggedServices =
-        _taggedServices.stableSortedBy((e) => e.tag!.name);
+    var sortedTaggedServices = _taggedServices
+        .where((t) => t.operations.isNotEmpty)
+        .stableSortedBy((e) => e.tag!.name);
 
     if (_untaggedService == null) {
       buffer.writeln('''

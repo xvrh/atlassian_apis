@@ -2066,6 +2066,15 @@
         "properties": {
           "scheduledDate": {
             "type": "string"
+          },
+          "migrationStartDateTime": {
+            "type": "string"
+          },
+          "migrationEndDataTime": {
+            "type": "string"
+          },
+          "atlassianAccountId": {
+            "type": "string"
           }
         }
       },

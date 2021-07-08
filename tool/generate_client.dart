@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dart_style/dart_style.dart';
 import 'swagger/dart.dart' as dart;
 import 'swagger/swagger_spec.dart';
-import 'update_swagger_file.dart' show Api;
+import 'update_swagger_files.dart' show Api;
 
 void main() {
   for (var api in Api.all) {

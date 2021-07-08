@@ -781,14 +781,14 @@ class ContentChildrenAndDescendantsApi {
   /// use `before` or `after` positions
   /// when the `targetId` is a top-level page.
   Future<Map<String, dynamic>> movePage(
-      {required String id,
+      {required String pageId,
       required String position,
       required String targetId}) async {
     return await _client.send(
       'put',
-      'api/content/{id}/move/{position}/{targetId}',
+      'api/content/{pageId}/move/{position}/{targetId}',
       pathParameters: {
-        'id': id,
+        'pageId': pageId,
         'position': position,
         'targetId': targetId,
       },
@@ -1706,8 +1706,6 @@ class ContentRestrictionsApi {
   Future<void> getContentRestrictionStatusForUser(
       {required String id,
       required String operationKey,
-      String? key,
-      String? userName,
       required String accountId}) async {
     await _client.send(
       'get',
@@ -1717,8 +1715,6 @@ class ContentRestrictionsApi {
         'operationKey': operationKey,
       },
       queryParameters: {
-        if (key != null) 'key': key,
-        if (userName != null) 'userName': userName,
         'accountId': accountId,
       },
     );
@@ -1732,8 +1728,6 @@ class ContentRestrictionsApi {
   Future<void> addUserToContentRestriction(
       {required String id,
       required String operationKey,
-      String? key,
-      String? userName,
       required String accountId}) async {
     await _client.send(
       'put',
@@ -1743,8 +1737,6 @@ class ContentRestrictionsApi {
         'operationKey': operationKey,
       },
       queryParameters: {
-        if (key != null) 'key': key,
-        if (userName != null) 'userName': userName,
         'accountId': accountId,
       },
     );
@@ -1758,8 +1750,6 @@ class ContentRestrictionsApi {
   Future<void> removeUserFromContentRestriction(
       {required String id,
       required String operationKey,
-      String? key,
-      String? userName,
       required String accountId}) async {
     await _client.send(
       'delete',
@@ -1769,8 +1759,6 @@ class ContentRestrictionsApi {
         'operationKey': operationKey,
       },
       queryParameters: {
-        if (key != null) 'key': key,
-        if (userName != null) 'userName': userName,
         'accountId': accountId,
       },
     );
@@ -1967,10 +1955,7 @@ class ContentWatchesApi {
   /// otherwise
   /// permission to access the Confluence site ('Can use' global permission).
   Future<UserWatch> getContentWatchStatus(
-      {required String contentId,
-      String? key,
-      String? username,
-      required String accountId}) async {
+      {required String contentId, required String accountId}) async {
     return UserWatch.fromJson(await _client.send(
       'get',
       'api/user/watch/content/{contentId}',
@@ -1978,8 +1963,6 @@ class ContentWatchesApi {
         'contentId': contentId,
       },
       queryParameters: {
-        if (key != null) 'key': key,
-        if (username != null) 'username': username,
         'accountId': accountId,
       },
     ));
@@ -2000,10 +1983,7 @@ class ContentWatchesApi {
   /// otherwise
   /// permission to access the Confluence site ('Can use' global permission).
   Future<void> addContentWatcher(
-      {required String contentId,
-      String? key,
-      String? username,
-      required String accountId}) async {
+      {required String contentId, required String accountId}) async {
     await _client.send(
       'post',
       'api/user/watch/content/{contentId}',
@@ -2011,8 +1991,6 @@ class ContentWatchesApi {
         'contentId': contentId,
       },
       queryParameters: {
-        if (key != null) 'key': key,
-        if (username != null) 'username': username,
         'accountId': accountId,
       },
     );
@@ -2032,8 +2010,6 @@ class ContentWatchesApi {
   Future<void> removeContentWatcher(
       {required String xAtlassianToken,
       required String contentId,
-      String? key,
-      String? username,
       required String accountId}) async {
     await _client.send(
       'delete',
@@ -2042,8 +2018,6 @@ class ContentWatchesApi {
         'contentId': contentId,
       },
       queryParameters: {
-        if (key != null) 'key': key,
-        if (username != null) 'username': username,
         'accountId': accountId,
       },
       headers: {
@@ -2064,10 +2038,7 @@ class ContentWatchesApi {
   /// otherwise
   /// permission to access the Confluence site ('Can use' global permission).
   Future<UserWatch> isWatchingLabel(
-      {required String labelName,
-      String? key,
-      String? username,
-      required String accountId}) async {
+      {required String labelName, required String accountId}) async {
     return UserWatch.fromJson(await _client.send(
       'get',
       'api/user/watch/label/{labelName}',
@@ -2075,8 +2046,6 @@ class ContentWatchesApi {
         'labelName': labelName,
       },
       queryParameters: {
-        if (key != null) 'key': key,
-        if (username != null) 'username': username,
         'accountId': accountId,
       },
     ));
@@ -2099,8 +2068,6 @@ class ContentWatchesApi {
   Future<void> addLabelWatcher(
       {required String xAtlassianToken,
       required String labelName,
-      String? key,
-      String? username,
       required String accountId}) async {
     await _client.send(
       'post',
@@ -2109,8 +2076,6 @@ class ContentWatchesApi {
         'labelName': labelName,
       },
       queryParameters: {
-        if (key != null) 'key': key,
-        if (username != null) 'username': username,
         'accountId': accountId,
       },
       headers: {
@@ -2131,10 +2096,7 @@ class ContentWatchesApi {
   /// otherwise
   /// permission to access the Confluence site ('Can use' global permission).
   Future<void> removeLabelWatcher(
-      {required String labelName,
-      String? key,
-      String? username,
-      required String accountId}) async {
+      {required String labelName, required String accountId}) async {
     await _client.send(
       'delete',
       'api/user/watch/label/{labelName}',
@@ -2142,8 +2104,6 @@ class ContentWatchesApi {
         'labelName': labelName,
       },
       queryParameters: {
-        if (key != null) 'key': key,
-        if (username != null) 'username': username,
         'accountId': accountId,
       },
     );
@@ -2161,10 +2121,7 @@ class ContentWatchesApi {
   /// otherwise
   /// permission to access the Confluence site ('Can use' global permission).
   Future<UserWatch> isWatchingSpace(
-      {required String spaceKey,
-      String? key,
-      String? username,
-      required String accountId}) async {
+      {required String spaceKey, required String accountId}) async {
     return UserWatch.fromJson(await _client.send(
       'get',
       'api/user/watch/space/{spaceKey}',
@@ -2172,8 +2129,6 @@ class ContentWatchesApi {
         'spaceKey': spaceKey,
       },
       queryParameters: {
-        if (key != null) 'key': key,
-        if (username != null) 'username': username,
         'accountId': accountId,
       },
     ));
@@ -2196,8 +2151,6 @@ class ContentWatchesApi {
   Future<void> addSpaceWatcher(
       {required String xAtlassianToken,
       required String spaceKey,
-      String? key,
-      String? username,
       required String accountId}) async {
     await _client.send(
       'post',
@@ -2206,8 +2159,6 @@ class ContentWatchesApi {
         'spaceKey': spaceKey,
       },
       queryParameters: {
-        if (key != null) 'key': key,
-        if (username != null) 'username': username,
         'accountId': accountId,
       },
       headers: {
@@ -2228,10 +2179,7 @@ class ContentWatchesApi {
   /// otherwise
   /// permission to access the Confluence site ('Can use' global permission).
   Future<void> removeSpaceWatch(
-      {required String spaceKey,
-      String? key,
-      String? username,
-      required String accountId}) async {
+      {required String spaceKey, required String accountId}) async {
     await _client.send(
       'delete',
       'api/user/watch/space/{spaceKey}',
@@ -2239,8 +2187,6 @@ class ContentWatchesApi {
         'spaceKey': spaceKey,
       },
       queryParameters: {
-        if (key != null) 'key': key,
-        if (username != null) 'username': username,
         'accountId': accountId,
       },
     );
@@ -2369,6 +2315,20 @@ class GroupApi {
         'id': id,
       },
     ));
+  }
+
+  /// Delete user group.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// User must be a site admin.
+  Future<void> removeGroupById(String id) async {
+    await _client.send(
+      'delete',
+      'api/group/by-id',
+      queryParameters: {
+        'id': id,
+      },
+    );
   }
 
   /// Returns a user group for a given group name.
@@ -3276,6 +3236,30 @@ class SpacePermissionsApi {
     ));
   }
 
+  /// Adds new custom content permission to space.
+  ///
+  /// If the permission to be added is a group permission, the group can be
+  /// identified
+  /// by its group name or group id.
+  ///
+  /// Note: Only apps can access this REST resource and only make changes to the
+  /// respective app permissions.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Admin' permission for the space.
+  Future<void> addCustomContentPermissions(
+      {required String spaceKey,
+      required SpacePermissionCustomContent body}) async {
+    await _client.send(
+      'post',
+      'api/space/{spaceKey}/permission/custom-content',
+      pathParameters: {
+        'spaceKey': spaceKey,
+      },
+      body: body.toJson(),
+    );
+  }
+
   /// Removes a space permission. Note that removing Read Space permission for a
   /// user or group will remove all
   /// the space permissions for that user or group.
@@ -3701,16 +3685,11 @@ class UsersApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
   Future<User> getUser(
-      {String? key,
-      String? username,
-      required String accountId,
-      List<String>? expand}) async {
+      {required String accountId, List<String>? expand}) async {
     return User.fromJson(await _client.send(
       'get',
       'api/user',
       queryParameters: {
-        if (key != null) 'key': key,
-        if (username != null) 'username': username,
         'accountId': accountId,
         if (expand != null) 'expand': '$expand',
       },
@@ -3753,17 +3732,11 @@ class UsersApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
   Future<GroupArray> getGroupMembershipsForUser(
-      {String? key,
-      String? username,
-      required String accountId,
-      int? start,
-      int? limit}) async {
+      {required String accountId, int? start, int? limit}) async {
     return GroupArray.fromJson(await _client.send(
       'get',
       'api/user/memberof',
       queryParameters: {
-        if (key != null) 'key': key,
-        if (username != null) 'username': username,
         'accountId': accountId,
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
@@ -13301,6 +13274,123 @@ class SpacePermission {
   }
 }
 
+/// This object represents a list of space permissions for custom content type
+/// for an individual user. Permissions consist of
+/// a subjects object and a list with at least one operation object.
+class SpacePermissionCustomContent {
+  final PermissionSubject subject;
+  final List<SpacePermissionCustomContentOperationsItem> operations;
+
+  SpacePermissionCustomContent(
+      {required this.subject, required this.operations});
+
+  factory SpacePermissionCustomContent.fromJson(Map<String, Object?> json) {
+    return SpacePermissionCustomContent(
+      subject: PermissionSubject.fromJson(
+          json[r'subject'] as Map<String, Object?>? ?? const {}),
+      operations: (json[r'operations'] as List<Object?>?)
+              ?.map((i) => SpacePermissionCustomContentOperationsItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var subject = this.subject;
+    var operations = this.operations;
+
+    final json = <String, Object?>{};
+    json[r'subject'] = subject.toJson();
+    json[r'operations'] = operations.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  SpacePermissionCustomContent copyWith(
+      {PermissionSubject? subject,
+      List<SpacePermissionCustomContentOperationsItem>? operations}) {
+    return SpacePermissionCustomContent(
+      subject: subject ?? this.subject,
+      operations: operations ?? this.operations,
+    );
+  }
+}
+
+class SpacePermissionCustomContentOperationsItem {
+  /// The operation type
+  final SpacePermissionCustomContentOperationsItemKey key;
+
+  /// The custom content type
+  final String target;
+
+  /// Grant or restrict access
+  final bool access;
+
+  SpacePermissionCustomContentOperationsItem(
+      {required this.key, required this.target, required this.access});
+
+  factory SpacePermissionCustomContentOperationsItem.fromJson(
+      Map<String, Object?> json) {
+    return SpacePermissionCustomContentOperationsItem(
+      key: SpacePermissionCustomContentOperationsItemKey.fromValue(
+          json[r'key'] as String? ?? ''),
+      target: json[r'target'] as String? ?? '',
+      access: json[r'access'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+    var target = this.target;
+    var access = this.access;
+
+    final json = <String, Object?>{};
+    json[r'key'] = key.value;
+    json[r'target'] = target;
+    json[r'access'] = access;
+    return json;
+  }
+
+  SpacePermissionCustomContentOperationsItem copyWith(
+      {SpacePermissionCustomContentOperationsItemKey? key,
+      String? target,
+      bool? access}) {
+    return SpacePermissionCustomContentOperationsItem(
+      key: key ?? this.key,
+      target: target ?? this.target,
+      access: access ?? this.access,
+    );
+  }
+}
+
+class SpacePermissionCustomContentOperationsItemKey {
+  static const read = SpacePermissionCustomContentOperationsItemKey._('read');
+  static const create =
+      SpacePermissionCustomContentOperationsItemKey._('create');
+  static const delete =
+      SpacePermissionCustomContentOperationsItemKey._('delete');
+
+  static const values = [
+    read,
+    create,
+    delete,
+  ];
+  final String value;
+
+  const SpacePermissionCustomContentOperationsItemKey._(this.value);
+
+  static SpacePermissionCustomContentOperationsItemKey fromValue(
+          String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => SpacePermissionCustomContentOperationsItemKey._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 /// The users and/or groups that the permission applies to.
 class SpacePermissionSubjects {
   final SpacePermissionSubjectsUser? user;
@@ -15658,6 +15748,9 @@ class Version {
   final VersionExpandable expandable;
   final GenericLinks links;
 
+  /// True if content type is modifed in this version (e.g. page to blog)
+  final bool contentTypeModified;
+
   Version(
       {required this.by,
       required this.when,
@@ -15668,7 +15761,9 @@ class Version {
       this.content,
       this.collaborators,
       required this.expandable,
-      required this.links});
+      required this.links,
+      bool? contentTypeModified})
+      : contentTypeModified = contentTypeModified ?? false;
 
   factory Version.fromJson(Map<String, Object?> json) {
     return Version(
@@ -15689,6 +15784,7 @@ class Version {
           json[r'_expandable'] as Map<String, Object?>? ?? const {}),
       links: GenericLinks.fromJson(
           json[r'_links'] as Map<String, Object?>? ?? const {}),
+      contentTypeModified: json[r'contentTypeModified'] as bool? ?? false,
     );
   }
 
@@ -15703,6 +15799,7 @@ class Version {
     var collaborators = this.collaborators;
     var expandable = this.expandable;
     var links = this.links;
+    var contentTypeModified = this.contentTypeModified;
 
     final json = <String, Object?>{};
     json[r'by'] = by.toJson();
@@ -15719,6 +15816,7 @@ class Version {
     }
     json[r'_expandable'] = expandable.toJson();
     json[r'_links'] = links.toJson();
+    json[r'contentTypeModified'] = contentTypeModified;
     return json;
   }
 
@@ -15732,7 +15830,8 @@ class Version {
       Content? content,
       UsersUserKeys? collaborators,
       VersionExpandable? expandable,
-      GenericLinks? links}) {
+      GenericLinks? links,
+      bool? contentTypeModified}) {
     return Version(
       by: by ?? this.by,
       when: when ?? this.when,
@@ -15744,6 +15843,7 @@ class Version {
       collaborators: collaborators ?? this.collaborators,
       expandable: expandable ?? this.expandable,
       links: links ?? this.links,
+      contentTypeModified: contentTypeModified ?? this.contentTypeModified,
     );
   }
 }
