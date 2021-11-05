@@ -290,7 +290,8 @@ class Schema {
   )   : properties = properties ?? const {},
         required = required ?? const [],
         description = description ?? '',
-        enums = _nullIfEmpty(enums?.whereNotNull().where((e) => e.isNotEmpty).toList());
+        enums = _nullIfEmpty(
+            enums?.whereNotNull().where((e) => e.isNotEmpty).toList());
 
   factory Schema.fromJson(Map<String, dynamic> json) => _$SchemaFromJson(json);
 
