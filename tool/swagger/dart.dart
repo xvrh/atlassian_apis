@@ -887,7 +887,12 @@ class SimpleType {
     return (accessor) => '$accessor as $type';
   }
 
-  static String _defaultIdentifierToString(String id) => "'\$$id'";
+  static String _defaultIdentifierToString(String id) {
+    if (id == r'$') {
+      id = r'{$}';
+    }
+    return "'\$$id'";
+  }
 }
 
 class ListDartType extends DartType {

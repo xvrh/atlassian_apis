@@ -1083,15 +1083,19 @@ class EventActorModel {
   /// The display name of the Actor.
   final String? name;
 
+  /// The email of the Actor.
+  final String? email;
+
   /// Link to this Actor
   final LinkSelfModel? links;
 
-  EventActorModel({required this.id, this.name, this.links});
+  EventActorModel({required this.id, this.name, this.email, this.links});
 
   factory EventActorModel.fromJson(Map<String, Object?> json) {
     return EventActorModel(
       id: json[r'id'] as String? ?? '',
       name: json[r'name'] as String?,
+      email: json[r'email'] as String?,
       links: json[r'links'] != null
           ? LinkSelfModel.fromJson(json[r'links']! as Map<String, Object?>)
           : null,
@@ -1101,6 +1105,7 @@ class EventActorModel {
   Map<String, Object?> toJson() {
     var id = this.id;
     var name = this.name;
+    var email = this.email;
     var links = this.links;
 
     final json = <String, Object?>{};
@@ -1108,16 +1113,21 @@ class EventActorModel {
     if (name != null) {
       json[r'name'] = name;
     }
+    if (email != null) {
+      json[r'email'] = email;
+    }
     if (links != null) {
       json[r'links'] = links.toJson();
     }
     return json;
   }
 
-  EventActorModel copyWith({String? id, String? name, LinkSelfModel? links}) {
+  EventActorModel copyWith(
+      {String? id, String? name, String? email, LinkSelfModel? links}) {
     return EventActorModel(
       id: id ?? this.id,
       name: name ?? this.name,
+      email: email ?? this.email,
       links: links ?? this.links,
     );
   }
@@ -1130,18 +1140,34 @@ class EventLocationModel {
   /// Geo location of the IP address
   final String? geo;
 
-  EventLocationModel({this.ip, this.geo});
+  /// Country location according to the IP address
+  final String? countryName;
+
+  /// Region location according to the IP address
+  final String? regionName;
+
+  /// City location according to the IP address
+  final String? city;
+
+  EventLocationModel(
+      {this.ip, this.geo, this.countryName, this.regionName, this.city});
 
   factory EventLocationModel.fromJson(Map<String, Object?> json) {
     return EventLocationModel(
       ip: json[r'ip'] as String?,
       geo: json[r'geo'] as String?,
+      countryName: json[r'countryName'] as String?,
+      regionName: json[r'regionName'] as String?,
+      city: json[r'city'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var ip = this.ip;
     var geo = this.geo;
+    var countryName = this.countryName;
+    var regionName = this.regionName;
+    var city = this.city;
 
     final json = <String, Object?>{};
     if (ip != null) {
@@ -1150,13 +1176,30 @@ class EventLocationModel {
     if (geo != null) {
       json[r'geo'] = geo;
     }
+    if (countryName != null) {
+      json[r'countryName'] = countryName;
+    }
+    if (regionName != null) {
+      json[r'regionName'] = regionName;
+    }
+    if (city != null) {
+      json[r'city'] = city;
+    }
     return json;
   }
 
-  EventLocationModel copyWith({String? ip, String? geo}) {
+  EventLocationModel copyWith(
+      {String? ip,
+      String? geo,
+      String? countryName,
+      String? regionName,
+      String? city}) {
     return EventLocationModel(
       ip: ip ?? this.ip,
       geo: geo ?? this.geo,
+      countryName: countryName ?? this.countryName,
+      regionName: regionName ?? this.regionName,
+      city: city ?? this.city,
     );
   }
 }

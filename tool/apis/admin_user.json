@@ -14,7 +14,7 @@
       {
         "title": "Authentication and authorization",
         "anchor": "auth",
-        "body": "To use the user management REST API you must have a valid API key. The API key protects the API\nand ensures that you have permission to update and disable the accounts owned by your organization.\nYou can use the same API key for the organizations REST API and the user management REST API.\nFor more information, see [Create an API key](https://confluence.atlassian.com/x/jPnJOQ).\n\nOnce you have your API key, you can provide it as a bearer token\nin the `Authorization` part of your HTTPS header."
+        "body": "To use the user management REST API you must have a valid API key. The API key protects the API\nand ensures that you have permission to update and deactivate the accounts owned by your organization.\nYou can use the same API key for the organizations REST API and the user management REST API.\nFor more information, see [Create an API key](https://confluence.atlassian.com/x/jPnJOQ).\n\nOnce you have your API key, you can provide it as a bearer token\nin the `Authorization` part of your HTTPS header."
       },
       {
         "title": "Version and URI",
@@ -75,7 +75,7 @@
         ],
         "responses": {
           "200": {
-            "description": "You have permission to manage at least some aspect of the specified user account. Restrictions around the privileges specified are returned.\n- _profile_: DEPRECATED, replace by profile.write\n- _profile.read_: have permission to read the profile data of the user account (at GET ./profile)\n- _profile.write_: refers to the object mutability of the user's profile (at PATCH ./profile)\n- _email.set_: have permission to set the user's email address (at PUT ./email)\n- _lifecycle.enablement_: have permission to enable and disable the user's account (at POST ./lifecycle/enable AND ./lifecycle/disable)\n- _apiToken.read_: have permission to list the user's API tokens (at GET ./api-tokens)\n- _apiToken.delete_: have permission to delete API tokens from the account (at DELETE ./api-tokens/{tokenId})\n",
+            "description": "You have permission to manage at least some aspect of the specified user account. Restrictions around the privileges specified are returned.\n- _profile_: DEPRECATED, replace by profile.write\n- _profile.read_: have permission to read the profile data of the user account (at GET ./profile)\n- _profile.write_: refers to the object mutability of the user's profile (at PATCH ./profile)\n- _email.set_: have permission to set the user's email address (at PUT ./email)\n- _lifecycle.enablement_: have permission to activate and deactivate the user's account (at POST ./lifecycle/enable AND ./lifecycle/disable)\n- _apiToken.read_: have permission to list the user's API tokens (at GET ./api-tokens)\n- _apiToken.delete_: have permission to delete API tokens from the account (at DELETE ./api-tokens/{tokenId})\n",
             "content": {
               "application/json": {
                 "schema": {
@@ -381,8 +381,8 @@
     },
     "/users/{account_id}/manage/lifecycle/disable": {
       "post": {
-        "summary": "Disable a user",
-        "description": "\nDisables the specified user account. The permission to make use of this resource is exposed by the `lifecycle.enablement` privilege.\nYou can optionally set a message associated with the block that will be shown to the user on attempted authentication. If none is supplied, a default message will be used.\n",
+        "summary": "Deactivate a user",
+        "description": "\nDeactivate the specified user account. The permission to make use of this resource is exposed by the `lifecycle.enablement` privilege.\nYou can optionally set a message associated with the block that will be shown to the user on attempted authentication. If none is supplied, a default message will be used.\n",
         "tags": [
           "lifecycle"
         ],
@@ -432,8 +432,8 @@
     },
     "/users/{account_id}/manage/lifecycle/enable": {
       "post": {
-        "summary": "Enable a user",
-        "description": "\nEnables the specified user account. The permission to make use of this resource is exposed by the `lifecycle.enablement` privilege.\nYou can optionally set a message associated with the block that will be shown to the user on attempted authentication. If none is supplied, a default message will be used.\n",
+        "summary": "Activate a user",
+        "description": "\nActivates the specified user account. The permission to make use of this resource is exposed by the `lifecycle.enablement` privilege.\nYou can optionally set a message associated with the block that will be shown to the user on attempted authentication. If none is supplied, a default message will be used.\n",
         "tags": [
           "lifecycle"
         ],
@@ -444,7 +444,7 @@
             "schema": {
               "$ref": "#/components/schemas/AccountId"
             },
-            "description": "The unique identifier of the user to enable.\n",
+            "description": "The unique identifier of the user to activate.\n",
             "required": true
           }
         ],

@@ -4053,6 +4053,7 @@ class InsightWorkspaceDTO {
   }
 }
 
+/// Details about an issue.
 class IssueBean {
   /// Expand options that include additional issue details in the response.
   final String? expand;
@@ -4745,13 +4746,13 @@ class Operations {
 
 class OrganizationCreateDTO {
   /// Name of the organization.
-  final String? name;
+  final String name;
 
-  OrganizationCreateDTO({this.name});
+  OrganizationCreateDTO({required this.name});
 
   factory OrganizationCreateDTO.fromJson(Map<String, Object?> json) {
     return OrganizationCreateDTO(
-      name: json[r'name'] as String?,
+      name: json[r'name'] as String? ?? '',
     );
   }
 
@@ -4759,9 +4760,7 @@ class OrganizationCreateDTO {
     var name = this.name;
 
     final json = <String, Object?>{};
-    if (name != null) {
-      json[r'name'] = name;
-    }
+    json[r'name'] = name;
     return json;
   }
 
@@ -4824,13 +4823,13 @@ class OrganizationDTO {
 class OrganizationServiceDeskUpdateDTO {
   /// List of organizations, specified by 'ID' field values, to add to or remove
   /// from the service desk.
-  final int? organizationId;
+  final int organizationId;
 
-  OrganizationServiceDeskUpdateDTO({this.organizationId});
+  OrganizationServiceDeskUpdateDTO({required this.organizationId});
 
   factory OrganizationServiceDeskUpdateDTO.fromJson(Map<String, Object?> json) {
     return OrganizationServiceDeskUpdateDTO(
-      organizationId: (json[r'organizationId'] as num?)?.toInt(),
+      organizationId: (json[r'organizationId'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -4838,9 +4837,7 @@ class OrganizationServiceDeskUpdateDTO {
     var organizationId = this.organizationId;
 
     final json = <String, Object?>{};
-    if (organizationId != null) {
-      json[r'organizationId'] = organizationId;
-    }
+    json[r'organizationId'] = organizationId;
     return json;
   }
 
@@ -7711,6 +7708,11 @@ class SlaInformationCompletedCycleDTO {
   /// Time and date at which the SLA cycle completed.
   final DateDTO? stopTime;
 
+  /// Time and date at which the SLA cycle breached in case of completed
+  /// breached cycle or would have breached in case of non-breached completed
+  /// cycle.
+  final DateDTO? breachTime;
+
   /// Indicates if the SLA (duration) was exceeded (true) or not (false).
   final bool breached;
 
@@ -7726,6 +7728,7 @@ class SlaInformationCompletedCycleDTO {
   SlaInformationCompletedCycleDTO(
       {this.startTime,
       this.stopTime,
+      this.breachTime,
       bool? breached,
       this.goalDuration,
       this.elapsedTime,
@@ -7739,6 +7742,9 @@ class SlaInformationCompletedCycleDTO {
           : null,
       stopTime: json[r'stopTime'] != null
           ? DateDTO.fromJson(json[r'stopTime']! as Map<String, Object?>)
+          : null,
+      breachTime: json[r'breachTime'] != null
+          ? DateDTO.fromJson(json[r'breachTime']! as Map<String, Object?>)
           : null,
       breached: json[r'breached'] as bool? ?? false,
       goalDuration: json[r'goalDuration'] != null
@@ -7757,6 +7763,7 @@ class SlaInformationCompletedCycleDTO {
   Map<String, Object?> toJson() {
     var startTime = this.startTime;
     var stopTime = this.stopTime;
+    var breachTime = this.breachTime;
     var breached = this.breached;
     var goalDuration = this.goalDuration;
     var elapsedTime = this.elapsedTime;
@@ -7768,6 +7775,9 @@ class SlaInformationCompletedCycleDTO {
     }
     if (stopTime != null) {
       json[r'stopTime'] = stopTime.toJson();
+    }
+    if (breachTime != null) {
+      json[r'breachTime'] = breachTime.toJson();
     }
     json[r'breached'] = breached;
     if (goalDuration != null) {
@@ -7785,6 +7795,7 @@ class SlaInformationCompletedCycleDTO {
   SlaInformationCompletedCycleDTO copyWith(
       {DateDTO? startTime,
       DateDTO? stopTime,
+      DateDTO? breachTime,
       bool? breached,
       DurationDTO? goalDuration,
       DurationDTO? elapsedTime,
@@ -7792,6 +7803,7 @@ class SlaInformationCompletedCycleDTO {
     return SlaInformationCompletedCycleDTO(
       startTime: startTime ?? this.startTime,
       stopTime: stopTime ?? this.stopTime,
+      breachTime: breachTime ?? this.breachTime,
       breached: breached ?? this.breached,
       goalDuration: goalDuration ?? this.goalDuration,
       elapsedTime: elapsedTime ?? this.elapsedTime,

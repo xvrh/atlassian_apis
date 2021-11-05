@@ -82,12 +82,12 @@ class AdminUserApi {
   }
 
   ///
-  /// Disables the specified user account. The permission to make use of this
+  /// Deactivate the specified user account. The permission to make use of this
   /// resource is exposed by the `lifecycle.enablement` privilege.
   /// You can optionally set a message associated with the block that will be
   /// shown to the user on attempted authentication. If none is supplied, a
   /// default message will be used.
-  Future<void> disableAUser(
+  Future<void> deactivateAUser(
       {required String accountId, required Map<String, dynamic> body}) async {
     await _client.send(
       'post',
@@ -100,12 +100,12 @@ class AdminUserApi {
   }
 
   ///
-  /// Enables the specified user account. The permission to make use of this
+  /// Activates the specified user account. The permission to make use of this
   /// resource is exposed by the `lifecycle.enablement` privilege.
   /// You can optionally set a message associated with the block that will be
   /// shown to the user on attempted authentication. If none is supplied, a
   /// default message will be used.
-  Future<void> enableAUser(String accountId) async {
+  Future<void> activateAUser(String accountId) async {
     await _client.send(
       'post',
       'users/{account_id}/manage/lifecycle/enable',
