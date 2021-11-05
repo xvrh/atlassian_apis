@@ -387,7 +387,7 @@ class BoardApi {
         if (maxResults != null) 'maxResults': '$maxResults',
         if (jql != null) 'jql': jql,
         if (validateQuery != null) 'validateQuery': '$validateQuery',
-        if (fields != null) 'fields': '$fields',
+        if (fields != null) 'fields': fields.map((e) => e).join(','),
         if (expand != null) 'expand': expand,
       },
     ));
@@ -483,7 +483,7 @@ class BoardApi {
         if (maxResults != null) 'maxResults': '$maxResults',
         if (jql != null) 'jql': jql,
         if (validateQuery != null) 'validateQuery': '$validateQuery',
-        if (fields != null) 'fields': '$fields',
+        if (fields != null) 'fields': fields.map((e) => e).join(','),
         if (expand != null) 'expand': expand,
       },
     );
@@ -516,7 +516,7 @@ class BoardApi {
         if (maxResults != null) 'maxResults': '$maxResults',
         if (jql != null) 'jql': jql,
         if (validateQuery != null) 'validateQuery': '$validateQuery',
-        if (fields != null) 'fields': '$fields',
+        if (fields != null) 'fields': fields.map((e) => e).join(','),
         if (expand != null) 'expand': expand,
       },
     );
@@ -575,7 +575,7 @@ class BoardApi {
         if (maxResults != null) 'maxResults': '$maxResults',
         if (jql != null) 'jql': jql,
         if (validateQuery != null) 'validateQuery': '$validateQuery',
-        if (fields != null) 'fields': '$fields',
+        if (fields != null) 'fields': fields.map((e) => e).join(','),
         if (expand != null) 'expand': expand,
       },
     ));
@@ -817,7 +817,7 @@ class BoardApi {
         if (maxResults != null) 'maxResults': '$maxResults',
         if (jql != null) 'jql': jql,
         if (validateQuery != null) 'validateQuery': '$validateQuery',
-        if (fields != null) 'fields': '$fields',
+        if (fields != null) 'fields': fields.map((e) => e).join(','),
         if (expand != null) 'expand': expand,
       },
     );
@@ -1268,7 +1268,7 @@ class EpicApi {
         if (maxResults != null) 'maxResults': '$maxResults',
         if (jql != null) 'jql': jql,
         if (validateQuery != null) 'validateQuery': '$validateQuery',
-        if (fields != null) 'fields': '$fields',
+        if (fields != null) 'fields': fields.map((e) => e).join(','),
         if (expand != null) 'expand': expand,
       },
     );
@@ -1378,7 +1378,7 @@ class EpicApi {
         if (maxResults != null) 'maxResults': '$maxResults',
         if (jql != null) 'jql': jql,
         if (validateQuery != null) 'validateQuery': '$validateQuery',
-        if (fields != null) 'fields': '$fields',
+        if (fields != null) 'fields': fields.map((e) => e).join(','),
         if (expand != null) 'expand': expand,
       },
     );
@@ -1567,7 +1567,7 @@ class IssueApi {
         'issueIdOrKey': issueIdOrKey,
       },
       queryParameters: {
-        if (fields != null) 'fields': '$fields',
+        if (fields != null) 'fields': fields.map((e) => e).join(','),
         if (expand != null) 'expand': expand,
         if (updateHistory != null) 'updateHistory': '$updateHistory',
       },
@@ -1897,7 +1897,7 @@ class SprintApi {
         if (maxResults != null) 'maxResults': '$maxResults',
         if (jql != null) 'jql': jql,
         if (validateQuery != null) 'validateQuery': '$validateQuery',
-        if (fields != null) 'fields': '$fields',
+        if (fields != null) 'fields': fields.map((e) => e).join(','),
         if (expand != null) 'expand': expand,
       },
     );

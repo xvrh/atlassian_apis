@@ -20,7 +20,8 @@ class AdminUserApi {
         'account_id': accountId,
       },
       queryParameters: {
-        if (privileges != null) 'privileges': '$privileges',
+        if (privileges != null)
+          'privileges': privileges.map((e) => e).join(','),
       },
     ) as Map<String, Object?>;
   }

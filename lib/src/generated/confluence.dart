@@ -232,9 +232,9 @@ class ContentApi {
         if (type != null) 'type': type,
         if (spaceKey != null) 'spaceKey': spaceKey,
         if (title != null) 'title': title,
-        if (status != null) 'status': '$status',
+        if (status != null) 'status': status.map((e) => e).join(','),
         if (postingDay != null) 'postingDay': postingDay,
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (trigger != null) 'trigger': trigger,
         if (orderby != null) 'orderby': orderby,
         if (start != null) 'start': '$start',
@@ -269,7 +269,7 @@ class ContentApi {
       'api/content',
       queryParameters: {
         if (status != null) 'status': status,
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
       body: body.toJson(),
     ));
@@ -296,7 +296,7 @@ class ContentApi {
       },
       queryParameters: {
         if (status != null) 'status': status,
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -319,7 +319,7 @@ class ContentApi {
       },
       queryParameters: {
         if (status != null) 'status': status,
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -381,7 +381,7 @@ class ContentApi {
       queryParameters: {
         'cql': cql,
         if (cqlcontext != null) 'cqlcontext': cqlcontext,
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (cursor != null) 'cursor': cursor,
         if (limit != null) 'limit': '$limit',
       },
@@ -411,11 +411,11 @@ class ContentApi {
         'id': id,
       },
       queryParameters: {
-        if (status != null) 'status': '$status',
+        if (status != null) 'status': status.map((e) => e).join(','),
         if (version != null) 'version': '$version',
         if (embeddedContentRender != null)
           'embeddedContentRender': embeddedContentRender,
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (trigger != null) 'trigger': trigger,
       },
     ));
@@ -491,7 +491,7 @@ class ContentApi {
         'id': id,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -526,7 +526,7 @@ class ContentAttachmentsApi {
         'id': id,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
         if (filename != null) 'filename': filename,
@@ -761,7 +761,7 @@ class ContentChildrenAndDescendantsApi {
         'id': id,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (parentVersion != null) 'parentVersion': '$parentVersion',
       },
     ));
@@ -828,7 +828,7 @@ class ContentChildrenAndDescendantsApi {
         'type': type,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (parentVersion != null) 'parentVersion': '$parentVersion',
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
@@ -867,7 +867,7 @@ class ContentChildrenAndDescendantsApi {
         'id': id,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -907,7 +907,7 @@ class ContentChildrenAndDescendantsApi {
       },
       queryParameters: {
         if (depth != null) 'depth': depth,
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
       },
@@ -976,7 +976,7 @@ class ContentChildrenAndDescendantsApi {
         'id': id,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
       body: body.toJson(),
     ));
@@ -1059,7 +1059,7 @@ class ContentBodyApi {
         'to': to,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (spaceKeyContext != null) 'spaceKeyContext': spaceKeyContext,
         if (contentIdContext != null) 'contentIdContext': contentIdContext,
         if (embeddedContentRender != null)
@@ -1097,11 +1097,11 @@ class ContentCommentsApi {
         'id': id,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (parentVersion != null) 'parentVersion': '$parentVersion',
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
-        if (location != null) 'location': '$location',
+        if (location != null) 'location': location.map((e) => e).join(','),
         if (depth != null) 'depth': depth,
       },
     ));
@@ -1278,7 +1278,7 @@ class ContentPropertiesApi {
         'id': id,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
       },
@@ -1328,7 +1328,7 @@ class ContentPropertiesApi {
         'key': key,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -1427,7 +1427,7 @@ class ContentRestrictionsApi {
         'id': id,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
       },
@@ -1450,7 +1450,7 @@ class ContentRestrictionsApi {
         'id': id,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
       body: body.toJson(),
     ));
@@ -1472,7 +1472,7 @@ class ContentRestrictionsApi {
         'id': id,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
       body: body.toJson(),
     ));
@@ -1491,7 +1491,7 @@ class ContentRestrictionsApi {
         'id': id,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -1512,7 +1512,7 @@ class ContentRestrictionsApi {
         'id': id,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ) as Map<String, Object?>;
   }
@@ -1536,7 +1536,7 @@ class ContentRestrictionsApi {
         'operationKey': operationKey,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
       },
@@ -1792,7 +1792,7 @@ class ContentVersionsApi {
       queryParameters: {
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -1814,7 +1814,7 @@ class ContentVersionsApi {
         'id': id,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
       body: body.toJson(),
     ));
@@ -1838,7 +1838,7 @@ class ContentVersionsApi {
         'versionNumber': '$versionNumber',
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -2234,7 +2234,7 @@ class DynamicModulesApi {
       'delete',
       'atlassian-connect/1/app/module/dynamic',
       queryParameters: {
-        'moduleKey': '$moduleKey',
+        'moduleKey': moduleKey.map((e) => e).join(','),
       },
     );
   }
@@ -2648,7 +2648,7 @@ class RelationApi {
         if (targetStatus != null) 'targetStatus': targetStatus,
         if (sourceVersion != null) 'sourceVersion': '$sourceVersion',
         if (targetVersion != null) 'targetVersion': '$targetVersion',
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
       },
@@ -2691,7 +2691,7 @@ class RelationApi {
         if (targetStatus != null) 'targetStatus': targetStatus,
         if (sourceVersion != null) 'sourceVersion': '$sourceVersion',
         if (targetVersion != null) 'targetVersion': '$targetVersion',
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -2811,7 +2811,7 @@ class RelationApi {
         if (targetStatus != null) 'targetStatus': targetStatus,
         if (sourceVersion != null) 'sourceVersion': '$sourceVersion',
         if (targetVersion != null) 'targetVersion': '$targetVersion',
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
       },
@@ -3051,14 +3051,14 @@ class SpaceApi {
       'get',
       'api/space',
       queryParameters: {
-        if (spaceKey != null) 'spaceKey': '$spaceKey',
-        if (spaceId != null) 'spaceId': '$spaceId',
+        if (spaceKey != null) 'spaceKey': spaceKey.map((e) => e).join(','),
+        if (spaceId != null) 'spaceId': spaceId.map((e) => '$e').join(','),
         if (type != null) 'type': type,
         if (status != null) 'status': status,
-        if (label != null) 'label': '$label',
+        if (label != null) 'label': label.map((e) => e).join(','),
         if (favourite != null) 'favourite': '$favourite',
         if (favouriteUserKey != null) 'favouriteUserKey': favouriteUserKey,
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
       },
@@ -3107,7 +3107,7 @@ class SpaceApi {
         'spaceKey': spaceKey,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -3169,7 +3169,7 @@ class SpaceApi {
       },
       queryParameters: {
         if (depth != null) 'depth': depth,
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
       },
@@ -3198,7 +3198,7 @@ class SpaceApi {
       },
       queryParameters: {
         if (depth != null) 'depth': depth,
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
       },
@@ -3306,7 +3306,7 @@ class SpacePropertiesApi {
         'spaceKey': spaceKey,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
       },
@@ -3345,7 +3345,7 @@ class SpacePropertiesApi {
         'key': key,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -3505,7 +3505,7 @@ class TemplateApi {
         if (spaceKey != null) 'spaceKey': spaceKey,
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -3525,7 +3525,7 @@ class TemplateApi {
         if (spaceKey != null) 'spaceKey': spaceKey,
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -3691,7 +3691,7 @@ class UsersApi {
       'api/user',
       queryParameters: {
         'accountId': accountId,
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -3706,7 +3706,7 @@ class UsersApi {
       'get',
       'api/user/anonymous',
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -3722,7 +3722,7 @@ class UsersApi {
       'get',
       'api/user/current',
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -3755,7 +3755,7 @@ class UsersApi {
       'api/user/bulk',
       queryParameters: {
         'accountId': accountId,
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (limit != null) 'limit': '$limit',
       },
     ));
@@ -3794,7 +3794,7 @@ class UsersApi {
       'get',
       'api/user/email/bulk',
       queryParameters: {
-        'accountId': '$accountId',
+        'accountId': accountId.map((e) => e).join(','),
       },
     ));
   }
@@ -3816,8 +3816,8 @@ class UsersApi {
       'get',
       'api/user/bulk/migration',
       queryParameters: {
-        'key': '$key',
-        if (username != null) 'username': '$username',
+        'key': key.map((e) => e).join(','),
+        if (username != null) 'username': username.map((e) => e).join(','),
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
       },
@@ -5801,7 +5801,7 @@ class Content {
   final ContentChildType? childTypes;
   final ContentChildren? descendants;
   final Container? container;
-  final ContentBody? body;
+  final ContentBodyValue? body;
   final ContentRestrictions? restrictions;
   final ContentExpandable expandable;
   final GenericLinks? links;
@@ -5867,7 +5867,7 @@ class Content {
           ? Container.fromJson(json[r'container']! as Map<String, Object?>)
           : null,
       body: json[r'body'] != null
-          ? ContentBody.fromJson(json[r'body']! as Map<String, Object?>)
+          ? ContentBodyValue.fromJson(json[r'body']! as Map<String, Object?>)
           : null,
       restrictions: json[r'restrictions'] != null
           ? ContentRestrictions.fromJson(
@@ -5955,7 +5955,7 @@ class Content {
       ContentChildType? childTypes,
       ContentChildren? descendants,
       Container? container,
-      ContentBody? body,
+      ContentBodyValue? body,
       ContentRestrictions? restrictions,
       ContentExpandable? expandable,
       GenericLinks? links}) {
@@ -6292,43 +6292,33 @@ class ContentBlueprintDraftVersion {
 }
 
 class ContentBody {
-  final ContentBody? view;
-  final ContentBody? exportView;
-  final ContentBody? styledView;
-  final ContentBody? storage;
-  final ContentBody? editor2;
-  final ContentBody? anonymousExportView;
+  final String value;
+  final ContentBodyRepresentation representation;
+  final List<EmbeddedContent> embeddedContent;
+  final WebResourceDependencies? webresource;
   final ContentBodyExpandable expandable;
 
   ContentBody(
-      {this.view,
-      this.exportView,
-      this.styledView,
-      this.storage,
-      this.editor2,
-      this.anonymousExportView,
-      required this.expandable});
+      {required this.value,
+      required this.representation,
+      List<EmbeddedContent>? embeddedContent,
+      this.webresource,
+      required this.expandable})
+      : embeddedContent = embeddedContent ?? [];
 
   factory ContentBody.fromJson(Map<String, Object?> json) {
     return ContentBody(
-      view: json[r'view'] != null
-          ? ContentBody.fromJson(json[r'view']! as Map<String, Object?>)
-          : null,
-      exportView: json[r'export_view'] != null
-          ? ContentBody.fromJson(json[r'export_view']! as Map<String, Object?>)
-          : null,
-      styledView: json[r'styled_view'] != null
-          ? ContentBody.fromJson(json[r'styled_view']! as Map<String, Object?>)
-          : null,
-      storage: json[r'storage'] != null
-          ? ContentBody.fromJson(json[r'storage']! as Map<String, Object?>)
-          : null,
-      editor2: json[r'editor2'] != null
-          ? ContentBody.fromJson(json[r'editor2']! as Map<String, Object?>)
-          : null,
-      anonymousExportView: json[r'anonymous_export_view'] != null
-          ? ContentBody.fromJson(
-              json[r'anonymous_export_view']! as Map<String, Object?>)
+      value: json[r'value'] as String? ?? '',
+      representation: ContentBodyRepresentation.fromValue(
+          json[r'representation'] as String? ?? ''),
+      embeddedContent: (json[r'embeddedContent'] as List<Object?>?)
+              ?.map((i) => EmbeddedContent.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      webresource: json[r'webresource'] != null
+          ? WebResourceDependencies.fromJson(
+              json[r'webresource']! as Map<String, Object?>)
           : null,
       expandable: ContentBodyExpandable.fromJson(
           json[r'_expandable'] as Map<String, Object?>? ?? const {}),
@@ -6336,55 +6326,69 @@ class ContentBody {
   }
 
   Map<String, Object?> toJson() {
-    var view = this.view;
-    var exportView = this.exportView;
-    var styledView = this.styledView;
-    var storage = this.storage;
-    var editor2 = this.editor2;
-    var anonymousExportView = this.anonymousExportView;
+    var value = this.value;
+    var representation = this.representation;
+    var embeddedContent = this.embeddedContent;
+    var webresource = this.webresource;
     var expandable = this.expandable;
 
     final json = <String, Object?>{};
-    if (view != null) {
-      json[r'view'] = view.toJson();
-    }
-    if (exportView != null) {
-      json[r'export_view'] = exportView.toJson();
-    }
-    if (styledView != null) {
-      json[r'styled_view'] = styledView.toJson();
-    }
-    if (storage != null) {
-      json[r'storage'] = storage.toJson();
-    }
-    if (editor2 != null) {
-      json[r'editor2'] = editor2.toJson();
-    }
-    if (anonymousExportView != null) {
-      json[r'anonymous_export_view'] = anonymousExportView.toJson();
+    json[r'value'] = value;
+    json[r'representation'] = representation.value;
+    json[r'embeddedContent'] = embeddedContent.map((i) => i.toJson()).toList();
+    if (webresource != null) {
+      json[r'webresource'] = webresource.toJson();
     }
     json[r'_expandable'] = expandable.toJson();
     return json;
   }
 
   ContentBody copyWith(
-      {ContentBody? view,
-      ContentBody? exportView,
-      ContentBody? styledView,
-      ContentBody? storage,
-      ContentBody? editor2,
-      ContentBody? anonymousExportView,
+      {String? value,
+      ContentBodyRepresentation? representation,
+      List<EmbeddedContent>? embeddedContent,
+      WebResourceDependencies? webresource,
       ContentBodyExpandable? expandable}) {
     return ContentBody(
-      view: view ?? this.view,
-      exportView: exportView ?? this.exportView,
-      styledView: styledView ?? this.styledView,
-      storage: storage ?? this.storage,
-      editor2: editor2 ?? this.editor2,
-      anonymousExportView: anonymousExportView ?? this.anonymousExportView,
+      value: value ?? this.value,
+      representation: representation ?? this.representation,
+      embeddedContent: embeddedContent ?? this.embeddedContent,
+      webresource: webresource ?? this.webresource,
       expandable: expandable ?? this.expandable,
     );
   }
+}
+
+class ContentBodyRepresentation {
+  static const view = ContentBodyRepresentation._('view');
+  static const exportView = ContentBodyRepresentation._('export_view');
+  static const styledView = ContentBodyRepresentation._('styled_view');
+  static const storage = ContentBodyRepresentation._('storage');
+  static const editor2 = ContentBodyRepresentation._('editor2');
+  static const anonymousExportView =
+      ContentBodyRepresentation._('anonymous_export_view');
+
+  static const values = [
+    view,
+    exportView,
+    styledView,
+    storage,
+    editor2,
+    anonymousExportView,
+  ];
+  final String value;
+
+  const ContentBodyRepresentation._(this.value);
+
+  static ContentBodyRepresentation fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ContentBodyRepresentation._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 /// This object is used when creating or updating content.
@@ -6530,6 +6534,130 @@ class ContentBodyCreateStorageRepresentation {
 }
 
 class ContentBodyExpandable {
+  final String? content;
+
+  ContentBodyExpandable({this.content});
+
+  factory ContentBodyExpandable.fromJson(Map<String, Object?> json) {
+    return ContentBodyExpandable(
+      content: json[r'content'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var content = this.content;
+
+    final json = <String, Object?>{};
+    if (content != null) {
+      json[r'content'] = content;
+    }
+    return json;
+  }
+
+  ContentBodyExpandable copyWith({String? content}) {
+    return ContentBodyExpandable(
+      content: content ?? this.content,
+    );
+  }
+}
+
+class ContentBodyValue {
+  final ContentBody? view;
+  final ContentBody? exportView;
+  final ContentBody? styledView;
+  final ContentBody? storage;
+  final ContentBody? editor2;
+  final ContentBody? anonymousExportView;
+  final ContentBodyValueExpandable expandable;
+
+  ContentBodyValue(
+      {this.view,
+      this.exportView,
+      this.styledView,
+      this.storage,
+      this.editor2,
+      this.anonymousExportView,
+      required this.expandable});
+
+  factory ContentBodyValue.fromJson(Map<String, Object?> json) {
+    return ContentBodyValue(
+      view: json[r'view'] != null
+          ? ContentBody.fromJson(json[r'view']! as Map<String, Object?>)
+          : null,
+      exportView: json[r'export_view'] != null
+          ? ContentBody.fromJson(json[r'export_view']! as Map<String, Object?>)
+          : null,
+      styledView: json[r'styled_view'] != null
+          ? ContentBody.fromJson(json[r'styled_view']! as Map<String, Object?>)
+          : null,
+      storage: json[r'storage'] != null
+          ? ContentBody.fromJson(json[r'storage']! as Map<String, Object?>)
+          : null,
+      editor2: json[r'editor2'] != null
+          ? ContentBody.fromJson(json[r'editor2']! as Map<String, Object?>)
+          : null,
+      anonymousExportView: json[r'anonymous_export_view'] != null
+          ? ContentBody.fromJson(
+              json[r'anonymous_export_view']! as Map<String, Object?>)
+          : null,
+      expandable: ContentBodyValueExpandable.fromJson(
+          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var view = this.view;
+    var exportView = this.exportView;
+    var styledView = this.styledView;
+    var storage = this.storage;
+    var editor2 = this.editor2;
+    var anonymousExportView = this.anonymousExportView;
+    var expandable = this.expandable;
+
+    final json = <String, Object?>{};
+    if (view != null) {
+      json[r'view'] = view.toJson();
+    }
+    if (exportView != null) {
+      json[r'export_view'] = exportView.toJson();
+    }
+    if (styledView != null) {
+      json[r'styled_view'] = styledView.toJson();
+    }
+    if (storage != null) {
+      json[r'storage'] = storage.toJson();
+    }
+    if (editor2 != null) {
+      json[r'editor2'] = editor2.toJson();
+    }
+    if (anonymousExportView != null) {
+      json[r'anonymous_export_view'] = anonymousExportView.toJson();
+    }
+    json[r'_expandable'] = expandable.toJson();
+    return json;
+  }
+
+  ContentBodyValue copyWith(
+      {ContentBody? view,
+      ContentBody? exportView,
+      ContentBody? styledView,
+      ContentBody? storage,
+      ContentBody? editor2,
+      ContentBody? anonymousExportView,
+      ContentBodyValueExpandable? expandable}) {
+    return ContentBodyValue(
+      view: view ?? this.view,
+      exportView: exportView ?? this.exportView,
+      styledView: styledView ?? this.styledView,
+      storage: storage ?? this.storage,
+      editor2: editor2 ?? this.editor2,
+      anonymousExportView: anonymousExportView ?? this.anonymousExportView,
+      expandable: expandable ?? this.expandable,
+    );
+  }
+}
+
+class ContentBodyValueExpandable {
   final String? editor;
   final String? view;
   final String? exportView;
@@ -6538,7 +6666,7 @@ class ContentBodyExpandable {
   final String? editor2;
   final String? anonymousExportView;
 
-  ContentBodyExpandable(
+  ContentBodyValueExpandable(
       {this.editor,
       this.view,
       this.exportView,
@@ -6547,8 +6675,8 @@ class ContentBodyExpandable {
       this.editor2,
       this.anonymousExportView});
 
-  factory ContentBodyExpandable.fromJson(Map<String, Object?> json) {
-    return ContentBodyExpandable(
+  factory ContentBodyValueExpandable.fromJson(Map<String, Object?> json) {
+    return ContentBodyValueExpandable(
       editor: json[r'editor'] as String?,
       view: json[r'view'] as String?,
       exportView: json[r'export_view'] as String?,
@@ -6593,7 +6721,7 @@ class ContentBodyExpandable {
     return json;
   }
 
-  ContentBodyExpandable copyWith(
+  ContentBodyValueExpandable copyWith(
       {String? editor,
       String? view,
       String? exportView,
@@ -6601,7 +6729,7 @@ class ContentBodyExpandable {
       String? storage,
       String? editor2,
       String? anonymousExportView}) {
-    return ContentBodyExpandable(
+    return ContentBodyValueExpandable(
       editor: editor ?? this.editor,
       view: view ?? this.view,
       exportView: exportView ?? this.exportView,
@@ -12619,7 +12747,7 @@ class Space {
   final String key;
   final String name;
   final Icon? icon;
-  final SpaceDescription? description;
+  final SpaceDescriptionValue? description;
   final Content? homepage;
   final String type;
   final SpaceMetadata? metadata;
@@ -12663,7 +12791,7 @@ class Space {
           ? Icon.fromJson(json[r'icon']! as Map<String, Object?>)
           : null,
       description: json[r'description'] != null
-          ? SpaceDescription.fromJson(
+          ? SpaceDescriptionValue.fromJson(
               json[r'description']! as Map<String, Object?>)
           : null,
       homepage: json[r'homepage'] != null
@@ -12764,7 +12892,7 @@ class Space {
       String? key,
       String? name,
       Icon? icon,
-      SpaceDescription? description,
+      SpaceDescriptionValue? description,
       Content? homepage,
       String? type,
       SpaceMetadata? metadata,
@@ -12934,42 +13062,72 @@ class SpaceCreate {
 }
 
 class SpaceDescription {
-  final SpaceDescription? plain;
-  final SpaceDescription? view;
+  final String value;
+  final SpaceDescriptionRepresentation representation;
+  final List<Map<String, dynamic>> embeddedContent;
 
-  SpaceDescription({this.plain, this.view});
+  SpaceDescription(
+      {required this.value,
+      required this.representation,
+      required this.embeddedContent});
 
   factory SpaceDescription.fromJson(Map<String, Object?> json) {
     return SpaceDescription(
-      plain: json[r'plain'] != null
-          ? SpaceDescription.fromJson(json[r'plain']! as Map<String, Object?>)
-          : null,
-      view: json[r'view'] != null
-          ? SpaceDescription.fromJson(json[r'view']! as Map<String, Object?>)
-          : null,
+      value: json[r'value'] as String? ?? '',
+      representation: SpaceDescriptionRepresentation.fromValue(
+          json[r'representation'] as String? ?? ''),
+      embeddedContent: (json[r'embeddedContent'] as List<Object?>?)
+              ?.map((i) => i as Map<String, Object?>? ?? {})
+              .toList() ??
+          [],
     );
   }
 
   Map<String, Object?> toJson() {
-    var plain = this.plain;
-    var view = this.view;
+    var value = this.value;
+    var representation = this.representation;
+    var embeddedContent = this.embeddedContent;
 
     final json = <String, Object?>{};
-    if (plain != null) {
-      json[r'plain'] = plain.toJson();
-    }
-    if (view != null) {
-      json[r'view'] = view.toJson();
-    }
+    json[r'value'] = value;
+    json[r'representation'] = representation.value;
+    json[r'embeddedContent'] = embeddedContent;
     return json;
   }
 
-  SpaceDescription copyWith({SpaceDescription? plain, SpaceDescription? view}) {
+  SpaceDescription copyWith(
+      {String? value,
+      SpaceDescriptionRepresentation? representation,
+      List<Map<String, dynamic>>? embeddedContent}) {
     return SpaceDescription(
-      plain: plain ?? this.plain,
-      view: view ?? this.view,
+      value: value ?? this.value,
+      representation: representation ?? this.representation,
+      embeddedContent: embeddedContent ?? this.embeddedContent,
     );
   }
+}
+
+class SpaceDescriptionRepresentation {
+  static const plain = SpaceDescriptionRepresentation._('plain');
+  static const view = SpaceDescriptionRepresentation._('view');
+
+  static const values = [
+    plain,
+    view,
+  ];
+  final String value;
+
+  const SpaceDescriptionRepresentation._(this.value);
+
+  static SpaceDescriptionRepresentation fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => SpaceDescriptionRepresentation._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 /// The description of the new/updated space. Note, only the 'plain'
@@ -13037,6 +13195,46 @@ class SpaceDescriptionCreatePlain {
     return SpaceDescriptionCreatePlain(
       value: value ?? this.value,
       representation: representation ?? this.representation,
+    );
+  }
+}
+
+class SpaceDescriptionValue {
+  final SpaceDescription? plain;
+  final SpaceDescription? view;
+
+  SpaceDescriptionValue({this.plain, this.view});
+
+  factory SpaceDescriptionValue.fromJson(Map<String, Object?> json) {
+    return SpaceDescriptionValue(
+      plain: json[r'plain'] != null
+          ? SpaceDescription.fromJson(json[r'plain']! as Map<String, Object?>)
+          : null,
+      view: json[r'view'] != null
+          ? SpaceDescription.fromJson(json[r'view']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var plain = this.plain;
+    var view = this.view;
+
+    final json = <String, Object?>{};
+    if (plain != null) {
+      json[r'plain'] = plain.toJson();
+    }
+    if (view != null) {
+      json[r'view'] = view.toJson();
+    }
+    return json;
+  }
+
+  SpaceDescriptionValue copyWith(
+      {SpaceDescription? plain, SpaceDescription? view}) {
+    return SpaceDescriptionValue(
+      plain: plain ?? this.plain,
+      view: view ?? this.view,
     );
   }
 }

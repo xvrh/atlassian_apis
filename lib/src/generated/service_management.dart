@@ -440,13 +440,14 @@ class RequestApi {
       'rest/servicedeskapi/request',
       queryParameters: {
         if (searchTerm != null) 'searchTerm': searchTerm,
-        if (requestOwnership != null) 'requestOwnership': '$requestOwnership',
+        if (requestOwnership != null)
+          'requestOwnership': requestOwnership.map((e) => e).join(','),
         if (requestStatus != null) 'requestStatus': requestStatus,
         if (approvalStatus != null) 'approvalStatus': approvalStatus,
         if (organizationId != null) 'organizationId': '$organizationId',
         if (serviceDeskId != null) 'serviceDeskId': '$serviceDeskId',
         if (requestTypeId != null) 'requestTypeId': '$requestTypeId',
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
       },
@@ -499,7 +500,7 @@ class RequestApi {
         'issueIdOrKey': issueIdOrKey,
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -633,7 +634,7 @@ class RequestApi {
       queryParameters: {
         if (public != null) 'public': '$public',
         if (internal != null) 'internal': '$internal',
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
       },
@@ -681,7 +682,7 @@ class RequestApi {
         'commentId': '$commentId',
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -1001,10 +1002,11 @@ class RequesttypeApi {
       'rest/servicedeskapi/requesttype',
       queryParameters: {
         if (searchQuery != null) 'searchQuery': searchQuery,
-        if (serviceDeskId != null) 'serviceDeskId': '$serviceDeskId',
+        if (serviceDeskId != null)
+          'serviceDeskId': serviceDeskId.map((e) => '$e').join(','),
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -1283,7 +1285,7 @@ class ServicedeskApi {
       },
       queryParameters: {
         if (groupId != null) 'groupId': '$groupId',
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (searchQuery != null) 'searchQuery': searchQuery,
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
@@ -1341,7 +1343,7 @@ class ServicedeskApi {
         'requestTypeId': '$requestTypeId',
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -1389,7 +1391,7 @@ class ServicedeskApi {
         'requestTypeId': '$requestTypeId',
       },
       queryParameters: {
-        if (expand != null) 'expand': '$expand',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
