@@ -41,6 +41,8 @@ String dartIdentifier(String input) {
     return '\$$input';
   } else if (_dartKeywords.contains(input)) {
     return '$input\$';
+  } else if (input.isEmpty) {
+    return r'$';
   } else {
     return input;
   }

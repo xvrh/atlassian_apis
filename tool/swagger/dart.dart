@@ -229,10 +229,8 @@ class $className {
       buffer.writeln();
     }
     for (var complexType in _complexTypes.stableSortedBy((e) => e.className)) {
-      if (!generatedClasses.contains(complexType.className)) {
-        generatedClasses.add(complexType.className);
-        buffer.writeln(complexType.toCode());
-      }
+      generatedClasses.add(complexType.className);
+      buffer.writeln(complexType.toCode());
       buffer.writeln();
     }
 
@@ -740,6 +738,9 @@ class InlineComplexType extends ComplexType {
       {bool isList = false}) {
     var name =
         '${parent.name}${propertyName.words.toUpperCamel()}${isList ? 'Item' : ''}';
+    if (api._spec.components.schemas.entries.any((c) => c.key == name)) {
+      name += 'Value';
+    }
     return api.typeAliases[name] ?? name;
   }
 }
@@ -886,7 +887,12 @@ class SimpleType {
     return (accessor) => '$accessor as $type';
   }
 
-  static String _defaultIdentifierToString(String id) => "'\$$id'";
+  static String _defaultIdentifierToString(String id) {
+    if (id == r'$') {
+      id = r'{$}';
+    }
+    return "'\$$id'";
+  }
 }
 
 class ListDartType extends DartType {
@@ -898,6 +904,11 @@ class ListDartType extends DartType {
 
   @override
   String get defaultValue => simpleType?.defaultValue ?? '[]';
+
+  @override
+  String identifierToString(String identifier) {
+    return "$identifier.map((e) => ${itemType.identifierToString('e')}).join(',')";
+  }
 
   @override
   String toJsonCode(

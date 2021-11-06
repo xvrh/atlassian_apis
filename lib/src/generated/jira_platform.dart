@@ -1205,7 +1205,7 @@ class DynamicModulesApi {
       'delete',
       'rest/atlassian-connect/1/app/module/dynamic',
       queryParameters: {
-        if (moduleKey != null) 'moduleKey': '$moduleKey',
+        if (moduleKey != null) 'moduleKey': moduleKey.map((e) => e).join(','),
       },
     );
   }
@@ -1491,7 +1491,7 @@ class FiltersApi {
         if (owner != null) 'owner': owner,
         if (groupname != null) 'groupname': groupname,
         if (projectId != null) 'projectId': '$projectId',
-        if (id != null) 'id': '$id',
+        if (id != null) 'id': id.map((e) => '$e').join(','),
         if (orderBy != null) 'orderBy': orderBy,
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
@@ -1756,8 +1756,9 @@ class GroupAndUserPickerApi {
         if (maxResults != null) 'maxResults': '$maxResults',
         if (showAvatar != null) 'showAvatar': '$showAvatar',
         if (fieldId != null) 'fieldId': fieldId,
-        if (projectId != null) 'projectId': '$projectId',
-        if (issueTypeId != null) 'issueTypeId': '$issueTypeId',
+        if (projectId != null) 'projectId': projectId.map((e) => e).join(','),
+        if (issueTypeId != null)
+          'issueTypeId': issueTypeId.map((e) => e).join(','),
         if (avatarSize != null) 'avatarSize': avatarSize,
         if (caseInsensitive != null) 'caseInsensitive': '$caseInsensitive',
         if (excludeConnectAddons != null)
@@ -1837,8 +1838,8 @@ class GroupsApi {
       queryParameters: {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
-        if (groupId != null) 'groupId': '$groupId',
-        if (groupName != null) 'groupName': '$groupName',
+        if (groupId != null) 'groupId': groupId.map((e) => e).join(','),
+        if (groupName != null) 'groupName': groupName.map((e) => e).join(','),
       },
     ));
   }
@@ -1936,7 +1937,7 @@ class GroupsApi {
       queryParameters: {
         if (accountId != null) 'accountId': accountId,
         if (query != null) 'query': query,
-        if (exclude != null) 'exclude': '$exclude',
+        if (exclude != null) 'exclude': exclude.map((e) => e).join(','),
         if (maxResults != null) 'maxResults': '$maxResults',
         if (userName != null) 'userName': userName,
       },
@@ -2480,7 +2481,8 @@ class IssueCustomFieldConfigurationAppsApi {
         'fieldIdOrKey': fieldIdOrKey,
       },
       queryParameters: {
-        if (contextId != null) 'contextId': '$contextId',
+        if (contextId != null)
+          'contextId': contextId.map((e) => '$e').join(','),
         if (issueId != null) 'issueId': '$issueId',
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
@@ -2547,7 +2549,8 @@ class IssueCustomFieldContextsApi {
       queryParameters: {
         if (isAnyIssueType != null) 'isAnyIssueType': '$isAnyIssueType',
         if (isGlobalContext != null) 'isGlobalContext': '$isGlobalContext',
-        if (contextId != null) 'contextId': '$contextId',
+        if (contextId != null)
+          'contextId': contextId.map((e) => '$e').join(','),
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
       },
@@ -2600,7 +2603,8 @@ class IssueCustomFieldContextsApi {
         'fieldId': fieldId,
       },
       queryParameters: {
-        if (contextId != null) 'contextId': '$contextId',
+        if (contextId != null)
+          'contextId': contextId.map((e) => '$e').join(','),
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
       },
@@ -2654,7 +2658,8 @@ class IssueCustomFieldContextsApi {
         'fieldId': fieldId,
       },
       queryParameters: {
-        if (contextId != null) 'contextId': '$contextId',
+        if (contextId != null)
+          'contextId': contextId.map((e) => '$e').join(','),
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
       },
@@ -2716,7 +2721,8 @@ class IssueCustomFieldContextsApi {
         'fieldId': fieldId,
       },
       queryParameters: {
-        if (contextId != null) 'contextId': '$contextId',
+        if (contextId != null)
+          'contextId': contextId.map((e) => '$e').join(','),
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
       },
@@ -3337,7 +3343,7 @@ class IssueFieldConfigurationsApi {
       queryParameters: {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
-        if (id != null) 'id': '$id',
+        if (id != null) 'id': id.map((e) => '$e').join(','),
         if (isDefault != null) 'isDefault': '$isDefault',
         if (query != null) 'query': query,
       },
@@ -3379,7 +3385,7 @@ class IssueFieldConfigurationsApi {
       queryParameters: {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
-        if (id != null) 'id': '$id',
+        if (id != null) 'id': id.map((e) => '$e').join(','),
       },
     ));
   }
@@ -3403,7 +3409,8 @@ class IssueFieldConfigurationsApi {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
         if (fieldConfigurationSchemeId != null)
-          'fieldConfigurationSchemeId': '$fieldConfigurationSchemeId',
+          'fieldConfigurationSchemeId':
+              fieldConfigurationSchemeId.map((e) => '$e').join(','),
       },
     ));
   }
@@ -3428,7 +3435,7 @@ class IssueFieldConfigurationsApi {
       queryParameters: {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
-        'projectId': '$projectId',
+        'projectId': projectId.map((e) => '$e').join(','),
       },
     ));
   }
@@ -3525,8 +3532,8 @@ class IssueFieldsApi {
       queryParameters: {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
-        if (type != null) 'type': '$type',
-        if (id != null) 'id': '$id',
+        if (type != null) 'type': type.map((e) => e).join(','),
+        if (id != null) 'id': id.map((e) => e).join(','),
         if (query != null) 'query': query,
         if (orderBy != null) 'orderBy': orderBy,
         if (expand != null) 'expand': expand,
@@ -4487,9 +4494,10 @@ class IssueSearchApi {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
         if (validateQuery != null) 'validateQuery': validateQuery,
-        if (fields != null) 'fields': '$fields',
+        if (fields != null) 'fields': fields.map((e) => e).join(','),
         if (expand != null) 'expand': expand,
-        if (properties != null) 'properties': '$properties',
+        if (properties != null)
+          'properties': properties.map((e) => e).join(','),
         if (fieldsByKeys != null) 'fieldsByKeys': '$fieldsByKeys',
       },
     ));
@@ -4551,7 +4559,8 @@ class IssueSecurityLevelApi {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
         if (issueSecurityLevelId != null)
-          'issueSecurityLevelId': '$issueSecurityLevelId',
+          'issueSecurityLevelId':
+              issueSecurityLevelId.map((e) => '$e').join(','),
         if (expand != null) 'expand': expand,
       },
     ));
@@ -4739,7 +4748,7 @@ class IssueTypeSchemesApi {
       queryParameters: {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
-        if (id != null) 'id': '$id',
+        if (id != null) 'id': id.map((e) => '$e').join(','),
       },
     ));
   }
@@ -4772,7 +4781,7 @@ class IssueTypeSchemesApi {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
         if (issueTypeSchemeId != null)
-          'issueTypeSchemeId': '$issueTypeSchemeId',
+          'issueTypeSchemeId': issueTypeSchemeId.map((e) => '$e').join(','),
       },
     ));
   }
@@ -4792,7 +4801,7 @@ class IssueTypeSchemesApi {
       queryParameters: {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
-        'projectId': '$projectId',
+        'projectId': projectId.map((e) => '$e').join(','),
       },
     ));
   }
@@ -4939,7 +4948,7 @@ class IssueTypeScreenSchemesApi {
       queryParameters: {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
-        if (id != null) 'id': '$id',
+        if (id != null) 'id': id.map((e) => '$e').join(','),
       },
     ));
   }
@@ -4974,7 +4983,8 @@ class IssueTypeScreenSchemesApi {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
         if (issueTypeScreenSchemeId != null)
-          'issueTypeScreenSchemeId': '$issueTypeScreenSchemeId',
+          'issueTypeScreenSchemeId':
+              issueTypeScreenSchemeId.map((e) => '$e').join(','),
       },
     ));
   }
@@ -4995,7 +5005,7 @@ class IssueTypeScreenSchemesApi {
       queryParameters: {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
-        'projectId': '$projectId',
+        'projectId': projectId.map((e) => '$e').join(','),
       },
     ));
   }
@@ -6026,10 +6036,14 @@ class IssuesApi {
       'get',
       'rest/api/3/issue/createmeta',
       queryParameters: {
-        if (projectIds != null) 'projectIds': '$projectIds',
-        if (projectKeys != null) 'projectKeys': '$projectKeys',
-        if (issuetypeIds != null) 'issuetypeIds': '$issuetypeIds',
-        if (issuetypeNames != null) 'issuetypeNames': '$issuetypeNames',
+        if (projectIds != null)
+          'projectIds': projectIds.map((e) => e).join(','),
+        if (projectKeys != null)
+          'projectKeys': projectKeys.map((e) => e).join(','),
+        if (issuetypeIds != null)
+          'issuetypeIds': issuetypeIds.map((e) => e).join(','),
+        if (issuetypeNames != null)
+          'issuetypeNames': issuetypeNames.map((e) => e).join(','),
         if (expand != null) 'expand': expand,
       },
     ));
@@ -6066,10 +6080,11 @@ class IssuesApi {
         'issueIdOrKey': issueIdOrKey,
       },
       queryParameters: {
-        if (fields != null) 'fields': '$fields',
+        if (fields != null) 'fields': fields.map((e) => e).join(','),
         if (fieldsByKeys != null) 'fieldsByKeys': '$fieldsByKeys',
         if (expand != null) 'expand': expand,
-        if (properties != null) 'properties': '$properties',
+        if (properties != null)
+          'properties': properties.map((e) => e).join(','),
         if (updateHistory != null) 'updateHistory': '$updateHistory',
       },
     ));
@@ -8773,7 +8788,8 @@ class ProjectsApi {
       queryParameters: {
         if (expand != null) 'expand': expand,
         if (recent != null) 'recent': '$recent',
-        if (properties != null) 'properties': '$properties',
+        if (properties != null)
+          'properties': properties.map((e) => e).join(','),
       },
     ) as List<Object?>)
         .map((i) => Project.fromJson(i as Map<String, Object?>? ?? const {}))
@@ -8862,14 +8878,15 @@ class ProjectsApi {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
         if (orderBy != null) 'orderBy': orderBy,
-        if (id != null) 'id': '$id',
+        if (id != null) 'id': id.map((e) => '$e').join(','),
         if (query != null) 'query': query,
         if (typeKey != null) 'typeKey': typeKey,
         if (categoryId != null) 'categoryId': '$categoryId',
         if (action != null) 'action': action,
         if (expand != null) 'expand': expand,
-        if (status != null) 'status': '$status',
-        if (properties != null) 'properties': '$properties',
+        if (status != null) 'status': status.map((e) => e).join(','),
+        if (properties != null)
+          'properties': properties.map((e) => '$e').join(','),
         if (propertyQuery != null) 'propertyQuery': propertyQuery,
       },
     ));
@@ -8895,7 +8912,8 @@ class ProjectsApi {
       },
       queryParameters: {
         if (expand != null) 'expand': expand,
-        if (properties != null) 'properties': '$properties',
+        if (properties != null)
+          'properties': properties.map((e) => e).join(','),
       },
     ));
   }
@@ -9110,7 +9128,7 @@ class ScreenSchemesApi {
       queryParameters: {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
-        if (id != null) 'id': '$id',
+        if (id != null) 'id': id.map((e) => '$e').join(','),
       },
     ));
   }
@@ -9406,7 +9424,7 @@ class ScreensApi {
       queryParameters: {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
-        if (id != null) 'id': '$id',
+        if (id != null) 'id': id.map((e) => '$e').join(','),
       },
     ));
   }
@@ -9951,9 +9969,9 @@ class UserSearchApi {
         'query': query,
         if (maxResults != null) 'maxResults': '$maxResults',
         if (showAvatar != null) 'showAvatar': '$showAvatar',
-        if (exclude != null) 'exclude': '$exclude',
+        if (exclude != null) 'exclude': exclude.map((e) => e).join(','),
         if (excludeAccountIds != null)
-          'excludeAccountIds': '$excludeAccountIds',
+          'excludeAccountIds': excludeAccountIds.map((e) => e).join(','),
         if (avatarSize != null) 'avatarSize': avatarSize,
         if (excludeConnectUsers != null)
           'excludeConnectUsers': '$excludeConnectUsers',
@@ -10235,9 +10253,9 @@ class UsersApi {
       queryParameters: {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
-        if (username != null) 'username': '$username',
-        if (key != null) 'key': '$key',
-        'accountId': '$accountId',
+        if (username != null) 'username': username.map((e) => e).join(','),
+        if (key != null) 'key': key.map((e) => e).join(','),
+        'accountId': accountId.map((e) => e).join(','),
       },
     ));
   }
@@ -10258,8 +10276,8 @@ class UsersApi {
       queryParameters: {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
-        if (username != null) 'username': '$username',
-        if (key != null) 'key': '$key',
+        if (username != null) 'username': username.map((e) => e).join(','),
+        if (key != null) 'key': key.map((e) => e).join(','),
       },
     ) as List<Object?>)
         .map((i) =>
@@ -10365,7 +10383,7 @@ class UsersApi {
       'get',
       'rest/api/3/user/email/bulk',
       queryParameters: {
-        'accountId': '$accountId',
+        'accountId': accountId.map((e) => e).join(','),
       },
     ));
   }
@@ -10822,7 +10840,7 @@ class WorkflowSchemeProjectAssociationsApi {
       'get',
       'rest/api/3/workflowscheme/project',
       queryParameters: {
-        'projectId': '$projectId',
+        'projectId': projectId.map((e) => '$e').join(','),
       },
     ));
   }
@@ -11392,8 +11410,8 @@ class WorkflowTransitionRulesApi {
       queryParameters: {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
-        'types': '$types',
-        if (keys != null) 'keys': '$keys',
+        'types': types.map((e) => e).join(','),
+        if (keys != null) 'keys': keys.map((e) => e).join(','),
         if (expand != null) 'expand': expand,
       },
     ));
@@ -11511,7 +11529,8 @@ class WorkflowsApi {
       queryParameters: {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
-        if (workflowName != null) 'workflowName': '$workflowName',
+        if (workflowName != null)
+          'workflowName': workflowName.map((e) => e).join(','),
         if (expand != null) 'expand': expand,
       },
     ));

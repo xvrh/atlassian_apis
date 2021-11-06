@@ -21,7 +21,7 @@ import 'package:atlassian_apis/service_management.dart';
 
 void main() async {
   // This example uses API Token authentication.
-  // Alternatively, you can use OAuth1 with RSA.
+  // Alternatively, you can use OAuth.
   var user = Platform.environment['ATLASSIAN_USER']!;
   var apiToken = Platform.environment['ATLASSIAN_API_TOKEN']!;
 

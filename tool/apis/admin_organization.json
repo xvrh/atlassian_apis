@@ -1541,6 +1541,10 @@
             "type": "string",
             "description": "The display name of the Actor."
           },
+          "email": {
+            "type": "string",
+            "description": "The email of the Actor."
+          },
           "links": {
             "type": "object",
             "description": "Link to this Actor",
@@ -1557,7 +1561,20 @@
           },
           "geo": {
             "type": "string",
-            "description": "Geo location of the IP address"
+            "description": "Geo location of the IP address",
+            "deprecated": true
+          },
+          "countryName": {
+            "type": "string",
+            "description": "Country location according to the IP address"
+          },
+          "regionName": {
+            "type": "string",
+            "description": "Region location according to the IP address"
+          },
+          "city": {
+            "type": "string",
+            "description": "City location according to the IP address"
           }
         }
       },
