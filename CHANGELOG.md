@@ -1,3 +1,6 @@
+## 0.4.0
+- Allow some operations to take a `MultipartFile` as `body`
+
 ## 0.3.0
 - Update to the latest API schemas
 - Fix some bug in confluence API
