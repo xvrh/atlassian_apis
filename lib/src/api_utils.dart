@@ -52,6 +52,10 @@ class ApiClient {
       });
     }
 
+    if (body is MultipartFile) {
+      file ??= body;
+    }
+
     BaseRequest request;
     if (file != null) {
       request = MultipartRequest(method, uri)
@@ -72,7 +76,9 @@ class ApiClient {
       request.headers.addAll(headers);
     }
 
-    request.headers[_headerExperimental] = 'opt-in';
+    request
+      ..headers[_headerExperimental] = 'opt-in'
+      ..headers['User-Agent'] = 'Dart/atlassian_apis';
 
     var response = await Response.fromStream(await _client.send(request));
     ApiException.checkResponse(response);

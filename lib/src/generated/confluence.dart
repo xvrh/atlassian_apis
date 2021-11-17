@@ -3163,7 +3163,10 @@ class SearchApi {
   /// privacy settings.
   /// These are: email, profilePicture, and displayName.
   Future<SearchPageResponseSearchResult> searchUser(
-      {required String cql, int? start, int? limit}) async {
+      {required String cql,
+      int? start,
+      int? limit,
+      List<String>? expand}) async {
     return SearchPageResponseSearchResult.fromJson(await _client.send(
       'get',
       'wiki/rest/api/search/user',
@@ -3171,6 +3174,7 @@ class SearchApi {
         'cql': cql,
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -7034,9 +7038,9 @@ class ContentBodyCreateStorageRepresentation {
 }
 
 class ContentBodyExpandable {
-  final dynamic content;
-  final dynamic embeddedContent;
-  final dynamic webresource;
+  final String? content;
+  final String? embeddedContent;
+  final String? webresource;
   final String? mediaToken;
 
   ContentBodyExpandable(
@@ -7044,9 +7048,9 @@ class ContentBodyExpandable {
 
   factory ContentBodyExpandable.fromJson(Map<String, Object?> json) {
     return ContentBodyExpandable(
-      content: json[r'content'],
-      embeddedContent: json[r'embeddedContent'],
-      webresource: json[r'webresource'],
+      content: json[r'content'] as String?,
+      embeddedContent: json[r'embeddedContent'] as String?,
+      webresource: json[r'webresource'] as String?,
       mediaToken: json[r'mediaToken'] as String?,
     );
   }
@@ -7074,9 +7078,9 @@ class ContentBodyExpandable {
   }
 
   ContentBodyExpandable copyWith(
-      {dynamic content,
-      dynamic embeddedContent,
-      dynamic webresource,
+      {String? content,
+      String? embeddedContent,
+      String? webresource,
       String? mediaToken}) {
     return ContentBodyExpandable(
       content: content ?? this.content,
@@ -7713,17 +7717,17 @@ class ContentChildren {
 }
 
 class ContentChildrenExpandable {
-  final dynamic attachment;
-  final dynamic comment;
-  final dynamic page;
+  final String? attachment;
+  final String? comment;
+  final String? page;
 
   ContentChildrenExpandable({this.attachment, this.comment, this.page});
 
   factory ContentChildrenExpandable.fromJson(Map<String, Object?> json) {
     return ContentChildrenExpandable(
-      attachment: json[r'attachment'],
-      comment: json[r'comment'],
-      page: json[r'page'],
+      attachment: json[r'attachment'] as String?,
+      comment: json[r'comment'] as String?,
+      page: json[r'page'] as String?,
     );
   }
 
@@ -7746,7 +7750,7 @@ class ContentChildrenExpandable {
   }
 
   ContentChildrenExpandable copyWith(
-      {dynamic attachment, dynamic comment, dynamic page}) {
+      {String? attachment, String? comment, String? page}) {
     return ContentChildrenExpandable(
       attachment: attachment ?? this.attachment,
       comment: comment ?? this.comment,
@@ -8139,28 +8143,366 @@ class ContentCreateContainer {
 
 /// The space that the content is being created in.
 class ContentCreateSpace {
+  final int? id;
+  final String? name;
+  final Icon? icon;
+  final GlobalSpaceIdentifier? identifiers;
+  final ContentCreateSpaceDescription? description;
+  final Content? homepage;
+  final String? type;
+  final ContentCreateSpaceMetadata? metadata;
+  final List<OperationCheckResult> operations;
+  final List<SpacePermission> permissions;
+  final String? status;
+  final SpaceSettings? settings;
+  final Theme? theme;
+  final LookAndFeel? lookAndFeel;
+  final ContentCreateSpaceHistory? history;
+
   /// The key of the space.
   final String key;
+  final Map<String, dynamic>? links;
 
-  ContentCreateSpace({required this.key});
+  ContentCreateSpace(
+      {this.id,
+      this.name,
+      this.icon,
+      this.identifiers,
+      this.description,
+      this.homepage,
+      this.type,
+      this.metadata,
+      List<OperationCheckResult>? operations,
+      List<SpacePermission>? permissions,
+      this.status,
+      this.settings,
+      this.theme,
+      this.lookAndFeel,
+      this.history,
+      required this.key,
+      this.links})
+      : operations = operations ?? [],
+        permissions = permissions ?? [];
 
   factory ContentCreateSpace.fromJson(Map<String, Object?> json) {
     return ContentCreateSpace(
+      id: (json[r'id'] as num?)?.toInt(),
+      name: json[r'name'] as String?,
+      icon: json[r'icon'] != null
+          ? Icon.fromJson(json[r'icon']! as Map<String, Object?>)
+          : null,
+      identifiers: json[r'identifiers'] != null
+          ? GlobalSpaceIdentifier.fromJson(
+              json[r'identifiers']! as Map<String, Object?>)
+          : null,
+      description: json[r'description'] != null
+          ? ContentCreateSpaceDescription.fromJson(
+              json[r'description']! as Map<String, Object?>)
+          : null,
+      homepage: json[r'homepage'] != null
+          ? Content.fromJson(json[r'homepage']! as Map<String, Object?>)
+          : null,
+      type: json[r'type'] as String?,
+      metadata: json[r'metadata'] != null
+          ? ContentCreateSpaceMetadata.fromJson(
+              json[r'metadata']! as Map<String, Object?>)
+          : null,
+      operations: (json[r'operations'] as List<Object?>?)
+              ?.map((i) => OperationCheckResult.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      permissions: (json[r'permissions'] as List<Object?>?)
+              ?.map((i) => SpacePermission.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      status: json[r'status'] as String?,
+      settings: json[r'settings'] != null
+          ? SpaceSettings.fromJson(json[r'settings']! as Map<String, Object?>)
+          : null,
+      theme: json[r'theme'] != null
+          ? Theme.fromJson(json[r'theme']! as Map<String, Object?>)
+          : null,
+      lookAndFeel: json[r'lookAndFeel'] != null
+          ? LookAndFeel.fromJson(json[r'lookAndFeel']! as Map<String, Object?>)
+          : null,
+      history: json[r'history'] != null
+          ? ContentCreateSpaceHistory.fromJson(
+              json[r'history']! as Map<String, Object?>)
+          : null,
       key: json[r'key'] as String? ?? '',
+      links: json[r'links'] as Map<String, Object?>?,
     );
   }
 
   Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+    var icon = this.icon;
+    var identifiers = this.identifiers;
+    var description = this.description;
+    var homepage = this.homepage;
+    var type = this.type;
+    var metadata = this.metadata;
+    var operations = this.operations;
+    var permissions = this.permissions;
+    var status = this.status;
+    var settings = this.settings;
+    var theme = this.theme;
+    var lookAndFeel = this.lookAndFeel;
+    var history = this.history;
     var key = this.key;
+    var links = this.links;
 
     final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (icon != null) {
+      json[r'icon'] = icon.toJson();
+    }
+    if (identifiers != null) {
+      json[r'identifiers'] = identifiers.toJson();
+    }
+    if (description != null) {
+      json[r'description'] = description.toJson();
+    }
+    if (homepage != null) {
+      json[r'homepage'] = homepage.toJson();
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (metadata != null) {
+      json[r'metadata'] = metadata.toJson();
+    }
+    json[r'operations'] = operations.map((i) => i.toJson()).toList();
+    json[r'permissions'] = permissions.map((i) => i.toJson()).toList();
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (settings != null) {
+      json[r'settings'] = settings.toJson();
+    }
+    if (theme != null) {
+      json[r'theme'] = theme.toJson();
+    }
+    if (lookAndFeel != null) {
+      json[r'lookAndFeel'] = lookAndFeel.toJson();
+    }
+    if (history != null) {
+      json[r'history'] = history.toJson();
+    }
     json[r'key'] = key;
+    if (links != null) {
+      json[r'links'] = links;
+    }
     return json;
   }
 
-  ContentCreateSpace copyWith({String? key}) {
+  ContentCreateSpace copyWith(
+      {int? id,
+      String? name,
+      Icon? icon,
+      GlobalSpaceIdentifier? identifiers,
+      ContentCreateSpaceDescription? description,
+      Content? homepage,
+      String? type,
+      ContentCreateSpaceMetadata? metadata,
+      List<OperationCheckResult>? operations,
+      List<SpacePermission>? permissions,
+      String? status,
+      SpaceSettings? settings,
+      Theme? theme,
+      LookAndFeel? lookAndFeel,
+      ContentCreateSpaceHistory? history,
+      String? key,
+      Map<String, dynamic>? links}) {
     return ContentCreateSpace(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      icon: icon ?? this.icon,
+      identifiers: identifiers ?? this.identifiers,
+      description: description ?? this.description,
+      homepage: homepage ?? this.homepage,
+      type: type ?? this.type,
+      metadata: metadata ?? this.metadata,
+      operations: operations ?? this.operations,
+      permissions: permissions ?? this.permissions,
+      status: status ?? this.status,
+      settings: settings ?? this.settings,
+      theme: theme ?? this.theme,
+      lookAndFeel: lookAndFeel ?? this.lookAndFeel,
+      history: history ?? this.history,
       key: key ?? this.key,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class ContentCreateSpaceDescription {
+  final SpaceDescription? plain;
+  final SpaceDescription? view;
+  final ContentCreateSpaceDescriptionExpandable? expandable;
+
+  ContentCreateSpaceDescription({this.plain, this.view, this.expandable});
+
+  factory ContentCreateSpaceDescription.fromJson(Map<String, Object?> json) {
+    return ContentCreateSpaceDescription(
+      plain: json[r'plain'] != null
+          ? SpaceDescription.fromJson(json[r'plain']! as Map<String, Object?>)
+          : null,
+      view: json[r'view'] != null
+          ? SpaceDescription.fromJson(json[r'view']! as Map<String, Object?>)
+          : null,
+      expandable: json[r'_expandable'] != null
+          ? ContentCreateSpaceDescriptionExpandable.fromJson(
+              json[r'_expandable']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var plain = this.plain;
+    var view = this.view;
+    var expandable = this.expandable;
+
+    final json = <String, Object?>{};
+    if (plain != null) {
+      json[r'plain'] = plain.toJson();
+    }
+    if (view != null) {
+      json[r'view'] = view.toJson();
+    }
+    if (expandable != null) {
+      json[r'_expandable'] = expandable.toJson();
+    }
+    return json;
+  }
+
+  ContentCreateSpaceDescription copyWith(
+      {SpaceDescription? plain,
+      SpaceDescription? view,
+      ContentCreateSpaceDescriptionExpandable? expandable}) {
+    return ContentCreateSpaceDescription(
+      plain: plain ?? this.plain,
+      view: view ?? this.view,
+      expandable: expandable ?? this.expandable,
+    );
+  }
+}
+
+class ContentCreateSpaceDescriptionExpandable {
+  final String? view;
+  final String? plain;
+
+  ContentCreateSpaceDescriptionExpandable({this.view, this.plain});
+
+  factory ContentCreateSpaceDescriptionExpandable.fromJson(
+      Map<String, Object?> json) {
+    return ContentCreateSpaceDescriptionExpandable(
+      view: json[r'view'] as String?,
+      plain: json[r'plain'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var view = this.view;
+    var plain = this.plain;
+
+    final json = <String, Object?>{};
+    if (view != null) {
+      json[r'view'] = view;
+    }
+    if (plain != null) {
+      json[r'plain'] = plain;
+    }
+    return json;
+  }
+
+  ContentCreateSpaceDescriptionExpandable copyWith(
+      {String? view, String? plain}) {
+    return ContentCreateSpaceDescriptionExpandable(
+      view: view ?? this.view,
+      plain: plain ?? this.plain,
+    );
+  }
+}
+
+class ContentCreateSpaceHistory {
+  final DateTime createdDate;
+  final User? createdBy;
+
+  ContentCreateSpaceHistory({required this.createdDate, this.createdBy});
+
+  factory ContentCreateSpaceHistory.fromJson(Map<String, Object?> json) {
+    return ContentCreateSpaceHistory(
+      createdDate: DateTime.tryParse(json[r'createdDate'] as String? ?? '') ??
+          DateTime(0),
+      createdBy: json[r'createdBy'] != null
+          ? User.fromJson(json[r'createdBy']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var createdDate = this.createdDate;
+    var createdBy = this.createdBy;
+
+    final json = <String, Object?>{};
+    json[r'createdDate'] = createdDate.toIso8601String();
+    if (createdBy != null) {
+      json[r'createdBy'] = createdBy.toJson();
+    }
+    return json;
+  }
+
+  ContentCreateSpaceHistory copyWith({DateTime? createdDate, User? createdBy}) {
+    return ContentCreateSpaceHistory(
+      createdDate: createdDate ?? this.createdDate,
+      createdBy: createdBy ?? this.createdBy,
+    );
+  }
+}
+
+class ContentCreateSpaceMetadata {
+  final LabelArray? labels;
+  final Map<String, dynamic>? expandable;
+
+  ContentCreateSpaceMetadata({this.labels, this.expandable});
+
+  factory ContentCreateSpaceMetadata.fromJson(Map<String, Object?> json) {
+    return ContentCreateSpaceMetadata(
+      labels: json[r'labels'] != null
+          ? LabelArray.fromJson(json[r'labels']! as Map<String, Object?>)
+          : null,
+      expandable: json[r'_expandable'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var labels = this.labels;
+    var expandable = this.expandable;
+
+    final json = <String, Object?>{};
+    if (labels != null) {
+      json[r'labels'] = labels.toJson();
+    }
+    if (expandable != null) {
+      json[r'_expandable'] = expandable;
+    }
+    return json;
+  }
+
+  ContentCreateSpaceMetadata copyWith(
+      {LabelArray? labels, Map<String, dynamic>? expandable}) {
+    return ContentCreateSpaceMetadata(
+      labels: labels ?? this.labels,
+      expandable: expandable ?? this.expandable,
     );
   }
 }
@@ -8468,10 +8810,10 @@ class ContentHistoryContributors {
 }
 
 class ContentHistoryExpandable {
-  final dynamic lastUpdated;
-  final dynamic previousVersion;
-  final dynamic contributors;
-  final dynamic nextVersion;
+  final String? lastUpdated;
+  final String? previousVersion;
+  final String? contributors;
+  final String? nextVersion;
 
   ContentHistoryExpandable(
       {this.lastUpdated,
@@ -8481,10 +8823,10 @@ class ContentHistoryExpandable {
 
   factory ContentHistoryExpandable.fromJson(Map<String, Object?> json) {
     return ContentHistoryExpandable(
-      lastUpdated: json[r'lastUpdated'],
-      previousVersion: json[r'previousVersion'],
-      contributors: json[r'contributors'],
-      nextVersion: json[r'nextVersion'],
+      lastUpdated: json[r'lastUpdated'] as String?,
+      previousVersion: json[r'previousVersion'] as String?,
+      contributors: json[r'contributors'] as String?,
+      nextVersion: json[r'nextVersion'] as String?,
     );
   }
 
@@ -8511,10 +8853,10 @@ class ContentHistoryExpandable {
   }
 
   ContentHistoryExpandable copyWith(
-      {dynamic lastUpdated,
-      dynamic previousVersion,
-      dynamic contributors,
-      dynamic nextVersion}) {
+      {String? lastUpdated,
+      String? previousVersion,
+      String? contributors,
+      String? nextVersion}) {
     return ContentHistoryExpandable(
       lastUpdated: lastUpdated ?? this.lastUpdated,
       previousVersion: previousVersion ?? this.previousVersion,
@@ -9585,15 +9927,15 @@ class ContentRestrictionArray {
 }
 
 class ContentRestrictionExpandable {
-  final dynamic restrictions;
-  final dynamic content;
+  final String? restrictions;
+  final String? content;
 
   ContentRestrictionExpandable({this.restrictions, this.content});
 
   factory ContentRestrictionExpandable.fromJson(Map<String, Object?> json) {
     return ContentRestrictionExpandable(
-      restrictions: json[r'restrictions'],
-      content: json[r'content'],
+      restrictions: json[r'restrictions'] as String?,
+      content: json[r'content'] as String?,
     );
   }
 
@@ -9612,7 +9954,7 @@ class ContentRestrictionExpandable {
   }
 
   ContentRestrictionExpandable copyWith(
-      {dynamic restrictions, dynamic content}) {
+      {String? restrictions, String? content}) {
     return ContentRestrictionExpandable(
       restrictions: restrictions ?? this.restrictions,
       content: content ?? this.content,
@@ -9673,16 +10015,16 @@ class ContentRestrictionRestrictions {
 }
 
 class ContentRestrictionRestrictionsExpandable {
-  final dynamic user;
-  final dynamic group;
+  final String? user;
+  final String? group;
 
   ContentRestrictionRestrictionsExpandable({this.user, this.group});
 
   factory ContentRestrictionRestrictionsExpandable.fromJson(
       Map<String, Object?> json) {
     return ContentRestrictionRestrictionsExpandable(
-      user: json[r'user'],
-      group: json[r'group'],
+      user: json[r'user'] as String?,
+      group: json[r'group'] as String?,
     );
   }
 
@@ -9701,7 +10043,7 @@ class ContentRestrictionRestrictionsExpandable {
   }
 
   ContentRestrictionRestrictionsExpandable copyWith(
-      {dynamic user, dynamic group}) {
+      {String? user, String? group}) {
     return ContentRestrictionRestrictionsExpandable(
       user: user ?? this.user,
       group: group ?? this.group,
@@ -11552,21 +11894,48 @@ class GenericLinks {
   }
 }
 
+class GlobalSpaceIdentifier {
+  final String spaceIdentifier;
+
+  GlobalSpaceIdentifier({required this.spaceIdentifier});
+
+  factory GlobalSpaceIdentifier.fromJson(Map<String, Object?> json) {
+    return GlobalSpaceIdentifier(
+      spaceIdentifier: json[r'spaceIdentifier'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var spaceIdentifier = this.spaceIdentifier;
+
+    final json = <String, Object?>{};
+    json[r'spaceIdentifier'] = spaceIdentifier;
+    return json;
+  }
+
+  GlobalSpaceIdentifier copyWith({String? spaceIdentifier}) {
+    return GlobalSpaceIdentifier(
+      spaceIdentifier: spaceIdentifier ?? this.spaceIdentifier,
+    );
+  }
+}
+
 class Group {
   final GroupType type;
   final String name;
   final String? id;
-  final GenericLinks links;
+  final GenericLinks? links;
 
-  Group({required this.type, required this.name, this.id, required this.links});
+  Group({required this.type, required this.name, this.id, this.links});
 
   factory Group.fromJson(Map<String, Object?> json) {
     return Group(
       type: GroupType.fromValue(json[r'type'] as String? ?? ''),
       name: json[r'name'] as String? ?? '',
       id: json[r'id'] as String?,
-      links: GenericLinks.fromJson(
-          json[r'_links'] as Map<String, Object?>? ?? const {}),
+      links: json[r'_links'] != null
+          ? GenericLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -11582,7 +11951,9 @@ class Group {
     if (id != null) {
       json[r'id'] = id;
     }
-    json[r'_links'] = links.toJson();
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
     return json;
   }
 
@@ -14377,7 +14748,7 @@ class SearchResult {
   final String entityType;
   final String iconCssClass;
   final DateTime lastModified;
-  final String friendlyLastModified;
+  final String? friendlyLastModified;
   final num? score;
 
   SearchResult(
@@ -14393,7 +14764,7 @@ class SearchResult {
       required this.entityType,
       required this.iconCssClass,
       required this.lastModified,
-      required this.friendlyLastModified,
+      this.friendlyLastModified,
       this.score});
 
   factory SearchResult.fromJson(Map<String, Object?> json) {
@@ -14427,7 +14798,7 @@ class SearchResult {
       iconCssClass: json[r'iconCssClass'] as String? ?? '',
       lastModified: DateTime.tryParse(json[r'lastModified'] as String? ?? '') ??
           DateTime(0),
-      friendlyLastModified: json[r'friendlyLastModified'] as String? ?? '',
+      friendlyLastModified: json[r'friendlyLastModified'] as String?,
       score: json[r'score'] as num?,
     );
   }
@@ -14471,7 +14842,9 @@ class SearchResult {
     json[r'entityType'] = entityType;
     json[r'iconCssClass'] = iconCssClass;
     json[r'lastModified'] = lastModified.toIso8601String();
-    json[r'friendlyLastModified'] = friendlyLastModified;
+    if (friendlyLastModified != null) {
+      json[r'friendlyLastModified'] = friendlyLastModified;
+    }
     if (score != null) {
       json[r'score'] = score;
     }
@@ -15843,9 +16216,9 @@ class SpacePermissionRequestOperationTarget {
 class SpacePermissionSubjects {
   final SpacePermissionSubjectsUser? user;
   final SpacePermissionSubjectsGroup? group;
-  final SpacePermissionSubjectsExpandable expandable;
+  final SpacePermissionSubjectsExpandable? expandable;
 
-  SpacePermissionSubjects({this.user, this.group, required this.expandable});
+  SpacePermissionSubjects({this.user, this.group, this.expandable});
 
   factory SpacePermissionSubjects.fromJson(Map<String, Object?> json) {
     return SpacePermissionSubjects(
@@ -15857,8 +16230,10 @@ class SpacePermissionSubjects {
           ? SpacePermissionSubjectsGroup.fromJson(
               json[r'group']! as Map<String, Object?>)
           : null,
-      expandable: SpacePermissionSubjectsExpandable.fromJson(
-          json[r'_expandable'] as Map<String, Object?>? ?? const {}),
+      expandable: json[r'_expandable'] != null
+          ? SpacePermissionSubjectsExpandable.fromJson(
+              json[r'_expandable']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -15874,7 +16249,9 @@ class SpacePermissionSubjects {
     if (group != null) {
       json[r'group'] = group.toJson();
     }
-    json[r'_expandable'] = expandable.toJson();
+    if (expandable != null) {
+      json[r'_expandable'] = expandable.toJson();
+    }
     return json;
   }
 
@@ -15929,8 +16306,11 @@ class SpacePermissionSubjectsExpandable {
 class SpacePermissionSubjectsGroup {
   final List<Group> results;
   final int size;
+  final int? start;
+  final int? limit;
 
-  SpacePermissionSubjectsGroup({required this.results, required this.size});
+  SpacePermissionSubjectsGroup(
+      {required this.results, required this.size, this.start, this.limit});
 
   factory SpacePermissionSubjectsGroup.fromJson(Map<String, Object?> json) {
     return SpacePermissionSubjectsGroup(
@@ -15940,23 +16320,36 @@ class SpacePermissionSubjectsGroup {
               .toList() ??
           [],
       size: (json[r'size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
     );
   }
 
   Map<String, Object?> toJson() {
     var results = this.results;
     var size = this.size;
+    var start = this.start;
+    var limit = this.limit;
 
     final json = <String, Object?>{};
     json[r'results'] = results.map((i) => i.toJson()).toList();
     json[r'size'] = size;
+    if (start != null) {
+      json[r'start'] = start;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
     return json;
   }
 
-  SpacePermissionSubjectsGroup copyWith({List<Group>? results, int? size}) {
+  SpacePermissionSubjectsGroup copyWith(
+      {List<Group>? results, int? size, int? start, int? limit}) {
     return SpacePermissionSubjectsGroup(
       results: results ?? this.results,
       size: size ?? this.size,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
     );
   }
 }
@@ -15964,8 +16357,11 @@ class SpacePermissionSubjectsGroup {
 class SpacePermissionSubjectsUser {
   final List<User> results;
   final int size;
+  final int? start;
+  final int? limit;
 
-  SpacePermissionSubjectsUser({required this.results, required this.size});
+  SpacePermissionSubjectsUser(
+      {required this.results, required this.size, this.start, this.limit});
 
   factory SpacePermissionSubjectsUser.fromJson(Map<String, Object?> json) {
     return SpacePermissionSubjectsUser(
@@ -15975,23 +16371,36 @@ class SpacePermissionSubjectsUser {
               .toList() ??
           [],
       size: (json[r'size'] as num?)?.toInt() ?? 0,
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
     );
   }
 
   Map<String, Object?> toJson() {
     var results = this.results;
     var size = this.size;
+    var start = this.start;
+    var limit = this.limit;
 
     final json = <String, Object?>{};
     json[r'results'] = results.map((i) => i.toJson()).toList();
     json[r'size'] = size;
+    if (start != null) {
+      json[r'start'] = start;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
     return json;
   }
 
-  SpacePermissionSubjectsUser copyWith({List<User>? results, int? size}) {
+  SpacePermissionSubjectsUser copyWith(
+      {List<User>? results, int? size, int? start, int? limit}) {
     return SpacePermissionSubjectsUser(
       results: results ?? this.results,
       size: size ?? this.size,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
     );
   }
 }

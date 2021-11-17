@@ -3935,14 +3935,14 @@
                 "schema": {
                   "type": "object",
                   "additionalProperties": {
-                    "anyOf": [
-                      {
+                    "properties": {
+                      "operationType": {
                         "$ref": "#/components/schemas/ContentRestriction"
                       },
-                      {
+                      "_links": {
                         "$ref": "#/components/schemas/GenericLinks"
                       }
-                    ]
+                    }
                   }
                 }
               }
@@ -7360,6 +7360,19 @@
               "format": "int32",
               "default": 25
             }
+          },
+          {
+            "name": "expand",
+            "in": "query",
+            "description": "A multi-value parameter indicating which properties of the user to expand.\n\n- `operations` returns the operations for the user, which are used\nwhen setting permissions.\n- `personalSpace` returns the personal space of the user.",
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
         ],
         "responses": {
@@ -10023,7 +10036,8 @@
                 "type": "string",
                 "enum": [
                   "operations",
-                  "personalSpace"
+                  "personalSpace",
+                  "isExternalCollaborator"
                 ]
               }
             }
@@ -10133,7 +10147,7 @@
           {
             "name": "expand",
             "in": "query",
-            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - personalSpace returns the user's personal space, if it exists.",
+            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - personalSpace returns the user's personal space, if it exists.\n  - `isExternalCollaborator` returns whether the user is an external collaborator user",
             "style": "form",
             "explode": false,
             "schema": {
@@ -10142,7 +10156,8 @@
                 "type": "string",
                 "enum": [
                   "operations",
-                  "personalSpace"
+                  "personalSpace",
+                  "isExternalCollaborator"
                 ]
               }
             }
@@ -11895,6 +11910,7 @@
       },
       "Container": {
         "type": "object",
+        "nullable": true,
         "additionalProperties": true,
         "description": "Container for content. This can be either a space (containing a page or blogpost)\nor a page/blog post (containing an attachment or comment)"
       },
@@ -12389,38 +12405,13 @@
             "type": "object",
             "properties": {
               "content": {
-                "oneOf": [
-                  {
-                    "type": "object",
-                    "additionalProperties": true
-                  },
-                  {
-                    "type": "string"
-                  }
-                ]
+                "type": "string"
               },
               "embeddedContent": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/EmbeddedContent"
-                    }
-                  }
-                ]
+                "type": "string"
               },
               "webresource": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "$ref": "#/components/schemas/WebResourceDependencies"
-                  }
-                ]
+                "type": "string"
               },
               "mediaToken": {
                 "type": "string"
@@ -12482,37 +12473,13 @@
             "additionalProperties": true,
             "properties": {
               "attachment": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "object",
-                    "additionalProperties": true
-                  }
-                ]
+                "type": "string"
               },
               "comment": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "object",
-                    "additionalProperties": true
-                  }
-                ]
+                "type": "string"
               },
               "page": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "object",
-                    "additionalProperties": true
-                  }
-                ]
+                "type": "string"
               }
             }
           },
@@ -12647,11 +12614,114 @@
               "key"
             ],
             "type": "object",
-            "additionalProperties": true,
             "properties": {
+              "id": {
+                "nullable": true,
+                "type": "integer",
+                "format": "int64"
+              },
+              "name": {
+                "nullable": true,
+                "type": "string"
+              },
+              "icon": {
+                "$ref": "#/components/schemas/Icon"
+              },
+              "identifiers": {
+                "$ref": "#/components/schemas/GlobalSpaceIdentifier"
+              },
+              "description": {
+                "type": "object",
+                "nullable": true,
+                "properties": {
+                  "plain": {
+                    "$ref": "#/components/schemas/SpaceDescription"
+                  },
+                  "view": {
+                    "$ref": "#/components/schemas/SpaceDescription"
+                  },
+                  "_expandable": {
+                    "type": "object",
+                    "properties": {
+                      "view": {
+                        "type": "string"
+                      },
+                      "plain": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "homepage": {
+                "$ref": "#/components/schemas/Content"
+              },
+              "type": {
+                "nullable": true,
+                "type": "string"
+              },
+              "metadata": {
+                "nullable": true,
+                "type": "object",
+                "properties": {
+                  "labels": {
+                    "$ref": "#/components/schemas/LabelArray"
+                  },
+                  "_expandable": {
+                    "type": "object"
+                  }
+                }
+              },
+              "operations": {
+                "nullable": true,
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OperationCheckResult"
+                }
+              },
+              "permissions": {
+                "nullable": true,
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SpacePermission"
+                }
+              },
+              "status": {
+                "nullable": true,
+                "type": "string"
+              },
+              "settings": {
+                "$ref": "#/components/schemas/SpaceSettings"
+              },
+              "theme": {
+                "$ref": "#/components/schemas/Theme"
+              },
+              "lookAndFeel": {
+                "$ref": "#/components/schemas/LookAndFeel"
+              },
+              "history": {
+                "required": [
+                  "createdDate"
+                ],
+                "type": "object",
+                "properties": {
+                  "createdDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "createdBy": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              },
               "key": {
                 "type": "string",
                 "description": "The key of the space."
+              },
+              "links": {
+                "nullable": true,
+                "type": "object",
+                "additionalProperties": true
               }
             },
             "description": "The space that the content is being created in."
@@ -12791,44 +12861,16 @@
             "type": "object",
             "properties": {
               "lastUpdated": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "object"
-                  }
-                ]
+                "type": "string"
               },
               "previousVersion": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "object"
-                  }
-                ]
+                "type": "string"
               },
               "contributors": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "object"
-                  }
-                ]
+                "type": "string"
               },
               "nextVersion": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "object"
-                  }
-                ]
+                "type": "string"
               }
             }
           },
@@ -13235,26 +13277,10 @@
                 "type": "object",
                 "properties": {
                   "user": {
-                    "oneOf": [
-                      {
-                        "type": "string"
-                      },
-                      {
-                        "type": "object",
-                        "additionalProperties": true
-                      }
-                    ]
+                    "type": "string"
                   },
                   "group": {
-                    "oneOf": [
-                      {
-                        "type": "string"
-                      },
-                      {
-                        "type": "object",
-                        "additionalProperties": true
-                      }
-                    ]
+                    "type": "string"
                   }
                 }
               }
@@ -13267,26 +13293,10 @@
             "type": "object",
             "properties": {
               "restrictions": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "object",
-                    "additionalProperties": true
-                  }
-                ]
+                "type": "string"
               },
               "content": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "object",
-                    "additionalProperties": true
-                  }
-                ]
+                "type": "string"
               }
             }
           },
@@ -13403,12 +13413,7 @@
             "description": "The users/groups that the restrictions will be applied to. At least one of\n`user` or `group` must be specified for this object."
           },
           "content": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Content"
-              }
-            ],
-            "nullable": true
+            "$ref": "#/components/schemas/Content"
           }
         }
       },
@@ -14144,9 +14149,20 @@
         "nullable": true,
         "description": "This property is no longer available and will be removed from the documentation soon.\nUse `accountId` instead.\nSee the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details."
       },
+      "GlobalSpaceIdentifier": {
+        "type": "object",
+        "nullable": true,
+        "required": [
+          "spaceIdentifier"
+        ],
+        "properties": {
+          "spaceIdentifier": {
+            "type": "string"
+          }
+        }
+      },
       "Group": {
         "required": [
-          "_links",
           "name",
           "type"
         ],
@@ -14163,6 +14179,7 @@
             "type": "string"
           },
           "id": {
+            "nullable": true,
             "type": "string"
           },
           "_links": {
@@ -14872,14 +14889,13 @@
           "args": {
             "type": "array",
             "items": {
-              "anyOf": [
+              "oneOf": [
                 {
                   "type": "string"
                 },
                 {
                   "type": "object",
-                  "additionalProperties": true,
-                  "properties": {}
+                  "additionalProperties": true
                 }
               ]
             }
@@ -15453,7 +15469,6 @@
           "breadcrumbs",
           "entityType",
           "excerpt",
-          "friendlyLastModified",
           "iconCssClass",
           "lastModified",
           "title",
@@ -15756,6 +15771,7 @@
           "value"
         ],
         "type": "object",
+        "additionalProperties": true,
         "properties": {
           "value": {
             "type": "string"
@@ -15813,9 +15829,6 @@
             "format": "int64"
           },
           "subjects": {
-            "required": [
-              "_expandable"
-            ],
             "type": "object",
             "properties": {
               "user": {
@@ -15832,6 +15845,14 @@
                     }
                   },
                   "size": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "start": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "limit": {
                     "type": "integer",
                     "format": "int32"
                   }
@@ -15851,6 +15872,14 @@
                     }
                   },
                   "size": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "start": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "limit": {
                     "type": "integer",
                     "format": "int32"
                   }
@@ -16130,6 +16159,7 @@
         }
       },
       "SpaceSettings": {
+        "nullable": true,
         "required": [
           "_links",
           "routeOverrideEnabled"
@@ -16775,6 +16805,7 @@
           "when"
         ],
         "type": "object",
+        "nullable": true,
         "additionalProperties": true,
         "properties": {
           "by": {
