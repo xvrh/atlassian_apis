@@ -3161,7 +3161,7 @@ class SearchApi {
   ///
   /// Note that some user fields may be set to null depending on the user's
   /// privacy settings.
-  /// These are: email, profilePicture, and displayName.
+  /// These are: email, profilePicture, displayName, and timeZone.
   Future<SearchPageResponseSearchResult> searchUser(
       {required String cql,
       int? start,
@@ -5582,6 +5582,13 @@ class BulkUserLookup {
   /// The display name of the user. Depending on the user's privacy setting,
   /// this may be the same as publicName.
   final String displayName;
+
+  /// This display user time zone. Depending on the user's privacy setting, this
+  /// may be default to tenant time zone.
+  final String? timeZone;
+
+  /// Whether the user is an external collaborator user
+  final bool isExternalCollaborator;
   final List<OperationCheckResult> operations;
   final UserDetails? details;
   final Space? personalSpace;
@@ -5598,12 +5605,15 @@ class BulkUserLookup {
       required this.publicName,
       required this.profilePicture,
       required this.displayName,
+      this.timeZone,
+      bool? isExternalCollaborator,
       List<OperationCheckResult>? operations,
       this.details,
       this.personalSpace,
       required this.expandable,
       required this.links})
-      : operations = operations ?? [];
+      : isExternalCollaborator = isExternalCollaborator ?? false,
+        operations = operations ?? [];
 
   factory BulkUserLookup.fromJson(Map<String, Object?> json) {
     return BulkUserLookup(
@@ -5617,6 +5627,8 @@ class BulkUserLookup {
       profilePicture: Icon.fromJson(
           json[r'profilePicture'] as Map<String, Object?>? ?? const {}),
       displayName: json[r'displayName'] as String? ?? '',
+      timeZone: json[r'timeZone'] as String?,
+      isExternalCollaborator: json[r'isExternalCollaborator'] as bool? ?? false,
       operations: (json[r'operations'] as List<Object?>?)
               ?.map((i) => OperationCheckResult.fromJson(
                   i as Map<String, Object?>? ?? const {}))
@@ -5645,6 +5657,8 @@ class BulkUserLookup {
     var publicName = this.publicName;
     var profilePicture = this.profilePicture;
     var displayName = this.displayName;
+    var timeZone = this.timeZone;
+    var isExternalCollaborator = this.isExternalCollaborator;
     var operations = this.operations;
     var details = this.details;
     var personalSpace = this.personalSpace;
@@ -5665,6 +5679,10 @@ class BulkUserLookup {
     json[r'publicName'] = publicName;
     json[r'profilePicture'] = profilePicture.toJson();
     json[r'displayName'] = displayName;
+    if (timeZone != null) {
+      json[r'timeZone'] = timeZone;
+    }
+    json[r'isExternalCollaborator'] = isExternalCollaborator;
     json[r'operations'] = operations.map((i) => i.toJson()).toList();
     if (details != null) {
       json[r'details'] = details.toJson();
@@ -5687,6 +5705,8 @@ class BulkUserLookup {
       String? publicName,
       Icon? profilePicture,
       String? displayName,
+      String? timeZone,
+      bool? isExternalCollaborator,
       List<OperationCheckResult>? operations,
       UserDetails? details,
       Space? personalSpace,
@@ -5702,6 +5722,9 @@ class BulkUserLookup {
       publicName: publicName ?? this.publicName,
       profilePicture: profilePicture ?? this.profilePicture,
       displayName: displayName ?? this.displayName,
+      timeZone: timeZone ?? this.timeZone,
+      isExternalCollaborator:
+          isExternalCollaborator ?? this.isExternalCollaborator,
       operations: operations ?? this.operations,
       details: details ?? this.details,
       personalSpace: personalSpace ?? this.personalSpace,
@@ -18074,6 +18097,10 @@ class User {
   /// this may be the same as publicName.
   final String? displayName;
 
+  /// This display user time zone. Depending on the user's privacy setting, this
+  /// may be default to tenant time zone.
+  final String? timeZone;
+
   /// Whether the user is an external collaborator user
   final bool isExternalCollaborator;
 
@@ -18095,6 +18122,7 @@ class User {
       this.publicName,
       this.profilePicture,
       this.displayName,
+      this.timeZone,
       bool? isExternalCollaborator,
       bool? externalCollaborator,
       List<OperationCheckResult>? operations,
@@ -18121,6 +18149,7 @@ class User {
           ? Icon.fromJson(json[r'profilePicture']! as Map<String, Object?>)
           : null,
       displayName: json[r'displayName'] as String?,
+      timeZone: json[r'timeZone'] as String?,
       isExternalCollaborator: json[r'isExternalCollaborator'] as bool? ?? false,
       externalCollaborator: json[r'externalCollaborator'] as bool? ?? false,
       operations: (json[r'operations'] as List<Object?>?)
@@ -18154,6 +18183,7 @@ class User {
     var publicName = this.publicName;
     var profilePicture = this.profilePicture;
     var displayName = this.displayName;
+    var timeZone = this.timeZone;
     var isExternalCollaborator = this.isExternalCollaborator;
     var externalCollaborator = this.externalCollaborator;
     var operations = this.operations;
@@ -18188,6 +18218,9 @@ class User {
     if (displayName != null) {
       json[r'displayName'] = displayName;
     }
+    if (timeZone != null) {
+      json[r'timeZone'] = timeZone;
+    }
     json[r'isExternalCollaborator'] = isExternalCollaborator;
     json[r'externalCollaborator'] = externalCollaborator;
     json[r'operations'] = operations.map((i) => i.toJson()).toList();
@@ -18216,6 +18249,7 @@ class User {
       String? publicName,
       Icon? profilePicture,
       String? displayName,
+      String? timeZone,
       bool? isExternalCollaborator,
       bool? externalCollaborator,
       List<OperationCheckResult>? operations,
@@ -18233,6 +18267,7 @@ class User {
       publicName: publicName ?? this.publicName,
       profilePicture: profilePicture ?? this.profilePicture,
       displayName: displayName ?? this.displayName,
+      timeZone: timeZone ?? this.timeZone,
       isExternalCollaborator:
           isExternalCollaborator ?? this.isExternalCollaborator,
       externalCollaborator: externalCollaborator ?? this.externalCollaborator,
@@ -19231,6 +19266,7 @@ class WatchUser {
   final String accountId;
   final Icon profilePicture;
   final String displayName;
+  final String? timeZone;
   final List<OperationCheckResult> operations;
   final bool isExternalCollaborator;
   final UserDetails? details;
@@ -19247,6 +19283,7 @@ class WatchUser {
       required this.accountId,
       required this.profilePicture,
       required this.displayName,
+      this.timeZone,
       required this.operations,
       required this.isExternalCollaborator,
       this.details,
@@ -19265,6 +19302,7 @@ class WatchUser {
       profilePicture: Icon.fromJson(
           json[r'profilePicture'] as Map<String, Object?>? ?? const {}),
       displayName: json[r'displayName'] as String? ?? '',
+      timeZone: json[r'timeZone'] as String?,
       operations: (json[r'operations'] as List<Object?>?)
               ?.map((i) => OperationCheckResult.fromJson(
                   i as Map<String, Object?>? ?? const {}))
@@ -19289,6 +19327,7 @@ class WatchUser {
     var accountId = this.accountId;
     var profilePicture = this.profilePicture;
     var displayName = this.displayName;
+    var timeZone = this.timeZone;
     var operations = this.operations;
     var isExternalCollaborator = this.isExternalCollaborator;
     var details = this.details;
@@ -19309,6 +19348,9 @@ class WatchUser {
     json[r'accountId'] = accountId;
     json[r'profilePicture'] = profilePicture.toJson();
     json[r'displayName'] = displayName;
+    if (timeZone != null) {
+      json[r'timeZone'] = timeZone;
+    }
     json[r'operations'] = operations.map((i) => i.toJson()).toList();
     json[r'isExternalCollaborator'] = isExternalCollaborator;
     if (details != null) {
@@ -19329,6 +19371,7 @@ class WatchUser {
       String? accountId,
       Icon? profilePicture,
       String? displayName,
+      String? timeZone,
       List<OperationCheckResult>? operations,
       bool? isExternalCollaborator,
       UserDetails? details,
@@ -19344,6 +19387,7 @@ class WatchUser {
       accountId: accountId ?? this.accountId,
       profilePicture: profilePicture ?? this.profilePicture,
       displayName: displayName ?? this.displayName,
+      timeZone: timeZone ?? this.timeZone,
       operations: operations ?? this.operations,
       isExternalCollaborator:
           isExternalCollaborator ?? this.isExternalCollaborator,

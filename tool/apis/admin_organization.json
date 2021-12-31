@@ -380,9 +380,6 @@
           "401": {
             "$ref": "#/components/responses/Error.Unauthenticated"
           },
-          "404": {
-            "$ref": "#/components/responses/Error.OrgNotFound"
-          },
           "429": {
             "$ref": "#/components/responses/Error.RateLimited"
           },
@@ -1068,6 +1065,54 @@
           }
         }
       }
+    },
+    "/orgs/{orgId}/policies/{policyId}/validate": {
+      "get": {
+        "tags": [
+          "policies",
+          "validate"
+        ],
+        "summary": "Validate Policy",
+        "description": "Validate a policy based on specific requirements. For example, Trigger CDEN validation by pushing a task into the SQS dns-validation queue",
+        "operationId": "validatePolicy",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "Organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "policyId",
+            "in": "path",
+            "description": "Policy ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted CDEN policy validation request"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error.CdenPolicyValidationFailed"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error.Unauthenticated"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error.RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.CdenPolicyValidationFailed"
+          }
+        }
+      }
     }
   },
   "servers": [
@@ -1203,6 +1248,16 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/Error.InternalError.Model"
+            }
+          }
+        }
+      },
+      "Error.CdenPolicyValidationFailed": {
+        "description": "CDEN policy validation failed",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error.CdenPolicyValidationFailed.Model"
             }
           }
         }
@@ -2458,6 +2513,33 @@
                       "type": "string",
                       "enum": [
                         "ADMIN-500-1"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Error.CdenPolicyValidationFailed.Model": {
+        "type": "object",
+        "description": "CDEN policy validation failed",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ApplicationError"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "ADMIN-500-2"
                       ]
                     }
                   }

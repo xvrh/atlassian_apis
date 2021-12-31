@@ -1,3 +1,6 @@
+## 0.5.0
+- Update to the latest API schemas
+
 ## 0.4.0
 - Allow some operations to take a `MultipartFile` as `body`
 

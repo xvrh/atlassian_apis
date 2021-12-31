@@ -5653,6 +5653,16 @@
             "content": {}
           }
         },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "read:confluence-groups"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "delete": {
@@ -7327,7 +7337,7 @@
           "Search"
         ],
         "summary": "Search users",
-        "description": "Searches for users using user-specific queries from the\n[Confluence Query Language (CQL)](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/).\n\nNote that some user fields may be set to null depending on the user's privacy settings.\nThese are: email, profilePicture, and displayName.",
+        "description": "Searches for users using user-specific queries from the\n[Confluence Query Language (CQL)](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/).\n\nNote that some user fields may be set to null depending on the user's privacy settings.\nThese are: email, profilePicture, displayName, and timeZone.",
         "operationId": "searchUser",
         "parameters": [
           {
@@ -15000,6 +15010,15 @@
             "type": "string",
             "description": "The display name of the user. Depending on the user's privacy setting, this may be the same as publicName."
           },
+          "timeZone": {
+            "nullable": true,
+            "type": "string",
+            "description": "This display user time zone. Depending on the user's privacy setting, this may be default to tenant time zone."
+          },
+          "isExternalCollaborator": {
+            "type": "boolean",
+            "description": "Whether the user is an external collaborator user"
+          },
           "operations": {
             "type": "array",
             "items": {
@@ -16609,6 +16628,11 @@
             "type": "string",
             "description": "The display name of the user. Depending on the user's privacy setting, this may be the same as publicName."
           },
+          "timeZone": {
+            "nullable": true,
+            "type": "string",
+            "description": "This display user time zone. Depending on the user's privacy setting, this may be default to tenant time zone."
+          },
           "isExternalCollaborator": {
             "type": "boolean",
             "description": "Whether the user is an external collaborator user"
@@ -17031,6 +17055,10 @@
             "$ref": "#/components/schemas/Icon"
           },
           "displayName": {
+            "type": "string"
+          },
+          "timeZone": {
+            "nullable": true,
             "type": "string"
           },
           "operations": {

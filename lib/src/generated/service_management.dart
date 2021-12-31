@@ -349,7 +349,7 @@ class OrganizationApi {
   ///
   /// **[Permissions](#permissions) required**: Service desk's agent.
   Future<PagedDTOOrganizationDTO> getOrganizations2(
-      {required int serviceDeskId,
+      {required String serviceDeskId,
       int? start,
       int? limit,
       String? accountId}) async {
@@ -357,7 +357,7 @@ class OrganizationApi {
       'get',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/organization',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
       },
       queryParameters: {
         if (start != null) 'start': '$start',
@@ -373,13 +373,13 @@ class OrganizationApi {
   ///
   /// **[Permissions](#permissions) required**: Service desk's agent.
   Future<void> addOrganization(
-      {required int serviceDeskId,
+      {required String serviceDeskId,
       required OrganizationServiceDeskUpdateDTO body}) async {
     await _client.send(
       'post',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/organization',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
       },
       body: body.toJson(),
     );
@@ -391,13 +391,13 @@ class OrganizationApi {
   ///
   /// **[Permissions](#permissions) required**: Service desk's agent.
   Future<void> removeOrganization(
-      {required int serviceDeskId,
+      {required String serviceDeskId,
       required OrganizationServiceDeskUpdateDTO body}) async {
     await _client.send(
       'delete',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/organization',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
       },
       body: body.toJson(),
     );
@@ -1044,12 +1044,12 @@ class ServicedeskApi {
   /// **[Permissions](#permissions) required**: Permission to access the Service
   /// Desk. For example, being the Service Desk's Administrator or one of its
   /// Agents or Users.
-  Future<ServiceDeskDTO> getServiceDeskById(int serviceDeskId) async {
+  Future<ServiceDeskDTO> getServiceDeskById(String serviceDeskId) async {
     return ServiceDeskDTO.fromJson(await _client.send(
       'get',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
       },
     ));
   }
@@ -1084,12 +1084,12 @@ class ServicedeskApi {
   /// **[Permissions](#permissions) required**: Permission to add attachments in
   /// this Service Desk.
   Future<TemporaryAttachments> attachTemporaryFile(
-      {required int serviceDeskId, required MultipartFile file}) async {
+      {required String serviceDeskId, required MultipartFile file}) async {
     return TemporaryAttachments.fromJson(await _client.send(
       'post',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/attachTemporaryFile',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
       },
       file: file,
     ));
@@ -1105,7 +1105,7 @@ class ServicedeskApi {
   /// **[Permissions](#permissions) required**: Permission to view this Service
   /// Desk's customers.
   Future<PagedDTOUserDTO> getCustomers(
-      {required int serviceDeskId,
+      {required String serviceDeskId,
       String? query,
       int? start,
       int? limit}) async {
@@ -1113,7 +1113,7 @@ class ServicedeskApi {
       'get',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/customer',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
       },
       queryParameters: {
         if (query != null) 'query': query,
@@ -1129,13 +1129,13 @@ class ServicedeskApi {
   ///
   /// **[Permissions](#permissions) required**: Service desk administrator
   Future<void> addCustomers(
-      {required int serviceDeskId,
+      {required String serviceDeskId,
       required ServiceDeskCustomerDTO body}) async {
     await _client.send(
       'post',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/customer',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
       },
       body: body.toJson(),
     );
@@ -1148,13 +1148,13 @@ class ServicedeskApi {
   ///
   /// **[Permissions](#permissions) required**: Services desk administrator
   Future<void> removeCustomers(
-      {required int serviceDeskId,
+      {required String serviceDeskId,
       required ServiceDeskCustomerDTO body}) async {
     await _client.send(
       'delete',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/customer',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
       },
       body: body.toJson(),
     );
@@ -1166,7 +1166,7 @@ class ServicedeskApi {
   /// **[Permissions](#permissions) required**: Permission to access the service
   /// desk.
   Future<PagedDTOArticleDTO> getArticles(
-      {required int serviceDeskId,
+      {required String serviceDeskId,
       String? query,
       bool? highlight,
       int? start,
@@ -1175,7 +1175,7 @@ class ServicedeskApi {
       'get',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/knowledgebase/article',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
       },
       queryParameters: {
         if (query != null) 'query': query,
@@ -1192,7 +1192,7 @@ class ServicedeskApi {
   ///
   /// **[Permissions](#permissions) required**: service desk's Agent.
   Future<PagedDTOQueueDTO> getQueues(
-      {required int serviceDeskId,
+      {required String serviceDeskId,
       bool? includeCount,
       int? start,
       int? limit}) async {
@@ -1200,7 +1200,7 @@ class ServicedeskApi {
       'get',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/queue',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
       },
       queryParameters: {
         if (includeCount != null) 'includeCount': '$includeCount',
@@ -1217,14 +1217,14 @@ class ServicedeskApi {
   ///
   /// **[Permissions](#permissions) required**: service desk's Agent.
   Future<QueueDTO> getQueue(
-      {required int serviceDeskId,
+      {required String serviceDeskId,
       required int queueId,
       bool? includeCount}) async {
     return QueueDTO.fromJson(await _client.send(
       'get',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/queue/{queueId}',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
         'queueId': '$queueId',
       },
       queryParameters: {
@@ -1240,7 +1240,7 @@ class ServicedeskApi {
   ///
   /// **[Permissions](#permissions) required**: Service desk's agent.
   Future<PagedDTOIssueBean> getIssuesInQueue(
-      {required int serviceDeskId,
+      {required String serviceDeskId,
       required int queueId,
       int? start,
       int? limit}) async {
@@ -1248,7 +1248,7 @@ class ServicedeskApi {
       'get',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/queue/{queueId}/issue',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
         'queueId': '$queueId',
       },
       queryParameters: {
@@ -1271,7 +1271,7 @@ class ServicedeskApi {
   /// **[Permissions](#permissions) required**: Permission to access the service
   /// desk.
   Future<PagedDTORequestTypeDTO> getRequestTypes(
-      {required int serviceDeskId,
+      {required String serviceDeskId,
       int? groupId,
       List<String>? expand,
       String? searchQuery,
@@ -1281,7 +1281,7 @@ class ServicedeskApi {
       'get',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
       },
       queryParameters: {
         if (groupId != null) 'groupId': '$groupId',
@@ -1316,12 +1316,13 @@ class ServicedeskApi {
   ///
   /// **[Permissions](#permissions) required**: Service desk's administrator
   Future<RequestTypeDTO> createRequestType(
-      {required int serviceDeskId, required RequestTypeCreateDTO body}) async {
+      {required String serviceDeskId,
+      required RequestTypeCreateDTO body}) async {
     return RequestTypeDTO.fromJson(await _client.send(
       'post',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
       },
       body: body.toJson(),
     ));
@@ -1332,14 +1333,14 @@ class ServicedeskApi {
   /// **[Permissions](#permissions) required**: Permission to access the service
   /// desk.
   Future<RequestTypeDTO> getRequestTypeById(
-      {required int serviceDeskId,
+      {required String serviceDeskId,
       required int requestTypeId,
       List<String>? expand}) async {
     return RequestTypeDTO.fromJson(await _client.send(
       'get',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
         'requestTypeId': '$requestTypeId',
       },
       queryParameters: {
@@ -1354,12 +1355,12 @@ class ServicedeskApi {
   ///
   /// **[Permissions](#permissions) required**: Service desk administrator.
   Future<void> deleteRequestType(
-      {required int serviceDeskId, required int requestTypeId}) async {
+      {required String serviceDeskId, required int requestTypeId}) async {
     await _client.send(
       'delete',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
         'requestTypeId': '$requestTypeId',
       },
     );
@@ -1380,14 +1381,14 @@ class ServicedeskApi {
   /// Desk. However, hidden fields would be visible to only Service desk's
   /// Administrator.
   Future<CustomerRequestCreateMetaDTO> getRequestTypeFields(
-      {required int serviceDeskId,
+      {required String serviceDeskId,
       required int requestTypeId,
       List<String>? expand}) async {
     return CustomerRequestCreateMetaDTO.fromJson(await _client.send(
       'get',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/field',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
         'requestTypeId': '$requestTypeId',
       },
       queryParameters: {
@@ -1407,13 +1408,13 @@ class ServicedeskApi {
   /// **[Permissions](#permissions) required**: The user must have permission to
   /// view the request type.
   Future<PropertyKeys> getPropertiesKeys(
-      {required int requestTypeId, required int serviceDeskId}) async {
+      {required int requestTypeId, required String serviceDeskId}) async {
     return PropertyKeys.fromJson(await _client.send(
       'get',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/property',
       pathParameters: {
         'requestTypeId': '$requestTypeId',
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
       },
     ));
   }
@@ -1428,14 +1429,14 @@ class ServicedeskApi {
   /// **[Permissions](#permissions) required**: User must have permission to
   /// view the request type.
   Future<EntityProperty> getProperty(
-      {required int serviceDeskId,
+      {required String serviceDeskId,
       required int requestTypeId,
       required String propertyKey}) async {
     return EntityProperty.fromJson(await _client.send(
       'get',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/property/{propertyKey}',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
         'requestTypeId': '$requestTypeId',
         'propertyKey': propertyKey,
       },
@@ -1454,14 +1455,14 @@ class ServicedeskApi {
   /// **[Permissions](#permissions) required**: Jira project administrator with
   /// a Jira Service Management agent license.
   Future<void> setProperty(
-      {required int serviceDeskId,
+      {required String serviceDeskId,
       required int requestTypeId,
       required String propertyKey}) async {
     await _client.send(
       'put',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/property/{propertyKey}',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
         'requestTypeId': '$requestTypeId',
         'propertyKey': propertyKey,
       },
@@ -1479,14 +1480,14 @@ class ServicedeskApi {
   /// **[Permissions](#permissions) required**: Jira project administrator with
   /// a Jira Service Management agent license.
   Future<void> deleteProperty(
-      {required int serviceDeskId,
+      {required String serviceDeskId,
       required int requestTypeId,
       required String propertyKey}) async {
     await _client.send(
       'delete',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/property/{propertyKey}',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
         'requestTypeId': '$requestTypeId',
         'propertyKey': propertyKey,
       },
@@ -1501,12 +1502,12 @@ class ServicedeskApi {
   /// **[Permissions](#permissions) required**: Permission to view the service
   /// desk.
   Future<PagedDTORequestTypeGroupDTO> getRequestTypeGroups(
-      {required int serviceDeskId, int? start, int? limit}) async {
+      {required String serviceDeskId, int? start, int? limit}) async {
     return PagedDTORequestTypeGroupDTO.fromJson(await _client.send(
       'get',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttypegroup',
       pathParameters: {
-        'serviceDeskId': '$serviceDeskId',
+        'serviceDeskId': serviceDeskId,
       },
       queryParameters: {
         if (start != null) 'start': '$start',
@@ -7213,6 +7214,9 @@ class RequestTypeFieldDTO {
   /// List of valid values for the field.
   final List<RequestTypeFieldValueDTO> validValues;
 
+  /// List of preset values for the field.
+  final List<String> presetValues;
+
   /// Jira specific implementation details for the field in the UI.
   final JsonTypeBean? jiraSchema;
   final bool visible;
@@ -7224,11 +7228,13 @@ class RequestTypeFieldDTO {
       bool? required,
       List<RequestTypeFieldValueDTO>? defaultValues,
       List<RequestTypeFieldValueDTO>? validValues,
+      List<String>? presetValues,
       this.jiraSchema,
       bool? visible})
       : required = required ?? false,
         defaultValues = defaultValues ?? [],
         validValues = validValues ?? [],
+        presetValues = presetValues ?? [],
         visible = visible ?? false;
 
   factory RequestTypeFieldDTO.fromJson(Map<String, Object?> json) {
@@ -7247,6 +7253,10 @@ class RequestTypeFieldDTO {
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
+      presetValues: (json[r'presetValues'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
       jiraSchema: json[r'jiraSchema'] != null
           ? JsonTypeBean.fromJson(json[r'jiraSchema']! as Map<String, Object?>)
           : null,
@@ -7261,6 +7271,7 @@ class RequestTypeFieldDTO {
     var required = this.required;
     var defaultValues = this.defaultValues;
     var validValues = this.validValues;
+    var presetValues = this.presetValues;
     var jiraSchema = this.jiraSchema;
     var visible = this.visible;
 
@@ -7277,6 +7288,7 @@ class RequestTypeFieldDTO {
     json[r'required'] = required;
     json[r'defaultValues'] = defaultValues.map((i) => i.toJson()).toList();
     json[r'validValues'] = validValues.map((i) => i.toJson()).toList();
+    json[r'presetValues'] = presetValues;
     if (jiraSchema != null) {
       json[r'jiraSchema'] = jiraSchema.toJson();
     }
@@ -7291,6 +7303,7 @@ class RequestTypeFieldDTO {
       bool? required,
       List<RequestTypeFieldValueDTO>? defaultValues,
       List<RequestTypeFieldValueDTO>? validValues,
+      List<String>? presetValues,
       JsonTypeBean? jiraSchema,
       bool? visible}) {
     return RequestTypeFieldDTO(
@@ -7300,6 +7313,7 @@ class RequestTypeFieldDTO {
       required: required ?? this.required,
       defaultValues: defaultValues ?? this.defaultValues,
       validValues: validValues ?? this.validValues,
+      presetValues: presetValues ?? this.presetValues,
       jiraSchema: jiraSchema ?? this.jiraSchema,
       visible: visible ?? this.visible,
     );

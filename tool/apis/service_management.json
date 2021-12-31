@@ -121,6 +121,24 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:servicedesk-customer"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:customer:jira-service-management",
+              "write:customer:jira-service-management",
+              "read:user:jira"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "ADMIN"
       }
     },
@@ -355,6 +373,22 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:knowledgebase:jira-service-management"
+            ]
+          }
+        ],
         "x-experimental": true,
         "x-atlassian-connect-scope": "READ"
       }
@@ -456,6 +490,22 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:servicedesk-customer"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:organization:jira-service-management"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "post": {
@@ -536,6 +586,23 @@
           {
             "OAuth2": [
               "manage:servicedesk-customer"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:servicedesk-customer"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:organization:jira-service-management",
+              "write:organization:jira-service-management"
             ]
           }
         ],
@@ -623,6 +690,22 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:servicedesk-customer"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:organization:jira-service-management"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "delete": {
@@ -694,6 +777,23 @@
           {
             "OAuth2": [
               "manage:servicedesk-customer"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:servicedesk-customer"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:organization:jira-service-management",
+              "delete:organization:jira-service-management"
             ]
           }
         ],
@@ -787,6 +887,22 @@
           {
             "OAuth2": [
               "manage:servicedesk-customer"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:servicedesk-customer"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:organization.property:jira-service-management"
             ]
           }
         ],
@@ -889,6 +1005,22 @@
           {
             "OAuth2": [
               "manage:servicedesk-customer"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:servicedesk-customer"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:organization.property:jira-service-management"
             ]
           }
         ],
@@ -997,6 +1129,23 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:servicedesk-customer"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:organization.property:jira-service-management",
+              "write:organization.property:jira-service-management"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
       },
       "delete": {
@@ -1086,6 +1235,23 @@
           {
             "OAuth2": [
               "manage:servicedesk-customer"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:servicedesk-customer"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:organization.property:jira-service-management",
+              "delete:organization.property:jira-service-management"
             ]
           }
         ],
@@ -1191,6 +1357,23 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:servicedesk-customer"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:organization.user:jira-service-management",
+              "read:user:jira"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "post": {
@@ -1292,6 +1475,24 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:servicedesk-customer"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:organization.user:jira-service-management",
+              "write:organization.user:jira-service-management",
+              "read:user:jira"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "ADMIN"
       },
       "delete": {
@@ -1390,6 +1591,24 @@
           {
             "OAuth2": [
               "manage:servicedesk-customer"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:servicedesk-customer"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:organization.user:jira-service-management",
+              "delete:organization.user:jira-service-management",
+              "read:user:jira"
             ]
           }
         ],
@@ -1548,6 +1767,23 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request:jira-service-management",
+              "read:user:jira"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "post": {
@@ -1636,6 +1872,24 @@
           {
             "OAuth2": [
               "write:servicedesk-request"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "write:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request:jira-service-management",
+              "write:request:jira-service-management",
+              "read:user:jira"
             ]
           }
         ],
@@ -1730,6 +1984,23 @@
           {
             "OAuth2": [
               "read:servicedesk-request"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request:jira-service-management",
+              "read:user:jira"
             ]
           }
         ],
@@ -1834,6 +2105,23 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.approval:jira-service-management",
+              "read:user:jira"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -1924,6 +2212,23 @@
           {
             "OAuth2": [
               "read:servicedesk-request"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.approval:jira-service-management",
+              "read:user:jira"
             ]
           }
         ],
@@ -2051,6 +2356,24 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "write:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.approval:jira-service-management",
+              "write:request.approval:jira-service-management",
+              "read:user:jira"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       }
     },
@@ -2149,6 +2472,23 @@
           {
             "OAuth2": [
               "read:servicedesk-request"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.attachment:jira-service-management",
+              "read:user:jira"
             ]
           }
         ],
@@ -2260,6 +2600,24 @@
           {
             "OAuth2": [
               "write:servicedesk-request"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "write:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.attachment:jira-service-management",
+              "write:request.attachment:jira-service-management",
+              "read:user:jira"
             ]
           }
         ],
@@ -2381,6 +2739,23 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.comment:jira-service-management",
+              "read:user:jira"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "post": {
@@ -2483,6 +2858,24 @@
           {
             "OAuth2": [
               "write:servicedesk-request"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "write:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.comment:jira-service-management",
+              "write:request.comment:jira-service-management",
+              "read:user:jira"
             ]
           }
         ],
@@ -2590,6 +2983,23 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.comment:jira-service-management",
+              "read:user:jira"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -2694,6 +3104,17 @@
           }
         },
         "deprecated": false,
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.attachment:jira-service-management",
+              "read:request.comment:jira-service-management",
+              "read:user:jira"
+            ]
+          }
+        ],
         "x-experimental": true,
         "x-atlassian-connect-scope": "INACCESSIBLE"
       }
@@ -2778,6 +3199,23 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.notification:jira-service-management",
+              "read:user:jira"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "put": {
@@ -2851,6 +3289,24 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "write:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.notification:jira-service-management",
+              "write:request.notification:jira-service-management",
+              "read:user:jira"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       },
       "delete": {
@@ -2921,6 +3377,24 @@
           {
             "OAuth2": [
               "write:servicedesk-request"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "write:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.notification:jira-service-management",
+              "delete:request.notification:jira-service-management",
+              "read:user:jira"
             ]
           }
         ],
@@ -3022,6 +3496,23 @@
           {
             "OAuth2": [
               "read:servicedesk-request"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.participant:jira-service-management",
+              "read:user:jira"
             ]
           }
         ],
@@ -3134,6 +3625,24 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "write:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.participant:jira-service-management",
+              "write:request.participant:jira-service-management",
+              "read:user:jira"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       },
       "delete": {
@@ -3243,6 +3752,24 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "write:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.participant:jira-service-management",
+              "delete:request.participant:jira-service-management",
+              "read:user:jira"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "DELETE"
       }
     },
@@ -3344,6 +3871,22 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:jira-work"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.sla:jira-service-management"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -3434,6 +3977,22 @@
           {
             "OAuth2": [
               "read:jira-work"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:jira-work"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.sla:jira-service-management"
             ]
           }
         ],
@@ -3538,6 +4097,23 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.status:jira-service-management",
+              "read:user:jira"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -3636,6 +4212,23 @@
           {
             "OAuth2": [
               "read:servicedesk-request"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.status:jira-service-management",
+              "read:user:jira"
             ]
           }
         ],
@@ -3738,6 +4331,24 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "write:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.status:jira-service-management",
+              "write:request.status:jira-service-management",
+              "read:user:jira"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       }
     },
@@ -3828,6 +4439,23 @@
           {
             "OAuth2": [
               "read:servicedesk-request"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.feedback:jira-service-management",
+              "read:user:jira"
             ]
           }
         ],
@@ -3941,6 +4569,24 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "write:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.feedback:jira-service-management",
+              "write:request.feedback:jira-service-management",
+              "read:user:jira"
+            ]
+          }
+        ],
         "x-experimental": true,
         "x-atlassian-connect-scope": "WRITE"
       },
@@ -4017,6 +4663,24 @@
           {
             "OAuth2": [
               "write:servicedesk-request"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "write:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.feedback:jira-service-management",
+              "delete:request.feedback:jira-service-management",
+              "read:user:jira"
             ]
           }
         ],
@@ -4123,6 +4787,22 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:requesttype:jira-service-management"
+            ]
+          }
+        ],
         "x-experimental": true,
         "x-atlassian-connect-scope": "READ"
       }
@@ -4196,6 +4876,22 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk:jira-service-management"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -4214,8 +4910,7 @@
             "description": "The ID of the service desk to return. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           }
         ],
@@ -4280,6 +4975,22 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk:jira-service-management"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -4298,8 +5009,7 @@
             "description": "The ID of the Service Desk to which the file will be attached. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           }
         ],
@@ -4382,6 +5092,23 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "write:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:request.attachment:jira-service-management",
+              "write:request.attachment:jira-service-management"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       }
     },
@@ -4400,8 +5127,7 @@
             "description": "The ID of the service desk the customer list should be returned from. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           },
           {
@@ -4492,6 +5218,23 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:servicedesk-customer"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk.customer:jira-service-management",
+              "read:user:jira"
+            ]
+          }
+        ],
         "x-experimental": true,
         "x-atlassian-connect-scope": "READ"
       },
@@ -4509,8 +5252,7 @@
             "description": "The ID of the service desk the customer list should be returned from. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           }
         ],
@@ -4599,6 +5341,23 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:servicedesk-customer"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk.customer:jira-service-management",
+              "write:servicedesk.customer:jira-service-management"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       },
       "delete": {
@@ -4615,8 +5374,7 @@
             "description": "The ID of the service desk the customers should be removed from. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           }
         ],
@@ -4705,6 +5463,23 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:servicedesk-customer"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk.customer:jira-service-management",
+              "delete:servicedesk.customer:jira-service-management"
+            ]
+          }
+        ],
         "x-experimental": true,
         "x-atlassian-connect-scope": "INACCESSIBLE"
       }
@@ -4723,8 +5498,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           },
           {
@@ -4817,6 +5591,15 @@
           }
         },
         "deprecated": false,
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:knowledgebase:jira-service-management"
+            ]
+          }
+        ],
         "x-experimental": true,
         "x-atlassian-connect-scope": "READ"
       }
@@ -4836,8 +5619,7 @@
             "description": "The ID of the service desk from which the organization list will be returned. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           },
           {
@@ -4928,6 +5710,22 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:servicedesk-customer"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk.organization:jira-service-management"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "post": {
@@ -4944,8 +5742,7 @@
             "description": "The ID of the service desk to which the organization will be added. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           }
         ],
@@ -5015,6 +5812,23 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:servicedesk-customer"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk.organization:jira-service-management",
+              "write:servicedesk.organization:jira-service-management"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       },
       "delete": {
@@ -5031,8 +5845,7 @@
             "description": "The ID of the service desk from which the organization will be removed. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           }
         ],
@@ -5102,6 +5915,23 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:servicedesk-customer"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk.organization:jira-service-management",
+              "delete:servicedesk.organization:jira-service-management"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "DELETE"
       }
     },
@@ -5120,8 +5950,7 @@
             "description": "ID of the service desk whose queues will be returned. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           },
           {
@@ -5213,6 +6042,24 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:jira-work"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:queue:jira-service-management",
+              "read:user:jira",
+              "read:jql:jira"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -5231,8 +6078,7 @@
             "description": "ID of the service desk whose queues will be returned. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           },
           {
@@ -5316,6 +6162,24 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:jira-work"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:queue:jira-service-management",
+              "read:user:jira",
+              "read:jql:jira"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -5334,8 +6198,7 @@
             "description": "The ID of the service desk containing the queue to be queried. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           },
           {
@@ -5428,6 +6291,24 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:jira-work"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:queue:jira-service-management",
+              "read:user:jira",
+              "read:issue:jira"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -5446,8 +6327,7 @@
             "description": "The ID of the service desk whose customer request types are to be returned. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           },
           {
@@ -5557,6 +6437,22 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:requesttype:jira-service-management"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "post": {
@@ -5573,8 +6469,7 @@
             "description": "The ID of the service desk where the customer request type is to be created. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           }
         ],
@@ -5658,6 +6553,16 @@
           }
         },
         "deprecated": false,
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:requesttype:jira-service-management",
+              "write:requesttype:jira-service-management"
+            ]
+          }
+        ],
         "x-experimental": true,
         "x-atlassian-connect-scope": "PROJECT_ADMIN"
       }
@@ -5677,8 +6582,7 @@
             "description": "The ID of the service desk whose customer request type is to be returned. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           },
           {
@@ -5763,6 +6667,22 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:requesttype:jira-service-management"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "delete": {
@@ -5779,8 +6699,7 @@
             "description": "The ID or [project identifier](#project-identifiers) of the service desk.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           },
           {
@@ -5876,8 +6795,7 @@
             "description": "The ID of the service desk containing the request types whose fields are to be returned. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           },
           {
@@ -5963,6 +6881,22 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:requesttype:jira-service-management"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -5991,8 +6925,7 @@
             "description": "The ID of the service desk which contains the request type. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           }
         ],
@@ -6057,6 +6990,22 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:requesttype.property:jira-service-management"
+            ]
+          }
+        ],
         "x-experimental": true,
         "x-atlassian-connect-scope": "INACCESSIBLE"
       }
@@ -6076,8 +7025,7 @@
             "description": "The ID of the service desk which contains the request type. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           },
           {
@@ -6161,6 +7109,22 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:requesttype.property:jira-service-management"
+            ]
+          }
+        ],
         "x-experimental": true,
         "x-atlassian-connect-scope": "INACCESSIBLE"
       },
@@ -6178,8 +7142,7 @@
             "description": "The ID of the service desk which contains the request type. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           },
           {
@@ -6278,6 +7241,23 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:jira-project"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:requesttype.property:jira-service-management",
+              "write:requesttype.property:jira-service-management"
+            ]
+          }
+        ],
         "x-experimental": true,
         "x-atlassian-connect-scope": "INACCESSIBLE"
       },
@@ -6295,8 +7275,7 @@
             "description": "The ID of the service desk which contains the request type. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           },
           {
@@ -6382,6 +7361,23 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "manage:jira-project"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:requesttype.property:jira-service-management",
+              "delete:requesttype.property:jira-service-management"
+            ]
+          }
+        ],
         "x-experimental": true,
         "x-atlassian-connect-scope": "INACCESSIBLE"
       }
@@ -6401,8 +7397,7 @@
             "description": "The ID of the service desk whose customer request type groups are to be returned. This can alternatively be a [project identifier.](#project-identifiers)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           },
           {
@@ -6485,12 +7480,179 @@
             ]
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "state": "Current",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:servicedesk-request"
+            ]
+          },
+          {
+            "state": "Beta",
+            "scheme": "OAuth2",
+            "scopes": [
+              "read:requesttype:jira-service-management"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     }
   },
   "components": {
     "schemas": {
+      "AdditionalCommentDTO": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "description": "Content of the comment."
+          }
+        },
+        "additionalProperties": false
+      },
+      "CSATFeedbackFullDTO": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Indicates the type of feedback, supported values: `csat`."
+          },
+          "rating": {
+            "type": "integer",
+            "description": "A numeric representation of the rating, this must be an integer value between 1 and 5.",
+            "format": "int32"
+          },
+          "comment": {
+            "description": "(Optional) The comment provided with this feedback.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AdditionalCommentDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "errorMessage": {
+            "type": "string"
+          },
+          "i18nErrorMessage": {
+            "$ref": "#/components/schemas/I18nErrorMessage"
+          }
+        },
+        "additionalProperties": false
+      },
+      "I18nErrorMessage": {
+        "type": "object",
+        "properties": {
+          "i18nKey": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerCreateDTO": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Customer's email address."
+          },
+          "fullName": {
+            "type": "string",
+            "description": "Deprecated, please use 'displayName'."
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Customer's name for display in the UI."
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserDTO": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "type": "string",
+            "description": "The accountId of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*."
+          },
+          "name": {
+            "type": "string",
+            "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details."
+          },
+          "key": {
+            "type": "string",
+            "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details."
+          },
+          "emailAddress": {
+            "type": "string",
+            "description": "Customer's email address. Depending on the customer’s privacy settings, this may be returned as null."
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Customer's name for display in a UI. Depending on the customer’s privacy settings, this may return an alternative value."
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Indicates if the customer is active (true) or inactive (false)"
+          },
+          "timeZone": {
+            "type": "string",
+            "description": "Customer time zone. Depending on the customer’s privacy settings, this may be returned as null."
+          },
+          "_links": {
+            "description": "URLs for the customer record and related items.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserLinkDTO": {
+        "type": "object",
+        "properties": {
+          "self": {
+            "type": "string",
+            "format": "uri"
+          },
+          "jiraRest": {
+            "type": "string",
+            "description": "REST API URL for the customer.",
+            "format": "uri"
+          },
+          "avatarUrls": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Links to the various sizes of the customer's avatar. Note that this property is deprecated, and will be removed in future versions."
+          }
+        },
+        "additionalProperties": false
+      },
+      "LinkableUserLinkDTO": {
+        "type": "object",
+        "properties": {
+          "_links": {
+            "$ref": "#/components/schemas/UserLinkDTO"
+          }
+        },
+        "additionalProperties": false
+      },
       "PropertyKey": {
         "type": "object",
         "properties": {
@@ -6523,33 +7685,6 @@
         "additionalProperties": false,
         "description": "List of property keys."
       },
-      "ErrorResponse": {
-        "type": "object",
-        "properties": {
-          "errorMessage": {
-            "type": "string"
-          },
-          "i18nErrorMessage": {
-            "$ref": "#/components/schemas/I18nErrorMessage"
-          }
-        },
-        "additionalProperties": false
-      },
-      "I18nErrorMessage": {
-        "type": "object",
-        "properties": {
-          "i18nKey": {
-            "type": "string"
-          },
-          "parameters": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "additionalProperties": false
-      },
       "EntityProperty": {
         "type": "object",
         "properties": {
@@ -6564,42 +7699,87 @@
         "additionalProperties": false,
         "description": "An entity property, for more information see [Entity properties](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/)."
       },
-      "ArticleDTO": {
+      "DateDTO": {
         "type": "object",
         "properties": {
-          "title": {
+          "iso8601": {
             "type": "string",
-            "description": "Title of the article."
+            "description": "Date in ISO8601 format."
           },
-          "excerpt": {
+          "jira": {
             "type": "string",
-            "description": "Excerpt of the article which matches the given query string."
+            "description": "Date in the format used in the Jira REST APIs, which is ISO8601 format but extended with milliseconds. For example, 2016-09-28T23:08:32.097+1000."
           },
-          "source": {
-            "description": "Source of the article.",
+          "friendly": {
+            "type": "string",
+            "description": "Date in a user-friendly text format."
+          },
+          "epochMillis": {
+            "type": "integer",
+            "description": "Date as the number of milliseconds that have elapsed since 00:00:00 Coordinated Universal Time (UTC), 1 January 1970.",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SelfLinkDTO": {
+        "type": "object",
+        "properties": {
+          "self": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SoftwareInfoDTO": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Jira Service Management version."
+          },
+          "platformVersion": {
+            "type": "string",
+            "description": "Jira Platform version upon which Service Desk is based."
+          },
+          "buildDate": {
+            "description": "Date of the current build.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/SourceDTO"
+                "$ref": "#/components/schemas/DateDTO"
               }
             ]
           },
-          "content": {
-            "$ref": "#/components/schemas/ContentDTO"
+          "buildChangeSet": {
+            "type": "string",
+            "description": "Reference of the change set included in the build."
+          },
+          "isLicensedForUse": {
+            "type": "boolean",
+            "description": "Indicates whether the instance is licensed (true) or not (false)."
+          },
+          "_links": {
+            "description": "REST API URL of the instance.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SelfLinkDTO"
+              }
+            ]
           }
         },
         "additionalProperties": false
       },
-      "ContentDTO": {
+      "Linkable": {
         "type": "object",
         "properties": {
-          "iframeSrc": {
-            "type": "string",
-            "description": "Url containing the body of the article (without title), suitable for rendering in an iframe"
+          "_links": {
+            "$ref": "#/components/schemas/SelfLinkDTO"
           }
         },
         "additionalProperties": false
       },
-      "PagedDTOArticleDTO": {
+      "PagedDTORequestTypeGroupDTO": {
         "type": "object",
         "properties": {
           "size": {
@@ -6625,7 +7805,7 @@
             "type": "array",
             "description": "Details of the items included in the page.",
             "items": {
-              "$ref": "#/components/schemas/ArticleDTO"
+              "$ref": "#/components/schemas/RequestTypeGroupDTO"
             }
           },
           "_expands": {
@@ -6674,18 +7854,468 @@
         },
         "additionalProperties": false
       },
-      "SourceDTO": {
+      "RequestTypeGroupDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the request type group"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the request type group."
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerRequestCreateMetaDTO": {
+        "type": "object",
+        "properties": {
+          "requestTypeFields": {
+            "type": "array",
+            "description": "List of the fields included in this request.",
+            "items": {
+              "$ref": "#/components/schemas/RequestTypeFieldDTO"
+            }
+          },
+          "canRaiseOnBehalfOf": {
+            "type": "boolean",
+            "description": "Flag indicating if a request can be raised on behalf of another user (true) or not."
+          },
+          "canAddRequestParticipants": {
+            "type": "boolean",
+            "description": "Flag indicating if participants can be added to a request (true) or not."
+          }
+        },
+        "additionalProperties": false
+      },
+      "JsonTypeBean": {
+        "required": [
+          "type"
+        ],
         "type": "object",
         "properties": {
           "type": {
             "type": "string",
-            "description": "Type of the knowledge base source",
-            "enum": [
-              "confluence"
+            "description": "The data type of the field.",
+            "readOnly": true
+          },
+          "items": {
+            "type": "string",
+            "description": "When the data type is an array, the name of the field items within the array.",
+            "readOnly": true
+          },
+          "system": {
+            "type": "string",
+            "description": "If the field is a system field, the name of the field.",
+            "readOnly": true
+          },
+          "custom": {
+            "type": "string",
+            "description": "If the field is a custom field, the URI of the field.",
+            "readOnly": true
+          },
+          "customId": {
+            "type": "integer",
+            "description": "If the field is a custom field, the custom ID of the field.",
+            "format": "int64",
+            "readOnly": true
+          },
+          "configuration": {
+            "type": "object",
+            "additionalProperties": {
+              "readOnly": true
+            },
+            "description": "If the field is a custom field, the configuration of the field.",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "The schema of a field."
+      },
+      "PagedDTORequestTypeDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/RequestTypeDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
+      },
+      "RequestTypeDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID for the request type."
+          },
+          "name": {
+            "type": "string",
+            "description": "Short name for the request type."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the request type."
+          },
+          "helpText": {
+            "type": "string",
+            "description": "Help text for the request type."
+          },
+          "issueTypeId": {
+            "type": "string",
+            "description": "ID of the issue type the request type is based upon."
+          },
+          "serviceDeskId": {
+            "type": "string",
+            "description": "ID of the service desk the request type belongs to."
+          },
+          "groupIds": {
+            "type": "array",
+            "description": "List of the request type groups the request type belongs to.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "icon": {
+            "description": "Links to the request type's icons.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RequestTypeIconDTO"
+              }
+            ]
+          },
+          "fields": {
+            "description": "Fields and additional metadata for creating a request that uses the request type",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CustomerRequestCreateMetaDTO"
+              }
+            ]
+          },
+          "practice": {
+            "type": "string",
+            "description": "The request type's practice"
+          },
+          "_expands": {
+            "type": "array",
+            "description": "List of items that can be expanded in the response by specifying the expand query parameter.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "REST API URL for the request type.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SelfLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "RequestTypeFieldDTO": {
+        "type": "object",
+        "properties": {
+          "fieldId": {
+            "type": "string",
+            "description": "ID of the field."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the field."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the field."
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Indicates if the field is required (true) or not (false)."
+          },
+          "defaultValues": {
+            "type": "array",
+            "description": "List of default values for the field.",
+            "items": {
+              "$ref": "#/components/schemas/RequestTypeFieldValueDTO"
+            }
+          },
+          "validValues": {
+            "type": "array",
+            "description": "List of valid values for the field.",
+            "items": {
+              "$ref": "#/components/schemas/RequestTypeFieldValueDTO"
+            }
+          },
+          "presetValues": {
+            "type": "array",
+            "description": "List of preset values for the field.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "jiraSchema": {
+            "description": "Jira specific implementation details for the field in the UI.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/JsonTypeBean"
+              }
+            ]
+          },
+          "visible": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RequestTypeFieldValueDTO": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "Value of the field."
+          },
+          "label": {
+            "type": "string",
+            "description": "Label for the field."
+          },
+          "children": {
+            "type": "array",
+            "description": "List of child fields.",
+            "items": {
+              "$ref": "#/components/schemas/RequestTypeFieldValueDTO"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "RequestTypeIconDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the request type icon."
+          },
+          "_links": {
+            "description": "Map of the URLs for the request type icons.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RequestTypeIconLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "RequestTypeIconLinkDTO": {
+        "type": "object",
+        "properties": {
+          "iconUrls": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "format": "uri"
+            },
+            "description": "URLs for the request type icons."
+          }
+        },
+        "additionalProperties": false
+      },
+      "Expandable": {
+        "type": "object",
+        "properties": {
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrganizationDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A unique system generated ID for the organization."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the organization."
+          },
+          "_links": {
+            "description": "REST API URL to the organization.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SelfLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedDTOOrganizationDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/OrganizationDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrganizationCreateDTO": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the organization."
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedDTOUserDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/UserDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "UsersOrganizationUpdateDTO": {
+        "type": "object",
+        "properties": {
+          "usernames": {
+            "type": "array",
+            "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details. Use `accountIds` instead.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "accountIds": {
+            "type": "array",
+            "description": "List of customers, specific by account IDs, to add to or remove from the organization.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
       },
       "CustomerTransitionDTO": {
         "type": "object",
@@ -6747,16 +8377,6 @@
         },
         "additionalProperties": false
       },
-      "AdditionalCommentDTO": {
-        "type": "object",
-        "properties": {
-          "body": {
-            "type": "string",
-            "description": "Content of the comment."
-          }
-        },
-        "additionalProperties": false
-      },
       "CustomerTransitionExecutionDTO": {
         "type": "object",
         "properties": {
@@ -6775,36 +8395,36 @@
         },
         "additionalProperties": false
       },
-      "RequestCreateDTO": {
+      "RequestParticipantUpdateDTO": {
         "type": "object",
         "properties": {
-          "serviceDeskId": {
-            "type": "string",
-            "description": "ID of the service desk in which to create the request."
-          },
-          "requestTypeId": {
-            "type": "string",
-            "description": "ID of the request type for the request."
-          },
-          "requestFieldValues": {
-            "type": "object",
-            "additionalProperties": {},
-            "description": "JSON map of Jira field IDs and their values representing the content of the request."
-          },
-          "requestParticipants": {
+          "usernames": {
             "type": "array",
-            "description": "List of customers to participate in the request, as a list of `accountId` values.",
+            "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details. Use `accountIds` instead.",
             "items": {
               "type": "string"
             }
           },
-          "raiseOnBehalfOf": {
+          "accountIds": {
+            "type": "array",
+            "description": "List of users, specified by account IDs, to add to or remove as participants in the request.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommentCreateDTO": {
+        "type": "object",
+        "properties": {
+          "body": {
             "type": "string",
-            "description": "The `accountId` of the customer that the request is being raised on behalf of."
+            "description": "Content of the comment."
           },
-          "channel": {
-            "type": "string",
-            "description": "(Experimental) Shows extra information for the request channel."
+          "public": {
+            "type": "boolean",
+            "description": "Indicates whether the comment is public (true) or private/internal (false)."
           }
         },
         "additionalProperties": false
@@ -6942,6 +8562,150 @@
         },
         "additionalProperties": false
       },
+      "PagedDTOAttachmentDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/AttachmentDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "RenderedValueDTO": {
+        "type": "object",
+        "properties": {
+          "html": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedDTOCommentDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/CommentDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "LinkableAttachmentLinkDTO": {
+        "type": "object",
+        "properties": {
+          "_links": {
+            "$ref": "#/components/schemas/AttachmentLinkDTO"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RequestCreateDTO": {
+        "type": "object",
+        "properties": {
+          "serviceDeskId": {
+            "type": "string",
+            "description": "ID of the service desk in which to create the request."
+          },
+          "requestTypeId": {
+            "type": "string",
+            "description": "ID of the request type for the request."
+          },
+          "requestFieldValues": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "JSON map of Jira field IDs and their values representing the content of the request."
+          },
+          "requestParticipants": {
+            "type": "array",
+            "description": "List of customers to participate in the request, as a list of `accountId` values.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "raiseOnBehalfOf": {
+            "type": "string",
+            "description": "The `accountId` of the customer that the request is being raised on behalf of."
+          },
+          "channel": {
+            "type": "string",
+            "description": "(Experimental) Shows extra information for the request channel."
+          }
+        },
+        "additionalProperties": false
+      },
       "CustomerRequestActionDTO": {
         "type": "object",
         "properties": {
@@ -6986,27 +8750,6 @@
                 "$ref": "#/components/schemas/CustomerRequestActionDTO"
               }
             ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "CustomerRequestCreateMetaDTO": {
-        "type": "object",
-        "properties": {
-          "requestTypeFields": {
-            "type": "array",
-            "description": "List of the fields included in this request.",
-            "items": {
-              "$ref": "#/components/schemas/RequestTypeFieldDTO"
-            }
-          },
-          "canRaiseOnBehalfOf": {
-            "type": "boolean",
-            "description": "Flag indicating if a request can be raised on behalf of another user (true) or not."
-          },
-          "canAddRequestParticipants": {
-            "type": "boolean",
-            "description": "Flag indicating if participants can be added to a request (true) or not."
           }
         },
         "additionalProperties": false
@@ -7217,29 +8960,6 @@
         },
         "additionalProperties": false
       },
-      "DateDTO": {
-        "type": "object",
-        "properties": {
-          "iso8601": {
-            "type": "string",
-            "description": "Date in ISO8601 format."
-          },
-          "jira": {
-            "type": "string",
-            "description": "Date in the format used in the Jira REST APIs, which is ISO8601 format but extended with milliseconds. For example, 2016-09-28T23:08:32.097+1000."
-          },
-          "friendly": {
-            "type": "string",
-            "description": "Date in a user-friendly text format."
-          },
-          "epochMillis": {
-            "type": "integer",
-            "description": "Date as the number of milliseconds that have elapsed since 00:00:00 Coordinated Universal Time (UTC), 1 January 1970.",
-            "format": "int64"
-          }
-        },
-        "additionalProperties": false
-      },
       "DurationDTO": {
         "type": "object",
         "properties": {
@@ -7251,142 +8971,6 @@
           "friendly": {
             "type": "string",
             "description": "Duration in a user-friendly text format."
-          }
-        },
-        "additionalProperties": false
-      },
-      "JsonTypeBean": {
-        "required": [
-          "type"
-        ],
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "description": "The data type of the field.",
-            "readOnly": true
-          },
-          "items": {
-            "type": "string",
-            "description": "When the data type is an array, the name of the field items within the array.",
-            "readOnly": true
-          },
-          "system": {
-            "type": "string",
-            "description": "If the field is a system field, the name of the field.",
-            "readOnly": true
-          },
-          "custom": {
-            "type": "string",
-            "description": "If the field is a custom field, the URI of the field.",
-            "readOnly": true
-          },
-          "customId": {
-            "type": "integer",
-            "description": "If the field is a custom field, the custom ID of the field.",
-            "format": "int64",
-            "readOnly": true
-          },
-          "configuration": {
-            "type": "object",
-            "additionalProperties": {
-              "readOnly": true
-            },
-            "description": "If the field is a custom field, the configuration of the field.",
-            "readOnly": true
-          }
-        },
-        "additionalProperties": false,
-        "description": "The schema of a field."
-      },
-      "PagedDTOAttachmentDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/AttachmentDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedDTOCommentDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/CommentDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
           }
         },
         "additionalProperties": false
@@ -7479,243 +9063,6 @@
                 "$ref": "#/components/schemas/PagedLinkDTO"
               }
             ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedDTOUserDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/UserDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "RenderedValueDTO": {
-        "type": "object",
-        "properties": {
-          "html": {
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "RequestTypeDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "ID for the request type."
-          },
-          "name": {
-            "type": "string",
-            "description": "Short name for the request type."
-          },
-          "description": {
-            "type": "string",
-            "description": "Description of the request type."
-          },
-          "helpText": {
-            "type": "string",
-            "description": "Help text for the request type."
-          },
-          "issueTypeId": {
-            "type": "string",
-            "description": "ID of the issue type the request type is based upon."
-          },
-          "serviceDeskId": {
-            "type": "string",
-            "description": "ID of the service desk the request type belongs to."
-          },
-          "groupIds": {
-            "type": "array",
-            "description": "List of the request type groups the request type belongs to.",
-            "items": {
-              "type": "string"
-            }
-          },
-          "icon": {
-            "description": "Links to the request type's icons.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/RequestTypeIconDTO"
-              }
-            ]
-          },
-          "fields": {
-            "description": "Fields and additional metadata for creating a request that uses the request type",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CustomerRequestCreateMetaDTO"
-              }
-            ]
-          },
-          "practice": {
-            "type": "string",
-            "description": "The request type's practice"
-          },
-          "_expands": {
-            "type": "array",
-            "description": "List of items that can be expanded in the response by specifying the expand query parameter.",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "REST API URL for the request type.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/SelfLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "RequestTypeFieldDTO": {
-        "type": "object",
-        "properties": {
-          "fieldId": {
-            "type": "string",
-            "description": "ID of the field."
-          },
-          "name": {
-            "type": "string",
-            "description": "Name of the field."
-          },
-          "description": {
-            "type": "string",
-            "description": "Description of the field."
-          },
-          "required": {
-            "type": "boolean",
-            "description": "Indicates if the field is required (true) or not (false)."
-          },
-          "defaultValues": {
-            "type": "array",
-            "description": "List of default values for the field.",
-            "items": {
-              "$ref": "#/components/schemas/RequestTypeFieldValueDTO"
-            }
-          },
-          "validValues": {
-            "type": "array",
-            "description": "List of valid values for the field.",
-            "items": {
-              "$ref": "#/components/schemas/RequestTypeFieldValueDTO"
-            }
-          },
-          "jiraSchema": {
-            "description": "Jira specific implementation details for the field in the UI.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/JsonTypeBean"
-              }
-            ]
-          },
-          "visible": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "RequestTypeFieldValueDTO": {
-        "type": "object",
-        "properties": {
-          "value": {
-            "type": "string",
-            "description": "Value of the field."
-          },
-          "label": {
-            "type": "string",
-            "description": "Label for the field."
-          },
-          "children": {
-            "type": "array",
-            "description": "List of child fields.",
-            "items": {
-              "$ref": "#/components/schemas/RequestTypeFieldValueDTO"
-            }
-          }
-        },
-        "additionalProperties": false
-      },
-      "RequestTypeIconDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "ID of the request type icon."
-          },
-          "_links": {
-            "description": "Map of the URLs for the request type icons.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/RequestTypeIconLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "RequestTypeIconLinkDTO": {
-        "type": "object",
-        "properties": {
-          "iconUrls": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "format": "uri"
-            },
-            "description": "URLs for the request type icons."
-          }
-        },
-        "additionalProperties": false
-      },
-      "SelfLinkDTO": {
-        "type": "object",
-        "properties": {
-          "self": {
-            "type": "string",
-            "format": "uri"
           }
         },
         "additionalProperties": false
@@ -7903,87 +9250,11 @@
         },
         "additionalProperties": false
       },
-      "UserDTO": {
-        "type": "object",
-        "properties": {
-          "accountId": {
-            "type": "string",
-            "description": "The accountId of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*."
-          },
-          "name": {
-            "type": "string",
-            "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details."
-          },
-          "key": {
-            "type": "string",
-            "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details."
-          },
-          "emailAddress": {
-            "type": "string",
-            "description": "Customer's email address. Depending on the customer’s privacy settings, this may be returned as null."
-          },
-          "displayName": {
-            "type": "string",
-            "description": "Customer's name for display in a UI. Depending on the customer’s privacy settings, this may return an alternative value."
-          },
-          "active": {
-            "type": "boolean",
-            "description": "Indicates if the customer is active (true) or inactive (false)"
-          },
-          "timeZone": {
-            "type": "string",
-            "description": "Customer time zone. Depending on the customer’s privacy settings, this may be returned as null."
-          },
-          "_links": {
-            "description": "URLs for the customer record and related items.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/UserLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserLinkDTO": {
-        "type": "object",
-        "properties": {
-          "self": {
-            "type": "string",
-            "format": "uri"
-          },
-          "jiraRest": {
-            "type": "string",
-            "description": "REST API URL for the customer.",
-            "format": "uri"
-          },
-          "avatarUrls": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            },
-            "description": "Links to the various sizes of the customer's avatar. Note that this property is deprecated, and will be removed in future versions."
-          }
-        },
-        "additionalProperties": false
-      },
       "LinkableCustomerRequestLinkDTO": {
         "type": "object",
         "properties": {
           "_links": {
             "$ref": "#/components/schemas/CustomerRequestLinkDTO"
-          }
-        },
-        "additionalProperties": false
-      },
-      "Expandable": {
-        "type": "object",
-        "properties": {
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           }
         },
         "additionalProperties": false
@@ -8034,88 +9305,42 @@
         },
         "additionalProperties": false
       },
-      "CommentCreateDTO": {
+      "ArticleDTO": {
         "type": "object",
         "properties": {
-          "body": {
+          "title": {
             "type": "string",
-            "description": "Content of the comment."
+            "description": "Title of the article."
           },
-          "public": {
-            "type": "boolean",
-            "description": "Indicates whether the comment is public (true) or private/internal (false)."
-          }
-        },
-        "additionalProperties": false
-      },
-      "Linkable": {
-        "type": "object",
-        "properties": {
-          "_links": {
-            "$ref": "#/components/schemas/SelfLinkDTO"
-          }
-        },
-        "additionalProperties": false
-      },
-      "LinkableAttachmentLinkDTO": {
-        "type": "object",
-        "properties": {
-          "_links": {
-            "$ref": "#/components/schemas/AttachmentLinkDTO"
-          }
-        },
-        "additionalProperties": false
-      },
-      "CustomerCreateDTO": {
-        "type": "object",
-        "properties": {
-          "email": {
+          "excerpt": {
             "type": "string",
-            "description": "Customer's email address."
+            "description": "Excerpt of the article which matches the given query string."
           },
-          "fullName": {
-            "type": "string",
-            "description": "Deprecated, please use 'displayName'."
-          },
-          "displayName": {
-            "type": "string",
-            "description": "Customer's name for display in the UI."
-          }
-        },
-        "additionalProperties": false
-      },
-      "LinkableUserLinkDTO": {
-        "type": "object",
-        "properties": {
-          "_links": {
-            "$ref": "#/components/schemas/UserLinkDTO"
-          }
-        },
-        "additionalProperties": false
-      },
-      "OrganizationDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "A unique system generated ID for the organization."
-          },
-          "name": {
-            "type": "string",
-            "description": "Name of the organization."
-          },
-          "_links": {
-            "description": "REST API URL to the organization.",
+          "source": {
+            "description": "Source of the article.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/SelfLinkDTO"
+                "$ref": "#/components/schemas/SourceDTO"
               }
             ]
+          },
+          "content": {
+            "$ref": "#/components/schemas/ContentDTO"
           }
         },
         "additionalProperties": false
       },
-      "PagedDTOOrganizationDTO": {
+      "ContentDTO": {
+        "type": "object",
+        "properties": {
+          "iframeSrc": {
+            "type": "string",
+            "description": "Url containing the body of the article (without title), suitable for rendering in an iframe"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedDTOArticleDTO": {
         "type": "object",
         "properties": {
           "size": {
@@ -8141,7 +9366,7 @@
             "type": "array",
             "description": "Details of the items included in the page.",
             "items": {
-              "$ref": "#/components/schemas/OrganizationDTO"
+              "$ref": "#/components/schemas/ArticleDTO"
             }
           },
           "_expands": {
@@ -8161,23 +9386,243 @@
         },
         "additionalProperties": false
       },
-      "OrganizationCreateDTO": {
-        "required": [
-          "name"
-        ],
+      "SourceDTO": {
         "type": "object",
         "properties": {
+          "type": {
+            "type": "string",
+            "description": "Type of the knowledge base source",
+            "enum": [
+              "confluence"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "ApprovalDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the approval."
+          },
           "name": {
             "type": "string",
-            "description": "Name of the organization."
+            "description": "Description of the approval being sought or provided."
+          },
+          "finalDecision": {
+            "type": "string",
+            "description": "Outcome of the approval, based on the approvals provided by all approvers.",
+            "enum": [
+              "approved",
+              "declined",
+              "pending"
+            ]
+          },
+          "canAnswerApproval": {
+            "type": "boolean",
+            "description": "Indicates whether the user making the request is one of the approvers and can respond to the approval (true) or not (false)."
+          },
+          "approvers": {
+            "type": "array",
+            "description": "Detailed list of the users who must provide a response to the approval.",
+            "items": {
+              "$ref": "#/components/schemas/ApproverDTO"
+            }
+          },
+          "createdDate": {
+            "description": "Date the approval was created.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DateDTO"
+              }
+            ]
+          },
+          "completedDate": {
+            "description": "Date the approval was completed.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DateDTO"
+              }
+            ]
+          },
+          "_links": {
+            "description": "The REST API URL of the approval.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SelfLinkDTO"
+              }
+            ]
           }
         },
         "additionalProperties": false
       },
-      "UsersOrganizationUpdateDTO": {
+      "ApproverDTO": {
+        "type": "object",
+        "properties": {
+          "approver": {
+            "description": "Details of the User who is providing approval.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserDTO"
+              }
+            ]
+          },
+          "approverDecision": {
+            "type": "string",
+            "description": "Decision made by the approver.",
+            "enum": [
+              "approved",
+              "declined",
+              "pending"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApprovalDecisionRequestDTO": {
+        "type": "object",
+        "properties": {
+          "decision": {
+            "type": "string",
+            "description": "Response to the approval request.",
+            "enum": [
+              "approve",
+              "decline"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedDTOApprovalDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/ApprovalDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedDTOServiceDeskDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/ServiceDeskDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "RequestNotificationSubscriptionDTO": {
+        "type": "object",
+        "properties": {
+          "subscribed": {
+            "type": "boolean",
+            "description": "Indicates whether the user is subscribed (true) or not (false) to the request's notifications."
+          }
+        },
+        "additionalProperties": false
+      },
+      "RequestTypeCreateDTO": {
+        "type": "object",
+        "properties": {
+          "issueTypeId": {
+            "type": "string",
+            "description": "ID of the request type to add to the service desk."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the request type on the service desk."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the request type on the service desk."
+          },
+          "helpText": {
+            "type": "string",
+            "description": "Help text for the request type on the service desk."
+          }
+        },
+        "additionalProperties": false
+      },
+      "ServiceDeskCustomerDTO": {
         "type": "object",
         "properties": {
           "usernames": {
+            "uniqueItems": true,
             "type": "array",
             "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details. Use `accountIds` instead.",
             "items": {
@@ -8185,11 +9630,83 @@
             }
           },
           "accountIds": {
+            "uniqueItems": true,
             "type": "array",
-            "description": "List of customers, specific by account IDs, to add to or remove from the organization.",
+            "description": "List of users, specified by account IDs, to add to or remove from a service desk.",
             "items": {
               "type": "string"
             }
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrganizationServiceDeskUpdateDTO": {
+        "required": [
+          "organizationId"
+        ],
+        "type": "object",
+        "properties": {
+          "organizationId": {
+            "type": "integer",
+            "description": "List of organizations, specified by 'ID' field values, to add to or remove from the service desk.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InsightWorkspaceDTO": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "description": "The workspace ID used as the identifier to access the Insight REST API."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Details of an insight workspace ID."
+      },
+      "PagedDTOInsightWorkspaceDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/InsightWorkspaceDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
           }
         },
         "additionalProperties": false
@@ -9078,505 +10595,6 @@
         },
         "additionalProperties": false,
         "description": "User details permitted by the user's Atlassian Account privacy settings. However, be aware of these exceptions:\n\n *  User record deleted from Atlassian: This occurs as the result of a right to be forgotten request. In this case, `displayName` provides an indication and other parameters have default values or are blank (for example, email is blank).\n *  User record corrupted: This occurs as a results of events such as a server import and can only happen to deleted users. In this case, `accountId` returns *unknown* and all other parameters have fallback values.\n *  User record unavailable: This usually occurs due to an internal service outage. In this case, all parameters have fallback values."
-      },
-      "PagedDTORequestTypeDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/RequestTypeDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "RequestTypeCreateDTO": {
-        "type": "object",
-        "properties": {
-          "issueTypeId": {
-            "type": "string",
-            "description": "ID of the request type to add to the service desk."
-          },
-          "name": {
-            "type": "string",
-            "description": "Name of the request type on the service desk."
-          },
-          "description": {
-            "type": "string",
-            "description": "Description of the request type on the service desk."
-          },
-          "helpText": {
-            "type": "string",
-            "description": "Help text for the request type on the service desk."
-          }
-        },
-        "additionalProperties": false
-      },
-      "InsightWorkspaceDTO": {
-        "type": "object",
-        "properties": {
-          "workspaceId": {
-            "type": "string",
-            "description": "The workspace ID used as the identifier to access the Insight REST API."
-          }
-        },
-        "additionalProperties": false,
-        "description": "Details of an insight workspace ID."
-      },
-      "PagedDTOInsightWorkspaceDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/InsightWorkspaceDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedDTORequestTypeGroupDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/RequestTypeGroupDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "RequestTypeGroupDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "ID of the request type group"
-          },
-          "name": {
-            "type": "string",
-            "description": "Name of the request type group."
-          }
-        },
-        "additionalProperties": false
-      },
-      "RequestParticipantUpdateDTO": {
-        "type": "object",
-        "properties": {
-          "usernames": {
-            "type": "array",
-            "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details. Use `accountIds` instead.",
-            "items": {
-              "type": "string"
-            }
-          },
-          "accountIds": {
-            "type": "array",
-            "description": "List of users, specified by account IDs, to add to or remove as participants in the request.",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "additionalProperties": false
-      },
-      "OrganizationServiceDeskUpdateDTO": {
-        "required": [
-          "organizationId"
-        ],
-        "type": "object",
-        "properties": {
-          "organizationId": {
-            "type": "integer",
-            "description": "List of organizations, specified by 'ID' field values, to add to or remove from the service desk.",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "ApprovalDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "ID of the approval."
-          },
-          "name": {
-            "type": "string",
-            "description": "Description of the approval being sought or provided."
-          },
-          "finalDecision": {
-            "type": "string",
-            "description": "Outcome of the approval, based on the approvals provided by all approvers.",
-            "enum": [
-              "approved",
-              "declined",
-              "pending"
-            ]
-          },
-          "canAnswerApproval": {
-            "type": "boolean",
-            "description": "Indicates whether the user making the request is one of the approvers and can respond to the approval (true) or not (false)."
-          },
-          "approvers": {
-            "type": "array",
-            "description": "Detailed list of the users who must provide a response to the approval.",
-            "items": {
-              "$ref": "#/components/schemas/ApproverDTO"
-            }
-          },
-          "createdDate": {
-            "description": "Date the approval was created.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DateDTO"
-              }
-            ]
-          },
-          "completedDate": {
-            "description": "Date the approval was completed.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DateDTO"
-              }
-            ]
-          },
-          "_links": {
-            "description": "The REST API URL of the approval.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/SelfLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "ApproverDTO": {
-        "type": "object",
-        "properties": {
-          "approver": {
-            "description": "Details of the User who is providing approval.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/UserDTO"
-              }
-            ]
-          },
-          "approverDecision": {
-            "type": "string",
-            "description": "Decision made by the approver.",
-            "enum": [
-              "approved",
-              "declined",
-              "pending"
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "ApprovalDecisionRequestDTO": {
-        "type": "object",
-        "properties": {
-          "decision": {
-            "type": "string",
-            "description": "Response to the approval request.",
-            "enum": [
-              "approve",
-              "decline"
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedDTOApprovalDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/ApprovalDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedDTOServiceDeskDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/ServiceDeskDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "SoftwareInfoDTO": {
-        "type": "object",
-        "properties": {
-          "version": {
-            "type": "string",
-            "description": "Jira Service Management version."
-          },
-          "platformVersion": {
-            "type": "string",
-            "description": "Jira Platform version upon which Service Desk is based."
-          },
-          "buildDate": {
-            "description": "Date of the current build.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DateDTO"
-              }
-            ]
-          },
-          "buildChangeSet": {
-            "type": "string",
-            "description": "Reference of the change set included in the build."
-          },
-          "isLicensedForUse": {
-            "type": "boolean",
-            "description": "Indicates whether the instance is licensed (true) or not (false)."
-          },
-          "_links": {
-            "description": "REST API URL of the instance.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/SelfLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "RequestNotificationSubscriptionDTO": {
-        "type": "object",
-        "properties": {
-          "subscribed": {
-            "type": "boolean",
-            "description": "Indicates whether the user is subscribed (true) or not (false) to the request's notifications."
-          }
-        },
-        "additionalProperties": false
-      },
-      "ServiceDeskCustomerDTO": {
-        "type": "object",
-        "properties": {
-          "usernames": {
-            "uniqueItems": true,
-            "type": "array",
-            "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details. Use `accountIds` instead.",
-            "items": {
-              "type": "string"
-            }
-          },
-          "accountIds": {
-            "uniqueItems": true,
-            "type": "array",
-            "description": "List of users, specified by account IDs, to add to or remove from a service desk.",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "additionalProperties": false
-      },
-      "CSATFeedbackFullDTO": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "description": "Indicates the type of feedback, supported values: `csat`."
-          },
-          "rating": {
-            "type": "integer",
-            "description": "A numeric representation of the rating, this must be an integer value between 1 and 5.",
-            "format": "int32"
-          },
-          "comment": {
-            "description": "(Optional) The comment provided with this feedback.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/AdditionalCommentDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
       },
       "AttachmentCreateDTO": {
         "type": "object",
