@@ -1004,6 +1004,9 @@ class EnumDartType extends DartType {
   static String _computeName(Api api, DartType? parent, String propertyName) {
     var name =
         '${parent != null ? parent.name : ''}${propertyName.words.toUpperCamel()}';
+    if (parent != null && api._spec.components.schemas[name] != null) {
+      name += 'Enum';
+    }
     return api.typeAliases[name] ?? name;
   }
 
