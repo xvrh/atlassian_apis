@@ -3,7 +3,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:atlassian_apis/service_management.dart';
-import 'package:http/http.dart';
 import 'package:path/path.dart' as path;
 
 void main() async {
