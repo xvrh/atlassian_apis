@@ -1,0 +1,7 @@
+.dart_tool/
+.packages
+build/
+doc/api/
+*.iml
+_*
+.*
