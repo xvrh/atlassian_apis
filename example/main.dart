@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:atlassian_apis/jira_platform.dart';
-import 'package:atlassian_apis/service_management.dart';
 
 void main() async {
   // This example uses API Token authentication.

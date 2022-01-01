@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 import 'package:atlassian_apis/jira_platform.dart';
-import 'package:atlassian_apis/service_management.dart';
 
 void main() async {
   // Create Jira API from an authenticated client

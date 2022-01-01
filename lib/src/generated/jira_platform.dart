@@ -11,12 +11,18 @@ class JiraPlatformApi {
 
   /// This resource supports
   /// [app migrations](https://developer.atlassian.com/platform/app-migration/).
-  /// Use it to exchange data from app migrations.
+  /// Use it to:
+  /// -
+  /// [to request migrated workflow rules details](https://developer.atlassian.com/platform/app-migration/migration-app-workflow-rules/).
+  /// -
+  /// [perform bulk updates of entity properties](https://developer.atlassian.com/platform/app-migration/entity-properties-bulk-api/).
+  /// -
+  /// [perform bulk updates of issue custom field values](https://developer.atlassian.com/platform/app-migration/migrating-app-custom-fields/).
   late final appMigration = AppMigrationApi(_client);
 
   /// This resource represents app properties. Use it to store arbitrary data
   /// for your
-  /// [Connect app](https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/#atlassian-connect).
+  /// [Connect app](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps).
   late final appProperties = AppPropertiesApi(_client);
 
   /// This resource represents application roles. Use it to get details of an
@@ -28,8 +34,8 @@ class JiraPlatformApi {
   late final auditRecords = AuditRecordsApi(_client);
 
   /// This resource represents system and custom avatars. Use it to obtain the
-  /// details of system or custom avatars as well as add and remove avatars from
-  /// a project or issue type.
+  /// details of system or custom avatars, add and remove avatars from a project
+  /// or issue type, and obtain avatar images.
   late final avatars = AvatarsApi(_client);
 
   /// This resource represents dashboards. Use it to obtain the details of
@@ -39,7 +45,7 @@ class JiraPlatformApi {
   /// This resource represents
   /// [modules registered dynamically](https://developer.atlassian.com/cloud/jira/platform/dynamic-modules/)
   /// by
-  /// [Connect apps](https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/#atlassian-connect).
+  /// [Connect apps](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps).
   late final dynamicModules = DynamicModulesApi(_client);
 
   /// This resource represents options for sharing
@@ -349,6 +355,10 @@ class JiraPlatformApi {
   /// [project's sender email address](https://confluence.atlassian.com/x/dolKLg).
   late final projectEmail = ProjectEmailApi(_client);
 
+  /// This resource represents project features. Use it to get the list of
+  /// features for a project and modify the state of a feature.
+  late final projectFeatures = ProjectFeaturesApi(_client);
+
   /// This resource provides validation for project keys and names.
   late final projectKeyAndNameValidation =
       ProjectKeyAndNameValidationApi(_client);
@@ -556,10 +566,33 @@ class AppMigrationApi {
 
   AppMigrationApi(this._client);
 
-  /// Updates the values of multiple entity properties for an object. This
-  /// operation is for use by Connect apps during app migration.
+  /// Updates the value of a custom field added by Connect apps on one or more
+  /// issues.
+  /// The values of up to 200 custom fields can be updated.
+  ///
+  /// **[Permissions](#permissions) required:** Only Connect apps can make this
+  /// request.
+  Future<void> updateIssueFields(
+      {required String atlassianTransferId,
+      required String atlassianAccountId,
+      required ConnectCustomFieldValues body}) async {
+    await _client.send(
+      'put',
+      'rest/atlassian-connect/1/migration/field',
+      headers: {
+        'Atlassian-Transfer-Id': 'null',
+        'Atlassian-Account-Id': 'null',
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Updates the values of multiple entity properties for an object, up to 50
+  /// updates per request. This operation is for use by Connect apps during app
+  /// migration.
   Future<void> updateEntityPropertiesValue(
       {required String atlassianTransferId,
+      required String atlassianAccountId,
       required String entityType,
       required List<EntityPropertyDetails> body}) async {
     await _client.send(
@@ -570,9 +603,25 @@ class AppMigrationApi {
       },
       headers: {
         'Atlassian-Transfer-Id': 'null',
+        'Atlassian-Account-Id': 'null',
       },
       body: body.map((i) => i.toJson()).toList(),
     );
+  }
+
+  /// Returns configurations for workflow transition rules migrated from server
+  /// to cloud and owned by the calling Connect app.
+  Future<WorkflowRulesSearchDetails> workflowRuleSearch(
+      {required String atlassianTransferId,
+      required WorkflowRulesSearch body}) async {
+    return WorkflowRulesSearchDetails.fromJson(await _client.send(
+      'post',
+      'rest/atlassian-connect/1/migration/workflow/rule/search',
+      headers: {
+        'Atlassian-Transfer-Id': 'null',
+      },
+      body: body.toJson(),
+    ));
   }
 }
 
@@ -876,6 +925,90 @@ class AvatarsApi {
       },
     );
   }
+
+  /// Returns the default project or issue type avatar image.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** None.
+  Future<Map<String, dynamic>> getAvatarImageByType(
+      {required String type, String? size, String? format}) async {
+    return await _client.send(
+      'get',
+      'rest/api/3/universal_avatar/view/type/{type}',
+      pathParameters: {
+        'type': type,
+      },
+      queryParameters: {
+        if (size != null) 'size': size,
+        if (format != null) 'format': format,
+      },
+    ) as Map<String, Object?>;
+  }
+
+  /// Returns a project or issue type avatar image by ID.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  For system avatars, none.
+  ///  *  For custom project avatars, *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project the avatar belongs to.
+  ///  *  For custom issue type avatars, *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for at
+  /// least one project the issue type is used in.
+  Future<Map<String, dynamic>> getAvatarImageByID(
+      {required String type,
+      required int id,
+      String? size,
+      String? format}) async {
+    return await _client.send(
+      'get',
+      'rest/api/3/universal_avatar/view/type/{type}/avatar/{id}',
+      pathParameters: {
+        'type': type,
+        'id': '$id',
+      },
+      queryParameters: {
+        if (size != null) 'size': size,
+        if (format != null) 'format': format,
+      },
+    ) as Map<String, Object?>;
+  }
+
+  /// Returns the avatar image for a project or issue type.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  For system avatars, none.
+  ///  *  For custom project avatars, *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project the avatar belongs to.
+  ///  *  For custom issue type avatars, *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for at
+  /// least one project the issue type is used in.
+  Future<Map<String, dynamic>> getAvatarImageByOwner(
+      {required String type,
+      required String entityId,
+      String? size,
+      String? format}) async {
+    return await _client.send(
+      'get',
+      'rest/api/3/universal_avatar/view/type/{type}/owner/{entityId}',
+      pathParameters: {
+        'type': type,
+        'entityId': entityId,
+      },
+      queryParameters: {
+        if (size != null) 'size': size,
+        if (format != null) 'format': format,
+      },
+    ) as Map<String, Object?>;
+  }
 }
 
 /// Jira Cloud platform REST API documentation
@@ -966,10 +1099,12 @@ class DashboardsApi {
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:** The user must be the owner of
-  /// the dashboard or be shared the dashboard. Note, users with the *Administer
-  /// Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) are
+  /// the dashboard or have the dashboard shared with them. Note, users with the
+  /// *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) are
   /// considered owners of the System dashboard. The System dashboard is
-  /// considered to be shared with all other users.
+  /// considered to be shared with all other users, and is accessible to
+  /// anonymous users when Jira’s anonymous access is permitted.
   Future<PropertyKeys> getDashboardItemPropertyKeys(
       {required String dashboardId, required String itemId}) async {
     return PropertyKeys.fromJson(await _client.send(
@@ -1004,10 +1139,12 @@ class DashboardsApi {
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:** The user must be the owner of
-  /// the dashboard or be shared the dashboard. Note, users with the *Administer
-  /// Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) are
+  /// the dashboard or have the dashboard shared with them. Note, users with the
+  /// *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) are
   /// considered owners of the System dashboard. The System dashboard is
-  /// considered to be shared with all other users.
+  /// considered to be shared with all other users, and is accessible to
+  /// anonymous users when Jira’s anonymous access is permitted.
   Future<EntityProperty> getDashboardItemProperty(
       {required String dashboardId,
       required String itemId,
@@ -1970,6 +2107,38 @@ class IssueAttachmentsApi {
 
   IssueAttachmentsApi(this._client);
 
+  /// Returns the contents of an attachment. A `Range` header can be set to
+  /// define a range of bytes within the attachment to download. See the
+  /// [HTTP Range header standard](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Range)
+  /// for details.
+  ///
+  /// To return a thumbnail of the attachment, use
+  /// [Download attachment thumbnail](#api-rest-api-3-attachment-thumbnail-id-get).
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** For the issue containing the
+  /// attachment:
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  Future<Map<String, dynamic>> getAttachmentContent(
+      {required String id, bool? redirect}) async {
+    return await _client.send(
+      'get',
+      'rest/api/3/attachment/content/{id}',
+      pathParameters: {
+        'id': id,
+      },
+      queryParameters: {
+        if (redirect != null) 'redirect': '$redirect',
+      },
+    ) as Map<String, Object?>;
+  }
+
   /// Returns the attachment settings, that is, whether attachments are enabled
   /// and the maximum attachment size allowed.
   ///
@@ -1985,6 +2154,43 @@ class IssueAttachmentsApi {
       'get',
       'rest/api/3/attachment/meta',
     ));
+  }
+
+  /// Returns the thumbnail of an attachment.
+  ///
+  /// To return the attachment contents, use
+  /// [Download attachment content](#api-rest-api-3-attachment-content-id-get).
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** For the issue containing the
+  /// attachment:
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  Future<Map<String, dynamic>> getAttachmentThumbnail(
+      {required String id,
+      bool? redirect,
+      bool? fallbackToDefault,
+      int? width,
+      int? height}) async {
+    return await _client.send(
+      'get',
+      'rest/api/3/attachment/thumbnail/{id}',
+      pathParameters: {
+        'id': id,
+      },
+      queryParameters: {
+        if (redirect != null) 'redirect': '$redirect',
+        if (fallbackToDefault != null)
+          'fallbackToDefault': '$fallbackToDefault',
+        if (width != null) 'width': '$width',
+        if (height != null) 'height': '$height',
+      },
+    ) as Map<String, Object?>;
   }
 
   /// Returns the metadata for an attachment. Note that the attachment itself is
@@ -2108,12 +2314,149 @@ class IssueAttachmentsApi {
   ///  *  The name of the multipart/form-data parameter that contains the
   /// attachments must be `file`.
   ///
-  /// The following example uploads a file called *myfile.txt* to the issue
+  /// The following examples upload a file called *myfile.txt* to the issue
   /// *TEST-123*:
   ///
-  /// `curl -D- -u admin:admin -X POST -H "X-Atlassian-Token: no-check" -F
-  /// "file=@myfile.txt"
-  /// https://your-domain.atlassian.net/rest/api/3/issue/TEST-123/attachments`
+  /// #### curl ####
+  ///
+  ///     curl --location --request POST
+  /// 'https://your-domain.atlassian.net/rest/api/3/issue/TEST-123/attachments'
+  ///      -u 'email@example.com:<api_token>'
+  ///      -H 'X-Atlassian-Token: no-check'
+  ///      --form 'file=@"myfile.txt"'
+  ///
+  /// #### Node.js ####
+  ///
+  ///     // This code sample uses the 'node-fetch' and 'form-data' libraries:
+  ///      // https://www.npmjs.com/package/node-fetch
+  ///      // https://www.npmjs.com/package/form-data
+  ///      const fetch = require('node-fetch');
+  ///      const FormData = require('form-data');
+  ///      const fs = require('fs');
+  ///
+  ///      const filePath = 'myfile.txt';
+  ///      const form = new FormData();
+  ///      const stats = fs.statSync(filePath);
+  ///      const fileSizeInBytes = stats.size;
+  ///      const fileStream = fs.createReadStream(filePath);
+  ///
+  ///      form.append('file', fileStream, {knownLength: fileSizeInBytes});
+  ///
+  ///
+  /// fetch('https://your-domain.atlassian.net/rest/api/3/issue/TEST-123/attachments',
+  /// {
+  ///          method: 'POST',
+  ///          body: form,
+  ///          headers: {
+  ///              'Authorization': `Basic ${Buffer.from(
+  ///                  'email@example.com:'
+  ///              ).toString('base64')}`,
+  ///              'Accept': 'application/json',
+  ///              'X-Atlassian-Token': 'no-check'
+  ///          }
+  ///      })
+  ///          .then(response => {
+  ///              console.log(
+  ///                  `Response: ${response.status} ${response.statusText}`
+  ///              );
+  ///              return response.text();
+  ///          })
+  ///          .then(text => console.log(text))
+  ///          .catch(err => console.error(err));
+  ///
+  /// #### Java ####
+  ///
+  ///     // This code sample uses the  'Unirest' library:
+  ///      // http://unirest.io/java.html
+  ///      HttpResponse response =
+  /// Unirest.post("https://your-domain.atlassian.net/rest/api/2/issue/{issueIdOrKey}/attachments")
+  ///              .basicAuth("email@example.com", "")
+  ///              .header("Accept", "application/json")
+  ///              .header("X-Atlassian-Token", "no-check")
+  ///              .field("file", new File("myfile.txt"))
+  ///              .asJson();
+  ///
+  ///              System.out.println(response.getBody());
+  ///
+  /// #### Python ####
+  ///
+  ///     # This code sample uses the 'requests' library:
+  ///      # http://docs.python-requests.org
+  ///      import requests
+  ///      from requests.auth import HTTPBasicAuth
+  ///      import json
+  ///
+  ///      url =
+  /// "https://your-domain.atlassian.net/rest/api/2/issue/{issueIdOrKey}/attachments"
+  ///
+  ///      auth = HTTPBasicAuth("email@example.com", "")
+  ///
+  ///      headers = {
+  ///         "Accept": "application/json",
+  ///         "X-Atlassian-Token": "no-check"
+  ///      }
+  ///
+  ///      response = requests.request(
+  ///         "POST",
+  ///         url,
+  ///         headers = headers,
+  ///         auth = auth,
+  ///         files = {
+  ///              "file": ("myfile.txt", open("myfile.txt","rb"),
+  /// "application-type")
+  ///         }
+  ///      )
+  ///
+  ///      print(json.dumps(json.loads(response.text), sort_keys=True, indent=4,
+  /// separators=(",", ": ")))
+  ///
+  /// #### PHP ####
+  ///
+  ///     // This code sample uses the 'Unirest' library:
+  ///      // http://unirest.io/php.html
+  ///      UnirestRequest::auth('email@example.com', '');
+  ///
+  ///      $headers = array(
+  ///        'Accept' => 'application/json',
+  ///        'X-Atlassian-Token' => 'no-check'
+  ///      );
+  ///
+  ///      $parameters = array(
+  ///        'file' => File::add('myfile.txt')
+  ///      );
+  ///
+  ///      $response = UnirestRequest::post(
+  ///
+  /// 'https://your-domain.atlassian.net/rest/api/2/issue/{issueIdOrKey}/attachments',
+  ///        $headers,
+  ///        $parameters
+  ///      );
+  ///
+  ///      var_dump($response)
+  ///
+  /// #### Forge ####
+  ///
+  ///     // This sample uses Atlassian Forge and the `form-data` library.
+  ///      // https://developer.atlassian.com/platform/forge/
+  ///      // https://www.npmjs.com/package/form-data
+  ///      import api from "@forge/api";
+  ///      import FormData from "form-data";
+  ///
+  ///      const form = new FormData();
+  ///      form.append('file', fileStream, {knownLength: fileSizeInBytes});
+  ///
+  ///      const response = await
+  /// api.asApp().requestJira('/rest/api/2/issue/{issueIdOrKey}/attachments', {
+  ///          method: 'POST',
+  ///          body: form,
+  ///          headers: {
+  ///              'Accept': 'application/json',
+  ///              'X-Atlassian-Token': 'no-check'
+  ///          }
+  ///      });
+  ///
+  ///      console.log(`Response: ${response.status} ${response.statusText}`);
+  ///      console.log(await response.json());
   ///
   /// Tip: Use a client library. Many client libraries have classes for handling
   /// multipart POST operations. For example, in Java, the Apache HTTP
@@ -2266,8 +2609,8 @@ class IssueCommentsApi {
 
   IssueCommentsApi(this._client);
 
-  /// Returns a [paginated](#pagination) list of just the comments for a list of
-  /// comments specified by comment IDs.
+  /// Returns a [paginated](#pagination) list of comments specified by a list of
+  /// comment IDs.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -2406,6 +2749,7 @@ class IssueCommentsApi {
   Future<Comment> updateComment(
       {required String issueIdOrKey,
       required String id,
+      bool? notifyUsers,
       String? expand,
       required Comment body}) async {
     return Comment.fromJson(await _client.send(
@@ -2416,6 +2760,7 @@ class IssueCommentsApi {
         'id': id,
       },
       queryParameters: {
+        if (notifyUsers != null) 'notifyUsers': '$notifyUsers',
         if (expand != null) 'expand': expand,
       },
       body: body.toJson(),
@@ -2461,8 +2806,14 @@ class IssueCustomFieldConfigurationAppsApi {
   /// field created by a
   /// [Forge app](https://developer.atlassian.com/platform/forge/).
   ///
-  /// The result can be filtered by `contextId` or `issueId`, otherwise all
-  /// configurations are returned. Invalid IDs are ignored.
+  /// The result can be filtered by one of these criteria:
+  ///
+  ///  *  `id`.
+  ///  *  `fieldContextId`.
+  ///  *  `issueId`.
+  ///  *  `projectKeyOrId` and `issueTypeId`.
+  ///
+  /// Otherwise, all configurations are returned.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira
@@ -2470,8 +2821,12 @@ class IssueCustomFieldConfigurationAppsApi {
   /// field.
   Future<PageBeanContextualConfiguration> getCustomFieldConfiguration(
       {required String fieldIdOrKey,
+      List<int>? id,
       List<int>? contextId,
+      List<int>? fieldContextId,
       int? issueId,
+      String? projectKeyOrId,
+      String? issueTypeId,
       int? startAt,
       int? maxResults}) async {
     return PageBeanContextualConfiguration.fromJson(await _client.send(
@@ -2481,9 +2836,14 @@ class IssueCustomFieldConfigurationAppsApi {
         'fieldIdOrKey': fieldIdOrKey,
       },
       queryParameters: {
+        if (id != null) 'id': id.map((e) => '$e').join(','),
         if (contextId != null)
           'contextId': contextId.map((e) => '$e').join(','),
+        if (fieldContextId != null)
+          'fieldContextId': fieldContextId.map((e) => '$e').join(','),
         if (issueId != null) 'issueId': '$issueId',
+        if (projectKeyOrId != null) 'projectKeyOrId': projectKeyOrId,
+        if (issueTypeId != null) 'issueTypeId': issueTypeId,
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
       },
@@ -2582,12 +2942,40 @@ class IssueCustomFieldContextsApi {
   /// returned. If no defaults are set for a context, nothing is returned.
   /// The returned object depends on type of the custom field:
   ///
+  ///  *  `CustomFieldContextDefaultValueDate` (type `datepicker`) for date
+  /// fields.
+  ///  *  `CustomFieldContextDefaultValueDateTime` (type `datetimepicker`) for
+  /// date-time fields.
   ///  *  `CustomFieldContextDefaultValueSingleOption` (type `option.single`)
   /// for single choice select lists and radio buttons.
   ///  *  `CustomFieldContextDefaultValueMultipleOption` (type
   /// `option.multiple`) for multiple choice select lists and checkboxes.
   ///  *  `CustomFieldContextDefaultValueCascadingOption` (type
   /// `option.cascading`) for cascading select lists.
+  ///  *  `CustomFieldContextSingleUserPickerDefaults` (type
+  /// `single.user.select`) for single users.
+  ///  *  `CustomFieldContextDefaultValueMultiUserPicker` (type
+  /// `multi.user.select`) for user lists.
+  ///  *  `CustomFieldContextDefaultValueSingleGroupPicker` (type
+  /// `grouppicker.single`) for single choice group picker.
+  ///  *  `CustomFieldContextDefaultValueMultipleGroupPicker` (type
+  /// `grouppicker.multiple`) for multiple choice group picker.
+  ///  *  `CustomFieldContextDefaultValueURL` (type `url`) for URL.
+  ///  *  `CustomFieldContextDefaultValueProject` (type `project`) for project
+  /// picker.
+  ///  *  `CustomFieldContextDefaultValueFloat` (type `float`) for float (a
+  /// floating-point number).
+  ///  *  `CustomFieldContextDefaultValueLabels` (type `labels`) for labels.
+  ///  *  `CustomFieldContextDefaultValueTextField` (type `textfield`) for text
+  /// field.
+  ///  *  `CustomFieldContextDefaultValueTextArea` (type `textarea`) for text
+  /// area field.
+  ///  *  `CustomFieldContextDefaultValueReadOnly` (type `readonly`) for read
+  /// only (text) field.
+  ///  *  `CustomFieldContextDefaultValueMultipleVersion` (type
+  /// `version.multiple`) for single choice version picker.
+  ///  *  `CustomFieldContextDefaultValueSingleVersion` (type `version.single`)
+  /// for multiple choice version picker.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
@@ -2614,12 +3002,40 @@ class IssueCustomFieldContextsApi {
   /// Sets default for contexts of a custom field. Default are defined using
   /// these objects:
   ///
+  ///  *  `CustomFieldContextDefaultValueDate` (type `datepicker`) for date
+  /// fields.
+  ///  *  `CustomFieldContextDefaultValueDateTime` (type `datetimepicker`) for
+  /// date-time fields.
   ///  *  `CustomFieldContextDefaultValueSingleOption` (type `option.single`)
   /// for single choice select lists and radio buttons.
   ///  *  `CustomFieldContextDefaultValueMultipleOption` (type
   /// `option.multiple`) for multiple choice select lists and checkboxes.
   ///  *  `CustomFieldContextDefaultValueCascadingOption` (type
   /// `option.cascading`) for cascading select lists.
+  ///  *  `CustomFieldContextSingleUserPickerDefaults` (type
+  /// `single.user.select`) for single users.
+  ///  *  `CustomFieldContextDefaultValueMultiUserPicker` (type
+  /// `multi.user.select`) for user lists.
+  ///  *  `CustomFieldContextDefaultValueSingleGroupPicker` (type
+  /// `grouppicker.single`) for single choice group picker.
+  ///  *  `CustomFieldContextDefaultValueMultipleGroupPicker` (type
+  /// `grouppicker.multiple`) for multiple choice group picker.
+  ///  *  `CustomFieldContextDefaultValueURL` (type `url`) for URL.
+  ///  *  `CustomFieldContextDefaultValueProject` (type `project`) for project
+  /// picker.
+  ///  *  `CustomFieldContextDefaultValueFloat` (type `float`) for float (a
+  /// floating-point number).
+  ///  *  `CustomFieldContextDefaultValueLabels` (type `labels`) for labels.
+  ///  *  `CustomFieldContextDefaultValueTextField` (type `textfield`) for text
+  /// field.
+  ///  *  `CustomFieldContextDefaultValueTextArea` (type `textarea`) for text
+  /// area field.
+  ///  *  `CustomFieldContextDefaultValueReadOnly` (type `readonly`) for read
+  /// only (text) field.
+  ///  *  `CustomFieldContextDefaultValueMultipleVersion` (type
+  /// `version.multiple`) for single choice version picker.
+  ///  *  `CustomFieldContextDefaultValueSingleVersion` (type `version.single`)
+  /// for multiple choice version picker.
   ///
   /// Only one type of default object can be included in a request. To remove a
   /// default for a context, set the default parameter to `null`.
@@ -2704,8 +3120,8 @@ class IssueCustomFieldContextsApi {
   }
 
   /// Returns a [paginated](#pagination) list of context to project mappings for
-  /// a custom field. The result can be filtered by `contextId`, or otherwise
-  /// all mappings are returned. Invalid IDs are ignored.
+  /// a custom field. The result can be filtered by `contextId`. Otherwise, all
+  /// mappings are returned. Invalid IDs are ignored.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
@@ -3247,6 +3663,11 @@ class IssueCustomFieldOptionsAppsApi {
   /// option. The update can also be limited to a smaller set of issues by using
   /// a JQL query.
   ///
+  /// Connect app users with admin permissions (from user permissions and app
+  /// scopes) and Forge app users with the `manage:jira-configuration` scope can
+  /// override the screen security configuration using `overrideScreenSecurity`
+  /// and `overrideEditableFlag`.
+  ///
   /// This is an [asynchronous operation](#async). The response object contains
   /// a link to the long-running task.
   ///
@@ -3262,6 +3683,8 @@ class IssueCustomFieldOptionsAppsApi {
   Future<TaskProgressBeanRemoveOptionFromIssuesResult> replaceIssueFieldOption(
       {int? replaceWith,
       String? jql,
+      bool? overrideScreenSecurity,
+      bool? overrideEditableFlag,
       required String fieldKey,
       required int optionId}) async {
     return TaskProgressBeanRemoveOptionFromIssuesResult.fromJson(
@@ -3275,6 +3698,10 @@ class IssueCustomFieldOptionsAppsApi {
       queryParameters: {
         if (replaceWith != null) 'replaceWith': '$replaceWith',
         if (jql != null) 'jql': jql,
+        if (overrideScreenSecurity != null)
+          'overrideScreenSecurity': '$overrideScreenSecurity',
+        if (overrideEditableFlag != null)
+          'overrideEditableFlag': '$overrideEditableFlag',
       },
     ));
   }
@@ -3287,6 +3714,27 @@ class IssueCustomFieldValuesAppsApi {
 
   IssueCustomFieldValuesAppsApi(this._client);
 
+  /// Updates the value of one or more custom fields on one or more issues.
+  /// Combinations of custom field and issue should be unique within the
+  /// request. Custom fields can only be updated by the Forge app that created
+  /// them.
+  ///
+  /// **[Permissions](#permissions) required:** Only the app that created the
+  /// custom field can update its values with this operation.
+  Future<void> updateMultipleCustomFieldValues(
+      {bool? generateChangelog,
+      required MultipleCustomFieldValuesUpdateDetails body}) async {
+    await _client.send(
+      'post',
+      'rest/api/3/app/field/value',
+      queryParameters: {
+        if (generateChangelog != null)
+          'generateChangelog': '$generateChangelog',
+      },
+      body: body.toJson(),
+    );
+  }
+
   /// Updates the value of a custom field on one or more issues. Custom fields
   /// can only be updated by the Forge app that created them.
   ///
@@ -3295,7 +3743,7 @@ class IssueCustomFieldValuesAppsApi {
   Future<void> updateCustomFieldValue(
       {required String fieldIdOrKey,
       bool? generateChangelog,
-      required CustomFieldValueUpdateRequest body}) async {
+      required CustomFieldValueUpdateDetails body}) async {
     await _client.send(
       'put',
       'rest/api/3/app/field/{fieldIdOrKey}/value',
@@ -3327,17 +3775,18 @@ class IssueFieldConfigurationsApi {
   ///  *  whether the field configuration name or description contains a query
   /// string.
   ///
-  /// Only field configurations used in classic projects are returned.
+  /// Only field configurations used in company-managed (classic) projects are
+  /// returned.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<PageBeanFieldConfiguration> getAllFieldConfigurations(
+  Future<PageBeanFieldConfigurationDetails> getAllFieldConfigurations(
       {int? startAt,
       int? maxResults,
       List<int>? id,
       bool? isDefault,
       String? query}) async {
-    return PageBeanFieldConfiguration.fromJson(await _client.send(
+    return PageBeanFieldConfigurationDetails.fromJson(await _client.send(
       'get',
       'rest/api/3/fieldconfiguration',
       queryParameters: {
@@ -3350,9 +3799,65 @@ class IssueFieldConfigurationsApi {
     ));
   }
 
+  /// Creates a field configuration. The field configuration is created with the
+  /// same field properties as the default configuration, with all the fields
+  /// being optional.
+  ///
+  /// This operation can only create configurations for use in company-managed
+  /// (classic) projects.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<FieldConfiguration> createFieldConfiguration(
+      {required FieldConfigurationDetails body}) async {
+    return FieldConfiguration.fromJson(await _client.send(
+      'post',
+      'rest/api/3/fieldconfiguration',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Updates a field configuration. The name and the description provided in
+  /// the request override the existing values.
+  ///
+  /// This operation can only update configurations used in company-managed
+  /// (classic) projects.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> updateFieldConfiguration(
+      {required int id, required FieldConfigurationDetails body}) async {
+    await _client.send(
+      'put',
+      'rest/api/3/fieldconfiguration/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Deletes a field configuration.
+  ///
+  /// This operation can only delete configurations used in company-managed
+  /// (classic) projects.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> deleteFieldConfiguration(int id) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/fieldconfiguration/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+    );
+  }
+
   /// Returns a [paginated](#pagination) list of all fields for a configuration.
   ///
-  /// Only the fields from configurations used in classic projects are returned.
+  /// Only the fields from configurations used in company-managed (classic)
+  /// projects are returned.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
@@ -3371,6 +3876,31 @@ class IssueFieldConfigurationsApi {
     ));
   }
 
+  /// Updates fields in a field configuration. The properties of the field
+  /// configuration fields provided override the existing values.
+  ///
+  /// This operation can only update field configurations used in
+  /// company-managed (classic) projects.
+  ///
+  /// The operation can set the renderer for text fields to the default text
+  /// renderer (`text-renderer`) or wiki style renderer (`wiki-renderer`).
+  /// However, the renderer cannot be updated for fields using the autocomplete
+  /// renderer (`autocomplete-renderer`).
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> updateFieldConfigurationItems(
+      {required int id, required FieldConfigurationItemsDetails body}) async {
+    await _client.send(
+      'put',
+      'rest/api/3/fieldconfiguration/{id}/fields',
+      pathParameters: {
+        'id': '$id',
+      },
+      body: body.toJson(),
+    );
+  }
+
   /// Returns a [paginated](#pagination) list of field configuration schemes.
   ///
   /// Only field configuration schemes used in classic projects are returned.
@@ -3387,6 +3917,22 @@ class IssueFieldConfigurationsApi {
         if (maxResults != null) 'maxResults': '$maxResults',
         if (id != null) 'id': id.map((e) => '$e').join(','),
       },
+    ));
+  }
+
+  /// Creates a field configuration scheme.
+  ///
+  /// This operation can only create field configuration schemes used in
+  /// company-managed (classic) projects.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<FieldConfigurationScheme> createFieldConfigurationScheme(
+      {required UpdateFieldConfigurationSchemeDetails body}) async {
+    return FieldConfigurationScheme.fromJson(await _client.send(
+      'post',
+      'rest/api/3/fieldconfigurationscheme',
+      body: body.toJson(),
     ));
   }
 
@@ -3453,6 +3999,82 @@ class IssueFieldConfigurationsApi {
     await _client.send(
       'put',
       'rest/api/3/fieldconfigurationscheme/project',
+      body: body.toJson(),
+    );
+  }
+
+  /// Updates a field configuration scheme.
+  ///
+  /// This operation can only update field configuration schemes used in
+  /// company-managed (classic) projects.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> updateFieldConfigurationScheme(
+      {required int id,
+      required UpdateFieldConfigurationSchemeDetails body}) async {
+    await _client.send(
+      'put',
+      'rest/api/3/fieldconfigurationscheme/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Deletes a field configuration scheme.
+  ///
+  /// This operation can only delete field configuration schemes used in
+  /// company-managed (classic) projects.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> deleteFieldConfigurationScheme(int id) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/fieldconfigurationscheme/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+    );
+  }
+
+  /// Assigns issue types to field configurations on field configuration scheme.
+  ///
+  /// This operation can only modify field configuration schemes used in
+  /// company-managed (classic) projects.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> setFieldConfigurationSchemeMapping(
+      {required int id,
+      required AssociateFieldConfigurationsWithIssueTypesRequest body}) async {
+    await _client.send(
+      'put',
+      'rest/api/3/fieldconfigurationscheme/{id}/mapping',
+      pathParameters: {
+        'id': '$id',
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Removes issue types from the field configuration scheme.
+  ///
+  /// This operation can only modify field configuration schemes used in
+  /// company-managed (classic) projects.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> removeIssueTypesFromGlobalFieldConfigurationScheme(
+      {required int id, required IssueTypeIdsToRemove body}) async {
+    await _client.send(
+      'post',
+      'rest/api/3/fieldconfigurationscheme/{id}/mapping/delete',
+      pathParameters: {
+        'id': '$id',
+      },
       body: body.toJson(),
     );
   }
@@ -3576,6 +4198,59 @@ class IssueFieldsApi {
         if (maxResults != null) 'maxResults': '$maxResults',
       },
     ));
+  }
+
+  /// Deletes a custom field. The custom field is deleted whether it is in the
+  /// trash or not. See
+  /// [Edit or delete a custom field](https://confluence.atlassian.com/x/Z44fOw)
+  /// for more information on trashing and deleting custom fields.
+  ///
+  /// This operation is [asynchronous](#async). Follow the `location` link in
+  /// the response to determine the status of the task and use
+  /// [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> deleteCustomField(String id) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/field/{id}',
+      pathParameters: {
+        'id': id,
+      },
+    );
+  }
+
+  /// Restores a custom field from trash. See
+  /// [Edit or delete a custom field](https://confluence.atlassian.com/x/Z44fOw)
+  /// for more information on trashing and deleting custom fields.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> restoreCustomField(String id) async {
+    await _client.send(
+      'post',
+      'rest/api/3/field/{id}/restore',
+      pathParameters: {
+        'id': id,
+      },
+    );
+  }
+
+  /// Moves a custom field to trash. See
+  /// [Edit or delete a custom field](https://confluence.atlassian.com/x/Z44fOw)
+  /// for more information on trashing and deleting custom fields.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> trashCustomField(String id) async {
+    await _client.send(
+      'post',
+      'rest/api/3/field/{id}/trash',
+      pathParameters: {
+        'id': id,
+      },
+    );
   }
 }
 
@@ -3934,8 +4609,9 @@ class IssuePropertiesApi {
 
   IssuePropertiesApi(this._client);
 
-  /// Sets the values of entity properties on issues. It can set up to 10 entity
-  /// properties on up to 10,000 issues.
+  /// Sets or updates a list of entity property values on issues. A list of up
+  /// to 10 entity properties can be specified along with up to 10,000 issues on
+  /// which to set or update that list of entity properties.
   ///
   /// The value of the request body must be a
   /// [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON. The maximum
@@ -3957,11 +4633,42 @@ class IssuePropertiesApi {
   /// project containing the issue.
   ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
   /// is configured, issue-level security permission to view the issue.
-  Future<void> bulkSetIssuesProperties(
+  Future<void> bulkSetIssuesPropertiesList(
       {required IssueEntityProperties body}) async {
     await _client.send(
       'post',
       'rest/api/3/issue/properties',
+      body: body.toJson(),
+    );
+  }
+
+  /// Sets or updates entity property values on issues. Up to 10 entity
+  /// properties can be specified for each issue and up to 100 issues included
+  /// in the request.
+  ///
+  /// The value of the request body must be a
+  /// [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON.
+  ///
+  /// This operation is:
+  ///
+  ///  *  [asynchronous](#async). Follow the `location` link in the response to
+  /// determine the status of the task and use
+  /// [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+  ///  *  non-transactional. Updating some entities may fail. Such information
+  /// will available in the task result.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Browse projects* and *Edit issues*
+  /// [project permissions](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the issue.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  Future<void> bulkSetIssuePropertiesByIssue(
+      {required MultiIssueEntityProperties body}) async {
+    await _client.send(
+      'post',
+      'rest/api/3/issue/properties/multi',
       body: body.toJson(),
     );
   }
@@ -5110,6 +5817,31 @@ class IssueTypeScreenSchemesApi {
       body: body.toJson(),
     );
   }
+
+  /// Returns a [paginated](#pagination) list of projects associated with an
+  /// issue type screen scheme.
+  ///
+  /// Only company-managed projects associated with an issue type screen scheme
+  /// are returned.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<PageBeanProjectDetails> getProjectsForIssueTypeScreenScheme(
+      {required int issueTypeScreenSchemeId,
+      int? startAt,
+      int? maxResults}) async {
+    return PageBeanProjectDetails.fromJson(await _client.send(
+      'get',
+      'rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}/project',
+      pathParameters: {
+        'issueTypeScreenSchemeId': '$issueTypeScreenSchemeId',
+      },
+      queryParameters: {
+        if (startAt != null) 'startAt': '$startAt',
+        if (maxResults != null) 'maxResults': '$maxResults',
+      },
+    ));
+  }
 }
 
 /// Jira Cloud platform REST API documentation
@@ -5403,6 +6135,30 @@ class IssueWatchersApi {
 
   IssueWatchersApi(this._client);
 
+  /// Returns, for the user, details of the watched status of issues from a
+  /// list. If an issue ID is invalid, the returned watched status is `false`.
+  ///
+  /// This operation requires the **Allow users to watch issues** option to be
+  /// *ON*. This option is set in General configuration for Jira. See
+  /// [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM)
+  /// for details.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  Future<BulkIssueIsWatching> getIsWatchingIssueBulk(
+      {required IssueList body}) async {
+    return BulkIssueIsWatching.fromJson(await _client.send(
+      'post',
+      'rest/api/3/issue/watching',
+      body: body.toJson(),
+    ));
+  }
+
   /// Returns the watchers for an issue.
   ///
   /// This operation requires the **Allow users to watch issues** option to be
@@ -5659,6 +6415,7 @@ class IssueWorklogsApi {
       int? startAt,
       int? maxResults,
       int? startedAfter,
+      int? startedBefore,
       String? expand}) async {
     return PageOfWorklogs.fromJson(await _client.send(
       'get',
@@ -5670,6 +6427,7 @@ class IssueWorklogsApi {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
         if (startedAfter != null) 'startedAfter': '$startedAfter',
+        if (startedBefore != null) 'startedBefore': '$startedBefore',
         if (expand != null) 'expand': expand,
       },
     ));
@@ -5935,6 +6693,19 @@ class IssuesApi {
 
   IssuesApi(this._client);
 
+  /// Returns all issue events.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<List<IssueEvent>> getEvents() async {
+    return (await _client.send(
+      'get',
+      'rest/api/3/events',
+    ) as List<Object?>)
+        .map((i) => IssueEvent.fromJson(i as Map<String, Object?>? ?? const {}))
+        .toList();
+  }
+
   /// Creates an issue or, where the option to create subtasks is enabled in
   /// Jira, a subtask. A transition may be applied, to move the issue or subtask
   /// to a workflow step other than the default start step, and issue properties
@@ -6104,9 +6875,10 @@ class IssuesApi {
   /// Single line custom fields (`textfield`) accept a string and don't handle
   /// Atlassian Document Format content.
   ///
-  /// Connect app users with admin permissions (from user permissions and app
-  /// scopes) can override the screen security configuration using
-  /// `overrideScreenSecurity` and `overrideEditableFlag`.
+  /// Connect app users with admin permission (from user permissions and app
+  /// scopes) and Forge app users with the `manage:jira-configuration` scope can
+  /// override the screen security configuration using `overrideScreenSecurity`
+  /// and `overrideEditableFlag`.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -6226,7 +6998,7 @@ class IssuesApi {
     ));
   }
 
-  /// Returns changelogs for an issue specified by a list of changelog ID.
+  /// Returns changelogs for an issue specified by a list of changelog IDs.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -6253,8 +7025,9 @@ class IssuesApi {
   /// editable by the user. Use the information to populate the requests in
   /// [Edit issue](#api-rest-api-3-issue-issueIdOrKey-put).
   ///
-  /// Connect app users with admin permissions (from user permissions and app
-  /// scopes) can return additional details using:
+  /// Connect app users with admin permission (from user permissions and app
+  /// scopes) and Forge app users with the `manage:jira-configuration` scope can
+  /// return additional details using:
   ///
   ///  *  `overrideScreenSecurity` Returns hidden fields.
   ///  *  `overrideEditableFlag` Returns uneditable fields. For example, where
@@ -6570,8 +7343,10 @@ class JiraExpressionsApi {
   /// anonymous.
   ///  *  `app`
   /// ([App](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#app)):
-  /// The Connect app that made the request. Available only for authenticated
-  /// requests made by Connect Apps (read more here:
+  /// The
+  /// [Connect app](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps)
+  /// that made the request. Available only for authenticated requests made by
+  /// Connect Apps (read more here:
   /// [Authentication for Connect apps](https://developer.atlassian.com/cloud/jira/platform/security-for-connect-apps/)).
   ///  *  `issue`
   /// ([Issue](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#issue)):
@@ -6603,6 +7378,20 @@ class JiraExpressionsApi {
   /// ([CustomerRequest](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#customerrequest)):
   /// The current customer request. Available only when the customer request is
   /// provided in the request context object.
+  ///
+  /// Also, custom context variables can be passed in the request with their
+  /// types. Those variables can be accessed by key in the Jira expression.
+  /// These variable types are available for use in a custom context:
+  ///
+  ///  *  `user`: A
+  /// [user](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#user)
+  /// specified as an Atlassian account ID.
+  ///  *  `issue`: An
+  /// [issue](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#issue)
+  /// specified by ID or key. All the fields of the issue object are available
+  /// in the Jira expression.
+  ///  *  `json`: A JSON object containing custom content.
+  ///  *  `list`: A JSON list of `user`, `issue`, or `json` variable types.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -7801,6 +8590,42 @@ class ProjectEmailApi {
 
 /// Jira Cloud platform REST API documentation
 
+class ProjectFeaturesApi {
+  final ApiClient _client;
+
+  ProjectFeaturesApi(this._client);
+
+  /// Returns the list of features for a project.
+  Future<ContainerForProjectFeatures> getFeaturesForProject(
+      String projectIdOrKey) async {
+    return ContainerForProjectFeatures.fromJson(await _client.send(
+      'get',
+      'rest/api/3/project/{projectIdOrKey}/features',
+      pathParameters: {
+        'projectIdOrKey': projectIdOrKey,
+      },
+    ));
+  }
+
+  /// Sets the state of a project feature.
+  Future<ContainerForProjectFeatures> toggleFeatureForProject(
+      {required String projectIdOrKey,
+      required String featureKey,
+      required ProjectFeatureState body}) async {
+    return ContainerForProjectFeatures.fromJson(await _client.send(
+      'put',
+      'rest/api/3/project/{projectIdOrKey}/features/{featureKey}',
+      pathParameters: {
+        'projectIdOrKey': projectIdOrKey,
+        'featureKey': featureKey,
+      },
+      body: body.toJson(),
+    ));
+  }
+}
+
+/// Jira Cloud platform REST API documentation
+
 class ProjectKeyAndNameValidationApi {
   final ApiClient _client;
 
@@ -8811,9 +9636,14 @@ class ProjectsApi {
   /// `com.atlassian.jira-core-project-templates:jira-core-simplified-recruitment`,
   /// `com.atlassian.jira-core-project-templates:jira-core-simplified-task-tracking`
   /// |
-  /// | `service_desk` | `com.atlassian.servicedesk:simplified-it-service-desk`,
+  /// | `service_desk` |
+  /// `com.atlassian.servicedesk:simplified-it-service-management`,
+  /// `com.atlassian.servicedesk:simplified-general-service-desk`,
   /// `com.atlassian.servicedesk:simplified-internal-service-desk`,
-  /// `com.atlassian.servicedesk:simplified-external-service-desk` |
+  /// `com.atlassian.servicedesk:simplified-external-service-desk`,
+  /// `com.atlassian.servicedesk:simplified-hr-service-desk`,
+  /// `com.atlassian.servicedesk:simplified-facilities-service-desk`,
+  /// `com.atlassian.servicedesk:simplified-legal-service-desk` |
   /// | `software` | `com.pyxis.greenhopper.jira:gh-simplified-agility-kanban`,
   /// `com.pyxis.greenhopper.jira:gh-simplified-agility-scrum`,
   /// `com.pyxis.greenhopper.jira:gh-simplified-basic`,
@@ -8843,6 +9673,37 @@ class ProjectsApi {
     ));
   }
 
+  /// Returns a list of up to 20 projects recently viewed by the user that are
+  /// still visible to the user.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** Projects are returned only where
+  /// the user has one of:
+  ///
+  ///  *  *Browse Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
+  ///  *  *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<List<Project>> getRecent(
+      {String? expand, List<StringList>? properties}) async {
+    return (await _client.send(
+      'get',
+      'rest/api/3/project/recent',
+      queryParameters: {
+        if (expand != null) 'expand': expand,
+        if (properties != null)
+          'properties': properties.map((e) => '$e').join(','),
+      },
+    ) as List<Object?>)
+        .map((i) => Project.fromJson(i as Map<String, Object?>? ?? const {}))
+        .toList();
+  }
+
   /// Returns a [paginated](#pagination) list of projects visible to the user.
   ///
   /// This operation can be accessed anonymously.
@@ -8863,6 +9724,7 @@ class ProjectsApi {
       int? maxResults,
       String? orderBy,
       List<int>? id,
+      List<String>? keys,
       String? query,
       String? typeKey,
       int? categoryId,
@@ -8879,6 +9741,7 @@ class ProjectsApi {
         if (maxResults != null) 'maxResults': '$maxResults',
         if (orderBy != null) 'orderBy': orderBy,
         if (id != null) 'id': id.map((e) => '$e').join(','),
+        if (keys != null) 'keys': keys.map((e) => e).join(','),
         if (query != null) 'query': query,
         if (typeKey != null) 'typeKey': typeKey,
         if (categoryId != null) 'categoryId': '$categoryId',
@@ -8944,6 +9807,10 @@ class ProjectsApi {
 
   /// Deletes a project.
   ///
+  /// You can't delete a project if it's archived. To delete an archived
+  /// project, restore the project and then delete it. To restore a project, use
+  /// the Jira UI.
+  ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<void> deleteProject(
@@ -8960,8 +9827,8 @@ class ProjectsApi {
     );
   }
 
-  /// Archives a project. Archived projects cannot be deleted. To delete an
-  /// archived project, restore the project and then delete it. To restore a
+  /// Archives a project. You can't delete a project if it's archived. To delete
+  /// an archived project, restore the project and then delete it. To restore a
   /// project, use the Jira UI.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
@@ -10211,7 +11078,7 @@ class UsersApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<User> createUser({required UserWriteBean body}) async {
+  Future<User> createUser({required NewUserDetails body}) async {
     return User.fromJson(await _client.send(
       'post',
       'rest/api/3/user',
@@ -10514,7 +11381,7 @@ class WebhooksApi {
   /// value or use the URL provided in `next`.
   ///
   /// **[Permissions](#permissions) required:** Only
-  /// [Connect apps](https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/#atlassian-connect)
+  /// [Connect apps](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps)
   /// can use this operation.
   Future<FailedWebhooks> getFailedWebhooks(
       {int? maxResults, int? after}) async {
@@ -10829,8 +11696,12 @@ class WorkflowSchemeProjectAssociationsApi {
 
   /// Returns a list of the workflow schemes associated with a list of projects.
   /// Each returned workflow scheme includes a list of the requested projects
-  /// associated with it. Any next-gen or non-existent projects in the request
-  /// are ignored and no errors are returned.
+  /// associated with it. Any team-managed or non-existent projects in the
+  /// request are ignored and no errors are returned.
+  ///
+  /// If the project is associated with the `Default Workflow Scheme` no ID is
+  /// returned. This is because the way the `Default Workflow Scheme` is stored
+  /// means it has no ID.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
@@ -11403,6 +12274,9 @@ class WorkflowTransitionRulesApi {
           int? maxResults,
           required List<String> types,
           List<String>? keys,
+          List<String>? workflowNames,
+          List<String>? withTags,
+          bool? draft,
           String? expand}) async {
     return PageBeanWorkflowTransitionRules.fromJson(await _client.send(
       'get',
@@ -11412,6 +12286,10 @@ class WorkflowTransitionRulesApi {
         if (maxResults != null) 'maxResults': '$maxResults',
         'types': types.map((e) => e).join(','),
         if (keys != null) 'keys': keys.map((e) => e).join(','),
+        if (workflowNames != null)
+          'workflowNames': workflowNames.map((e) => e).join(','),
+        if (withTags != null) 'withTags': withTags.map((e) => e).join(','),
+        if (draft != null) 'draft': '$draft',
         if (expand != null) 'expand': expand,
       },
     ));
@@ -11428,6 +12306,14 @@ class WorkflowTransitionRulesApi {
   /// [validators](https://developer.atlassian.com/cloud/jira/platform/modules/workflow-validator/)
   ///
   /// Only rules created by the calling Connect app can be updated.
+  ///
+  /// To assist with app migration, this operation can be used to:
+  ///
+  ///  *  Disable a rule.
+  ///  *  Add a `tag`. Use this to filter rules in the
+  /// [Get workflow transition rule configurations](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-transition-rules/#api-rest-api-3-workflow-rule-config-get).
+  ///
+  /// Rules are enabled if the `disabled` parameter is not provided.
   ///
   /// **[Permissions](#permissions) required:** Only Connect apps can use this
   /// operation.
@@ -11496,8 +12382,825 @@ class WorkflowsApi {
         .toList();
   }
 
-  /// Creates a workflow. Workflow transitions are created with the default
-  /// system transition rules.
+  /// Creates a workflow. You can define transition rules using the shapes
+  /// detailed in the following sections. If no transitional rules are specified
+  /// the default system transition rules are used.
+  ///
+  /// #### Conditions ####
+  ///
+  /// Conditions enable workflow rules that govern whether a transition can
+  /// execute.
+  ///
+  /// ##### Always false condition #####
+  ///
+  /// A condition that always fails.
+  ///
+  ///     {
+  ///        "type": "AlwaysFalseCondition"
+  ///      }
+  ///
+  /// ##### Block transition until approval #####
+  ///
+  /// A condition that blocks issue transition if there is a pending approval.
+  ///
+  ///     {
+  ///        "type": "BlockInProgressApprovalCondition"
+  ///      }
+  ///
+  /// ##### Compare number custom field condition #####
+  ///
+  /// A condition that allows transition if a comparison between a number custom
+  /// field and a value is true.
+  ///
+  ///     {
+  ///        "type": "CompareNumberCFCondition",
+  ///        "configuration": {
+  ///          "comparator": "=",
+  ///          "fieldId": "customfield_10029",
+  ///          "fieldValue": 2
+  ///        }
+  ///      }
+  ///
+  ///  *  `comparator` One of the supported comparator: `=`, `>`, and `<`.
+  ///  *  `fieldId` The custom numeric field ID. Allowed field types:
+  ///
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:float`
+  ///      *  `com.pyxis.greenhopper.jira:jsw-story-points`
+  ///  *  `fieldValue` The value for comparison.
+  ///
+  /// ##### Hide from user condition #####
+  ///
+  /// A condition that hides a transition from users. The transition can only be
+  /// triggered from a workflow function or REST API operation.
+  ///
+  ///     {
+  ///        "type": "RemoteOnlyCondition"
+  ///      }
+  ///
+  /// ##### Only assignee condition #####
+  ///
+  /// A condition that allows only the assignee to execute a transition.
+  ///
+  ///     {
+  ///        "type": "AllowOnlyAssignee"
+  ///      }
+  ///
+  /// ##### Only Bamboo notifications workflow condition #####
+  ///
+  /// A condition that makes the transition available only to Bamboo build
+  /// notifications.
+  ///
+  ///     {
+  ///        "type": "OnlyBambooNotificationsCondition"
+  ///      }
+  ///
+  /// ##### Only reporter condition #####
+  ///
+  /// A condition that allows only the reporter to execute a transition.
+  ///
+  ///     {
+  ///        "type": "AllowOnlyReporter"
+  ///      }
+  ///
+  /// ##### Permission condition #####
+  ///
+  /// A condition that allows only users with a permission to execute a
+  /// transition.
+  ///
+  ///     {
+  ///        "type": "PermissionCondition",
+  ///        "configuration": {
+  ///            "permissionKey": "BROWSE_PROJECTS"
+  ///        }
+  ///      }
+  ///
+  ///  *  `permissionKey` The permission required to perform the transition.
+  /// Allowed values:
+  /// [built-in](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#built-in-permissions)
+  /// or app defined permissions.
+  ///
+  /// ##### Previous status condition #####
+  ///
+  /// A condition that allows a transition based on whether an issue has or has
+  /// not transitioned through a status.
+  ///
+  ///     {
+  ///        "type": "PreviousStatusCondition",
+  ///        "configuration": {
+  ///          "ignoreLoopTransitions": true,
+  ///          "includeCurrentStatus": true,
+  ///          "mostRecentStatusOnly": true,
+  ///          "reverseCondition": true,
+  ///          "previousStatus": {
+  ///            "id": "5"
+  ///          }
+  ///        }
+  ///      }
+  ///
+  /// By default this condition allows the transition if the status, as defined
+  /// by its ID in the `previousStatus` object, matches any previous issue
+  /// status, unless:
+  ///
+  ///  *  `ignoreLoopTransitions` is `true`, then loop transitions (from and to
+  /// the same status) are ignored.
+  ///  *  `includeCurrentStatus` is `true`, then the current issue status is
+  /// also checked.
+  ///  *  `mostRecentStatusOnly` is `true`, then only the issue's preceding
+  /// status (the one immediately before the current status) is checked.
+  ///  *  `reverseCondition` is `true`, then the status must not be present.
+  ///
+  /// ##### Separation of duties condition #####
+  ///
+  /// A condition that prevents a user to perform the transition, if the user
+  /// has already performed a transition on the issue.
+  ///
+  ///     {
+  ///        "type": "SeparationOfDutiesCondition",
+  ///        "configuration": {
+  ///          "fromStatus": {
+  ///            "id": "5"
+  ///          },
+  ///          "toStatus": {
+  ///            "id": "6"
+  ///          }
+  ///        }
+  ///      }
+  ///
+  ///  *  `fromStatus` OPTIONAL. An object containing the ID of the source
+  /// status of the transition that is blocked. If omitted any transition to
+  /// `toStatus` is blocked.
+  ///  *  `toStatus` An object containing the ID of the target status of the
+  /// transition that is blocked.
+  ///
+  /// ##### Subtask blocking condition #####
+  ///
+  /// A condition that blocks transition on a parent issue if any of its
+  /// subtasks are in any of one or more statuses.
+  ///
+  ///     {
+  ///        "type": "SubTaskBlockingCondition",
+  ///        "configuration": {
+  ///          "statuses": [
+  ///            {
+  ///              "id": "1"
+  ///            },
+  ///            {
+  ///              "id": "3"
+  ///            }
+  ///          ]
+  ///        }
+  ///      }
+  ///
+  ///  *  `statuses` A list of objects containing status IDs.
+  ///
+  /// ##### User is in any group condition #####
+  ///
+  /// A condition that allows users belonging to any group from a list of groups
+  /// to execute a transition.
+  ///
+  ///     {
+  ///        "type": "UserInAnyGroupCondition",
+  ///        "configuration": {
+  ///          "groups": [
+  ///            "administrators",
+  ///            "atlassian-addons-admin"
+  ///          ]
+  ///        }
+  ///      }
+  ///
+  ///  *  `groups` A list of group names.
+  ///
+  /// ##### User is in any project role condition #####
+  ///
+  /// A condition that allows only users with at least one project roles from a
+  /// list of project roles to execute a transition.
+  ///
+  ///     {
+  ///        "type": "InAnyProjectRoleCondition",
+  ///        "configuration": {
+  ///          "projectRoles": [
+  ///            {
+  ///              "id": "10002"
+  ///            },
+  ///            {
+  ///              "id": "10003"
+  ///            },
+  ///            {
+  ///              "id": "10012"
+  ///            },
+  ///            {
+  ///              "id": "10013"
+  ///            }
+  ///          ]
+  ///        }
+  ///      }
+  ///
+  ///  *  `projectRoles` A list of objects containing project role IDs.
+  ///
+  /// ##### User is in custom field condition #####
+  ///
+  /// A condition that allows only users listed in a given custom field to
+  /// execute the transition.
+  ///
+  ///     {
+  ///        "type": "UserIsInCustomFieldCondition",
+  ///        "configuration": {
+  ///          "allowUserInField": false,
+  ///          "fieldId": "customfield_10010"
+  ///        }
+  ///      }
+  ///
+  ///  *  `allowUserInField` If `true` only a user who is listed in `fieldId`
+  /// can perform the transition, otherwise, only a user who is not listed in
+  /// `fieldId` can perform the transition.
+  ///  *  `fieldId` The ID of the field containing the list of users.
+  ///
+  /// ##### User is in group condition #####
+  ///
+  /// A condition that allows users belonging to a group to execute a
+  /// transition.
+  ///
+  ///     {
+  ///        "type": "UserInGroupCondition",
+  ///        "configuration": {
+  ///          "group": "administrators"
+  ///        }
+  ///      }
+  ///
+  ///  *  `group` The name of the group.
+  ///
+  /// ##### User is in group custom field condition #####
+  ///
+  /// A condition that allows users belonging to a group specified in a custom
+  /// field to execute a transition.
+  ///
+  ///     {
+  ///        "type": "InGroupCFCondition",
+  ///        "configuration": {
+  ///          "fieldId": "customfield_10012"
+  ///        }
+  ///      }
+  ///
+  ///  *  `fieldId` The ID of the field. Allowed field types:
+  ///
+  ///      *
+  /// `com.atlassian.jira.plugin.system.customfieldtypes:multigrouppicker`
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:grouppicker`
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:select`
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:multiselect`
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:radiobuttons`
+  ///      *
+  /// `com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes`
+  ///      *  `com.pyxis.greenhopper.jira:gh-epic-status`
+  ///
+  /// ##### User is in project role condition #####
+  ///
+  /// A condition that allows users with a project role to execute a transition.
+  ///
+  ///     {
+  ///        "type": "InProjectRoleCondition",
+  ///        "configuration": {
+  ///          "projectRole": {
+  ///            "id": "10002"
+  ///          }
+  ///        }
+  ///      }
+  ///
+  ///  *  `projectRole` An object containing the ID of a project role.
+  ///
+  /// ##### Value field condition #####
+  ///
+  /// A conditions that allows a transition to execute if the value of a field
+  /// is equal to a constant value or simply set.
+  ///
+  ///     {
+  ///        "type": "ValueFieldCondition",
+  ///        "configuration": {
+  ///          "fieldId": "assignee",
+  ///          "fieldValue":
+  /// "qm:6e1ecee6-8e64-4db6-8c85-916bb3275f51:54b56885-2bd2-4381-8239-78263442520f",
+  ///          "comparisonType": "NUMBER",
+  ///          "comparator": "="
+  ///        }
+  ///      }
+  ///
+  ///  *  `fieldId` The ID of a field used in the comparison.
+  ///  *  `fieldValue` The expected value of the field.
+  ///  *  `comparisonType` The type of the comparison. Allowed values: `STRING`,
+  /// `NUMBER`, `DATE`, `DATE_WITHOUT_TIME`, or `OPTIONID`.
+  ///  *  `comparator` One of the supported comparator: `>`, `>=`, `=`, `<=`,
+  /// `<`, `!=`.
+  ///
+  /// **Notes:**
+  ///
+  ///  *  If you choose the comparison type `STRING`, only `=` and `!=` are
+  /// valid options.
+  ///  *  You may leave `fieldValue` empty when comparison type is `!=` to
+  /// indicate that a value is required in the field.
+  ///  *  For date fields without time format values as `yyyy-MM-dd`, and for
+  /// those with time as `yyyy-MM-dd HH:mm`. For example, for July 16 2021 use
+  /// `2021-07-16`, for 8:05 AM use `2021-07-16 08:05`, and for 4 PM:
+  /// `2021-07-16 16:00`.
+  ///
+  /// #### Validators ####
+  ///
+  /// Validators check that any input made to the transition is valid before the
+  /// transition is performed.
+  ///
+  /// ##### Date field validator #####
+  ///
+  /// A validator that compares two dates.
+  ///
+  ///     {
+  ///        "type": "DateFieldValidator",
+  ///        "configuration": {
+  ///            "comparator": ">",
+  ///            "date1": "updated",
+  ///            "date2": "created",
+  ///            "expression": "1d",
+  ///            "includeTime": true
+  ///          }
+  ///      }
+  ///
+  ///  *  `comparator` One of the supported comparator: `>`, `>=`, `=`, `<=`,
+  /// `<`, or `!=`.
+  ///  *  `date1` The date field to validate. Allowed field types:
+  ///
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:datepicker`
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:datetime`
+  ///      *  `com.atlassian.jpo:jpo-custom-field-baseline-end`
+  ///      *  `com.atlassian.jpo:jpo-custom-field-baseline-start`
+  ///      *  `duedate`
+  ///      *  `created`
+  ///      *  `updated`
+  ///      *  `Resolved`
+  ///  *  `date2` The second date field. Required, if `expression` is not
+  /// passed. Allowed field types:
+  ///
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:datepicker`
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:datetime`
+  ///      *  `com.atlassian.jpo:jpo-custom-field-baseline-end`
+  ///      *  `com.atlassian.jpo:jpo-custom-field-baseline-start`
+  ///      *  `duedate`
+  ///      *  `created`
+  ///      *  `updated`
+  ///      *  `Resolved`
+  ///  *  `expression` An expression specifying an offset. Required, if `date2`
+  /// is not passed. Offsets are built with a number, with `-` as prefix for the
+  /// past, and one of these time units: `d` for day, `w` for week, `m` for
+  /// month, or `y` for year. For example, -2d means two days into the past and
+  /// 1w means one week into the future. The `now` keyword enables a comparison
+  /// with the current date.
+  ///  *  `includeTime` If `true`, then the time part of the data is included
+  /// for the comparison. If the field doesn't have a time part, 00:00:00 is
+  /// used.
+  ///
+  /// ##### Windows date validator #####
+  ///
+  /// A validator that checks that a date falls on or after a reference date and
+  /// before or on the reference date plus a number of days.
+  ///
+  ///     {
+  ///        "type": "WindowsDateValidator",
+  ///        "configuration": {
+  ///            "date1": "customfield_10009",
+  ///            "date2": "created",
+  ///            "windowsDays": 5
+  ///          }
+  ///      }
+  ///
+  ///  *  `date1` The date field to validate. Allowed field types:
+  ///
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:datepicker`
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:datetime`
+  ///      *  `com.atlassian.jpo:jpo-custom-field-baseline-end`
+  ///      *  `com.atlassian.jpo:jpo-custom-field-baseline-start`
+  ///      *  `duedate`
+  ///      *  `created`
+  ///      *  `updated`
+  ///      *  `Resolved`
+  ///  *  `date2` The reference date. Allowed field types:
+  ///
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:datepicker`
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:datetime`
+  ///      *  `com.atlassian.jpo:jpo-custom-field-baseline-end`
+  ///      *  `com.atlassian.jpo:jpo-custom-field-baseline-start`
+  ///      *  `duedate`
+  ///      *  `created`
+  ///      *  `updated`
+  ///      *  `Resolved`
+  ///  *  `windowsDays` A positive integer indicating a number of days.
+  ///
+  /// ##### Field required validator #####
+  ///
+  /// A validator that checks fields are not empty. By default, if a field is
+  /// not included in the current context it's ignored and not validated.
+  ///
+  ///     {
+  ///          "type": "FieldRequiredValidator",
+  ///          "configuration": {
+  ///              "ignoreContext": true,
+  ///              "errorMessage": "Hey",
+  ///              "fieldIds": [
+  ///                  "versions",
+  ///                  "customfield_10037",
+  ///                  "customfield_10003"
+  ///              ]
+  ///          }
+  ///      }
+  ///
+  ///  *  `ignoreContext` If `true`, then the context is ignored and all the
+  /// fields are validated.
+  ///  *  `errorMessage` OPTIONAL. The error message displayed when one or more
+  /// fields are empty. A default error message is shown if an error message is
+  /// not provided.
+  ///  *  `fieldIds` The list of fields to validate.
+  ///
+  /// ##### Field changed validator #####
+  ///
+  /// A validator that checks that a field value is changed. However, this
+  /// validation can be ignored for users from a list of groups.
+  ///
+  ///     {
+  ///          "type": "FieldChangedValidator",
+  ///          "configuration": {
+  ///              "fieldId": "comment",
+  ///              "errorMessage": "Hey",
+  ///              "exemptedGroups": [
+  ///                  "administrators",
+  ///                  "atlassian-addons-admin"
+  ///              ]
+  ///          }
+  ///      }
+  ///
+  ///  *  `fieldId` The ID of a field.
+  ///  *  `errorMessage` OPTIONAL. The error message displayed if the field is
+  /// not changed. A default error message is shown if the error message is not
+  /// provided.
+  ///  *  `exemptedGroups` OPTIONAL. The list of groups.
+  ///
+  /// ##### Field has single value validator #####
+  ///
+  /// A validator that checks that a multi-select field has only one value.
+  /// Optionally, the validation can ignore values copied from subtasks.
+  ///
+  ///     {
+  ///          "type": "FieldHasSingleValueValidator",
+  ///          "configuration": {
+  ///              "fieldId": "attachment,
+  ///              "excludeSubtasks": true
+  ///          }
+  ///      }
+  ///
+  ///  *  `fieldId` The ID of a field.
+  ///  *  `excludeSubtasks` If `true`, then values copied from subtasks are
+  /// ignored.
+  ///
+  /// ##### Parent status validator #####
+  ///
+  /// A validator that checks the status of the parent issue of a subtask. Ìf
+  /// the issue is not a subtask, no validation is performed.
+  ///
+  ///     {
+  ///          "type": "ParentStatusValidator",
+  ///          "configuration": {
+  ///              "parentStatuses": [
+  ///                  {
+  ///                    "id":"1"
+  ///                  },
+  ///                  {
+  ///                    "id":"2"
+  ///                  }
+  ///              ]
+  ///          }
+  ///      }
+  ///
+  ///  *  `parentStatus` The list of required parent issue statuses.
+  ///
+  /// ##### Permission validator #####
+  ///
+  /// A validator that checks the user has a permission.
+  ///
+  ///     {
+  ///        "type": "PermissionValidator",
+  ///        "configuration": {
+  ///            "permissionKey": "ADMINISTER_PROJECTS"
+  ///        }
+  ///      }
+  ///
+  ///  *  `permissionKey` The permission required to perform the transition.
+  /// Allowed values:
+  /// [built-in](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#built-in-permissions)
+  /// or app defined permissions.
+  ///
+  /// ##### Previous status validator #####
+  ///
+  /// A validator that checks if the issue has held a status.
+  ///
+  ///     {
+  ///        "type": "PreviousStatusValidator",
+  ///        "configuration": {
+  ///            "mostRecentStatusOnly": false,
+  ///            "previousStatus": {
+  ///                "id": "15"
+  ///            }
+  ///        }
+  ///      }
+  ///
+  ///  *  `mostRecentStatusOnly` If `true`, then only the issue's preceding
+  /// status (the one immediately before the current status) is checked.
+  ///  *  `previousStatus` An object containing the ID of an issue status.
+  ///
+  /// ##### Regular expression validator #####
+  ///
+  /// A validator that checks the content of a field against a regular
+  /// expression.
+  ///
+  ///     {
+  ///        "type": "RegexpFieldValidator",
+  ///        "configuration": {
+  ///            "regExp": "[0-9]",
+  ///            "fieldId": "customfield_10029"
+  ///        }
+  ///      }
+  ///
+  ///  *  `regExp`A regular expression.
+  ///  *  `fieldId` The ID of a field. Allowed field types:
+  ///
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:select`
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:multiselect`
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:radiobuttons`
+  ///      *
+  /// `com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes`
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:textarea`
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:textfield`
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:url`
+  ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:float`
+  ///      *  `com.pyxis.greenhopper.jira:jsw-story-points`
+  ///      *  `com.pyxis.greenhopper.jira:gh-epic-status`
+  ///      *  `description`
+  ///      *  `summary`
+  ///
+  /// ##### User permission validator #####
+  ///
+  /// A validator that checks if a user has a permission. Obsolete. You may
+  /// encounter this validator when getting transition rules and can pass it
+  /// when updating or creating rules, for example, when you want to duplicate
+  /// the rules from a workflow on a new workflow.
+  ///
+  ///     {
+  ///          "type": "UserPermissionValidator",
+  ///          "configuration": {
+  ///              "permissionKey": "BROWSE_PROJECTS",
+  ///              "nullAllowed": false,
+  ///              "username": "TestUser"
+  ///          }
+  ///      }
+  ///
+  ///  *  `permissionKey` The permission to be validated. Allowed values:
+  /// [built-in](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#built-in-permissions)
+  /// or app defined permissions.
+  ///  *  `nullAllowed` If `true`, allows the transition when `username` is
+  /// empty.
+  ///  *  `username` The username to validate against the `permissionKey`.
+  ///
+  /// #### Post functions ####
+  ///
+  /// Post functions carry out any additional processing required after a Jira
+  /// workflow transition is executed.
+  ///
+  /// ##### Fire issue event function #####
+  ///
+  /// A post function that fires an event that is processed by the listeners.
+  ///
+  ///     {
+  ///        "type": "FireIssueEventFunction",
+  ///        "configuration": {
+  ///          "event": {
+  ///            "id":"1"
+  ///          }
+  ///        }
+  ///      }
+  ///
+  /// **Note:** If provided, this post function overrides the default
+  /// `FireIssueEventFunction`. Can be included once in a transition.
+  ///
+  ///  *  `event` An object containing the ID of the issue event.
+  ///
+  /// ##### Update issue status #####
+  ///
+  /// A post function that sets issue status to the linked status of the
+  /// destination workflow status.
+  ///
+  ///     {
+  ///        "type": "UpdateIssueStatusFunction"
+  ///      }
+  ///
+  /// **Note:** This post function is a default function in global and directed
+  /// transitions. It can only be added to the initial transition and can only
+  /// be added once.
+  ///
+  /// ##### Create comment #####
+  ///
+  /// A post function that adds a comment entered during the transition to an
+  /// issue.
+  ///
+  ///     {
+  ///        "type": "CreateCommentFunction"
+  ///      }
+  ///
+  /// **Note:** This post function is a default function in global and directed
+  /// transitions. It can only be added to the initial transition and can only
+  /// be added once.
+  ///
+  /// ##### Store issue #####
+  ///
+  /// A post function that stores updates to an issue.
+  ///
+  ///     {
+  ///        "type": "IssueStoreFunction"
+  ///      }
+  ///
+  /// **Note:** This post function can only be added to the initial transition
+  /// and can only be added once.
+  ///
+  /// ##### Assign to current user function #####
+  ///
+  /// A post function that assigns the issue to the current user if the current
+  /// user has the `ASSIGNABLE_USER` permission.
+  ///
+  ///     {
+  ///          "type": "AssignToCurrentUserFunction"
+  ///      }
+  ///
+  /// **Note:** This post function can be included once in a transition.
+  ///
+  /// ##### Assign to lead function #####
+  ///
+  /// A post function that assigns the issue to the project or component lead
+  /// developer.
+  ///
+  ///     {
+  ///          "type": "AssignToLeadFunction"
+  ///      }
+  ///
+  /// **Note:** This post function can be included once in a transition.
+  ///
+  /// ##### Assign to reporter function #####
+  ///
+  /// A post function that assigns the issue to the reporter.
+  ///
+  ///     {
+  ///          "type": "AssignToReporterFunction"
+  ///      }
+  ///
+  /// **Note:** This post function can be included once in a transition.
+  ///
+  /// ##### Clear field value function #####
+  ///
+  /// A post function that clears the value from a field.
+  ///
+  ///     {
+  ///        "type": "ClearFieldValuePostFunction",
+  ///        "configuration": {
+  ///          "fieldId": "assignee"
+  ///        }
+  ///      }
+  ///
+  ///  *  `fieldId` The ID of the field.
+  ///
+  /// ##### Copy value from other field function #####
+  ///
+  /// A post function that copies the value of one field to another, either
+  /// within an issue or from parent to subtask.
+  ///
+  ///     {
+  ///        "type": "CopyValueFromOtherFieldPostFunction",
+  ///        "configuration": {
+  ///          "sourceFieldId": "assignee",
+  ///          "destinationFieldId": "creator",
+  ///          "copyType": "same"
+  ///        }
+  ///      }
+  ///
+  ///  *  `sourceFieldId` The ID of the source field.
+  ///  *  `destinationFieldId` The ID of the destination field.
+  ///  *  `copyType` Use `same` to copy the value from a field inside the issue,
+  /// or `parent` to copy the value from the parent issue.
+  ///
+  /// ##### Create Crucible review workflow function #####
+  ///
+  /// A post function that creates a Crucible review for all unreviewed code for
+  /// the issue.
+  ///
+  ///     {
+  ///          "type": "CreateCrucibleReviewWorkflowFunction"
+  ///      }
+  ///
+  /// **Note:** This post function can be included once in a transition.
+  ///
+  /// ##### Set issue security level based on user's project role function #####
+  ///
+  /// A post function that sets the issue's security level if the current user
+  /// has a project role.
+  ///
+  ///     {
+  ///        "type": "SetIssueSecurityFromRoleFunction",
+  ///        "configuration": {
+  ///          "projectRole": {
+  ///              "id":"10002"
+  ///          },
+  ///          "issueSecurityLevel": {
+  ///              "id":"10000"
+  ///          }
+  ///        }
+  ///      }
+  ///
+  ///  *  `projectRole` An object containing the ID of the project role.
+  ///  *  `issueSecurityLevel` OPTIONAL. The object containing the ID of the
+  /// security level. If not passed, then the security level is set to `none`.
+  ///
+  /// ##### Trigger a webhook function #####
+  ///
+  /// A post function that triggers a webhook.
+  ///
+  ///     {
+  ///        "type": "TriggerWebhookFunction",
+  ///        "configuration": {
+  ///          "webhook": {
+  ///            "id": "1"
+  ///          }
+  ///        }
+  ///      }
+  ///
+  ///  *  `webhook` An object containing the ID of the webhook listener to
+  /// trigger.
+  ///
+  /// ##### Update issue custom field function #####
+  ///
+  /// A post function that updates the content of an issue custom field.
+  ///
+  ///     {
+  ///        "type": "UpdateIssueCustomFieldPostFunction",
+  ///        "configuration": {
+  ///          "mode": "append",
+  ///          "fieldId": "customfield_10003",
+  ///          "fieldValue": "yikes"
+  ///        }
+  ///      }
+  ///
+  ///  *  `mode` Use `replace` to override the field content with `fieldValue`
+  /// or `append` to add `fieldValue` to the end of the field content.
+  ///  *  `fieldId` The ID of the field.
+  ///  *  `fieldValue` The update content.
+  ///
+  /// ##### Update issue field function #####
+  ///
+  /// A post function that updates a simple issue field.
+  ///
+  ///     {
+  ///        "type": "UpdateIssueFieldFunction",
+  ///        "configuration": {
+  ///          "fieldId": "assignee",
+  ///          "fieldValue": "5f0c277e70b8a90025a00776"
+  ///        }
+  ///      }
+  ///
+  ///  *  `fieldId` The ID of the field. Allowed field types:
+  ///
+  ///      *  `assignee`
+  ///      *  `description`
+  ///      *  `environment`
+  ///      *  `priority`
+  ///      *  `resolution`
+  ///      *  `summary`
+  ///      *  `timeoriginalestimate`
+  ///      *  `timeestimate`
+  ///      *  `timespent`
+  ///  *  `fieldValue` The update value.
+  ///  *  If the `fieldId` is `assignee`, the `fieldValue` should be one of
+  /// these values:
+  ///
+  ///      *  an account ID.
+  ///      *  `automatic`.
+  ///      *  a blank string, which sets the value to `unassigned`.
+  ///
+  /// #### Connect rules ####
+  ///
+  /// Connect rules are conditions, validators, and post functions of a
+  /// transition that are registered by Connect apps. To create a rule
+  /// registered by the app, the app must be enabled and the rule's module must
+  /// exist.
+  ///
+  ///     {
+  ///        "type": "appKey__moduleKey",
+  ///        "configuration": {
+  ///          "value":"{"isValid":"true"}"
+  ///        }
+  ///      }
+  ///
+  ///  *  `type` A Connect rule key in a form of `appKey__moduleKey`.
+  ///  *  `value` The stringified JSON configuration of a Connect rule.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
@@ -11522,7 +13225,10 @@ class WorkflowsApi {
       {int? startAt,
       int? maxResults,
       List<String>? workflowName,
-      String? expand}) async {
+      String? expand,
+      String? queryString,
+      String? orderBy,
+      bool? isActive}) async {
     return PageBeanWorkflow.fromJson(await _client.send(
       'get',
       'rest/api/3/workflow/search',
@@ -11532,6 +13238,9 @@ class WorkflowsApi {
         if (workflowName != null)
           'workflowName': workflowName.map((e) => e).join(','),
         if (expand != null) 'expand': expand,
+        if (queryString != null) 'queryString': queryString,
+        if (orderBy != null) 'orderBy': orderBy,
+        if (isActive != null) 'isActive': '$isActive',
       },
     ));
   }
@@ -12018,6 +13727,40 @@ class ApplicationRole {
   }
 }
 
+/// Details of a field configuration to issue type mappings.
+class AssociateFieldConfigurationsWithIssueTypesRequest {
+  /// Field configuration to issue type mappings.
+  final List<FieldConfigurationToIssueTypeMapping> mappings;
+
+  AssociateFieldConfigurationsWithIssueTypesRequest({required this.mappings});
+
+  factory AssociateFieldConfigurationsWithIssueTypesRequest.fromJson(
+      Map<String, Object?> json) {
+    return AssociateFieldConfigurationsWithIssueTypesRequest(
+      mappings: (json[r'mappings'] as List<Object?>?)
+              ?.map((i) => FieldConfigurationToIssueTypeMapping.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var mappings = this.mappings;
+
+    final json = <String, Object?>{};
+    json[r'mappings'] = mappings.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  AssociateFieldConfigurationsWithIssueTypesRequest copyWith(
+      {List<FieldConfigurationToIssueTypeMapping>? mappings}) {
+    return AssociateFieldConfigurationsWithIssueTypesRequest(
+      mappings: mappings ?? this.mappings,
+    );
+  }
+}
+
 /// Details of an item associated with the changed record.
 class AssociatedItemBean {
   /// The ID of the associated record.
@@ -12274,23 +14017,23 @@ class AttachmentArchive {
 }
 
 class AttachmentArchiveEntry {
-  final String? abbreviatedName;
   final int? entryIndex;
+  final String? abbreviatedName;
   final String? mediaType;
   final String? name;
   final int? size;
 
   AttachmentArchiveEntry(
-      {this.abbreviatedName,
-      this.entryIndex,
+      {this.entryIndex,
+      this.abbreviatedName,
       this.mediaType,
       this.name,
       this.size});
 
   factory AttachmentArchiveEntry.fromJson(Map<String, Object?> json) {
     return AttachmentArchiveEntry(
-      abbreviatedName: json[r'abbreviatedName'] as String?,
       entryIndex: (json[r'entryIndex'] as num?)?.toInt(),
+      abbreviatedName: json[r'abbreviatedName'] as String?,
       mediaType: json[r'mediaType'] as String?,
       name: json[r'name'] as String?,
       size: (json[r'size'] as num?)?.toInt(),
@@ -12298,18 +14041,18 @@ class AttachmentArchiveEntry {
   }
 
   Map<String, Object?> toJson() {
-    var abbreviatedName = this.abbreviatedName;
     var entryIndex = this.entryIndex;
+    var abbreviatedName = this.abbreviatedName;
     var mediaType = this.mediaType;
     var name = this.name;
     var size = this.size;
 
     final json = <String, Object?>{};
-    if (abbreviatedName != null) {
-      json[r'abbreviatedName'] = abbreviatedName;
-    }
     if (entryIndex != null) {
       json[r'entryIndex'] = entryIndex;
+    }
+    if (abbreviatedName != null) {
+      json[r'abbreviatedName'] = abbreviatedName;
     }
     if (mediaType != null) {
       json[r'mediaType'] = mediaType;
@@ -12324,14 +14067,14 @@ class AttachmentArchiveEntry {
   }
 
   AttachmentArchiveEntry copyWith(
-      {String? abbreviatedName,
-      int? entryIndex,
+      {int? entryIndex,
+      String? abbreviatedName,
       String? mediaType,
       String? name,
       int? size}) {
     return AttachmentArchiveEntry(
-      abbreviatedName: abbreviatedName ?? this.abbreviatedName,
       entryIndex: entryIndex ?? this.entryIndex,
+      abbreviatedName: abbreviatedName ?? this.abbreviatedName,
       mediaType: mediaType ?? this.mediaType,
       name: name ?? this.name,
       size: size ?? this.size,
@@ -12566,6 +14309,9 @@ class AttachmentMetadata {
   /// The URL of a thumbnail representing the attachment.
   final String? thumbnail;
 
+  /// [EXPERIMENTAL] - The file ID of the attachment in the media store.
+  final String? mediaApiFileId;
+
   AttachmentMetadata(
       {this.id,
       this.self,
@@ -12576,7 +14322,8 @@ class AttachmentMetadata {
       this.mimeType,
       this.properties,
       this.content,
-      this.thumbnail});
+      this.thumbnail,
+      this.mediaApiFileId});
 
   factory AttachmentMetadata.fromJson(Map<String, Object?> json) {
     return AttachmentMetadata(
@@ -12592,6 +14339,7 @@ class AttachmentMetadata {
       properties: json[r'properties'] as Map<String, Object?>?,
       content: json[r'content'] as String?,
       thumbnail: json[r'thumbnail'] as String?,
+      mediaApiFileId: json[r'mediaApiFileId'] as String?,
     );
   }
 
@@ -12606,6 +14354,7 @@ class AttachmentMetadata {
     var properties = this.properties;
     var content = this.content;
     var thumbnail = this.thumbnail;
+    var mediaApiFileId = this.mediaApiFileId;
 
     final json = <String, Object?>{};
     if (id != null) {
@@ -12638,6 +14387,9 @@ class AttachmentMetadata {
     if (thumbnail != null) {
       json[r'thumbnail'] = thumbnail;
     }
+    if (mediaApiFileId != null) {
+      json[r'mediaApiFileId'] = mediaApiFileId;
+    }
     return json;
   }
 
@@ -12651,7 +14403,8 @@ class AttachmentMetadata {
       String? mimeType,
       Map<String, dynamic>? properties,
       String? content,
-      String? thumbnail}) {
+      String? thumbnail,
+      String? mediaApiFileId}) {
     return AttachmentMetadata(
       id: id ?? this.id,
       self: self ?? this.self,
@@ -12663,6 +14416,7 @@ class AttachmentMetadata {
       properties: properties ?? this.properties,
       content: content ?? this.content,
       thumbnail: thumbnail ?? this.thumbnail,
+      mediaApiFileId: mediaApiFileId ?? this.mediaApiFileId,
     );
   }
 }
@@ -13258,6 +15012,36 @@ class BulkCustomFieldOptionUpdateRequest {
       {List<CustomFieldOptionUpdate>? options}) {
     return BulkCustomFieldOptionUpdateRequest(
       options: options ?? this.options,
+    );
+  }
+}
+
+/// A container for the watch status of a list of issues.
+class BulkIssueIsWatching {
+  /// The map of issue ID to boolean watch status.
+  final Map<String, dynamic>? issuesIsWatching;
+
+  BulkIssueIsWatching({this.issuesIsWatching});
+
+  factory BulkIssueIsWatching.fromJson(Map<String, Object?> json) {
+    return BulkIssueIsWatching(
+      issuesIsWatching: json[r'issuesIsWatching'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issuesIsWatching = this.issuesIsWatching;
+
+    final json = <String, Object?>{};
+    if (issuesIsWatching != null) {
+      json[r'issuesIsWatching'] = issuesIsWatching;
+    }
+    return json;
+  }
+
+  BulkIssueIsWatching copyWith({Map<String, dynamic>? issuesIsWatching}) {
+    return BulkIssueIsWatching(
+      issuesIsWatching: issuesIsWatching ?? this.issuesIsWatching,
     );
   }
 }
@@ -14036,6 +15820,9 @@ class Comment {
   /// operation.
   final bool jsdPublic;
 
+  /// Whether the comment is made by an outsider who is not part of the issue.
+  final bool jsdAuthorCanSeeRequest;
+
   /// A list of comment properties. Optional on create and update.
   final List<EntityProperty> properties;
 
@@ -14050,8 +15837,10 @@ class Comment {
       this.updated,
       this.visibility,
       bool? jsdPublic,
+      bool? jsdAuthorCanSeeRequest,
       List<EntityProperty>? properties})
       : jsdPublic = jsdPublic ?? false,
+        jsdAuthorCanSeeRequest = jsdAuthorCanSeeRequest ?? false,
         properties = properties ?? [];
 
   factory Comment.fromJson(Map<String, Object?> json) {
@@ -14072,6 +15861,7 @@ class Comment {
           ? Visibility.fromJson(json[r'visibility']! as Map<String, Object?>)
           : null,
       jsdPublic: json[r'jsdPublic'] as bool? ?? false,
+      jsdAuthorCanSeeRequest: json[r'jsdAuthorCanSeeRequest'] as bool? ?? false,
       properties: (json[r'properties'] as List<Object?>?)
               ?.map((i) => EntityProperty.fromJson(
                   i as Map<String, Object?>? ?? const {}))
@@ -14091,6 +15881,7 @@ class Comment {
     var updated = this.updated;
     var visibility = this.visibility;
     var jsdPublic = this.jsdPublic;
+    var jsdAuthorCanSeeRequest = this.jsdAuthorCanSeeRequest;
     var properties = this.properties;
 
     final json = <String, Object?>{};
@@ -14122,6 +15913,7 @@ class Comment {
       json[r'visibility'] = visibility.toJson();
     }
     json[r'jsdPublic'] = jsdPublic;
+    json[r'jsdAuthorCanSeeRequest'] = jsdAuthorCanSeeRequest;
     json[r'properties'] = properties.map((i) => i.toJson()).toList();
     return json;
   }
@@ -14137,6 +15929,7 @@ class Comment {
       DateTime? updated,
       Visibility? visibility,
       bool? jsdPublic,
+      bool? jsdAuthorCanSeeRequest,
       List<EntityProperty>? properties}) {
     return Comment(
       self: self ?? this.self,
@@ -14149,6 +15942,8 @@ class Comment {
       updated: updated ?? this.updated,
       visibility: visibility ?? this.visibility,
       jsdPublic: jsdPublic ?? this.jsdPublic,
+      jsdAuthorCanSeeRequest:
+          jsdAuthorCanSeeRequest ?? this.jsdAuthorCanSeeRequest,
       properties: properties ?? this.properties,
     );
   }
@@ -14198,42 +15993,6 @@ class ComponentWithIssueCount {
   /// Count of issues for the component.
   final int? issueCount;
 
-  /// The description for the component.
-  final String? description;
-
-  /// The key of the project to which the component is assigned.
-  final String? project;
-
-  /// Not used.
-  final int? projectId;
-
-  /// The details of the user associated with `assigneeType`, if any. See
-  /// `realAssignee` for details of the user assigned to issues created with
-  /// this component.
-  final User? assignee;
-
-  /// The URL for this count of the issues contained in the component.
-  final String? self;
-
-  /// The nominal user type used to determine the assignee for issues created
-  /// with this component. See `realAssigneeType` for details on how the type of
-  /// the user, and hence the user, assigned to issues is determined. Takes the
-  /// following values:
-  ///
-  ///  *  `PROJECT_LEAD` the assignee to any issues created with this component
-  /// is nominally the lead for the project the component is in.
-  ///  *  `COMPONENT_LEAD` the assignee to any issues created with this
-  /// component is nominally the lead for the component.
-  ///  *  `UNASSIGNED` an assignee is not set for issues created with this
-  /// component.
-  ///  *  `PROJECT_DEFAULT` the assignee to any issues created with this
-  /// component is nominally the default assignee for the project that the
-  /// component is in.
-  final ComponentWithIssueCountAssigneeType? assigneeType;
-
-  /// The user details for the component's lead user.
-  final User? lead;
-
   /// The user assigned to issues created with this component, when
   /// `assigneeType` does not identify a valid assignee.
   final User? realAssignee;
@@ -14259,6 +16018,42 @@ class ComponentWithIssueCount {
   ///  *  `PROJECT_DEFAULT` when none of the preceding cases are true.
   final ComponentWithIssueCountRealAssigneeType? realAssigneeType;
 
+  /// The key of the project to which the component is assigned.
+  final String? project;
+
+  /// Not used.
+  final int? projectId;
+
+  /// The details of the user associated with `assigneeType`, if any. See
+  /// `realAssignee` for details of the user assigned to issues created with
+  /// this component.
+  final User? assignee;
+
+  /// The user details for the component's lead user.
+  final User? lead;
+
+  /// The nominal user type used to determine the assignee for issues created
+  /// with this component. See `realAssigneeType` for details on how the type of
+  /// the user, and hence the user, assigned to issues is determined. Takes the
+  /// following values:
+  ///
+  ///  *  `PROJECT_LEAD` the assignee to any issues created with this component
+  /// is nominally the lead for the project the component is in.
+  ///  *  `COMPONENT_LEAD` the assignee to any issues created with this
+  /// component is nominally the lead for the component.
+  ///  *  `UNASSIGNED` an assignee is not set for issues created with this
+  /// component.
+  ///  *  `PROJECT_DEFAULT` the assignee to any issues created with this
+  /// component is nominally the default assignee for the project that the
+  /// component is in.
+  final ComponentWithIssueCountAssigneeType? assigneeType;
+
+  /// The description for the component.
+  final String? description;
+
+  /// The URL for this count of the issues contained in the component.
+  final String? self;
+
   /// The name for the component.
   final String? name;
 
@@ -14267,16 +16062,16 @@ class ComponentWithIssueCount {
 
   ComponentWithIssueCount(
       {this.issueCount,
-      this.description,
-      this.project,
-      this.projectId,
-      this.assignee,
-      this.self,
-      this.assigneeType,
-      this.lead,
       this.realAssignee,
       bool? isAssigneeTypeValid,
       this.realAssigneeType,
+      this.project,
+      this.projectId,
+      this.assignee,
+      this.lead,
+      this.assigneeType,
+      this.description,
+      this.self,
       this.name,
       this.id})
       : isAssigneeTypeValid = isAssigneeTypeValid ?? false;
@@ -14284,20 +16079,6 @@ class ComponentWithIssueCount {
   factory ComponentWithIssueCount.fromJson(Map<String, Object?> json) {
     return ComponentWithIssueCount(
       issueCount: (json[r'issueCount'] as num?)?.toInt(),
-      description: json[r'description'] as String?,
-      project: json[r'project'] as String?,
-      projectId: (json[r'projectId'] as num?)?.toInt(),
-      assignee: json[r'assignee'] != null
-          ? User.fromJson(json[r'assignee']! as Map<String, Object?>)
-          : null,
-      self: json[r'self'] as String?,
-      assigneeType: json[r'assigneeType'] != null
-          ? ComponentWithIssueCountAssigneeType.fromValue(
-              json[r'assigneeType']! as String)
-          : null,
-      lead: json[r'lead'] != null
-          ? User.fromJson(json[r'lead']! as Map<String, Object?>)
-          : null,
       realAssignee: json[r'realAssignee'] != null
           ? User.fromJson(json[r'realAssignee']! as Map<String, Object?>)
           : null,
@@ -14306,6 +16087,20 @@ class ComponentWithIssueCount {
           ? ComponentWithIssueCountRealAssigneeType.fromValue(
               json[r'realAssigneeType']! as String)
           : null,
+      project: json[r'project'] as String?,
+      projectId: (json[r'projectId'] as num?)?.toInt(),
+      assignee: json[r'assignee'] != null
+          ? User.fromJson(json[r'assignee']! as Map<String, Object?>)
+          : null,
+      lead: json[r'lead'] != null
+          ? User.fromJson(json[r'lead']! as Map<String, Object?>)
+          : null,
+      assigneeType: json[r'assigneeType'] != null
+          ? ComponentWithIssueCountAssigneeType.fromValue(
+              json[r'assigneeType']! as String)
+          : null,
+      description: json[r'description'] as String?,
+      self: json[r'self'] as String?,
       name: json[r'name'] as String?,
       id: json[r'id'] as String?,
     );
@@ -14313,16 +16108,16 @@ class ComponentWithIssueCount {
 
   Map<String, Object?> toJson() {
     var issueCount = this.issueCount;
-    var description = this.description;
-    var project = this.project;
-    var projectId = this.projectId;
-    var assignee = this.assignee;
-    var self = this.self;
-    var assigneeType = this.assigneeType;
-    var lead = this.lead;
     var realAssignee = this.realAssignee;
     var isAssigneeTypeValid = this.isAssigneeTypeValid;
     var realAssigneeType = this.realAssigneeType;
+    var project = this.project;
+    var projectId = this.projectId;
+    var assignee = this.assignee;
+    var lead = this.lead;
+    var assigneeType = this.assigneeType;
+    var description = this.description;
+    var self = this.self;
     var name = this.name;
     var id = this.id;
 
@@ -14330,8 +16125,12 @@ class ComponentWithIssueCount {
     if (issueCount != null) {
       json[r'issueCount'] = issueCount;
     }
-    if (description != null) {
-      json[r'description'] = description;
+    if (realAssignee != null) {
+      json[r'realAssignee'] = realAssignee.toJson();
+    }
+    json[r'isAssigneeTypeValid'] = isAssigneeTypeValid;
+    if (realAssigneeType != null) {
+      json[r'realAssigneeType'] = realAssigneeType.value;
     }
     if (project != null) {
       json[r'project'] = project;
@@ -14342,21 +16141,17 @@ class ComponentWithIssueCount {
     if (assignee != null) {
       json[r'assignee'] = assignee.toJson();
     }
-    if (self != null) {
-      json[r'self'] = self;
+    if (lead != null) {
+      json[r'lead'] = lead.toJson();
     }
     if (assigneeType != null) {
       json[r'assigneeType'] = assigneeType.value;
     }
-    if (lead != null) {
-      json[r'lead'] = lead.toJson();
+    if (description != null) {
+      json[r'description'] = description;
     }
-    if (realAssignee != null) {
-      json[r'realAssignee'] = realAssignee.toJson();
-    }
-    json[r'isAssigneeTypeValid'] = isAssigneeTypeValid;
-    if (realAssigneeType != null) {
-      json[r'realAssigneeType'] = realAssigneeType.value;
+    if (self != null) {
+      json[r'self'] = self;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -14369,64 +16164,34 @@ class ComponentWithIssueCount {
 
   ComponentWithIssueCount copyWith(
       {int? issueCount,
-      String? description,
-      String? project,
-      int? projectId,
-      User? assignee,
-      String? self,
-      ComponentWithIssueCountAssigneeType? assigneeType,
-      User? lead,
       User? realAssignee,
       bool? isAssigneeTypeValid,
       ComponentWithIssueCountRealAssigneeType? realAssigneeType,
+      String? project,
+      int? projectId,
+      User? assignee,
+      User? lead,
+      ComponentWithIssueCountAssigneeType? assigneeType,
+      String? description,
+      String? self,
       String? name,
       String? id}) {
     return ComponentWithIssueCount(
       issueCount: issueCount ?? this.issueCount,
-      description: description ?? this.description,
-      project: project ?? this.project,
-      projectId: projectId ?? this.projectId,
-      assignee: assignee ?? this.assignee,
-      self: self ?? this.self,
-      assigneeType: assigneeType ?? this.assigneeType,
-      lead: lead ?? this.lead,
       realAssignee: realAssignee ?? this.realAssignee,
       isAssigneeTypeValid: isAssigneeTypeValid ?? this.isAssigneeTypeValid,
       realAssigneeType: realAssigneeType ?? this.realAssigneeType,
+      project: project ?? this.project,
+      projectId: projectId ?? this.projectId,
+      assignee: assignee ?? this.assignee,
+      lead: lead ?? this.lead,
+      assigneeType: assigneeType ?? this.assigneeType,
+      description: description ?? this.description,
+      self: self ?? this.self,
       name: name ?? this.name,
       id: id ?? this.id,
     );
   }
-}
-
-class ComponentWithIssueCountAssigneeType {
-  static const projectDefault =
-      ComponentWithIssueCountAssigneeType._('PROJECT_DEFAULT');
-  static const componentLead =
-      ComponentWithIssueCountAssigneeType._('COMPONENT_LEAD');
-  static const projectLead =
-      ComponentWithIssueCountAssigneeType._('PROJECT_LEAD');
-  static const unassigned = ComponentWithIssueCountAssigneeType._('UNASSIGNED');
-
-  static const values = [
-    projectDefault,
-    componentLead,
-    projectLead,
-    unassigned,
-  ];
-  final String value;
-
-  const ComponentWithIssueCountAssigneeType._(this.value);
-
-  static ComponentWithIssueCountAssigneeType fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => ComponentWithIssueCountAssigneeType._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
 }
 
 class ComponentWithIssueCountRealAssigneeType {
@@ -14452,6 +16217,36 @@ class ComponentWithIssueCountRealAssigneeType {
   static ComponentWithIssueCountRealAssigneeType fromValue(String value) =>
       values.firstWhere((e) => e.value == value,
           orElse: () => ComponentWithIssueCountRealAssigneeType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class ComponentWithIssueCountAssigneeType {
+  static const projectDefault =
+      ComponentWithIssueCountAssigneeType._('PROJECT_DEFAULT');
+  static const componentLead =
+      ComponentWithIssueCountAssigneeType._('COMPONENT_LEAD');
+  static const projectLead =
+      ComponentWithIssueCountAssigneeType._('PROJECT_LEAD');
+  static const unassigned = ComponentWithIssueCountAssigneeType._('UNASSIGNED');
+
+  static const values = [
+    projectDefault,
+    componentLead,
+    projectLead,
+    unassigned,
+  ];
+  final String value;
+
+  const ComponentWithIssueCountAssigneeType._(this.value);
+
+  static ComponentWithIssueCountAssigneeType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ComponentWithIssueCountAssigneeType._(value));
 
   /// An enum received from the server but this version of the client doesn't recognize it.
   bool get isUnknown => values.every((v) => v.value != value);
@@ -14645,6 +16440,182 @@ class Configuration {
   }
 }
 
+/// A list of custom field details.
+class ConnectCustomFieldValue {
+  /// The type of custom field.
+  final ConnectCustomFieldValueType type;
+
+  /// The issue ID.
+  final int issueId;
+
+  /// The custom field ID.
+  final int fieldId;
+
+  /// The value of string type custom field when `_type` is `StringIssueField`.
+  final String? string;
+
+  /// The value of number type custom field when `_type` is `NumberIssueField`.
+  final num? number;
+
+  /// The value of richText type custom field when `_type` is
+  /// `RichTextIssueField`.
+  final String? richText;
+
+  /// The value of single select and multiselect custom field type when `_type`
+  /// is `SingleSelectIssueField` or `MultiSelectIssueField`.
+  final String? optionId;
+
+  /// The value of of text custom field type when `_type` is `TextIssueField`.
+  final String? text;
+
+  ConnectCustomFieldValue(
+      {required this.type,
+      required this.issueId,
+      required this.fieldId,
+      this.string,
+      this.number,
+      this.richText,
+      this.optionId,
+      this.text});
+
+  factory ConnectCustomFieldValue.fromJson(Map<String, Object?> json) {
+    return ConnectCustomFieldValue(
+      type: ConnectCustomFieldValueType.fromValue(
+          json[r'_type'] as String? ?? ''),
+      issueId: (json[r'issueID'] as num?)?.toInt() ?? 0,
+      fieldId: (json[r'fieldID'] as num?)?.toInt() ?? 0,
+      string: json[r'string'] as String?,
+      number: json[r'number'] as num?,
+      richText: json[r'richText'] as String?,
+      optionId: json[r'optionID'] as String?,
+      text: json[r'text'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var issueId = this.issueId;
+    var fieldId = this.fieldId;
+    var string = this.string;
+    var number = this.number;
+    var richText = this.richText;
+    var optionId = this.optionId;
+    var text = this.text;
+
+    final json = <String, Object?>{};
+    json[r'_type'] = type.value;
+    json[r'issueID'] = issueId;
+    json[r'fieldID'] = fieldId;
+    if (string != null) {
+      json[r'string'] = string;
+    }
+    if (number != null) {
+      json[r'number'] = number;
+    }
+    if (richText != null) {
+      json[r'richText'] = richText;
+    }
+    if (optionId != null) {
+      json[r'optionID'] = optionId;
+    }
+    if (text != null) {
+      json[r'text'] = text;
+    }
+    return json;
+  }
+
+  ConnectCustomFieldValue copyWith(
+      {ConnectCustomFieldValueType? type,
+      int? issueId,
+      int? fieldId,
+      String? string,
+      num? number,
+      String? richText,
+      String? optionId,
+      String? text}) {
+    return ConnectCustomFieldValue(
+      type: type ?? this.type,
+      issueId: issueId ?? this.issueId,
+      fieldId: fieldId ?? this.fieldId,
+      string: string ?? this.string,
+      number: number ?? this.number,
+      richText: richText ?? this.richText,
+      optionId: optionId ?? this.optionId,
+      text: text ?? this.text,
+    );
+  }
+}
+
+class ConnectCustomFieldValueType {
+  static const stringIssueField =
+      ConnectCustomFieldValueType._('StringIssueField');
+  static const numberIssueField =
+      ConnectCustomFieldValueType._('NumberIssueField');
+  static const richTextIssueField =
+      ConnectCustomFieldValueType._('RichTextIssueField');
+  static const singleSelectIssueField =
+      ConnectCustomFieldValueType._('SingleSelectIssueField');
+  static const multiSelectIssueField =
+      ConnectCustomFieldValueType._('MultiSelectIssueField');
+  static const textIssueField = ConnectCustomFieldValueType._('TextIssueField');
+
+  static const values = [
+    stringIssueField,
+    numberIssueField,
+    richTextIssueField,
+    singleSelectIssueField,
+    multiSelectIssueField,
+    textIssueField,
+  ];
+  final String value;
+
+  const ConnectCustomFieldValueType._(this.value);
+
+  static ConnectCustomFieldValueType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ConnectCustomFieldValueType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// Details of updates for a custom field.
+class ConnectCustomFieldValues {
+  /// The list of custom field update details.
+  final List<ConnectCustomFieldValue> updateValueList;
+
+  ConnectCustomFieldValues({List<ConnectCustomFieldValue>? updateValueList})
+      : updateValueList = updateValueList ?? [];
+
+  factory ConnectCustomFieldValues.fromJson(Map<String, Object?> json) {
+    return ConnectCustomFieldValues(
+      updateValueList: (json[r'updateValueList'] as List<Object?>?)
+              ?.map((i) => ConnectCustomFieldValue.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var updateValueList = this.updateValueList;
+
+    final json = <String, Object?>{};
+    json[r'updateValueList'] = updateValueList.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  ConnectCustomFieldValues copyWith(
+      {List<ConnectCustomFieldValue>? updateValueList}) {
+    return ConnectCustomFieldValues(
+      updateValueList: updateValueList ?? this.updateValueList,
+    );
+  }
+}
+
 /// A
 /// [Connect module](https://developer.atlassian.com/cloud/jira/platform/about-jira-modules/)
 /// in the same format as in the
@@ -14749,6 +16720,39 @@ class ConnectWorkflowTransitionRule {
       key: key ?? this.key,
       configuration: configuration ?? this.configuration,
       transition: transition ?? this.transition,
+    );
+  }
+}
+
+/// The list of features on a project.
+class ContainerForProjectFeatures {
+  /// The project features.
+  final List<ProjectFeature> features;
+
+  ContainerForProjectFeatures({List<ProjectFeature>? features})
+      : features = features ?? [];
+
+  factory ContainerForProjectFeatures.fromJson(Map<String, Object?> json) {
+    return ContainerForProjectFeatures(
+      features: (json[r'features'] as List<Object?>?)
+              ?.map((i) => ProjectFeature.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var features = this.features;
+
+    final json = <String, Object?>{};
+    json[r'features'] = features.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  ContainerForProjectFeatures copyWith({List<ProjectFeature>? features}) {
+    return ContainerForProjectFeatures(
+      features: features ?? this.features,
     );
   }
 }
@@ -14957,37 +16961,72 @@ class ContextForProjectAndIssueType {
 
 /// Details of the contextual configuration for a custom field.
 class ContextualConfiguration {
-  /// The ID of the context the configuration is associated with.
-  final int contextId;
+  /// The ID of the configuration.
+  final String id;
 
-  /// The configuration associated with the context.
+  /// Deprecated, do not use.
+  final int? contextId;
+
+  /// The ID of the field context the configuration is associated with.
+  final String fieldContextId;
+
+  /// The field configuration.
   final dynamic configuration;
 
-  ContextualConfiguration({required this.contextId, this.configuration});
+  /// The field value schema.
+  final dynamic schema;
+
+  ContextualConfiguration(
+      {required this.id,
+      this.contextId,
+      required this.fieldContextId,
+      this.configuration,
+      this.schema});
 
   factory ContextualConfiguration.fromJson(Map<String, Object?> json) {
     return ContextualConfiguration(
-      contextId: (json[r'contextId'] as num?)?.toInt() ?? 0,
+      id: json[r'id'] as String? ?? '',
+      contextId: (json[r'contextId'] as num?)?.toInt(),
+      fieldContextId: json[r'fieldContextId'] as String? ?? '',
       configuration: json[r'configuration'],
+      schema: json[r'schema'],
     );
   }
 
   Map<String, Object?> toJson() {
+    var id = this.id;
     var contextId = this.contextId;
+    var fieldContextId = this.fieldContextId;
     var configuration = this.configuration;
+    var schema = this.schema;
 
     final json = <String, Object?>{};
-    json[r'contextId'] = contextId;
+    json[r'id'] = id;
+    if (contextId != null) {
+      json[r'contextId'] = contextId;
+    }
+    json[r'fieldContextId'] = fieldContextId;
     if (configuration != null) {
       json[r'configuration'] = configuration;
+    }
+    if (schema != null) {
+      json[r'schema'] = schema;
     }
     return json;
   }
 
-  ContextualConfiguration copyWith({int? contextId, dynamic configuration}) {
+  ContextualConfiguration copyWith(
+      {String? id,
+      int? contextId,
+      String? fieldContextId,
+      dynamic configuration,
+      dynamic schema}) {
     return ContextualConfiguration(
+      id: id ?? this.id,
       contextId: contextId ?? this.contextId,
+      fieldContextId: fieldContextId ?? this.fieldContextId,
       configuration: configuration ?? this.configuration,
+      schema: schema ?? this.schema,
     );
   }
 }
@@ -15452,9 +17491,12 @@ class CreateProjectDetailsProjectTemplateKey {
   static const comPyxisGreenhopperJiraGhSimplifiedScrumClassic =
       CreateProjectDetailsProjectTemplateKey._(
           'com.pyxis.greenhopper.jira:gh-simplified-scrum-classic');
-  static const comAtlassianServicedeskSimplifiedItServiceDesk =
+  static const comAtlassianServicedeskSimplifiedItServiceManagement =
       CreateProjectDetailsProjectTemplateKey._(
-          'com.atlassian.servicedesk:simplified-it-service-desk');
+          'com.atlassian.servicedesk:simplified-it-service-management');
+  static const comAtlassianServicedeskSimplifiedGeneralServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:simplified-general-service-desk');
   static const comAtlassianServicedeskSimplifiedInternalServiceDesk =
       CreateProjectDetailsProjectTemplateKey._(
           'com.atlassian.servicedesk:simplified-internal-service-desk');
@@ -15467,6 +17509,9 @@ class CreateProjectDetailsProjectTemplateKey {
   static const comAtlassianServicedeskSimplifiedFacilitiesServiceDesk =
       CreateProjectDetailsProjectTemplateKey._(
           'com.atlassian.servicedesk:simplified-facilities-service-desk');
+  static const comAtlassianServicedeskSimplifiedLegalServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:simplified-legal-service-desk');
   static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedContentManagement =
       CreateProjectDetailsProjectTemplateKey._(
           'com.atlassian.jira-core-project-templates:jira-core-simplified-content-management');
@@ -15498,11 +17543,13 @@ class CreateProjectDetailsProjectTemplateKey {
     comPyxisGreenhopperJiraGhSimplifiedBasic,
     comPyxisGreenhopperJiraGhSimplifiedKanbanClassic,
     comPyxisGreenhopperJiraGhSimplifiedScrumClassic,
-    comAtlassianServicedeskSimplifiedItServiceDesk,
+    comAtlassianServicedeskSimplifiedItServiceManagement,
+    comAtlassianServicedeskSimplifiedGeneralServiceDesk,
     comAtlassianServicedeskSimplifiedInternalServiceDesk,
     comAtlassianServicedeskSimplifiedExternalServiceDesk,
     comAtlassianServicedeskSimplifiedHrServiceDesk,
     comAtlassianServicedeskSimplifiedFacilitiesServiceDesk,
+    comAtlassianServicedeskSimplifiedLegalServiceDesk,
     comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedContentManagement,
     comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedDocumentApproval,
     comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedLeadTracking,
@@ -15566,6 +17613,100 @@ class CreateUpdateRoleRequestBean {
       description: description ?? this.description,
     );
   }
+}
+
+/// A workflow transition condition.
+class CreateWorkflowCondition {
+  /// The compound condition operator.
+  final CreateWorkflowConditionOperator? operator$;
+
+  /// The list of workflow conditions.
+  final List<CreateWorkflowCondition> conditions;
+
+  /// The type of the transition rule.
+  final String? type;
+
+  /// EXPERIMENTAL. The configuration of the transition rule.
+  final Map<String, dynamic>? configuration;
+
+  CreateWorkflowCondition(
+      {this.operator$,
+      List<CreateWorkflowCondition>? conditions,
+      this.type,
+      this.configuration})
+      : conditions = conditions ?? [];
+
+  factory CreateWorkflowCondition.fromJson(Map<String, Object?> json) {
+    return CreateWorkflowCondition(
+      operator$: json[r'operator'] != null
+          ? CreateWorkflowConditionOperator.fromValue(
+              json[r'operator']! as String)
+          : null,
+      conditions: (json[r'conditions'] as List<Object?>?)
+              ?.map((i) => CreateWorkflowCondition.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      type: json[r'type'] as String?,
+      configuration: json[r'configuration'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var operator$ = this.operator$;
+    var conditions = this.conditions;
+    var type = this.type;
+    var configuration = this.configuration;
+
+    final json = <String, Object?>{};
+    if (operator$ != null) {
+      json[r'operator'] = operator$.value;
+    }
+    json[r'conditions'] = conditions.map((i) => i.toJson()).toList();
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (configuration != null) {
+      json[r'configuration'] = configuration;
+    }
+    return json;
+  }
+
+  CreateWorkflowCondition copyWith(
+      {CreateWorkflowConditionOperator? operator$,
+      List<CreateWorkflowCondition>? conditions,
+      String? type,
+      Map<String, dynamic>? configuration}) {
+    return CreateWorkflowCondition(
+      operator$: operator$ ?? this.operator$,
+      conditions: conditions ?? this.conditions,
+      type: type ?? this.type,
+      configuration: configuration ?? this.configuration,
+    );
+  }
+}
+
+class CreateWorkflowConditionOperator {
+  static const and = CreateWorkflowConditionOperator._('AND');
+  static const or = CreateWorkflowConditionOperator._('OR');
+
+  static const values = [
+    and,
+    or,
+  ];
+  final String value;
+
+  const CreateWorkflowConditionOperator._(this.value);
+
+  static CreateWorkflowConditionOperator fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => CreateWorkflowConditionOperator._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 /// The details of a workflow.
@@ -15654,25 +17795,35 @@ class CreateWorkflowStatusDetails {
   /// The ID of the status.
   final String id;
 
-  CreateWorkflowStatusDetails({required this.id});
+  /// The properties of the status.
+  final Map<String, dynamic>? properties;
+
+  CreateWorkflowStatusDetails({required this.id, this.properties});
 
   factory CreateWorkflowStatusDetails.fromJson(Map<String, Object?> json) {
     return CreateWorkflowStatusDetails(
       id: json[r'id'] as String? ?? '',
+      properties: json[r'properties'] as Map<String, Object?>?,
     );
   }
 
   Map<String, Object?> toJson() {
     var id = this.id;
+    var properties = this.properties;
 
     final json = <String, Object?>{};
     json[r'id'] = id;
+    if (properties != null) {
+      json[r'properties'] = properties;
+    }
     return json;
   }
 
-  CreateWorkflowStatusDetails copyWith({String? id}) {
+  CreateWorkflowStatusDetails copyWith(
+      {String? id, Map<String, dynamic>? properties}) {
     return CreateWorkflowStatusDetails(
       id: id ?? this.id,
+      properties: properties ?? this.properties,
     );
   }
 }
@@ -15694,12 +17845,24 @@ class CreateWorkflowTransitionDetails {
   /// The type of the transition.
   final CreateWorkflowTransitionDetailsType type;
 
+  /// The rules of the transition.
+  final CreateWorkflowTransitionRulesDetails? rules;
+
+  /// The screen of the transition.
+  final CreateWorkflowTransitionScreenDetails? screen;
+
+  /// The properties of the transition.
+  final Map<String, dynamic>? properties;
+
   CreateWorkflowTransitionDetails(
       {required this.name,
       this.description,
       List<String>? from,
       required this.to,
-      required this.type})
+      required this.type,
+      this.rules,
+      this.screen,
+      this.properties})
       : from = from ?? [];
 
   factory CreateWorkflowTransitionDetails.fromJson(Map<String, Object?> json) {
@@ -15713,6 +17876,15 @@ class CreateWorkflowTransitionDetails {
       to: json[r'to'] as String? ?? '',
       type: CreateWorkflowTransitionDetailsType.fromValue(
           json[r'type'] as String? ?? ''),
+      rules: json[r'rules'] != null
+          ? CreateWorkflowTransitionRulesDetails.fromJson(
+              json[r'rules']! as Map<String, Object?>)
+          : null,
+      screen: json[r'screen'] != null
+          ? CreateWorkflowTransitionScreenDetails.fromJson(
+              json[r'screen']! as Map<String, Object?>)
+          : null,
+      properties: json[r'properties'] as Map<String, Object?>?,
     );
   }
 
@@ -15722,6 +17894,9 @@ class CreateWorkflowTransitionDetails {
     var from = this.from;
     var to = this.to;
     var type = this.type;
+    var rules = this.rules;
+    var screen = this.screen;
+    var properties = this.properties;
 
     final json = <String, Object?>{};
     json[r'name'] = name;
@@ -15731,6 +17906,15 @@ class CreateWorkflowTransitionDetails {
     json[r'from'] = from;
     json[r'to'] = to;
     json[r'type'] = type.value;
+    if (rules != null) {
+      json[r'rules'] = rules.toJson();
+    }
+    if (screen != null) {
+      json[r'screen'] = screen.toJson();
+    }
+    if (properties != null) {
+      json[r'properties'] = properties;
+    }
     return json;
   }
 
@@ -15739,13 +17923,19 @@ class CreateWorkflowTransitionDetails {
       String? description,
       List<String>? from,
       String? to,
-      CreateWorkflowTransitionDetailsType? type}) {
+      CreateWorkflowTransitionDetailsType? type,
+      CreateWorkflowTransitionRulesDetails? rules,
+      CreateWorkflowTransitionScreenDetails? screen,
+      Map<String, dynamic>? properties}) {
     return CreateWorkflowTransitionDetails(
       name: name ?? this.name,
       description: description ?? this.description,
       from: from ?? this.from,
       to: to ?? this.to,
       type: type ?? this.type,
+      rules: rules ?? this.rules,
+      screen: screen ?? this.screen,
+      properties: properties ?? this.properties,
     );
   }
 }
@@ -15773,6 +17963,137 @@ class CreateWorkflowTransitionDetailsType {
 
   @override
   String toString() => value;
+}
+
+/// A workflow transition rule.
+class CreateWorkflowTransitionRule {
+  /// The type of the transition rule.
+  final String type;
+
+  /// EXPERIMENTAL. The configuration of the transition rule.
+  final Map<String, dynamic>? configuration;
+
+  CreateWorkflowTransitionRule({required this.type, this.configuration});
+
+  factory CreateWorkflowTransitionRule.fromJson(Map<String, Object?> json) {
+    return CreateWorkflowTransitionRule(
+      type: json[r'type'] as String? ?? '',
+      configuration: json[r'configuration'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var configuration = this.configuration;
+
+    final json = <String, Object?>{};
+    json[r'type'] = type;
+    if (configuration != null) {
+      json[r'configuration'] = configuration;
+    }
+    return json;
+  }
+
+  CreateWorkflowTransitionRule copyWith(
+      {String? type, Map<String, dynamic>? configuration}) {
+    return CreateWorkflowTransitionRule(
+      type: type ?? this.type,
+      configuration: configuration ?? this.configuration,
+    );
+  }
+}
+
+/// The details of a workflow transition rules.
+class CreateWorkflowTransitionRulesDetails {
+  /// The workflow conditions.
+  final CreateWorkflowCondition? conditions;
+
+  /// The workflow validators.
+  final List<CreateWorkflowTransitionRule> validators;
+
+  /// The workflow post functions.
+  final List<CreateWorkflowTransitionRule> postFunctions;
+
+  CreateWorkflowTransitionRulesDetails(
+      {this.conditions,
+      List<CreateWorkflowTransitionRule>? validators,
+      List<CreateWorkflowTransitionRule>? postFunctions})
+      : validators = validators ?? [],
+        postFunctions = postFunctions ?? [];
+
+  factory CreateWorkflowTransitionRulesDetails.fromJson(
+      Map<String, Object?> json) {
+    return CreateWorkflowTransitionRulesDetails(
+      conditions: json[r'conditions'] != null
+          ? CreateWorkflowCondition.fromJson(
+              json[r'conditions']! as Map<String, Object?>)
+          : null,
+      validators: (json[r'validators'] as List<Object?>?)
+              ?.map((i) => CreateWorkflowTransitionRule.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      postFunctions: (json[r'postFunctions'] as List<Object?>?)
+              ?.map((i) => CreateWorkflowTransitionRule.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var conditions = this.conditions;
+    var validators = this.validators;
+    var postFunctions = this.postFunctions;
+
+    final json = <String, Object?>{};
+    if (conditions != null) {
+      json[r'conditions'] = conditions.toJson();
+    }
+    json[r'validators'] = validators.map((i) => i.toJson()).toList();
+    json[r'postFunctions'] = postFunctions.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  CreateWorkflowTransitionRulesDetails copyWith(
+      {CreateWorkflowCondition? conditions,
+      List<CreateWorkflowTransitionRule>? validators,
+      List<CreateWorkflowTransitionRule>? postFunctions}) {
+    return CreateWorkflowTransitionRulesDetails(
+      conditions: conditions ?? this.conditions,
+      validators: validators ?? this.validators,
+      postFunctions: postFunctions ?? this.postFunctions,
+    );
+  }
+}
+
+/// The details of a transition screen.
+class CreateWorkflowTransitionScreenDetails {
+  /// The ID of the screen.
+  final String id;
+
+  CreateWorkflowTransitionScreenDetails({required this.id});
+
+  factory CreateWorkflowTransitionScreenDetails.fromJson(
+      Map<String, Object?> json) {
+    return CreateWorkflowTransitionScreenDetails(
+      id: json[r'id'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    return json;
+  }
+
+  CreateWorkflowTransitionScreenDetails copyWith({String? id}) {
+    return CreateWorkflowTransitionScreenDetails(
+      id: id ?? this.id,
+    );
+  }
 }
 
 /// Details about a created issue or subtask.
@@ -15879,6 +18200,33 @@ class CreatedIssues {
     return CreatedIssues(
       issues: issues ?? this.issues,
       errors: errors ?? this.errors,
+    );
+  }
+}
+
+class CustomContextVariable {
+  /// Type of custom context variable.
+  final String type;
+
+  CustomContextVariable({required this.type});
+
+  factory CustomContextVariable.fromJson(Map<String, Object?> json) {
+    return CustomContextVariable(
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    json[r'type'] = type;
+    return json;
+  }
+
+  CustomContextVariable copyWith({String? type}) {
+    return CustomContextVariable(
+      type: type ?? this.type,
     );
   }
 }
@@ -15995,7 +18343,7 @@ class CustomFieldContextDefaultValue {
   }
 }
 
-/// Default value for a cascading select custom field.
+/// The default value for a cascading select custom field.
 class CustomFieldContextDefaultValueCascadingOption {
   /// The ID of the context.
   final String contextId;
@@ -16053,7 +18401,265 @@ class CustomFieldContextDefaultValueCascadingOption {
   }
 }
 
-/// Default value for a multi-select custom field.
+/// The default value for a Date custom field.
+class CustomFieldContextDefaultValueDate {
+  /// The default date in ISO format. Ignored if `useCurrent` is true.
+  final String? date;
+
+  /// Whether to use the current date.
+  final bool useCurrent;
+  final String type;
+
+  CustomFieldContextDefaultValueDate(
+      {this.date, bool? useCurrent, required this.type})
+      : useCurrent = useCurrent ?? false;
+
+  factory CustomFieldContextDefaultValueDate.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueDate(
+      date: json[r'date'] as String?,
+      useCurrent: json[r'useCurrent'] as bool? ?? false,
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var date = this.date;
+    var useCurrent = this.useCurrent;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    if (date != null) {
+      json[r'date'] = date;
+    }
+    json[r'useCurrent'] = useCurrent;
+    json[r'type'] = type;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueDate copyWith(
+      {String? date, bool? useCurrent, String? type}) {
+    return CustomFieldContextDefaultValueDate(
+      date: date ?? this.date,
+      useCurrent: useCurrent ?? this.useCurrent,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// The default value for a date time custom field.
+class CustomFieldContextDefaultValueDateTime {
+  /// The default date-time in ISO format. Ignored if `useCurrent` is true.
+  final String? dateTime;
+
+  /// Whether to use the current date.
+  final bool useCurrent;
+  final String type;
+
+  CustomFieldContextDefaultValueDateTime(
+      {this.dateTime, bool? useCurrent, required this.type})
+      : useCurrent = useCurrent ?? false;
+
+  factory CustomFieldContextDefaultValueDateTime.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueDateTime(
+      dateTime: json[r'dateTime'] as String?,
+      useCurrent: json[r'useCurrent'] as bool? ?? false,
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var dateTime = this.dateTime;
+    var useCurrent = this.useCurrent;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    if (dateTime != null) {
+      json[r'dateTime'] = dateTime;
+    }
+    json[r'useCurrent'] = useCurrent;
+    json[r'type'] = type;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueDateTime copyWith(
+      {String? dateTime, bool? useCurrent, String? type}) {
+    return CustomFieldContextDefaultValueDateTime(
+      dateTime: dateTime ?? this.dateTime,
+      useCurrent: useCurrent ?? this.useCurrent,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// Default value for a float (number) custom field.
+class CustomFieldContextDefaultValueFloat {
+  /// The default floating-point number.
+  final num number;
+  final String type;
+
+  CustomFieldContextDefaultValueFloat(
+      {required this.number, required this.type});
+
+  factory CustomFieldContextDefaultValueFloat.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueFloat(
+      number: json[r'number'] as num? ?? 0,
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var number = this.number;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    json[r'number'] = number;
+    json[r'type'] = type;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueFloat copyWith({num? number, String? type}) {
+    return CustomFieldContextDefaultValueFloat(
+      number: number ?? this.number,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// Default value for a labels custom field.
+class CustomFieldContextDefaultValueLabels {
+  /// The default labels value.
+  final List<String> labels;
+  final String type;
+
+  CustomFieldContextDefaultValueLabels(
+      {required this.labels, required this.type});
+
+  factory CustomFieldContextDefaultValueLabels.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueLabels(
+      labels: (json[r'labels'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var labels = this.labels;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    json[r'labels'] = labels;
+    json[r'type'] = type;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueLabels copyWith(
+      {List<String>? labels, String? type}) {
+    return CustomFieldContextDefaultValueLabels(
+      labels: labels ?? this.labels,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// The default value for a User Picker (multiple) custom field.
+class CustomFieldContextDefaultValueMultiUserPicker {
+  /// The ID of the context.
+  final String contextId;
+
+  /// The IDs of the default users.
+  final List<String> accountIds;
+  final String type;
+
+  CustomFieldContextDefaultValueMultiUserPicker(
+      {required this.contextId, required this.accountIds, required this.type});
+
+  factory CustomFieldContextDefaultValueMultiUserPicker.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueMultiUserPicker(
+      contextId: json[r'contextId'] as String? ?? '',
+      accountIds: (json[r'accountIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var contextId = this.contextId;
+    var accountIds = this.accountIds;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    json[r'contextId'] = contextId;
+    json[r'accountIds'] = accountIds;
+    json[r'type'] = type;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueMultiUserPicker copyWith(
+      {String? contextId, List<String>? accountIds, String? type}) {
+    return CustomFieldContextDefaultValueMultiUserPicker(
+      contextId: contextId ?? this.contextId,
+      accountIds: accountIds ?? this.accountIds,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// The default value for a multiple group picker custom field.
+class CustomFieldContextDefaultValueMultipleGroupPicker {
+  /// The ID of the context.
+  final String contextId;
+
+  /// The IDs of the default groups.
+  final List<String> groupIds;
+  final String type;
+
+  CustomFieldContextDefaultValueMultipleGroupPicker(
+      {required this.contextId, required this.groupIds, required this.type});
+
+  factory CustomFieldContextDefaultValueMultipleGroupPicker.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueMultipleGroupPicker(
+      contextId: json[r'contextId'] as String? ?? '',
+      groupIds: (json[r'groupIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var contextId = this.contextId;
+    var groupIds = this.groupIds;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    json[r'contextId'] = contextId;
+    json[r'groupIds'] = groupIds;
+    json[r'type'] = type;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueMultipleGroupPicker copyWith(
+      {String? contextId, List<String>? groupIds, String? type}) {
+    return CustomFieldContextDefaultValueMultipleGroupPicker(
+      contextId: contextId ?? this.contextId,
+      groupIds: groupIds ?? this.groupIds,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// The default value for a multi-select custom field.
 class CustomFieldContextDefaultValueMultipleOption {
   /// The ID of the context.
   final String contextId;
@@ -16099,7 +18705,180 @@ class CustomFieldContextDefaultValueMultipleOption {
   }
 }
 
-/// Default value for a single select custom field.
+/// The default value for a multiple version picker custom field.
+class CustomFieldContextDefaultValueMultipleVersionPicker {
+  /// The IDs of the default versions.
+  final List<String> versionIds;
+
+  /// The order the pickable versions are displayed in. If not provided, the
+  /// released-first order is used. Available version orders are
+  /// `"releasedFirst"` and `"unreleasedFirst"`.
+  final String? versionOrder;
+  final String type;
+
+  CustomFieldContextDefaultValueMultipleVersionPicker(
+      {required this.versionIds, this.versionOrder, required this.type});
+
+  factory CustomFieldContextDefaultValueMultipleVersionPicker.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueMultipleVersionPicker(
+      versionIds: (json[r'versionIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      versionOrder: json[r'versionOrder'] as String?,
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var versionIds = this.versionIds;
+    var versionOrder = this.versionOrder;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    json[r'versionIds'] = versionIds;
+    if (versionOrder != null) {
+      json[r'versionOrder'] = versionOrder;
+    }
+    json[r'type'] = type;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueMultipleVersionPicker copyWith(
+      {List<String>? versionIds, String? versionOrder, String? type}) {
+    return CustomFieldContextDefaultValueMultipleVersionPicker(
+      versionIds: versionIds ?? this.versionIds,
+      versionOrder: versionOrder ?? this.versionOrder,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// The default value for a project custom field.
+class CustomFieldContextDefaultValueProject {
+  /// The ID of the context.
+  final String contextId;
+
+  /// The ID of the default project.
+  final String projectId;
+  final String type;
+
+  CustomFieldContextDefaultValueProject(
+      {required this.contextId, required this.projectId, required this.type});
+
+  factory CustomFieldContextDefaultValueProject.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueProject(
+      contextId: json[r'contextId'] as String? ?? '',
+      projectId: json[r'projectId'] as String? ?? '',
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var contextId = this.contextId;
+    var projectId = this.projectId;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    json[r'contextId'] = contextId;
+    json[r'projectId'] = projectId;
+    json[r'type'] = type;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueProject copyWith(
+      {String? contextId, String? projectId, String? type}) {
+    return CustomFieldContextDefaultValueProject(
+      contextId: contextId ?? this.contextId,
+      projectId: projectId ?? this.projectId,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// The default text for a read only custom field.
+class CustomFieldContextDefaultValueReadOnly {
+  /// The default text. The maximum length is 255 characters.
+  final String? text;
+  final String type;
+
+  CustomFieldContextDefaultValueReadOnly({this.text, required this.type});
+
+  factory CustomFieldContextDefaultValueReadOnly.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueReadOnly(
+      text: json[r'text'] as String?,
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var text = this.text;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    if (text != null) {
+      json[r'text'] = text;
+    }
+    json[r'type'] = type;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueReadOnly copyWith(
+      {String? text, String? type}) {
+    return CustomFieldContextDefaultValueReadOnly(
+      text: text ?? this.text,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// The default value for a group picker custom field.
+class CustomFieldContextDefaultValueSingleGroupPicker {
+  /// The ID of the context.
+  final String contextId;
+
+  /// The ID of the the default group.
+  final String groupId;
+  final String type;
+
+  CustomFieldContextDefaultValueSingleGroupPicker(
+      {required this.contextId, required this.groupId, required this.type});
+
+  factory CustomFieldContextDefaultValueSingleGroupPicker.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueSingleGroupPicker(
+      contextId: json[r'contextId'] as String? ?? '',
+      groupId: json[r'groupId'] as String? ?? '',
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var contextId = this.contextId;
+    var groupId = this.groupId;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    json[r'contextId'] = contextId;
+    json[r'groupId'] = groupId;
+    json[r'type'] = type;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueSingleGroupPicker copyWith(
+      {String? contextId, String? groupId, String? type}) {
+    return CustomFieldContextDefaultValueSingleGroupPicker(
+      contextId: contextId ?? this.contextId,
+      groupId: groupId ?? this.groupId,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// The default value for a single select custom field.
 class CustomFieldContextDefaultValueSingleOption {
   /// The ID of the context.
   final String contextId;
@@ -16137,6 +18916,170 @@ class CustomFieldContextDefaultValueSingleOption {
     return CustomFieldContextDefaultValueSingleOption(
       contextId: contextId ?? this.contextId,
       optionId: optionId ?? this.optionId,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// The default value for a version picker custom field.
+class CustomFieldContextDefaultValueSingleVersionPicker {
+  /// The ID of the default version.
+  final String versionId;
+
+  /// The order the pickable versions are displayed in. If not provided, the
+  /// released-first order is used. Available version orders are
+  /// `"releasedFirst"` and `"unreleasedFirst"`.
+  final String? versionOrder;
+  final String type;
+
+  CustomFieldContextDefaultValueSingleVersionPicker(
+      {required this.versionId, this.versionOrder, required this.type});
+
+  factory CustomFieldContextDefaultValueSingleVersionPicker.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueSingleVersionPicker(
+      versionId: json[r'versionId'] as String? ?? '',
+      versionOrder: json[r'versionOrder'] as String?,
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var versionId = this.versionId;
+    var versionOrder = this.versionOrder;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    json[r'versionId'] = versionId;
+    if (versionOrder != null) {
+      json[r'versionOrder'] = versionOrder;
+    }
+    json[r'type'] = type;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueSingleVersionPicker copyWith(
+      {String? versionId, String? versionOrder, String? type}) {
+    return CustomFieldContextDefaultValueSingleVersionPicker(
+      versionId: versionId ?? this.versionId,
+      versionOrder: versionOrder ?? this.versionOrder,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// The default text for a text area custom field.
+class CustomFieldContextDefaultValueTextArea {
+  /// The default text. The maximum length is 32767 characters.
+  final String? text;
+  final String type;
+
+  CustomFieldContextDefaultValueTextArea({this.text, required this.type});
+
+  factory CustomFieldContextDefaultValueTextArea.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueTextArea(
+      text: json[r'text'] as String?,
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var text = this.text;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    if (text != null) {
+      json[r'text'] = text;
+    }
+    json[r'type'] = type;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueTextArea copyWith(
+      {String? text, String? type}) {
+    return CustomFieldContextDefaultValueTextArea(
+      text: text ?? this.text,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// The default text for a text custom field.
+class CustomFieldContextDefaultValueTextField {
+  /// The default text. The maximum length is 254 characters.
+  final String? text;
+  final String type;
+
+  CustomFieldContextDefaultValueTextField({this.text, required this.type});
+
+  factory CustomFieldContextDefaultValueTextField.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueTextField(
+      text: json[r'text'] as String?,
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var text = this.text;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    if (text != null) {
+      json[r'text'] = text;
+    }
+    json[r'type'] = type;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueTextField copyWith(
+      {String? text, String? type}) {
+    return CustomFieldContextDefaultValueTextField(
+      text: text ?? this.text,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// The default value for a URL custom field.
+class CustomFieldContextDefaultValueURL {
+  /// The ID of the context.
+  final String contextId;
+
+  /// The default URL.
+  final String url;
+  final String type;
+
+  CustomFieldContextDefaultValueURL(
+      {required this.contextId, required this.url, required this.type});
+
+  factory CustomFieldContextDefaultValueURL.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueURL(
+      contextId: json[r'contextId'] as String? ?? '',
+      url: json[r'url'] as String? ?? '',
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var contextId = this.contextId;
+    var url = this.url;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    json[r'contextId'] = contextId;
+    json[r'url'] = url;
+    json[r'type'] = type;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueURL copyWith(
+      {String? contextId, String? url, String? type}) {
+    return CustomFieldContextDefaultValueURL(
+      contextId: contextId ?? this.contextId,
+      url: url ?? this.url,
       type: type ?? this.type,
     );
   }
@@ -16234,7 +19177,7 @@ class CustomFieldContextOption {
   }
 }
 
-/// Details of context to project associations.
+/// Details of a context to project association.
 class CustomFieldContextProjectMapping {
   /// The ID of the context.
   final String contextId;
@@ -16277,6 +19220,61 @@ class CustomFieldContextProjectMapping {
       contextId: contextId ?? this.contextId,
       projectId: projectId ?? this.projectId,
       isGlobalContext: isGlobalContext ?? this.isGlobalContext,
+    );
+  }
+}
+
+/// Defaults for a User Picker (single) custom field.
+class CustomFieldContextSingleUserPickerDefaults {
+  /// The ID of the context.
+  final String contextId;
+
+  /// The ID of the default user.
+  final String accountId;
+  final UserFilter userFilter;
+  final String type;
+
+  CustomFieldContextSingleUserPickerDefaults(
+      {required this.contextId,
+      required this.accountId,
+      required this.userFilter,
+      required this.type});
+
+  factory CustomFieldContextSingleUserPickerDefaults.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextSingleUserPickerDefaults(
+      contextId: json[r'contextId'] as String? ?? '',
+      accountId: json[r'accountId'] as String? ?? '',
+      userFilter: UserFilter.fromJson(
+          json[r'userFilter'] as Map<String, Object?>? ?? const {}),
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var contextId = this.contextId;
+    var accountId = this.accountId;
+    var userFilter = this.userFilter;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    json[r'contextId'] = contextId;
+    json[r'accountId'] = accountId;
+    json[r'userFilter'] = userFilter.toJson();
+    json[r'type'] = type;
+    return json;
+  }
+
+  CustomFieldContextSingleUserPickerDefaults copyWith(
+      {String? contextId,
+      String? accountId,
+      UserFilter? userFilter,
+      String? type}) {
+    return CustomFieldContextSingleUserPickerDefaults(
+      contextId: contextId ?? this.contextId,
+      accountId: accountId ?? this.accountId,
+      userFilter: userFilter ?? this.userFilter,
+      type: type ?? this.type,
     );
   }
 }
@@ -16791,21 +19789,21 @@ class CustomFieldValueUpdate {
   final List<int> issueIds;
 
   /// The value for the custom field. The value must be compatible with the
-  /// [custom field type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/#data-types)
+  /// [custom field type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field/#data-types)
   /// as follows:
   ///
-  ///  *  `string` – the value must be a string.
-  ///  *  `number` – the value must be a number.
-  ///  *  `datetime` – the value must be a string that represents a date in the
+  ///  *  `string` the value must be a string.
+  ///  *  `number` the value must be a number.
+  ///  *  `datetime` the value must be a string that represents a date in the
   /// ISO format, for example `"2021-01-18T12:00:00-03:00"`.
-  ///  *  `user` – the value must be an object that contains the `accountId`
+  ///  *  `user` the value must be an object that contains the `accountId`
   /// field.
-  ///  *  `group` – the value must be an object that contains the group `name`
+  ///  *  `group` the value must be an object that contains the group `name`
   /// field.
   ///
   /// A list of appropriate values must be provided if the field is of the
   /// `list`
-  /// [collection type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/#collection-types).
+  /// [collection type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field/#collection-types).
   final dynamic value;
 
   CustomFieldValueUpdate({required this.issueIds, required this.value});
@@ -16839,15 +19837,15 @@ class CustomFieldValueUpdate {
 }
 
 /// Details of updates for a custom field.
-class CustomFieldValueUpdateRequest {
+class CustomFieldValueUpdateDetails {
   /// The list of custom field update details.
   final List<CustomFieldValueUpdate> updates;
 
-  CustomFieldValueUpdateRequest({List<CustomFieldValueUpdate>? updates})
+  CustomFieldValueUpdateDetails({List<CustomFieldValueUpdate>? updates})
       : updates = updates ?? [];
 
-  factory CustomFieldValueUpdateRequest.fromJson(Map<String, Object?> json) {
-    return CustomFieldValueUpdateRequest(
+  factory CustomFieldValueUpdateDetails.fromJson(Map<String, Object?> json) {
+    return CustomFieldValueUpdateDetails(
       updates: (json[r'updates'] as List<Object?>?)
               ?.map((i) => CustomFieldValueUpdate.fromJson(
                   i as Map<String, Object?>? ?? const {}))
@@ -16864,9 +19862,9 @@ class CustomFieldValueUpdateRequest {
     return json;
   }
 
-  CustomFieldValueUpdateRequest copyWith(
+  CustomFieldValueUpdateDetails copyWith(
       {List<CustomFieldValueUpdate>? updates}) {
-    return CustomFieldValueUpdateRequest(
+    return CustomFieldValueUpdateDetails(
       updates: updates ?? this.updates,
     );
   }
@@ -16906,6 +19904,9 @@ class Dashboard {
   /// The URL of the dashboard.
   final String? view;
 
+  /// Whether the current user has permission to edit the dashboard.
+  final bool isWritable;
+
   Dashboard(
       {this.description,
       this.id,
@@ -16917,10 +19918,12 @@ class Dashboard {
       this.self,
       List<SharePermission>? sharePermissions,
       List<SharePermission>? editPermissions,
-      this.view})
+      this.view,
+      bool? isWritable})
       : isFavourite = isFavourite ?? false,
         sharePermissions = sharePermissions ?? [],
-        editPermissions = editPermissions ?? [];
+        editPermissions = editPermissions ?? [],
+        isWritable = isWritable ?? false;
 
   factory Dashboard.fromJson(Map<String, Object?> json) {
     return Dashboard(
@@ -16945,6 +19948,7 @@ class Dashboard {
               .toList() ??
           [],
       view: json[r'view'] as String?,
+      isWritable: json[r'isWritable'] as bool? ?? false,
     );
   }
 
@@ -16960,6 +19964,7 @@ class Dashboard {
     var sharePermissions = this.sharePermissions;
     var editPermissions = this.editPermissions;
     var view = this.view;
+    var isWritable = this.isWritable;
 
     final json = <String, Object?>{};
     if (description != null) {
@@ -16990,6 +19995,7 @@ class Dashboard {
     if (view != null) {
       json[r'view'] = view;
     }
+    json[r'isWritable'] = isWritable;
     return json;
   }
 
@@ -17004,7 +20010,8 @@ class Dashboard {
       String? self,
       List<SharePermission>? sharePermissions,
       List<SharePermission>? editPermissions,
-      String? view}) {
+      String? view,
+      bool? isWritable}) {
     return Dashboard(
       description: description ?? this.description,
       id: id ?? this.id,
@@ -17017,6 +20024,7 @@ class Dashboard {
       sharePermissions: sharePermissions ?? this.sharePermissions,
       editPermissions: editPermissions ?? this.editPermissions,
       view: view ?? this.view,
+      isWritable: isWritable ?? this.isWritable,
     );
   }
 }
@@ -17029,17 +20037,28 @@ class DashboardDetails {
   /// The description of the dashboard.
   final String? description;
 
-  /// The details of any share permissions for the dashboard.
+  /// The share permissions for the dashboard.
   final List<SharePermission> sharePermissions;
 
+  /// The edit permissions for the dashboard.
+  final List<SharePermission> editPermissions;
+
   DashboardDetails(
-      {required this.name, this.description, required this.sharePermissions});
+      {required this.name,
+      this.description,
+      required this.sharePermissions,
+      required this.editPermissions});
 
   factory DashboardDetails.fromJson(Map<String, Object?> json) {
     return DashboardDetails(
       name: json[r'name'] as String? ?? '',
       description: json[r'description'] as String?,
       sharePermissions: (json[r'sharePermissions'] as List<Object?>?)
+              ?.map((i) => SharePermission.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      editPermissions: (json[r'editPermissions'] as List<Object?>?)
               ?.map((i) => SharePermission.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -17051,6 +20070,7 @@ class DashboardDetails {
     var name = this.name;
     var description = this.description;
     var sharePermissions = this.sharePermissions;
+    var editPermissions = this.editPermissions;
 
     final json = <String, Object?>{};
     json[r'name'] = name;
@@ -17059,17 +20079,20 @@ class DashboardDetails {
     }
     json[r'sharePermissions'] =
         sharePermissions.map((i) => i.toJson()).toList();
+    json[r'editPermissions'] = editPermissions.map((i) => i.toJson()).toList();
     return json;
   }
 
   DashboardDetails copyWith(
       {String? name,
       String? description,
-      List<SharePermission>? sharePermissions}) {
+      List<SharePermission>? sharePermissions,
+      List<SharePermission>? editPermissions}) {
     return DashboardDetails(
       name: name ?? this.name,
       description: description ?? this.description,
       sharePermissions: sharePermissions ?? this.sharePermissions,
+      editPermissions: editPermissions ?? this.editPermissions,
     );
   }
 }
@@ -17823,6 +20846,9 @@ class Field {
   /// Whether the field is locked.
   final bool isLocked;
 
+  /// Whether the field is shown on screen or not.
+  final bool isUnscreenable;
+
   /// The searcher key of the field. Returned for custom fields.
   final String? searcherKey;
 
@@ -17840,11 +20866,13 @@ class Field {
       this.description,
       this.key,
       bool? isLocked,
+      bool? isUnscreenable,
       this.searcherKey,
       this.screensCount,
       this.contextsCount,
       this.lastUsed})
-      : isLocked = isLocked ?? false;
+      : isLocked = isLocked ?? false,
+        isUnscreenable = isUnscreenable ?? false;
 
   factory Field.fromJson(Map<String, Object?> json) {
     return Field(
@@ -17855,6 +20883,7 @@ class Field {
       description: json[r'description'] as String?,
       key: json[r'key'] as String?,
       isLocked: json[r'isLocked'] as bool? ?? false,
+      isUnscreenable: json[r'isUnscreenable'] as bool? ?? false,
       searcherKey: json[r'searcherKey'] as String?,
       screensCount: (json[r'screensCount'] as num?)?.toInt(),
       contextsCount: (json[r'contextsCount'] as num?)?.toInt(),
@@ -17871,6 +20900,7 @@ class Field {
     var description = this.description;
     var key = this.key;
     var isLocked = this.isLocked;
+    var isUnscreenable = this.isUnscreenable;
     var searcherKey = this.searcherKey;
     var screensCount = this.screensCount;
     var contextsCount = this.contextsCount;
@@ -17887,6 +20917,7 @@ class Field {
       json[r'key'] = key;
     }
     json[r'isLocked'] = isLocked;
+    json[r'isUnscreenable'] = isUnscreenable;
     if (searcherKey != null) {
       json[r'searcherKey'] = searcherKey;
     }
@@ -17909,6 +20940,7 @@ class Field {
       String? description,
       String? key,
       bool? isLocked,
+      bool? isUnscreenable,
       String? searcherKey,
       int? screensCount,
       int? contextsCount,
@@ -17920,6 +20952,7 @@ class Field {
       description: description ?? this.description,
       key: key ?? this.key,
       isLocked: isLocked ?? this.isLocked,
+      isUnscreenable: isUnscreenable ?? this.isUnscreenable,
       searcherKey: searcherKey ?? this.searcherKey,
       screensCount: screensCount ?? this.screensCount,
       contextsCount: contextsCount ?? this.contextsCount,
@@ -18058,6 +21091,43 @@ class FieldConfiguration {
   }
 }
 
+/// Details of a field configuration.
+class FieldConfigurationDetails {
+  /// The name of the field configuration. Must be unique.
+  final String name;
+
+  /// The description of the field configuration.
+  final String? description;
+
+  FieldConfigurationDetails({required this.name, this.description});
+
+  factory FieldConfigurationDetails.fromJson(Map<String, Object?> json) {
+    return FieldConfigurationDetails(
+      name: json[r'name'] as String? ?? '',
+      description: json[r'description'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var description = this.description;
+
+    final json = <String, Object?>{};
+    json[r'name'] = name;
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    return json;
+  }
+
+  FieldConfigurationDetails copyWith({String? name, String? description}) {
+    return FieldConfigurationDetails(
+      name: name ?? this.name,
+      description: description ?? this.description,
+    );
+  }
+}
+
 /// The field configuration for an issue type.
 class FieldConfigurationIssueTypeItem {
   /// The ID of the field configuration scheme.
@@ -18124,8 +21194,15 @@ class FieldConfigurationItem {
   /// Whether the field is required in the field configuration.
   final bool isRequired;
 
+  /// The renderer type for the field within the field configuration.
+  final String? renderer;
+
   FieldConfigurationItem(
-      {required this.id, this.description, bool? isHidden, bool? isRequired})
+      {required this.id,
+      this.description,
+      bool? isHidden,
+      bool? isRequired,
+      this.renderer})
       : isHidden = isHidden ?? false,
         isRequired = isRequired ?? false;
 
@@ -18135,6 +21212,7 @@ class FieldConfigurationItem {
       description: json[r'description'] as String?,
       isHidden: json[r'isHidden'] as bool? ?? false,
       isRequired: json[r'isRequired'] as bool? ?? false,
+      renderer: json[r'renderer'] as String?,
     );
   }
 
@@ -18143,6 +21221,7 @@ class FieldConfigurationItem {
     var description = this.description;
     var isHidden = this.isHidden;
     var isRequired = this.isRequired;
+    var renderer = this.renderer;
 
     final json = <String, Object?>{};
     json[r'id'] = id;
@@ -18151,16 +21230,60 @@ class FieldConfigurationItem {
     }
     json[r'isHidden'] = isHidden;
     json[r'isRequired'] = isRequired;
+    if (renderer != null) {
+      json[r'renderer'] = renderer;
+    }
     return json;
   }
 
   FieldConfigurationItem copyWith(
-      {String? id, String? description, bool? isHidden, bool? isRequired}) {
+      {String? id,
+      String? description,
+      bool? isHidden,
+      bool? isRequired,
+      String? renderer}) {
     return FieldConfigurationItem(
       id: id ?? this.id,
       description: description ?? this.description,
       isHidden: isHidden ?? this.isHidden,
       isRequired: isRequired ?? this.isRequired,
+      renderer: renderer ?? this.renderer,
+    );
+  }
+}
+
+/// Details of field configuration items.
+class FieldConfigurationItemsDetails {
+  /// Details of fields in a field configuration.
+  final List<FieldConfigurationItem> fieldConfigurationItems;
+
+  FieldConfigurationItemsDetails({required this.fieldConfigurationItems});
+
+  factory FieldConfigurationItemsDetails.fromJson(Map<String, Object?> json) {
+    return FieldConfigurationItemsDetails(
+      fieldConfigurationItems:
+          (json[r'fieldConfigurationItems'] as List<Object?>?)
+                  ?.map((i) => FieldConfigurationItem.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+                  .toList() ??
+              [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fieldConfigurationItems = this.fieldConfigurationItems;
+
+    final json = <String, Object?>{};
+    json[r'fieldConfigurationItems'] =
+        fieldConfigurationItems.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  FieldConfigurationItemsDetails copyWith(
+      {List<FieldConfigurationItem>? fieldConfigurationItems}) {
+    return FieldConfigurationItemsDetails(
+      fieldConfigurationItems:
+          fieldConfigurationItems ?? this.fieldConfigurationItems,
     );
   }
 }
@@ -18297,6 +21420,46 @@ class FieldConfigurationSchemeProjects {
       fieldConfigurationScheme:
           fieldConfigurationScheme ?? this.fieldConfigurationScheme,
       projectIds: projectIds ?? this.projectIds,
+    );
+  }
+}
+
+/// The field configuration to issue type mapping.
+class FieldConfigurationToIssueTypeMapping {
+  /// The ID of the issue type or *default*. When set to *default* this field
+  /// configuration issue type item applies to all issue types without a field
+  /// configuration. An issue type can be included only once in a request.
+  final String issueTypeId;
+
+  /// The ID of the field configuration.
+  final String fieldConfigurationId;
+
+  FieldConfigurationToIssueTypeMapping(
+      {required this.issueTypeId, required this.fieldConfigurationId});
+
+  factory FieldConfigurationToIssueTypeMapping.fromJson(
+      Map<String, Object?> json) {
+    return FieldConfigurationToIssueTypeMapping(
+      issueTypeId: json[r'issueTypeId'] as String? ?? '',
+      fieldConfigurationId: json[r'fieldConfigurationId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueTypeId = this.issueTypeId;
+    var fieldConfigurationId = this.fieldConfigurationId;
+
+    final json = <String, Object?>{};
+    json[r'issueTypeId'] = issueTypeId;
+    json[r'fieldConfigurationId'] = fieldConfigurationId;
+    return json;
+  }
+
+  FieldConfigurationToIssueTypeMapping copyWith(
+      {String? issueTypeId, String? fieldConfigurationId}) {
+    return FieldConfigurationToIssueTypeMapping(
+      issueTypeId: issueTypeId ?? this.issueTypeId,
+      fieldConfigurationId: fieldConfigurationId ?? this.fieldConfigurationId,
     );
   }
 }
@@ -18819,16 +21982,16 @@ class FieldReferenceDataAuto {
 
 /// Details of an operation to perform on a field.
 class FieldUpdateOperation {
-  /// A map containing the name of a field and the value to add to it.
+  /// The value to add to the field.
   final dynamic add;
 
-  /// A map containing the name of a field and the value to set in it.
+  /// The value to set in the field.
   final dynamic set;
 
-  /// A map containing the name of a field and the value to removed from it.
+  /// The value to removed from the field.
   final dynamic remove;
 
-  /// A map containing the name of a field and the value to edit in it.
+  /// The value to edit in the field.
   final dynamic edit;
 
   FieldUpdateOperation({this.add, this.set, this.remove, this.edit});
@@ -19212,6 +22375,9 @@ class Filter {
   /// The groups and projects that the filter is shared with.
   final List<SharePermission> sharePermissions;
 
+  /// The groups and projects that can edit the filter.
+  final List<SharePermission> editPermissions;
+
   /// A paginated list of the users that the filter is shared with. This
   /// includes users that are members of the groups or can browse the projects
   /// that the filter is shared with.
@@ -19232,10 +22398,12 @@ class Filter {
       bool? favourite,
       this.favouritedCount,
       List<SharePermission>? sharePermissions,
+      List<SharePermission>? editPermissions,
       this.sharedUsers,
       this.subscriptions})
       : favourite = favourite ?? false,
-        sharePermissions = sharePermissions ?? [];
+        sharePermissions = sharePermissions ?? [],
+        editPermissions = editPermissions ?? [];
 
   factory Filter.fromJson(Map<String, Object?> json) {
     return Filter(
@@ -19252,6 +22420,11 @@ class Filter {
       favourite: json[r'favourite'] as bool? ?? false,
       favouritedCount: (json[r'favouritedCount'] as num?)?.toInt(),
       sharePermissions: (json[r'sharePermissions'] as List<Object?>?)
+              ?.map((i) => SharePermission.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      editPermissions: (json[r'editPermissions'] as List<Object?>?)
               ?.map((i) => SharePermission.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
@@ -19278,6 +22451,7 @@ class Filter {
     var favourite = this.favourite;
     var favouritedCount = this.favouritedCount;
     var sharePermissions = this.sharePermissions;
+    var editPermissions = this.editPermissions;
     var sharedUsers = this.sharedUsers;
     var subscriptions = this.subscriptions;
 
@@ -19310,6 +22484,7 @@ class Filter {
     }
     json[r'sharePermissions'] =
         sharePermissions.map((i) => i.toJson()).toList();
+    json[r'editPermissions'] = editPermissions.map((i) => i.toJson()).toList();
     if (sharedUsers != null) {
       json[r'sharedUsers'] = sharedUsers.toJson();
     }
@@ -19331,6 +22506,7 @@ class Filter {
       bool? favourite,
       int? favouritedCount,
       List<SharePermission>? sharePermissions,
+      List<SharePermission>? editPermissions,
       UserList? sharedUsers,
       FilterSubscriptionsList? subscriptions}) {
     return Filter(
@@ -19345,6 +22521,7 @@ class Filter {
       favourite: favourite ?? this.favourite,
       favouritedCount: favouritedCount ?? this.favouritedCount,
       sharePermissions: sharePermissions ?? this.sharePermissions,
+      editPermissions: editPermissions ?? this.editPermissions,
       sharedUsers: sharedUsers ?? this.sharedUsers,
       subscriptions: subscriptions ?? this.subscriptions,
     );
@@ -19353,21 +22530,24 @@ class Filter {
 
 /// Details of a filter.
 class FilterDetails {
+  /// Expand options that include additional filter details in the response.
+  final String? expand;
+
   /// The URL of the filter.
   final String? self;
 
   /// The unique identifier for the filter.
   final String? id;
 
-  /// The name of the filter. Must be unique.
+  /// The name of the filter.
   final String name;
 
-  /// A description of the filter.
+  /// The description of the filter.
   final String? description;
 
-  /// The user who owns the filter. This is defaulted to the creator of the
-  /// filter, however Jira administrators can change the owner of a shared
-  /// filter in the admin settings.
+  /// The user who owns the filter. Defaults to the creator of the filter,
+  /// however, Jira administrators can change the owner of a shared filter in
+  /// the admin settings.
   final User? owner;
 
   /// The JQL query for the filter. For example, *project = SSP AND issuetype =
@@ -19396,11 +22576,16 @@ class FilterDetails {
   /// specified when updating a filter, but not when creating a filter.
   final List<SharePermission> sharePermissions;
 
+  /// The groups and projects that can edit the filter. This can be specified
+  /// when updating a filter, but not when creating a filter.
+  final List<SharePermission> editPermissions;
+
   /// The users that are subscribed to the filter.
   final List<FilterSubscription> subscriptions;
 
   FilterDetails(
-      {this.self,
+      {this.expand,
+      this.self,
       this.id,
       required this.name,
       this.description,
@@ -19411,13 +22596,16 @@ class FilterDetails {
       bool? favourite,
       this.favouritedCount,
       List<SharePermission>? sharePermissions,
+      List<SharePermission>? editPermissions,
       List<FilterSubscription>? subscriptions})
       : favourite = favourite ?? false,
         sharePermissions = sharePermissions ?? [],
+        editPermissions = editPermissions ?? [],
         subscriptions = subscriptions ?? [];
 
   factory FilterDetails.fromJson(Map<String, Object?> json) {
     return FilterDetails(
+      expand: json[r'expand'] as String?,
       self: json[r'self'] as String?,
       id: json[r'id'] as String?,
       name: json[r'name'] as String? ?? '',
@@ -19435,6 +22623,11 @@ class FilterDetails {
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
+      editPermissions: (json[r'editPermissions'] as List<Object?>?)
+              ?.map((i) => SharePermission.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
       subscriptions: (json[r'subscriptions'] as List<Object?>?)
               ?.map((i) => FilterSubscription.fromJson(
                   i as Map<String, Object?>? ?? const {}))
@@ -19444,6 +22637,7 @@ class FilterDetails {
   }
 
   Map<String, Object?> toJson() {
+    var expand = this.expand;
     var self = this.self;
     var id = this.id;
     var name = this.name;
@@ -19455,9 +22649,13 @@ class FilterDetails {
     var favourite = this.favourite;
     var favouritedCount = this.favouritedCount;
     var sharePermissions = this.sharePermissions;
+    var editPermissions = this.editPermissions;
     var subscriptions = this.subscriptions;
 
     final json = <String, Object?>{};
+    if (expand != null) {
+      json[r'expand'] = expand;
+    }
     if (self != null) {
       json[r'self'] = self;
     }
@@ -19486,12 +22684,14 @@ class FilterDetails {
     }
     json[r'sharePermissions'] =
         sharePermissions.map((i) => i.toJson()).toList();
+    json[r'editPermissions'] = editPermissions.map((i) => i.toJson()).toList();
     json[r'subscriptions'] = subscriptions.map((i) => i.toJson()).toList();
     return json;
   }
 
   FilterDetails copyWith(
-      {String? self,
+      {String? expand,
+      String? self,
       String? id,
       String? name,
       String? description,
@@ -19502,8 +22702,10 @@ class FilterDetails {
       bool? favourite,
       int? favouritedCount,
       List<SharePermission>? sharePermissions,
+      List<SharePermission>? editPermissions,
       List<FilterSubscription>? subscriptions}) {
     return FilterDetails(
+      expand: expand ?? this.expand,
       self: self ?? this.self,
       id: id ?? this.id,
       name: name ?? this.name,
@@ -19515,6 +22717,7 @@ class FilterDetails {
       favourite: favourite ?? this.favourite,
       favouritedCount: favouritedCount ?? this.favouritedCount,
       sharePermissions: sharePermissions ?? this.sharePermissions,
+      editPermissions: editPermissions ?? this.editPermissions,
       subscriptions: subscriptions ?? this.subscriptions,
     );
   }
@@ -20982,6 +24185,7 @@ class IncludedFields {
   }
 }
 
+/// Details about an issue.
 class IssueBean {
   /// Expand options that include additional issue details in the response.
   final String? expand;
@@ -21240,6 +24444,55 @@ class IssueCommentListRequestBean {
   }
 }
 
+/// An
+/// [issue](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#issue)
+/// specified by ID or key. All the fields of the issue object are available in
+/// the Jira expression.
+class IssueContextVariable {
+  /// Type of custom context variable.
+  final String type;
+
+  /// The issue ID.
+  final int? id;
+
+  /// The issue key.
+  final String? key;
+
+  IssueContextVariable({required this.type, this.id, this.key});
+
+  factory IssueContextVariable.fromJson(Map<String, Object?> json) {
+    return IssueContextVariable(
+      type: json[r'type'] as String? ?? '',
+      id: (json[r'id'] as num?)?.toInt(),
+      key: json[r'key'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var id = this.id;
+    var key = this.key;
+
+    final json = <String, Object?>{};
+    json[r'type'] = type;
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    return json;
+  }
+
+  IssueContextVariable copyWith({String? type, int? id, String? key}) {
+    return IssueContextVariable(
+      type: type ?? this.type,
+      id: id ?? this.id,
+      key: key ?? this.key,
+    );
+  }
+}
+
 /// The wrapper for the issue creation metadata for a list of projects.
 class IssueCreateMetadata {
   /// Expand options that include additional project details in the response.
@@ -21323,6 +24576,89 @@ class IssueEntityProperties {
     return IssueEntityProperties(
       entitiesIds: entitiesIds ?? this.entitiesIds,
       properties: properties ?? this.properties,
+    );
+  }
+}
+
+/// An issue ID with entity property values. See
+/// [Entity properties](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/)
+/// for more information.
+class IssueEntityPropertiesForMultiUpdate {
+  /// The ID of the issue.
+  final int? issueId;
+
+  /// Entity properties to set on the issue. The maximum length of an issue
+  /// property value is 32768 characters.
+  final Map<String, dynamic>? properties;
+
+  IssueEntityPropertiesForMultiUpdate({this.issueId, this.properties});
+
+  factory IssueEntityPropertiesForMultiUpdate.fromJson(
+      Map<String, Object?> json) {
+    return IssueEntityPropertiesForMultiUpdate(
+      issueId: (json[r'issueID'] as num?)?.toInt(),
+      properties: json[r'properties'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueId = this.issueId;
+    var properties = this.properties;
+
+    final json = <String, Object?>{};
+    if (issueId != null) {
+      json[r'issueID'] = issueId;
+    }
+    if (properties != null) {
+      json[r'properties'] = properties;
+    }
+    return json;
+  }
+
+  IssueEntityPropertiesForMultiUpdate copyWith(
+      {int? issueId, Map<String, dynamic>? properties}) {
+    return IssueEntityPropertiesForMultiUpdate(
+      issueId: issueId ?? this.issueId,
+      properties: properties ?? this.properties,
+    );
+  }
+}
+
+/// Details about an issue event.
+class IssueEvent {
+  /// The ID of the event.
+  final int? id;
+
+  /// The name of the event.
+  final String? name;
+
+  IssueEvent({this.id, this.name});
+
+  factory IssueEvent.fromJson(Map<String, Object?> json) {
+    return IssueEvent(
+      id: (json[r'id'] as num?)?.toInt(),
+      name: json[r'name'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    return json;
+  }
+
+  IssueEvent copyWith({int? id, String? name}) {
+    return IssueEvent(
+      id: id ?? this.id,
+      name: name ?? this.name,
     );
   }
 }
@@ -21876,6 +25212,37 @@ class IssueLinkTypes {
   IssueLinkTypes copyWith({List<IssueLinkType>? issueLinkTypes}) {
     return IssueLinkTypes(
       issueLinkTypes: issueLinkTypes ?? this.issueLinkTypes,
+    );
+  }
+}
+
+/// A list of issue IDs.
+class IssueList {
+  /// The list of issue IDs.
+  final List<String> issueIds;
+
+  IssueList({required this.issueIds});
+
+  factory IssueList.fromJson(Map<String, Object?> json) {
+    return IssueList(
+      issueIds: (json[r'issueIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueIds = this.issueIds;
+
+    final json = <String, Object?>{};
+    json[r'issueIds'] = issueIds;
+    return json;
+  }
+
+  IssueList copyWith({List<String>? issueIds}) {
+    return IssueList(
+      issueIds: issueIds ?? this.issueIds,
     );
   }
 }
@@ -22507,6 +25874,39 @@ class IssueTypeIds {
 
   IssueTypeIds copyWith({List<String>? issueTypeIds}) {
     return IssueTypeIds(
+      issueTypeIds: issueTypeIds ?? this.issueTypeIds,
+    );
+  }
+}
+
+/// The list of issue type IDs to be removed from the field configuration
+/// scheme.
+class IssueTypeIdsToRemove {
+  /// The list of issue type IDs. Must contain unique values not longer than 255
+  /// characters and not be empty. Maximum of 100 IDs.
+  final List<String> issueTypeIds;
+
+  IssueTypeIdsToRemove({required this.issueTypeIds});
+
+  factory IssueTypeIdsToRemove.fromJson(Map<String, Object?> json) {
+    return IssueTypeIdsToRemove(
+      issueTypeIds: (json[r'issueTypeIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueTypeIds = this.issueTypeIds;
+
+    final json = <String, Object?>{};
+    json[r'issueTypeIds'] = issueTypeIds;
+    return json;
+  }
+
+  IssueTypeIdsToRemove copyWith({List<String>? issueTypeIds}) {
+    return IssueTypeIdsToRemove(
       issueTypeIds: issueTypeIds ?? this.issueTypeIds,
     );
   }
@@ -23740,8 +27140,9 @@ class IssueUpdateDetails {
   /// `update`.
   final Map<String, dynamic>? fields;
 
-  /// List of operations to perform on issue screen fields. Note that fields
-  /// included in here cannot be included in `fields`.
+  /// A Map containing the field field name and a list of operations to perform
+  /// on the issue screen field. Note that fields included in here cannot be
+  /// included in `fields`.
   final Map<String, dynamic>? update;
 
   /// Additional issue history details.
@@ -24447,6 +27848,20 @@ class JiraExpressionEvalContextBean {
   /// context variable will have a different type.
   final int? customerRequest;
 
+  /// Custom context variables and their types. These variable types are
+  /// available for use in a custom context:
+  ///
+  ///  *  `user`: A
+  /// [user](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#user)
+  /// specified as an Atlassian account ID.
+  ///  *  `issue`: An
+  /// [issue](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#issue)
+  /// specified by ID or key. All the fields of the issue object are available
+  /// in the Jira expression.
+  ///  *  `json`: A JSON object containing custom content.
+  ///  *  `list`: A JSON list of `user`, `issue`, or `json` variable types.
+  final List<CustomContextVariable> custom;
+
   JiraExpressionEvalContextBean(
       {this.issue,
       this.issues,
@@ -24454,7 +27869,9 @@ class JiraExpressionEvalContextBean {
       this.sprint,
       this.board,
       this.serviceDesk,
-      this.customerRequest});
+      this.customerRequest,
+      List<CustomContextVariable>? custom})
+      : custom = custom ?? [];
 
   factory JiraExpressionEvalContextBean.fromJson(Map<String, Object?> json) {
     return JiraExpressionEvalContextBean(
@@ -24471,6 +27888,11 @@ class JiraExpressionEvalContextBean {
       board: (json[r'board'] as num?)?.toInt(),
       serviceDesk: (json[r'serviceDesk'] as num?)?.toInt(),
       customerRequest: (json[r'customerRequest'] as num?)?.toInt(),
+      custom: (json[r'custom'] as List<Object?>?)
+              ?.map((i) => CustomContextVariable.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
     );
   }
 
@@ -24482,6 +27904,7 @@ class JiraExpressionEvalContextBean {
     var board = this.board;
     var serviceDesk = this.serviceDesk;
     var customerRequest = this.customerRequest;
+    var custom = this.custom;
 
     final json = <String, Object?>{};
     if (issue != null) {
@@ -24505,6 +27928,7 @@ class JiraExpressionEvalContextBean {
     if (customerRequest != null) {
       json[r'customerRequest'] = customerRequest;
     }
+    json[r'custom'] = custom.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -24515,7 +27939,8 @@ class JiraExpressionEvalContextBean {
       int? sprint,
       int? board,
       int? serviceDesk,
-      int? customerRequest}) {
+      int? customerRequest,
+      List<CustomContextVariable>? custom}) {
     return JiraExpressionEvalContextBean(
       issue: issue ?? this.issue,
       issues: issues ?? this.issues,
@@ -24524,6 +27949,7 @@ class JiraExpressionEvalContextBean {
       board: board ?? this.board,
       serviceDesk: serviceDesk ?? this.serviceDesk,
       customerRequest: customerRequest ?? this.customerRequest,
+      custom: custom ?? this.custom,
     );
   }
 }
@@ -25358,19 +28784,49 @@ class JqlQueryUnitaryOperand {
   }
 }
 
+/// A JSON object with custom content.
+class JsonContextVariable {
+  /// Type of custom context variable.
+  final String type;
+
+  /// A JSON object containing custom content.
+  final Map<String, dynamic>? value;
+
+  JsonContextVariable({required this.type, this.value});
+
+  factory JsonContextVariable.fromJson(Map<String, Object?> json) {
+    return JsonContextVariable(
+      type: json[r'type'] as String? ?? '',
+      value: json[r'value'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    json[r'type'] = type;
+    if (value != null) {
+      json[r'value'] = value;
+    }
+    return json;
+  }
+
+  JsonContextVariable copyWith({String? type, Map<String, dynamic>? value}) {
+    return JsonContextVariable(
+      type: type ?? this.type,
+      value: value ?? this.value,
+    );
+  }
+}
+
 class JsonNode {
-  final String? textValue;
-  final String? valueAsText;
-  final Map<String, dynamic>? fieldNames;
+  final bool floatingPointNumber;
   final Map<String, dynamic>? elements;
   final bool pojo;
-  final bool containerNode;
-  final bool missingNode;
-  final bool object;
-  final bool valueNode;
   final bool number;
   final bool integralNumber;
-  final bool floatingPointNumber;
   final bool int$;
   final bool long;
   final bool double$;
@@ -25379,6 +28835,10 @@ class JsonNode {
   final bool textual;
   final bool boolean;
   final bool binary;
+  final bool containerNode;
+  final bool missingNode;
+  final bool object;
+  final bool valueNode;
   final num? numberValue;
   final JsonNodeNumberType? numberType;
   final int? intValue;
@@ -25392,23 +28852,19 @@ class JsonNode {
   final int? valueAsLong;
   final num? valueAsDouble;
   final bool valueAsBoolean;
+  final Map<String, dynamic>? fieldNames;
+  final String? textValue;
+  final String? valueAsText;
   final bool array;
   final Map<String, dynamic>? fields;
   final bool null$;
 
   JsonNode(
-      {this.textValue,
-      this.valueAsText,
-      this.fieldNames,
+      {bool? floatingPointNumber,
       this.elements,
       bool? pojo,
-      bool? containerNode,
-      bool? missingNode,
-      bool? object,
-      bool? valueNode,
       bool? number,
       bool? integralNumber,
-      bool? floatingPointNumber,
       bool? int$,
       bool? long,
       bool? double$,
@@ -25417,6 +28873,10 @@ class JsonNode {
       bool? textual,
       bool? boolean,
       bool? binary,
+      bool? containerNode,
+      bool? missingNode,
+      bool? object,
+      bool? valueNode,
       this.numberValue,
       this.numberType,
       this.intValue,
@@ -25430,17 +28890,16 @@ class JsonNode {
       this.valueAsLong,
       this.valueAsDouble,
       bool? valueAsBoolean,
+      this.fieldNames,
+      this.textValue,
+      this.valueAsText,
       bool? array,
       this.fields,
       bool? null$})
-      : pojo = pojo ?? false,
-        containerNode = containerNode ?? false,
-        missingNode = missingNode ?? false,
-        object = object ?? false,
-        valueNode = valueNode ?? false,
+      : floatingPointNumber = floatingPointNumber ?? false,
+        pojo = pojo ?? false,
         number = number ?? false,
         integralNumber = integralNumber ?? false,
-        floatingPointNumber = floatingPointNumber ?? false,
         int$ = int$ ?? false,
         long = long ?? false,
         double$ = double$ ?? false,
@@ -25449,6 +28908,10 @@ class JsonNode {
         textual = textual ?? false,
         boolean = boolean ?? false,
         binary = binary ?? false,
+        containerNode = containerNode ?? false,
+        missingNode = missingNode ?? false,
+        object = object ?? false,
+        valueNode = valueNode ?? false,
         booleanValue = booleanValue ?? false,
         binaryValue = binaryValue ?? [],
         valueAsBoolean = valueAsBoolean ?? false,
@@ -25457,18 +28920,11 @@ class JsonNode {
 
   factory JsonNode.fromJson(Map<String, Object?> json) {
     return JsonNode(
-      textValue: json[r'textValue'] as String?,
-      valueAsText: json[r'valueAsText'] as String?,
-      fieldNames: json[r'fieldNames'] as Map<String, Object?>?,
+      floatingPointNumber: json[r'floatingPointNumber'] as bool? ?? false,
       elements: json[r'elements'] as Map<String, Object?>?,
       pojo: json[r'pojo'] as bool? ?? false,
-      containerNode: json[r'containerNode'] as bool? ?? false,
-      missingNode: json[r'missingNode'] as bool? ?? false,
-      object: json[r'object'] as bool? ?? false,
-      valueNode: json[r'valueNode'] as bool? ?? false,
       number: json[r'number'] as bool? ?? false,
       integralNumber: json[r'integralNumber'] as bool? ?? false,
-      floatingPointNumber: json[r'floatingPointNumber'] as bool? ?? false,
       int$: json[r'int'] as bool? ?? false,
       long: json[r'long'] as bool? ?? false,
       double$: json[r'double'] as bool? ?? false,
@@ -25477,6 +28933,10 @@ class JsonNode {
       textual: json[r'textual'] as bool? ?? false,
       boolean: json[r'boolean'] as bool? ?? false,
       binary: json[r'binary'] as bool? ?? false,
+      containerNode: json[r'containerNode'] as bool? ?? false,
+      missingNode: json[r'missingNode'] as bool? ?? false,
+      object: json[r'object'] as bool? ?? false,
+      valueNode: json[r'valueNode'] as bool? ?? false,
       numberValue: json[r'numberValue'] as num?,
       numberType: json[r'numberType'] != null
           ? JsonNodeNumberType.fromValue(json[r'numberType']! as String)
@@ -25495,6 +28955,9 @@ class JsonNode {
       valueAsLong: (json[r'valueAsLong'] as num?)?.toInt(),
       valueAsDouble: json[r'valueAsDouble'] as num?,
       valueAsBoolean: json[r'valueAsBoolean'] as bool? ?? false,
+      fieldNames: json[r'fieldNames'] as Map<String, Object?>?,
+      textValue: json[r'textValue'] as String?,
+      valueAsText: json[r'valueAsText'] as String?,
       array: json[r'array'] as bool? ?? false,
       fields: json[r'fields'] as Map<String, Object?>?,
       null$: json[r'null'] as bool? ?? false,
@@ -25502,18 +28965,11 @@ class JsonNode {
   }
 
   Map<String, Object?> toJson() {
-    var textValue = this.textValue;
-    var valueAsText = this.valueAsText;
-    var fieldNames = this.fieldNames;
+    var floatingPointNumber = this.floatingPointNumber;
     var elements = this.elements;
     var pojo = this.pojo;
-    var containerNode = this.containerNode;
-    var missingNode = this.missingNode;
-    var object = this.object;
-    var valueNode = this.valueNode;
     var number = this.number;
     var integralNumber = this.integralNumber;
-    var floatingPointNumber = this.floatingPointNumber;
     var int$ = this.int$;
     var long = this.long;
     var double$ = this.double$;
@@ -25522,6 +28978,10 @@ class JsonNode {
     var textual = this.textual;
     var boolean = this.boolean;
     var binary = this.binary;
+    var containerNode = this.containerNode;
+    var missingNode = this.missingNode;
+    var object = this.object;
+    var valueNode = this.valueNode;
     var numberValue = this.numberValue;
     var numberType = this.numberType;
     var intValue = this.intValue;
@@ -25535,31 +28995,21 @@ class JsonNode {
     var valueAsLong = this.valueAsLong;
     var valueAsDouble = this.valueAsDouble;
     var valueAsBoolean = this.valueAsBoolean;
+    var fieldNames = this.fieldNames;
+    var textValue = this.textValue;
+    var valueAsText = this.valueAsText;
     var array = this.array;
     var fields = this.fields;
     var null$ = this.null$;
 
     final json = <String, Object?>{};
-    if (textValue != null) {
-      json[r'textValue'] = textValue;
-    }
-    if (valueAsText != null) {
-      json[r'valueAsText'] = valueAsText;
-    }
-    if (fieldNames != null) {
-      json[r'fieldNames'] = fieldNames;
-    }
+    json[r'floatingPointNumber'] = floatingPointNumber;
     if (elements != null) {
       json[r'elements'] = elements;
     }
     json[r'pojo'] = pojo;
-    json[r'containerNode'] = containerNode;
-    json[r'missingNode'] = missingNode;
-    json[r'object'] = object;
-    json[r'valueNode'] = valueNode;
     json[r'number'] = number;
     json[r'integralNumber'] = integralNumber;
-    json[r'floatingPointNumber'] = floatingPointNumber;
     json[r'int'] = int$;
     json[r'long'] = long;
     json[r'double'] = double$;
@@ -25568,6 +29018,10 @@ class JsonNode {
     json[r'textual'] = textual;
     json[r'boolean'] = boolean;
     json[r'binary'] = binary;
+    json[r'containerNode'] = containerNode;
+    json[r'missingNode'] = missingNode;
+    json[r'object'] = object;
+    json[r'valueNode'] = valueNode;
     if (numberValue != null) {
       json[r'numberValue'] = numberValue;
     }
@@ -25601,6 +29055,15 @@ class JsonNode {
       json[r'valueAsDouble'] = valueAsDouble;
     }
     json[r'valueAsBoolean'] = valueAsBoolean;
+    if (fieldNames != null) {
+      json[r'fieldNames'] = fieldNames;
+    }
+    if (textValue != null) {
+      json[r'textValue'] = textValue;
+    }
+    if (valueAsText != null) {
+      json[r'valueAsText'] = valueAsText;
+    }
     json[r'array'] = array;
     if (fields != null) {
       json[r'fields'] = fields;
@@ -25610,18 +29073,11 @@ class JsonNode {
   }
 
   JsonNode copyWith(
-      {String? textValue,
-      String? valueAsText,
-      Map<String, dynamic>? fieldNames,
+      {bool? floatingPointNumber,
       Map<String, dynamic>? elements,
       bool? pojo,
-      bool? containerNode,
-      bool? missingNode,
-      bool? object,
-      bool? valueNode,
       bool? number,
       bool? integralNumber,
-      bool? floatingPointNumber,
       bool? int$,
       bool? long,
       bool? double$,
@@ -25630,6 +29086,10 @@ class JsonNode {
       bool? textual,
       bool? boolean,
       bool? binary,
+      bool? containerNode,
+      bool? missingNode,
+      bool? object,
+      bool? valueNode,
       num? numberValue,
       JsonNodeNumberType? numberType,
       int? intValue,
@@ -25643,22 +29103,18 @@ class JsonNode {
       int? valueAsLong,
       num? valueAsDouble,
       bool? valueAsBoolean,
+      Map<String, dynamic>? fieldNames,
+      String? textValue,
+      String? valueAsText,
       bool? array,
       Map<String, dynamic>? fields,
       bool? null$}) {
     return JsonNode(
-      textValue: textValue ?? this.textValue,
-      valueAsText: valueAsText ?? this.valueAsText,
-      fieldNames: fieldNames ?? this.fieldNames,
+      floatingPointNumber: floatingPointNumber ?? this.floatingPointNumber,
       elements: elements ?? this.elements,
       pojo: pojo ?? this.pojo,
-      containerNode: containerNode ?? this.containerNode,
-      missingNode: missingNode ?? this.missingNode,
-      object: object ?? this.object,
-      valueNode: valueNode ?? this.valueNode,
       number: number ?? this.number,
       integralNumber: integralNumber ?? this.integralNumber,
-      floatingPointNumber: floatingPointNumber ?? this.floatingPointNumber,
       int$: int$ ?? this.int$,
       long: long ?? this.long,
       double$: double$ ?? this.double$,
@@ -25667,6 +29123,10 @@ class JsonNode {
       textual: textual ?? this.textual,
       boolean: boolean ?? this.boolean,
       binary: binary ?? this.binary,
+      containerNode: containerNode ?? this.containerNode,
+      missingNode: missingNode ?? this.missingNode,
+      object: object ?? this.object,
+      valueNode: valueNode ?? this.valueNode,
       numberValue: numberValue ?? this.numberValue,
       numberType: numberType ?? this.numberType,
       intValue: intValue ?? this.intValue,
@@ -25680,6 +29140,9 @@ class JsonNode {
       valueAsLong: valueAsLong ?? this.valueAsLong,
       valueAsDouble: valueAsDouble ?? this.valueAsDouble,
       valueAsBoolean: valueAsBoolean ?? this.valueAsBoolean,
+      fieldNames: fieldNames ?? this.fieldNames,
+      textValue: textValue ?? this.textValue,
+      valueAsText: valueAsText ?? this.valueAsText,
       array: array ?? this.array,
       fields: fields ?? this.fields,
       null$: null$ ?? this.null$,
@@ -26309,6 +29772,140 @@ class MoveFieldBeanPosition {
   String toString() => value;
 }
 
+/// A list of issues and their respective properties to set or update. See
+/// [Entity properties](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/)
+/// for more information.
+class MultiIssueEntityProperties {
+  /// A list of issue IDs and their respective properties.
+  final List<IssueEntityPropertiesForMultiUpdate> issues;
+
+  MultiIssueEntityProperties(
+      {List<IssueEntityPropertiesForMultiUpdate>? issues})
+      : issues = issues ?? [];
+
+  factory MultiIssueEntityProperties.fromJson(Map<String, Object?> json) {
+    return MultiIssueEntityProperties(
+      issues: (json[r'issues'] as List<Object?>?)
+              ?.map((i) => IssueEntityPropertiesForMultiUpdate.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issues = this.issues;
+
+    final json = <String, Object?>{};
+    json[r'issues'] = issues.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  MultiIssueEntityProperties copyWith(
+      {List<IssueEntityPropertiesForMultiUpdate>? issues}) {
+    return MultiIssueEntityProperties(
+      issues: issues ?? this.issues,
+    );
+  }
+}
+
+/// A custom field and its new value with a list of issue to update.
+class MultipleCustomFieldValuesUpdate {
+  /// The ID or key of the custom field. For example, `customfield_10010`.
+  final String customField;
+
+  /// The list of issue IDs.
+  final List<int> issueIds;
+
+  /// The value for the custom field. The value must be compatible with the
+  /// [custom field type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field/#data-types)
+  /// as follows:
+  ///
+  ///  *  `string` the value must be a string.
+  ///  *  `number` the value must be a number.
+  ///  *  `datetime` the value must be a string that represents a date in the
+  /// ISO format, for example `"2021-01-18T12:00:00-03:00"`.
+  ///  *  `user` the value must be an object that contains the `accountId`
+  /// field.
+  ///  *  `group` the value must be an object that contains the group `name`
+  /// field.
+  ///
+  /// A list of appropriate values must be provided if the field is of the
+  /// `list`
+  /// [collection type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field/#collection-types).
+  final dynamic value;
+
+  MultipleCustomFieldValuesUpdate(
+      {required this.customField, required this.issueIds, required this.value});
+
+  factory MultipleCustomFieldValuesUpdate.fromJson(Map<String, Object?> json) {
+    return MultipleCustomFieldValuesUpdate(
+      customField: json[r'customField'] as String? ?? '',
+      issueIds: (json[r'issueIds'] as List<Object?>?)
+              ?.map((i) => (i as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
+      value: json[r'value'],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var customField = this.customField;
+    var issueIds = this.issueIds;
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    json[r'customField'] = customField;
+    json[r'issueIds'] = issueIds;
+    json[r'value'] = value;
+    return json;
+  }
+
+  MultipleCustomFieldValuesUpdate copyWith(
+      {String? customField, List<int>? issueIds, dynamic value}) {
+    return MultipleCustomFieldValuesUpdate(
+      customField: customField ?? this.customField,
+      issueIds: issueIds ?? this.issueIds,
+      value: value ?? this.value,
+    );
+  }
+}
+
+/// List of updates for a custom fields.
+class MultipleCustomFieldValuesUpdateDetails {
+  final List<MultipleCustomFieldValuesUpdate> updates;
+
+  MultipleCustomFieldValuesUpdateDetails(
+      {List<MultipleCustomFieldValuesUpdate>? updates})
+      : updates = updates ?? [];
+
+  factory MultipleCustomFieldValuesUpdateDetails.fromJson(
+      Map<String, Object?> json) {
+    return MultipleCustomFieldValuesUpdateDetails(
+      updates: (json[r'updates'] as List<Object?>?)
+              ?.map((i) => MultipleCustomFieldValuesUpdate.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var updates = this.updates;
+
+    final json = <String, Object?>{};
+    json[r'updates'] = updates.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  MultipleCustomFieldValuesUpdateDetails copyWith(
+      {List<MultipleCustomFieldValuesUpdate>? updates}) {
+    return MultipleCustomFieldValuesUpdateDetails(
+      updates: updates ?? this.updates,
+    );
+  }
+}
+
 class NestedResponse {
   final int? status;
   final ErrorCollection? errorCollection;
@@ -26343,6 +29940,112 @@ class NestedResponse {
     return NestedResponse(
       status: status ?? this.status,
       errorCollection: errorCollection ?? this.errorCollection,
+    );
+  }
+}
+
+/// The user details.
+class NewUserDetails {
+  /// The URL of the user.
+  final String? self;
+
+  /// This property is no longer available. See the
+  /// [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
+  final String? key;
+
+  /// This property is no longer available. See the
+  /// [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
+  /// for details.
+  final String? name;
+
+  /// This property is no longer available. If the user has an Atlassian
+  /// account, their password is not changed. If the user does not have an
+  /// Atlassian account, they are sent an email asking them set up an account.
+  final String? password;
+
+  /// The email address for the user.
+  final String emailAddress;
+
+  /// A suggested display name for the user. If the user has an Atlassian
+  /// account, their display name is not changed. If the user does not have an
+  /// Atlassian account, this display name is used as a suggestion for creating
+  /// an account. The user is sent an email asking them to set their display
+  /// name and privacy preferences.
+  final String displayName;
+
+  /// Deprecated, do not use.
+  final List<String> applicationKeys;
+
+  NewUserDetails(
+      {this.self,
+      this.key,
+      this.name,
+      this.password,
+      required this.emailAddress,
+      required this.displayName,
+      List<String>? applicationKeys})
+      : applicationKeys = applicationKeys ?? [];
+
+  factory NewUserDetails.fromJson(Map<String, Object?> json) {
+    return NewUserDetails(
+      self: json[r'self'] as String?,
+      key: json[r'key'] as String?,
+      name: json[r'name'] as String?,
+      password: json[r'password'] as String?,
+      emailAddress: json[r'emailAddress'] as String? ?? '',
+      displayName: json[r'displayName'] as String? ?? '',
+      applicationKeys: (json[r'applicationKeys'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var self = this.self;
+    var key = this.key;
+    var name = this.name;
+    var password = this.password;
+    var emailAddress = this.emailAddress;
+    var displayName = this.displayName;
+    var applicationKeys = this.applicationKeys;
+
+    final json = <String, Object?>{};
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (password != null) {
+      json[r'password'] = password;
+    }
+    json[r'emailAddress'] = emailAddress;
+    json[r'displayName'] = displayName;
+    json[r'applicationKeys'] = applicationKeys;
+    return json;
+  }
+
+  NewUserDetails copyWith(
+      {String? self,
+      String? key,
+      String? name,
+      String? password,
+      String? emailAddress,
+      String? displayName,
+      List<String>? applicationKeys}) {
+    return NewUserDetails(
+      self: self ?? this.self,
+      key: key ?? this.key,
+      name: name ?? this.name,
+      password: password ?? this.password,
+      emailAddress: emailAddress ?? this.emailAddress,
+      displayName: displayName ?? this.displayName,
+      applicationKeys: applicationKeys ?? this.applicationKeys,
     );
   }
 }
@@ -28213,7 +31916,7 @@ class PageBeanField {
 }
 
 /// A page of items.
-class PageBeanFieldConfiguration {
+class PageBeanFieldConfigurationDetails {
   /// The URL of the page.
   final String? self;
 
@@ -28233,21 +31936,22 @@ class PageBeanFieldConfiguration {
   final bool isLast;
 
   /// The list of items.
-  final List<FieldConfiguration> values;
+  final List<FieldConfigurationDetails> values;
 
-  PageBeanFieldConfiguration(
+  PageBeanFieldConfigurationDetails(
       {this.self,
       this.nextPage,
       this.maxResults,
       this.startAt,
       this.total,
       bool? isLast,
-      List<FieldConfiguration>? values})
+      List<FieldConfigurationDetails>? values})
       : isLast = isLast ?? false,
         values = values ?? [];
 
-  factory PageBeanFieldConfiguration.fromJson(Map<String, Object?> json) {
-    return PageBeanFieldConfiguration(
+  factory PageBeanFieldConfigurationDetails.fromJson(
+      Map<String, Object?> json) {
+    return PageBeanFieldConfigurationDetails(
       self: json[r'self'] as String?,
       nextPage: json[r'nextPage'] as String?,
       maxResults: (json[r'maxResults'] as num?)?.toInt(),
@@ -28255,7 +31959,7 @@ class PageBeanFieldConfiguration {
       total: (json[r'total'] as num?)?.toInt(),
       isLast: json[r'isLast'] as bool? ?? false,
       values: (json[r'values'] as List<Object?>?)
-              ?.map((i) => FieldConfiguration.fromJson(
+              ?.map((i) => FieldConfigurationDetails.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
@@ -28292,15 +31996,15 @@ class PageBeanFieldConfiguration {
     return json;
   }
 
-  PageBeanFieldConfiguration copyWith(
+  PageBeanFieldConfigurationDetails copyWith(
       {String? self,
       String? nextPage,
       int? maxResults,
       int? startAt,
       int? total,
       bool? isLast,
-      List<FieldConfiguration>? values}) {
-    return PageBeanFieldConfiguration(
+      List<FieldConfigurationDetails>? values}) {
+    return PageBeanFieldConfigurationDetails(
       self: self ?? this.self,
       nextPage: nextPage ?? this.nextPage,
       maxResults: maxResults ?? this.maxResults,
@@ -30018,6 +33722,106 @@ class PageBeanProject {
 }
 
 /// A page of items.
+class PageBeanProjectDetails {
+  /// The URL of the page.
+  final String? self;
+
+  /// If there is another page of results, the URL of the next page.
+  final String? nextPage;
+
+  /// The maximum number of items that could be returned.
+  final int? maxResults;
+
+  /// The index of the first item returned.
+  final int? startAt;
+
+  /// The number of items returned.
+  final int? total;
+
+  /// Whether this is the last page.
+  final bool isLast;
+
+  /// The list of items.
+  final List<ProjectDetails> values;
+
+  PageBeanProjectDetails(
+      {this.self,
+      this.nextPage,
+      this.maxResults,
+      this.startAt,
+      this.total,
+      bool? isLast,
+      List<ProjectDetails>? values})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageBeanProjectDetails.fromJson(Map<String, Object?> json) {
+    return PageBeanProjectDetails(
+      self: json[r'self'] as String?,
+      nextPage: json[r'nextPage'] as String?,
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      isLast: json[r'isLast'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => ProjectDetails.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var self = this.self;
+    var nextPage = this.nextPage;
+    var maxResults = this.maxResults;
+    var startAt = this.startAt;
+    var total = this.total;
+    var isLast = this.isLast;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (nextPage != null) {
+      json[r'nextPage'] = nextPage;
+    }
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'isLast'] = isLast;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageBeanProjectDetails copyWith(
+      {String? self,
+      String? nextPage,
+      int? maxResults,
+      int? startAt,
+      int? total,
+      bool? isLast,
+      List<ProjectDetails>? values}) {
+    return PageBeanProjectDetails(
+      self: self ?? this.self,
+      nextPage: nextPage ?? this.nextPage,
+      maxResults: maxResults ?? this.maxResults,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      isLast: isLast ?? this.isLast,
+      values: values ?? this.values,
+    );
+  }
+}
+
+/// A page of items.
 class PageBeanScreen {
   /// The URL of the page.
   final String? self;
@@ -31576,19 +35380,19 @@ class PagedListUserDetailsApplicationUser {
 
 class PaginatedResponseComment {
   final int? total;
-  final int? startAt;
   final int? maxResults;
+  final int? startAt;
   final List<Comment> results;
 
   PaginatedResponseComment(
-      {this.total, this.startAt, this.maxResults, List<Comment>? results})
+      {this.total, this.maxResults, this.startAt, List<Comment>? results})
       : results = results ?? [];
 
   factory PaginatedResponseComment.fromJson(Map<String, Object?> json) {
     return PaginatedResponseComment(
       total: (json[r'total'] as num?)?.toInt(),
-      startAt: (json[r'startAt'] as num?)?.toInt(),
       maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
       results: (json[r'results'] as List<Object?>?)
               ?.map((i) =>
                   Comment.fromJson(i as Map<String, Object?>? ?? const {}))
@@ -31599,30 +35403,30 @@ class PaginatedResponseComment {
 
   Map<String, Object?> toJson() {
     var total = this.total;
-    var startAt = this.startAt;
     var maxResults = this.maxResults;
+    var startAt = this.startAt;
     var results = this.results;
 
     final json = <String, Object?>{};
     if (total != null) {
       json[r'total'] = total;
     }
-    if (startAt != null) {
-      json[r'startAt'] = startAt;
-    }
     if (maxResults != null) {
       json[r'maxResults'] = maxResults;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
     }
     json[r'results'] = results.map((i) => i.toJson()).toList();
     return json;
   }
 
   PaginatedResponseComment copyWith(
-      {int? total, int? startAt, int? maxResults, List<Comment>? results}) {
+      {int? total, int? maxResults, int? startAt, List<Comment>? results}) {
     return PaginatedResponseComment(
       total: total ?? this.total,
-      startAt: startAt ?? this.startAt,
       maxResults: maxResults ?? this.maxResults,
+      startAt: startAt ?? this.startAt,
       results: results ?? this.results,
     );
   }
@@ -33084,38 +36888,8 @@ class ProjectComponentRealAssigneeType {
   String toString() => value;
 }
 
-/// A project's sender email address.
-class ProjectEmailAddress {
-  /// The email address.
-  final String? emailAddress;
-
-  ProjectEmailAddress({this.emailAddress});
-
-  factory ProjectEmailAddress.fromJson(Map<String, Object?> json) {
-    return ProjectEmailAddress(
-      emailAddress: json[r'emailAddress'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var emailAddress = this.emailAddress;
-
-    final json = <String, Object?>{};
-    if (emailAddress != null) {
-      json[r'emailAddress'] = emailAddress;
-    }
-    return json;
-  }
-
-  ProjectEmailAddress copyWith({String? emailAddress}) {
-    return ProjectEmailAddress(
-      emailAddress: emailAddress ?? this.emailAddress,
-    );
-  }
-}
-
-/// Details about a next-gen project.
-class ProjectForScope {
+/// Details about a project.
+class ProjectDetails {
   /// The URL of the project details.
   final String? self;
 
@@ -33131,7 +36905,7 @@ class ProjectForScope {
   /// The
   /// [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes)
   /// of the project.
-  final ProjectForScopeProjectTypeKey? projectTypeKey;
+  final ProjectDetailsProjectTypeKey? projectTypeKey;
 
   /// Whether or not the project is simplified.
   final bool simplified;
@@ -33142,7 +36916,7 @@ class ProjectForScope {
   /// The category the project belongs to.
   final UpdatedProjectCategory? projectCategory;
 
-  ProjectForScope(
+  ProjectDetails(
       {this.self,
       this.id,
       this.key,
@@ -33153,14 +36927,14 @@ class ProjectForScope {
       this.projectCategory})
       : simplified = simplified ?? false;
 
-  factory ProjectForScope.fromJson(Map<String, Object?> json) {
-    return ProjectForScope(
+  factory ProjectDetails.fromJson(Map<String, Object?> json) {
+    return ProjectDetails(
       self: json[r'self'] as String?,
       id: json[r'id'] as String?,
       key: json[r'key'] as String?,
       name: json[r'name'] as String?,
       projectTypeKey: json[r'projectTypeKey'] != null
-          ? ProjectForScopeProjectTypeKey.fromValue(
+          ? ProjectDetailsProjectTypeKey.fromValue(
               json[r'projectTypeKey']! as String)
           : null,
       simplified: json[r'simplified'] as bool? ?? false,
@@ -33211,16 +36985,16 @@ class ProjectForScope {
     return json;
   }
 
-  ProjectForScope copyWith(
+  ProjectDetails copyWith(
       {String? self,
       String? id,
       String? key,
       String? name,
-      ProjectForScopeProjectTypeKey? projectTypeKey,
+      ProjectDetailsProjectTypeKey? projectTypeKey,
       bool? simplified,
       AvatarUrlsBean? avatarUrls,
       UpdatedProjectCategory? projectCategory}) {
-    return ProjectForScope(
+    return ProjectDetails(
       self: self ?? this.self,
       id: id ?? this.id,
       key: key ?? this.key,
@@ -33233,10 +37007,10 @@ class ProjectForScope {
   }
 }
 
-class ProjectForScopeProjectTypeKey {
-  static const software = ProjectForScopeProjectTypeKey._('software');
-  static const serviceDesk = ProjectForScopeProjectTypeKey._('service_desk');
-  static const business = ProjectForScopeProjectTypeKey._('business');
+class ProjectDetailsProjectTypeKey {
+  static const software = ProjectDetailsProjectTypeKey._('software');
+  static const serviceDesk = ProjectDetailsProjectTypeKey._('service_desk');
+  static const business = ProjectDetailsProjectTypeKey._('business');
 
   static const values = [
     software,
@@ -33245,11 +37019,248 @@ class ProjectForScopeProjectTypeKey {
   ];
   final String value;
 
-  const ProjectForScopeProjectTypeKey._(this.value);
+  const ProjectDetailsProjectTypeKey._(this.value);
 
-  static ProjectForScopeProjectTypeKey fromValue(String value) =>
+  static ProjectDetailsProjectTypeKey fromValue(String value) =>
       values.firstWhere((e) => e.value == value,
-          orElse: () => ProjectForScopeProjectTypeKey._(value));
+          orElse: () => ProjectDetailsProjectTypeKey._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// A project's sender email address.
+class ProjectEmailAddress {
+  /// The email address.
+  final String? emailAddress;
+
+  /// When using a custom domain, the status of the email address.
+  final List<String> emailAddressStatus;
+
+  ProjectEmailAddress({this.emailAddress, List<String>? emailAddressStatus})
+      : emailAddressStatus = emailAddressStatus ?? [];
+
+  factory ProjectEmailAddress.fromJson(Map<String, Object?> json) {
+    return ProjectEmailAddress(
+      emailAddress: json[r'emailAddress'] as String?,
+      emailAddressStatus: (json[r'emailAddressStatus'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var emailAddress = this.emailAddress;
+    var emailAddressStatus = this.emailAddressStatus;
+
+    final json = <String, Object?>{};
+    if (emailAddress != null) {
+      json[r'emailAddress'] = emailAddress;
+    }
+    json[r'emailAddressStatus'] = emailAddressStatus;
+    return json;
+  }
+
+  ProjectEmailAddress copyWith(
+      {String? emailAddress, List<String>? emailAddressStatus}) {
+    return ProjectEmailAddress(
+      emailAddress: emailAddress ?? this.emailAddress,
+      emailAddressStatus: emailAddressStatus ?? this.emailAddressStatus,
+    );
+  }
+}
+
+/// Details of a project feature.
+class ProjectFeature {
+  /// The ID of the project.
+  final int? projectId;
+
+  /// The state of the feature. When updating the state of a feature, only
+  /// ENABLED and DISABLED are supported. Responses can contain all values
+  final ProjectFeatureStateEnum? state;
+
+  /// Whether the state of the feature can be updated.
+  final bool toggleLocked;
+
+  /// The key of the feature.
+  final String? feature;
+
+  /// List of keys of the features required to enable the feature.
+  final List<String> prerequisites;
+
+  /// Localized display name for the feature.
+  final String? localisedName;
+
+  /// Localized display description for the feature.
+  final String? localisedDescription;
+
+  /// URI for the image representing the feature.
+  final String? imageUri;
+
+  ProjectFeature(
+      {this.projectId,
+      this.state,
+      bool? toggleLocked,
+      this.feature,
+      List<String>? prerequisites,
+      this.localisedName,
+      this.localisedDescription,
+      this.imageUri})
+      : toggleLocked = toggleLocked ?? false,
+        prerequisites = prerequisites ?? [];
+
+  factory ProjectFeature.fromJson(Map<String, Object?> json) {
+    return ProjectFeature(
+      projectId: (json[r'projectId'] as num?)?.toInt(),
+      state: json[r'state'] != null
+          ? ProjectFeatureStateEnum.fromValue(json[r'state']! as String)
+          : null,
+      toggleLocked: json[r'toggleLocked'] as bool? ?? false,
+      feature: json[r'feature'] as String?,
+      prerequisites: (json[r'prerequisites'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      localisedName: json[r'localisedName'] as String?,
+      localisedDescription: json[r'localisedDescription'] as String?,
+      imageUri: json[r'imageUri'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var projectId = this.projectId;
+    var state = this.state;
+    var toggleLocked = this.toggleLocked;
+    var feature = this.feature;
+    var prerequisites = this.prerequisites;
+    var localisedName = this.localisedName;
+    var localisedDescription = this.localisedDescription;
+    var imageUri = this.imageUri;
+
+    final json = <String, Object?>{};
+    if (projectId != null) {
+      json[r'projectId'] = projectId;
+    }
+    if (state != null) {
+      json[r'state'] = state.value;
+    }
+    json[r'toggleLocked'] = toggleLocked;
+    if (feature != null) {
+      json[r'feature'] = feature;
+    }
+    json[r'prerequisites'] = prerequisites;
+    if (localisedName != null) {
+      json[r'localisedName'] = localisedName;
+    }
+    if (localisedDescription != null) {
+      json[r'localisedDescription'] = localisedDescription;
+    }
+    if (imageUri != null) {
+      json[r'imageUri'] = imageUri;
+    }
+    return json;
+  }
+
+  ProjectFeature copyWith(
+      {int? projectId,
+      ProjectFeatureStateEnum? state,
+      bool? toggleLocked,
+      String? feature,
+      List<String>? prerequisites,
+      String? localisedName,
+      String? localisedDescription,
+      String? imageUri}) {
+    return ProjectFeature(
+      projectId: projectId ?? this.projectId,
+      state: state ?? this.state,
+      toggleLocked: toggleLocked ?? this.toggleLocked,
+      feature: feature ?? this.feature,
+      prerequisites: prerequisites ?? this.prerequisites,
+      localisedName: localisedName ?? this.localisedName,
+      localisedDescription: localisedDescription ?? this.localisedDescription,
+      imageUri: imageUri ?? this.imageUri,
+    );
+  }
+}
+
+class ProjectFeatureStateEnum {
+  static const enabled = ProjectFeatureStateEnum._('ENABLED');
+  static const disabled = ProjectFeatureStateEnum._('DISABLED');
+  static const comingSoon = ProjectFeatureStateEnum._('COMING_SOON');
+
+  static const values = [
+    enabled,
+    disabled,
+    comingSoon,
+  ];
+  final String value;
+
+  const ProjectFeatureStateEnum._(this.value);
+
+  static ProjectFeatureStateEnum fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ProjectFeatureStateEnum._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// Details of the feature state.
+class ProjectFeatureState {
+  /// The feature state.
+  final ProjectFeatureStateState? state;
+
+  ProjectFeatureState({this.state});
+
+  factory ProjectFeatureState.fromJson(Map<String, Object?> json) {
+    return ProjectFeatureState(
+      state: json[r'state'] != null
+          ? ProjectFeatureStateState.fromValue(json[r'state']! as String)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var state = this.state;
+
+    final json = <String, Object?>{};
+    if (state != null) {
+      json[r'state'] = state.value;
+    }
+    return json;
+  }
+
+  ProjectFeatureState copyWith({ProjectFeatureStateState? state}) {
+    return ProjectFeatureState(
+      state: state ?? this.state,
+    );
+  }
+}
+
+class ProjectFeatureStateState {
+  static const enabled = ProjectFeatureStateState._('ENABLED');
+  static const disabled = ProjectFeatureStateState._('DISABLED');
+  static const comingSoon = ProjectFeatureStateState._('COMING_SOON');
+
+  static const values = [
+    enabled,
+    disabled,
+    comingSoon,
+  ];
+  final String value;
+
+  const ProjectFeatureStateState._(this.value);
+
+  static ProjectFeatureStateState fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ProjectFeatureStateState._(value));
 
   /// An enum received from the server but this version of the client doesn't recognize it.
   bool get isUnknown => values.every((v) => v.value != value);
@@ -35149,25 +39160,43 @@ class RuleConfiguration {
   /// configuration page.
   final String value;
 
-  RuleConfiguration({required this.value});
+  /// EXPERIMENTAL: Whether the rule is disabled.
+  final bool disabled;
+
+  /// EXPERIMENTAL: A tag used to filter rules in
+  /// [Get workflow transition rule configurations](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-transition-rules/#api-rest-api-3-workflow-rule-config-get).
+  final String? tag;
+
+  RuleConfiguration({required this.value, bool? disabled, this.tag})
+      : disabled = disabled ?? false;
 
   factory RuleConfiguration.fromJson(Map<String, Object?> json) {
     return RuleConfiguration(
       value: json[r'value'] as String? ?? '',
+      disabled: json[r'disabled'] as bool? ?? false,
+      tag: json[r'tag'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var value = this.value;
+    var disabled = this.disabled;
+    var tag = this.tag;
 
     final json = <String, Object?>{};
     json[r'value'] = value;
+    json[r'disabled'] = disabled;
+    if (tag != null) {
+      json[r'tag'] = tag;
+    }
     return json;
   }
 
-  RuleConfiguration copyWith({String? value}) {
+  RuleConfiguration copyWith({String? value, bool? disabled, String? tag}) {
     return RuleConfiguration(
       value: value ?? this.value,
+      disabled: disabled ?? this.disabled,
+      tag: tag ?? this.tag,
     );
   }
 }
@@ -35179,7 +39208,7 @@ class Scope {
   final ScopeType? type;
 
   /// The project the item has scope in.
-  final ProjectForScope? project;
+  final ProjectDetails? project;
 
   Scope({this.type, this.project});
 
@@ -35189,7 +39218,7 @@ class Scope {
           ? ScopeType.fromValue(json[r'type']! as String)
           : null,
       project: json[r'project'] != null
-          ? ProjectForScope.fromJson(json[r'project']! as Map<String, Object?>)
+          ? ProjectDetails.fromJson(json[r'project']! as Map<String, Object?>)
           : null,
     );
   }
@@ -35208,7 +39237,7 @@ class Scope {
     return json;
   }
 
-  Scope copyWith({ScopeType? type, ProjectForScope? project}) {
+  Scope copyWith({ScopeType? type, ProjectDetails? project}) {
     return Scope(
       type: type ?? this.type,
       project: project ?? this.project,
@@ -35331,34 +39360,6 @@ class ScreenDetails {
     return ScreenDetails(
       name: name ?? this.name,
       description: description ?? this.description,
-    );
-  }
-}
-
-/// ID of a screen.
-class ScreenID {
-  /// The ID of the screen.
-  final String id;
-
-  ScreenID({required this.id});
-
-  factory ScreenID.fromJson(Map<String, Object?> json) {
-    return ScreenID(
-      id: json[r'id'] as String? ?? '',
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-
-    final json = <String, Object?>{};
-    json[r'id'] = id;
-    return json;
-  }
-
-  ScreenID copyWith({String? id}) {
-    return ScreenID(
-      id: id ?? this.id,
     );
   }
 }
@@ -35595,7 +39596,7 @@ class ScreenWithTab {
   /// The scope of the screen.
   final Scope? scope;
 
-  /// The tab for the screen
+  /// The tab for the screen.
   final ScreenableTab? tab;
 
   ScreenWithTab({this.id, this.name, this.description, this.scope, this.tab});
@@ -36413,6 +40414,7 @@ class SharePermission {
 
   /// The type of share permission:
   ///
+  ///  *  `user` Shared with a user.
   ///  *  `group` Shared with a group. If set in a request, then specify
   /// `sharePermission.group` as well.
   ///  *  `project` Shared with a project. If set in a request, then specify
@@ -36446,8 +40448,17 @@ class SharePermission {
   /// `name` property for the group.
   final GroupName? group;
 
+  /// The user account ID that the filter is shared with. For a request, specify
+  /// the `accountId` property for the user.
+  final UserBean? user;
+
   SharePermission(
-      {this.id, required this.type, this.project, this.role, this.group});
+      {this.id,
+      required this.type,
+      this.project,
+      this.role,
+      this.group,
+      this.user});
 
   factory SharePermission.fromJson(Map<String, Object?> json) {
     return SharePermission(
@@ -36462,6 +40473,9 @@ class SharePermission {
       group: json[r'group'] != null
           ? GroupName.fromJson(json[r'group']! as Map<String, Object?>)
           : null,
+      user: json[r'user'] != null
+          ? UserBean.fromJson(json[r'user']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -36471,6 +40485,7 @@ class SharePermission {
     var project = this.project;
     var role = this.role;
     var group = this.group;
+    var user = this.user;
 
     final json = <String, Object?>{};
     if (id != null) {
@@ -36486,6 +40501,9 @@ class SharePermission {
     if (group != null) {
       json[r'group'] = group.toJson();
     }
+    if (user != null) {
+      json[r'user'] = user.toJson();
+    }
     return json;
   }
 
@@ -36494,18 +40512,21 @@ class SharePermission {
       SharePermissionType? type,
       Project? project,
       ProjectRole? role,
-      GroupName? group}) {
+      GroupName? group,
+      UserBean? user}) {
     return SharePermission(
       id: id ?? this.id,
       type: type ?? this.type,
       project: project ?? this.project,
       role: role ?? this.role,
       group: group ?? this.group,
+      user: user ?? this.user,
     );
   }
 }
 
 class SharePermissionType {
+  static const user = SharePermissionType._('user');
   static const group = SharePermissionType._('group');
   static const project = SharePermissionType._('project');
   static const projectRole = SharePermissionType._('projectRole');
@@ -36515,6 +40536,7 @@ class SharePermissionType {
   static const projectUnknown = SharePermissionType._('project-unknown');
 
   static const values = [
+    user,
     group,
     project,
     projectRole,
@@ -36541,6 +40563,7 @@ class SharePermissionType {
 class SharePermissionInputBean {
   /// The type of the share permission.Specify the type as follows:
   ///
+  ///  *  `user` Share with a user.
   ///  *  `group` Share with a group. Specify `groupname` as well.
   ///  *  `project` Share with a project. Specify `projectId` as well.
   ///  *  `projectRole` Share with a project role in a project. Specify
@@ -36564,8 +40587,20 @@ class SharePermissionInputBean {
   /// `projectRole` and the `projectId` for the project that the role is in.
   final String? projectRoleId;
 
+  /// The user account ID that the filter is shared with. For a request, specify
+  /// the `accountId` property for the user.
+  final String? accountId;
+
+  /// The rights for the share permission.
+  final int? rights;
+
   SharePermissionInputBean(
-      {required this.type, this.projectId, this.groupname, this.projectRoleId});
+      {required this.type,
+      this.projectId,
+      this.groupname,
+      this.projectRoleId,
+      this.accountId,
+      this.rights});
 
   factory SharePermissionInputBean.fromJson(Map<String, Object?> json) {
     return SharePermissionInputBean(
@@ -36574,6 +40609,8 @@ class SharePermissionInputBean {
       projectId: json[r'projectId'] as String?,
       groupname: json[r'groupname'] as String?,
       projectRoleId: json[r'projectRoleId'] as String?,
+      accountId: json[r'accountId'] as String?,
+      rights: (json[r'rights'] as num?)?.toInt(),
     );
   }
 
@@ -36582,6 +40619,8 @@ class SharePermissionInputBean {
     var projectId = this.projectId;
     var groupname = this.groupname;
     var projectRoleId = this.projectRoleId;
+    var accountId = this.accountId;
+    var rights = this.rights;
 
     final json = <String, Object?>{};
     json[r'type'] = type.value;
@@ -36594,6 +40633,12 @@ class SharePermissionInputBean {
     if (projectRoleId != null) {
       json[r'projectRoleId'] = projectRoleId;
     }
+    if (accountId != null) {
+      json[r'accountId'] = accountId;
+    }
+    if (rights != null) {
+      json[r'rights'] = rights;
+    }
     return json;
   }
 
@@ -36601,17 +40646,22 @@ class SharePermissionInputBean {
       {SharePermissionInputBeanType? type,
       String? projectId,
       String? groupname,
-      String? projectRoleId}) {
+      String? projectRoleId,
+      String? accountId,
+      int? rights}) {
     return SharePermissionInputBean(
       type: type ?? this.type,
       projectId: projectId ?? this.projectId,
       groupname: groupname ?? this.groupname,
       projectRoleId: projectRoleId ?? this.projectRoleId,
+      accountId: accountId ?? this.accountId,
+      rights: rights ?? this.rights,
     );
   }
 }
 
 class SharePermissionInputBeanType {
+  static const user = SharePermissionInputBeanType._('user');
   static const project = SharePermissionInputBeanType._('project');
   static const group = SharePermissionInputBeanType._('group');
   static const projectRole = SharePermissionInputBeanType._('projectRole');
@@ -36619,6 +40669,7 @@ class SharePermissionInputBeanType {
   static const authenticated = SharePermissionInputBeanType._('authenticated');
 
   static const values = [
+    user,
     project,
     group,
     projectRole,
@@ -37994,8 +42045,11 @@ class Transition {
 
   /// The type of the transition.
   final TransitionType type;
-  final ScreenID? screen;
+  final TransitionScreenDetails? screen;
   final WorkflowRules? rules;
+
+  /// The properties of the transition.
+  final Map<String, dynamic>? properties;
 
   Transition(
       {required this.id,
@@ -38005,7 +42059,8 @@ class Transition {
       required this.to,
       required this.type,
       this.screen,
-      this.rules});
+      this.rules,
+      this.properties});
 
   factory Transition.fromJson(Map<String, Object?> json) {
     return Transition(
@@ -38019,11 +42074,13 @@ class Transition {
       to: json[r'to'] as String? ?? '',
       type: TransitionType.fromValue(json[r'type'] as String? ?? ''),
       screen: json[r'screen'] != null
-          ? ScreenID.fromJson(json[r'screen']! as Map<String, Object?>)
+          ? TransitionScreenDetails.fromJson(
+              json[r'screen']! as Map<String, Object?>)
           : null,
       rules: json[r'rules'] != null
           ? WorkflowRules.fromJson(json[r'rules']! as Map<String, Object?>)
           : null,
+      properties: json[r'properties'] as Map<String, Object?>?,
     );
   }
 
@@ -38036,6 +42093,7 @@ class Transition {
     var type = this.type;
     var screen = this.screen;
     var rules = this.rules;
+    var properties = this.properties;
 
     final json = <String, Object?>{};
     json[r'id'] = id;
@@ -38050,6 +42108,9 @@ class Transition {
     if (rules != null) {
       json[r'rules'] = rules.toJson();
     }
+    if (properties != null) {
+      json[r'properties'] = properties;
+    }
     return json;
   }
 
@@ -38060,8 +42121,9 @@ class Transition {
       List<String>? from,
       String? to,
       TransitionType? type,
-      ScreenID? screen,
-      WorkflowRules? rules}) {
+      TransitionScreenDetails? screen,
+      WorkflowRules? rules,
+      Map<String, dynamic>? properties}) {
     return Transition(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -38071,6 +42133,7 @@ class Transition {
       type: type ?? this.type,
       screen: screen ?? this.screen,
       rules: rules ?? this.rules,
+      properties: properties ?? this.properties,
     );
   }
 }
@@ -38098,6 +42161,43 @@ class TransitionType {
 
   @override
   String toString() => value;
+}
+
+/// The details of a transition screen.
+class TransitionScreenDetails {
+  /// The ID of the screen.
+  final String id;
+
+  /// The name of the screen.
+  final String? name;
+
+  TransitionScreenDetails({required this.id, this.name});
+
+  factory TransitionScreenDetails.fromJson(Map<String, Object?> json) {
+    return TransitionScreenDetails(
+      id: json[r'id'] as String? ?? '',
+      name: json[r'name'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    return json;
+  }
+
+  TransitionScreenDetails copyWith({String? id, String? name}) {
+    return TransitionScreenDetails(
+      id: id ?? this.id,
+      name: name ?? this.name,
+    );
+  }
 }
 
 /// List of issue transitions.
@@ -38360,6 +42460,45 @@ class UpdateDefaultScreenScheme {
   }
 }
 
+/// The details of the field configuration scheme.
+class UpdateFieldConfigurationSchemeDetails {
+  /// The name of the field configuration scheme. The name must be unique.
+  final String name;
+
+  /// The description of the field configuration scheme.
+  final String? description;
+
+  UpdateFieldConfigurationSchemeDetails({required this.name, this.description});
+
+  factory UpdateFieldConfigurationSchemeDetails.fromJson(
+      Map<String, Object?> json) {
+    return UpdateFieldConfigurationSchemeDetails(
+      name: json[r'name'] as String? ?? '',
+      description: json[r'description'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var description = this.description;
+
+    final json = <String, Object?>{};
+    json[r'name'] = name;
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    return json;
+  }
+
+  UpdateFieldConfigurationSchemeDetails copyWith(
+      {String? name, String? description}) {
+    return UpdateFieldConfigurationSchemeDetails(
+      name: name ?? this.name,
+      description: description ?? this.description,
+    );
+  }
+}
+
 /// Details about the project.
 class UpdateProjectDetails {
   /// Project keys must be unique and start with an uppercase letter followed by
@@ -38411,7 +42550,8 @@ class UpdateProjectDetails {
   /// The ID of the project's category. A complete list of category IDs is found
   /// using the
   /// [Get all project categories](#api-rest-api-3-projectCategory-get)
-  /// operation.
+  /// operation. To remove the project category from the project, set the value
+  /// to `-1.`
   final int? categoryId;
 
   UpdateProjectDetails(
@@ -38711,8 +42851,7 @@ class UpdateScreenTypes {
 }
 
 class UpdateUserToGroupBean {
-  /// This property is no longer available and will be removed from the
-  /// documentation soon. See the
+  /// This property is no longer available. See the
   /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
   /// for details.
   final String? name;
@@ -39161,8 +43300,8 @@ class UserBean {
 }
 
 class UserBeanAvatarUrls {
-  /// The URL of the user's 24x24 pixel avatar.
-  final String? $24X24;
+  /// The URL of the user's 16x16 pixel avatar.
+  final String? $16X16;
 
   /// The URL of the user's 32x32 pixel avatar.
   final String? $32X32;
@@ -39170,29 +43309,29 @@ class UserBeanAvatarUrls {
   /// The URL of the user's 48x48 pixel avatar.
   final String? $48X48;
 
-  /// The URL of the user's 16x16 pixel avatar.
-  final String? $16X16;
+  /// The URL of the user's 24x24 pixel avatar.
+  final String? $24X24;
 
-  UserBeanAvatarUrls({this.$24X24, this.$32X32, this.$48X48, this.$16X16});
+  UserBeanAvatarUrls({this.$16X16, this.$32X32, this.$48X48, this.$24X24});
 
   factory UserBeanAvatarUrls.fromJson(Map<String, Object?> json) {
     return UserBeanAvatarUrls(
-      $24X24: json[r'24x24'] as String?,
+      $16X16: json[r'16x16'] as String?,
       $32X32: json[r'32x32'] as String?,
       $48X48: json[r'48x48'] as String?,
-      $16X16: json[r'16x16'] as String?,
+      $24X24: json[r'24x24'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var $24X24 = this.$24X24;
+    var $16X16 = this.$16X16;
     var $32X32 = this.$32X32;
     var $48X48 = this.$48X48;
-    var $16X16 = this.$16X16;
+    var $24X24 = this.$24X24;
 
     final json = <String, Object?>{};
-    if ($24X24 != null) {
-      json[r'24x24'] = $24X24;
+    if ($16X16 != null) {
+      json[r'16x16'] = $16X16;
     }
     if ($32X32 != null) {
       json[r'32x32'] = $32X32;
@@ -39200,19 +43339,56 @@ class UserBeanAvatarUrls {
     if ($48X48 != null) {
       json[r'48x48'] = $48X48;
     }
-    if ($16X16 != null) {
-      json[r'16x16'] = $16X16;
+    if ($24X24 != null) {
+      json[r'24x24'] = $24X24;
     }
     return json;
   }
 
   UserBeanAvatarUrls copyWith(
-      {String? $24X24, String? $32X32, String? $48X48, String? $16X16}) {
+      {String? $16X16, String? $32X32, String? $48X48, String? $24X24}) {
     return UserBeanAvatarUrls(
-      $24X24: $24X24 ?? this.$24X24,
+      $16X16: $16X16 ?? this.$16X16,
       $32X32: $32X32 ?? this.$32X32,
       $48X48: $48X48 ?? this.$48X48,
-      $16X16: $16X16 ?? this.$16X16,
+      $24X24: $24X24 ?? this.$24X24,
+    );
+  }
+}
+
+/// A
+/// [user](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#user)
+/// specified as an Atlassian account ID.
+class UserContextVariable {
+  /// Type of custom context variable.
+  final String type;
+
+  /// The account ID of the user.
+  final String accountId;
+
+  UserContextVariable({required this.type, required this.accountId});
+
+  factory UserContextVariable.fromJson(Map<String, Object?> json) {
+    return UserContextVariable(
+      type: json[r'type'] as String? ?? '',
+      accountId: json[r'accountId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var accountId = this.accountId;
+
+    final json = <String, Object?>{};
+    json[r'type'] = type;
+    json[r'accountId'] = accountId;
+    return json;
+  }
+
+  UserContextVariable copyWith({String? type, String? accountId}) {
+    return UserContextVariable(
+      type: type ?? this.type,
+      accountId: accountId ?? this.accountId,
     );
   }
 }
@@ -39369,6 +43545,59 @@ class UserDetails {
       active: active ?? this.active,
       timeZone: timeZone ?? this.timeZone,
       accountType: accountType ?? this.accountType,
+    );
+  }
+}
+
+/// Filter for a User Picker (single) custom field.
+class UserFilter {
+  /// Whether the filter is enabled.
+  final bool enabled;
+
+  /// User groups autocomplete suggestion users must belong to. If not provided,
+  /// the default values are used. A maximum of 10 groups can be provided.
+  final List<String> groups;
+
+  /// Roles that autocomplete suggestion users must belong to. If not provided,
+  /// the default values are used. A maximum of 10 roles can be provided.
+  final List<int> roleIds;
+
+  UserFilter({required this.enabled, List<String>? groups, List<int>? roleIds})
+      : groups = groups ?? [],
+        roleIds = roleIds ?? [];
+
+  factory UserFilter.fromJson(Map<String, Object?> json) {
+    return UserFilter(
+      enabled: json[r'enabled'] as bool? ?? false,
+      groups: (json[r'groups'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      roleIds: (json[r'roleIds'] as List<Object?>?)
+              ?.map((i) => (i as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var enabled = this.enabled;
+    var groups = this.groups;
+    var roleIds = this.roleIds;
+
+    final json = <String, Object?>{};
+    json[r'enabled'] = enabled;
+    json[r'groups'] = groups;
+    json[r'roleIds'] = roleIds;
+    return json;
+  }
+
+  UserFilter copyWith(
+      {bool? enabled, List<String>? groups, List<int>? roleIds}) {
+    return UserFilter(
+      enabled: enabled ?? this.enabled,
+      groups: groups ?? this.groups,
+      roleIds: roleIds ?? this.roleIds,
     );
   }
 }
@@ -39675,14 +43904,12 @@ class UserPickerUser {
   /// Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
   final String? accountId;
 
-  /// This property is no longer available and will be removed from the
-  /// documentation soon. See the
+  /// This property is no longer available . See the
   /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
   /// for details.
   final String? name;
 
-  /// This property is no longer available and will be removed from the
-  /// documentation soon. See the
+  /// This property is no longer available. See the
   /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
   /// for details.
   final String? key;
@@ -39761,111 +43988,6 @@ class UserPickerUser {
       html: html ?? this.html,
       displayName: displayName ?? this.displayName,
       avatarUrl: avatarUrl ?? this.avatarUrl,
-    );
-  }
-}
-
-class UserWriteBean {
-  /// The URL of the user.
-  final String? self;
-
-  /// This parameter is no longer available. See the
-  /// [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
-  /// for details.
-  final String? key;
-
-  /// This parameter is no longer available. See the
-  /// [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
-  /// for details.
-  final String? name;
-
-  /// This parameter is no longer available. If the user has an Atlassian
-  /// account, their password is not changed. If the user does not have an
-  /// Atlassian account, they are sent an email asking them set up an account.
-  final String? password;
-
-  /// The email address for the user.
-  final String emailAddress;
-
-  /// A suggested display name for the user. If the user has an Atlassian
-  /// account, their display name is not changed. If the user does not have an
-  /// Atlassian account, this display name is used as a suggestion for creating
-  /// an account. The user is sent an email asking them to set their display
-  /// name and privacy preferences.
-  final String displayName;
-
-  /// Deprecated, do not use.
-  final List<String> applicationKeys;
-
-  UserWriteBean(
-      {this.self,
-      this.key,
-      this.name,
-      this.password,
-      required this.emailAddress,
-      required this.displayName,
-      List<String>? applicationKeys})
-      : applicationKeys = applicationKeys ?? [];
-
-  factory UserWriteBean.fromJson(Map<String, Object?> json) {
-    return UserWriteBean(
-      self: json[r'self'] as String?,
-      key: json[r'key'] as String?,
-      name: json[r'name'] as String?,
-      password: json[r'password'] as String?,
-      emailAddress: json[r'emailAddress'] as String? ?? '',
-      displayName: json[r'displayName'] as String? ?? '',
-      applicationKeys: (json[r'applicationKeys'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var self = this.self;
-    var key = this.key;
-    var name = this.name;
-    var password = this.password;
-    var emailAddress = this.emailAddress;
-    var displayName = this.displayName;
-    var applicationKeys = this.applicationKeys;
-
-    final json = <String, Object?>{};
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (key != null) {
-      json[r'key'] = key;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (password != null) {
-      json[r'password'] = password;
-    }
-    json[r'emailAddress'] = emailAddress;
-    json[r'displayName'] = displayName;
-    json[r'applicationKeys'] = applicationKeys;
-    return json;
-  }
-
-  UserWriteBean copyWith(
-      {String? self,
-      String? key,
-      String? name,
-      String? password,
-      String? emailAddress,
-      String? displayName,
-      List<String>? applicationKeys}) {
-    return UserWriteBean(
-      self: self ?? this.self,
-      key: key ?? this.key,
-      name: name ?? this.name,
-      password: password ?? this.password,
-      emailAddress: emailAddress ?? this.emailAddress,
-      displayName: displayName ?? this.displayName,
-      applicationKeys: applicationKeys ?? this.applicationKeys,
     );
   }
 }
@@ -40674,6 +44796,9 @@ class Webhook {
 
   /// The Jira events that trigger the webhook.
   final List<WebhookEvents> events;
+
+  /// The date after which the webhook will stop being sent. Use the "Extend
+  /// webhook life" resource to extend it.
   final int? expirationDate;
 
   Webhook(
@@ -40941,6 +45066,7 @@ class WebhookRegistrationDetails {
 
 /// The date the newly refreshed webhooks expire.
 class WebhooksExpirationDate {
+  /// The new expiration date of all refreshed webhooks: 30 days from now.
   final int expirationDate;
 
   WebhooksExpirationDate({required this.expirationDate});
@@ -40982,15 +45108,40 @@ class Workflow {
   /// Whether this is the default workflow.
   final bool isDefault;
 
+  /// The workflow schemes the workflow is assigned to.
+  final List<WorkflowSchemeIdName> schemes;
+
+  /// The projects the workflow is assigned to, through workflow schemes.
+  final List<ProjectDetails> projects;
+
+  /// Whether the workflow has a draft version.
+  final bool hasDraftWorkflow;
+  final WorkflowOperations? operations;
+
+  /// The creation date of the workflow.
+  final DateTime? created;
+
+  /// The last edited date of the workflow.
+  final DateTime? updated;
+
   Workflow(
       {required this.id,
       required this.description,
       List<Transition>? transitions,
       List<WorkflowStatus>? statuses,
-      bool? isDefault})
+      bool? isDefault,
+      List<WorkflowSchemeIdName>? schemes,
+      List<ProjectDetails>? projects,
+      bool? hasDraftWorkflow,
+      this.operations,
+      this.created,
+      this.updated})
       : transitions = transitions ?? [],
         statuses = statuses ?? [],
-        isDefault = isDefault ?? false;
+        isDefault = isDefault ?? false,
+        schemes = schemes ?? [],
+        projects = projects ?? [],
+        hasDraftWorkflow = hasDraftWorkflow ?? false;
 
   factory Workflow.fromJson(Map<String, Object?> json) {
     return Workflow(
@@ -41008,6 +45159,23 @@ class Workflow {
               .toList() ??
           [],
       isDefault: json[r'isDefault'] as bool? ?? false,
+      schemes: (json[r'schemes'] as List<Object?>?)
+              ?.map((i) => WorkflowSchemeIdName.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      projects: (json[r'projects'] as List<Object?>?)
+              ?.map((i) => ProjectDetails.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      hasDraftWorkflow: json[r'hasDraftWorkflow'] as bool? ?? false,
+      operations: json[r'operations'] != null
+          ? WorkflowOperations.fromJson(
+              json[r'operations']! as Map<String, Object?>)
+          : null,
+      created: DateTime.tryParse(json[r'created'] as String? ?? ''),
+      updated: DateTime.tryParse(json[r'updated'] as String? ?? ''),
     );
   }
 
@@ -41017,6 +45185,12 @@ class Workflow {
     var transitions = this.transitions;
     var statuses = this.statuses;
     var isDefault = this.isDefault;
+    var schemes = this.schemes;
+    var projects = this.projects;
+    var hasDraftWorkflow = this.hasDraftWorkflow;
+    var operations = this.operations;
+    var created = this.created;
+    var updated = this.updated;
 
     final json = <String, Object?>{};
     json[r'id'] = id.toJson();
@@ -41024,6 +45198,18 @@ class Workflow {
     json[r'transitions'] = transitions.map((i) => i.toJson()).toList();
     json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
     json[r'isDefault'] = isDefault;
+    json[r'schemes'] = schemes.map((i) => i.toJson()).toList();
+    json[r'projects'] = projects.map((i) => i.toJson()).toList();
+    json[r'hasDraftWorkflow'] = hasDraftWorkflow;
+    if (operations != null) {
+      json[r'operations'] = operations.toJson();
+    }
+    if (created != null) {
+      json[r'created'] = created.toIso8601String();
+    }
+    if (updated != null) {
+      json[r'updated'] = updated.toIso8601String();
+    }
     return json;
   }
 
@@ -41032,13 +45218,25 @@ class Workflow {
       String? description,
       List<Transition>? transitions,
       List<WorkflowStatus>? statuses,
-      bool? isDefault}) {
+      bool? isDefault,
+      List<WorkflowSchemeIdName>? schemes,
+      List<ProjectDetails>? projects,
+      bool? hasDraftWorkflow,
+      WorkflowOperations? operations,
+      DateTime? created,
+      DateTime? updated}) {
     return Workflow(
       id: id ?? this.id,
       description: description ?? this.description,
       transitions: transitions ?? this.transitions,
       statuses: statuses ?? this.statuses,
       isDefault: isDefault ?? this.isDefault,
+      schemes: schemes ?? this.schemes,
+      projects: projects ?? this.projects,
+      hasDraftWorkflow: hasDraftWorkflow ?? this.hasDraftWorkflow,
+      operations: operations ?? this.operations,
+      created: created ?? this.created,
+      updated: updated ?? this.updated,
     );
   }
 }
@@ -41204,6 +45402,41 @@ class WorkflowId {
   }
 }
 
+/// Operations allowed on a workflow
+class WorkflowOperations {
+  /// Whether the workflow can be updated.
+  final bool canEdit;
+
+  /// Whether the workflow can be deleted.
+  final bool canDelete;
+
+  WorkflowOperations({required this.canEdit, required this.canDelete});
+
+  factory WorkflowOperations.fromJson(Map<String, Object?> json) {
+    return WorkflowOperations(
+      canEdit: json[r'canEdit'] as bool? ?? false,
+      canDelete: json[r'canDelete'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var canEdit = this.canEdit;
+    var canDelete = this.canDelete;
+
+    final json = <String, Object?>{};
+    json[r'canEdit'] = canEdit;
+    json[r'canDelete'] = canDelete;
+    return json;
+  }
+
+  WorkflowOperations copyWith({bool? canEdit, bool? canDelete}) {
+    return WorkflowOperations(
+      canEdit: canEdit ?? this.canEdit,
+      canDelete: canDelete ?? this.canDelete,
+    );
+  }
+}
+
 /// A collection of transition rules.
 class WorkflowRules {
   /// The workflow conditions.
@@ -41276,6 +45509,117 @@ class WorkflowRules {
       conditionsTree: conditionsTree ?? this.conditionsTree,
       validators: validators ?? this.validators,
       postFunctions: postFunctions ?? this.postFunctions,
+    );
+  }
+}
+
+/// Details of the workflow and its transition rules.
+class WorkflowRulesSearch {
+  /// The workflow ID.
+  final String workflowEntityId;
+
+  /// The list of workflow rule IDs.
+  final List<String> ruleIds;
+
+  /// Use expand to include additional information in the response. This
+  /// parameter accepts `transition` which, for each rule, returns information
+  /// about the transition the rule is assigned to.
+  final String? expand;
+
+  WorkflowRulesSearch(
+      {required this.workflowEntityId, required this.ruleIds, this.expand});
+
+  factory WorkflowRulesSearch.fromJson(Map<String, Object?> json) {
+    return WorkflowRulesSearch(
+      workflowEntityId: json[r'workflowEntityId'] as String? ?? '',
+      ruleIds: (json[r'ruleIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      expand: json[r'expand'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var workflowEntityId = this.workflowEntityId;
+    var ruleIds = this.ruleIds;
+    var expand = this.expand;
+
+    final json = <String, Object?>{};
+    json[r'workflowEntityId'] = workflowEntityId;
+    json[r'ruleIds'] = ruleIds;
+    if (expand != null) {
+      json[r'expand'] = expand;
+    }
+    return json;
+  }
+
+  WorkflowRulesSearch copyWith(
+      {String? workflowEntityId, List<String>? ruleIds, String? expand}) {
+    return WorkflowRulesSearch(
+      workflowEntityId: workflowEntityId ?? this.workflowEntityId,
+      ruleIds: ruleIds ?? this.ruleIds,
+      expand: expand ?? this.expand,
+    );
+  }
+}
+
+/// Details of workflow transition rules.
+class WorkflowRulesSearchDetails {
+  /// The workflow ID.
+  final String? workflowEntityId;
+
+  /// List of workflow rule IDs that do not belong to the workflow or can not be
+  /// found.
+  final List<String> invalidRules;
+
+  /// List of valid workflow transition rules.
+  final List<WorkflowTransitionRules> validRules;
+
+  WorkflowRulesSearchDetails(
+      {this.workflowEntityId,
+      List<String>? invalidRules,
+      List<WorkflowTransitionRules>? validRules})
+      : invalidRules = invalidRules ?? [],
+        validRules = validRules ?? [];
+
+  factory WorkflowRulesSearchDetails.fromJson(Map<String, Object?> json) {
+    return WorkflowRulesSearchDetails(
+      workflowEntityId: json[r'workflowEntityId'] as String?,
+      invalidRules: (json[r'invalidRules'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      validRules: (json[r'validRules'] as List<Object?>?)
+              ?.map((i) => WorkflowTransitionRules.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var workflowEntityId = this.workflowEntityId;
+    var invalidRules = this.invalidRules;
+    var validRules = this.validRules;
+
+    final json = <String, Object?>{};
+    if (workflowEntityId != null) {
+      json[r'workflowEntityId'] = workflowEntityId;
+    }
+    json[r'invalidRules'] = invalidRules;
+    json[r'validRules'] = validRules.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  WorkflowRulesSearchDetails copyWith(
+      {String? workflowEntityId,
+      List<String>? invalidRules,
+      List<WorkflowTransitionRules>? validRules}) {
+    return WorkflowRulesSearchDetails(
+      workflowEntityId: workflowEntityId ?? this.workflowEntityId,
+      invalidRules: invalidRules ?? this.invalidRules,
+      validRules: validRules ?? this.validRules,
     );
   }
 }
@@ -41516,6 +45860,41 @@ class WorkflowSchemeAssociations {
   }
 }
 
+/// The ID and the name of the workflow scheme.
+class WorkflowSchemeIdName {
+  /// The ID of the workflow scheme.
+  final String id;
+
+  /// The name of the workflow scheme.
+  final String name;
+
+  WorkflowSchemeIdName({required this.id, required this.name});
+
+  factory WorkflowSchemeIdName.fromJson(Map<String, Object?> json) {
+    return WorkflowSchemeIdName(
+      id: json[r'id'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    json[r'name'] = name;
+    return json;
+  }
+
+  WorkflowSchemeIdName copyWith({String? id, String? name}) {
+    return WorkflowSchemeIdName(
+      id: id ?? this.id,
+      name: name ?? this.name,
+    );
+  }
+}
+
 /// An associated workflow scheme and project.
 class WorkflowSchemeProjectAssociation {
   /// The ID of the workflow scheme. If the workflow scheme ID is `null`, the
@@ -41608,7 +45987,11 @@ class WorkflowStatus {
 
   /// The name of the status in the workflow.
   final String name;
-  final WorkflowStatusProperties? properties;
+
+  /// Additional properties that modify the behavior of issues in this status.
+  /// Supports the properties `jira.issue.editable` and `issueEditable`
+  /// (deprecated) that indicate whether issues are editable.
+  final Map<String, dynamic>? properties;
 
   WorkflowStatus({required this.id, required this.name, this.properties});
 
@@ -41616,10 +45999,7 @@ class WorkflowStatus {
     return WorkflowStatus(
       id: json[r'id'] as String? ?? '',
       name: json[r'name'] as String? ?? '',
-      properties: json[r'properties'] != null
-          ? WorkflowStatusProperties.fromJson(
-              json[r'properties']! as Map<String, Object?>)
-          : null,
+      properties: json[r'properties'] as Map<String, Object?>?,
     );
   }
 
@@ -41632,45 +46012,17 @@ class WorkflowStatus {
     json[r'id'] = id;
     json[r'name'] = name;
     if (properties != null) {
-      json[r'properties'] = properties.toJson();
+      json[r'properties'] = properties;
     }
     return json;
   }
 
   WorkflowStatus copyWith(
-      {String? id, String? name, WorkflowStatusProperties? properties}) {
+      {String? id, String? name, Map<String, dynamic>? properties}) {
     return WorkflowStatus(
       id: id ?? this.id,
       name: name ?? this.name,
       properties: properties ?? this.properties,
-    );
-  }
-}
-
-/// Properties of a workflow status.
-class WorkflowStatusProperties {
-  /// Whether issues are editable in this status.
-  final bool issueEditable;
-
-  WorkflowStatusProperties({required this.issueEditable});
-
-  factory WorkflowStatusProperties.fromJson(Map<String, Object?> json) {
-    return WorkflowStatusProperties(
-      issueEditable: json[r'issueEditable'] as bool? ?? false,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var issueEditable = this.issueEditable;
-
-    final json = <String, Object?>{};
-    json[r'issueEditable'] = issueEditable;
-    return json;
-  }
-
-  WorkflowStatusProperties copyWith({bool? issueEditable}) {
-    return WorkflowStatusProperties(
-      issueEditable: issueEditable ?? this.issueEditable,
     );
   }
 }

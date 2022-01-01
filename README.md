@@ -17,7 +17,6 @@ See [Atlassian documentation of the APIs](https://developer.atlassian.com/cloud/
 ```dart
 import 'dart:io';
 import 'package:atlassian_apis/jira_platform.dart';
-import 'package:atlassian_apis/service_management.dart';
 
 void main() async {
   // This example uses API Token authentication.
@@ -47,7 +46,6 @@ void main() async {
 ```dart
 import 'dart:convert';
 import 'package:atlassian_apis/jira_platform.dart';
-import 'package:atlassian_apis/service_management.dart';
 
 void main() async {
   // Create Jira API from an authenticated client
@@ -66,7 +64,6 @@ void main() async {
 import 'dart:convert';
 import 'dart:io';
 import 'package:atlassian_apis/service_management.dart';
-import 'package:http/http.dart';
 import 'package:path/path.dart' as path;
 
 void main() async {
@@ -85,7 +82,7 @@ void main() async {
   // Upload a file
   var file = File('some_file.png');
   var attachment = await serviceManagement.servicedesk.attachTemporaryFile(
-      serviceDeskId: 1,
+      serviceDeskId: '1',
       file: MultipartFile('file', file.openRead(), file.lengthSync(),
           filename: path.basename(file.path)));
 

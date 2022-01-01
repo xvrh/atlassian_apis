@@ -240,6 +240,20 @@ class AdminOrganizationApi {
       },
     ));
   }
+
+  /// Validate a policy based on specific requirements. For example, Trigger
+  /// CDEN validation by pushing a task into the SQS dns-validation queue
+  Future<void> validatePolicy(
+      {required String orgId, required String policyId}) async {
+    await _client.send(
+      'get',
+      'orgs/{orgId}/policies/{policyId}/validate',
+      pathParameters: {
+        'orgId': orgId,
+        'policyId': policyId,
+      },
+    );
+  }
 }
 
 /// Applicable when policy type is `ip-allowlist` or `data-residency`
@@ -642,6 +656,40 @@ class DomainPage {
     return DomainPage(
       data: data ?? this.data,
       links: links ?? this.links,
+    );
+  }
+}
+
+/// CDEN policy validation failed
+class ErrorCdenPolicyValidationFailedModel {
+  final List<ApplicationError> errors;
+
+  ErrorCdenPolicyValidationFailedModel({List<ApplicationError>? errors})
+      : errors = errors ?? [];
+
+  factory ErrorCdenPolicyValidationFailedModel.fromJson(
+      Map<String, Object?> json) {
+    return ErrorCdenPolicyValidationFailedModel(
+      errors: (json[r'errors'] as List<Object?>?)
+              ?.map((i) => ApplicationError.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var errors = this.errors;
+
+    final json = <String, Object?>{};
+    json[r'errors'] = errors.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  ErrorCdenPolicyValidationFailedModel copyWith(
+      {List<ApplicationError>? errors}) {
+    return ErrorCdenPolicyValidationFailedModel(
+      errors: errors ?? this.errors,
     );
   }
 }
