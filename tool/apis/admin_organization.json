@@ -202,8 +202,8 @@
           "401": {
             "$ref": "#/components/responses/Error.Unauthenticated"
           },
-          "404": {
-            "$ref": "#/components/responses/Error.OrgNotFound"
+          "403": {
+            "$ref": "#/components/responses/Error.NoPerms"
           },
           "429": {
             "$ref": "#/components/responses/Error.RateLimited"
@@ -259,19 +259,15 @@
           "401": {
             "$ref": "#/components/responses/Error.Unauthenticated"
           },
+          "403": {
+            "$ref": "#/components/responses/Error.NoPerms"
+          },
           "404": {
-            "description": "Domain or organization not found",
+            "description": "Domain not found",
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/Error.DomainNotFound.Model"
-                    },
-                    {
-                      "$ref": "#/components/schemas/Error.OrgNotFound.Model"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/Error.DomainNotFound.Model"
                 }
               }
             }
@@ -1207,6 +1203,16 @@
             "schema": {
               "type": "object",
               "$ref": "#/components/schemas/Error.DomainNotFound.Model"
+            }
+          }
+        }
+      },
+      "Error.NoPerms": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error.NoPerms.Model"
             }
           }
         }
@@ -2279,6 +2285,38 @@
           }
         }
       },
+      "NoPermsError": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "description": "Timestamp of the request."
+          },
+          "path": {
+            "type": "string",
+            "description": "Path of the request."
+          },
+          "status": {
+            "type": "number",
+            "enum": [
+              403
+            ],
+            "description": "The HTTP status code applicable to this error."
+          },
+          "error": {
+            "type": "string",
+            "description": "The HTTP status text applicable to this error."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable explanation of the error."
+          },
+          "requestId": {
+            "type": "string",
+            "description": "Id of the request."
+          }
+        }
+      },
       "Error.InvalidPageCursor.Model": {
         "type": "object",
         "description": "Invalid page cursor",
@@ -2386,6 +2424,11 @@
             }
           }
         }
+      },
+      "Error.NoPerms.Model": {
+        "type": "object",
+        "description": "Forbidden",
+        "$ref": "#/components/schemas/NoPermsError"
       },
       "Error.DomainNotFound.Model": {
         "type": "object",

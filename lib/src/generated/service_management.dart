@@ -250,9 +250,9 @@ class OrganizationApi {
   /// Jira administrator permission, using the
   /// **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)**
   /// feature.
-  Future<void> setProperty(
+  Future<dynamic> setProperty(
       {required String organizationId, required String propertyKey}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/servicedeskapi/organization/{organizationId}/property/{propertyKey}',
       pathParameters: {
@@ -610,6 +610,56 @@ class RequestApi {
     ));
   }
 
+  /// Returns the contents of an attachment.
+  ///
+  /// To return a thumbnail of the attachment, use
+  /// [servicedeskapi/request/{issueIdOrKey}/attachment/{attachmentId}/thumbnail](#api-rest-servicedeskapi-request-issueidorkey-attachment-attachmentid-thumbnail-get).
+  ///
+  /// **[Permissions](#permissions) required:** For the issue containing the
+  /// attachment:
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  Future<dynamic> getAttachmentContent(
+      {required String issueIdOrKey, required int attachmentId}) async {
+    return await _client.send(
+      'get',
+      'rest/servicedeskapi/request/{issueIdOrKey}/attachment/{attachmentId}',
+      pathParameters: {
+        'issueIdOrKey': issueIdOrKey,
+        'attachmentId': '$attachmentId',
+      },
+    );
+  }
+
+  /// Returns the thumbnail of an attachment.
+  ///
+  /// To return the attachment contents, use
+  /// [servicedeskapi/request/{issueIdOrKey}/attachment/{attachmentId}](#api-rest-servicedeskapi-request-issueidorkey-attachment-attachmentid-get).
+  ///
+  /// **[Permissions](#permissions) required:** For the issue containing the
+  /// attachment:
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  Future<dynamic> getAttachmentThumbnail(
+      {required String issueIdOrKey, required int attachmentId}) async {
+    return await _client.send(
+      'get',
+      'rest/servicedeskapi/request/{issueIdOrKey}/attachment/{attachmentId}/thumbnail',
+      pathParameters: {
+        'issueIdOrKey': issueIdOrKey,
+        'attachmentId': '$attachmentId',
+      },
+    );
+  }
+
   /// This method returns all comments on a customer request. No permissions
   /// error is provided if, for example, the user doesn't have access to the
   /// service desk or request, the method simply returns an empty response.
@@ -959,8 +1009,8 @@ class RequestApi {
   ///
   /// **[Permissions](#permissions) required**: User must be the reporter or an
   /// Atlassian Connect app.
-  Future<void> deleteFeedback(String requestIdOrKey) async {
-    await _client.send(
+  Future<dynamic> deleteFeedback(String requestIdOrKey) async {
+    return await _client.send(
       'delete',
       'rest/servicedeskapi/request/{requestIdOrKey}/feedback',
       pathParameters: {
@@ -1454,11 +1504,11 @@ class ServicedeskApi {
   ///
   /// **[Permissions](#permissions) required**: Jira project administrator with
   /// a Jira Service Management agent license.
-  Future<void> setProperty(
+  Future<dynamic> setProperty(
       {required String serviceDeskId,
       required int requestTypeId,
       required String propertyKey}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/property/{propertyKey}',
       pathParameters: {
@@ -3607,6 +3657,9 @@ class FieldMetadata {
   /// The default value of the field.
   final dynamic defaultValue;
 
+  /// The configuration properties.
+  final Map<String, dynamic>? configuration;
+
   FieldMetadata(
       {required this.required,
       required this.schema,
@@ -3616,7 +3669,8 @@ class FieldMetadata {
       bool? hasDefaultValue,
       required this.operations,
       List<dynamic>? allowedValues,
-      this.defaultValue})
+      this.defaultValue,
+      this.configuration})
       : hasDefaultValue = hasDefaultValue ?? false,
         allowedValues = allowedValues ?? [];
 
@@ -3637,6 +3691,7 @@ class FieldMetadata {
           (json[r'allowedValues'] as List<Object?>?)?.map((i) => i).toList() ??
               [],
       defaultValue: json[r'defaultValue'],
+      configuration: json[r'configuration'] as Map<String, Object?>?,
     );
   }
 
@@ -3650,6 +3705,7 @@ class FieldMetadata {
     var operations = this.operations;
     var allowedValues = this.allowedValues;
     var defaultValue = this.defaultValue;
+    var configuration = this.configuration;
 
     final json = <String, Object?>{};
     json[r'required'] = required;
@@ -3665,6 +3721,9 @@ class FieldMetadata {
     if (defaultValue != null) {
       json[r'defaultValue'] = defaultValue;
     }
+    if (configuration != null) {
+      json[r'configuration'] = configuration;
+    }
     return json;
   }
 
@@ -3677,7 +3736,8 @@ class FieldMetadata {
       bool? hasDefaultValue,
       List<String>? operations,
       List<dynamic>? allowedValues,
-      dynamic defaultValue}) {
+      dynamic defaultValue,
+      Map<String, dynamic>? configuration}) {
     return FieldMetadata(
       required: required ?? this.required,
       schema: schema ?? this.schema,
@@ -3688,6 +3748,7 @@ class FieldMetadata {
       operations: operations ?? this.operations,
       allowedValues: allowedValues ?? this.allowedValues,
       defaultValue: defaultValue ?? this.defaultValue,
+      configuration: configuration ?? this.configuration,
     );
   }
 }
@@ -7839,6 +7900,9 @@ class SlaInformationDTO {
   /// Details of the active cycle for the SLA.
   final SlaInformationOngoingCycleDTO? ongoingCycle;
 
+  /// Format in which SLA is to be displayed in the UI
+  final String? slaDisplayFormat;
+
   /// REST API URL for the SLA.
   final SelfLinkDTO? links;
 
@@ -7847,6 +7911,7 @@ class SlaInformationDTO {
       this.name,
       List<SlaInformationCompletedCycleDTO>? completedCycles,
       this.ongoingCycle,
+      this.slaDisplayFormat,
       this.links})
       : completedCycles = completedCycles ?? [];
 
@@ -7863,6 +7928,7 @@ class SlaInformationDTO {
           ? SlaInformationOngoingCycleDTO.fromJson(
               json[r'ongoingCycle']! as Map<String, Object?>)
           : null,
+      slaDisplayFormat: json[r'slaDisplayFormat'] as String?,
       links: json[r'_links'] != null
           ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
@@ -7874,6 +7940,7 @@ class SlaInformationDTO {
     var name = this.name;
     var completedCycles = this.completedCycles;
     var ongoingCycle = this.ongoingCycle;
+    var slaDisplayFormat = this.slaDisplayFormat;
     var links = this.links;
 
     final json = <String, Object?>{};
@@ -7887,6 +7954,9 @@ class SlaInformationDTO {
     if (ongoingCycle != null) {
       json[r'ongoingCycle'] = ongoingCycle.toJson();
     }
+    if (slaDisplayFormat != null) {
+      json[r'slaDisplayFormat'] = slaDisplayFormat;
+    }
     if (links != null) {
       json[r'_links'] = links.toJson();
     }
@@ -7898,12 +7968,14 @@ class SlaInformationDTO {
       String? name,
       List<SlaInformationCompletedCycleDTO>? completedCycles,
       SlaInformationOngoingCycleDTO? ongoingCycle,
+      String? slaDisplayFormat,
       SelfLinkDTO? links}) {
     return SlaInformationDTO(
       id: id ?? this.id,
       name: name ?? this.name,
       completedCycles: completedCycles ?? this.completedCycles,
       ongoingCycle: ongoingCycle ?? this.ongoingCycle,
+      slaDisplayFormat: slaDisplayFormat ?? this.slaDisplayFormat,
       links: links ?? this.links,
     );
   }

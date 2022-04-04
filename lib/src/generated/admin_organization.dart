@@ -886,6 +886,20 @@ class ErrorInvalidSearchTimeDateModel {
   }
 }
 
+/// Forbidden
+class ErrorNoPermsModel {
+  ErrorNoPermsModel();
+
+  factory ErrorNoPermsModel.fromJson(Map<String, Object?> json) {
+    return ErrorNoPermsModel();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
 /// Organization not found
 class ErrorOrgNotFoundModel {
   final List<ApplicationError> errors;
@@ -1824,6 +1838,115 @@ class Meta {
       atlassianAccountId: atlassianAccountId ?? this.atlassianAccountId,
     );
   }
+}
+
+class NoPermsError {
+  /// Timestamp of the request.
+  final String? timestamp;
+
+  /// Path of the request.
+  final String? path;
+
+  /// The HTTP status code applicable to this error.
+  final NoPermsErrorStatus? status;
+
+  /// The HTTP status text applicable to this error.
+  final String? error;
+
+  /// Human-readable explanation of the error.
+  final String? message;
+
+  /// Id of the request.
+  final String? requestId;
+
+  NoPermsError(
+      {this.timestamp,
+      this.path,
+      this.status,
+      this.error,
+      this.message,
+      this.requestId});
+
+  factory NoPermsError.fromJson(Map<String, Object?> json) {
+    return NoPermsError(
+      timestamp: json[r'timestamp'] as String?,
+      path: json[r'path'] as String?,
+      status: json[r'status'] != null
+          ? NoPermsErrorStatus.fromValue(json[r'status']! as String)
+          : null,
+      error: json[r'error'] as String?,
+      message: json[r'message'] as String?,
+      requestId: json[r'requestId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var timestamp = this.timestamp;
+    var path = this.path;
+    var status = this.status;
+    var error = this.error;
+    var message = this.message;
+    var requestId = this.requestId;
+
+    final json = <String, Object?>{};
+    if (timestamp != null) {
+      json[r'timestamp'] = timestamp;
+    }
+    if (path != null) {
+      json[r'path'] = path;
+    }
+    if (status != null) {
+      json[r'status'] = status.value;
+    }
+    if (error != null) {
+      json[r'error'] = error;
+    }
+    if (message != null) {
+      json[r'message'] = message;
+    }
+    if (requestId != null) {
+      json[r'requestId'] = requestId;
+    }
+    return json;
+  }
+
+  NoPermsError copyWith(
+      {String? timestamp,
+      String? path,
+      NoPermsErrorStatus? status,
+      String? error,
+      String? message,
+      String? requestId}) {
+    return NoPermsError(
+      timestamp: timestamp ?? this.timestamp,
+      path: path ?? this.path,
+      status: status ?? this.status,
+      error: error ?? this.error,
+      message: message ?? this.message,
+      requestId: requestId ?? this.requestId,
+    );
+  }
+}
+
+class NoPermsErrorStatus {
+  static const $403 = NoPermsErrorStatus._('403');
+
+  static const values = [
+    $403,
+  ];
+  final String value;
+
+  const NoPermsErrorStatus._(this.value);
+
+  static NoPermsErrorStatus fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => NoPermsErrorStatus._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 class Org {

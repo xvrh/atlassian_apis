@@ -29,3 +29,9 @@ import 'example/jira.dart#example';
 ```dart
 import 'example/service_management.dart#example';
 ```
+
+### Confluence
+
+```dart
+import 'example/confluence.dart#example';
+```

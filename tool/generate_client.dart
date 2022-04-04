@@ -27,24 +27,7 @@ void main() {
 }
 
 void fixApi(String name, Map<String, dynamic> api) {
-  if (name == 'jira_software') {
-    var epic =
-        ((api['paths']! as Map<String, Object?>)['/agile/1.0/epic/search']!
-            as Map<String, Object?>)['get']! as Map<String, Object?>;
-    epic['tags'] = ['Epic'];
-
-    var project = ((api['paths']! as Map<String, Object?>)[
-            '/agile/1.0/project/{projectIdOrKey}/features']!
-        as Map<String, Object?>)['get']! as Map<String, Object?>;
-    project['tags'] = ['Issue'];
-  } else if (name == 'admin_user') {
-    for (var prop in ['Allowed', 'Unallowed']) {
-      // ignore: avoid_dynamic_calls
-      var target = api['components']!['schemas']!['Manageability.$prop']![
-          'properties']!['allowed']! as Map<String, Object?>;
-      target.remove('enum');
-    }
-  } else if (name == 'service_management') {
+  if (name == 'service_management') {
     // ignore: avoid_dynamic_calls
     var schemas = api['components']!['schemas']! as Map<String, dynamic>;
     schemas['TemporaryAttachments'] = jsonDecode(r'''
