@@ -260,7 +260,7 @@ class Schema {
     this.format,
     Map<String, Schema>? properties,
     this.additionalProperties,
-    List<dynamic?>? enums,
+    List<dynamic>? enums,
     this.ref,
     this.items,
     String? description,
