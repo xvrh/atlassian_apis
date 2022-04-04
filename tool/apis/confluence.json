@@ -3,7 +3,7 @@
   "info": {
     "title": "The Confluence Cloud REST API",
     "description": "This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.",
-    "termsOfService": "http://atlassian.com/terms/",
+    "termsOfService": "https://atlassian.com/terms/",
     "version": "1.0.0"
   },
   "externalDocs": {
@@ -18,6 +18,10 @@
   "tags": [
     {
       "name": "Audit",
+      "description": ""
+    },
+    {
+      "name": "Analytics",
       "description": ""
     },
     {
@@ -74,11 +78,11 @@
     },
     {
       "name": "Experimental",
-      "description": ""
+      "description": "APIs in this section can change without any prior deprecation notice."
     },
     {
       "name": "Group",
-      "description": ""
+      "description": "**[WARNING](https://support.atlassian.com/user-management/docs/create-and-update-groups/) The standard Atlassian group names are default names only and can be edited or deleted.**  For example, an admin or Atlassian support could delete the default group jira-software-users or rename it to jsw-users at any point."
     },
     {
       "name": "Inline tasks",
@@ -210,6 +214,25 @@
             "content": {}
           }
         },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "read:audit-log:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:audit-log:confluence"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
       },
       "post": {
@@ -250,6 +273,27 @@
             "content": {}
           }
         },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "read:audit-log:confluence",
+              "write:audit-log:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:audit-log:confluence",
+              "write:audit-log:confluence"
+            ]
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "INACCESSIBLE"
       }
@@ -324,6 +368,25 @@
             "content": {}
           }
         },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "read:audit-log:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:audit-log:confluence"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
       }
     },
@@ -351,6 +414,25 @@
             "content": {}
           }
         },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "read:audit-log:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:audit-log:confluence"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
       },
       "put": {
@@ -387,6 +469,25 @@
             "content": {}
           }
         },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "write:audit-log:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:audit-log:confluence"
+            ]
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "INACCESSIBLE"
       }
@@ -481,6 +582,25 @@
             "content": {}
           }
         },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "read:audit-log:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:audit-log:confluence"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
       }
     },
@@ -626,11 +746,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -698,11 +834,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "read:content-details:confluence",
+              "write:content:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence",
+              "write:content:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "content",
@@ -748,7 +902,13 @@
         "responses": {
           "202": {
             "description": "Returned if the archive request has been submitted.",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LongTask"
+                }
+              }
+            }
           },
           "400": {
             "description": "Returned if:\n- there is an archival job already running for the tenant.\n- the number of pages to archive is larger than the limit of 300.\n- any of the content IDs specified in the array do not resolve to pages.\n- any of the specified pages are already archived.\n- the request is coming from a free edition tenant.\n- the request is coming from a non premium edition tenant with more than 1 page ID\n  in the archive request.",
@@ -762,11 +922,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "read:content.metadata:confluence",
+              "write:page:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content.metadata:confluence",
+              "write:page:confluence"
+            ]
           }
         ],
         "x-experimental": true,
@@ -837,11 +1015,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "read:content-details:confluence",
+              "write:content:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence",
+              "write:content:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -910,11 +1106,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "read:content-details:confluence",
+              "write:content:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence",
+              "write:content:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -993,11 +1207,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "search:confluence"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "search:confluence"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -1113,11 +1343,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -1218,11 +1464,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "read:content-details:confluence",
+              "write:content:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence",
+              "write:content:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "content",
@@ -1233,7 +1497,7 @@
           "Content"
         ],
         "summary": "Delete content",
-        "description": "Moves a piece of content to the space's trash or purges it from the trash,\ndepending on the content's type and status:\n\n- If the content's type is `page` or `blogpost` and its status is `current`,\nit will be trashed.\n- If the content's type is `page` or `blogpost` and its status is `trashed`,\nthe content will be purged from the trash and deleted permanently. Note,\nyou must also set the `status` query parameter to `trashed` in your request.\n- If the content's type is `comment` or `attachment`, it will be deleted\npermanently without being trashed.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Delete' permission for the space that the content is in, and permission to edit the content.",
+        "description": "Moves a piece of content to the space's trash or purges it from the trash,\ndepending on the content's type and status:\n\n- If the content's type is `page` or `blogpost` and its status is `current`,\nit will be trashed.\n- If the content's type is `page` or `blogpost` and its status is `trashed`,\nthe content will be purged from the trash and deleted permanently. Note,\nyou must also set the `status` query parameter to `trashed` in your request.\n- If the content's type is `comment` or `attachment`, it will be deleted\npermanently without being trashed.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Delete' permission for the space that the content is in.",
         "operationId": "deleteContent",
         "parameters": [
           {
@@ -1279,11 +1543,103 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "delete:content:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "delete:content:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "DELETE"
+      }
+    },
+    "/wiki/rest/api/content/{id}/pageTree": {
+      "delete": {
+        "tags": [
+          "Experimental"
+        ],
+        "summary": "Delete page tree",
+        "description": "Moves a pagetree rooted at a page to the space's trash:\n\n- If the content's type is `page` and its status is `current`, it will be trashed including\nall its descendants.\n- For every other combination of content type and status, this API is not supported.\n\nThis API accepts the pageTree delete request and returns a task ID.\nThe delete process happens asynchronously.\n\n Response example:\n <pre><code>\n {\n      \"id\" : \"1180606\",\n      \"links\" : {\n           \"status\" : \"/rest/api/longtask/1180606\"\n      }\n }\n </code></pre>\n Use the `/longtask/<taskId>` REST API to get the copy task status.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Delete' permission for the space that the content is in.",
+        "operationId": "deletePageTree",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the content which forms root of the page tree, to be deleted.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Returned if the request to trash content and all its current page descendants, is successfully accepted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LongTask"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if the content id is invalid or id does not represents a 'CURRENT' page.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "403": {
+            "description": "Returned if the calling user can not delete the content with specified id.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if;\n\n- There is no content with the given ID.\n- The requesting user does not have permission to trash the content or any of it's descendant pages.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "delete:content:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "delete:content:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "DELETE"
@@ -1350,11 +1706,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -1434,11 +1806,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "write:page:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:page:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -1523,11 +1911,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -1616,11 +2020,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-file"
+              "read:content-details:confluence",
+              "write:attachment:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-file"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence",
+              "write:attachment:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -1713,11 +2135,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-file"
+              "read:content-details:confluence",
+              "write:attachment:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-file"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence",
+              "write:attachment:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -1793,12 +2233,30 @@
         "security": [
           {
             "oAuthDefinitions": [
+              "read:content-details:confluence",
+              "write:attachment:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
               "write:confluence-file",
               "write:confluence-props"
             ]
           },
           {
-            "basicAuth": []
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence",
+              "write:attachment:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -1886,11 +2344,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-file"
+              "read:content-details:confluence",
+              "write:attachment:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-file"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence",
+              "write:attachment:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -1949,11 +2425,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "readonly:content.attachment:confluence"
+              "read:attachment:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "readonly:content.attachment:confluence"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:attachment:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -2057,11 +2549,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -2157,11 +2665,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -2223,11 +2747,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -2328,11 +2868,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -2403,11 +2959,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:content.metadata:confluence",
+              "read:user:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content.metadata:confluence",
+              "read:user:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -2434,7 +3008,7 @@
           {
             "name": "version",
             "in": "path",
-            "description": "The version of the content that contains the macro.",
+            "description": "The version of the content that contains the macro. Specifying `0` as the `version` will return\nthe macro body for the latest content version.",
             "required": true,
             "schema": {
               "type": "integer",
@@ -2474,11 +3048,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.all"
+              "read:content.metadata:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.all"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content.metadata:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -2561,11 +3151,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:label:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:label:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -2633,11 +3239,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "read:label:confluence",
+              "write:label:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:label:confluence",
+              "write:label:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -2687,14 +3311,30 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "write:label:confluence"
             ]
           },
           {
             "basicAuth": []
           }
         ],
-        "x-atlassian-connect-scope": "DELETE"
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:label:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "WRITE"
       }
     },
     "/wiki/rest/api/content/{id}/label/{label}": {
@@ -2746,14 +3386,30 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "write:label:confluence"
             ]
           },
           {
             "basicAuth": []
           }
         ],
-        "x-atlassian-connect-scope": "DELETE"
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:label:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "WRITE"
       }
     },
     "/wiki/rest/api/content/{id}/notification/child-created": {
@@ -2816,11 +3472,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:watcher:confluence",
+              "read:user:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:watcher:confluence",
+              "read:user:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -2886,11 +3560,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:watcher:confluence",
+              "read:user:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:watcher:confluence",
+              "read:user:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -2928,7 +3620,13 @@
         "responses": {
           "202": {
             "description": "Returns a full JSON representation of a long running task",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LongTask"
+                }
+              }
+            }
           },
           "400": {
             "description": "Returned if the title prefix is invalid (e.g. is empty, creates a conflict)",
@@ -2946,11 +3644,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "read:content.metadata:confluence",
+              "write:page:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content.metadata:confluence",
+              "write:page:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "request",
@@ -3020,11 +3736,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "read:content-details:confluence",
+              "write:page:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence",
+              "write:page:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "request",
@@ -3092,11 +3826,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.permission"
+              "read:content.permission:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.permission"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content.permission:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -3192,11 +3942,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-props"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-props"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -3257,11 +4023,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-props"
+              "read:content.property:confluence",
+              "write:content.property:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-props"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content.property:confluence",
+              "write:content.property:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -3357,11 +4141,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-props"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-props"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -3439,11 +4239,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-props"
+              "read:content.property:confluence",
+              "write:content.property:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-props"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content.property:confluence",
+              "write:content.property:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -3514,11 +4332,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-props"
+              "read:content.property:confluence",
+              "write:content.property:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-props"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content.property:confluence",
+              "write:content.property:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -3568,14 +4404,30 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-props"
+              "write:content.property:confluence"
             ]
           },
           {
             "basicAuth": []
           }
         ],
-        "x-atlassian-connect-scope": "DELETE"
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-props"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:content.property:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "WRITE"
       }
     },
     "/wiki/rest/api/content/{id}/restriction": {
@@ -3608,7 +4460,11 @@
                 "type": "string",
                 "enum": [
                   "restrictions.user",
+                  "read.restrictions.user",
+                  "update.restrictions.user",
                   "restrictions.group",
+                  "read.restrictions.group",
+                  "update.restrictions.group",
                   "content"
                 ]
               }
@@ -3656,11 +4512,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.all"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.all"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -3694,7 +4566,11 @@
                 "type": "string",
                 "enum": [
                   "restrictions.user",
+                  "read.restrictions.user",
+                  "update.restrictions.user",
                   "restrictions.group",
+                  "read.restrictions.group",
+                  "update.restrictions.group",
                   "content"
                 ]
               }
@@ -3731,11 +4607,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "read:content-details:confluence",
+              "write:content.restriction:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence",
+              "write:content.restriction:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -3770,7 +4664,11 @@
                 "type": "string",
                 "enum": [
                   "restrictions.user",
+                  "read.restrictions.user",
+                  "update.restrictions.user",
                   "restrictions.group",
+                  "read.restrictions.group",
+                  "update.restrictions.group",
                   "content"
                 ]
               }
@@ -3807,11 +4705,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "read:content-details:confluence",
+              "write:content.restriction:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence",
+              "write:content.restriction:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -3846,7 +4762,11 @@
                 "type": "string",
                 "enum": [
                   "restrictions.user",
+                  "read.restrictions.user",
+                  "update.restrictions.user",
                   "restrictions.group",
+                  "read.restrictions.group",
+                  "update.restrictions.group",
                   "content"
                 ]
               }
@@ -3880,11 +4800,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "read:content-details:confluence",
+              "write:content.restriction:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence",
+              "write:content.restriction:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "DELETE"
@@ -3952,11 +4890,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.all"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.all"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -4049,11 +5003,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.all"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.all"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -4117,11 +5087,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.all"
+              "read:content.restriction:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.all"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content.restriction:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -4179,11 +5165,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "write:content.restriction:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:content.restriction:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -4241,14 +5243,30 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "write:content.restriction:confluence"
             ]
           },
           {
             "basicAuth": []
           }
         ],
-        "x-atlassian-connect-scope": "DELETE"
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:content.restriction:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "WRITE"
       }
     },
     "/wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/byGroupId/{groupId}": {
@@ -4309,11 +5327,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.all"
+              "read:content.restriction:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.all"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content.restriction:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -4379,11 +5413,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "write:content.restriction:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:content.restriction:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -4449,14 +5499,30 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "write:content.restriction:confluence"
             ]
           },
           {
             "basicAuth": []
           }
         ],
-        "x-atlassian-connect-scope": "DELETE"
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:content.restriction:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "WRITE"
       }
     },
     "/wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/user": {
@@ -4509,11 +5575,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.all"
+              "read:content.restriction:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.all"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content.restriction:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -4571,11 +5653,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "write:content.restriction:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:content.restriction:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -4633,14 +5731,30 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "write:content.restriction:confluence"
             ]
           },
           {
             "basicAuth": []
           }
         ],
-        "x-atlassian-connect-scope": "DELETE"
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:content.restriction:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "WRITE"
       }
     },
     "/wiki/rest/api/content/{id}/version": {
@@ -4716,11 +5830,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -4790,11 +5920,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "read:content-details:confluence",
+              "write:content:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence",
+              "write:content:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -4866,11 +6014,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -4920,11 +6084,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "delete:content:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "delete:content:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "DELETE"
@@ -5015,11 +6195,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.all"
+              "read:content.metadata:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.all"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content.metadata:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -5187,11 +6383,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.all"
+              "read:inlinetask:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.all"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:inlinetask:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -5237,6 +6449,25 @@
             "description": "Returned if task could not be found with the given global ID."
           }
         },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "read:inlinetask:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:inlinetask:confluence"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "put": {
@@ -5292,6 +6523,27 @@
             "description": "Returned if task could not be found with given global ID."
           }
         },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "read:inlinetask:confluence",
+              "write:inlinetask:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:inlinetask:confluence",
+              "write:inlinetask:confluence"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       }
     },
@@ -5377,14 +6629,32 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:label:confluence",
+              "read:content:confluence"
             ]
           },
           {
             "basicAuth": []
           }
         ],
-        "x-atlassian-connect-scope": "INACCESSIBLE"
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:label:confluence",
+              "read:content:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
       }
     },
     "/wiki/rest/api/group": {
@@ -5453,11 +6723,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-groups"
+              "read:group:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-groups"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:group:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -5507,11 +6793,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-groups"
+              "read:group:confluence",
+              "write:group:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-groups"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:group:confluence",
+              "write:group:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -5560,11 +6864,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-groups"
+              "write:group:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-groups"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:group:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
@@ -5608,11 +6928,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-groups"
+              "read:group:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-groups"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:group:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -5656,11 +6992,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-groups"
+              "read:group:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-groups"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:group:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -5708,11 +7060,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-groups"
+              "write:group:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-groups"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:group:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
@@ -5800,6 +7168,15 @@
               "format": "int32",
               "default": 200
             }
+          },
+          {
+            "name": "shouldReturnTotalSize",
+            "in": "query",
+            "description": "Whether to include total size parameter in the results.\nNote, fetching total size property is an expensive operation; use it if your use case needs this value.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
         "responses": {
@@ -5821,11 +7198,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-groups"
+              "read:group:confluence",
+              "read:user:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-groups"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:group:confluence",
+              "read:user:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -5935,6 +7330,15 @@
               "format": "int32",
               "default": 200
             }
+          },
+          {
+            "name": "shouldReturnTotalSize",
+            "in": "query",
+            "description": "Whether to include total size parameter in the results.\nNote, fetching total size property is an expensive operation; use it if your use case needs this value.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
         "responses": {
@@ -5956,11 +7360,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-groups"
+              "read:group:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-groups"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:group:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -6021,11 +7441,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-groups"
+              "write:group:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-groups"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:group:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -6083,11 +7519,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-groups"
+              "write:group:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-groups"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:group:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
@@ -6132,6 +7584,15 @@
               "format": "int32",
               "default": 200
             }
+          },
+          {
+            "name": "shouldReturnTotalSize",
+            "in": "query",
+            "description": "Whether to include total size parameter in the results.\nNote, fetching total size property is an expensive operation; use it if your use case needs this value.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
         "responses": {
@@ -6157,11 +7618,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-groups"
+              "read:group:confluence",
+              "read:user:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-groups"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:group:confluence",
+              "read:user:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -6222,11 +7701,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-groups"
+              "write:group:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-groups"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:group:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -6284,11 +7779,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-groups"
+              "write:group:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-groups"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:group:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
@@ -6342,6 +7853,25 @@
             "content": {}
           }
         },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "read:content.metadata:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content.metadata:confluence"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -6387,11 +7917,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-space.summary"
+              "read:content.metadata:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-space.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content.metadata:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -6554,11 +8100,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:relation:confluence",
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:relation:confluence",
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -6712,11 +8276,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:relation:confluence",
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:relation:confluence",
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -6850,11 +8432,35 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "read:relation:confluence",
+              "read:space:confluence",
+              "read:user:confluence",
+              "read:content:confluence",
+              "write:relation:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:relation:confluence",
+              "read:space:confluence",
+              "read:user:confluence",
+              "read:content:confluence",
+              "write:relation:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -6982,14 +8588,30 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "write:relation:confluence"
             ]
           },
           {
             "basicAuth": []
           }
         ],
-        "x-atlassian-connect-scope": "DELETE"
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:relation:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "WRITE"
       }
     },
     "/wiki/rest/api/relation/{relationName}/to/{targetType}/{targetKey}/from/{sourceType}": {
@@ -7149,11 +8771,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:relation:confluence",
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:relation:confluence",
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -7321,11 +8961,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "search:confluence"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "search:confluence"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -7343,7 +8999,7 @@
           {
             "name": "cql",
             "in": "query",
-            "description": "The CQL query to be used for the search. See\n[Advanced Searching using CQL](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/)\nfor instructions on how to build a CQL query.\n\nExample queries:\n          cql=type=user will return all users\n          cql=user=“1234” will return user with accountId “1234”\n          You can also use IN, NOT IN, != operators\n          cql=user IN (“12”, “34\") will return users with accountids “12” and “34”\n          cql=user.fullname~jo will return users with nickname/full name starting with “jo”\n          cql=user.accountid=“123” will return user with accountId “123”",
+            "description": "The CQL query to be used for the search. See\n[Advanced Searching using CQL](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/)\nfor instructions on how to build a CQL query.\n\nExample queries:\n          cql=type=user will return all users\n          cql=user=\"1234\" will return user with accountId \"1234\"\n          You can also use IN, NOT IN, != operators\n          cql=user IN (\"12\", \"34\") will return users with accountids \"12\" and \"34\"\n          cql=user.fullname~jo will return users with nickname/full name starting with \"jo\"\n          cql=user.accountid=\"123\" will return user with accountId \"123\"",
             "required": true,
             "schema": {
               "type": "string"
@@ -7405,6 +9061,25 @@
             "content": {}
           }
         },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "read:content-details:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -7449,11 +9124,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "manage:confluence-configuration"
+              "read:configuration:confluence",
+              "read:space.setting:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "manage:confluence-configuration"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:configuration:confluence",
+              "read:space.setting:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -7507,11 +9200,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "manage:confluence-configuration"
+              "read:space.setting:confluence",
+              "write:space.setting:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "manage:confluence-configuration"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:space.setting:confluence",
+              "write:space.setting:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -7574,11 +9285,33 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "manage:confluence-configuration"
+              "read:configuration:confluence",
+              "read:space.setting:confluence",
+              "write:configuration:confluence",
+              "write:space.setting:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "manage:confluence-configuration"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:configuration:confluence",
+              "read:space.setting:confluence",
+              "write:configuration:confluence",
+              "write:space.setting:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -7622,11 +9355,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "manage:confluence-configuration"
+              "write:configuration:confluence",
+              "write:space.setting:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "manage:confluence-configuration"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:configuration:confluence",
+              "write:space.setting:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "DELETE"
@@ -7694,11 +9445,33 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "manage:confluence-configuration"
+              "read:configuration:confluence",
+              "read:space.setting:confluence",
+              "write:configuration:confluence",
+              "write:space.setting:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "manage:confluence-configuration"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:configuration:confluence",
+              "read:space.setting:confluence",
+              "write:configuration:confluence",
+              "write:space.setting:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -7732,11 +9505,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "manage:confluence-configuration"
+              "read:configuration:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "manage:confluence-configuration"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:configuration:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -7789,11 +9578,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "manage:confluence-configuration"
+              "read:configuration:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "manage:confluence-configuration"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:configuration:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -7826,11 +9631,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "manage:confluence-configuration"
+              "read:configuration:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "manage:confluence-configuration"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:configuration:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -7874,11 +9695,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "manage:confluence-configuration"
+              "read:configuration:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "manage:confluence-configuration"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:configuration:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -8022,11 +9859,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-space.summary"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-space.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -8076,11 +9929,31 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-space"
+              "read:space-details:confluence",
+              "write:space:confluence",
+              "write:space.permission:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-space"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:space-details:confluence",
+              "write:space:confluence",
+              "write:space.permission:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -8133,11 +10006,31 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-space"
+              "read:space-details:confluence",
+              "write:space:confluence",
+              "write:space.permission:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-space"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:space-details:confluence",
+              "write:space:confluence",
+              "write:space.permission:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "SpacePrivateCreate",
@@ -8189,11 +10082,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-space.summary"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-space.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -8250,11 +10159,31 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-space"
+              "read:space-details:confluence",
+              "write:space:confluence",
+              "write:space.permission:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-space"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:space-details:confluence",
+              "write:space:confluence",
+              "write:space.permission:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -8281,7 +10210,13 @@
         "responses": {
           "202": {
             "description": "Returns a pointer to the status of the space deletion task.",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LongTask"
+                }
+              }
+            }
           },
           "401": {
             "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
@@ -8295,11 +10230,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-space"
+              "read:content.metadata:confluence",
+              "delete:space:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-space"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content.metadata:confluence",
+              "delete:space:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "DELETE"
@@ -8396,11 +10349,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -8465,6 +10434,27 @@
           }
         },
         "x-codegen-request-body-name": "body",
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "read:space.permission:confluence",
+              "write:space.permission:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:space.permission:confluence",
+              "write:space.permission:confluence"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
       }
     },
@@ -8521,6 +10511,27 @@
           }
         },
         "x-codegen-request-body-name": "body",
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "read:space.permission:confluence",
+              "write:space.permission:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:space.permission:confluence",
+              "write:space.permission:confluence"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       }
     },
@@ -8574,6 +10585,25 @@
             "content": {}
           }
         },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "write:space.permission:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:space.permission:confluence"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
       }
     },
@@ -8666,11 +10696,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -8753,11 +10799,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-props"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-props"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -8826,11 +10888,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-props"
+              "read:space.property:confluence",
+              "write:space.property:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-props"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:space.property:confluence",
+              "write:space.property:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -8901,11 +10981,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-props"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-props"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -8983,11 +11079,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-props"
+              "read:space.property:confluence",
+              "write:space.property:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-props"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:space.property:confluence",
+              "write:space.property:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -9058,11 +11172,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-props"
+              "read:space.property:confluence",
+              "write:space.property:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-props"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:space.property:confluence",
+              "write:space.property:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -9112,14 +11244,30 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-props"
+              "write:space.property:confluence"
             ]
           },
           {
             "basicAuth": []
           }
         ],
-        "x-atlassian-connect-scope": "DELETE"
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-props"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:space.property:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "WRITE"
       }
     },
     "/wiki/rest/api/space/{spaceKey}/settings": {
@@ -9164,11 +11312,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-space.summary"
+              "read:space.setting:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-space.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:space.setting:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -9225,11 +11389,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-space"
+              "read:space.setting:confluence",
+              "write:space.setting:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-space"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:space.setting:confluence",
+              "write:space.setting:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "SpaceSettingsUpdate",
@@ -9274,11 +11456,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-space.summary"
+              "read:space.setting:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-space.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:space.setting:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -9334,11 +11532,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-space"
+              "read:space.setting:confluence",
+              "write:space.setting:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-space"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:space.setting:confluence",
+              "write:space.setting:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -9375,11 +11591,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-space"
+              "write:space.setting:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-space"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:space.setting:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "DELETE"
@@ -9436,6 +11668,27 @@
             "content": {}
           }
         },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "read:watcher:confluence",
+              "read:user:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:watcher:confluence",
+              "read:user:confluence"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -9512,11 +11765,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-space.summary"
+              "read:label:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-space.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:label:confluence"
+            ]
           }
         ],
         "x-experimental": true,
@@ -9581,11 +11850,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-space"
+              "read:label:confluence",
+              "write:label:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-space"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:label:confluence",
+              "write:label:confluence"
+            ]
           }
         ],
         "x-experimental": true,
@@ -9644,15 +11931,31 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-space"
+              "write:label:confluence"
             ]
           },
           {
             "basicAuth": []
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-space"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:label:confluence"
+            ]
+          }
+        ],
         "x-experimental": true,
-        "x-atlassian-connect-scope": "DELETE"
+        "x-atlassian-connect-scope": "WRITE"
       }
     },
     "/wiki/rest/api/template": {
@@ -9697,11 +12000,31 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "read:template:confluence",
+              "read:content-details:confluence",
+              "write:template:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:template:confluence",
+              "read:content-details:confluence",
+              "write:template:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -9748,11 +12071,31 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "read:template:confluence",
+              "read:content-details:confluence",
+              "write:template:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:template:confluence",
+              "read:content-details:confluence",
+              "write:template:confluence"
+            ]
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -9834,11 +12177,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:template:confluence",
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:template:confluence",
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -9919,11 +12280,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:template:confluence",
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:template:confluence",
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -9967,11 +12346,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:template:confluence",
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:template:confluence",
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -10006,11 +12403,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "write:template:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:template:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "DELETE"
@@ -10080,11 +12493,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-user"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-user"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -10135,11 +12564,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-user"
+              "read:user:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-user"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:user:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -10192,11 +12637,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-user"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-user"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -10262,11 +12723,29 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-user"
+              "read:user:confluence",
+              "read:group:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-user"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:user:confluence",
+              "read:group:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -10338,14 +12817,30 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-user"
+              "read:content-details:confluence"
             ]
           },
           {
             "basicAuth": []
           }
         ],
-        "x-atlassian-connect-scope": "INACCESSIBLE"
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-user"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
       }
     },
     "/wiki/rest/api/user/watch/content/{contentId}": {
@@ -10399,11 +12894,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:watcher:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:watcher:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -10452,11 +12963,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "write:watcher:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:watcher:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -10515,14 +13042,30 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "write:watcher:confluence"
             ]
           },
           {
             "basicAuth": []
           }
         ],
-        "x-atlassian-connect-scope": "DELETE"
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:watcher:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "WRITE"
       }
     },
     "/wiki/rest/api/user/watch/label/{labelName}": {
@@ -10576,11 +13119,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:watcher:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:watcher:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -10639,11 +13198,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "write:watcher:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:watcher:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -10692,14 +13267,30 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "write:watcher:confluence"
             ]
           },
           {
             "basicAuth": []
           }
         ],
-        "x-atlassian-connect-scope": "DELETE"
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:watcher:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "WRITE"
       }
     },
     "/wiki/rest/api/user/watch/space/{spaceKey}": {
@@ -10753,11 +13344,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:watcher:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:watcher:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -10816,11 +13423,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "write:watcher:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:watcher:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -10869,14 +13492,30 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "write:confluence-content"
+              "write:watcher:confluence"
             ]
           },
           {
             "basicAuth": []
           }
         ],
-        "x-atlassian-connect-scope": "DELETE"
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:watcher:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "WRITE"
       }
     },
     "/wiki/rest/api/user/email": {
@@ -11061,11 +13700,27 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-user"
+              "read:user:confluence"
             ]
           },
           {
             "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-user"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:user:confluence"
+            ]
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -11212,7 +13867,7 @@
     "/wiki/rest/api/analytics/content/{contentId}/views": {
       "get": {
         "tags": [
-          "Experimental"
+          "Analytics"
         ],
         "summary": "Get views",
         "description": "Get the total number of views a piece of content has.",
@@ -11276,21 +13931,36 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:analytics.content:confluence"
             ]
           },
           {
             "basicAuth": []
           }
         ],
-        "x-experimental": true,
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:analytics.content:confluence"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
     "/wiki/rest/api/analytics/content/{contentId}/viewers": {
       "get": {
         "tags": [
-          "Experimental"
+          "Analytics"
         ],
         "summary": "Get viewers",
         "description": "Get the total number of distinct viewers a piece of content has.",
@@ -11354,15 +14024,444 @@
         "security": [
           {
             "oAuthDefinitions": [
-              "read:confluence-content.summary"
+              "read:analytics.content:confluence"
             ]
           },
           {
             "basicAuth": []
           }
         ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Deprecated",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:analytics.content:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/wiki/rest/api/user/{userId}/property": {
+      "get": {
+        "tags": [
+          "Experimental"
+        ],
+        "summary": "Get user properties",
+        "description": "Returns the properties for a user as list of property keys. For more information\nabout user properties, see [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).\n`Note`, these properties stored against a user are on a Confluence site level and not space/content level.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
+        "operationId": "getUserProperties",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The account ID of the user to be queried for its properties.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "description": "The starting index of the returned properties.",
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The maximum number of properties to return per page.\nNote, this may be restricted by fixed system limits.",
+            "schema": {
+              "minimum": 0,
+              "maximum": 25,
+              "type": "integer",
+              "format": "int32",
+              "default": 5
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested properties are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPropertyKeyArray"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if request has malformed syntax or userId is not a valid user id.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing from the request.",
+            "content": {}
+          },
+          "403": {
+            "description": "Returned if the user does not have the correct permissions.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if there is no user with the given user ID.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "read:user.property:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:user.property:confluence"
+            ]
+          }
+        ],
         "x-experimental": true,
         "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/wiki/rest/api/user/{userId}/property/{key}": {
+      "get": {
+        "tags": [
+          "Experimental"
+        ],
+        "summary": "Get user property",
+        "description": "Returns the property corresponding to `key` for a user. For more information\nabout user properties, see [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).\n`Note`, these properties stored against a user are on a Confluence site level and not space/content level.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
+        "operationId": "getUserProperty",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The account ID of the user to be queried for its properties.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "description": "The key of the user property.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[-_a-zA-Z0-9]+$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested properties are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProperty"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if;\n\n- The key is too long.\n- Request has malformed syntax or userId is not a valid user id.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing from the request.",
+            "content": {}
+          },
+          "403": {
+            "description": "Returned if the user does not have the correct permissions.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if;\n\n- There is no user with the given user ID\n- There is no user property with the given key",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "read:user.property:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:user.property:confluence"
+            ]
+          }
+        ],
+        "x-experimental": true,
+        "x-atlassian-connect-scope": "READ"
+      },
+      "put": {
+        "tags": [
+          "Experimental"
+        ],
+        "summary": "Update user property",
+        "description": "Updates a property for the given user. Note, you cannot update the key of a user property, only the value.\nFor more information about user properties, see\n[Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).\n`Note`, these properties stored against a user are on a Confluence site level and not space/content level.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
+        "operationId": "updateUserProperty",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The account ID of the user. The accountId uniquely identifies the user across all Atlassian\nproducts. For example, 384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "description": "The key of the user property.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[-_a-zA-Z0-9]+$"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The user property to be updated.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserPropertyUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Returned if the user property is updated."
+          },
+          "400": {
+            "description": "Returned if;\n\n- The key is too long.\n- The value is empty.\n- The value is too long.\n- Request has malformed syntax or userId is not a valid user id.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing from the request.",
+            "content": {}
+          },
+          "403": {
+            "description": "Returned if the user does not have the correct permissions.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if;\n\n- There is no user property with the given key.\n- There is no user with the given user id.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "write:user.property:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:user.property:confluence"
+            ]
+          }
+        ],
+        "x-codegen-request-body-name": "body",
+        "x-experimental": true,
+        "x-atlassian-connect-scope": "WRITE"
+      },
+      "post": {
+        "tags": [
+          "Experimental"
+        ],
+        "summary": "Create user property by key",
+        "description": "Creates a property for a user. For more information  about user properties, see [Confluence entity properties]\n(https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).\n`Note`, these properties stored against a user are on a Confluence site level and not space/content level.\n\n`Note:` the number of properties which could be created per app in a tenant for each user might be\nrestricted by fixed system limits.\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
+        "operationId": "createUserProperty",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The account ID of the user. The accountId uniquely identifies the user across all Atlassian\nproducts. For example, 384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "description": "The key of the user property.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[-_a-zA-Z0-9]+$"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The user property to be created.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserPropertyCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Returned if the user property is created."
+          },
+          "400": {
+            "description": "Returned if;\n\n- The key is too long.\n- The value is empty.\n- The value is too long.\n- Request has malformed syntax or userId is not a valid user id.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing from the request.",
+            "content": {}
+          },
+          "403": {
+            "description": "Returned if the user does not have the correct permissions.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if there is no user with the given user id.",
+            "content": {}
+          },
+          "409": {
+            "description": "Returned if the key already exists for the user.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "write:user.property:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:user.property:confluence"
+            ]
+          }
+        ],
+        "x-codegen-request-body-name": "body",
+        "x-experimental": true,
+        "x-atlassian-connect-scope": "WRITE"
+      },
+      "delete": {
+        "tags": [
+          "Experimental"
+        ],
+        "summary": "Delete user property",
+        "description": "Deletes a property for the given user.\nFor more information about user properties, see\n[Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).\n`Note`, these properties stored against a user are on a Confluence site level and not space/content level.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
+        "operationId": "deleteUserProperty",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The account ID of the user. The accountId uniquely identifies the user across all Atlassian\nproducts. For example, 384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "description": "The key of the user property.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[-_a-zA-Z0-9]+$"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Returned if the user property is deleted."
+          },
+          "400": {
+            "description": "Returned if;\n\n- The key is too long.\n- Request has malformed syntax or userId is not a valid user id.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing from the request.",
+            "content": {}
+          },
+          "403": {
+            "description": "Returned if the user does not have the correct permissions.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if;\n\n- There is no user property with the given key\n- There is no user with the given user id",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "write:user.property:confluence"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:user.property:confluence"
+            ]
+          }
+        ],
+        "x-experimental": true,
+        "x-atlassian-connect-scope": "WRITE"
       }
     }
   },
@@ -13235,7 +16334,14 @@
             "additionalProperties": true,
             "properties": {
               "number": {
-                "type": "integer",
+                "oneOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
                 "description": "The new version for the updated content property. Set this to the\ncurrent version number incremented by one. To get the current\nversion number, use 'Get content property' and retrieve\n`version.number`.",
                 "format": "int32"
               },
@@ -13963,6 +17069,11 @@
             "description": "If set to `true`, custom contents are copied to the destination page.",
             "default": false
           },
+          "copyDescendants": {
+            "type": "boolean",
+            "description": "If set to `true`, descendants are copied to the destination page.",
+            "default": true
+          },
           "destinationPageId": {
             "$ref": "#/components/schemas/ContentId"
           },
@@ -14275,6 +17386,12 @@
             "type": "integer",
             "format": "int32"
           },
+          "totalSize": {
+            "type": "integer",
+            "format": "int64",
+            "default": 0,
+            "description": "This property will return total count of the objects before pagination is applied.\nThis value is returned if `shouldReturnTotalSize` is set to `true`."
+          },
           "_links": {
             "$ref": "#/components/schemas/GenericLinks"
           }
@@ -14515,6 +17632,29 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/LabelCreate"
+        }
+      },
+      "LongTask": {
+        "required": [
+          "id",
+          "links"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "a unique identifier for the long task"
+          },
+          "links": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "status": {
+                "type": "string",
+                "description": "The URL to retrive status of long task."
+              }
+            }
+          }
         }
       },
       "LookAndFeel": {
@@ -14830,7 +17970,8 @@
             "type": "object",
             "properties": {
               "destinationId": {
-                "type": "string"
+                "type": "string",
+                "nullable": true
               },
               "destinationUrl": {
                 "type": "string"
@@ -15008,12 +18149,12 @@
           },
           "displayName": {
             "type": "string",
-            "description": "The display name of the user. Depending on the user's privacy setting, this may be the same as publicName."
+            "description": "The displays name of the user. Depending on the user's privacy setting, this may be the same as publicName."
           },
           "timeZone": {
             "nullable": true,
             "type": "string",
-            "description": "This display user time zone. Depending on the user's privacy setting, this may be default to tenant time zone."
+            "description": "This displays user time zone. Depending on the user's privacy setting, this may return null."
           },
           "isExternalCollaborator": {
             "type": "boolean",
@@ -16357,6 +19498,7 @@
           "commitHash"
         ],
         "type": "object",
+        "nullable": true,
         "properties": {
           "cloudId": {
             "type": "string"
@@ -16374,6 +19516,9 @@
             "type": "string"
           },
           "defaultLocale": {
+            "type": "string"
+          },
+          "defaultTimeZone": {
             "type": "string"
           }
         }
@@ -16626,12 +19771,12 @@
           "displayName": {
             "nullable": true,
             "type": "string",
-            "description": "The display name of the user. Depending on the user's privacy setting, this may be the same as publicName."
+            "description": "The displays name of the user. Depending on the user's privacy setting, this may be the same as publicName."
           },
           "timeZone": {
             "nullable": true,
             "type": "string",
-            "description": "This display user time zone. Depending on the user's privacy setting, this may be default to tenant time zone."
+            "description": "This displays user time zone. Depending on the user's privacy setting, this may return null."
           },
           "isExternalCollaborator": {
             "type": "boolean",
@@ -16738,6 +19883,12 @@
             "type": "integer",
             "format": "int32"
           },
+          "totalSize": {
+            "type": "integer",
+            "format": "int64",
+            "default": 0,
+            "description": "This property will return total count of the objects before pagination is applied.\nThis value is returned if `shouldReturnTotalSize` is set to `true`."
+          },
           "_links": {
             "$ref": "#/components/schemas/GenericLinks"
           }
@@ -16783,6 +19934,108 @@
                 "description": "This property has been deprecated due to privacy changes. Use the `User.email` property instead. See the\n[migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)\nfor details."
               }
             }
+          }
+        }
+      },
+      "UserProperty": {
+        "required": [
+          "key",
+          "value",
+          "id",
+          "lastModifiedDate",
+          "createdDate"
+        ],
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {},
+            "description": "The value of the content property."
+          },
+          "id": {
+            "type": "string",
+            "description": "a unique identifier for the user property"
+          },
+          "lastModifiedDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "datetime when the property was last modified such as `2022-02-01T12:00:00.111Z`"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "datetime when the property was created such as `2022-01-01T12:00:00.111Z`"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/GenericLinks"
+          }
+        }
+      },
+      "UserPropertyKeyArray": {
+        "required": [
+          "results"
+        ],
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "start": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/GenericLinks"
+          }
+        }
+      },
+      "UserPropertyCreate": {
+        "required": [
+          "value"
+        ],
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {},
+            "description": "The value of the user property."
+          }
+        }
+      },
+      "UserPropertyUpdate": {
+        "required": [
+          "value"
+        ],
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {},
+            "description": "The value of the user property."
           }
         }
       },
@@ -17583,7 +20836,61 @@
               "write:confluence-groups": "Create, remove and update user groups.",
               "read:confluence-user": "Read users.",
               "readonly:content.attachment:confluence": "Download attachments of a Confluence page or blogpost that you have access to.",
-              "readonly:analytics.content:confluence": "View analytics for content"
+              "read:content:confluence": "View content.",
+              "read:content-details:confluence": "View content details.",
+              "write:content:confluence": "Create and update content.",
+              "delete:content:confluence": "Delete content.",
+              "read:space-details:confluence": "View space details.",
+              "read:analytics.content:confluence": "View analytics for content.",
+              "read:audit-log:confluence": "View audit records.",
+              "write:audit-log:confluence": "Create audit records.",
+              "read:configuration:confluence": "View Confluence settings.",
+              "write:configuration:confluence": "Update Confluence settings.",
+              "read:page:confluence": "View pages.",
+              "write:page:confluence": "Create and update pages.",
+              "delete:page:confluence": "Delete pages.",
+              "read:blogpost:confluence": "View blogposts.",
+              "write:blogpost:confluence": "Create and update blogposts.",
+              "delete:blopgpost:confluence": "Delete blogposts.",
+              "read:custom-content:confluence": "View custom content.",
+              "write:custom-content:confluence": "Create and update custom content.",
+              "delete:custom-content:confluence": "Delete custom content.",
+              "read:attachment:confluence": "View and download content attachments.",
+              "write:attachment:confluence": "Create and update attachments.",
+              "delete:attachment:confluence": "Delete attachments.",
+              "read:comment:confluence": "View comments.",
+              "write:comment:confluence": "Create and update comments.",
+              "delete:comment:confluence": "Delete comments.",
+              "read:template:confluence": "View content templates.",
+              "write:template:confluence": "Create, update and delete content templates.",
+              "read:label:confluence": "View labels.",
+              "write:label:confluence": "Add and remove labels.",
+              "read:content.permission:confluence": "Check content permissions.",
+              "read:content.property:confluence": "View content properties.",
+              "write:content.property:confluence": "Create, update and delete content properties.",
+              "read:content.restriction:confluence": "View content restrictions.",
+              "write:content.restriction:confluence": "Update content restrictions.",
+              "read:content.metadata:confluence": "View content summaries.",
+              "read:watcher:confluence": "View content watchers.",
+              "write:watcher:confluence": "Add and remove content watchers.",
+              "read:group:confluence": "View groups.",
+              "write:group:confluence": "Create and delete groups.",
+              "read:inlinetask:confluence": "View tasks.",
+              "write:inlinetask:confluence": "Update tasks.",
+              "read:relation:confluence": "View entity relationships.",
+              "write:relation:confluence": "Create and update entity relationships.",
+              "read:space:confluence": "View spaces.",
+              "write:space:confluence": "Create and update spaces.",
+              "delete:space:confluence": "Delete spaces.",
+              "read:space.permission:confluence": "View space permissions.",
+              "write:space.permission:confluence": "Update space permissions.",
+              "read:space.property:confluence": "View space properties.",
+              "write:space.property:confluence": "Create, update and delete space properties.",
+              "read:user.property:confluence": "View user properties.",
+              "write:user.property:confluence": "Create, update and delete user properties.",
+              "read:space.setting:confluence": "View space settings.",
+              "write:space.setting:confluence": "Update space settings.",
+              "read:user:confluence": "View user details."
             }
           }
         }

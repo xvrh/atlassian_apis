@@ -13,11 +13,11 @@ class JiraPlatformApi {
   /// [app migrations](https://developer.atlassian.com/platform/app-migration/).
   /// Use it to:
   /// -
-  /// [to request migrated workflow rules details](https://developer.atlassian.com/platform/app-migration/migration-app-workflow-rules/).
+  /// [to request migrated workflow rules details](https://developer.atlassian.com/platform/app-migration/tutorials/migration-app-workflow-rules/).
   /// -
-  /// [perform bulk updates of entity properties](https://developer.atlassian.com/platform/app-migration/entity-properties-bulk-api/).
+  /// [perform bulk updates of entity properties](https://developer.atlassian.com/platform/app-migration/tutorials/entity-properties-bulk-api/).
   /// -
-  /// [perform bulk updates of issue custom field values](https://developer.atlassian.com/platform/app-migration/migrating-app-custom-fields/).
+  /// [perform bulk updates of issue custom field values](https://developer.atlassian.com/platform/app-migration/tutorials/migrating-app-custom-fields/).
   late final appMigration = AppMigrationApi(_client);
 
   /// This resource represents app properties. Use it to store arbitrary data
@@ -39,7 +39,8 @@ class JiraPlatformApi {
   late final avatars = AvatarsApi(_client);
 
   /// This resource represents dashboards. Use it to obtain the details of
-  /// dashboards as well as add and remove item properties from dashboards.
+  /// dashboards as well as get, create, update, or remove item properties and
+  /// gadgets from dashboards.
   late final dashboards = DashboardsApi(_client);
 
   /// This resource represents
@@ -70,6 +71,12 @@ class JiraPlatformApi {
   /// This resource represents information about the Jira instance. Use it to
   /// get license details.
   late final instanceInformation = InstanceInformationApi(_client);
+
+  /// Issue adjustments is an experimental feature available for **Forge apps
+  /// only**. It enables Forge apps to control how selected Jira fields behave
+  /// on global create issue dialog. For example: hide specific fields, set them
+  /// as required, etc.
+  late final issueAdjustmentsApps = IssueAdjustmentsAppsApi(_client);
 
   /// This resource represents issue attachments and the attachment settings for
   /// Jira. Use it to get the metadata for an attachment, delete an attachment,
@@ -302,9 +309,13 @@ class JiraPlatformApi {
   /// This resource represents JQL search auto-complete details. Use it to
   /// obtain JQL search auto-complete data and suggestions for use in
   /// programmatic construction of queries or custom query builders. It also
-  /// provides an operation to convert one or more JQL queries with user
-  /// identifiers (username or user key) to equivalent JQL queries with account
-  /// IDs.
+  /// provides operations to:
+  ///
+  ///  *  convert one or more JQL queries with user identifiers (username or
+  /// user key) to equivalent JQL queries with account IDs.
+  ///  *  convert readable details in one or more JQL queries to IDs where a
+  /// user doesn't have permission to view the entity whose details are
+  /// readable.
   late final jql = JQLApi(_client);
 
   /// This resource is a collection of operations for
@@ -1048,6 +1059,17 @@ class DashboardsApi {
     ));
   }
 
+  /// Gets a list of all available gadgets that can be added to all dashboards.
+  ///
+  /// **[Permissions](#permissions) required:** None.
+  Future<AvailableDashboardGadgetsResponse>
+      getAllAvailableDashboardGadgets() async {
+    return AvailableDashboardGadgetsResponse.fromJson(await _client.send(
+      'get',
+      'rest/api/3/dashboard/gadgets',
+    ));
+  }
+
   /// Returns a [paginated](#pagination) list of dashboards. This operation is
   /// similar to [Get dashboards](#api-rest-api-3-dashboard-get) except that the
   /// results can be refined to include dashboards that have specific
@@ -1076,6 +1098,7 @@ class DashboardsApi {
       String? orderBy,
       int? startAt,
       int? maxResults,
+      String? status,
       String? expand}) async {
     return PageBeanDashboard.fromJson(await _client.send(
       'get',
@@ -1089,9 +1112,92 @@ class DashboardsApi {
         if (orderBy != null) 'orderBy': orderBy,
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
+        if (status != null) 'status': status,
         if (expand != null) 'expand': expand,
       },
     ));
+  }
+
+  /// Returns a list of dashboard gadgets on a dashboard.
+  ///
+  /// This operation returns:
+  ///
+  ///  *  Gadgets from a list of IDs, when `id` is set.
+  ///  *  Gadgets with a module key, when `moduleKey` is set.
+  ///  *  Gadgets from a list of URIs, when `uri` is set.
+  ///  *  All gadgets, when no other parameters are set.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** None.
+  Future<DashboardGadgetResponse> getAllGadgets(
+      {required int dashboardId,
+      List<String>? moduleKey,
+      List<String>? uri,
+      List<int>? gadgetId}) async {
+    return DashboardGadgetResponse.fromJson(await _client.send(
+      'get',
+      'rest/api/3/dashboard/{dashboardId}/gadget',
+      pathParameters: {
+        'dashboardId': '$dashboardId',
+      },
+      queryParameters: {
+        if (moduleKey != null) 'moduleKey': moduleKey.map((e) => e).join(','),
+        if (uri != null) 'uri': uri.map((e) => e).join(','),
+        if (gadgetId != null) 'gadgetId': gadgetId.map((e) => '$e').join(','),
+      },
+    ));
+  }
+
+  /// Adds a gadget to a dashboard.
+  ///
+  /// **[Permissions](#permissions) required:** None.
+  Future<DashboardGadget> addGadget(
+      {required int dashboardId, required DashboardGadgetSettings body}) async {
+    return DashboardGadget.fromJson(await _client.send(
+      'post',
+      'rest/api/3/dashboard/{dashboardId}/gadget',
+      pathParameters: {
+        'dashboardId': '$dashboardId',
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Changes the title, position, and color of the gadget on a dashboard.
+  ///
+  /// **[Permissions](#permissions) required:** None.
+  Future<void> updateGadget(
+      {required int dashboardId,
+      required int gadgetId,
+      required DashboardGadgetUpdateRequest body}) async {
+    await _client.send(
+      'put',
+      'rest/api/3/dashboard/{dashboardId}/gadget/{gadgetId}',
+      pathParameters: {
+        'dashboardId': '$dashboardId',
+        'gadgetId': '$gadgetId',
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Removes a dashboard gadget from a dashboard.
+  ///
+  /// When a gadget is removed from a dashboard, other gadgets in the same
+  /// column are moved up to fill the emptied position.
+  ///
+  /// **[Permissions](#permissions) required:** None.
+  Future<void> removeGadget(
+      {required int dashboardId, required int gadgetId}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/dashboard/{dashboardId}/gadget/{gadgetId}',
+      pathParameters: {
+        'dashboardId': '$dashboardId',
+        'gadgetId': '$gadgetId',
+      },
+    );
   }
 
   /// Returns the keys of all properties for a dashboard item.
@@ -1517,12 +1623,17 @@ class FiltersApi {
   /// selected as a favorite.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
-  Future<Filter> createFilter({String? expand, required Filter body}) async {
+  Future<Filter> createFilter(
+      {String? expand,
+      bool? overrideSharePermissions,
+      required Filter body}) async {
     return Filter.fromJson(await _client.send(
       'post',
       'rest/api/3/filter',
       queryParameters: {
         if (expand != null) 'expand': expand,
+        if (overrideSharePermissions != null)
+          'overrideSharePermissions': '$overrideSharePermissions',
       },
       body: body.toJson(),
     ));
@@ -1613,12 +1724,14 @@ class FiltersApi {
       String? accountId,
       String? owner,
       String? groupname,
+      String? groupId,
       int? projectId,
       List<int>? id,
       String? orderBy,
       int? startAt,
       int? maxResults,
-      String? expand}) async {
+      String? expand,
+      bool? overrideSharePermissions}) async {
     return PageBeanFilterDetails.fromJson(await _client.send(
       'get',
       'rest/api/3/filter/search',
@@ -1627,12 +1740,15 @@ class FiltersApi {
         if (accountId != null) 'accountId': accountId,
         if (owner != null) 'owner': owner,
         if (groupname != null) 'groupname': groupname,
+        if (groupId != null) 'groupId': groupId,
         if (projectId != null) 'projectId': '$projectId',
         if (id != null) 'id': id.map((e) => '$e').join(','),
         if (orderBy != null) 'orderBy': orderBy,
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
         if (expand != null) 'expand': expand,
+        if (overrideSharePermissions != null)
+          'overrideSharePermissions': '$overrideSharePermissions',
       },
     ));
   }
@@ -1650,7 +1766,8 @@ class FiltersApi {
   /// [project permission](https://confluence.atlassian.com/x/yodKLg) for.
   ///  *  shared with a public project.
   ///  *  shared with the public.
-  Future<Filter> getFilter({required int id, String? expand}) async {
+  Future<Filter> getFilter(
+      {required int id, String? expand, bool? overrideSharePermissions}) async {
     return Filter.fromJson(await _client.send(
       'get',
       'rest/api/3/filter/{id}',
@@ -1659,6 +1776,8 @@ class FiltersApi {
       },
       queryParameters: {
         if (expand != null) 'expand': expand,
+        if (overrideSharePermissions != null)
+          'overrideSharePermissions': '$overrideSharePermissions',
       },
     ));
   }
@@ -1669,7 +1788,10 @@ class FiltersApi {
   /// **[Permissions](#permissions) required:** Permission to access Jira,
   /// however the user must own the filter.
   Future<Filter> updateFilter(
-      {required int id, String? expand, required Filter body}) async {
+      {required int id,
+      String? expand,
+      bool? overrideSharePermissions,
+      required Filter body}) async {
     return Filter.fromJson(await _client.send(
       'put',
       'rest/api/3/filter/{id}',
@@ -1678,6 +1800,8 @@ class FiltersApi {
       },
       queryParameters: {
         if (expand != null) 'expand': expand,
+        if (overrideSharePermissions != null)
+          'overrideSharePermissions': '$overrideSharePermissions',
       },
       body: body.toJson(),
     ));
@@ -1826,6 +1950,23 @@ class FiltersApi {
       },
     ));
   }
+
+  /// Changes the owner of the filter.
+  ///
+  /// **[Permissions](#permissions) required:** Permission to access Jira.
+  /// However, the user must own the filter or have the *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> changeFilterOwner(
+      {required int id, required ChangeFilterOwner body}) async {
+    await _client.send(
+      'put',
+      'rest/api/3/filter/{id}/owner',
+      pathParameters: {
+        'id': '$id',
+      },
+      body: body.toJson(),
+    );
+  }
 }
 
 /// Jira Cloud platform REST API documentation
@@ -1919,12 +2060,14 @@ class GroupsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<Group> getGroup({required String groupname, String? expand}) async {
+  Future<Group> getGroup(
+      {String? groupname, String? groupId, String? expand}) async {
     return Group.fromJson(await _client.send(
       'get',
       'rest/api/3/group',
       queryParameters: {
-        'groupname': groupname,
+        if (groupname != null) 'groupname': groupname,
+        if (groupId != null) 'groupId': groupId,
         if (expand != null) 'expand': expand,
       },
     ));
@@ -1949,13 +2092,18 @@ class GroupsApi {
   /// member of the *site-admin* strategic
   /// [group](https://confluence.atlassian.com/x/24xjL)).
   Future<void> removeGroup(
-      {required String groupname, String? swapGroup}) async {
+      {String? groupname,
+      String? groupId,
+      String? swapGroup,
+      String? swapGroupId}) async {
     await _client.send(
       'delete',
       'rest/api/3/group',
       queryParameters: {
-        'groupname': groupname,
+        if (groupname != null) 'groupname': groupname,
+        if (groupId != null) 'groupId': groupId,
         if (swapGroup != null) 'swapGroup': swapGroup,
+        if (swapGroupId != null) 'swapGroupId': swapGroupId,
       },
     );
   }
@@ -1989,7 +2137,8 @@ class GroupsApi {
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanUserDetails> getUsersFromGroup(
-      {required String groupname,
+      {String? groupname,
+      String? groupId,
       bool? includeInactiveUsers,
       int? startAt,
       int? maxResults}) async {
@@ -1997,7 +2146,8 @@ class GroupsApi {
       'get',
       'rest/api/3/group/member',
       queryParameters: {
-        'groupname': groupname,
+        if (groupname != null) 'groupname': groupname,
+        if (groupId != null) 'groupId': groupId,
         if (includeInactiveUsers != null)
           'includeInactiveUsers': '$includeInactiveUsers',
         if (startAt != null) 'startAt': '$startAt',
@@ -2012,12 +2162,15 @@ class GroupsApi {
   /// member of the *site-admin*
   /// [group](https://confluence.atlassian.com/x/24xjL)).
   Future<Group> addUserToGroup(
-      {required String groupname, required UpdateUserToGroupBean body}) async {
+      {String? groupname,
+      String? groupId,
+      required UpdateUserToGroupBean body}) async {
     return Group.fromJson(await _client.send(
       'post',
       'rest/api/3/group/user',
       queryParameters: {
-        'groupname': groupname,
+        if (groupname != null) 'groupname': groupname,
+        if (groupId != null) 'groupId': groupId,
       },
       body: body.toJson(),
     ));
@@ -2029,14 +2182,16 @@ class GroupsApi {
   /// member of the *site-admin*
   /// [group](https://confluence.atlassian.com/x/24xjL)).
   Future<void> removeUserFromGroup(
-      {required String groupname,
+      {String? groupname,
+      String? groupId,
       String? username,
       required String accountId}) async {
     await _client.send(
       'delete',
       'rest/api/3/group/user',
       queryParameters: {
-        'groupname': groupname,
+        if (groupname != null) 'groupname': groupname,
+        if (groupId != null) 'groupId': groupId,
         if (username != null) 'username': username,
         'accountId': accountId,
       },
@@ -2066,6 +2221,7 @@ class GroupsApi {
       {String? accountId,
       String? query,
       List<String>? exclude,
+      List<String>? excludeId,
       int? maxResults,
       String? userName}) async {
     return FoundGroups.fromJson(await _client.send(
@@ -2075,6 +2231,7 @@ class GroupsApi {
         if (accountId != null) 'accountId': accountId,
         if (query != null) 'query': query,
         if (exclude != null) 'exclude': exclude.map((e) => e).join(','),
+        if (excludeId != null) 'excludeId': excludeId.map((e) => e).join(','),
         if (maxResults != null) 'maxResults': '$maxResults',
         if (userName != null) 'userName': userName,
       },
@@ -2097,6 +2254,91 @@ class InstanceInformationApi {
       'get',
       'rest/api/3/instance/license',
     ));
+  }
+}
+
+/// Jira Cloud platform REST API documentation
+
+class IssueAdjustmentsAppsApi {
+  final ApiClient _client;
+
+  IssueAdjustmentsAppsApi(this._client);
+
+  /// Gets issue adjustments. Issue adjustments can only be retrieved by Forge
+  /// apps.
+  ///
+  /// **[Permissions](#permissions) required:** None.
+  Future<PageBeanIssueAdjustmentDetails> getIssueAdjustments(
+      {int? startAt, int? maxResults, String? expand}) async {
+    return PageBeanIssueAdjustmentDetails.fromJson(await _client.send(
+      'get',
+      'rest/api/3/issueAdjustments',
+      queryParameters: {
+        if (startAt != null) 'startAt': '$startAt',
+        if (maxResults != null) 'maxResults': '$maxResults',
+        if (expand != null) 'expand': expand,
+      },
+    ));
+  }
+
+  /// Creates an issue adjustment. Issue adjustment can only be created by Forge
+  /// apps.
+  ///
+  /// Each app can define up to 100 issue adjustments. Each issue adjustment can
+  /// define up to 1000 contexts.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *None* if the issue adjustment is created without contexts.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for one or
+  /// more projects, if the issue adjustment is created with contexts.
+  Future<IssueAdjustmentIdentifiers> createIssueAdjustment(
+      {required CreateIssueAdjustmentDetails body}) async {
+    return IssueAdjustmentIdentifiers.fromJson(await _client.send(
+      'post',
+      'rest/api/3/issueAdjustments',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Updates an issue adjustment. Issue adjustment can only be updated by Forge
+  /// apps.
+  ///
+  /// Each issue adjustment can define up to 1000 contexts.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *None* if the issue adjustment is created without contexts.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for one or
+  /// more projects, if the issue adjustment is created with contexts.
+  Future<void> updateIssueAdjustment(
+      {required String issueAdjustmentId,
+      required UpdateIssueAdjustmentDetails body}) async {
+    await _client.send(
+      'put',
+      'rest/api/3/issueAdjustments/{issueAdjustmentId}',
+      pathParameters: {
+        'issueAdjustmentId': issueAdjustmentId,
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Deletes an issue adjustment. All the contexts that belong to the issue
+  /// adjustment are deleted too. Issue adjustment can only be deleted by Forge
+  /// apps.
+  ///
+  /// **[Permissions](#permissions) required:** None.
+  Future<void> deleteIssueAdjustment(String issueAdjustmentId) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/issueAdjustments/{issueAdjustmentId}',
+      pathParameters: {
+        'issueAdjustmentId': issueAdjustmentId,
+      },
+    );
   }
 }
 
@@ -2822,7 +3064,6 @@ class IssueCustomFieldConfigurationAppsApi {
   Future<PageBeanContextualConfiguration> getCustomFieldConfiguration(
       {required String fieldIdOrKey,
       List<int>? id,
-      List<int>? contextId,
       List<int>? fieldContextId,
       int? issueId,
       String? projectKeyOrId,
@@ -2837,8 +3078,6 @@ class IssueCustomFieldConfigurationAppsApi {
       },
       queryParameters: {
         if (id != null) 'id': id.map((e) => '$e').join(','),
-        if (contextId != null)
-          'contextId': contextId.map((e) => '$e').join(','),
         if (fieldContextId != null)
           'fieldContextId': fieldContextId.map((e) => '$e').join(','),
         if (issueId != null) 'issueId': '$issueId',
@@ -2957,25 +3196,48 @@ class IssueCustomFieldContextsApi {
   ///  *  `CustomFieldContextDefaultValueMultiUserPicker` (type
   /// `multi.user.select`) for user lists.
   ///  *  `CustomFieldContextDefaultValueSingleGroupPicker` (type
-  /// `grouppicker.single`) for single choice group picker.
+  /// `grouppicker.single`) for single choice group pickers.
   ///  *  `CustomFieldContextDefaultValueMultipleGroupPicker` (type
-  /// `grouppicker.multiple`) for multiple choice group picker.
-  ///  *  `CustomFieldContextDefaultValueURL` (type `url`) for URL.
+  /// `grouppicker.multiple`) for multiple choice group pickers.
+  ///  *  `CustomFieldContextDefaultValueURL` (type `url`) for URLs.
   ///  *  `CustomFieldContextDefaultValueProject` (type `project`) for project
-  /// picker.
-  ///  *  `CustomFieldContextDefaultValueFloat` (type `float`) for float (a
-  /// floating-point number).
+  /// pickers.
+  ///  *  `CustomFieldContextDefaultValueFloat` (type `float`) for floats
+  /// (floating-point numbers).
   ///  *  `CustomFieldContextDefaultValueLabels` (type `labels`) for labels.
   ///  *  `CustomFieldContextDefaultValueTextField` (type `textfield`) for text
-  /// field.
+  /// fields.
   ///  *  `CustomFieldContextDefaultValueTextArea` (type `textarea`) for text
-  /// area field.
+  /// area fields.
   ///  *  `CustomFieldContextDefaultValueReadOnly` (type `readonly`) for read
-  /// only (text) field.
+  /// only (text) fields.
   ///  *  `CustomFieldContextDefaultValueMultipleVersion` (type
-  /// `version.multiple`) for single choice version picker.
+  /// `version.multiple`) for single choice version pickers.
   ///  *  `CustomFieldContextDefaultValueSingleVersion` (type `version.single`)
-  /// for multiple choice version picker.
+  /// for multiple choice version pickers.
+  ///
+  /// Forge custom fields
+  /// [types](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/#data-types)
+  /// are also supported, returning:
+  ///
+  ///  *  `CustomFieldContextDefaultValueForgeStringFieldBean` (type
+  /// `forge.string`) for Forge string fields.
+  ///  *  `CustomFieldContextDefaultValueForgeMultiStringFieldBean` (type
+  /// `forge.string.list`) for Forge string collection fields.
+  ///  *  `CustomFieldContextDefaultValueForgeObjectFieldBean` (type
+  /// `forge.object`) for Forge object fields.
+  ///  *  `CustomFieldContextDefaultValueForgeDateTimeFieldBean` (type
+  /// `forge.datetime`) for Forge date-time fields.
+  ///  *  `CustomFieldContextDefaultValueForgeGroupFieldBean` (type
+  /// `forge.group`) for Forge group fields.
+  ///  *  `CustomFieldContextDefaultValueForgeMultiGroupFieldBean` (type
+  /// `forge.group.list`) for Forge group collection fields.
+  ///  *  `CustomFieldContextDefaultValueForgeNumberFieldBean` (type
+  /// `forge.number`) for Forge number fields.
+  ///  *  `CustomFieldContextDefaultValueForgeUserFieldBean` (type `forge.user`)
+  /// for Forge user fields.
+  ///  *  `CustomFieldContextDefaultValueForgeMultiUserFieldBean` (type
+  /// `forge.user.list`) for Forge user collection fields.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
@@ -3017,25 +3279,48 @@ class IssueCustomFieldContextsApi {
   ///  *  `CustomFieldContextDefaultValueMultiUserPicker` (type
   /// `multi.user.select`) for user lists.
   ///  *  `CustomFieldContextDefaultValueSingleGroupPicker` (type
-  /// `grouppicker.single`) for single choice group picker.
+  /// `grouppicker.single`) for single choice group pickers.
   ///  *  `CustomFieldContextDefaultValueMultipleGroupPicker` (type
-  /// `grouppicker.multiple`) for multiple choice group picker.
-  ///  *  `CustomFieldContextDefaultValueURL` (type `url`) for URL.
+  /// `grouppicker.multiple`) for multiple choice group pickers.
+  ///  *  `CustomFieldContextDefaultValueURL` (type `url`) for URLs.
   ///  *  `CustomFieldContextDefaultValueProject` (type `project`) for project
-  /// picker.
-  ///  *  `CustomFieldContextDefaultValueFloat` (type `float`) for float (a
-  /// floating-point number).
+  /// pickers.
+  ///  *  `CustomFieldContextDefaultValueFloat` (type `float`) for floats
+  /// (floating-point numbers).
   ///  *  `CustomFieldContextDefaultValueLabels` (type `labels`) for labels.
   ///  *  `CustomFieldContextDefaultValueTextField` (type `textfield`) for text
-  /// field.
+  /// fields.
   ///  *  `CustomFieldContextDefaultValueTextArea` (type `textarea`) for text
-  /// area field.
+  /// area fields.
   ///  *  `CustomFieldContextDefaultValueReadOnly` (type `readonly`) for read
-  /// only (text) field.
+  /// only (text) fields.
   ///  *  `CustomFieldContextDefaultValueMultipleVersion` (type
-  /// `version.multiple`) for single choice version picker.
+  /// `version.multiple`) for single choice version pickers.
   ///  *  `CustomFieldContextDefaultValueSingleVersion` (type `version.single`)
-  /// for multiple choice version picker.
+  /// for multiple choice version pickers.
+  ///
+  /// Forge custom fields
+  /// [types](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/#data-types)
+  /// are also supported, returning:
+  ///
+  ///  *  `CustomFieldContextDefaultValueForgeStringFieldBean` (type
+  /// `forge.string`) for Forge string fields.
+  ///  *  `CustomFieldContextDefaultValueForgeMultiStringFieldBean` (type
+  /// `forge.string.list`) for Forge string collection fields.
+  ///  *  `CustomFieldContextDefaultValueForgeObjectFieldBean` (type
+  /// `forge.object`) for Forge object fields.
+  ///  *  `CustomFieldContextDefaultValueForgeDateTimeFieldBean` (type
+  /// `forge.datetime`) for Forge date-time fields.
+  ///  *  `CustomFieldContextDefaultValueForgeGroupFieldBean` (type
+  /// `forge.group`) for Forge group fields.
+  ///  *  `CustomFieldContextDefaultValueForgeMultiGroupFieldBean` (type
+  /// `forge.group.list`) for Forge group collection fields.
+  ///  *  `CustomFieldContextDefaultValueForgeNumberFieldBean` (type
+  /// `forge.number`) for Forge number fields.
+  ///  *  `CustomFieldContextDefaultValueForgeUserFieldBean` (type `forge.user`)
+  /// for Forge user fields.
+  ///  *  `CustomFieldContextDefaultValueForgeMultiUserFieldBean` (type
+  /// `forge.user.list`) for Forge user collection fields.
   ///
   /// Only one type of default object can be included in a request. To remove a
   /// default for a context, set the default parameter to `null`.
@@ -3663,8 +3948,8 @@ class IssueCustomFieldOptionsAppsApi {
   /// option. The update can also be limited to a smaller set of issues by using
   /// a JQL query.
   ///
-  /// Connect app users with admin permissions (from user permissions and app
-  /// scopes) and Forge app users with the `manage:jira-configuration` scope can
+  /// Connect and Forge app users with *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) can
   /// override the screen security configuration using `overrideScreenSecurity`
   /// and `overrideEditableFlag`.
   ///
@@ -4211,14 +4496,14 @@ class IssueFieldsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteCustomField(String id) async {
-    await _client.send(
+  Future<TaskProgressBeanObject> deleteCustomField(String id) async {
+    return TaskProgressBeanObject.fromJson(await _client.send(
       'delete',
       'rest/api/3/field/{id}',
       pathParameters: {
         'id': id,
       },
-    );
+    ));
   }
 
   /// Restores a custom field from trash. See
@@ -5448,7 +5733,12 @@ class IssueTypeSchemesApi {
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanIssueTypeScheme> getAllIssueTypeSchemes(
-      {int? startAt, int? maxResults, List<int>? id}) async {
+      {int? startAt,
+      int? maxResults,
+      List<int>? id,
+      String? orderBy,
+      String? expand,
+      String? queryString}) async {
     return PageBeanIssueTypeScheme.fromJson(await _client.send(
       'get',
       'rest/api/3/issuetypescheme',
@@ -5456,6 +5746,9 @@ class IssueTypeSchemesApi {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
         if (id != null) 'id': id.map((e) => '$e').join(','),
+        if (orderBy != null) 'orderBy': orderBy,
+        if (expand != null) 'expand': expand,
+        if (queryString != null) 'queryString': queryString,
       },
     ));
   }
@@ -5648,7 +5941,12 @@ class IssueTypeScreenSchemesApi {
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanIssueTypeScreenScheme> getIssueTypeScreenSchemes(
-      {int? startAt, int? maxResults, List<int>? id}) async {
+      {int? startAt,
+      int? maxResults,
+      List<int>? id,
+      String? queryString,
+      String? orderBy,
+      String? expand}) async {
     return PageBeanIssueTypeScreenScheme.fromJson(await _client.send(
       'get',
       'rest/api/3/issuetypescreenscheme',
@@ -5656,6 +5954,9 @@ class IssueTypeScreenSchemesApi {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
         if (id != null) 'id': id.map((e) => '$e').join(','),
+        if (queryString != null) 'queryString': queryString,
+        if (orderBy != null) 'orderBy': orderBy,
+        if (expand != null) 'expand': expand,
       },
     ));
   }
@@ -6729,8 +7030,7 @@ class IssuesApi {
   ///  *  `parent` must contain the ID or key of the parent issue.
   ///
   /// In a next-gen project any issue may be made a child providing that the
-  /// parent and child are members of the same project. In a classic project the
-  /// parent field is only valid for subtasks.
+  /// parent and child are members of the same project.
   ///
   /// **[Permissions](#permissions) required:** *Browse projects* and *Create
   /// issues* [project permissions](https://confluence.atlassian.com/x/yodKLg)
@@ -6747,10 +7047,10 @@ class IssuesApi {
     ));
   }
 
-  /// Creates issues and, where the option to create subtasks is enabled in
-  /// Jira, subtasks. Transitions may be applied, to move the issues or subtasks
-  /// to a workflow step other than the default start step, and issue properties
-  /// set.
+  /// Creates upto **50** issues and, where the option to create subtasks is
+  /// enabled in Jira, subtasks. Transitions may be applied, to move the issues
+  /// or subtasks to a workflow step other than the default start step, and
+  /// issue properties set.
   ///
   /// The content of each issue or subtask is defined using `update` and
   /// `fields`. The fields that can be set in the issue or subtask are
@@ -6875,8 +7175,10 @@ class IssuesApi {
   /// Single line custom fields (`textfield`) accept a string and don't handle
   /// Atlassian Document Format content.
   ///
-  /// Connect app users with admin permission (from user permissions and app
-  /// scopes) and Forge app users with the `manage:jira-configuration` scope can
+  /// Connect apps having an app user with *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg), and Forge
+  /// apps acting on behalf of users with *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg), can
   /// override the screen security configuration using `overrideScreenSecurity`
   /// and `overrideEditableFlag`.
   ///
@@ -7025,9 +7327,11 @@ class IssuesApi {
   /// editable by the user. Use the information to populate the requests in
   /// [Edit issue](#api-rest-api-3-issue-issueIdOrKey-put).
   ///
-  /// Connect app users with admin permission (from user permissions and app
-  /// scopes) and Forge app users with the `manage:jira-configuration` scope can
-  /// return additional details using:
+  /// Connect apps having an app user with *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg), and Forge
+  /// apps acting on behalf of users with *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg), can return
+  /// additional details using:
   ///
   ///  *  `overrideScreenSecurity` Returns hidden fields.
   ///  *  `overrideEditableFlag` Returns uneditable fields. For example, where
@@ -7289,6 +7593,35 @@ class JQLApi {
     return ConvertedJQLQueries.fromJson(await _client.send(
       'post',
       'rest/api/3/jql/pdcleaner',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Sanitizes one or more JQL queries by converting readable details into IDs
+  /// where a user doesn't have permission to view the entity.
+  ///
+  /// For example, if the query contains the clause *project = 'Secret
+  /// project'*, and a user does not have browse permission for the project
+  /// "Secret project", the sanitized query replaces the clause with *project =
+  /// 12345"* (where 12345 is the ID of the project). If a user has the required
+  /// permission, the clause is not sanitized. If the account ID is null,
+  /// sanitizing is performed for an anonymous user.
+  ///
+  /// Note that sanitization doesn't make the queries GDPR-compliant, because it
+  /// doesn't remove user identifiers (username or user key). If you need to
+  /// make queries GDPR-compliant, use
+  /// [Convert user identifiers to account IDs in JQL queries](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-jql/#api-rest-api-3-jql-sanitize-post).
+  ///
+  /// Before sanitization each JQL query is parsed. The queries are returned in
+  /// the same order that they were passed.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<SanitizedJqlQueries> sanitiseJqlQueries(
+      {required JqlQueriesToSanitize body}) async {
+    return SanitizedJqlQueries.fromJson(await _client.send(
+      'post',
+      'rest/api/3/jql/sanitize',
       body: body.toJson(),
     ));
   }
@@ -9065,13 +9398,19 @@ class ProjectRolesApi {
   /// project or *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ProjectRole> getProjectRole(
-      {required String projectIdOrKey, required int id}) async {
+      {required String projectIdOrKey,
+      required int id,
+      bool? excludeInactiveUsers}) async {
     return ProjectRole.fromJson(await _client.send(
       'get',
       'rest/api/3/project/{projectIdOrKey}/role/{id}',
       pathParameters: {
         'projectIdOrKey': projectIdOrKey,
         'id': '$id',
+      },
+      queryParameters: {
+        if (excludeInactiveUsers != null)
+          'excludeInactiveUsers': '$excludeInactiveUsers',
       },
     ));
   }
@@ -9988,7 +10327,12 @@ class ScreenSchemesApi {
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanScreenScheme> getScreenSchemes(
-      {int? startAt, int? maxResults, List<int>? id}) async {
+      {int? startAt,
+      int? maxResults,
+      List<int>? id,
+      String? expand,
+      String? queryString,
+      String? orderBy}) async {
     return PageBeanScreenScheme.fromJson(await _client.send(
       'get',
       'rest/api/3/screenscheme',
@@ -9996,6 +10340,9 @@ class ScreenSchemesApi {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
         if (id != null) 'id': id.map((e) => '$e').join(','),
+        if (expand != null) 'expand': expand,
+        if (queryString != null) 'queryString': queryString,
+        if (orderBy != null) 'orderBy': orderBy,
       },
     ));
   }
@@ -10284,7 +10631,12 @@ class ScreensApi {
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanScreen> getScreens(
-      {int? startAt, int? maxResults, List<int>? id}) async {
+      {int? startAt,
+      int? maxResults,
+      List<int>? id,
+      String? queryString,
+      List<String>? scope,
+      String? orderBy}) async {
     return PageBeanScreen.fromJson(await _client.send(
       'get',
       'rest/api/3/screens',
@@ -10292,6 +10644,9 @@ class ScreensApi {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
         if (id != null) 'id': id.map((e) => '$e').join(','),
+        if (queryString != null) 'queryString': queryString,
+        if (scope != null) 'scope': scope.map((e) => e).join(','),
+        if (orderBy != null) 'orderBy': orderBy,
       },
     ));
   }
@@ -10667,6 +11022,12 @@ class UserSearchApi {
   /// [Get all users](#api-rest-api-3-users-search-get) and filter the records
   /// in your code.
   ///
+  /// Privacy controls are applied to the response based on the users'
+  /// preferences. This could mean, for example, that the user's email address
+  /// is hidden. See the
+  /// [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/)
+  /// for more details.
+  ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:** None.
@@ -10715,6 +11076,12 @@ class UserSearchApi {
   /// users who can be assigned the issue, use
   /// [Get all users](#api-rest-api-3-users-search-get) and filter the records
   /// in your code.
+  ///
+  /// Privacy controls are applied to the response based on the users'
+  /// preferences. This could mean, for example, that the user's email address
+  /// is hidden. See the
+  /// [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/)
+  /// for more details.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
   Future<List<User>> findAssignableUsers(
@@ -10766,6 +11133,12 @@ class UserSearchApi {
   /// [Get all users](#api-rest-api-3-users-search-get) and filter the records
   /// in your code.
   ///
+  /// Privacy controls are applied to the response based on the users'
+  /// preferences. This could mean, for example, that the user's email address
+  /// is hidden. See the
+  /// [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/)
+  /// for more details.
+  ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:**
@@ -10815,6 +11188,12 @@ class UserSearchApi {
   /// term, use [Get all users](#api-rest-api-3-users-search-get) and filter the
   /// records in your code.
   ///
+  /// Privacy controls are applied to the response based on the users'
+  /// preferences. This could mean, for example, that the user's email address
+  /// is hidden. See the
+  /// [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/)
+  /// for more details.
+  ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:** *Browse users and groups*
@@ -10857,6 +11236,12 @@ class UserSearchApi {
   /// in your code.
   ///
   /// This operation can be accessed anonymously.
+  ///
+  /// Privacy controls are applied to the response based on the users'
+  /// preferences. This could mean, for example, that the user's email address
+  /// is hidden. See the
+  /// [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/)
+  /// for more details.
   ///
   /// **[Permissions](#permissions) required:** *Browse users and groups*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Anonymous
@@ -11008,6 +11393,12 @@ class UserSearchApi {
   /// [Get all users](#api-rest-api-3-users-search-get) and filter the records
   /// in your code.
   ///
+  /// Privacy controls are applied to the response based on the users'
+  /// preferences. This could mean, for example, that the user's email address
+  /// is hidden. See the
+  /// [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/)
+  /// for more details.
+  ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:** *Browse users and groups*
@@ -11049,6 +11440,12 @@ class UsersApi {
 
   /// Returns a user.
   ///
+  /// Privacy controls are applied to the response based on the user's
+  /// preferences. This could mean, for example, that the user's email address
+  /// is hidden. See the
+  /// [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/)
+  /// for more details.
+  ///
   /// **[Permissions](#permissions) required:** *Browse users and groups*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<User> getUser(
@@ -11086,7 +11483,9 @@ class UsersApi {
     ));
   }
 
-  /// Deletes a user.
+  /// Deletes a user. If the operation completes successfully then the user is
+  /// removed from Jira's user base. This operation does not delete the user's
+  /// Atlassian account.
   ///
   /// **[Permissions](#permissions) required:** Site administration (that is,
   /// membership of the *site-admin*
@@ -11276,6 +11675,12 @@ class UsersApi {
 
   /// Returns a list of all (active and inactive) users.
   ///
+  /// Privacy controls are applied to the response based on the users'
+  /// preferences. This could mean, for example, that the user's email address
+  /// is hidden. See the
+  /// [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/)
+  /// for more details.
+  ///
   /// **[Permissions](#permissions) required:** *Browse users and groups*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<List<User>> getAllUsersDefault({int? startAt, int? maxResults}) async {
@@ -11292,6 +11697,12 @@ class UsersApi {
   }
 
   /// Returns a list of all (active and inactive) users.
+  ///
+  /// Privacy controls are applied to the response based on the users'
+  /// preferences. This could mean, for example, that the user's email address
+  /// is hidden. See the
+  /// [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/)
+  /// for more details.
   ///
   /// **[Permissions](#permissions) required:** *Browse users and groups*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
@@ -11395,8 +11806,8 @@ class WebhooksApi {
     ));
   }
 
-  /// Webhooks registered through the REST API expire after 30 days. Call this
-  /// resource periodically to keep them alive.
+  /// Extends the life of webhook. Webhooks registered through the REST API
+  /// expire after 30 days. Call this operation to keep them alive.
   ///
   /// Unrecognized webhook IDs (those that are not found or belong to other
   /// apps) are ignored.
@@ -12088,7 +12499,7 @@ class WorkflowStatusesApi {
 
   WorkflowStatusesApi(this._client);
 
-  /// Returns a list of all statuses associated with workflows.
+  /// Returns a list of all statuses associated with active workflows.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -12103,8 +12514,8 @@ class WorkflowStatusesApi {
         .toList();
   }
 
-  /// Returns a status. The status must be associated with a workflow to be
-  /// returned.
+  /// Returns a status. The status must be associated with an active workflow to
+  /// be returned.
   ///
   /// If a name is used on more than one status, only the status found first is
   /// returned. Therefore, identifying the status by its ID may be preferable.
@@ -13579,14 +13990,23 @@ class ApplicationRole {
   /// The key of the application role.
   final String? key;
 
-  /// The groups associated with the application role.
+  /// The groups associated with the application role. As a group's name can
+  /// change, use of `groupDetails` is recommended to identify a groups.
   final List<String> groups;
+
+  /// The groups associated with the application role.
+  final List<GroupName> groupDetails;
 
   /// The display name of the application role.
   final String? name;
 
-  /// The groups that are granted default access for this application role.
+  /// The groups that are granted default access for this application role. As a
+  /// group's name can change, use of `defaultGroupsDetails` is recommended to
+  /// identify a groups.
   final List<String> defaultGroups;
+
+  /// The groups that are granted default access for this application role.
+  final List<GroupName> defaultGroupsDetails;
 
   /// Determines whether this application role should be selected by default on
   /// user creation.
@@ -13615,8 +14035,10 @@ class ApplicationRole {
   ApplicationRole(
       {this.key,
       List<String>? groups,
+      List<GroupName>? groupDetails,
       this.name,
       List<String>? defaultGroups,
+      List<GroupName>? defaultGroupsDetails,
       bool? selectedByDefault,
       bool? defined,
       this.numberOfSeats,
@@ -13626,7 +14048,9 @@ class ApplicationRole {
       bool? hasUnlimitedSeats,
       bool? platform})
       : groups = groups ?? [],
+        groupDetails = groupDetails ?? [],
         defaultGroups = defaultGroups ?? [],
+        defaultGroupsDetails = defaultGroupsDetails ?? [],
         selectedByDefault = selectedByDefault ?? false,
         defined = defined ?? false,
         hasUnlimitedSeats = hasUnlimitedSeats ?? false,
@@ -13639,9 +14063,19 @@ class ApplicationRole {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
+      groupDetails: (json[r'groupDetails'] as List<Object?>?)
+              ?.map((i) =>
+                  GroupName.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
       name: json[r'name'] as String?,
       defaultGroups: (json[r'defaultGroups'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      defaultGroupsDetails: (json[r'defaultGroupsDetails'] as List<Object?>?)
+              ?.map((i) =>
+                  GroupName.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
       selectedByDefault: json[r'selectedByDefault'] as bool? ?? false,
@@ -13658,8 +14092,10 @@ class ApplicationRole {
   Map<String, Object?> toJson() {
     var key = this.key;
     var groups = this.groups;
+    var groupDetails = this.groupDetails;
     var name = this.name;
     var defaultGroups = this.defaultGroups;
+    var defaultGroupsDetails = this.defaultGroupsDetails;
     var selectedByDefault = this.selectedByDefault;
     var defined = this.defined;
     var numberOfSeats = this.numberOfSeats;
@@ -13674,10 +14110,13 @@ class ApplicationRole {
       json[r'key'] = key;
     }
     json[r'groups'] = groups;
+    json[r'groupDetails'] = groupDetails.map((i) => i.toJson()).toList();
     if (name != null) {
       json[r'name'] = name;
     }
     json[r'defaultGroups'] = defaultGroups;
+    json[r'defaultGroupsDetails'] =
+        defaultGroupsDetails.map((i) => i.toJson()).toList();
     json[r'selectedByDefault'] = selectedByDefault;
     json[r'defined'] = defined;
     if (numberOfSeats != null) {
@@ -13700,8 +14139,10 @@ class ApplicationRole {
   ApplicationRole copyWith(
       {String? key,
       List<String>? groups,
+      List<GroupName>? groupDetails,
       String? name,
       List<String>? defaultGroups,
+      List<GroupName>? defaultGroupsDetails,
       bool? selectedByDefault,
       bool? defined,
       int? numberOfSeats,
@@ -13713,8 +14154,10 @@ class ApplicationRole {
     return ApplicationRole(
       key: key ?? this.key,
       groups: groups ?? this.groups,
+      groupDetails: groupDetails ?? this.groupDetails,
       name: name ?? this.name,
       defaultGroups: defaultGroups ?? this.defaultGroups,
+      defaultGroupsDetails: defaultGroupsDetails ?? this.defaultGroupsDetails,
       selectedByDefault: selectedByDefault ?? this.selectedByDefault,
       defined: defined ?? this.defined,
       numberOfSeats: numberOfSeats ?? this.numberOfSeats,
@@ -14017,45 +14460,39 @@ class AttachmentArchive {
 }
 
 class AttachmentArchiveEntry {
-  final int? entryIndex;
   final String? abbreviatedName;
-  final String? mediaType;
   final String? name;
   final int? size;
+  final int? entryIndex;
+  final String? mediaType;
 
   AttachmentArchiveEntry(
-      {this.entryIndex,
-      this.abbreviatedName,
-      this.mediaType,
+      {this.abbreviatedName,
       this.name,
-      this.size});
+      this.size,
+      this.entryIndex,
+      this.mediaType});
 
   factory AttachmentArchiveEntry.fromJson(Map<String, Object?> json) {
     return AttachmentArchiveEntry(
-      entryIndex: (json[r'entryIndex'] as num?)?.toInt(),
       abbreviatedName: json[r'abbreviatedName'] as String?,
-      mediaType: json[r'mediaType'] as String?,
       name: json[r'name'] as String?,
       size: (json[r'size'] as num?)?.toInt(),
+      entryIndex: (json[r'entryIndex'] as num?)?.toInt(),
+      mediaType: json[r'mediaType'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var entryIndex = this.entryIndex;
     var abbreviatedName = this.abbreviatedName;
-    var mediaType = this.mediaType;
     var name = this.name;
     var size = this.size;
+    var entryIndex = this.entryIndex;
+    var mediaType = this.mediaType;
 
     final json = <String, Object?>{};
-    if (entryIndex != null) {
-      json[r'entryIndex'] = entryIndex;
-    }
     if (abbreviatedName != null) {
       json[r'abbreviatedName'] = abbreviatedName;
-    }
-    if (mediaType != null) {
-      json[r'mediaType'] = mediaType;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -14063,21 +14500,27 @@ class AttachmentArchiveEntry {
     if (size != null) {
       json[r'size'] = size;
     }
+    if (entryIndex != null) {
+      json[r'entryIndex'] = entryIndex;
+    }
+    if (mediaType != null) {
+      json[r'mediaType'] = mediaType;
+    }
     return json;
   }
 
   AttachmentArchiveEntry copyWith(
-      {int? entryIndex,
-      String? abbreviatedName,
-      String? mediaType,
+      {String? abbreviatedName,
       String? name,
-      int? size}) {
+      int? size,
+      int? entryIndex,
+      String? mediaType}) {
     return AttachmentArchiveEntry(
-      entryIndex: entryIndex ?? this.entryIndex,
       abbreviatedName: abbreviatedName ?? this.abbreviatedName,
-      mediaType: mediaType ?? this.mediaType,
       name: name ?? this.name,
       size: size ?? this.size,
+      entryIndex: entryIndex ?? this.entryIndex,
+      mediaType: mediaType ?? this.mediaType,
     );
   }
 }
@@ -14309,9 +14752,6 @@ class AttachmentMetadata {
   /// The URL of a thumbnail representing the attachment.
   final String? thumbnail;
 
-  /// [EXPERIMENTAL] - The file ID of the attachment in the media store.
-  final String? mediaApiFileId;
-
   AttachmentMetadata(
       {this.id,
       this.self,
@@ -14322,8 +14762,7 @@ class AttachmentMetadata {
       this.mimeType,
       this.properties,
       this.content,
-      this.thumbnail,
-      this.mediaApiFileId});
+      this.thumbnail});
 
   factory AttachmentMetadata.fromJson(Map<String, Object?> json) {
     return AttachmentMetadata(
@@ -14339,7 +14778,6 @@ class AttachmentMetadata {
       properties: json[r'properties'] as Map<String, Object?>?,
       content: json[r'content'] as String?,
       thumbnail: json[r'thumbnail'] as String?,
-      mediaApiFileId: json[r'mediaApiFileId'] as String?,
     );
   }
 
@@ -14354,7 +14792,6 @@ class AttachmentMetadata {
     var properties = this.properties;
     var content = this.content;
     var thumbnail = this.thumbnail;
-    var mediaApiFileId = this.mediaApiFileId;
 
     final json = <String, Object?>{};
     if (id != null) {
@@ -14387,9 +14824,6 @@ class AttachmentMetadata {
     if (thumbnail != null) {
       json[r'thumbnail'] = thumbnail;
     }
-    if (mediaApiFileId != null) {
-      json[r'mediaApiFileId'] = mediaApiFileId;
-    }
     return json;
   }
 
@@ -14403,8 +14837,7 @@ class AttachmentMetadata {
       String? mimeType,
       Map<String, dynamic>? properties,
       String? content,
-      String? thumbnail,
-      String? mediaApiFileId}) {
+      String? thumbnail}) {
     return AttachmentMetadata(
       id: id ?? this.id,
       self: self ?? this.self,
@@ -14416,7 +14849,6 @@ class AttachmentMetadata {
       properties: properties ?? this.properties,
       content: content ?? this.content,
       thumbnail: thumbnail ?? this.thumbnail,
-      mediaApiFileId: mediaApiFileId ?? this.mediaApiFileId,
     );
   }
 }
@@ -14744,6 +15176,87 @@ class AutoCompleteSuggestions {
   AutoCompleteSuggestions copyWith({List<AutoCompleteSuggestion>? results}) {
     return AutoCompleteSuggestions(
       results: results ?? this.results,
+    );
+  }
+}
+
+/// The details of the available dashboard gadget.
+class AvailableDashboardGadget {
+  /// The module key of the gadget type.
+  final String? moduleKey;
+
+  /// The URI of the gadget type.
+  final String? uri;
+
+  /// The title of the gadget.
+  final String title;
+
+  AvailableDashboardGadget({this.moduleKey, this.uri, required this.title});
+
+  factory AvailableDashboardGadget.fromJson(Map<String, Object?> json) {
+    return AvailableDashboardGadget(
+      moduleKey: json[r'moduleKey'] as String?,
+      uri: json[r'uri'] as String?,
+      title: json[r'title'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var moduleKey = this.moduleKey;
+    var uri = this.uri;
+    var title = this.title;
+
+    final json = <String, Object?>{};
+    if (moduleKey != null) {
+      json[r'moduleKey'] = moduleKey;
+    }
+    if (uri != null) {
+      json[r'uri'] = uri;
+    }
+    json[r'title'] = title;
+    return json;
+  }
+
+  AvailableDashboardGadget copyWith(
+      {String? moduleKey, String? uri, String? title}) {
+    return AvailableDashboardGadget(
+      moduleKey: moduleKey ?? this.moduleKey,
+      uri: uri ?? this.uri,
+      title: title ?? this.title,
+    );
+  }
+}
+
+/// The list of available gadgets.
+class AvailableDashboardGadgetsResponse {
+  /// The list of available gadgets.
+  final List<AvailableDashboardGadget> gadgets;
+
+  AvailableDashboardGadgetsResponse({required this.gadgets});
+
+  factory AvailableDashboardGadgetsResponse.fromJson(
+      Map<String, Object?> json) {
+    return AvailableDashboardGadgetsResponse(
+      gadgets: (json[r'gadgets'] as List<Object?>?)
+              ?.map((i) => AvailableDashboardGadget.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var gadgets = this.gadgets;
+
+    final json = <String, Object?>{};
+    json[r'gadgets'] = gadgets.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  AvailableDashboardGadgetsResponse copyWith(
+      {List<AvailableDashboardGadget>? gadgets}) {
+    return AvailableDashboardGadgetsResponse(
+      gadgets: gadgets ?? this.gadgets,
     );
   }
 }
@@ -15467,6 +15980,34 @@ class ChangeDetails {
   }
 }
 
+/// The account ID of the new owner.
+class ChangeFilterOwner {
+  /// The account ID of the new owner.
+  final String accountId;
+
+  ChangeFilterOwner({required this.accountId});
+
+  factory ChangeFilterOwner.fromJson(Map<String, Object?> json) {
+    return ChangeFilterOwner(
+      accountId: json[r'accountId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var accountId = this.accountId;
+
+    final json = <String, Object?>{};
+    json[r'accountId'] = accountId;
+    return json;
+  }
+
+  ChangeFilterOwner copyWith({String? accountId}) {
+    return ChangeFilterOwner(
+      accountId: accountId ?? this.accountId,
+    );
+  }
+}
+
 /// Details of names changed in the record event.
 class ChangedValueBean {
   /// The name of the field changed.
@@ -15820,7 +16361,10 @@ class Comment {
   /// operation.
   final bool jsdPublic;
 
-  /// Whether the comment is made by an outsider who is not part of the issue.
+  /// Whether the comment was added from an email sent by a person who is not
+  /// part of the issue. See
+  /// [Allow external emails to be added as comments on issues](https://support.atlassian.com/jira-service-management-cloud/docs/allow-external-emails-to-be-added-as-comments-on-issues/)for
+  /// information on setting up this feature.
   final bool jsdAuthorCanSeeRequest;
 
   /// A list of comment properties. Optional on create and update.
@@ -15993,30 +16537,11 @@ class ComponentWithIssueCount {
   /// Count of issues for the component.
   final int? issueCount;
 
-  /// The user assigned to issues created with this component, when
-  /// `assigneeType` does not identify a valid assignee.
-  final User? realAssignee;
+  /// The name for the component.
+  final String? name;
 
-  /// Whether a user is associated with `assigneeType`. For example, if the
-  /// `assigneeType` is set to `COMPONENT_LEAD` but the component lead is not
-  /// set, then `false` is returned.
-  final bool isAssigneeTypeValid;
-
-  /// The type of the assignee that is assigned to issues created with this
-  /// component, when an assignee cannot be set from the `assigneeType`. For
-  /// example, `assigneeType` is set to `COMPONENT_LEAD` but no component lead
-  /// is set. This property is set to one of the following values:
-  ///
-  ///  *  `PROJECT_LEAD` when `assigneeType` is `PROJECT_LEAD` and the project
-  /// lead has permission to be assigned issues in the project that the
-  /// component is in.
-  ///  *  `COMPONENT_LEAD` when `assignee`Type is `COMPONENT_LEAD` and the
-  /// component lead has permission to be assigned issues in the project that
-  /// the component is in.
-  ///  *  `UNASSIGNED` when `assigneeType` is `UNASSIGNED` and Jira is
-  /// configured to allow unassigned issues.
-  ///  *  `PROJECT_DEFAULT` when none of the preceding cases are true.
-  final ComponentWithIssueCountRealAssigneeType? realAssigneeType;
+  /// The unique identifier for the component.
+  final String? id;
 
   /// The key of the project to which the component is assigned.
   final String? project;
@@ -16024,13 +16549,11 @@ class ComponentWithIssueCount {
   /// Not used.
   final int? projectId;
 
-  /// The details of the user associated with `assigneeType`, if any. See
-  /// `realAssignee` for details of the user assigned to issues created with
-  /// this component.
-  final User? assignee;
+  /// The description for the component.
+  final String? description;
 
-  /// The user details for the component's lead user.
-  final User? lead;
+  /// The URL for this count of the issues contained in the component.
+  final String? self;
 
   /// The nominal user type used to determine the assignee for issues created
   /// with this component. See `realAssigneeType` for details on how the type of
@@ -16048,110 +16571,103 @@ class ComponentWithIssueCount {
   /// component is in.
   final ComponentWithIssueCountAssigneeType? assigneeType;
 
-  /// The description for the component.
-  final String? description;
+  /// The details of the user associated with `assigneeType`, if any. See
+  /// `realAssignee` for details of the user assigned to issues created with
+  /// this component.
+  final User? assignee;
 
-  /// The URL for this count of the issues contained in the component.
-  final String? self;
+  /// The user details for the component's lead user.
+  final User? lead;
 
-  /// The name for the component.
-  final String? name;
+  /// The type of the assignee that is assigned to issues created with this
+  /// component, when an assignee cannot be set from the `assigneeType`. For
+  /// example, `assigneeType` is set to `COMPONENT_LEAD` but no component lead
+  /// is set. This property is set to one of the following values:
+  ///
+  ///  *  `PROJECT_LEAD` when `assigneeType` is `PROJECT_LEAD` and the project
+  /// lead has permission to be assigned issues in the project that the
+  /// component is in.
+  ///  *  `COMPONENT_LEAD` when `assignee`Type is `COMPONENT_LEAD` and the
+  /// component lead has permission to be assigned issues in the project that
+  /// the component is in.
+  ///  *  `UNASSIGNED` when `assigneeType` is `UNASSIGNED` and Jira is
+  /// configured to allow unassigned issues.
+  ///  *  `PROJECT_DEFAULT` when none of the preceding cases are true.
+  final ComponentWithIssueCountRealAssigneeType? realAssigneeType;
 
-  /// The unique identifier for the component.
-  final String? id;
+  /// The user assigned to issues created with this component, when
+  /// `assigneeType` does not identify a valid assignee.
+  final User? realAssignee;
+
+  /// Whether a user is associated with `assigneeType`. For example, if the
+  /// `assigneeType` is set to `COMPONENT_LEAD` but the component lead is not
+  /// set, then `false` is returned.
+  final bool isAssigneeTypeValid;
 
   ComponentWithIssueCount(
       {this.issueCount,
-      this.realAssignee,
-      bool? isAssigneeTypeValid,
-      this.realAssigneeType,
+      this.name,
+      this.id,
       this.project,
       this.projectId,
-      this.assignee,
-      this.lead,
-      this.assigneeType,
       this.description,
       this.self,
-      this.name,
-      this.id})
+      this.assigneeType,
+      this.assignee,
+      this.lead,
+      this.realAssigneeType,
+      this.realAssignee,
+      bool? isAssigneeTypeValid})
       : isAssigneeTypeValid = isAssigneeTypeValid ?? false;
 
   factory ComponentWithIssueCount.fromJson(Map<String, Object?> json) {
     return ComponentWithIssueCount(
       issueCount: (json[r'issueCount'] as num?)?.toInt(),
-      realAssignee: json[r'realAssignee'] != null
-          ? User.fromJson(json[r'realAssignee']! as Map<String, Object?>)
-          : null,
-      isAssigneeTypeValid: json[r'isAssigneeTypeValid'] as bool? ?? false,
-      realAssigneeType: json[r'realAssigneeType'] != null
-          ? ComponentWithIssueCountRealAssigneeType.fromValue(
-              json[r'realAssigneeType']! as String)
-          : null,
+      name: json[r'name'] as String?,
+      id: json[r'id'] as String?,
       project: json[r'project'] as String?,
       projectId: (json[r'projectId'] as num?)?.toInt(),
+      description: json[r'description'] as String?,
+      self: json[r'self'] as String?,
+      assigneeType: json[r'assigneeType'] != null
+          ? ComponentWithIssueCountAssigneeType.fromValue(
+              json[r'assigneeType']! as String)
+          : null,
       assignee: json[r'assignee'] != null
           ? User.fromJson(json[r'assignee']! as Map<String, Object?>)
           : null,
       lead: json[r'lead'] != null
           ? User.fromJson(json[r'lead']! as Map<String, Object?>)
           : null,
-      assigneeType: json[r'assigneeType'] != null
-          ? ComponentWithIssueCountAssigneeType.fromValue(
-              json[r'assigneeType']! as String)
+      realAssigneeType: json[r'realAssigneeType'] != null
+          ? ComponentWithIssueCountRealAssigneeType.fromValue(
+              json[r'realAssigneeType']! as String)
           : null,
-      description: json[r'description'] as String?,
-      self: json[r'self'] as String?,
-      name: json[r'name'] as String?,
-      id: json[r'id'] as String?,
+      realAssignee: json[r'realAssignee'] != null
+          ? User.fromJson(json[r'realAssignee']! as Map<String, Object?>)
+          : null,
+      isAssigneeTypeValid: json[r'isAssigneeTypeValid'] as bool? ?? false,
     );
   }
 
   Map<String, Object?> toJson() {
     var issueCount = this.issueCount;
-    var realAssignee = this.realAssignee;
-    var isAssigneeTypeValid = this.isAssigneeTypeValid;
-    var realAssigneeType = this.realAssigneeType;
-    var project = this.project;
-    var projectId = this.projectId;
-    var assignee = this.assignee;
-    var lead = this.lead;
-    var assigneeType = this.assigneeType;
-    var description = this.description;
-    var self = this.self;
     var name = this.name;
     var id = this.id;
+    var project = this.project;
+    var projectId = this.projectId;
+    var description = this.description;
+    var self = this.self;
+    var assigneeType = this.assigneeType;
+    var assignee = this.assignee;
+    var lead = this.lead;
+    var realAssigneeType = this.realAssigneeType;
+    var realAssignee = this.realAssignee;
+    var isAssigneeTypeValid = this.isAssigneeTypeValid;
 
     final json = <String, Object?>{};
     if (issueCount != null) {
       json[r'issueCount'] = issueCount;
-    }
-    if (realAssignee != null) {
-      json[r'realAssignee'] = realAssignee.toJson();
-    }
-    json[r'isAssigneeTypeValid'] = isAssigneeTypeValid;
-    if (realAssigneeType != null) {
-      json[r'realAssigneeType'] = realAssigneeType.value;
-    }
-    if (project != null) {
-      json[r'project'] = project;
-    }
-    if (projectId != null) {
-      json[r'projectId'] = projectId;
-    }
-    if (assignee != null) {
-      json[r'assignee'] = assignee.toJson();
-    }
-    if (lead != null) {
-      json[r'lead'] = lead.toJson();
-    }
-    if (assigneeType != null) {
-      json[r'assigneeType'] = assigneeType.value;
-    }
-    if (description != null) {
-      json[r'description'] = description;
-    }
-    if (self != null) {
-      json[r'self'] = self;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -16159,39 +16675,97 @@ class ComponentWithIssueCount {
     if (id != null) {
       json[r'id'] = id;
     }
+    if (project != null) {
+      json[r'project'] = project;
+    }
+    if (projectId != null) {
+      json[r'projectId'] = projectId;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (assigneeType != null) {
+      json[r'assigneeType'] = assigneeType.value;
+    }
+    if (assignee != null) {
+      json[r'assignee'] = assignee.toJson();
+    }
+    if (lead != null) {
+      json[r'lead'] = lead.toJson();
+    }
+    if (realAssigneeType != null) {
+      json[r'realAssigneeType'] = realAssigneeType.value;
+    }
+    if (realAssignee != null) {
+      json[r'realAssignee'] = realAssignee.toJson();
+    }
+    json[r'isAssigneeTypeValid'] = isAssigneeTypeValid;
     return json;
   }
 
   ComponentWithIssueCount copyWith(
       {int? issueCount,
-      User? realAssignee,
-      bool? isAssigneeTypeValid,
-      ComponentWithIssueCountRealAssigneeType? realAssigneeType,
+      String? name,
+      String? id,
       String? project,
       int? projectId,
-      User? assignee,
-      User? lead,
-      ComponentWithIssueCountAssigneeType? assigneeType,
       String? description,
       String? self,
-      String? name,
-      String? id}) {
+      ComponentWithIssueCountAssigneeType? assigneeType,
+      User? assignee,
+      User? lead,
+      ComponentWithIssueCountRealAssigneeType? realAssigneeType,
+      User? realAssignee,
+      bool? isAssigneeTypeValid}) {
     return ComponentWithIssueCount(
       issueCount: issueCount ?? this.issueCount,
-      realAssignee: realAssignee ?? this.realAssignee,
-      isAssigneeTypeValid: isAssigneeTypeValid ?? this.isAssigneeTypeValid,
-      realAssigneeType: realAssigneeType ?? this.realAssigneeType,
-      project: project ?? this.project,
-      projectId: projectId ?? this.projectId,
-      assignee: assignee ?? this.assignee,
-      lead: lead ?? this.lead,
-      assigneeType: assigneeType ?? this.assigneeType,
-      description: description ?? this.description,
-      self: self ?? this.self,
       name: name ?? this.name,
       id: id ?? this.id,
+      project: project ?? this.project,
+      projectId: projectId ?? this.projectId,
+      description: description ?? this.description,
+      self: self ?? this.self,
+      assigneeType: assigneeType ?? this.assigneeType,
+      assignee: assignee ?? this.assignee,
+      lead: lead ?? this.lead,
+      realAssigneeType: realAssigneeType ?? this.realAssigneeType,
+      realAssignee: realAssignee ?? this.realAssignee,
+      isAssigneeTypeValid: isAssigneeTypeValid ?? this.isAssigneeTypeValid,
     );
   }
+}
+
+class ComponentWithIssueCountAssigneeType {
+  static const projectDefault =
+      ComponentWithIssueCountAssigneeType._('PROJECT_DEFAULT');
+  static const componentLead =
+      ComponentWithIssueCountAssigneeType._('COMPONENT_LEAD');
+  static const projectLead =
+      ComponentWithIssueCountAssigneeType._('PROJECT_LEAD');
+  static const unassigned = ComponentWithIssueCountAssigneeType._('UNASSIGNED');
+
+  static const values = [
+    projectDefault,
+    componentLead,
+    projectLead,
+    unassigned,
+  ];
+  final String value;
+
+  const ComponentWithIssueCountAssigneeType._(this.value);
+
+  static ComponentWithIssueCountAssigneeType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ComponentWithIssueCountAssigneeType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 class ComponentWithIssueCountRealAssigneeType {
@@ -16217,36 +16791,6 @@ class ComponentWithIssueCountRealAssigneeType {
   static ComponentWithIssueCountRealAssigneeType fromValue(String value) =>
       values.firstWhere((e) => e.value == value,
           orElse: () => ComponentWithIssueCountRealAssigneeType._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class ComponentWithIssueCountAssigneeType {
-  static const projectDefault =
-      ComponentWithIssueCountAssigneeType._('PROJECT_DEFAULT');
-  static const componentLead =
-      ComponentWithIssueCountAssigneeType._('COMPONENT_LEAD');
-  static const projectLead =
-      ComponentWithIssueCountAssigneeType._('PROJECT_LEAD');
-  static const unassigned = ComponentWithIssueCountAssigneeType._('UNASSIGNED');
-
-  static const values = [
-    projectDefault,
-    componentLead,
-    projectLead,
-    unassigned,
-  ];
-  final String value;
-
-  const ComponentWithIssueCountAssigneeType._(this.value);
-
-  static ComponentWithIssueCountAssigneeType fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => ComponentWithIssueCountAssigneeType._(value));
 
   /// An enum received from the server but this version of the client doesn't recognize it.
   bool get isUnknown => values.every((v) => v.value != value);
@@ -16964,9 +17508,6 @@ class ContextualConfiguration {
   /// The ID of the configuration.
   final String id;
 
-  /// Deprecated, do not use.
-  final int? contextId;
-
   /// The ID of the field context the configuration is associated with.
   final String fieldContextId;
 
@@ -16978,7 +17519,6 @@ class ContextualConfiguration {
 
   ContextualConfiguration(
       {required this.id,
-      this.contextId,
       required this.fieldContextId,
       this.configuration,
       this.schema});
@@ -16986,7 +17526,6 @@ class ContextualConfiguration {
   factory ContextualConfiguration.fromJson(Map<String, Object?> json) {
     return ContextualConfiguration(
       id: json[r'id'] as String? ?? '',
-      contextId: (json[r'contextId'] as num?)?.toInt(),
       fieldContextId: json[r'fieldContextId'] as String? ?? '',
       configuration: json[r'configuration'],
       schema: json[r'schema'],
@@ -16995,16 +17534,12 @@ class ContextualConfiguration {
 
   Map<String, Object?> toJson() {
     var id = this.id;
-    var contextId = this.contextId;
     var fieldContextId = this.fieldContextId;
     var configuration = this.configuration;
     var schema = this.schema;
 
     final json = <String, Object?>{};
     json[r'id'] = id;
-    if (contextId != null) {
-      json[r'contextId'] = contextId;
-    }
     json[r'fieldContextId'] = fieldContextId;
     if (configuration != null) {
       json[r'configuration'] = configuration;
@@ -17017,13 +17552,11 @@ class ContextualConfiguration {
 
   ContextualConfiguration copyWith(
       {String? id,
-      int? contextId,
       String? fieldContextId,
       dynamic configuration,
       dynamic schema}) {
     return ContextualConfiguration(
       id: id ?? this.id,
-      contextId: contextId ?? this.contextId,
       fieldContextId: fieldContextId ?? this.fieldContextId,
       configuration: configuration ?? this.configuration,
       schema: schema ?? this.schema,
@@ -17160,6 +17693,75 @@ class CreateCustomFieldContext {
       description: description ?? this.description,
       projectIds: projectIds ?? this.projectIds,
       issueTypeIds: issueTypeIds ?? this.issueTypeIds,
+    );
+  }
+}
+
+/// The details of an issue adjustment.
+class CreateIssueAdjustmentDetails {
+  /// The name of the issue adjustment. The maximum length is 255 characters.
+  final String name;
+
+  /// The description of the issue adjustment. The maximum length is 255
+  /// characters.
+  final String? description;
+
+  /// The data of the issue adjustment. The maximum size of the data is 50000
+  /// characters.
+  final String? data;
+
+  /// List of contexts of the issue adjustment. The maximum number of contexts
+  /// is 1000.
+  final List<IssueAdjustmentContextDetails> contexts;
+
+  CreateIssueAdjustmentDetails(
+      {required this.name,
+      this.description,
+      this.data,
+      List<IssueAdjustmentContextDetails>? contexts})
+      : contexts = contexts ?? [];
+
+  factory CreateIssueAdjustmentDetails.fromJson(Map<String, Object?> json) {
+    return CreateIssueAdjustmentDetails(
+      name: json[r'name'] as String? ?? '',
+      description: json[r'description'] as String?,
+      data: json[r'data'] as String?,
+      contexts: (json[r'contexts'] as List<Object?>?)
+              ?.map((i) => IssueAdjustmentContextDetails.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var description = this.description;
+    var data = this.data;
+    var contexts = this.contexts;
+
+    final json = <String, Object?>{};
+    json[r'name'] = name;
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (data != null) {
+      json[r'data'] = data;
+    }
+    json[r'contexts'] = contexts.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  CreateIssueAdjustmentDetails copyWith(
+      {String? name,
+      String? description,
+      String? data,
+      List<IssueAdjustmentContextDetails>? contexts}) {
+    return CreateIssueAdjustmentDetails(
+      name: name ?? this.name,
+      description: description ?? this.description,
+      data: data ?? this.data,
+      contexts: contexts ?? this.contexts,
     );
   }
 }
@@ -18009,9 +18611,69 @@ class CreateWorkflowTransitionRulesDetails {
   final CreateWorkflowCondition? conditions;
 
   /// The workflow validators.
+  ///
+  /// **Note:** The default permission validator is always added to the
+  /// *initial* transition, as in:
+  ///
+  ///     "validators": [
+  ///         {
+  ///             "type": "PermissionValidator",
+  ///             "configuration": {
+  ///                 "permissionKey": "CREATE_ISSUES"
+  ///             }
+  ///         }
+  ///     ]
   final List<CreateWorkflowTransitionRule> validators;
 
   /// The workflow post functions.
+  ///
+  /// **Note:** The default post functions are always added to the *initial*
+  /// transition, as in:
+  ///
+  ///     "postFunctions": [
+  ///         {
+  ///             "type": "IssueCreateFunction"
+  ///         },
+  ///         {
+  ///             "type": "IssueReindexFunction"
+  ///         },
+  ///         {
+  ///             "type": "FireIssueEventFunction",
+  ///             "configuration": {
+  ///                 "event": {
+  ///                     "id": "1",
+  ///                     "name": "issue_created"
+  ///                 }
+  ///             }
+  ///         }
+  ///     ]
+  ///
+  /// **Note:** The default post functions are always added to the *global* and
+  /// *directed* transitions, as in:
+  ///
+  ///     "postFunctions": [
+  ///         {
+  ///             "type": "UpdateIssueStatusFunction"
+  ///         },
+  ///         {
+  ///             "type": "CreateCommentFunction"
+  ///         },
+  ///         {
+  ///             "type": "GenerateChangeHistoryFunction"
+  ///         },
+  ///         {
+  ///             "type": "IssueReindexFunction"
+  ///         },
+  ///         {
+  ///             "type": "FireIssueEventFunction",
+  ///             "configuration": {
+  ///                 "event": {
+  ///                     "id": "13",
+  ///                     "name": "issue_generic"
+  ///                 }
+  ///             }
+  ///         }
+  ///     ]
   final List<CreateWorkflowTransitionRule> postFunctions;
 
   CreateWorkflowTransitionRulesDetails(
@@ -18524,6 +19186,351 @@ class CustomFieldContextDefaultValueFloat {
     return CustomFieldContextDefaultValueFloat(
       number: number ?? this.number,
       type: type ?? this.type,
+    );
+  }
+}
+
+/// The default value for a Forge date time custom field.
+class CustomFieldContextDefaultValueForgeDateTimeField {
+  /// The default date-time in ISO format. Ignored if `useCurrent` is true.
+  final String? dateTime;
+
+  /// Whether to use the current date.
+  final bool useCurrent;
+
+  CustomFieldContextDefaultValueForgeDateTimeField(
+      {this.dateTime, bool? useCurrent})
+      : useCurrent = useCurrent ?? false;
+
+  factory CustomFieldContextDefaultValueForgeDateTimeField.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueForgeDateTimeField(
+      dateTime: json[r'dateTime'] as String?,
+      useCurrent: json[r'useCurrent'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var dateTime = this.dateTime;
+    var useCurrent = this.useCurrent;
+
+    final json = <String, Object?>{};
+    if (dateTime != null) {
+      json[r'dateTime'] = dateTime;
+    }
+    json[r'useCurrent'] = useCurrent;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueForgeDateTimeField copyWith(
+      {String? dateTime, bool? useCurrent}) {
+    return CustomFieldContextDefaultValueForgeDateTimeField(
+      dateTime: dateTime ?? this.dateTime,
+      useCurrent: useCurrent ?? this.useCurrent,
+    );
+  }
+}
+
+/// The default value for a Forge group custom field.
+class CustomFieldContextDefaultValueForgeGroupField {
+  /// The ID of the context.
+  final String contextId;
+
+  /// The ID of the the default group.
+  final String groupId;
+
+  CustomFieldContextDefaultValueForgeGroupField(
+      {required this.contextId, required this.groupId});
+
+  factory CustomFieldContextDefaultValueForgeGroupField.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueForgeGroupField(
+      contextId: json[r'contextId'] as String? ?? '',
+      groupId: json[r'groupId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var contextId = this.contextId;
+    var groupId = this.groupId;
+
+    final json = <String, Object?>{};
+    json[r'contextId'] = contextId;
+    json[r'groupId'] = groupId;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueForgeGroupField copyWith(
+      {String? contextId, String? groupId}) {
+    return CustomFieldContextDefaultValueForgeGroupField(
+      contextId: contextId ?? this.contextId,
+      groupId: groupId ?? this.groupId,
+    );
+  }
+}
+
+/// The default value for a Forge collection of groups custom field.
+class CustomFieldContextDefaultValueForgeMultiGroupField {
+  /// The ID of the context.
+  final String contextId;
+
+  /// The IDs of the default groups.
+  final List<String> groupIds;
+
+  CustomFieldContextDefaultValueForgeMultiGroupField(
+      {required this.contextId, required this.groupIds});
+
+  factory CustomFieldContextDefaultValueForgeMultiGroupField.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueForgeMultiGroupField(
+      contextId: json[r'contextId'] as String? ?? '',
+      groupIds: (json[r'groupIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var contextId = this.contextId;
+    var groupIds = this.groupIds;
+
+    final json = <String, Object?>{};
+    json[r'contextId'] = contextId;
+    json[r'groupIds'] = groupIds;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueForgeMultiGroupField copyWith(
+      {String? contextId, List<String>? groupIds}) {
+    return CustomFieldContextDefaultValueForgeMultiGroupField(
+      contextId: contextId ?? this.contextId,
+      groupIds: groupIds ?? this.groupIds,
+    );
+  }
+}
+
+/// The default text for a Forge collection of strings custom field.
+class CustomFieldContextDefaultValueForgeMultiStringField {
+  /// List of string values. The maximum length for a value is 254 characters.
+  final List<String> values;
+  final String type;
+
+  CustomFieldContextDefaultValueForgeMultiStringField(
+      {List<String>? values, required this.type})
+      : values = values ?? [];
+
+  factory CustomFieldContextDefaultValueForgeMultiStringField.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueForgeMultiStringField(
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var values = this.values;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    json[r'values'] = values;
+    json[r'type'] = type;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueForgeMultiStringField copyWith(
+      {List<String>? values, String? type}) {
+    return CustomFieldContextDefaultValueForgeMultiStringField(
+      values: values ?? this.values,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// Defaults for a Forge collection of users custom field.
+class CustomFieldContextDefaultValueForgeMultiUserField {
+  /// The ID of the context.
+  final String contextId;
+
+  /// The IDs of the default users.
+  final List<String> accountIds;
+
+  CustomFieldContextDefaultValueForgeMultiUserField(
+      {required this.contextId, required this.accountIds});
+
+  factory CustomFieldContextDefaultValueForgeMultiUserField.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueForgeMultiUserField(
+      contextId: json[r'contextId'] as String? ?? '',
+      accountIds: (json[r'accountIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var contextId = this.contextId;
+    var accountIds = this.accountIds;
+
+    final json = <String, Object?>{};
+    json[r'contextId'] = contextId;
+    json[r'accountIds'] = accountIds;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueForgeMultiUserField copyWith(
+      {String? contextId, List<String>? accountIds}) {
+    return CustomFieldContextDefaultValueForgeMultiUserField(
+      contextId: contextId ?? this.contextId,
+      accountIds: accountIds ?? this.accountIds,
+    );
+  }
+}
+
+/// Default value for a Forge number custom field.
+class CustomFieldContextDefaultValueForgeNumberField {
+  /// The default floating-point number.
+  final num number;
+
+  CustomFieldContextDefaultValueForgeNumberField({required this.number});
+
+  factory CustomFieldContextDefaultValueForgeNumberField.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueForgeNumberField(
+      number: json[r'number'] as num? ?? 0,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var number = this.number;
+
+    final json = <String, Object?>{};
+    json[r'number'] = number;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueForgeNumberField copyWith({num? number}) {
+    return CustomFieldContextDefaultValueForgeNumberField(
+      number: number ?? this.number,
+    );
+  }
+}
+
+/// The default value for a Forge object custom field.
+class CustomFieldContextDefaultValueForgeObjectField {
+  /// The default JSON object.
+  final Map<String, dynamic>? object;
+  final String type;
+
+  CustomFieldContextDefaultValueForgeObjectField(
+      {this.object, required this.type});
+
+  factory CustomFieldContextDefaultValueForgeObjectField.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueForgeObjectField(
+      object: json[r'object'] as Map<String, Object?>?,
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var object = this.object;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    if (object != null) {
+      json[r'object'] = object;
+    }
+    json[r'type'] = type;
+    return json;
+  }
+
+  CustomFieldContextDefaultValueForgeObjectField copyWith(
+      {Map<String, dynamic>? object, String? type}) {
+    return CustomFieldContextDefaultValueForgeObjectField(
+      object: object ?? this.object,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// The default text for a Forge string custom field.
+class CustomFieldContextDefaultValueForgeStringField {
+  /// The default text. The maximum length is 254 characters.
+  final String? text;
+
+  CustomFieldContextDefaultValueForgeStringField({this.text});
+
+  factory CustomFieldContextDefaultValueForgeStringField.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueForgeStringField(
+      text: json[r'text'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var text = this.text;
+
+    final json = <String, Object?>{};
+    if (text != null) {
+      json[r'text'] = text;
+    }
+    return json;
+  }
+
+  CustomFieldContextDefaultValueForgeStringField copyWith({String? text}) {
+    return CustomFieldContextDefaultValueForgeStringField(
+      text: text ?? this.text,
+    );
+  }
+}
+
+/// Defaults for a Forge user custom field.
+class CustomFieldContextDefaultValueForgeUserField {
+  /// The ID of the context.
+  final String contextId;
+
+  /// The ID of the default user.
+  final String accountId;
+  final UserFilter userFilter;
+
+  CustomFieldContextDefaultValueForgeUserField(
+      {required this.contextId,
+      required this.accountId,
+      required this.userFilter});
+
+  factory CustomFieldContextDefaultValueForgeUserField.fromJson(
+      Map<String, Object?> json) {
+    return CustomFieldContextDefaultValueForgeUserField(
+      contextId: json[r'contextId'] as String? ?? '',
+      accountId: json[r'accountId'] as String? ?? '',
+      userFilter: UserFilter.fromJson(
+          json[r'userFilter'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var contextId = this.contextId;
+    var accountId = this.accountId;
+    var userFilter = this.userFilter;
+
+    final json = <String, Object?>{};
+    json[r'contextId'] = contextId;
+    json[r'accountId'] = accountId;
+    json[r'userFilter'] = userFilter.toJson();
+    return json;
+  }
+
+  CustomFieldContextDefaultValueForgeUserField copyWith(
+      {String? contextId, String? accountId, UserFilter? userFilter}) {
+    return CustomFieldContextDefaultValueForgeUserField(
+      contextId: contextId ?? this.contextId,
+      accountId: accountId ?? this.accountId,
+      userFilter: userFilter ?? this.userFilter,
     );
   }
 }
@@ -19795,7 +20802,9 @@ class CustomFieldValueUpdate {
   ///  *  `string` the value must be a string.
   ///  *  `number` the value must be a number.
   ///  *  `datetime` the value must be a string that represents a date in the
-  /// ISO format, for example `"2021-01-18T12:00:00-03:00"`.
+  /// ISO format or the simplified extended ISO format. For example,
+  /// `"2023-01-18T12:00:00-03:00"` or `"2023-01-18T12:00:00.000Z"`. However,
+  /// the milliseconds part is ignored.
   ///  *  `user` the value must be an object that contains the `accountId`
   /// field.
   ///  *  `group` the value must be an object that contains the group `name`
@@ -19901,6 +20910,9 @@ class Dashboard {
   /// The details of any edit share permissions for the dashboard.
   final List<SharePermission> editPermissions;
 
+  /// The automatic refresh interval for the dashboard in milliseconds.
+  final int? automaticRefreshMs;
+
   /// The URL of the dashboard.
   final String? view;
 
@@ -19918,6 +20930,7 @@ class Dashboard {
       this.self,
       List<SharePermission>? sharePermissions,
       List<SharePermission>? editPermissions,
+      this.automaticRefreshMs,
       this.view,
       bool? isWritable})
       : isFavourite = isFavourite ?? false,
@@ -19947,6 +20960,7 @@ class Dashboard {
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
+      automaticRefreshMs: (json[r'automaticRefreshMs'] as num?)?.toInt(),
       view: json[r'view'] as String?,
       isWritable: json[r'isWritable'] as bool? ?? false,
     );
@@ -19963,6 +20977,7 @@ class Dashboard {
     var self = this.self;
     var sharePermissions = this.sharePermissions;
     var editPermissions = this.editPermissions;
+    var automaticRefreshMs = this.automaticRefreshMs;
     var view = this.view;
     var isWritable = this.isWritable;
 
@@ -19992,6 +21007,9 @@ class Dashboard {
     json[r'sharePermissions'] =
         sharePermissions.map((i) => i.toJson()).toList();
     json[r'editPermissions'] = editPermissions.map((i) => i.toJson()).toList();
+    if (automaticRefreshMs != null) {
+      json[r'automaticRefreshMs'] = automaticRefreshMs;
+    }
     if (view != null) {
       json[r'view'] = view;
     }
@@ -20010,6 +21028,7 @@ class Dashboard {
       String? self,
       List<SharePermission>? sharePermissions,
       List<SharePermission>? editPermissions,
+      int? automaticRefreshMs,
       String? view,
       bool? isWritable}) {
     return Dashboard(
@@ -20023,6 +21042,7 @@ class Dashboard {
       self: self ?? this.self,
       sharePermissions: sharePermissions ?? this.sharePermissions,
       editPermissions: editPermissions ?? this.editPermissions,
+      automaticRefreshMs: automaticRefreshMs ?? this.automaticRefreshMs,
       view: view ?? this.view,
       isWritable: isWritable ?? this.isWritable,
     );
@@ -20093,6 +21113,341 @@ class DashboardDetails {
       description: description ?? this.description,
       sharePermissions: sharePermissions ?? this.sharePermissions,
       editPermissions: editPermissions ?? this.editPermissions,
+    );
+  }
+}
+
+/// Details of a gadget.
+class DashboardGadget {
+  /// The ID of the gadget instance.
+  final int id;
+
+  /// The module key of the gadget type.
+  final String? moduleKey;
+
+  /// The URI of the gadget type.
+  final String? uri;
+
+  /// The color of the gadget. Should be one of `blue`, `red`, `yellow`,
+  /// `green`, `cyan`, `purple`, `gray`, or `white`.
+  final DashboardGadgetColor color;
+
+  /// The position of the gadget.
+  final DashboardGadgetPosition position;
+
+  /// The title of the gadget.
+  final String title;
+
+  DashboardGadget(
+      {required this.id,
+      this.moduleKey,
+      this.uri,
+      required this.color,
+      required this.position,
+      required this.title});
+
+  factory DashboardGadget.fromJson(Map<String, Object?> json) {
+    return DashboardGadget(
+      id: (json[r'id'] as num?)?.toInt() ?? 0,
+      moduleKey: json[r'moduleKey'] as String?,
+      uri: json[r'uri'] as String?,
+      color: DashboardGadgetColor.fromValue(json[r'color'] as String? ?? ''),
+      position: DashboardGadgetPosition.fromJson(
+          json[r'position'] as Map<String, Object?>? ?? const {}),
+      title: json[r'title'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var moduleKey = this.moduleKey;
+    var uri = this.uri;
+    var color = this.color;
+    var position = this.position;
+    var title = this.title;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    if (moduleKey != null) {
+      json[r'moduleKey'] = moduleKey;
+    }
+    if (uri != null) {
+      json[r'uri'] = uri;
+    }
+    json[r'color'] = color.value;
+    json[r'position'] = position.toJson();
+    json[r'title'] = title;
+    return json;
+  }
+
+  DashboardGadget copyWith(
+      {int? id,
+      String? moduleKey,
+      String? uri,
+      DashboardGadgetColor? color,
+      DashboardGadgetPosition? position,
+      String? title}) {
+    return DashboardGadget(
+      id: id ?? this.id,
+      moduleKey: moduleKey ?? this.moduleKey,
+      uri: uri ?? this.uri,
+      color: color ?? this.color,
+      position: position ?? this.position,
+      title: title ?? this.title,
+    );
+  }
+}
+
+class DashboardGadgetColor {
+  static const blue = DashboardGadgetColor._('blue');
+  static const red = DashboardGadgetColor._('red');
+  static const yellow = DashboardGadgetColor._('yellow');
+  static const green = DashboardGadgetColor._('green');
+  static const cyan = DashboardGadgetColor._('cyan');
+  static const purple = DashboardGadgetColor._('purple');
+  static const gray = DashboardGadgetColor._('gray');
+  static const white = DashboardGadgetColor._('white');
+
+  static const values = [
+    blue,
+    red,
+    yellow,
+    green,
+    cyan,
+    purple,
+    gray,
+    white,
+  ];
+  final String value;
+
+  const DashboardGadgetColor._(this.value);
+
+  static DashboardGadgetColor fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => DashboardGadgetColor._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// Details of a gadget position.
+class DashboardGadgetPosition {
+  final int theRowPositionOfTheGadget;
+  final int theColumnPositionOfTheGadget;
+
+  DashboardGadgetPosition(
+      {required this.theRowPositionOfTheGadget,
+      required this.theColumnPositionOfTheGadget});
+
+  factory DashboardGadgetPosition.fromJson(Map<String, Object?> json) {
+    return DashboardGadgetPosition(
+      theRowPositionOfTheGadget:
+          (json[r'The row position of the gadget.'] as num?)?.toInt() ?? 0,
+      theColumnPositionOfTheGadget:
+          (json[r'The column position of the gadget.'] as num?)?.toInt() ?? 0,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var theRowPositionOfTheGadget = this.theRowPositionOfTheGadget;
+    var theColumnPositionOfTheGadget = this.theColumnPositionOfTheGadget;
+
+    final json = <String, Object?>{};
+    json[r'The row position of the gadget.'] = theRowPositionOfTheGadget;
+    json[r'The column position of the gadget.'] = theColumnPositionOfTheGadget;
+    return json;
+  }
+
+  DashboardGadgetPosition copyWith(
+      {int? theRowPositionOfTheGadget, int? theColumnPositionOfTheGadget}) {
+    return DashboardGadgetPosition(
+      theRowPositionOfTheGadget:
+          theRowPositionOfTheGadget ?? this.theRowPositionOfTheGadget,
+      theColumnPositionOfTheGadget:
+          theColumnPositionOfTheGadget ?? this.theColumnPositionOfTheGadget,
+    );
+  }
+}
+
+/// The list of gadgets on the dashboard.
+class DashboardGadgetResponse {
+  /// The list of gadgets.
+  final List<DashboardGadget> gadgets;
+
+  DashboardGadgetResponse({required this.gadgets});
+
+  factory DashboardGadgetResponse.fromJson(Map<String, Object?> json) {
+    return DashboardGadgetResponse(
+      gadgets: (json[r'gadgets'] as List<Object?>?)
+              ?.map((i) => DashboardGadget.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var gadgets = this.gadgets;
+
+    final json = <String, Object?>{};
+    json[r'gadgets'] = gadgets.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  DashboardGadgetResponse copyWith({List<DashboardGadget>? gadgets}) {
+    return DashboardGadgetResponse(
+      gadgets: gadgets ?? this.gadgets,
+    );
+  }
+}
+
+/// Details of the settings for a dashboard gadget.
+class DashboardGadgetSettings {
+  /// The module key of the gadget type. Can't be provided with `uri`.
+  final String? moduleKey;
+
+  /// The URI of the gadget type. Can't be provided with `moduleKey`.
+  final String? uri;
+
+  /// The color of the gadget. Should be one of `blue`, `red`, `yellow`,
+  /// `green`, `cyan`, `purple`, `gray`, or `white`.
+  final String? color;
+
+  /// The position of the gadget. When the gadget is placed into the position,
+  /// other gadgets in the same column are moved down to accommodate it.
+  final DashboardGadgetPosition? position;
+
+  /// The title of the gadget.
+  final String? title;
+
+  /// Whether to ignore the validation of module key and URI. For example, when
+  /// a gadget is created that is a part of an application that isn't installed.
+  final bool ignoreUriAndModuleKeyValidation;
+
+  DashboardGadgetSettings(
+      {this.moduleKey,
+      this.uri,
+      this.color,
+      this.position,
+      this.title,
+      bool? ignoreUriAndModuleKeyValidation})
+      : ignoreUriAndModuleKeyValidation =
+            ignoreUriAndModuleKeyValidation ?? false;
+
+  factory DashboardGadgetSettings.fromJson(Map<String, Object?> json) {
+    return DashboardGadgetSettings(
+      moduleKey: json[r'moduleKey'] as String?,
+      uri: json[r'uri'] as String?,
+      color: json[r'color'] as String?,
+      position: json[r'position'] != null
+          ? DashboardGadgetPosition.fromJson(
+              json[r'position']! as Map<String, Object?>)
+          : null,
+      title: json[r'title'] as String?,
+      ignoreUriAndModuleKeyValidation:
+          json[r'ignoreUriAndModuleKeyValidation'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var moduleKey = this.moduleKey;
+    var uri = this.uri;
+    var color = this.color;
+    var position = this.position;
+    var title = this.title;
+    var ignoreUriAndModuleKeyValidation = this.ignoreUriAndModuleKeyValidation;
+
+    final json = <String, Object?>{};
+    if (moduleKey != null) {
+      json[r'moduleKey'] = moduleKey;
+    }
+    if (uri != null) {
+      json[r'uri'] = uri;
+    }
+    if (color != null) {
+      json[r'color'] = color;
+    }
+    if (position != null) {
+      json[r'position'] = position.toJson();
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    json[r'ignoreUriAndModuleKeyValidation'] = ignoreUriAndModuleKeyValidation;
+    return json;
+  }
+
+  DashboardGadgetSettings copyWith(
+      {String? moduleKey,
+      String? uri,
+      String? color,
+      DashboardGadgetPosition? position,
+      String? title,
+      bool? ignoreUriAndModuleKeyValidation}) {
+    return DashboardGadgetSettings(
+      moduleKey: moduleKey ?? this.moduleKey,
+      uri: uri ?? this.uri,
+      color: color ?? this.color,
+      position: position ?? this.position,
+      title: title ?? this.title,
+      ignoreUriAndModuleKeyValidation: ignoreUriAndModuleKeyValidation ??
+          this.ignoreUriAndModuleKeyValidation,
+    );
+  }
+}
+
+/// The details of the gadget to update.
+class DashboardGadgetUpdateRequest {
+  /// The title of the gadget.
+  final String? title;
+
+  /// The color of the gadget. Should be one of `blue`, `red`, `yellow`,
+  /// `green`, `cyan`, `purple`, `gray`, or `white`.
+  final String? color;
+
+  /// The position of the gadget.
+  final DashboardGadgetPosition? position;
+
+  DashboardGadgetUpdateRequest({this.title, this.color, this.position});
+
+  factory DashboardGadgetUpdateRequest.fromJson(Map<String, Object?> json) {
+    return DashboardGadgetUpdateRequest(
+      title: json[r'title'] as String?,
+      color: json[r'color'] as String?,
+      position: json[r'position'] != null
+          ? DashboardGadgetPosition.fromJson(
+              json[r'position']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var title = this.title;
+    var color = this.color;
+    var position = this.position;
+
+    final json = <String, Object?>{};
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (color != null) {
+      json[r'color'] = color;
+    }
+    if (position != null) {
+      json[r'position'] = position.toJson();
+    }
+    return json;
+  }
+
+  DashboardGadgetUpdateRequest copyWith(
+      {String? title, String? color, DashboardGadgetPosition? position}) {
+    return DashboardGadgetUpdateRequest(
+      title: title ?? this.title,
+      color: color ?? this.color,
+      position: position ?? this.position,
     );
   }
 }
@@ -20542,7 +21897,10 @@ class EventNotification {
   /// Identifies the recipients of the notification.
   final EventNotificationNotificationType? notificationType;
 
-  /// The value of the `notificationType`:
+  /// As a group's name can change, use of `recipient` is recommended. The
+  /// identifier associated with the `notificationType` value that defines the
+  /// receiver of the notification, where the receiver isn't implied by
+  /// `notificationType` value. So, when `notificationType` is:
   ///
   ///  *  `User` The `parameter` is the user account ID.
   ///  *  `Group` The `parameter` is the group name.
@@ -20550,6 +21908,17 @@ class EventNotification {
   ///  *  `UserCustomField` The `parameter` is the ID of the custom field.
   ///  *  `GroupCustomField` The `parameter` is the ID of the custom field.
   final String? parameter;
+
+  /// The identifier associated with the `notificationType` value that defines
+  /// the receiver of the notification, where the receiver isn't implied by the
+  /// `notificationType` value. So, when `notificationType` is:
+  ///
+  ///  *  `User`, `recipient` is the user account ID.
+  ///  *  `Group`, `recipient` is the group ID.
+  ///  *  `ProjectRole`, `recipient` is the project role ID.
+  ///  *  `UserCustomField`, `recipient` is the ID of the custom field.
+  ///  *  `GroupCustomField`, `recipient` is the ID of the custom field.
+  final String? recipient;
 
   /// The specified group.
   final GroupName? group;
@@ -20571,6 +21940,7 @@ class EventNotification {
       this.id,
       this.notificationType,
       this.parameter,
+      this.recipient,
       this.group,
       this.field,
       this.emailAddress,
@@ -20586,6 +21956,7 @@ class EventNotification {
               json[r'notificationType']! as String)
           : null,
       parameter: json[r'parameter'] as String?,
+      recipient: json[r'recipient'] as String?,
       group: json[r'group'] != null
           ? GroupName.fromJson(json[r'group']! as Map<String, Object?>)
           : null,
@@ -20607,6 +21978,7 @@ class EventNotification {
     var id = this.id;
     var notificationType = this.notificationType;
     var parameter = this.parameter;
+    var recipient = this.recipient;
     var group = this.group;
     var field = this.field;
     var emailAddress = this.emailAddress;
@@ -20625,6 +21997,9 @@ class EventNotification {
     }
     if (parameter != null) {
       json[r'parameter'] = parameter;
+    }
+    if (recipient != null) {
+      json[r'recipient'] = recipient;
     }
     if (group != null) {
       json[r'group'] = group.toJson();
@@ -20649,6 +22024,7 @@ class EventNotification {
       int? id,
       EventNotificationNotificationType? notificationType,
       String? parameter,
+      String? recipient,
       GroupName? group,
       FieldDetails? field,
       String? emailAddress,
@@ -20659,6 +22035,7 @@ class EventNotification {
       id: id ?? this.id,
       notificationType: notificationType ?? this.notificationType,
       parameter: parameter ?? this.parameter,
+      recipient: recipient ?? this.recipient,
       group: group ?? this.group,
       field: field ?? this.field,
       emailAddress: emailAddress ?? this.emailAddress,
@@ -21699,6 +23076,9 @@ class FieldMetadata {
   /// The default value of the field.
   final dynamic defaultValue;
 
+  /// The configuration properties.
+  final Map<String, dynamic>? configuration;
+
   FieldMetadata(
       {required this.required,
       required this.schema,
@@ -21708,7 +23088,8 @@ class FieldMetadata {
       bool? hasDefaultValue,
       required this.operations,
       List<dynamic>? allowedValues,
-      this.defaultValue})
+      this.defaultValue,
+      this.configuration})
       : hasDefaultValue = hasDefaultValue ?? false,
         allowedValues = allowedValues ?? [];
 
@@ -21729,6 +23110,7 @@ class FieldMetadata {
           (json[r'allowedValues'] as List<Object?>?)?.map((i) => i).toList() ??
               [],
       defaultValue: json[r'defaultValue'],
+      configuration: json[r'configuration'] as Map<String, Object?>?,
     );
   }
 
@@ -21742,6 +23124,7 @@ class FieldMetadata {
     var operations = this.operations;
     var allowedValues = this.allowedValues;
     var defaultValue = this.defaultValue;
+    var configuration = this.configuration;
 
     final json = <String, Object?>{};
     json[r'required'] = required;
@@ -21757,6 +23140,9 @@ class FieldMetadata {
     if (defaultValue != null) {
       json[r'defaultValue'] = defaultValue;
     }
+    if (configuration != null) {
+      json[r'configuration'] = configuration;
+    }
     return json;
   }
 
@@ -21769,7 +23155,8 @@ class FieldMetadata {
       bool? hasDefaultValue,
       List<String>? operations,
       List<dynamic>? allowedValues,
-      dynamic defaultValue}) {
+      dynamic defaultValue,
+      Map<String, dynamic>? configuration}) {
     return FieldMetadata(
       required: required ?? this.required,
       schema: schema ?? this.schema,
@@ -21780,6 +23167,7 @@ class FieldMetadata {
       operations: operations ?? this.operations,
       allowedValues: allowedValues ?? this.allowedValues,
       defaultValue: defaultValue ?? this.defaultValue,
+      configuration: configuration ?? this.configuration,
     );
   }
 }
@@ -22856,7 +24244,8 @@ class FilterSubscriptionsList {
 
 /// A group found in a search.
 class FoundGroup {
-  /// The name of the group.
+  /// The name of the group. The name of a group is mutable, to reliably
+  /// identify a group use ``groupId`.`
   final String? name;
 
   /// The group name with the matched query string highlighted with the HTML
@@ -22864,9 +24253,8 @@ class FoundGroup {
   final String? html;
   final List<GroupLabel> labels;
 
-  /// The ID of the group, if available, which uniquely identifies the group
-  /// across all Atlassian products. For example,
-  /// *952d12c3-5b5b-4d04-bb32-44d383afc4b2*.
+  /// The ID of the group, which uniquely identifies the group across all
+  /// Atlassian products. For example, *952d12c3-5b5b-4d04-bb32-44d383afc4b2*.
   final String? groupId;
 
   FoundGroup({this.name, this.html, List<GroupLabel>? labels, this.groupId})
@@ -23251,6 +24639,10 @@ class Group {
   /// The name of group.
   final String? name;
 
+  /// The ID of the group, which uniquely identifies the group across all
+  /// Atlassian products. For example, *952d12c3-5b5b-4d04-bb32-44d383afc4b2*.
+  final String? groupId;
+
   /// The URL for these group details.
   final String? self;
 
@@ -23263,11 +24655,12 @@ class Group {
   /// Expand options that include additional group details in the response.
   final String? expand;
 
-  Group({this.name, this.self, this.users, this.expand});
+  Group({this.name, this.groupId, this.self, this.users, this.expand});
 
   factory Group.fromJson(Map<String, Object?> json) {
     return Group(
       name: json[r'name'] as String?,
+      groupId: json[r'groupId'] as String?,
       self: json[r'self'] as String?,
       users: json[r'users'] != null
           ? PagedListUserDetailsApplicationUser.fromJson(
@@ -23279,6 +24672,7 @@ class Group {
 
   Map<String, Object?> toJson() {
     var name = this.name;
+    var groupId = this.groupId;
     var self = this.self;
     var users = this.users;
     var expand = this.expand;
@@ -23286,6 +24680,9 @@ class Group {
     final json = <String, Object?>{};
     if (name != null) {
       json[r'name'] = name;
+    }
+    if (groupId != null) {
+      json[r'groupId'] = groupId;
     }
     if (self != null) {
       json[r'self'] = self;
@@ -23301,11 +24698,13 @@ class Group {
 
   Group copyWith(
       {String? name,
+      String? groupId,
       String? self,
       PagedListUserDetailsApplicationUser? users,
       String? expand}) {
     return Group(
       name: name ?? this.name,
+      groupId: groupId ?? this.groupId,
       self: self ?? this.self,
       users: users ?? this.users,
       expand: expand ?? this.expand,
@@ -23318,9 +24717,8 @@ class GroupDetails {
   /// The name of the group.
   final String? name;
 
-  /// The ID of the group, if available, which uniquely identifies the group
-  /// across all Atlassian products. For example,
-  /// *952d12c3-5b5b-4d04-bb32-44d383afc4b2*.
+  /// The ID of the group, which uniquely identifies the group across all
+  /// Atlassian products. For example, *952d12c3-5b5b-4d04-bb32-44d383afc4b2*.
   final String? groupId;
 
   GroupDetails({this.name, this.groupId});
@@ -23434,25 +24832,34 @@ class GroupName {
   /// The name of group.
   final String? name;
 
+  /// The ID of the group, which uniquely identifies the group across all
+  /// Atlassian products. For example, *952d12c3-5b5b-4d04-bb32-44d383afc4b2*.
+  final String? groupId;
+
   /// The URL for these group details.
   final String? self;
 
-  GroupName({this.name, this.self});
+  GroupName({this.name, this.groupId, this.self});
 
   factory GroupName.fromJson(Map<String, Object?> json) {
     return GroupName(
       name: json[r'name'] as String?,
+      groupId: json[r'groupId'] as String?,
       self: json[r'self'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var name = this.name;
+    var groupId = this.groupId;
     var self = this.self;
 
     final json = <String, Object?>{};
     if (name != null) {
       json[r'name'] = name;
+    }
+    if (groupId != null) {
+      json[r'groupId'] = groupId;
     }
     if (self != null) {
       json[r'self'] = self;
@@ -23460,9 +24867,10 @@ class GroupName {
     return json;
   }
 
-  GroupName copyWith({String? name, String? self}) {
+  GroupName copyWith({String? name, String? groupId, String? self}) {
     return GroupName(
       name: name ?? this.name,
+      groupId: groupId ?? this.groupId,
       self: self ?? this.self,
     );
   }
@@ -23523,16 +24931,16 @@ class Hierarchy {
   final int? baseLevelId;
 
   /// Details about the hierarchy level.
-  final List<HierarchyLevel> levels;
+  final List<SimplifiedHierarchyLevel> levels;
 
-  Hierarchy({this.baseLevelId, List<HierarchyLevel>? levels})
+  Hierarchy({this.baseLevelId, List<SimplifiedHierarchyLevel>? levels})
       : levels = levels ?? [];
 
   factory Hierarchy.fromJson(Map<String, Object?> json) {
     return Hierarchy(
       baseLevelId: (json[r'baseLevelId'] as num?)?.toInt(),
       levels: (json[r'levels'] as List<Object?>?)
-              ?.map((i) => HierarchyLevel.fromJson(
+              ?.map((i) => SimplifiedHierarchyLevel.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
@@ -23551,168 +24959,13 @@ class Hierarchy {
     return json;
   }
 
-  Hierarchy copyWith({int? baseLevelId, List<HierarchyLevel>? levels}) {
+  Hierarchy copyWith(
+      {int? baseLevelId, List<SimplifiedHierarchyLevel>? levels}) {
     return Hierarchy(
       baseLevelId: baseLevelId ?? this.baseLevelId,
       levels: levels ?? this.levels,
     );
   }
-}
-
-class HierarchyLevel {
-  /// The ID of the hierarchy level. This property is deprecated, see
-  /// [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
-  final int? id;
-
-  /// The name of this hierarchy level.
-  final String? name;
-
-  /// The ID of the level above this one in the hierarchy. This property is
-  /// deprecated, see
-  /// [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
-  final int? aboveLevelId;
-
-  /// The ID of the level below this one in the hierarchy. This property is
-  /// deprecated, see
-  /// [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
-  final int? belowLevelId;
-
-  /// The ID of the project configuration. This property is deprecated, see
-  /// [Change oticen: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
-  final int? projectConfigurationId;
-
-  /// The level of this item in the hierarchy.
-  final int? level;
-
-  /// The issue types available in this hierarchy level.
-  final List<int> issueTypeIds;
-
-  /// The external UUID of the hierarchy level. This property is deprecated, see
-  /// [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
-  final String? externalUuid;
-  final HierarchyLevelGlobalHierarchyLevel? globalHierarchyLevel;
-
-  HierarchyLevel(
-      {this.id,
-      this.name,
-      this.aboveLevelId,
-      this.belowLevelId,
-      this.projectConfigurationId,
-      this.level,
-      List<int>? issueTypeIds,
-      this.externalUuid,
-      this.globalHierarchyLevel})
-      : issueTypeIds = issueTypeIds ?? [];
-
-  factory HierarchyLevel.fromJson(Map<String, Object?> json) {
-    return HierarchyLevel(
-      id: (json[r'id'] as num?)?.toInt(),
-      name: json[r'name'] as String?,
-      aboveLevelId: (json[r'aboveLevelId'] as num?)?.toInt(),
-      belowLevelId: (json[r'belowLevelId'] as num?)?.toInt(),
-      projectConfigurationId:
-          (json[r'projectConfigurationId'] as num?)?.toInt(),
-      level: (json[r'level'] as num?)?.toInt(),
-      issueTypeIds: (json[r'issueTypeIds'] as List<Object?>?)
-              ?.map((i) => (i as num?)?.toInt() ?? 0)
-              .toList() ??
-          [],
-      externalUuid: json[r'externalUuid'] as String?,
-      globalHierarchyLevel: json[r'globalHierarchyLevel'] != null
-          ? HierarchyLevelGlobalHierarchyLevel.fromValue(
-              json[r'globalHierarchyLevel']! as String)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var name = this.name;
-    var aboveLevelId = this.aboveLevelId;
-    var belowLevelId = this.belowLevelId;
-    var projectConfigurationId = this.projectConfigurationId;
-    var level = this.level;
-    var issueTypeIds = this.issueTypeIds;
-    var externalUuid = this.externalUuid;
-    var globalHierarchyLevel = this.globalHierarchyLevel;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (aboveLevelId != null) {
-      json[r'aboveLevelId'] = aboveLevelId;
-    }
-    if (belowLevelId != null) {
-      json[r'belowLevelId'] = belowLevelId;
-    }
-    if (projectConfigurationId != null) {
-      json[r'projectConfigurationId'] = projectConfigurationId;
-    }
-    if (level != null) {
-      json[r'level'] = level;
-    }
-    json[r'issueTypeIds'] = issueTypeIds;
-    if (externalUuid != null) {
-      json[r'externalUuid'] = externalUuid;
-    }
-    if (globalHierarchyLevel != null) {
-      json[r'globalHierarchyLevel'] = globalHierarchyLevel.value;
-    }
-    return json;
-  }
-
-  HierarchyLevel copyWith(
-      {int? id,
-      String? name,
-      int? aboveLevelId,
-      int? belowLevelId,
-      int? projectConfigurationId,
-      int? level,
-      List<int>? issueTypeIds,
-      String? externalUuid,
-      HierarchyLevelGlobalHierarchyLevel? globalHierarchyLevel}) {
-    return HierarchyLevel(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      aboveLevelId: aboveLevelId ?? this.aboveLevelId,
-      belowLevelId: belowLevelId ?? this.belowLevelId,
-      projectConfigurationId:
-          projectConfigurationId ?? this.projectConfigurationId,
-      level: level ?? this.level,
-      issueTypeIds: issueTypeIds ?? this.issueTypeIds,
-      externalUuid: externalUuid ?? this.externalUuid,
-      globalHierarchyLevel: globalHierarchyLevel ?? this.globalHierarchyLevel,
-    );
-  }
-}
-
-class HierarchyLevelGlobalHierarchyLevel {
-  static const subtask = HierarchyLevelGlobalHierarchyLevel._('SUBTASK');
-  static const base = HierarchyLevelGlobalHierarchyLevel._('BASE');
-  static const epic = HierarchyLevelGlobalHierarchyLevel._('EPIC');
-
-  static const values = [
-    subtask,
-    base,
-    epic,
-  ];
-  final String value;
-
-  const HierarchyLevelGlobalHierarchyLevel._(this.value);
-
-  static HierarchyLevelGlobalHierarchyLevel fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => HierarchyLevelGlobalHierarchyLevel._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
 }
 
 /// Details of issue history metadata.
@@ -24132,20 +25385,24 @@ class IdOrKeyBean {
 }
 
 class IncludedFields {
+  final List<String> actuallyIncluded;
   final List<String> excluded;
   final List<String> included;
-  final List<String> actuallyIncluded;
 
   IncludedFields(
-      {List<String>? excluded,
-      List<String>? included,
-      List<String>? actuallyIncluded})
-      : excluded = excluded ?? [],
-        included = included ?? [],
-        actuallyIncluded = actuallyIncluded ?? [];
+      {List<String>? actuallyIncluded,
+      List<String>? excluded,
+      List<String>? included})
+      : actuallyIncluded = actuallyIncluded ?? [],
+        excluded = excluded ?? [],
+        included = included ?? [];
 
   factory IncludedFields.fromJson(Map<String, Object?> json) {
     return IncludedFields(
+      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
       excluded: (json[r'excluded'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -24154,33 +25411,223 @@ class IncludedFields {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var actuallyIncluded = this.actuallyIncluded;
+    var excluded = this.excluded;
+    var included = this.included;
+
+    final json = <String, Object?>{};
+    json[r'actuallyIncluded'] = actuallyIncluded;
+    json[r'excluded'] = excluded;
+    json[r'included'] = included;
+    return json;
+  }
+
+  IncludedFields copyWith(
+      {List<String>? actuallyIncluded,
+      List<String>? excluded,
+      List<String>? included}) {
+    return IncludedFields(
+      actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
+      excluded: excluded ?? this.excluded,
+      included: included ?? this.included,
+    );
+  }
+}
+
+/// The details of an issue adjustment's context, which define where to activate
+/// the issue adjustment.
+class IssueAdjustmentContextDetails {
+  /// The ID of the issue adjustment context.
+  final String? id;
+
+  /// The project ID of the context.
+  final String projectId;
+
+  /// The issue type ID of the context.
+  final String issueTypeId;
+
+  /// The view type of the context. Only `GIC` (Global Issue Create) is
+  /// supported.
+  final String viewType;
+
+  /// Whether a context is available. For example, when a project is deleted the
+  /// context becomes unavailable.
+  final bool isAvailable;
+
+  IssueAdjustmentContextDetails(
+      {this.id,
+      required this.projectId,
+      required this.issueTypeId,
+      required this.viewType,
+      bool? isAvailable})
+      : isAvailable = isAvailable ?? false;
+
+  factory IssueAdjustmentContextDetails.fromJson(Map<String, Object?> json) {
+    return IssueAdjustmentContextDetails(
+      id: json[r'id'] as String?,
+      projectId: json[r'projectId'] as String? ?? '',
+      issueTypeId: json[r'issueTypeId'] as String? ?? '',
+      viewType: json[r'viewType'] as String? ?? '',
+      isAvailable: json[r'isAvailable'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var projectId = this.projectId;
+    var issueTypeId = this.issueTypeId;
+    var viewType = this.viewType;
+    var isAvailable = this.isAvailable;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    json[r'projectId'] = projectId;
+    json[r'issueTypeId'] = issueTypeId;
+    json[r'viewType'] = viewType;
+    json[r'isAvailable'] = isAvailable;
+    return json;
+  }
+
+  IssueAdjustmentContextDetails copyWith(
+      {String? id,
+      String? projectId,
+      String? issueTypeId,
+      String? viewType,
+      bool? isAvailable}) {
+    return IssueAdjustmentContextDetails(
+      id: id ?? this.id,
+      projectId: projectId ?? this.projectId,
+      issueTypeId: issueTypeId ?? this.issueTypeId,
+      viewType: viewType ?? this.viewType,
+      isAvailable: isAvailable ?? this.isAvailable,
+    );
+  }
+}
+
+/// The details of an issue adjustment.
+class IssueAdjustmentDetails {
+  /// The ID of the issue adjustment.
+  final String id;
+
+  /// The name of the issue adjustment. The maximum length is 255 characters.
+  final String name;
+
+  /// The description of the issue adjustment. The maximum length is 255
+  /// characters.
+  final String? description;
+
+  /// The URL of the issue adjustment.
+  final String self;
+
+  /// The data of the issue adjustment. The maximum size of the data is 50000
+  /// characters.
+  final String? data;
+
+  /// List of contexts of the issue adjustment. The maximum number of contexts
+  /// is 1000.
+  final List<IssueAdjustmentContextDetails> contexts;
+
+  IssueAdjustmentDetails(
+      {required this.id,
+      required this.name,
+      this.description,
+      required this.self,
+      this.data,
+      List<IssueAdjustmentContextDetails>? contexts})
+      : contexts = contexts ?? [];
+
+  factory IssueAdjustmentDetails.fromJson(Map<String, Object?> json) {
+    return IssueAdjustmentDetails(
+      id: json[r'id'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      description: json[r'description'] as String?,
+      self: json[r'self'] as String? ?? '',
+      data: json[r'data'] as String?,
+      contexts: (json[r'contexts'] as List<Object?>?)
+              ?.map((i) => IssueAdjustmentContextDetails.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
     );
   }
 
   Map<String, Object?> toJson() {
-    var excluded = this.excluded;
-    var included = this.included;
-    var actuallyIncluded = this.actuallyIncluded;
+    var id = this.id;
+    var name = this.name;
+    var description = this.description;
+    var self = this.self;
+    var data = this.data;
+    var contexts = this.contexts;
 
     final json = <String, Object?>{};
-    json[r'excluded'] = excluded;
-    json[r'included'] = included;
-    json[r'actuallyIncluded'] = actuallyIncluded;
+    json[r'id'] = id;
+    json[r'name'] = name;
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    json[r'self'] = self;
+    if (data != null) {
+      json[r'data'] = data;
+    }
+    json[r'contexts'] = contexts.map((i) => i.toJson()).toList();
     return json;
   }
 
-  IncludedFields copyWith(
-      {List<String>? excluded,
-      List<String>? included,
-      List<String>? actuallyIncluded}) {
-    return IncludedFields(
-      excluded: excluded ?? this.excluded,
-      included: included ?? this.included,
-      actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
+  IssueAdjustmentDetails copyWith(
+      {String? id,
+      String? name,
+      String? description,
+      String? self,
+      String? data,
+      List<IssueAdjustmentContextDetails>? contexts}) {
+    return IssueAdjustmentDetails(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      self: self ?? this.self,
+      data: data ?? this.data,
+      contexts: contexts ?? this.contexts,
+    );
+  }
+}
+
+/// Identifiers for an issue adjustment.
+class IssueAdjustmentIdentifiers {
+  /// The ID of the issue adjustment.
+  final String id;
+
+  /// The URL of the issue adjustment.
+  final String self;
+
+  IssueAdjustmentIdentifiers({required this.id, required this.self});
+
+  factory IssueAdjustmentIdentifiers.fromJson(Map<String, Object?> json) {
+    return IssueAdjustmentIdentifiers(
+      id: json[r'id'] as String? ?? '',
+      self: json[r'self'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var self = this.self;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    json[r'self'] = self;
+    return json;
+  }
+
+  IssueAdjustmentIdentifiers copyWith({String? id, String? self}) {
+    return IssueAdjustmentIdentifiers(
+      id: id ?? this.id,
+      self: self ?? this.self,
     );
   }
 }
@@ -25021,10 +26468,14 @@ class IssueLink {
   /// The type of link between the issues.
   final IssueLinkType type;
 
-  /// The issue the link joins to.
+  /// Provides details about the linked issue. If presenting this link in a user
+  /// interface, use the `inward` field of the issue link type to label the
+  /// link.
   final LinkedIssue inwardIssue;
 
-  /// The issue the link originates from.
+  /// Provides details about the linked issue. If presenting this link in a user
+  /// interface, use the `outward` field of the issue link type to label the
+  /// link.
   final LinkedIssue outwardIssue;
 
   IssueLink(
@@ -25632,7 +27083,9 @@ class IssueTypeCreateBean {
   /// The description of the issue type.
   final String? description;
 
-  /// Deprecated. Use `hierarchyLevel` instead.
+  /// Deprecated. Use `hierarchyLevel` instead. See the
+  /// [deprecation notice](https://community.developer.atlassian.com/t/deprecation-of-the-epic-link-parent-link-and-other-related-fields-in-rest-apis-and-webhooks/54048)
+  /// for details.
   ///
   /// Whether the issue type is `subtype` or `standard`. Defaults to `standard`.
   final IssueTypeCreateBeanType? type;
@@ -27221,7 +28674,6 @@ class IssueUpdateDetails {
 
 /// A list of editable field details.
 class IssueUpdateMetadata {
-  /// A list of editable field details.
   final Map<String, dynamic>? fields;
 
   IssueUpdateMetadata({this.fields});
@@ -28399,6 +29851,39 @@ class JqlQueriesToParse {
   }
 }
 
+/// The list of JQL queries to sanitize for the given account IDs.
+class JqlQueriesToSanitize {
+  /// The list of JQL queries to sanitize. Must contain unique values. Maximum
+  /// of 20 queries.
+  final List<JqlQueryToSanitize> queries;
+
+  JqlQueriesToSanitize({required this.queries});
+
+  factory JqlQueriesToSanitize.fromJson(Map<String, Object?> json) {
+    return JqlQueriesToSanitize(
+      queries: (json[r'queries'] as List<Object?>?)
+              ?.map((i) => JqlQueryToSanitize.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var queries = this.queries;
+
+    final json = <String, Object?>{};
+    json[r'queries'] = queries.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  JqlQueriesToSanitize copyWith({List<JqlQueryToSanitize>? queries}) {
+    return JqlQueriesToSanitize(
+      queries: queries ?? this.queries,
+    );
+  }
+}
+
 /// A parsed JQL query.
 class JqlQuery {
   final JqlQueryClause? where;
@@ -28770,6 +30255,45 @@ class JqlQueryOrderByClauseElementDirection {
   String toString() => value;
 }
 
+/// The JQL query to sanitize for the account ID. If the account ID is null,
+/// sanitizing is performed for an anonymous user.
+class JqlQueryToSanitize {
+  /// The account ID of the user, which uniquely identifies the user across all
+  /// Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
+  final String? accountId;
+
+  /// The query to sanitize.
+  final String query;
+
+  JqlQueryToSanitize({this.accountId, required this.query});
+
+  factory JqlQueryToSanitize.fromJson(Map<String, Object?> json) {
+    return JqlQueryToSanitize(
+      accountId: json[r'accountId'] as String?,
+      query: json[r'query'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var accountId = this.accountId;
+    var query = this.query;
+
+    final json = <String, Object?>{};
+    if (accountId != null) {
+      json[r'accountId'] = accountId;
+    }
+    json[r'query'] = query;
+    return json;
+  }
+
+  JqlQueryToSanitize copyWith({String? accountId, String? query}) {
+    return JqlQueryToSanitize(
+      accountId: accountId ?? this.accountId,
+      query: query ?? this.query,
+    );
+  }
+}
+
 /// An operand that can be part of a list operand.
 class JqlQueryUnitaryOperand {
   JqlQueryUnitaryOperand();
@@ -28822,8 +30346,12 @@ class JsonContextVariable {
 }
 
 class JsonNode {
-  final bool floatingPointNumber;
+  final bool array;
+  final Map<String, dynamic>? fields;
+  final bool null$;
   final Map<String, dynamic>? elements;
+  final bool containerNode;
+  final bool valueNode;
   final bool pojo;
   final bool number;
   final bool integralNumber;
@@ -28835,10 +30363,9 @@ class JsonNode {
   final bool textual;
   final bool boolean;
   final bool binary;
-  final bool containerNode;
-  final bool missingNode;
   final bool object;
-  final bool valueNode;
+  final bool missingNode;
+  final bool floatingPointNumber;
   final num? numberValue;
   final JsonNodeNumberType? numberType;
   final int? intValue;
@@ -28852,16 +30379,17 @@ class JsonNode {
   final int? valueAsLong;
   final num? valueAsDouble;
   final bool valueAsBoolean;
-  final Map<String, dynamic>? fieldNames;
   final String? textValue;
   final String? valueAsText;
-  final bool array;
-  final Map<String, dynamic>? fields;
-  final bool null$;
+  final Map<String, dynamic>? fieldNames;
 
   JsonNode(
-      {bool? floatingPointNumber,
+      {bool? array,
+      this.fields,
+      bool? null$,
       this.elements,
+      bool? containerNode,
+      bool? valueNode,
       bool? pojo,
       bool? number,
       bool? integralNumber,
@@ -28873,10 +30401,9 @@ class JsonNode {
       bool? textual,
       bool? boolean,
       bool? binary,
-      bool? containerNode,
-      bool? missingNode,
       bool? object,
-      bool? valueNode,
+      bool? missingNode,
+      bool? floatingPointNumber,
       this.numberValue,
       this.numberType,
       this.intValue,
@@ -28890,13 +30417,13 @@ class JsonNode {
       this.valueAsLong,
       this.valueAsDouble,
       bool? valueAsBoolean,
-      this.fieldNames,
       this.textValue,
       this.valueAsText,
-      bool? array,
-      this.fields,
-      bool? null$})
-      : floatingPointNumber = floatingPointNumber ?? false,
+      this.fieldNames})
+      : array = array ?? false,
+        null$ = null$ ?? false,
+        containerNode = containerNode ?? false,
+        valueNode = valueNode ?? false,
         pojo = pojo ?? false,
         number = number ?? false,
         integralNumber = integralNumber ?? false,
@@ -28908,20 +30435,21 @@ class JsonNode {
         textual = textual ?? false,
         boolean = boolean ?? false,
         binary = binary ?? false,
-        containerNode = containerNode ?? false,
-        missingNode = missingNode ?? false,
         object = object ?? false,
-        valueNode = valueNode ?? false,
+        missingNode = missingNode ?? false,
+        floatingPointNumber = floatingPointNumber ?? false,
         booleanValue = booleanValue ?? false,
         binaryValue = binaryValue ?? [],
-        valueAsBoolean = valueAsBoolean ?? false,
-        array = array ?? false,
-        null$ = null$ ?? false;
+        valueAsBoolean = valueAsBoolean ?? false;
 
   factory JsonNode.fromJson(Map<String, Object?> json) {
     return JsonNode(
-      floatingPointNumber: json[r'floatingPointNumber'] as bool? ?? false,
+      array: json[r'array'] as bool? ?? false,
+      fields: json[r'fields'] as Map<String, Object?>?,
+      null$: json[r'null'] as bool? ?? false,
       elements: json[r'elements'] as Map<String, Object?>?,
+      containerNode: json[r'containerNode'] as bool? ?? false,
+      valueNode: json[r'valueNode'] as bool? ?? false,
       pojo: json[r'pojo'] as bool? ?? false,
       number: json[r'number'] as bool? ?? false,
       integralNumber: json[r'integralNumber'] as bool? ?? false,
@@ -28933,10 +30461,9 @@ class JsonNode {
       textual: json[r'textual'] as bool? ?? false,
       boolean: json[r'boolean'] as bool? ?? false,
       binary: json[r'binary'] as bool? ?? false,
-      containerNode: json[r'containerNode'] as bool? ?? false,
-      missingNode: json[r'missingNode'] as bool? ?? false,
       object: json[r'object'] as bool? ?? false,
-      valueNode: json[r'valueNode'] as bool? ?? false,
+      missingNode: json[r'missingNode'] as bool? ?? false,
+      floatingPointNumber: json[r'floatingPointNumber'] as bool? ?? false,
       numberValue: json[r'numberValue'] as num?,
       numberType: json[r'numberType'] != null
           ? JsonNodeNumberType.fromValue(json[r'numberType']! as String)
@@ -28955,18 +30482,19 @@ class JsonNode {
       valueAsLong: (json[r'valueAsLong'] as num?)?.toInt(),
       valueAsDouble: json[r'valueAsDouble'] as num?,
       valueAsBoolean: json[r'valueAsBoolean'] as bool? ?? false,
-      fieldNames: json[r'fieldNames'] as Map<String, Object?>?,
       textValue: json[r'textValue'] as String?,
       valueAsText: json[r'valueAsText'] as String?,
-      array: json[r'array'] as bool? ?? false,
-      fields: json[r'fields'] as Map<String, Object?>?,
-      null$: json[r'null'] as bool? ?? false,
+      fieldNames: json[r'fieldNames'] as Map<String, Object?>?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var floatingPointNumber = this.floatingPointNumber;
+    var array = this.array;
+    var fields = this.fields;
+    var null$ = this.null$;
     var elements = this.elements;
+    var containerNode = this.containerNode;
+    var valueNode = this.valueNode;
     var pojo = this.pojo;
     var number = this.number;
     var integralNumber = this.integralNumber;
@@ -28978,10 +30506,9 @@ class JsonNode {
     var textual = this.textual;
     var boolean = this.boolean;
     var binary = this.binary;
-    var containerNode = this.containerNode;
-    var missingNode = this.missingNode;
     var object = this.object;
-    var valueNode = this.valueNode;
+    var missingNode = this.missingNode;
+    var floatingPointNumber = this.floatingPointNumber;
     var numberValue = this.numberValue;
     var numberType = this.numberType;
     var intValue = this.intValue;
@@ -28995,18 +30522,21 @@ class JsonNode {
     var valueAsLong = this.valueAsLong;
     var valueAsDouble = this.valueAsDouble;
     var valueAsBoolean = this.valueAsBoolean;
-    var fieldNames = this.fieldNames;
     var textValue = this.textValue;
     var valueAsText = this.valueAsText;
-    var array = this.array;
-    var fields = this.fields;
-    var null$ = this.null$;
+    var fieldNames = this.fieldNames;
 
     final json = <String, Object?>{};
-    json[r'floatingPointNumber'] = floatingPointNumber;
+    json[r'array'] = array;
+    if (fields != null) {
+      json[r'fields'] = fields;
+    }
+    json[r'null'] = null$;
     if (elements != null) {
       json[r'elements'] = elements;
     }
+    json[r'containerNode'] = containerNode;
+    json[r'valueNode'] = valueNode;
     json[r'pojo'] = pojo;
     json[r'number'] = number;
     json[r'integralNumber'] = integralNumber;
@@ -29018,10 +30548,9 @@ class JsonNode {
     json[r'textual'] = textual;
     json[r'boolean'] = boolean;
     json[r'binary'] = binary;
-    json[r'containerNode'] = containerNode;
-    json[r'missingNode'] = missingNode;
     json[r'object'] = object;
-    json[r'valueNode'] = valueNode;
+    json[r'missingNode'] = missingNode;
+    json[r'floatingPointNumber'] = floatingPointNumber;
     if (numberValue != null) {
       json[r'numberValue'] = numberValue;
     }
@@ -29055,26 +30584,25 @@ class JsonNode {
       json[r'valueAsDouble'] = valueAsDouble;
     }
     json[r'valueAsBoolean'] = valueAsBoolean;
-    if (fieldNames != null) {
-      json[r'fieldNames'] = fieldNames;
-    }
     if (textValue != null) {
       json[r'textValue'] = textValue;
     }
     if (valueAsText != null) {
       json[r'valueAsText'] = valueAsText;
     }
-    json[r'array'] = array;
-    if (fields != null) {
-      json[r'fields'] = fields;
+    if (fieldNames != null) {
+      json[r'fieldNames'] = fieldNames;
     }
-    json[r'null'] = null$;
     return json;
   }
 
   JsonNode copyWith(
-      {bool? floatingPointNumber,
+      {bool? array,
+      Map<String, dynamic>? fields,
+      bool? null$,
       Map<String, dynamic>? elements,
+      bool? containerNode,
+      bool? valueNode,
       bool? pojo,
       bool? number,
       bool? integralNumber,
@@ -29086,10 +30614,9 @@ class JsonNode {
       bool? textual,
       bool? boolean,
       bool? binary,
-      bool? containerNode,
-      bool? missingNode,
       bool? object,
-      bool? valueNode,
+      bool? missingNode,
+      bool? floatingPointNumber,
       num? numberValue,
       JsonNodeNumberType? numberType,
       int? intValue,
@@ -29103,15 +30630,16 @@ class JsonNode {
       int? valueAsLong,
       num? valueAsDouble,
       bool? valueAsBoolean,
-      Map<String, dynamic>? fieldNames,
       String? textValue,
       String? valueAsText,
-      bool? array,
-      Map<String, dynamic>? fields,
-      bool? null$}) {
+      Map<String, dynamic>? fieldNames}) {
     return JsonNode(
-      floatingPointNumber: floatingPointNumber ?? this.floatingPointNumber,
+      array: array ?? this.array,
+      fields: fields ?? this.fields,
+      null$: null$ ?? this.null$,
       elements: elements ?? this.elements,
+      containerNode: containerNode ?? this.containerNode,
+      valueNode: valueNode ?? this.valueNode,
       pojo: pojo ?? this.pojo,
       number: number ?? this.number,
       integralNumber: integralNumber ?? this.integralNumber,
@@ -29123,10 +30651,9 @@ class JsonNode {
       textual: textual ?? this.textual,
       boolean: boolean ?? this.boolean,
       binary: binary ?? this.binary,
-      containerNode: containerNode ?? this.containerNode,
-      missingNode: missingNode ?? this.missingNode,
       object: object ?? this.object,
-      valueNode: valueNode ?? this.valueNode,
+      missingNode: missingNode ?? this.missingNode,
+      floatingPointNumber: floatingPointNumber ?? this.floatingPointNumber,
       numberValue: numberValue ?? this.numberValue,
       numberType: numberType ?? this.numberType,
       intValue: intValue ?? this.intValue,
@@ -29140,12 +30667,9 @@ class JsonNode {
       valueAsLong: valueAsLong ?? this.valueAsLong,
       valueAsDouble: valueAsDouble ?? this.valueAsDouble,
       valueAsBoolean: valueAsBoolean ?? this.valueAsBoolean,
-      fieldNames: fieldNames ?? this.fieldNames,
       textValue: textValue ?? this.textValue,
       valueAsText: valueAsText ?? this.valueAsText,
-      array: array ?? this.array,
-      fields: fields ?? this.fields,
-      null$: null$ ?? this.null$,
+      fieldNames: fieldNames ?? this.fieldNames,
     );
   }
 }
@@ -29824,7 +31348,9 @@ class MultipleCustomFieldValuesUpdate {
   ///  *  `string` the value must be a string.
   ///  *  `number` the value must be a number.
   ///  *  `datetime` the value must be a string that represents a date in the
-  /// ISO format, for example `"2021-01-18T12:00:00-03:00"`.
+  /// ISO format or the simplified extended ISO format. For example,
+  /// `"2023-01-18T12:00:00-03:00"` or `"2023-01-18T12:00:00.000Z"`. However,
+  /// the milliseconds part is ignored.
   ///  *  `user` the value must be an object that contains the `accountId`
   /// field.
   ///  *  `group` the value must be an object that contains the group `name`
@@ -30216,19 +31742,24 @@ class NotificationRecipients {
   /// List of groups to receive the notification.
   final List<GroupName> groups;
 
+  /// List of groupIds to receive the notification.
+  final List<String> groupIds;
+
   NotificationRecipients(
       {bool? reporter,
       bool? assignee,
       bool? watchers,
       bool? voters,
       List<UserDetails>? users,
-      List<GroupName>? groups})
+      List<GroupName>? groups,
+      List<String>? groupIds})
       : reporter = reporter ?? false,
         assignee = assignee ?? false,
         watchers = watchers ?? false,
         voters = voters ?? false,
         users = users ?? [],
-        groups = groups ?? [];
+        groups = groups ?? [],
+        groupIds = groupIds ?? [];
 
   factory NotificationRecipients.fromJson(Map<String, Object?> json) {
     return NotificationRecipients(
@@ -30246,6 +31777,10 @@ class NotificationRecipients {
                   GroupName.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
+      groupIds: (json[r'groupIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
     );
   }
 
@@ -30256,6 +31791,7 @@ class NotificationRecipients {
     var voters = this.voters;
     var users = this.users;
     var groups = this.groups;
+    var groupIds = this.groupIds;
 
     final json = <String, Object?>{};
     json[r'reporter'] = reporter;
@@ -30264,6 +31800,7 @@ class NotificationRecipients {
     json[r'voters'] = voters;
     json[r'users'] = users.map((i) => i.toJson()).toList();
     json[r'groups'] = groups.map((i) => i.toJson()).toList();
+    json[r'groupIds'] = groupIds;
     return json;
   }
 
@@ -30273,7 +31810,8 @@ class NotificationRecipients {
       bool? watchers,
       bool? voters,
       List<UserDetails>? users,
-      List<GroupName>? groups}) {
+      List<GroupName>? groups,
+      List<String>? groupIds}) {
     return NotificationRecipients(
       reporter: reporter ?? this.reporter,
       assignee: assignee ?? this.assignee,
@@ -30281,6 +31819,7 @@ class NotificationRecipients {
       voters: voters ?? this.voters,
       users: users ?? this.users,
       groups: groups ?? this.groups,
+      groupIds: groupIds ?? this.groupIds,
     );
   }
 }
@@ -30291,12 +31830,18 @@ class NotificationRecipientsRestrictions {
   /// List of group memberships required to receive the notification.
   final List<GroupName> groups;
 
+  /// List of groupId memberships required to receive the notification.
+  final List<String> groupIds;
+
   /// List of permissions required to receive the notification.
   final List<RestrictedPermission> permissions;
 
   NotificationRecipientsRestrictions(
-      {List<GroupName>? groups, List<RestrictedPermission>? permissions})
+      {List<GroupName>? groups,
+      List<String>? groupIds,
+      List<RestrictedPermission>? permissions})
       : groups = groups ?? [],
+        groupIds = groupIds ?? [],
         permissions = permissions ?? [];
 
   factory NotificationRecipientsRestrictions.fromJson(
@@ -30305,6 +31850,10 @@ class NotificationRecipientsRestrictions {
       groups: (json[r'groups'] as List<Object?>?)
               ?.map((i) =>
                   GroupName.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      groupIds: (json[r'groupIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
       permissions: (json[r'permissions'] as List<Object?>?)
@@ -30317,18 +31866,23 @@ class NotificationRecipientsRestrictions {
 
   Map<String, Object?> toJson() {
     var groups = this.groups;
+    var groupIds = this.groupIds;
     var permissions = this.permissions;
 
     final json = <String, Object?>{};
     json[r'groups'] = groups.map((i) => i.toJson()).toList();
+    json[r'groupIds'] = groupIds;
     json[r'permissions'] = permissions.map((i) => i.toJson()).toList();
     return json;
   }
 
   NotificationRecipientsRestrictions copyWith(
-      {List<GroupName>? groups, List<RestrictedPermission>? permissions}) {
+      {List<GroupName>? groups,
+      List<String>? groupIds,
+      List<RestrictedPermission>? permissions}) {
     return NotificationRecipientsRestrictions(
       groups: groups ?? this.groups,
+      groupIds: groupIds ?? this.groupIds,
       permissions: permissions ?? this.permissions,
     );
   }
@@ -32607,6 +34161,106 @@ class PageBeanGroupDetails {
       bool? isLast,
       List<GroupDetails>? values}) {
     return PageBeanGroupDetails(
+      self: self ?? this.self,
+      nextPage: nextPage ?? this.nextPage,
+      maxResults: maxResults ?? this.maxResults,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      isLast: isLast ?? this.isLast,
+      values: values ?? this.values,
+    );
+  }
+}
+
+/// A page of items.
+class PageBeanIssueAdjustmentDetails {
+  /// The URL of the page.
+  final String? self;
+
+  /// If there is another page of results, the URL of the next page.
+  final String? nextPage;
+
+  /// The maximum number of items that could be returned.
+  final int? maxResults;
+
+  /// The index of the first item returned.
+  final int? startAt;
+
+  /// The number of items returned.
+  final int? total;
+
+  /// Whether this is the last page.
+  final bool isLast;
+
+  /// The list of items.
+  final List<IssueAdjustmentDetails> values;
+
+  PageBeanIssueAdjustmentDetails(
+      {this.self,
+      this.nextPage,
+      this.maxResults,
+      this.startAt,
+      this.total,
+      bool? isLast,
+      List<IssueAdjustmentDetails>? values})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageBeanIssueAdjustmentDetails.fromJson(Map<String, Object?> json) {
+    return PageBeanIssueAdjustmentDetails(
+      self: json[r'self'] as String?,
+      nextPage: json[r'nextPage'] as String?,
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      isLast: json[r'isLast'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => IssueAdjustmentDetails.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var self = this.self;
+    var nextPage = this.nextPage;
+    var maxResults = this.maxResults;
+    var startAt = this.startAt;
+    var total = this.total;
+    var isLast = this.isLast;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (nextPage != null) {
+      json[r'nextPage'] = nextPage;
+    }
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'isLast'] = isLast;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageBeanIssueAdjustmentDetails copyWith(
+      {String? self,
+      String? nextPage,
+      int? maxResults,
+      int? startAt,
+      int? total,
+      bool? isLast,
+      List<IssueAdjustmentDetails>? values}) {
+    return PageBeanIssueAdjustmentDetails(
       self: self ?? this.self,
       nextPage: nextPage ?? this.nextPage,
       maxResults: maxResults ?? this.maxResults,
@@ -35380,54 +37034,54 @@ class PagedListUserDetailsApplicationUser {
 
 class PaginatedResponseComment {
   final int? total;
-  final int? maxResults;
-  final int? startAt;
   final List<Comment> results;
+  final int? startAt;
+  final int? maxResults;
 
   PaginatedResponseComment(
-      {this.total, this.maxResults, this.startAt, List<Comment>? results})
+      {this.total, List<Comment>? results, this.startAt, this.maxResults})
       : results = results ?? [];
 
   factory PaginatedResponseComment.fromJson(Map<String, Object?> json) {
     return PaginatedResponseComment(
       total: (json[r'total'] as num?)?.toInt(),
-      maxResults: (json[r'maxResults'] as num?)?.toInt(),
-      startAt: (json[r'startAt'] as num?)?.toInt(),
       results: (json[r'results'] as List<Object?>?)
               ?.map((i) =>
                   Comment.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
     );
   }
 
   Map<String, Object?> toJson() {
     var total = this.total;
-    var maxResults = this.maxResults;
-    var startAt = this.startAt;
     var results = this.results;
+    var startAt = this.startAt;
+    var maxResults = this.maxResults;
 
     final json = <String, Object?>{};
     if (total != null) {
       json[r'total'] = total;
     }
-    if (maxResults != null) {
-      json[r'maxResults'] = maxResults;
-    }
+    json[r'results'] = results.map((i) => i.toJson()).toList();
     if (startAt != null) {
       json[r'startAt'] = startAt;
     }
-    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
     return json;
   }
 
   PaginatedResponseComment copyWith(
-      {int? total, int? maxResults, int? startAt, List<Comment>? results}) {
+      {int? total, List<Comment>? results, int? startAt, int? maxResults}) {
     return PaginatedResponseComment(
       total: total ?? this.total,
-      maxResults: maxResults ?? this.maxResults,
-      startAt: startAt ?? this.startAt,
       results: results ?? this.results,
+      startAt: startAt ?? this.startAt,
+      maxResults: maxResults ?? this.maxResults,
     );
   }
 }
@@ -35637,19 +37291,27 @@ class PermissionHolder {
   /// The type of permission holder.
   final String type;
 
-  /// The identifier of permission holder.
+  /// As a group's name can change, use of `value` is recommended. The
+  /// identifier associated withthe `type` value that defines the holder of the
+  /// permission.
   final String? parameter;
+
+  /// The identifier associated with the `type` value that defines the holder of
+  /// the permission.
+  final String? value;
 
   /// Expand options that include additional permission holder details in the
   /// response.
   final String? expand;
 
-  PermissionHolder({required this.type, this.parameter, this.expand});
+  PermissionHolder(
+      {required this.type, this.parameter, this.value, this.expand});
 
   factory PermissionHolder.fromJson(Map<String, Object?> json) {
     return PermissionHolder(
       type: json[r'type'] as String? ?? '',
       parameter: json[r'parameter'] as String?,
+      value: json[r'value'] as String?,
       expand: json[r'expand'] as String?,
     );
   }
@@ -35657,6 +37319,7 @@ class PermissionHolder {
   Map<String, Object?> toJson() {
     var type = this.type;
     var parameter = this.parameter;
+    var value = this.value;
     var expand = this.expand;
 
     final json = <String, Object?>{};
@@ -35664,16 +37327,21 @@ class PermissionHolder {
     if (parameter != null) {
       json[r'parameter'] = parameter;
     }
+    if (value != null) {
+      json[r'value'] = value;
+    }
     if (expand != null) {
       json[r'expand'] = expand;
     }
     return json;
   }
 
-  PermissionHolder copyWith({String? type, String? parameter, String? expand}) {
+  PermissionHolder copyWith(
+      {String? type, String? parameter, String? value, String? expand}) {
     return PermissionHolder(
       type: type ?? this.type,
       parameter: parameter ?? this.parameter,
+      value: value ?? this.value,
       expand: expand ?? this.expand,
     );
   }
@@ -35929,13 +37597,18 @@ class Priority {
   /// The ID of the issue priority.
   final String? id;
 
+  /// Whether this priority is the default.
+  final bool isDefault;
+
   Priority(
       {this.self,
       this.statusColor,
       this.description,
       this.iconUrl,
       this.name,
-      this.id});
+      this.id,
+      bool? isDefault})
+      : isDefault = isDefault ?? false;
 
   factory Priority.fromJson(Map<String, Object?> json) {
     return Priority(
@@ -35945,6 +37618,7 @@ class Priority {
       iconUrl: json[r'iconUrl'] as String?,
       name: json[r'name'] as String?,
       id: json[r'id'] as String?,
+      isDefault: json[r'isDefault'] as bool? ?? false,
     );
   }
 
@@ -35955,6 +37629,7 @@ class Priority {
     var iconUrl = this.iconUrl;
     var name = this.name;
     var id = this.id;
+    var isDefault = this.isDefault;
 
     final json = <String, Object?>{};
     if (self != null) {
@@ -35975,6 +37650,7 @@ class Priority {
     if (id != null) {
       json[r'id'] = id;
     }
+    json[r'isDefault'] = isDefault;
     return json;
   }
 
@@ -35984,7 +37660,8 @@ class Priority {
       String? description,
       String? iconUrl,
       String? name,
-      String? id}) {
+      String? id,
+      bool? isDefault}) {
     return Priority(
       self: self ?? this.self,
       statusColor: statusColor ?? this.statusColor,
@@ -35992,6 +37669,7 @@ class Priority {
       iconUrl: iconUrl ?? this.iconUrl,
       name: name ?? this.name,
       id: id ?? this.id,
+      isDefault: isDefault ?? this.isDefault,
     );
   }
 }
@@ -37857,14 +39535,14 @@ class ProjectRole {
   /// Whether the calling user is part of this role.
   final bool currentUserRole;
 
+  /// Whether this role is the default role for the project
+  final bool default$;
+
   /// Whether this role is the admin role for the project.
   final bool admin;
 
   /// Whether the roles are configurable for this project.
   final bool roleConfigurable;
-
-  /// Whether this role is the default role for the project
-  final bool default$;
 
   ProjectRole(
       {this.self,
@@ -37875,14 +39553,14 @@ class ProjectRole {
       this.scope,
       this.translatedName,
       bool? currentUserRole,
+      bool? default$,
       bool? admin,
-      bool? roleConfigurable,
-      bool? default$})
+      bool? roleConfigurable})
       : actors = actors ?? [],
         currentUserRole = currentUserRole ?? false,
+        default$ = default$ ?? false,
         admin = admin ?? false,
-        roleConfigurable = roleConfigurable ?? false,
-        default$ = default$ ?? false;
+        roleConfigurable = roleConfigurable ?? false;
 
   factory ProjectRole.fromJson(Map<String, Object?> json) {
     return ProjectRole(
@@ -37900,9 +39578,9 @@ class ProjectRole {
           : null,
       translatedName: json[r'translatedName'] as String?,
       currentUserRole: json[r'currentUserRole'] as bool? ?? false,
+      default$: json[r'default'] as bool? ?? false,
       admin: json[r'admin'] as bool? ?? false,
       roleConfigurable: json[r'roleConfigurable'] as bool? ?? false,
-      default$: json[r'default'] as bool? ?? false,
     );
   }
 
@@ -37915,9 +39593,9 @@ class ProjectRole {
     var scope = this.scope;
     var translatedName = this.translatedName;
     var currentUserRole = this.currentUserRole;
+    var default$ = this.default$;
     var admin = this.admin;
     var roleConfigurable = this.roleConfigurable;
-    var default$ = this.default$;
 
     final json = <String, Object?>{};
     if (self != null) {
@@ -37940,9 +39618,9 @@ class ProjectRole {
       json[r'translatedName'] = translatedName;
     }
     json[r'currentUserRole'] = currentUserRole;
+    json[r'default'] = default$;
     json[r'admin'] = admin;
     json[r'roleConfigurable'] = roleConfigurable;
-    json[r'default'] = default$;
     return json;
   }
 
@@ -37955,9 +39633,9 @@ class ProjectRole {
       Scope? scope,
       String? translatedName,
       bool? currentUserRole,
+      bool? default$,
       bool? admin,
-      bool? roleConfigurable,
-      bool? default$}) {
+      bool? roleConfigurable}) {
     return ProjectRole(
       self: self ?? this.self,
       name: name ?? this.name,
@@ -37967,9 +39645,9 @@ class ProjectRole {
       scope: scope ?? this.scope,
       translatedName: translatedName ?? this.translatedName,
       currentUserRole: currentUserRole ?? this.currentUserRole,
+      default$: default$ ?? this.default$,
       admin: admin ?? this.admin,
       roleConfigurable: roleConfigurable ?? this.roleConfigurable,
-      default$: default$ ?? this.default$,
     );
   }
 }
@@ -38144,7 +39822,8 @@ class ProjectRoleGroup {
   /// The display name of the group.
   final String? displayName;
 
-  /// The name of the group
+  /// The name of the group. As a group's name can change, use of `groupId` is
+  /// recommended to identify the group.
   final String? name;
 
   ProjectRoleGroup({this.displayName, this.name});
@@ -38985,40 +40664,47 @@ class RestrictedPermission {
 }
 
 class RichText {
-  final bool valueSet;
-  final bool finalised;
+  final bool empty;
   final bool emptyAdf;
+  final bool finalised;
+  final bool valueSet;
 
-  RichText({bool? valueSet, bool? finalised, bool? emptyAdf})
-      : valueSet = valueSet ?? false,
+  RichText({bool? empty, bool? emptyAdf, bool? finalised, bool? valueSet})
+      : empty = empty ?? false,
+        emptyAdf = emptyAdf ?? false,
         finalised = finalised ?? false,
-        emptyAdf = emptyAdf ?? false;
+        valueSet = valueSet ?? false;
 
   factory RichText.fromJson(Map<String, Object?> json) {
     return RichText(
-      valueSet: json[r'valueSet'] as bool? ?? false,
-      finalised: json[r'finalised'] as bool? ?? false,
+      empty: json[r'empty'] as bool? ?? false,
       emptyAdf: json[r'emptyAdf'] as bool? ?? false,
+      finalised: json[r'finalised'] as bool? ?? false,
+      valueSet: json[r'valueSet'] as bool? ?? false,
     );
   }
 
   Map<String, Object?> toJson() {
-    var valueSet = this.valueSet;
-    var finalised = this.finalised;
+    var empty = this.empty;
     var emptyAdf = this.emptyAdf;
+    var finalised = this.finalised;
+    var valueSet = this.valueSet;
 
     final json = <String, Object?>{};
-    json[r'valueSet'] = valueSet;
-    json[r'finalised'] = finalised;
+    json[r'empty'] = empty;
     json[r'emptyAdf'] = emptyAdf;
+    json[r'finalised'] = finalised;
+    json[r'valueSet'] = valueSet;
     return json;
   }
 
-  RichText copyWith({bool? valueSet, bool? finalised, bool? emptyAdf}) {
+  RichText copyWith(
+      {bool? empty, bool? emptyAdf, bool? finalised, bool? valueSet}) {
     return RichText(
-      valueSet: valueSet ?? this.valueSet,
-      finalised: finalised ?? this.finalised,
+      empty: empty ?? this.empty,
       emptyAdf: emptyAdf ?? this.emptyAdf,
+      finalised: finalised ?? this.finalised,
+      valueSet: valueSet ?? this.valueSet,
     );
   }
 }
@@ -39197,6 +40883,103 @@ class RuleConfiguration {
       value: value ?? this.value,
       disabled: disabled ?? this.disabled,
       tag: tag ?? this.tag,
+    );
+  }
+}
+
+/// The sanitized JQL queries for the given account IDs.
+class SanitizedJqlQueries {
+  /// The list of sanitized JQL queries.
+  final List<SanitizedJqlQuery> queries;
+
+  SanitizedJqlQueries({List<SanitizedJqlQuery>? queries})
+      : queries = queries ?? [];
+
+  factory SanitizedJqlQueries.fromJson(Map<String, Object?> json) {
+    return SanitizedJqlQueries(
+      queries: (json[r'queries'] as List<Object?>?)
+              ?.map((i) => SanitizedJqlQuery.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var queries = this.queries;
+
+    final json = <String, Object?>{};
+    json[r'queries'] = queries.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  SanitizedJqlQueries copyWith({List<SanitizedJqlQuery>? queries}) {
+    return SanitizedJqlQueries(
+      queries: queries ?? this.queries,
+    );
+  }
+}
+
+/// Details of the sanitized JQL query.
+class SanitizedJqlQuery {
+  /// The initial query.
+  final String? initialQuery;
+
+  /// The sanitized query, if there were no errors.
+  final String? sanitizedQuery;
+
+  /// The list of errors.
+  final ErrorCollection? errors;
+
+  /// The account ID of the user for whom sanitization was performed.
+  final String? accountId;
+
+  SanitizedJqlQuery(
+      {this.initialQuery, this.sanitizedQuery, this.errors, this.accountId});
+
+  factory SanitizedJqlQuery.fromJson(Map<String, Object?> json) {
+    return SanitizedJqlQuery(
+      initialQuery: json[r'initialQuery'] as String?,
+      sanitizedQuery: json[r'sanitizedQuery'] as String?,
+      errors: json[r'errors'] != null
+          ? ErrorCollection.fromJson(json[r'errors']! as Map<String, Object?>)
+          : null,
+      accountId: json[r'accountId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var initialQuery = this.initialQuery;
+    var sanitizedQuery = this.sanitizedQuery;
+    var errors = this.errors;
+    var accountId = this.accountId;
+
+    final json = <String, Object?>{};
+    if (initialQuery != null) {
+      json[r'initialQuery'] = initialQuery;
+    }
+    if (sanitizedQuery != null) {
+      json[r'sanitizedQuery'] = sanitizedQuery;
+    }
+    if (errors != null) {
+      json[r'errors'] = errors.toJson();
+    }
+    if (accountId != null) {
+      json[r'accountId'] = accountId;
+    }
+    return json;
+  }
+
+  SanitizedJqlQuery copyWith(
+      {String? initialQuery,
+      String? sanitizedQuery,
+      ErrorCollection? errors,
+      String? accountId}) {
+    return SanitizedJqlQuery(
+      initialQuery: initialQuery ?? this.initialQuery,
+      sanitizedQuery: sanitizedQuery ?? this.sanitizedQuery,
+      errors: errors ?? this.errors,
+      accountId: accountId ?? this.accountId,
     );
   }
 }
@@ -40581,6 +42364,8 @@ class SharePermissionInputBean {
   final String? projectId;
 
   /// The name of the group to share the filter with. Set `type` to `group`.
+  /// Please note that the name of a group is mutable, to reliably identify a
+  /// group use `groupId`.
   final String? groupname;
 
   /// The ID of the project role to share the filter with. Set `type` to
@@ -40594,13 +42379,19 @@ class SharePermissionInputBean {
   /// The rights for the share permission.
   final int? rights;
 
+  /// The ID of the group, which uniquely identifies the group across all
+  /// Atlassian products.For example, *952d12c3-5b5b-4d04-bb32-44d383afc4b2*.
+  /// Cannot be provided with `groupname`.
+  final String? groupId;
+
   SharePermissionInputBean(
       {required this.type,
       this.projectId,
       this.groupname,
       this.projectRoleId,
       this.accountId,
-      this.rights});
+      this.rights,
+      this.groupId});
 
   factory SharePermissionInputBean.fromJson(Map<String, Object?> json) {
     return SharePermissionInputBean(
@@ -40611,6 +42402,7 @@ class SharePermissionInputBean {
       projectRoleId: json[r'projectRoleId'] as String?,
       accountId: json[r'accountId'] as String?,
       rights: (json[r'rights'] as num?)?.toInt(),
+      groupId: json[r'groupId'] as String?,
     );
   }
 
@@ -40621,6 +42413,7 @@ class SharePermissionInputBean {
     var projectRoleId = this.projectRoleId;
     var accountId = this.accountId;
     var rights = this.rights;
+    var groupId = this.groupId;
 
     final json = <String, Object?>{};
     json[r'type'] = type.value;
@@ -40639,6 +42432,9 @@ class SharePermissionInputBean {
     if (rights != null) {
       json[r'rights'] = rights;
     }
+    if (groupId != null) {
+      json[r'groupId'] = groupId;
+    }
     return json;
   }
 
@@ -40648,7 +42444,8 @@ class SharePermissionInputBean {
       String? groupname,
       String? projectRoleId,
       String? accountId,
-      int? rights}) {
+      int? rights,
+      String? groupId}) {
     return SharePermissionInputBean(
       type: type ?? this.type,
       projectId: projectId ?? this.projectId,
@@ -40656,6 +42453,7 @@ class SharePermissionInputBean {
       projectRoleId: projectRoleId ?? this.projectRoleId,
       accountId: accountId ?? this.accountId,
       rights: rights ?? this.rights,
+      groupId: groupId ?? this.groupId,
     );
   }
 }
@@ -41016,6 +42814,163 @@ class SimpleListWrapperGroupName {
       maxResults: maxResults ?? this.maxResults,
     );
   }
+}
+
+class SimplifiedHierarchyLevel {
+  /// The ID of the hierarchy level. This property is deprecated, see
+  /// [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
+  final int? id;
+
+  /// The name of this hierarchy level.
+  final String? name;
+
+  /// The ID of the level above this one in the hierarchy. This property is
+  /// deprecated, see
+  /// [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
+  final int? aboveLevelId;
+
+  /// The ID of the level below this one in the hierarchy. This property is
+  /// deprecated, see
+  /// [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
+  final int? belowLevelId;
+
+  /// The ID of the project configuration. This property is deprecated, see
+  /// [Change oticen: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
+  final int? projectConfigurationId;
+
+  /// The level of this item in the hierarchy.
+  final int? level;
+
+  /// The issue types available in this hierarchy level.
+  final List<int> issueTypeIds;
+
+  /// The external UUID of the hierarchy level. This property is deprecated, see
+  /// [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
+  final String? externalUuid;
+  final SimplifiedHierarchyLevelGlobalHierarchyLevel? globalHierarchyLevel;
+
+  SimplifiedHierarchyLevel(
+      {this.id,
+      this.name,
+      this.aboveLevelId,
+      this.belowLevelId,
+      this.projectConfigurationId,
+      this.level,
+      List<int>? issueTypeIds,
+      this.externalUuid,
+      this.globalHierarchyLevel})
+      : issueTypeIds = issueTypeIds ?? [];
+
+  factory SimplifiedHierarchyLevel.fromJson(Map<String, Object?> json) {
+    return SimplifiedHierarchyLevel(
+      id: (json[r'id'] as num?)?.toInt(),
+      name: json[r'name'] as String?,
+      aboveLevelId: (json[r'aboveLevelId'] as num?)?.toInt(),
+      belowLevelId: (json[r'belowLevelId'] as num?)?.toInt(),
+      projectConfigurationId:
+          (json[r'projectConfigurationId'] as num?)?.toInt(),
+      level: (json[r'level'] as num?)?.toInt(),
+      issueTypeIds: (json[r'issueTypeIds'] as List<Object?>?)
+              ?.map((i) => (i as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
+      externalUuid: json[r'externalUuid'] as String?,
+      globalHierarchyLevel: json[r'globalHierarchyLevel'] != null
+          ? SimplifiedHierarchyLevelGlobalHierarchyLevel.fromValue(
+              json[r'globalHierarchyLevel']! as String)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+    var aboveLevelId = this.aboveLevelId;
+    var belowLevelId = this.belowLevelId;
+    var projectConfigurationId = this.projectConfigurationId;
+    var level = this.level;
+    var issueTypeIds = this.issueTypeIds;
+    var externalUuid = this.externalUuid;
+    var globalHierarchyLevel = this.globalHierarchyLevel;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (aboveLevelId != null) {
+      json[r'aboveLevelId'] = aboveLevelId;
+    }
+    if (belowLevelId != null) {
+      json[r'belowLevelId'] = belowLevelId;
+    }
+    if (projectConfigurationId != null) {
+      json[r'projectConfigurationId'] = projectConfigurationId;
+    }
+    if (level != null) {
+      json[r'level'] = level;
+    }
+    json[r'issueTypeIds'] = issueTypeIds;
+    if (externalUuid != null) {
+      json[r'externalUuid'] = externalUuid;
+    }
+    if (globalHierarchyLevel != null) {
+      json[r'globalHierarchyLevel'] = globalHierarchyLevel.value;
+    }
+    return json;
+  }
+
+  SimplifiedHierarchyLevel copyWith(
+      {int? id,
+      String? name,
+      int? aboveLevelId,
+      int? belowLevelId,
+      int? projectConfigurationId,
+      int? level,
+      List<int>? issueTypeIds,
+      String? externalUuid,
+      SimplifiedHierarchyLevelGlobalHierarchyLevel? globalHierarchyLevel}) {
+    return SimplifiedHierarchyLevel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      aboveLevelId: aboveLevelId ?? this.aboveLevelId,
+      belowLevelId: belowLevelId ?? this.belowLevelId,
+      projectConfigurationId:
+          projectConfigurationId ?? this.projectConfigurationId,
+      level: level ?? this.level,
+      issueTypeIds: issueTypeIds ?? this.issueTypeIds,
+      externalUuid: externalUuid ?? this.externalUuid,
+      globalHierarchyLevel: globalHierarchyLevel ?? this.globalHierarchyLevel,
+    );
+  }
+}
+
+class SimplifiedHierarchyLevelGlobalHierarchyLevel {
+  static const subtask =
+      SimplifiedHierarchyLevelGlobalHierarchyLevel._('SUBTASK');
+  static const base = SimplifiedHierarchyLevelGlobalHierarchyLevel._('BASE');
+  static const epic = SimplifiedHierarchyLevelGlobalHierarchyLevel._('EPIC');
+
+  static const values = [
+    subtask,
+    base,
+    epic,
+  ];
+  final String value;
+
+  const SimplifiedHierarchyLevelGlobalHierarchyLevel._(this.value);
+
+  static SimplifiedHierarchyLevelGlobalHierarchyLevel fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => SimplifiedHierarchyLevelGlobalHierarchyLevel._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 /// The status of the item.
@@ -42499,6 +44454,77 @@ class UpdateFieldConfigurationSchemeDetails {
   }
 }
 
+/// The details of an issue adjustment.
+class UpdateIssueAdjustmentDetails {
+  /// The name of the issue adjustment. The maximum length is 255 characters.
+  final String? name;
+
+  /// The description of the issue adjustment. The maximum length is 255
+  /// characters.
+  final String? description;
+
+  /// The data of the issue adjustment. The maximum size of the data is 50000
+  /// characters.
+  final String? data;
+
+  /// List of contexts of the issue adjustment. The maximum number of contexts
+  /// is 1000. If provided, replaces all existing contexts.
+  final List<IssueAdjustmentContextDetails> contexts;
+
+  UpdateIssueAdjustmentDetails(
+      {this.name,
+      this.description,
+      this.data,
+      List<IssueAdjustmentContextDetails>? contexts})
+      : contexts = contexts ?? [];
+
+  factory UpdateIssueAdjustmentDetails.fromJson(Map<String, Object?> json) {
+    return UpdateIssueAdjustmentDetails(
+      name: json[r'name'] as String?,
+      description: json[r'description'] as String?,
+      data: json[r'data'] as String?,
+      contexts: (json[r'contexts'] as List<Object?>?)
+              ?.map((i) => IssueAdjustmentContextDetails.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var description = this.description;
+    var data = this.data;
+    var contexts = this.contexts;
+
+    final json = <String, Object?>{};
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (data != null) {
+      json[r'data'] = data;
+    }
+    json[r'contexts'] = contexts.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  UpdateIssueAdjustmentDetails copyWith(
+      {String? name,
+      String? description,
+      String? data,
+      List<IssueAdjustmentContextDetails>? contexts}) {
+    return UpdateIssueAdjustmentDetails(
+      name: name ?? this.name,
+      description: description ?? this.description,
+      data: data ?? this.data,
+      contexts: contexts ?? this.contexts,
+    );
+  }
+}
+
 /// Details about the project.
 class UpdateProjectDetails {
   /// Project keys must be unique and start with an uppercase letter followed by
@@ -43300,11 +45326,11 @@ class UserBean {
 }
 
 class UserBeanAvatarUrls {
-  /// The URL of the user's 16x16 pixel avatar.
-  final String? $16X16;
-
   /// The URL of the user's 32x32 pixel avatar.
   final String? $32X32;
+
+  /// The URL of the user's 16x16 pixel avatar.
+  final String? $16X16;
 
   /// The URL of the user's 48x48 pixel avatar.
   final String? $48X48;
@@ -43312,29 +45338,29 @@ class UserBeanAvatarUrls {
   /// The URL of the user's 24x24 pixel avatar.
   final String? $24X24;
 
-  UserBeanAvatarUrls({this.$16X16, this.$32X32, this.$48X48, this.$24X24});
+  UserBeanAvatarUrls({this.$32X32, this.$16X16, this.$48X48, this.$24X24});
 
   factory UserBeanAvatarUrls.fromJson(Map<String, Object?> json) {
     return UserBeanAvatarUrls(
-      $16X16: json[r'16x16'] as String?,
       $32X32: json[r'32x32'] as String?,
+      $16X16: json[r'16x16'] as String?,
       $48X48: json[r'48x48'] as String?,
       $24X24: json[r'24x24'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var $16X16 = this.$16X16;
     var $32X32 = this.$32X32;
+    var $16X16 = this.$16X16;
     var $48X48 = this.$48X48;
     var $24X24 = this.$24X24;
 
     final json = <String, Object?>{};
-    if ($16X16 != null) {
-      json[r'16x16'] = $16X16;
-    }
     if ($32X32 != null) {
       json[r'32x32'] = $32X32;
+    }
+    if ($16X16 != null) {
+      json[r'16x16'] = $16X16;
     }
     if ($48X48 != null) {
       json[r'48x48'] = $48X48;
@@ -43346,10 +45372,10 @@ class UserBeanAvatarUrls {
   }
 
   UserBeanAvatarUrls copyWith(
-      {String? $16X16, String? $32X32, String? $48X48, String? $24X24}) {
+      {String? $32X32, String? $16X16, String? $48X48, String? $24X24}) {
     return UserBeanAvatarUrls(
-      $16X16: $16X16 ?? this.$16X16,
       $32X32: $32X32 ?? this.$32X32,
+      $16X16: $16X16 ?? this.$16X16,
       $48X48: $48X48 ?? this.$48X48,
       $24X24: $24X24 ?? this.$24X24,
     );
@@ -44586,11 +46612,15 @@ class Visibility {
   /// Whether visibility of this item is restricted to a group or role.
   final VisibilityType? type;
 
-  /// The name of the group or role to which visibility of this item is
-  /// restricted.
+  /// The name of the group or role that visibility of this item is restricted
+  /// to. Please note that the name of a group is mutable, to reliably identify
+  /// a group use `identifier`.
   final String? value;
 
-  Visibility({this.type, this.value});
+  /// The ID of the group or role that visibility of this item is restricted to.
+  final String? identifier;
+
+  Visibility({this.type, this.value, this.identifier});
 
   factory Visibility.fromJson(Map<String, Object?> json) {
     return Visibility(
@@ -44598,12 +46628,14 @@ class Visibility {
           ? VisibilityType.fromValue(json[r'type']! as String)
           : null,
       value: json[r'value'] as String?,
+      identifier: json[r'identifier'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var type = this.type;
     var value = this.value;
+    var identifier = this.identifier;
 
     final json = <String, Object?>{};
     if (type != null) {
@@ -44612,13 +46644,18 @@ class Visibility {
     if (value != null) {
       json[r'value'] = value;
     }
+    if (identifier != null) {
+      json[r'identifier'] = identifier;
+    }
     return json;
   }
 
-  Visibility copyWith({VisibilityType? type, String? value}) {
+  Visibility copyWith(
+      {VisibilityType? type, String? value, String? identifier}) {
     return Visibility(
       type: type ?? this.type,
       value: value ?? this.value,
+      identifier: identifier ?? this.identifier,
     );
   }
 }
@@ -44797,8 +46834,9 @@ class Webhook {
   /// The Jira events that trigger the webhook.
   final List<WebhookEvents> events;
 
-  /// The date after which the webhook will stop being sent. Use the "Extend
-  /// webhook life" resource to extend it.
+  /// The date after which the webhook is no longer sent. Use
+  /// [Extend webhook life](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-webhooks/#api-rest-api-3-webhook-refresh-put)
+  /// to extend the date.
   final int? expirationDate;
 
   Webhook(
@@ -45064,9 +47102,9 @@ class WebhookRegistrationDetails {
   }
 }
 
-/// The date the newly refreshed webhooks expire.
+/// The date the refreshed webhooks expire.
 class WebhooksExpirationDate {
-  /// The new expiration date of all refreshed webhooks: 30 days from now.
+  /// The expiration date of all the refreshed webhooks.
   final int expirationDate;
 
   WebhooksExpirationDate({required this.expirationDate});
@@ -45439,9 +47477,6 @@ class WorkflowOperations {
 
 /// A collection of transition rules.
 class WorkflowRules {
-  /// The workflow conditions.
-  /// ([Deprecated](https://community.developer.atlassian.com/t/deprecation-of-conditions-body-param/48884))
-  final List<WorkflowTransitionRule> conditions;
   final WorkflowCondition? conditionsTree;
 
   /// The workflow validators.
@@ -45451,21 +47486,14 @@ class WorkflowRules {
   final List<WorkflowTransitionRule> postFunctions;
 
   WorkflowRules(
-      {List<WorkflowTransitionRule>? conditions,
-      this.conditionsTree,
+      {this.conditionsTree,
       List<WorkflowTransitionRule>? validators,
       List<WorkflowTransitionRule>? postFunctions})
-      : conditions = conditions ?? [],
-        validators = validators ?? [],
+      : validators = validators ?? [],
         postFunctions = postFunctions ?? [];
 
   factory WorkflowRules.fromJson(Map<String, Object?> json) {
     return WorkflowRules(
-      conditions: (json[r'conditions'] as List<Object?>?)
-              ?.map((i) => WorkflowTransitionRule.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
       conditionsTree: json[r'conditionsTree'] != null
           ? WorkflowCondition.fromJson(
               json[r'conditionsTree']! as Map<String, Object?>)
@@ -45484,13 +47512,11 @@ class WorkflowRules {
   }
 
   Map<String, Object?> toJson() {
-    var conditions = this.conditions;
     var conditionsTree = this.conditionsTree;
     var validators = this.validators;
     var postFunctions = this.postFunctions;
 
     final json = <String, Object?>{};
-    json[r'conditions'] = conditions.map((i) => i.toJson()).toList();
     if (conditionsTree != null) {
       json[r'conditionsTree'] = conditionsTree.toJson();
     }
@@ -45500,12 +47526,10 @@ class WorkflowRules {
   }
 
   WorkflowRules copyWith(
-      {List<WorkflowTransitionRule>? conditions,
-      WorkflowCondition? conditionsTree,
+      {WorkflowCondition? conditionsTree,
       List<WorkflowTransitionRule>? validators,
       List<WorkflowTransitionRule>? postFunctions}) {
     return WorkflowRules(
-      conditions: conditions ?? this.conditions,
       conditionsTree: conditionsTree ?? this.conditionsTree,
       validators: validators ?? this.validators,
       postFunctions: postFunctions ?? this.postFunctions,
@@ -46162,9 +48186,12 @@ class WorkflowTransitionRules {
 
   WorkflowTransitionRules(
       {required this.workflowId,
-      required this.postFunctions,
-      required this.conditions,
-      required this.validators});
+      List<ConnectWorkflowTransitionRule>? postFunctions,
+      List<ConnectWorkflowTransitionRule>? conditions,
+      List<ConnectWorkflowTransitionRule>? validators})
+      : postFunctions = postFunctions ?? [],
+        conditions = conditions ?? [],
+        validators = validators ?? [];
 
   factory WorkflowTransitionRules.fromJson(Map<String, Object?> json) {
     return WorkflowTransitionRules(

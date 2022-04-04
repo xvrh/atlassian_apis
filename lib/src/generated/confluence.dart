@@ -9,6 +9,8 @@ class ConfluenceApi {
 
   ConfluenceApi(this._client);
 
+  late final analytics = AnalyticsApi(_client);
+
   late final audit = AuditApi(_client);
 
   late final content = ContentApi(_client);
@@ -38,8 +40,14 @@ class ConfluenceApi {
 
   late final dynamicModules = DynamicModulesApi(_client);
 
+  /// APIs in this section can change without any prior deprecation notice.
   late final experimental = ExperimentalApi(_client);
 
+  /// **[WARNING](https://support.atlassian.com/user-management/docs/create-and-update-groups/)
+  /// The standard Atlassian group names are default names only and can be
+  /// edited or deleted.**  For example, an admin or Atlassian support could
+  /// delete the default group jira-software-users or rename it to jsw-users at
+  /// any point.
   late final group = GroupApi(_client);
 
   late final inlineTasks = InlineTasksApi(_client);
@@ -69,6 +77,44 @@ class ConfluenceApi {
   late final users = UsersApi(_client);
 
   void close() => _client.close();
+}
+
+/// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
+
+class AnalyticsApi {
+  final ApiClient _client;
+
+  AnalyticsApi(this._client);
+
+  /// Get the total number of views a piece of content has.
+  Future<Map<String, dynamic>> getViews(
+      {required String contentId, String? fromDate}) async {
+    return await _client.send(
+      'get',
+      'wiki/rest/api/analytics/content/{contentId}/views',
+      pathParameters: {
+        'contentId': contentId,
+      },
+      queryParameters: {
+        if (fromDate != null) 'fromDate': fromDate,
+      },
+    ) as Map<String, Object?>;
+  }
+
+  /// Get the total number of distinct viewers a piece of content has.
+  Future<Map<String, dynamic>> getViewers(
+      {required String contentId, String? fromDate}) async {
+    return await _client.send(
+      'get',
+      'wiki/rest/api/analytics/content/{contentId}/viewers',
+      pathParameters: {
+        'contentId': contentId,
+      },
+      queryParameters: {
+        if (fromDate != null) 'fromDate': fromDate,
+      },
+    ) as Map<String, Object?>;
+  }
 }
 
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
@@ -290,12 +336,12 @@ class ContentApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'Archive' permission for each of the pages in the corresponding space it
   /// belongs to.
-  Future<void> archivePages({required Map<String, dynamic> body}) async {
-    await _client.send(
+  Future<LongTask> archivePages({required Map<String, dynamic> body}) async {
+    return LongTask.fromJson(await _client.send(
       'post',
       'wiki/rest/api/content/archive',
       body: body,
-    );
+    ));
   }
 
   /// Publishes a shared draft of a page created from a blueprint.
@@ -494,8 +540,7 @@ class ContentApi {
   /// permanently without being trashed.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// 'Delete' permission for the space that the content is in, and permission
-  /// to edit the content.
+  /// 'Delete' permission for the space that the content is in.
   Future<void> deleteContent({required String id, String? status}) async {
     await _client.send(
       'delete',
@@ -986,16 +1031,16 @@ class ContentChildrenAndDescendantsApi {
   ///  }
   ///  `</pre>
   ///  Use the /longtask/<taskId> REST API to get the copy task status.
-  Future<void> copyPageHierarchy(
+  Future<LongTask> copyPageHierarchy(
       {required String id, required CopyPageHierarchyRequest body}) async {
-    await _client.send(
+    return LongTask.fromJson(await _client.send(
       'post',
       'wiki/rest/api/content/{id}/pagehierarchy/copy',
       pathParameters: {
         'id': id,
       },
       body: body.toJson(),
-    );
+    ));
   }
 
   /// Copies a single page and its associated properties, permissions,
@@ -2353,6 +2398,40 @@ class ExperimentalApi {
 
   ExperimentalApi(this._client);
 
+  /// Moves a pagetree rooted at a page to the space's trash:
+  ///
+  /// - If the content's type is `page` and its status is `current`, it will be
+  /// trashed including
+  /// all its descendants.
+  /// - For every other combination of content type and status, this API is not
+  /// supported.
+  ///
+  /// This API accepts the pageTree delete request and returns a task ID.
+  /// The delete process happens asynchronously.
+  ///
+  ///  Response example:
+  ///  <pre>`
+  ///  {
+  ///       "id" : "1180606",
+  ///       "links" : {
+  ///            "status" : "/rest/api/longtask/1180606"
+  ///       }
+  ///  }
+  ///  `</pre>
+  ///  Use the `/longtask/<taskId>` REST API to get the copy task status.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Delete' permission for the space that the content is in.
+  Future<LongTask> deletePageTree(String id) async {
+    return LongTask.fromJson(await _client.send(
+      'delete',
+      'wiki/rest/api/content/{id}/pageTree',
+      pathParameters: {
+        'id': id,
+      },
+    ));
+  }
+
   /// Returns a list of labels associated with a space. Can provide a prefix as
   /// well as other filters to
   /// select different types of labels.
@@ -2415,34 +2494,119 @@ class ExperimentalApi {
     );
   }
 
-  /// Get the total number of views a piece of content has.
-  Future<Map<String, dynamic>> getViews(
-      {required String contentId, String? fromDate}) async {
-    return await _client.send(
+  /// Returns the properties for a user as list of property keys. For more
+  /// information
+  /// about user properties, see
+  /// [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+  /// `Note`, these properties stored against a user are on a Confluence site
+  /// level and not space/content level.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  Future<UserPropertyKeyArray> getUserProperties(
+      {required String userId, int? start, int? limit}) async {
+    return UserPropertyKeyArray.fromJson(await _client.send(
       'get',
-      'wiki/rest/api/analytics/content/{contentId}/views',
+      'wiki/rest/api/user/{userId}/property',
       pathParameters: {
-        'contentId': contentId,
+        'userId': userId,
       },
       queryParameters: {
-        if (fromDate != null) 'fromDate': fromDate,
+        if (start != null) 'start': '$start',
+        if (limit != null) 'limit': '$limit',
       },
-    ) as Map<String, Object?>;
+    ));
   }
 
-  /// Get the total number of distinct viewers a piece of content has.
-  Future<Map<String, dynamic>> getViewers(
-      {required String contentId, String? fromDate}) async {
-    return await _client.send(
+  /// Returns the property corresponding to `key` for a user. For more
+  /// information
+  /// about user properties, see
+  /// [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+  /// `Note`, these properties stored against a user are on a Confluence site
+  /// level and not space/content level.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  Future<UserProperty> getUserProperty(
+      {required String userId, required String key}) async {
+    return UserProperty.fromJson(await _client.send(
       'get',
-      'wiki/rest/api/analytics/content/{contentId}/viewers',
+      'wiki/rest/api/user/{userId}/property/{key}',
       pathParameters: {
-        'contentId': contentId,
+        'userId': userId,
+        'key': key,
       },
-      queryParameters: {
-        if (fromDate != null) 'fromDate': fromDate,
+    ));
+  }
+
+  /// Updates a property for the given user. Note, you cannot update the key of
+  /// a user property, only the value.
+  /// For more information about user properties, see
+  /// [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+  /// `Note`, these properties stored against a user are on a Confluence site
+  /// level and not space/content level.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  Future<void> updateUserProperty(
+      {required String userId,
+      required String key,
+      required UserPropertyUpdate body}) async {
+    await _client.send(
+      'put',
+      'wiki/rest/api/user/{userId}/property/{key}',
+      pathParameters: {
+        'userId': userId,
+        'key': key,
       },
-    ) as Map<String, Object?>;
+      body: body.toJson(),
+    );
+  }
+
+  /// Creates a property for a user. For more information  about user
+  /// properties, see [Confluence entity properties]
+  /// (https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+  /// `Note`, these properties stored against a user are on a Confluence site
+  /// level and not space/content level.
+  ///
+  /// `Note:` the number of properties which could be created per app in a
+  /// tenant for each user might be
+  /// restricted by fixed system limits.
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  Future<void> createUserProperty(
+      {required String userId,
+      required String key,
+      required UserPropertyCreate body}) async {
+    await _client.send(
+      'post',
+      'wiki/rest/api/user/{userId}/property/{key}',
+      pathParameters: {
+        'userId': userId,
+        'key': key,
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Deletes a property for the given user.
+  /// For more information about user properties, see
+  /// [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+  /// `Note`, these properties stored against a user are on a Confluence site
+  /// level and not space/content level.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  Future<void> deleteUserProperty(
+      {required String userId, required String key}) async {
+    await _client.send(
+      'delete',
+      'wiki/rest/api/user/{userId}/property/{key}',
+      pathParameters: {
+        'userId': userId,
+        'key': key,
+      },
+    );
   }
 }
 
@@ -2560,7 +2724,10 @@ class GroupApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
   Future<UserArray> getMembersByQueryParam(
-      {required String name, int? start, int? limit}) async {
+      {required String name,
+      int? start,
+      int? limit,
+      bool? shouldReturnTotalSize}) async {
     return UserArray.fromJson(await _client.send(
       'get',
       'wiki/rest/api/group/member',
@@ -2568,6 +2735,8 @@ class GroupApi {
         'name': name,
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
+        if (shouldReturnTotalSize != null)
+          'shouldReturnTotalSize': '$shouldReturnTotalSize',
       },
     ));
   }
@@ -2595,7 +2764,10 @@ class GroupApi {
 
   /// Get search results of groups by partial query provided.
   Future<GroupArrayWithLinks> searchGroups(
-      {required String query, int? start, int? limit}) async {
+      {required String query,
+      int? start,
+      int? limit,
+      bool? shouldReturnTotalSize}) async {
     return GroupArrayWithLinks.fromJson(await _client.send(
       'get',
       'wiki/rest/api/group/picker',
@@ -2603,6 +2775,8 @@ class GroupApi {
         'query': query,
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
+        if (shouldReturnTotalSize != null)
+          'shouldReturnTotalSize': '$shouldReturnTotalSize',
       },
     ));
   }
@@ -2651,7 +2825,10 @@ class GroupApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
   Future<UserArray> getGroupMembersByGroupId(
-      {required String groupId, int? start, int? limit}) async {
+      {required String groupId,
+      int? start,
+      int? limit,
+      bool? shouldReturnTotalSize}) async {
     return UserArray.fromJson(await _client.send(
       'get',
       'wiki/rest/api/group/{groupId}/membersByGroupId',
@@ -2661,6 +2838,8 @@ class GroupApi {
       queryParameters: {
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
+        if (shouldReturnTotalSize != null)
+          'shouldReturnTotalSize': '$shouldReturnTotalSize',
       },
     ));
   }
@@ -3409,14 +3588,14 @@ class SpaceApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'Admin' permission for the space.
-  Future<void> deleteSpace(String spaceKey) async {
-    await _client.send(
+  Future<LongTask> deleteSpace(String spaceKey) async {
+    return LongTask.fromJson(await _client.send(
       'delete',
       'wiki/rest/api/space/{spaceKey}',
       pathParameters: {
         'spaceKey': spaceKey,
       },
-    );
+    ));
   }
 
   /// Returns all content in a space. The returned content is grouped by type
@@ -5579,12 +5758,12 @@ class BulkUserLookup {
   final String publicName;
   final Icon profilePicture;
 
-  /// The display name of the user. Depending on the user's privacy setting,
+  /// The displays name of the user. Depending on the user's privacy setting,
   /// this may be the same as publicName.
   final String displayName;
 
-  /// This display user time zone. Depending on the user's privacy setting, this
-  /// may be default to tenant time zone.
+  /// This displays user time zone. Depending on the user's privacy setting,
+  /// this may return null.
   final String? timeZone;
 
   /// Whether the user is an external collaborator user
@@ -9659,7 +9838,7 @@ class ContentPropertyUpdateVersion {
   /// current version number incremented by one. To get the current
   /// version number, use 'Get content property' and retrieve
   /// `version.number`.
-  final int number;
+  final dynamic number;
 
   /// If `minorEdit` is set to 'true', no notification email or activity
   /// stream will be generated for the change.
@@ -9670,7 +9849,7 @@ class ContentPropertyUpdateVersion {
 
   factory ContentPropertyUpdateVersion.fromJson(Map<String, Object?> json) {
     return ContentPropertyUpdateVersion(
-      number: (json[r'number'] as num?)?.toInt() ?? 0,
+      number: json[r'number'],
       minorEdit: json[r'minorEdit'] as bool? ?? false,
     );
   }
@@ -9685,7 +9864,7 @@ class ContentPropertyUpdateVersion {
     return json;
   }
 
-  ContentPropertyUpdateVersion copyWith({int? number, bool? minorEdit}) {
+  ContentPropertyUpdateVersion copyWith({dynamic number, bool? minorEdit}) {
     return ContentPropertyUpdateVersion(
       number: number ?? this.number,
       minorEdit: minorEdit ?? this.minorEdit,
@@ -11487,6 +11666,9 @@ class CopyPageHierarchyRequest {
 
   /// If set to `true`, custom contents are copied to the destination page.
   final bool copyCustomContents;
+
+  /// If set to `true`, descendants are copied to the destination page.
+  final bool copyDescendants;
   final String destinationPageId;
   final CopyPageHierarchyTitleOptions? titleOptions;
 
@@ -11496,13 +11678,15 @@ class CopyPageHierarchyRequest {
       bool? copyProperties,
       bool? copyLabels,
       bool? copyCustomContents,
+      bool? copyDescendants,
       required this.destinationPageId,
       this.titleOptions})
       : copyAttachments = copyAttachments ?? false,
         copyPermissions = copyPermissions ?? false,
         copyProperties = copyProperties ?? false,
         copyLabels = copyLabels ?? false,
-        copyCustomContents = copyCustomContents ?? false;
+        copyCustomContents = copyCustomContents ?? false,
+        copyDescendants = copyDescendants ?? false;
 
   factory CopyPageHierarchyRequest.fromJson(Map<String, Object?> json) {
     return CopyPageHierarchyRequest(
@@ -11511,6 +11695,7 @@ class CopyPageHierarchyRequest {
       copyProperties: json[r'copyProperties'] as bool? ?? false,
       copyLabels: json[r'copyLabels'] as bool? ?? false,
       copyCustomContents: json[r'copyCustomContents'] as bool? ?? false,
+      copyDescendants: json[r'copyDescendants'] as bool? ?? false,
       destinationPageId: json[r'destinationPageId'] as String? ?? '',
       titleOptions: json[r'titleOptions'] != null
           ? CopyPageHierarchyTitleOptions.fromJson(
@@ -11525,6 +11710,7 @@ class CopyPageHierarchyRequest {
     var copyProperties = this.copyProperties;
     var copyLabels = this.copyLabels;
     var copyCustomContents = this.copyCustomContents;
+    var copyDescendants = this.copyDescendants;
     var destinationPageId = this.destinationPageId;
     var titleOptions = this.titleOptions;
 
@@ -11534,6 +11720,7 @@ class CopyPageHierarchyRequest {
     json[r'copyProperties'] = copyProperties;
     json[r'copyLabels'] = copyLabels;
     json[r'copyCustomContents'] = copyCustomContents;
+    json[r'copyDescendants'] = copyDescendants;
     json[r'destinationPageId'] = destinationPageId;
     if (titleOptions != null) {
       json[r'titleOptions'] = titleOptions.toJson();
@@ -11547,6 +11734,7 @@ class CopyPageHierarchyRequest {
       bool? copyProperties,
       bool? copyLabels,
       bool? copyCustomContents,
+      bool? copyDescendants,
       String? destinationPageId,
       CopyPageHierarchyTitleOptions? titleOptions}) {
     return CopyPageHierarchyRequest(
@@ -11555,6 +11743,7 @@ class CopyPageHierarchyRequest {
       copyProperties: copyProperties ?? this.copyProperties,
       copyLabels: copyLabels ?? this.copyLabels,
       copyCustomContents: copyCustomContents ?? this.copyCustomContents,
+      copyDescendants: copyDescendants ?? this.copyDescendants,
       destinationPageId: destinationPageId ?? this.destinationPageId,
       titleOptions: titleOptions ?? this.titleOptions,
     );
@@ -12067,6 +12256,11 @@ class GroupArrayWithLinks {
   final int start;
   final int limit;
   final int size;
+
+  /// This property will return total count of the objects before pagination is
+  /// applied.
+  /// This value is returned if `shouldReturnTotalSize` is set to `true`.
+  final int? totalSize;
   final GenericLinks links;
 
   GroupArrayWithLinks(
@@ -12074,6 +12268,7 @@ class GroupArrayWithLinks {
       required this.start,
       required this.limit,
       required this.size,
+      this.totalSize,
       required this.links});
 
   factory GroupArrayWithLinks.fromJson(Map<String, Object?> json) {
@@ -12086,6 +12281,7 @@ class GroupArrayWithLinks {
       start: (json[r'start'] as num?)?.toInt() ?? 0,
       limit: (json[r'limit'] as num?)?.toInt() ?? 0,
       size: (json[r'size'] as num?)?.toInt() ?? 0,
+      totalSize: (json[r'totalSize'] as num?)?.toInt(),
       links: GenericLinks.fromJson(
           json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
@@ -12096,6 +12292,7 @@ class GroupArrayWithLinks {
     var start = this.start;
     var limit = this.limit;
     var size = this.size;
+    var totalSize = this.totalSize;
     var links = this.links;
 
     final json = <String, Object?>{};
@@ -12103,6 +12300,9 @@ class GroupArrayWithLinks {
     json[r'start'] = start;
     json[r'limit'] = limit;
     json[r'size'] = size;
+    if (totalSize != null) {
+      json[r'totalSize'] = totalSize;
+    }
     json[r'_links'] = links.toJson();
     return json;
   }
@@ -12112,12 +12312,14 @@ class GroupArrayWithLinks {
       int? start,
       int? limit,
       int? size,
+      int? totalSize,
       GenericLinks? links}) {
     return GroupArrayWithLinks(
       results: results ?? this.results,
       start: start ?? this.start,
       limit: limit ?? this.limit,
       size: size ?? this.size,
+      totalSize: totalSize ?? this.totalSize,
       links: links ?? this.links,
     );
   }
@@ -12666,6 +12868,68 @@ class LabeledContentPageResponse {
       start: start ?? this.start,
       limit: limit ?? this.limit,
       size: size ?? this.size,
+    );
+  }
+}
+
+class LongTask {
+  /// a unique identifier for the long task
+  final String id;
+  final LongTaskLinks links;
+
+  LongTask({required this.id, required this.links});
+
+  factory LongTask.fromJson(Map<String, Object?> json) {
+    return LongTask(
+      id: json[r'id'] as String? ?? '',
+      links: LongTaskLinks.fromJson(
+          json[r'links'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    json[r'links'] = links.toJson();
+    return json;
+  }
+
+  LongTask copyWith({String? id, LongTaskLinks? links}) {
+    return LongTask(
+      id: id ?? this.id,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class LongTaskLinks {
+  /// The URL to retrive status of long task.
+  final String? status;
+
+  LongTaskLinks({this.status});
+
+  factory LongTaskLinks.fromJson(Map<String, Object?> json) {
+    return LongTaskLinks(
+      status: json[r'status'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var status = this.status;
+
+    final json = <String, Object?>{};
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    return json;
+  }
+
+  LongTaskLinks copyWith({String? status}) {
+    return LongTaskLinks(
+      status: status ?? this.status,
     );
   }
 }
@@ -17473,6 +17737,7 @@ class SystemInfoEntity {
   final String? edition;
   final String? siteTitle;
   final String? defaultLocale;
+  final String? defaultTimeZone;
 
   SystemInfoEntity(
       {required this.cloudId,
@@ -17480,7 +17745,8 @@ class SystemInfoEntity {
       this.baseUrl,
       this.edition,
       this.siteTitle,
-      this.defaultLocale});
+      this.defaultLocale,
+      this.defaultTimeZone});
 
   factory SystemInfoEntity.fromJson(Map<String, Object?> json) {
     return SystemInfoEntity(
@@ -17490,6 +17756,7 @@ class SystemInfoEntity {
       edition: json[r'edition'] as String?,
       siteTitle: json[r'siteTitle'] as String?,
       defaultLocale: json[r'defaultLocale'] as String?,
+      defaultTimeZone: json[r'defaultTimeZone'] as String?,
     );
   }
 
@@ -17500,6 +17767,7 @@ class SystemInfoEntity {
     var edition = this.edition;
     var siteTitle = this.siteTitle;
     var defaultLocale = this.defaultLocale;
+    var defaultTimeZone = this.defaultTimeZone;
 
     final json = <String, Object?>{};
     json[r'cloudId'] = cloudId;
@@ -17516,6 +17784,9 @@ class SystemInfoEntity {
     if (defaultLocale != null) {
       json[r'defaultLocale'] = defaultLocale;
     }
+    if (defaultTimeZone != null) {
+      json[r'defaultTimeZone'] = defaultTimeZone;
+    }
     return json;
   }
 
@@ -17525,7 +17796,8 @@ class SystemInfoEntity {
       String? baseUrl,
       String? edition,
       String? siteTitle,
-      String? defaultLocale}) {
+      String? defaultLocale,
+      String? defaultTimeZone}) {
     return SystemInfoEntity(
       cloudId: cloudId ?? this.cloudId,
       commitHash: commitHash ?? this.commitHash,
@@ -17533,6 +17805,7 @@ class SystemInfoEntity {
       edition: edition ?? this.edition,
       siteTitle: siteTitle ?? this.siteTitle,
       defaultLocale: defaultLocale ?? this.defaultLocale,
+      defaultTimeZone: defaultTimeZone ?? this.defaultTimeZone,
     );
   }
 }
@@ -18093,12 +18366,12 @@ class User {
   final String? publicName;
   final Icon? profilePicture;
 
-  /// The display name of the user. Depending on the user's privacy setting,
+  /// The displays name of the user. Depending on the user's privacy setting,
   /// this may be the same as publicName.
   final String? displayName;
 
-  /// This display user time zone. Depending on the user's privacy setting, this
-  /// may be default to tenant time zone.
+  /// This displays user time zone. Depending on the user's privacy setting,
+  /// this may return null.
   final String? timeZone;
 
   /// Whether the user is an external collaborator user
@@ -18448,10 +18721,20 @@ class UserArray {
   final int? start;
   final int? limit;
   final int? size;
+
+  /// This property will return total count of the objects before pagination is
+  /// applied.
+  /// This value is returned if `shouldReturnTotalSize` is set to `true`.
+  final int? totalSize;
   final GenericLinks? links;
 
   UserArray(
-      {required this.results, this.start, this.limit, this.size, this.links});
+      {required this.results,
+      this.start,
+      this.limit,
+      this.size,
+      this.totalSize,
+      this.links});
 
   factory UserArray.fromJson(Map<String, Object?> json) {
     return UserArray(
@@ -18463,6 +18746,7 @@ class UserArray {
       start: (json[r'start'] as num?)?.toInt(),
       limit: (json[r'limit'] as num?)?.toInt(),
       size: (json[r'size'] as num?)?.toInt(),
+      totalSize: (json[r'totalSize'] as num?)?.toInt(),
       links: json[r'_links'] != null
           ? GenericLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
@@ -18474,6 +18758,7 @@ class UserArray {
     var start = this.start;
     var limit = this.limit;
     var size = this.size;
+    var totalSize = this.totalSize;
     var links = this.links;
 
     final json = <String, Object?>{};
@@ -18487,6 +18772,9 @@ class UserArray {
     if (size != null) {
       json[r'size'] = size;
     }
+    if (totalSize != null) {
+      json[r'totalSize'] = totalSize;
+    }
     if (links != null) {
       json[r'_links'] = links.toJson();
     }
@@ -18498,12 +18786,14 @@ class UserArray {
       int? start,
       int? limit,
       int? size,
+      int? totalSize,
       GenericLinks? links}) {
     return UserArray(
       results: results ?? this.results,
       start: start ?? this.start,
       limit: limit ?? this.limit,
       size: size ?? this.size,
+      totalSize: totalSize ?? this.totalSize,
       links: links ?? this.links,
     );
   }
@@ -18716,6 +19006,233 @@ class UserExpandable {
       operations: operations ?? this.operations,
       details: details ?? this.details,
       personalSpace: personalSpace ?? this.personalSpace,
+    );
+  }
+}
+
+class UserProperty {
+  final String key;
+
+  /// The value of the content property.
+  final Map<String, dynamic> value;
+
+  /// a unique identifier for the user property
+  final String id;
+
+  /// datetime when the property was last modified such as
+  /// `2022-02-01T12:00:00.111Z`
+  final DateTime lastModifiedDate;
+
+  /// datetime when the property was created such as `2022-01-01T12:00:00.111Z`
+  final DateTime createdDate;
+  final GenericLinks? links;
+
+  UserProperty(
+      {required this.key,
+      required this.value,
+      required this.id,
+      required this.lastModifiedDate,
+      required this.createdDate,
+      this.links});
+
+  factory UserProperty.fromJson(Map<String, Object?> json) {
+    return UserProperty(
+      key: json[r'key'] as String? ?? '',
+      value: json[r'value'] as Map<String, Object?>? ?? {},
+      id: json[r'id'] as String? ?? '',
+      lastModifiedDate:
+          DateTime.tryParse(json[r'lastModifiedDate'] as String? ?? '') ??
+              DateTime(0),
+      createdDate: DateTime.tryParse(json[r'createdDate'] as String? ?? '') ??
+          DateTime(0),
+      links: json[r'_links'] != null
+          ? GenericLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+    var value = this.value;
+    var id = this.id;
+    var lastModifiedDate = this.lastModifiedDate;
+    var createdDate = this.createdDate;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'key'] = key;
+    json[r'value'] = value;
+    json[r'id'] = id;
+    json[r'lastModifiedDate'] = lastModifiedDate.toIso8601String();
+    json[r'createdDate'] = createdDate.toIso8601String();
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  UserProperty copyWith(
+      {String? key,
+      Map<String, dynamic>? value,
+      String? id,
+      DateTime? lastModifiedDate,
+      DateTime? createdDate,
+      GenericLinks? links}) {
+    return UserProperty(
+      key: key ?? this.key,
+      value: value ?? this.value,
+      id: id ?? this.id,
+      lastModifiedDate: lastModifiedDate ?? this.lastModifiedDate,
+      createdDate: createdDate ?? this.createdDate,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class UserPropertyCreate {
+  /// The value of the user property.
+  final Map<String, dynamic> value;
+
+  UserPropertyCreate({required this.value});
+
+  factory UserPropertyCreate.fromJson(Map<String, Object?> json) {
+    return UserPropertyCreate(
+      value: json[r'value'] as Map<String, Object?>? ?? {},
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    json[r'value'] = value;
+    return json;
+  }
+
+  UserPropertyCreate copyWith({Map<String, dynamic>? value}) {
+    return UserPropertyCreate(
+      value: value ?? this.value,
+    );
+  }
+}
+
+class UserPropertyKeyArray {
+  final List<UserPropertyKeyArrayResultsItem> results;
+  final int? start;
+  final int? limit;
+  final int? size;
+  final GenericLinks? links;
+
+  UserPropertyKeyArray(
+      {required this.results, this.start, this.limit, this.size, this.links});
+
+  factory UserPropertyKeyArray.fromJson(Map<String, Object?> json) {
+    return UserPropertyKeyArray(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) => UserPropertyKeyArrayResultsItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      size: (json[r'size'] as num?)?.toInt(),
+      links: json[r'_links'] != null
+          ? GenericLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var start = this.start;
+    var limit = this.limit;
+    var size = this.size;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (start != null) {
+      json[r'start'] = start;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
+    if (size != null) {
+      json[r'size'] = size;
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  UserPropertyKeyArray copyWith(
+      {List<UserPropertyKeyArrayResultsItem>? results,
+      int? start,
+      int? limit,
+      int? size,
+      GenericLinks? links}) {
+    return UserPropertyKeyArray(
+      results: results ?? this.results,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
+      size: size ?? this.size,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class UserPropertyKeyArrayResultsItem {
+  final String? key;
+
+  UserPropertyKeyArrayResultsItem({this.key});
+
+  factory UserPropertyKeyArrayResultsItem.fromJson(Map<String, Object?> json) {
+    return UserPropertyKeyArrayResultsItem(
+      key: json[r'key'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+
+    final json = <String, Object?>{};
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    return json;
+  }
+
+  UserPropertyKeyArrayResultsItem copyWith({String? key}) {
+    return UserPropertyKeyArrayResultsItem(
+      key: key ?? this.key,
+    );
+  }
+}
+
+class UserPropertyUpdate {
+  /// The value of the user property.
+  final Map<String, dynamic> value;
+
+  UserPropertyUpdate({required this.value});
+
+  factory UserPropertyUpdate.fromJson(Map<String, Object?> json) {
+    return UserPropertyUpdate(
+      value: json[r'value'] as Map<String, Object?>? ?? {},
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    json[r'value'] = value;
+    return json;
+  }
+
+  UserPropertyUpdate copyWith({Map<String, dynamic>? value}) {
+    return UserPropertyUpdate(
+      value: value ?? this.value,
     );
   }
 }

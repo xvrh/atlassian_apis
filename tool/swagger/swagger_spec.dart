@@ -260,7 +260,7 @@ class Schema {
     this.format,
     Map<String, Schema>? properties,
     this.additionalProperties,
-    List<String?>? enums,
+    List<dynamic?>? enums,
     this.ref,
     this.items,
     String? description,
@@ -291,7 +291,7 @@ class Schema {
         required = required ?? const [],
         description = description ?? '',
         enums = _nullIfEmpty(
-            enums?.whereNotNull().where((e) => e.isNotEmpty).toList());
+            enums?.whereNotNull().map((s) => '$s').where((e) => e.isNotEmpty).toList());
 
   factory Schema.fromJson(Map<String, dynamic> json) => _$SchemaFromJson(json);
 

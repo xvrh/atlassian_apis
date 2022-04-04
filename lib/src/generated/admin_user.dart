@@ -261,13 +261,14 @@ class ExtendedProfile {
 
 /// You are allowed to take or write the action/property
 class ManageabilityAllowed {
-  final bool allowed;
+  final ManageabilityAllowedAllowed allowed;
 
   ManageabilityAllowed({required this.allowed});
 
   factory ManageabilityAllowed.fromJson(Map<String, Object?> json) {
     return ManageabilityAllowed(
-      allowed: json[r'allowed'] as bool? ?? false,
+      allowed: ManageabilityAllowedAllowed.fromValue(
+          json[r'allowed'] as String? ?? ''),
     );
   }
 
@@ -275,15 +276,36 @@ class ManageabilityAllowed {
     var allowed = this.allowed;
 
     final json = <String, Object?>{};
-    json[r'allowed'] = allowed;
+    json[r'allowed'] = allowed.value;
     return json;
   }
 
-  ManageabilityAllowed copyWith({bool? allowed}) {
+  ManageabilityAllowed copyWith({ManageabilityAllowedAllowed? allowed}) {
     return ManageabilityAllowed(
       allowed: allowed ?? this.allowed,
     );
   }
+}
+
+class ManageabilityAllowedAllowed {
+  static const true$ = ManageabilityAllowedAllowed._('true');
+
+  static const values = [
+    true$,
+  ];
+  final String value;
+
+  const ManageabilityAllowedAllowed._(this.value);
+
+  static ManageabilityAllowedAllowed fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ManageabilityAllowedAllowed._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 class ManageabilityRestrictionReason {
@@ -401,14 +423,15 @@ class ManageabilityRuleSimple {
 
 /// You are not allowed to take or write the action/property
 class ManageabilityUnallowed {
-  final bool allowed;
+  final ManageabilityUnallowedAllowed allowed;
   final ManageabilityRestrictionReason reason;
 
   ManageabilityUnallowed({required this.allowed, required this.reason});
 
   factory ManageabilityUnallowed.fromJson(Map<String, Object?> json) {
     return ManageabilityUnallowed(
-      allowed: json[r'allowed'] as bool? ?? false,
+      allowed: ManageabilityUnallowedAllowed.fromValue(
+          json[r'allowed'] as String? ?? ''),
       reason: ManageabilityRestrictionReason.fromJson(
           json[r'reason'] as Map<String, Object?>? ?? const {}),
     );
@@ -419,18 +442,40 @@ class ManageabilityUnallowed {
     var reason = this.reason;
 
     final json = <String, Object?>{};
-    json[r'allowed'] = allowed;
+    json[r'allowed'] = allowed.value;
     json[r'reason'] = reason.toJson();
     return json;
   }
 
   ManageabilityUnallowed copyWith(
-      {bool? allowed, ManageabilityRestrictionReason? reason}) {
+      {ManageabilityUnallowedAllowed? allowed,
+      ManageabilityRestrictionReason? reason}) {
     return ManageabilityUnallowed(
       allowed: allowed ?? this.allowed,
       reason: reason ?? this.reason,
     );
   }
+}
+
+class ManageabilityUnallowedAllowed {
+  static const false$ = ManageabilityUnallowedAllowed._('false');
+
+  static const values = [
+    false$,
+  ];
+  final String value;
+
+  const ManageabilityUnallowedAllowed._(this.value);
+
+  static ManageabilityUnallowedAllowed fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ManageabilityUnallowedAllowed._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 /// The body was not parsed successfully.
