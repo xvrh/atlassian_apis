@@ -393,7 +393,8 @@ class Operation {
           (responseSchema.type != null || responseSchema.ref != null)) {
         returnDartType = _api.typeFromSchema(responseSchema);
         returnTypeName = returnDartType.toString();
-      } else if (firstResponseContent.example != null) {
+      } else if (responseSchema != null ||
+          firstResponseContent.example != null) {
         returnTypeName = 'dynamic';
       }
     }

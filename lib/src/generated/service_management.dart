@@ -250,9 +250,9 @@ class OrganizationApi {
   /// Jira administrator permission, using the
   /// **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)**
   /// feature.
-  Future<void> setProperty(
+  Future<dynamic> setProperty(
       {required String organizationId, required String propertyKey}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/servicedeskapi/organization/{organizationId}/property/{propertyKey}',
       pathParameters: {
@@ -623,9 +623,9 @@ class RequestApi {
   /// project that the issue is in.
   ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
   /// is configured, issue-level security permission to view the issue.
-  Future<void> getAttachmentContent(
+  Future<dynamic> getAttachmentContent(
       {required String issueIdOrKey, required int attachmentId}) async {
-    await _client.send(
+    return await _client.send(
       'get',
       'rest/servicedeskapi/request/{issueIdOrKey}/attachment/{attachmentId}',
       pathParameters: {
@@ -648,9 +648,9 @@ class RequestApi {
   /// project that the issue is in.
   ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
   /// is configured, issue-level security permission to view the issue.
-  Future<void> getAttachmentThumbnail(
+  Future<dynamic> getAttachmentThumbnail(
       {required String issueIdOrKey, required int attachmentId}) async {
-    await _client.send(
+    return await _client.send(
       'get',
       'rest/servicedeskapi/request/{issueIdOrKey}/attachment/{attachmentId}/thumbnail',
       pathParameters: {
@@ -1009,8 +1009,8 @@ class RequestApi {
   ///
   /// **[Permissions](#permissions) required**: User must be the reporter or an
   /// Atlassian Connect app.
-  Future<void> deleteFeedback(String requestIdOrKey) async {
-    await _client.send(
+  Future<dynamic> deleteFeedback(String requestIdOrKey) async {
+    return await _client.send(
       'delete',
       'rest/servicedeskapi/request/{requestIdOrKey}/feedback',
       pathParameters: {
@@ -1504,11 +1504,11 @@ class ServicedeskApi {
   ///
   /// **[Permissions](#permissions) required**: Jira project administrator with
   /// a Jira Service Management agent license.
-  Future<void> setProperty(
+  Future<dynamic> setProperty(
       {required String serviceDeskId,
       required int requestTypeId,
       required String propertyKey}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/property/{propertyKey}',
       pathParameters: {

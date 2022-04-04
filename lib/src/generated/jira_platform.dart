@@ -583,11 +583,11 @@ class AppMigrationApi {
   ///
   /// **[Permissions](#permissions) required:** Only Connect apps can make this
   /// request.
-  Future<void> updateIssueFields(
+  Future<dynamic> updateIssueFields(
       {required String atlassianTransferId,
       required String atlassianAccountId,
       required ConnectCustomFieldValues body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/atlassian-connect/1/migration/field',
       headers: {
@@ -1167,11 +1167,11 @@ class DashboardsApi {
   /// Changes the title, position, and color of the gadget on a dashboard.
   ///
   /// **[Permissions](#permissions) required:** None.
-  Future<void> updateGadget(
+  Future<dynamic> updateGadget(
       {required int dashboardId,
       required int gadgetId,
       required DashboardGadgetUpdateRequest body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/dashboard/{dashboardId}/gadget/{gadgetId}',
       pathParameters: {
@@ -1188,9 +1188,9 @@ class DashboardsApi {
   /// column are moved up to fill the emptied position.
   ///
   /// **[Permissions](#permissions) required:** None.
-  Future<void> removeGadget(
+  Future<dynamic> removeGadget(
       {required int dashboardId, required int gadgetId}) async {
-    await _client.send(
+    return await _client.send(
       'delete',
       'rest/api/3/dashboard/{dashboardId}/gadget/{gadgetId}',
       pathParameters: {
@@ -1296,12 +1296,12 @@ class DashboardsApi {
   /// the dashboard. Note, users with the *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg) are
   /// considered owners of the System dashboard.
-  Future<void> setDashboardItemProperty(
+  Future<dynamic> setDashboardItemProperty(
       {required String dashboardId,
       required String itemId,
       required String propertyKey,
       required dynamic body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/dashboard/{dashboardId}/items/{itemId}/properties/{propertyKey}',
       pathParameters: {
@@ -1871,8 +1871,9 @@ class FiltersApi {
   /// for.
   ///  *  filters shared with a public project.
   ///  *  filters shared with the public.
-  Future<void> setColumns({required int id, required List<String> body}) async {
-    await _client.send(
+  Future<dynamic> setColumns(
+      {required int id, required List<String> body}) async {
+    return await _client.send(
       'put',
       'rest/api/3/filter/{id}/columns',
       pathParameters: {
@@ -1956,9 +1957,9 @@ class FiltersApi {
   /// **[Permissions](#permissions) required:** Permission to access Jira.
   /// However, the user must own the filter or have the *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> changeFilterOwner(
+  Future<dynamic> changeFilterOwner(
       {required int id, required ChangeFilterOwner body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/filter/{id}/owner',
       pathParameters: {
@@ -2313,10 +2314,10 @@ class IssueAdjustmentsAppsApi {
   ///  *  *Browse projects*
   /// [project permission](https://confluence.atlassian.com/x/yodKLg) for one or
   /// more projects, if the issue adjustment is created with contexts.
-  Future<void> updateIssueAdjustment(
+  Future<dynamic> updateIssueAdjustment(
       {required String issueAdjustmentId,
       required UpdateIssueAdjustmentDetails body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/issueAdjustments/{issueAdjustmentId}',
       pathParameters: {
@@ -2331,8 +2332,8 @@ class IssueAdjustmentsAppsApi {
   /// apps.
   ///
   /// **[Permissions](#permissions) required:** None.
-  Future<void> deleteIssueAdjustment(String issueAdjustmentId) async {
-    await _client.send(
+  Future<dynamic> deleteIssueAdjustment(String issueAdjustmentId) async {
+    return await _client.send(
       'delete',
       'rest/api/3/issueAdjustments/{issueAdjustmentId}',
       pathParameters: {
@@ -2803,11 +2804,11 @@ class IssueCommentPropertiesApi {
   ///
   /// Also, when the visibility of a comment is restricted to a role or group
   /// the user must be a member of that role or group.
-  Future<void> setCommentProperty(
+  Future<dynamic> setCommentProperty(
       {required String commentId,
       required String propertyKey,
       required dynamic body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/comment/{commentId}/properties/{propertyKey}',
       pathParameters: {
@@ -3096,10 +3097,10 @@ class IssueCustomFieldConfigurationAppsApi {
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira
   /// permissions are not required for the Forge app that created the custom
   /// field.
-  Future<void> updateCustomFieldConfiguration(
+  Future<dynamic> updateCustomFieldConfiguration(
       {required String fieldIdOrKey,
       required CustomFieldConfigurations body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/app/field/{fieldIdOrKey}/context/configuration',
       pathParameters: {
@@ -3327,10 +3328,10 @@ class IssueCustomFieldContextsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> setDefaultValues(
+  Future<dynamic> setDefaultValues(
       {required String fieldId,
       required CustomFieldContextDefaultValueUpdate body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/field/{fieldId}/context/defaultValue',
       pathParameters: {
@@ -3435,11 +3436,11 @@ class IssueCustomFieldContextsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> updateCustomFieldContext(
+  Future<dynamic> updateCustomFieldContext(
       {required String fieldId,
       required int contextId,
       required CustomFieldContextUpdateDetails body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/field/{fieldId}/context/{contextId}',
       pathParameters: {
@@ -3455,9 +3456,9 @@ class IssueCustomFieldContextsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteCustomFieldContext(
+  Future<dynamic> deleteCustomFieldContext(
       {required String fieldId, required int contextId}) async {
-    await _client.send(
+    return await _client.send(
       'delete',
       'rest/api/3/field/{fieldId}/context/{contextId}',
       pathParameters: {
@@ -3479,11 +3480,11 @@ class IssueCustomFieldContextsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> addIssueTypesToContext(
+  Future<dynamic> addIssueTypesToContext(
       {required String fieldId,
       required int contextId,
       required IssueTypeIds body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/field/{fieldId}/context/{contextId}/issuetype',
       pathParameters: {
@@ -3500,11 +3501,11 @@ class IssueCustomFieldContextsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> removeIssueTypesFromContext(
+  Future<dynamic> removeIssueTypesFromContext(
       {required String fieldId,
       required int contextId,
       required IssueTypeIds body}) async {
-    await _client.send(
+    return await _client.send(
       'post',
       'rest/api/3/field/{fieldId}/context/{contextId}/issuetype/remove',
       pathParameters: {
@@ -3522,11 +3523,11 @@ class IssueCustomFieldContextsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> assignProjectsToCustomFieldContext(
+  Future<dynamic> assignProjectsToCustomFieldContext(
       {required String fieldId,
       required int contextId,
       required ProjectIds body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/field/{fieldId}/context/{contextId}/project',
       pathParameters: {
@@ -3549,11 +3550,11 @@ class IssueCustomFieldContextsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> removeCustomFieldContextFromProjects(
+  Future<dynamic> removeCustomFieldContextFromProjects(
       {required String fieldId,
       required int contextId,
       required ProjectIds body}) async {
-    await _client.send(
+    return await _client.send(
       'post',
       'rest/api/3/field/{fieldId}/context/{contextId}/project/remove',
       pathParameters: {
@@ -3706,11 +3707,11 @@ class IssueCustomFieldOptionsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> reorderCustomFieldOptions(
+  Future<dynamic> reorderCustomFieldOptions(
       {required String fieldId,
       required int contextId,
       required OrderOfCustomFieldOptions body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/field/{fieldId}/context/{contextId}/option/move',
       pathParameters: {
@@ -3931,9 +3932,9 @@ class IssueCustomFieldOptionsAppsApi {
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira
   /// permissions are not required for the app providing the field.
-  Future<void> deleteIssueFieldOption(
+  Future<dynamic> deleteIssueFieldOption(
       {required String fieldKey, required int optionId}) async {
-    await _client.send(
+    return await _client.send(
       'delete',
       'rest/api/3/field/{fieldKey}/option/{optionId}',
       pathParameters: {
@@ -4006,10 +4007,10 @@ class IssueCustomFieldValuesAppsApi {
   ///
   /// **[Permissions](#permissions) required:** Only the app that created the
   /// custom field can update its values with this operation.
-  Future<void> updateMultipleCustomFieldValues(
+  Future<dynamic> updateMultipleCustomFieldValues(
       {bool? generateChangelog,
       required MultipleCustomFieldValuesUpdateDetails body}) async {
-    await _client.send(
+    return await _client.send(
       'post',
       'rest/api/3/app/field/value',
       queryParameters: {
@@ -4025,11 +4026,11 @@ class IssueCustomFieldValuesAppsApi {
   ///
   /// **[Permissions](#permissions) required:** Only the app that created the
   /// custom field can update its values with this operation.
-  Future<void> updateCustomFieldValue(
+  Future<dynamic> updateCustomFieldValue(
       {required String fieldIdOrKey,
       bool? generateChangelog,
       required CustomFieldValueUpdateDetails body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/app/field/{fieldIdOrKey}/value',
       pathParameters: {
@@ -4110,9 +4111,9 @@ class IssueFieldConfigurationsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> updateFieldConfiguration(
+  Future<dynamic> updateFieldConfiguration(
       {required int id, required FieldConfigurationDetails body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/fieldconfiguration/{id}',
       pathParameters: {
@@ -4129,8 +4130,8 @@ class IssueFieldConfigurationsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteFieldConfiguration(int id) async {
-    await _client.send(
+  Future<dynamic> deleteFieldConfiguration(int id) async {
+    return await _client.send(
       'delete',
       'rest/api/3/fieldconfiguration/{id}',
       pathParameters: {
@@ -4174,9 +4175,9 @@ class IssueFieldConfigurationsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> updateFieldConfigurationItems(
+  Future<dynamic> updateFieldConfigurationItems(
       {required int id, required FieldConfigurationItemsDetails body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/fieldconfiguration/{id}/fields',
       pathParameters: {
@@ -4279,9 +4280,9 @@ class IssueFieldConfigurationsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> assignFieldConfigurationSchemeToProject(
+  Future<dynamic> assignFieldConfigurationSchemeToProject(
       {required FieldConfigurationSchemeProjectAssociation body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/fieldconfigurationscheme/project',
       body: body.toJson(),
@@ -4295,10 +4296,10 @@ class IssueFieldConfigurationsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> updateFieldConfigurationScheme(
+  Future<dynamic> updateFieldConfigurationScheme(
       {required int id,
       required UpdateFieldConfigurationSchemeDetails body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/fieldconfigurationscheme/{id}',
       pathParameters: {
@@ -4315,8 +4316,8 @@ class IssueFieldConfigurationsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteFieldConfigurationScheme(int id) async {
-    await _client.send(
+  Future<dynamic> deleteFieldConfigurationScheme(int id) async {
+    return await _client.send(
       'delete',
       'rest/api/3/fieldconfigurationscheme/{id}',
       pathParameters: {
@@ -4332,10 +4333,10 @@ class IssueFieldConfigurationsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> setFieldConfigurationSchemeMapping(
+  Future<dynamic> setFieldConfigurationSchemeMapping(
       {required int id,
       required AssociateFieldConfigurationsWithIssueTypesRequest body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/fieldconfigurationscheme/{id}/mapping',
       pathParameters: {
@@ -4352,9 +4353,9 @@ class IssueFieldConfigurationsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> removeIssueTypesFromGlobalFieldConfigurationScheme(
+  Future<dynamic> removeIssueTypesFromGlobalFieldConfigurationScheme(
       {required int id, required IssueTypeIdsToRemove body}) async {
-    await _client.send(
+    return await _client.send(
       'post',
       'rest/api/3/fieldconfigurationscheme/{id}/mapping/delete',
       pathParameters: {
@@ -4452,9 +4453,9 @@ class IssueFieldsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> updateCustomField(
+  Future<dynamic> updateCustomField(
       {required String fieldId, required UpdateCustomFieldDetails body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/field/{fieldId}',
       pathParameters: {
@@ -4512,8 +4513,8 @@ class IssueFieldsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> restoreCustomField(String id) async {
-    await _client.send(
+  Future<dynamic> restoreCustomField(String id) async {
+    return await _client.send(
       'post',
       'rest/api/3/field/{id}/restore',
       pathParameters: {
@@ -4528,8 +4529,8 @@ class IssueFieldsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> trashCustomField(String id) async {
-    await _client.send(
+  Future<dynamic> trashCustomField(String id) async {
+    return await _client.send(
       'post',
       'rest/api/3/field/{id}/trash',
       pathParameters: {
@@ -4672,8 +4673,8 @@ class IssueLinksApi {
   /// is configured, issue-level security permission to view the issue.
   ///  *  If the comment has visibility restrictions, belongs to the group or
   /// has the role visibility is restricted to.
-  Future<void> linkIssues({required LinkIssueRequestJsonBean body}) async {
-    await _client.send(
+  Future<dynamic> linkIssues({required LinkIssueRequestJsonBean body}) async {
+    return await _client.send(
       'post',
       'rest/api/3/issueLink',
       body: body.toJson(),
@@ -4763,9 +4764,9 @@ class IssueNavigatorSettingsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> setIssueNavigatorDefaultColumns(
+  Future<dynamic> setIssueNavigatorDefaultColumns(
       {required List<String> body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/settings/columns',
       body: body,
@@ -5130,11 +5131,11 @@ class IssuePropertiesApi {
   /// project containing the issue.
   ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
   /// is configured, issue-level security permission to view the issue.
-  Future<void> setIssueProperty(
+  Future<dynamic> setIssueProperty(
       {required String issueIdOrKey,
       required String propertyKey,
       required dynamic body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/issue/{issueIdOrKey}/properties/{propertyKey}',
       pathParameters: {
@@ -5314,11 +5315,11 @@ class IssueRemoteLinksApi {
   /// project that the issue is in.
   ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
   /// is configured, issue-level security permission to view the issue.
-  Future<void> updateRemoteIssueLink(
+  Future<dynamic> updateRemoteIssueLink(
       {required String issueIdOrKey,
       required String linkId,
       required RemoteIssueLinkRequest body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/issue/{issueIdOrKey}/remotelink/{linkId}',
       pathParameters: {
@@ -5686,11 +5687,11 @@ class IssueTypePropertiesApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> setIssueTypeProperty(
+  Future<dynamic> setIssueTypeProperty(
       {required String issueTypeId,
       required String propertyKey,
       required dynamic body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/issuetype/{issueTypeId}/properties/{propertyKey}',
       pathParameters: {
@@ -5816,9 +5817,9 @@ class IssueTypeSchemesApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> assignIssueTypeSchemeToProject(
+  Future<dynamic> assignIssueTypeSchemeToProject(
       {required IssueTypeSchemeProjectAssociation body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/issuetypescheme/project',
       body: body.toJson(),
@@ -5829,10 +5830,10 @@ class IssueTypeSchemesApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> updateIssueTypeScheme(
+  Future<dynamic> updateIssueTypeScheme(
       {required int issueTypeSchemeId,
       required IssueTypeSchemeUpdateDetails body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/issuetypescheme/{issueTypeSchemeId}',
       pathParameters: {
@@ -5851,8 +5852,8 @@ class IssueTypeSchemesApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteIssueTypeScheme(int issueTypeSchemeId) async {
-    await _client.send(
+  Future<dynamic> deleteIssueTypeScheme(int issueTypeSchemeId) async {
+    return await _client.send(
       'delete',
       'rest/api/3/issuetypescheme/{issueTypeSchemeId}',
       pathParameters: {
@@ -5870,9 +5871,9 @@ class IssueTypeSchemesApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> addIssueTypesToIssueTypeScheme(
+  Future<dynamic> addIssueTypesToIssueTypeScheme(
       {required int issueTypeSchemeId, required IssueTypeIds body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/issuetypescheme/{issueTypeSchemeId}/issuetype',
       pathParameters: {
@@ -5892,9 +5893,9 @@ class IssueTypeSchemesApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> reorderIssueTypesInIssueTypeScheme(
+  Future<dynamic> reorderIssueTypesInIssueTypeScheme(
       {required int issueTypeSchemeId, required OrderOfIssueTypes body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/issuetypescheme/{issueTypeSchemeId}/issuetype/move',
       pathParameters: {
@@ -5914,9 +5915,9 @@ class IssueTypeSchemesApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> removeIssueTypeFromIssueTypeScheme(
+  Future<dynamic> removeIssueTypeFromIssueTypeScheme(
       {required int issueTypeSchemeId, required int issueTypeId}) async {
-    await _client.send(
+    return await _client.send(
       'delete',
       'rest/api/3/issuetypescheme/{issueTypeSchemeId}/issuetype/{issueTypeId}',
       pathParameters: {
@@ -6024,9 +6025,9 @@ class IssueTypeScreenSchemesApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> assignIssueTypeScreenSchemeToProject(
+  Future<dynamic> assignIssueTypeScreenSchemeToProject(
       {required IssueTypeScreenSchemeProjectAssociation body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/issuetypescreenscheme/project',
       body: body.toJson(),
@@ -6037,10 +6038,10 @@ class IssueTypeScreenSchemesApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> updateIssueTypeScreenScheme(
+  Future<dynamic> updateIssueTypeScreenScheme(
       {required String issueTypeScreenSchemeId,
       required IssueTypeScreenSchemeUpdateDetails body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}',
       pathParameters: {
@@ -6054,9 +6055,9 @@ class IssueTypeScreenSchemesApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteIssueTypeScreenScheme(
+  Future<dynamic> deleteIssueTypeScreenScheme(
       String issueTypeScreenSchemeId) async {
-    await _client.send(
+    return await _client.send(
       'delete',
       'rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}',
       pathParameters: {
@@ -6070,10 +6071,10 @@ class IssueTypeScreenSchemesApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> appendMappingsForIssueTypeScreenScheme(
+  Future<dynamic> appendMappingsForIssueTypeScreenScheme(
       {required String issueTypeScreenSchemeId,
       required IssueTypeScreenSchemeMappingDetails body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}/mapping',
       pathParameters: {
@@ -6088,10 +6089,10 @@ class IssueTypeScreenSchemesApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> updateDefaultScreenScheme(
+  Future<dynamic> updateDefaultScreenScheme(
       {required String issueTypeScreenSchemeId,
       required UpdateDefaultScreenScheme body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}/mapping/default',
       pathParameters: {
@@ -6106,10 +6107,10 @@ class IssueTypeScreenSchemesApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> removeMappingsFromIssueTypeScreenScheme(
+  Future<dynamic> removeMappingsFromIssueTypeScreenScheme(
       {required String issueTypeScreenSchemeId,
       required IssueTypeIds body}) async {
-    await _client.send(
+    return await _client.send(
       'post',
       'rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}/mapping/remove',
       pathParameters: {
@@ -6393,8 +6394,8 @@ class IssueVotesApi {
   /// project that the issue is in.
   ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
   /// is configured, issue-level security permission to view the issue.
-  Future<void> addVote(String issueIdOrKey) async {
-    await _client.send(
+  Future<dynamic> addVote(String issueIdOrKey) async {
+    return await _client.send(
       'post',
       'rest/api/3/issue/{issueIdOrKey}/votes',
       pathParameters: {
@@ -6509,9 +6510,9 @@ class IssueWatchersApi {
   ///  *  To add users other than themselves to the watchlist, *Manage watcher
   /// list* [project permission](https://confluence.atlassian.com/x/yodKLg) for
   /// the project that the issue is in.
-  Future<void> addWatcher(
+  Future<dynamic> addWatcher(
       {required String issueIdOrKey, required String body}) async {
-    await _client.send(
+    return await _client.send(
       'post',
       'rest/api/3/issue/{issueIdOrKey}/watchers',
       pathParameters: {
@@ -6639,12 +6640,12 @@ class IssueWorklogPropertiesApi {
   /// the user.
   ///  *  If the worklog has visibility restrictions, belongs to the group or
   /// has the role visibility is restricted to.
-  Future<void> setWorklogProperty(
+  Future<dynamic> setWorklogProperty(
       {required String issueIdOrKey,
       required String worklogId,
       required String propertyKey,
       required dynamic body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/issue/{issueIdOrKey}/worklog/{worklogId}/properties/{propertyKey}',
       pathParameters: {
@@ -7191,13 +7192,13 @@ class IssuesApi {
   /// project that the issue is in.
   ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
   /// is configured, issue-level security permission to view the issue.
-  Future<void> editIssue(
+  Future<dynamic> editIssue(
       {required String issueIdOrKey,
       bool? notifyUsers,
       bool? overrideScreenSecurity,
       bool? overrideEditableFlag,
       required IssueUpdateDetails body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/issue/{issueIdOrKey}',
       pathParameters: {
@@ -7261,9 +7262,9 @@ class IssuesApi {
   /// project that the issue is in.
   ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
   /// is configured, issue-level security permission to view the issue.
-  Future<void> assignIssue(
+  Future<dynamic> assignIssue(
       {required String issueIdOrKey, required User body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/issue/{issueIdOrKey}/assignee',
       pathParameters: {
@@ -7378,9 +7379,9 @@ class IssuesApi {
   /// project that the issue is in.
   ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
   /// is configured, issue-level security permission to view the issue.
-  Future<void> notify(
+  Future<dynamic> notify(
       {required String issueIdOrKey, required Notification body}) async {
-    await _client.send(
+    return await _client.send(
       'post',
       'rest/api/3/issue/{issueIdOrKey}/notify',
       pathParameters: {
@@ -7455,9 +7456,9 @@ class IssuesApi {
   /// project that the issue is in.
   ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
   /// is configured, issue-level security permission to view the issue.
-  Future<void> doTransition(
+  Future<dynamic> doTransition(
       {required String issueIdOrKey, required IssueUpdateDetails body}) async {
-    await _client.send(
+    return await _client.send(
       'post',
       'rest/api/3/issue/{issueIdOrKey}/transitions',
       pathParameters: {
@@ -8007,9 +8008,9 @@ class MyselfApi {
   /// from the user management REST API to manage timezone and locale instead.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
-  Future<void> setPreference(
+  Future<dynamic> setPreference(
       {required String key, required String body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/mypreferences',
       queryParameters: {
@@ -8070,8 +8071,8 @@ class MyselfApi {
   /// instance of Jira.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
-  Future<void> setLocale({required Locale body}) async {
-    await _client.send(
+  Future<dynamic> setLocale({required Locale body}) async {
+    return await _client.send(
       'put',
       'rest/api/3/mypreferences/locale',
       body: body.toJson(),
@@ -8085,8 +8086,8 @@ class MyselfApi {
   /// Deletes the locale of the user, which restores the default setting.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
-  Future<void> deleteLocale() async {
-    await _client.send(
+  Future<dynamic> deleteLocale() async {
+    return await _client.send(
       'delete',
       'rest/api/3/mypreferences/locale',
     );
@@ -8538,9 +8539,9 @@ class ProjectAvatarsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer projects*
   /// [project permission](https://confluence.atlassian.com/x/yodKLg).
-  Future<void> updateProjectAvatar(
+  Future<dynamic> updateProjectAvatar(
       {required String projectIdOrKey, required Avatar body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/project/{projectIdOrKey}/avatar',
       pathParameters: {
@@ -8908,9 +8909,9 @@ class ProjectEmailApi {
   /// **[Permissions](#permissions) required:** *Browse projects*
   /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
   /// project.
-  Future<void> updateProjectEmail(
+  Future<dynamic> updateProjectEmail(
       {required int projectId, required ProjectEmailAddress body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/project/{projectId}/email',
       pathParameters: {
@@ -9164,11 +9165,11 @@ class ProjectPropertiesApi {
   /// *Administer Projects*
   /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
   /// project in which the property is created.
-  Future<void> setProjectProperty(
+  Future<dynamic> setProjectProperty(
       {required String projectIdOrKey,
       required String propertyKey,
       required dynamic body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}',
       pathParameters: {
@@ -9828,9 +9829,9 @@ class ProjectVersionsApi {
   /// *Administer Projects*
   /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
   /// project that contains the version.
-  Future<void> mergeVersions(
+  Future<dynamic> mergeVersions(
       {required String id, required String moveIssuesTo}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/version/{id}/mergeto/{moveIssuesTo}',
       pathParameters: {
@@ -9896,9 +9897,9 @@ class ProjectVersionsApi {
   /// *Administer Projects*
   /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
   /// project that contains the version.
-  Future<void> deleteAndReplaceVersion(
+  Future<dynamic> deleteAndReplaceVersion(
       {required String id, required DeleteAndReplaceVersionBean body}) async {
-    await _client.send(
+    return await _client.send(
       'post',
       'rest/api/3/version/{id}/removeAndSwap',
       pathParameters: {
@@ -10172,8 +10173,8 @@ class ProjectsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> archiveProject(String projectIdOrKey) async {
-    await _client.send(
+  Future<dynamic> archiveProject(String projectIdOrKey) async {
+    return await _client.send(
       'post',
       'rest/api/3/project/{projectIdOrKey}/archive',
       pathParameters: {
@@ -10365,10 +10366,10 @@ class ScreenSchemesApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> updateScreenScheme(
+  Future<dynamic> updateScreenScheme(
       {required String screenSchemeId,
       required UpdateScreenSchemeDetails body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/screenscheme/{screenSchemeId}',
       pathParameters: {
@@ -10474,12 +10475,12 @@ class ScreenTabFieldsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> moveScreenTabField(
+  Future<dynamic> moveScreenTabField(
       {required int screenId,
       required int tabId,
       required String id,
       required MoveFieldBean body}) async {
-    await _client.send(
+    return await _client.send(
       'post',
       'rest/api/3/screens/{screenId}/tabs/{tabId}/fields/{id}/move',
       pathParameters: {
@@ -10581,9 +10582,9 @@ class ScreenTabsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> moveScreenTab(
+  Future<dynamic> moveScreenTab(
       {required int screenId, required int tabId, required int pos}) async {
-    await _client.send(
+    return await _client.send(
       'post',
       'rest/api/3/screens/{screenId}/tabs/{tabId}/move/{pos}',
       pathParameters: {
@@ -10667,8 +10668,8 @@ class ScreensApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> addFieldToDefaultScreen(String fieldId) async {
-    await _client.send(
+  Future<dynamic> addFieldToDefaultScreen(String fieldId) async {
+    return await _client.send(
       'post',
       'rest/api/3/screens/addToDefault/{fieldId}',
       pathParameters: {
@@ -10782,8 +10783,8 @@ class TasksApi {
   ///  *  *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   ///  *  Creator of the task.
-  Future<void> cancelTask(String taskId) async {
-    await _client.send(
+  Future<dynamic> cancelTask(String taskId) async {
+    return await _client.send(
       'post',
       'rest/api/3/task/{taskId}/cancel',
       pathParameters: {
@@ -10817,9 +10818,9 @@ class TimeTrackingApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> selectTimeTrackingImplementation(
+  Future<dynamic> selectTimeTrackingImplementation(
       {required TimeTrackingProvider body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/configuration/timetracking',
       body: body.toJson(),
@@ -10950,13 +10951,13 @@ class UserPropertiesApi {
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg), to set a
   /// property on any user.
   ///  *  Access to Jira, to set a property on the calling user's record.
-  Future<void> setUserProperty(
+  Future<dynamic> setUserProperty(
       {String? accountId,
       String? userKey,
       String? username,
       required String propertyKey,
       required dynamic body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/user/properties/{propertyKey}',
       pathParameters: {
@@ -11594,9 +11595,9 @@ class UsersApi {
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the
   /// columns on any user.
   ///  *  Permission to access Jira, to set the calling user's columns.
-  Future<void> setUserColumns(
+  Future<dynamic> setUserColumns(
       {String? accountId, required List<String> body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/user/columns',
       queryParameters: {
@@ -12134,9 +12135,9 @@ class WorkflowSchemeProjectAssociationsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> assignSchemeToProject(
+  Future<dynamic> assignSchemeToProject(
       {required WorkflowSchemeProjectAssociation body}) async {
-    await _client.send(
+    return await _client.send(
       'put',
       'rest/api/3/workflowscheme/project',
       body: body.toJson(),
@@ -12225,8 +12226,8 @@ class WorkflowSchemesApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteWorkflowScheme(int id) async {
-    await _client.send(
+  Future<dynamic> deleteWorkflowScheme(int id) async {
+    return await _client.send(
       'delete',
       'rest/api/3/workflowscheme/{id}',
       pathParameters: {

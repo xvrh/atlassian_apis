@@ -871,9 +871,9 @@ class BuildsApi {
   /// Only Connect apps that define the `jiraBuildInfoProvider` module, and
   /// on-premise integrations, can access this resource.
   /// This resource requires the 'WRITE' scope for Connect apps.
-  Future<void> getBuildByKey(
+  Future<dynamic> getBuildByKey(
       {required String pipelineId, required int buildNumber}) async {
-    await _client.send(
+    return await _client.send(
       'get',
       'builds/0.1/pipelines/{pipelineId}/builds/{buildNumber}',
       pathParameters: {
@@ -940,8 +940,8 @@ class DeploymentsApi {
   /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and
   /// on-premise integrations, can access this resource.
   /// This resource requires the 'WRITE' scope for Connect apps.
-  Future<void> submitDeployments({required dynamic body}) async {
-    await _client.send(
+  Future<dynamic> submitDeployments({required dynamic body}) async {
+    return await _client.send(
       'post',
       'deployments/0.1/bulk',
       body: body,
@@ -987,11 +987,11 @@ class DeploymentsApi {
   /// Only Connect apps that define the `jiraDeploymentInfoProvider` module, and
   /// on-premise integrations, can access this resource.
   /// This resource requires the 'READ' scope for Connect apps.
-  Future<void> getDeploymentByKey(
+  Future<dynamic> getDeploymentByKey(
       {required String pipelineId,
       required String environmentId,
       required int deploymentSequenceNumber}) async {
-    await _client.send(
+    return await _client.send(
       'get',
       'deployments/0.1/pipelines/{pipelineId}/environments/{environmentId}/deployments/{deploymentSequenceNumber}',
       pathParameters: {
@@ -1036,11 +1036,11 @@ class DeploymentsApi {
   /// environmentId + deploymentSequenceNumber` combination. Only apps that
   /// define the `jiraDeploymentInfoProvider` module can access this resource.
   /// This resource requires the 'READ' scope.
-  Future<void> getDeploymentGatingStatusByKey(
+  Future<dynamic> getDeploymentGatingStatusByKey(
       {required String pipelineId,
       required String environmentId,
       required int deploymentSequenceNumber}) async {
-    await _client.send(
+    return await _client.send(
       'get',
       'deployments/0.1/pipelines/{pipelineId}/environments/{environmentId}/deployments/{deploymentSequenceNumber}/gating-status',
       pathParameters: {
@@ -1351,8 +1351,8 @@ class FeatureFlagsApi {
   ///
   /// Only apps that define the Feature Flags module can access this resource.
   /// This resource requires the 'WRITE' scope.
-  Future<void> submitFeatureFlags({required dynamic body}) async {
-    await _client.send(
+  Future<dynamic> submitFeatureFlags({required dynamic body}) async {
+    return await _client.send(
       'post',
       'featureflags/0.1/bulk',
       body: body,
@@ -1392,8 +1392,8 @@ class FeatureFlagsApi {
   ///
   /// Only apps that define the Feature Flags module can access this resource.
   /// This resource requires the 'READ' scope.
-  Future<void> getFeatureFlagById(String featureFlagId) async {
-    await _client.send(
+  Future<dynamic> getFeatureFlagById(String featureFlagId) async {
+    return await _client.send(
       'get',
       'featureflags/0.1/flag/{featureFlagId}',
       pathParameters: {
@@ -1610,8 +1610,8 @@ class RemoteLinksApi {
   /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module, and
   /// on-premise integrations, can access this resource.
   /// This resource requires the 'WRITE' scope for Connect apps.
-  Future<void> getRemoteLinkById(String remoteLinkId) async {
-    await _client.send(
+  Future<dynamic> getRemoteLinkById(String remoteLinkId) async {
+    return await _client.send(
       'get',
       'remotelinks/1.0/remotelink/{remoteLinkId}',
       pathParameters: {
