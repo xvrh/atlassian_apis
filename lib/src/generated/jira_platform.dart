@@ -8132,38 +8132,47 @@ class PermissionSchemesApi {
   /// granted the permission. For example, the *Administer projects* permission
   /// is granted to a group named *Teams in space administrators*. In this case,
   /// the type is `"type": "group"`, and the parameter is the group name,
-  /// `"parameter": "Teams in space administrators"`. The `holder` object is
+  /// `"parameter": "Teams in space administrators"` and the value is group ID,
+  /// `"value": "ca85fac0-d974-40ca-a615-7af99c48d24f"`. The `holder` object is
   /// defined by the following properties:
   ///
   ///  *  `type` Identifies the user or group (see the list of types below).
-  ///  *  `parameter` The value of this property depends on the `type`. For
+  ///  *  `parameter` As a group's name can change, use of `value` is
+  /// recommended. The value of this property depends on the `type`. For
   /// example, if the `type` is a group, then you need to specify the group
   /// name.
+  ///  *  `value` The value of this property depends on the `type`. If the
+  /// `type` is a group, then you need to specify the group ID. For other `type`
+  /// it has the same value as `parameter`
   ///
-  /// The following `types` are available. The expected values for the
-  /// `parameter` are given in parenthesis (some `types` may not have a
-  /// `parameter`):
+  /// The following `types` are available. The expected values for `parameter`
+  /// and `value` are given in parentheses (some types may not have a
+  /// `parameter` or `value`):
   ///
   ///  *  `anyone` Grant for anonymous users.
   ///  *  `applicationRole` Grant for users with access to the specified
-  /// application (application name). See
+  /// application (application name, application name). See
   /// [Update product access settings](https://confluence.atlassian.com/x/3YxjL)
   /// for more information.
   ///  *  `assignee` Grant for the user currently assigned to an issue.
-  ///  *  `group` Grant for the specified group (group name).
+  ///  *  `group` Grant for the specified group (`parameter` : group name,
+  /// `value` : group ID).
   ///  *  `groupCustomField` Grant for a user in the group selected in the
-  /// specified custom field (custom field ID).
+  /// specified custom field (`parameter` : custom field ID, `value` : custom
+  /// field ID).
   ///  *  `projectLead` Grant for a project lead.
-  ///  *  `projectRole` Grant for the specified project role (project role ID).
+  ///  *  `projectRole` Grant for the specified project role (`parameter`
+  /// :project role ID, `value` : project role ID).
   ///  *  `reporter` Grant for the user who reported the issue.
   ///  *  `sd.customer.portal.only` Jira Service Desk only. Grants customers
   /// permission to access the customer portal but not Jira. See
   /// [Customizing Jira Service Desk permissions](https://confluence.atlassian.com/x/24dKLg)
   /// for more information.
-  ///  *  `user` Grant for the specified user (user ID - historically this was
-  /// the userkey but that is deprecated and the account ID should be used).
+  ///  *  `user` Grant for the specified user (`parameter` : user ID -
+  /// historically this was the userkey but that is deprecated and the account
+  /// ID should be used, `value` : user ID).
   ///  *  `userCustomField` Grant for a user selected in the specified custom
-  /// field (custom field ID).
+  /// field (`parameter` : custom field ID, `value` : custom field ID).
   ///
   /// #### Built-in permissions ####
   ///
@@ -16543,15 +16552,6 @@ class ComponentWithIssueCount {
   /// Count of issues for the component.
   final int? issueCount;
 
-  /// The description for the component.
-  final String? description;
-
-  /// The URL for this count of the issues contained in the component.
-  final String? self;
-
-  /// Not used.
-  final int? projectId;
-
   /// The key of the project to which the component is assigned.
   final String? project;
 
@@ -16574,19 +16574,19 @@ class ComponentWithIssueCount {
   /// The user details for the component's lead user.
   final User? lead;
 
-  /// The user assigned to issues created with this component, when
-  /// `assigneeType` does not identify a valid assignee.
-  final User? realAssignee;
-
-  /// Whether a user is associated with `assigneeType`. For example, if the
-  /// `assigneeType` is set to `COMPONENT_LEAD` but the component lead is not
-  /// set, then `false` is returned.
-  final bool isAssigneeTypeValid;
-
   /// The details of the user associated with `assigneeType`, if any. See
   /// `realAssignee` for details of the user assigned to issues created with
   /// this component.
   final User? assignee;
+
+  /// Not used.
+  final int? projectId;
+
+  /// The description for the component.
+  final String? description;
+
+  /// The URL for this count of the issues contained in the component.
+  final String? self;
 
   /// The type of the assignee that is assigned to issues created with this
   /// component, when an assignee cannot be set from the `assigneeType`. For
@@ -16604,6 +16604,15 @@ class ComponentWithIssueCount {
   ///  *  `PROJECT_DEFAULT` when none of the preceding cases are true.
   final ComponentWithIssueCountRealAssigneeType? realAssigneeType;
 
+  /// The user assigned to issues created with this component, when
+  /// `assigneeType` does not identify a valid assignee.
+  final User? realAssignee;
+
+  /// Whether a user is associated with `assigneeType`. For example, if the
+  /// `assigneeType` is set to `COMPONENT_LEAD` but the component lead is not
+  /// set, then `false` is returned.
+  final bool isAssigneeTypeValid;
+
   /// The name for the component.
   final String? name;
 
@@ -16612,16 +16621,16 @@ class ComponentWithIssueCount {
 
   ComponentWithIssueCount(
       {this.issueCount,
-      this.description,
-      this.self,
-      this.projectId,
       this.project,
       this.assigneeType,
       this.lead,
+      this.assignee,
+      this.projectId,
+      this.description,
+      this.self,
+      this.realAssigneeType,
       this.realAssignee,
       bool? isAssigneeTypeValid,
-      this.assignee,
-      this.realAssigneeType,
       this.name,
       this.id})
       : isAssigneeTypeValid = isAssigneeTypeValid ?? false;
@@ -16629,9 +16638,6 @@ class ComponentWithIssueCount {
   factory ComponentWithIssueCount.fromJson(Map<String, Object?> json) {
     return ComponentWithIssueCount(
       issueCount: (json[r'issueCount'] as num?)?.toInt(),
-      description: json[r'description'] as String?,
-      self: json[r'self'] as String?,
-      projectId: (json[r'projectId'] as num?)?.toInt(),
       project: json[r'project'] as String?,
       assigneeType: json[r'assigneeType'] != null
           ? ComponentWithIssueCountAssigneeType.fromValue(
@@ -16640,17 +16646,20 @@ class ComponentWithIssueCount {
       lead: json[r'lead'] != null
           ? User.fromJson(json[r'lead']! as Map<String, Object?>)
           : null,
-      realAssignee: json[r'realAssignee'] != null
-          ? User.fromJson(json[r'realAssignee']! as Map<String, Object?>)
-          : null,
-      isAssigneeTypeValid: json[r'isAssigneeTypeValid'] as bool? ?? false,
       assignee: json[r'assignee'] != null
           ? User.fromJson(json[r'assignee']! as Map<String, Object?>)
           : null,
+      projectId: (json[r'projectId'] as num?)?.toInt(),
+      description: json[r'description'] as String?,
+      self: json[r'self'] as String?,
       realAssigneeType: json[r'realAssigneeType'] != null
           ? ComponentWithIssueCountRealAssigneeType.fromValue(
               json[r'realAssigneeType']! as String)
           : null,
+      realAssignee: json[r'realAssignee'] != null
+          ? User.fromJson(json[r'realAssignee']! as Map<String, Object?>)
+          : null,
+      isAssigneeTypeValid: json[r'isAssigneeTypeValid'] as bool? ?? false,
       name: json[r'name'] as String?,
       id: json[r'id'] as String?,
     );
@@ -16658,31 +16667,22 @@ class ComponentWithIssueCount {
 
   Map<String, Object?> toJson() {
     var issueCount = this.issueCount;
-    var description = this.description;
-    var self = this.self;
-    var projectId = this.projectId;
     var project = this.project;
     var assigneeType = this.assigneeType;
     var lead = this.lead;
+    var assignee = this.assignee;
+    var projectId = this.projectId;
+    var description = this.description;
+    var self = this.self;
+    var realAssigneeType = this.realAssigneeType;
     var realAssignee = this.realAssignee;
     var isAssigneeTypeValid = this.isAssigneeTypeValid;
-    var assignee = this.assignee;
-    var realAssigneeType = this.realAssigneeType;
     var name = this.name;
     var id = this.id;
 
     final json = <String, Object?>{};
     if (issueCount != null) {
       json[r'issueCount'] = issueCount;
-    }
-    if (description != null) {
-      json[r'description'] = description;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (projectId != null) {
-      json[r'projectId'] = projectId;
     }
     if (project != null) {
       json[r'project'] = project;
@@ -16693,16 +16693,25 @@ class ComponentWithIssueCount {
     if (lead != null) {
       json[r'lead'] = lead.toJson();
     }
-    if (realAssignee != null) {
-      json[r'realAssignee'] = realAssignee.toJson();
-    }
-    json[r'isAssigneeTypeValid'] = isAssigneeTypeValid;
     if (assignee != null) {
       json[r'assignee'] = assignee.toJson();
+    }
+    if (projectId != null) {
+      json[r'projectId'] = projectId;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (self != null) {
+      json[r'self'] = self;
     }
     if (realAssigneeType != null) {
       json[r'realAssigneeType'] = realAssigneeType.value;
     }
+    if (realAssignee != null) {
+      json[r'realAssignee'] = realAssignee.toJson();
+    }
+    json[r'isAssigneeTypeValid'] = isAssigneeTypeValid;
     if (name != null) {
       json[r'name'] = name;
     }
@@ -16714,30 +16723,30 @@ class ComponentWithIssueCount {
 
   ComponentWithIssueCount copyWith(
       {int? issueCount,
-      String? description,
-      String? self,
-      int? projectId,
       String? project,
       ComponentWithIssueCountAssigneeType? assigneeType,
       User? lead,
+      User? assignee,
+      int? projectId,
+      String? description,
+      String? self,
+      ComponentWithIssueCountRealAssigneeType? realAssigneeType,
       User? realAssignee,
       bool? isAssigneeTypeValid,
-      User? assignee,
-      ComponentWithIssueCountRealAssigneeType? realAssigneeType,
       String? name,
       String? id}) {
     return ComponentWithIssueCount(
       issueCount: issueCount ?? this.issueCount,
-      description: description ?? this.description,
-      self: self ?? this.self,
-      projectId: projectId ?? this.projectId,
       project: project ?? this.project,
       assigneeType: assigneeType ?? this.assigneeType,
       lead: lead ?? this.lead,
+      assignee: assignee ?? this.assignee,
+      projectId: projectId ?? this.projectId,
+      description: description ?? this.description,
+      self: self ?? this.self,
+      realAssigneeType: realAssigneeType ?? this.realAssigneeType,
       realAssignee: realAssignee ?? this.realAssignee,
       isAssigneeTypeValid: isAssigneeTypeValid ?? this.isAssigneeTypeValid,
-      assignee: assignee ?? this.assignee,
-      realAssigneeType: realAssigneeType ?? this.realAssigneeType,
       name: name ?? this.name,
       id: id ?? this.id,
     );
@@ -25392,16 +25401,16 @@ class IdOrKeyBean {
 
 class IncludedFields {
   final List<String> actuallyIncluded;
-  final List<String> excluded;
   final List<String> included;
+  final List<String> excluded;
 
   IncludedFields(
       {List<String>? actuallyIncluded,
-      List<String>? excluded,
-      List<String>? included})
+      List<String>? included,
+      List<String>? excluded})
       : actuallyIncluded = actuallyIncluded ?? [],
-        excluded = excluded ?? [],
-        included = included ?? [];
+        included = included ?? [],
+        excluded = excluded ?? [];
 
   factory IncludedFields.fromJson(Map<String, Object?> json) {
     return IncludedFields(
@@ -25409,11 +25418,11 @@ class IncludedFields {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      excluded: (json[r'excluded'] as List<Object?>?)
+      included: (json[r'included'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      included: (json[r'included'] as List<Object?>?)
+      excluded: (json[r'excluded'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -25422,24 +25431,24 @@ class IncludedFields {
 
   Map<String, Object?> toJson() {
     var actuallyIncluded = this.actuallyIncluded;
-    var excluded = this.excluded;
     var included = this.included;
+    var excluded = this.excluded;
 
     final json = <String, Object?>{};
     json[r'actuallyIncluded'] = actuallyIncluded;
-    json[r'excluded'] = excluded;
     json[r'included'] = included;
+    json[r'excluded'] = excluded;
     return json;
   }
 
   IncludedFields copyWith(
       {List<String>? actuallyIncluded,
-      List<String>? excluded,
-      List<String>? included}) {
+      List<String>? included,
+      List<String>? excluded}) {
     return IncludedFields(
       actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
-      excluded: excluded ?? this.excluded,
       included: included ?? this.included,
+      excluded: excluded ?? this.excluded,
     );
   }
 }
@@ -37040,54 +37049,54 @@ class PagedListUserDetailsApplicationUser {
 
 class PaginatedResponseComment {
   final int? total;
+  final List<Comment> results;
   final int? maxResults;
   final int? startAt;
-  final List<Comment> results;
 
   PaginatedResponseComment(
-      {this.total, this.maxResults, this.startAt, List<Comment>? results})
+      {this.total, List<Comment>? results, this.maxResults, this.startAt})
       : results = results ?? [];
 
   factory PaginatedResponseComment.fromJson(Map<String, Object?> json) {
     return PaginatedResponseComment(
       total: (json[r'total'] as num?)?.toInt(),
-      maxResults: (json[r'maxResults'] as num?)?.toInt(),
-      startAt: (json[r'startAt'] as num?)?.toInt(),
       results: (json[r'results'] as List<Object?>?)
               ?.map((i) =>
                   Comment.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
     );
   }
 
   Map<String, Object?> toJson() {
     var total = this.total;
+    var results = this.results;
     var maxResults = this.maxResults;
     var startAt = this.startAt;
-    var results = this.results;
 
     final json = <String, Object?>{};
     if (total != null) {
       json[r'total'] = total;
     }
+    json[r'results'] = results.map((i) => i.toJson()).toList();
     if (maxResults != null) {
       json[r'maxResults'] = maxResults;
     }
     if (startAt != null) {
       json[r'startAt'] = startAt;
     }
-    json[r'results'] = results.map((i) => i.toJson()).toList();
     return json;
   }
 
   PaginatedResponseComment copyWith(
-      {int? total, int? maxResults, int? startAt, List<Comment>? results}) {
+      {int? total, List<Comment>? results, int? maxResults, int? startAt}) {
     return PaginatedResponseComment(
       total: total ?? this.total,
+      results: results ?? this.results,
       maxResults: maxResults ?? this.maxResults,
       startAt: startAt ?? this.startAt,
-      results: results ?? this.results,
     );
   }
 }
@@ -37183,8 +37192,8 @@ class PermissionGrant {
   /// The URL of the permission granted details.
   final String? self;
 
-  /// The user or group being granted the permission. It consists of a `type`
-  /// and a type-dependent `parameter`. See
+  /// The user or group being granted the permission. It consists of a `type`, a
+  /// type-dependent `parameter` and a type-dependent `value`. See
   /// [Holder object](../api-group-permission-schemes/#holder-object) in *Get
   /// all permission schemes* for more information.
   final PermissionHolder? holder;
@@ -45338,28 +45347,28 @@ class UserBeanAvatarUrls {
   /// The URL of the user's 32x32 pixel avatar.
   final String? $32X32;
 
-  /// The URL of the user's 48x48 pixel avatar.
-  final String? $48X48;
-
   /// The URL of the user's 16x16 pixel avatar.
   final String? $16X16;
 
-  UserBeanAvatarUrls({this.$24X24, this.$32X32, this.$48X48, this.$16X16});
+  /// The URL of the user's 48x48 pixel avatar.
+  final String? $48X48;
+
+  UserBeanAvatarUrls({this.$24X24, this.$32X32, this.$16X16, this.$48X48});
 
   factory UserBeanAvatarUrls.fromJson(Map<String, Object?> json) {
     return UserBeanAvatarUrls(
       $24X24: json[r'24x24'] as String?,
       $32X32: json[r'32x32'] as String?,
-      $48X48: json[r'48x48'] as String?,
       $16X16: json[r'16x16'] as String?,
+      $48X48: json[r'48x48'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var $24X24 = this.$24X24;
     var $32X32 = this.$32X32;
-    var $48X48 = this.$48X48;
     var $16X16 = this.$16X16;
+    var $48X48 = this.$48X48;
 
     final json = <String, Object?>{};
     if ($24X24 != null) {
@@ -45368,22 +45377,22 @@ class UserBeanAvatarUrls {
     if ($32X32 != null) {
       json[r'32x32'] = $32X32;
     }
-    if ($48X48 != null) {
-      json[r'48x48'] = $48X48;
-    }
     if ($16X16 != null) {
       json[r'16x16'] = $16X16;
+    }
+    if ($48X48 != null) {
+      json[r'48x48'] = $48X48;
     }
     return json;
   }
 
   UserBeanAvatarUrls copyWith(
-      {String? $24X24, String? $32X32, String? $48X48, String? $16X16}) {
+      {String? $24X24, String? $32X32, String? $16X16, String? $48X48}) {
     return UserBeanAvatarUrls(
       $24X24: $24X24 ?? this.$24X24,
       $32X32: $32X32 ?? this.$32X32,
-      $48X48: $48X48 ?? this.$48X48,
       $16X16: $16X16 ?? this.$16X16,
+      $48X48: $48X48 ?? this.$48X48,
     );
   }
 }
