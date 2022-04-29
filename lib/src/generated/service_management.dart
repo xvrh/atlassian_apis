@@ -4032,25 +4032,25 @@ class I18nErrorMessage {
 }
 
 class IncludedFields {
-  final List<String> included;
   final List<String> actuallyIncluded;
+  final List<String> included;
   final List<String> excluded;
 
   IncludedFields(
-      {List<String>? included,
-      List<String>? actuallyIncluded,
+      {List<String>? actuallyIncluded,
+      List<String>? included,
       List<String>? excluded})
-      : included = included ?? [],
-        actuallyIncluded = actuallyIncluded ?? [],
+      : actuallyIncluded = actuallyIncluded ?? [],
+        included = included ?? [],
         excluded = excluded ?? [];
 
   factory IncludedFields.fromJson(Map<String, Object?> json) {
     return IncludedFields(
-      included: (json[r'included'] as List<Object?>?)
+      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
+      included: (json[r'included'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -4062,24 +4062,24 @@ class IncludedFields {
   }
 
   Map<String, Object?> toJson() {
-    var included = this.included;
     var actuallyIncluded = this.actuallyIncluded;
+    var included = this.included;
     var excluded = this.excluded;
 
     final json = <String, Object?>{};
-    json[r'included'] = included;
     json[r'actuallyIncluded'] = actuallyIncluded;
+    json[r'included'] = included;
     json[r'excluded'] = excluded;
     return json;
   }
 
   IncludedFields copyWith(
-      {List<String>? included,
-      List<String>? actuallyIncluded,
+      {List<String>? actuallyIncluded,
+      List<String>? included,
       List<String>? excluded}) {
     return IncludedFields(
-      included: included ?? this.included,
       actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
+      included: included ?? this.included,
       excluded: excluded ?? this.excluded,
     );
   }
