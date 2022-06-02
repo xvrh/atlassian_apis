@@ -4144,17 +4144,12 @@ class UsersApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
   Future<User> getUser(
-      {String? key,
-      String? username,
-      String? accountId,
-      List<String>? expand}) async {
+      {required String accountId, List<String>? expand}) async {
     return User.fromJson(await _client.send(
       'get',
       'wiki/rest/api/user',
       queryParameters: {
-        if (key != null) 'key': key,
-        if (username != null) 'username': username,
-        if (accountId != null) 'accountId': accountId,
+        'accountId': accountId,
         if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
@@ -4196,18 +4191,12 @@ class UsersApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
   Future<GroupArrayWithLinks> getGroupMembershipsForUser(
-      {String? key,
-      String? username,
-      String? accountId,
-      int? start,
-      int? limit}) async {
+      {required String accountId, int? start, int? limit}) async {
     return GroupArrayWithLinks.fromJson(await _client.send(
       'get',
       'wiki/rest/api/user/memberof',
       queryParameters: {
-        if (key != null) 'key': key,
-        if (username != null) 'username': username,
-        if (accountId != null) 'accountId': accountId,
+        'accountId': accountId,
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
       },
@@ -11348,7 +11337,7 @@ class ContentUpdate {
 
   /// The updated title of the content. If you are not changing this field, set
   /// this to the current `title`.
-  final String title;
+  final String? title;
 
   /// The type of content. Set this to the current type of the content. For
   /// example, - page - blogpost - comment - attachment
@@ -11375,7 +11364,7 @@ class ContentUpdate {
 
   ContentUpdate(
       {required this.version,
-      required this.title,
+      this.title,
       required this.type,
       this.status,
       List<ContentUpdateAncestorsItem>? ancestors,
@@ -11386,7 +11375,7 @@ class ContentUpdate {
     return ContentUpdate(
       version: ContentUpdateVersion.fromJson(
           json[r'version'] as Map<String, Object?>? ?? const {}),
-      title: json[r'title'] as String? ?? '',
+      title: json[r'title'] as String?,
       type: json[r'type'] as String? ?? '',
       status: json[r'status'] != null
           ? ContentUpdateStatus.fromValue(json[r'status']! as String)
@@ -11412,7 +11401,9 @@ class ContentUpdate {
 
     final json = <String, Object?>{};
     json[r'version'] = version.toJson();
-    json[r'title'] = title;
+    if (title != null) {
+      json[r'title'] = title;
+    }
     json[r'type'] = type;
     if (status != null) {
       json[r'status'] = status.value;
@@ -11512,6 +11503,7 @@ class ContentUpdateBody {
   final ContentBodyCreate? editor;
   final ContentBodyCreate? editor2;
   final ContentBodyCreate? wiki;
+  final ContentBodyCreate? atlasDocFormat;
   final ContentBodyCreate? anonymousExportView;
 
   ContentUpdateBody(
@@ -11522,6 +11514,7 @@ class ContentUpdateBody {
       this.editor,
       this.editor2,
       this.wiki,
+      this.atlasDocFormat,
       this.anonymousExportView});
 
   factory ContentUpdateBody.fromJson(Map<String, Object?> json) {
@@ -11551,6 +11544,10 @@ class ContentUpdateBody {
       wiki: json[r'wiki'] != null
           ? ContentBodyCreate.fromJson(json[r'wiki']! as Map<String, Object?>)
           : null,
+      atlasDocFormat: json[r'atlas_doc_format'] != null
+          ? ContentBodyCreate.fromJson(
+              json[r'atlas_doc_format']! as Map<String, Object?>)
+          : null,
       anonymousExportView: json[r'anonymous_export_view'] != null
           ? ContentBodyCreate.fromJson(
               json[r'anonymous_export_view']! as Map<String, Object?>)
@@ -11566,6 +11563,7 @@ class ContentUpdateBody {
     var editor = this.editor;
     var editor2 = this.editor2;
     var wiki = this.wiki;
+    var atlasDocFormat = this.atlasDocFormat;
     var anonymousExportView = this.anonymousExportView;
 
     final json = <String, Object?>{};
@@ -11590,6 +11588,9 @@ class ContentUpdateBody {
     if (wiki != null) {
       json[r'wiki'] = wiki.toJson();
     }
+    if (atlasDocFormat != null) {
+      json[r'atlas_doc_format'] = atlasDocFormat.toJson();
+    }
     if (anonymousExportView != null) {
       json[r'anonymous_export_view'] = anonymousExportView.toJson();
     }
@@ -11604,6 +11605,7 @@ class ContentUpdateBody {
       ContentBodyCreate? editor,
       ContentBodyCreate? editor2,
       ContentBodyCreate? wiki,
+      ContentBodyCreate? atlasDocFormat,
       ContentBodyCreate? anonymousExportView}) {
     return ContentUpdateBody(
       view: view ?? this.view,
@@ -11613,6 +11615,7 @@ class ContentUpdateBody {
       editor: editor ?? this.editor,
       editor2: editor2 ?? this.editor2,
       wiki: wiki ?? this.wiki,
+      atlasDocFormat: atlasDocFormat ?? this.atlasDocFormat,
       anonymousExportView: anonymousExportView ?? this.anonymousExportView,
     );
   }
