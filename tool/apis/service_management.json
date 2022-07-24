@@ -46,6 +46,16 @@
         "summary": "Create customer",
         "description": "This method adds a customer to the Jira Service Management instance by passing a JSON file including an email address and display name. The display name does not need to be unique. The record's identifiers, `name` and `key`, are automatically generated from the request details.\n\n**[Permissions](#permissions) required**: Jira Administrator Global permission",
         "operationId": "createCustomer",
+        "parameters": [
+          {
+            "name": "strictConflictStatusCode",
+            "in": "query",
+            "description": "Optional boolean flag to return 409 Conflict status code for duplicate customer creation request",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -73,7 +83,7 @@
             }
           },
           "400": {
-            "description": "Returned if the request is invalid, either because the email address is incorrectly formed or already exists in the database.",
+            "description": "Returned if the request is invalid, either because the email address is incorrectly formed or already exists in the database if `strictConflictStatusCode=false` or if `strictConflictStatusCode` parameter is not provided",
             "content": {
               "application/json": {
                 "schema": {
@@ -102,6 +112,16 @@
               }
             }
           },
+          "409": {
+            "description": "Returned if the request is invalid because the email address already exists in the database and `strictConflictStatusCode=true`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal Server Error.",
             "content": {
@@ -117,22 +137,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:customer:jira-service-management",
-              "write:customer:jira-service-management",
-              "read:user:jira"
+              "manage:servicedesk-customer"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:servicedesk-customer"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:customer:jira-service-management",
@@ -261,9 +279,16 @@
         "deprecated": false,
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
+              "read:servicedesk-request"
+            ]
+          }
+        ],
+        "security": [
+          {
+            "OAuth2": [
               "read:servicedesk-request"
             ]
           }
@@ -373,20 +398,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:knowledgebase:jira-service-management"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:knowledgebase:jira-service-management"
@@ -490,20 +515,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:organization:jira-service-management"
+              "manage:servicedesk-customer"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:servicedesk-customer"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:organization:jira-service-management"
@@ -589,21 +614,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:organization:jira-service-management",
-              "write:organization:jira-service-management"
+              "manage:servicedesk-customer"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:servicedesk-customer"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:organization:jira-service-management",
@@ -691,20 +715,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:organization:jira-service-management"
+              "manage:servicedesk-customer"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:servicedesk-customer"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:organization:jira-service-management"
@@ -781,21 +805,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:organization:jira-service-management",
-              "delete:organization:jira-service-management"
+              "manage:servicedesk-customer"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:servicedesk-customer"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:organization:jira-service-management",
@@ -892,20 +915,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:organization.property:jira-service-management"
+              "manage:servicedesk-customer"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:servicedesk-customer"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:organization.property:jira-service-management"
@@ -1010,20 +1033,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:organization.property:jira-service-management"
+              "manage:servicedesk-customer"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:servicedesk-customer"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:organization.property:jira-service-management"
@@ -1131,21 +1154,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:organization.property:jira-service-management",
-              "write:organization.property:jira-service-management"
+              "manage:servicedesk-customer"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:servicedesk-customer"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:organization.property:jira-service-management",
@@ -1241,21 +1263,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:organization.property:jira-service-management",
-              "delete:organization.property:jira-service-management"
+              "manage:servicedesk-customer"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:servicedesk-customer"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:organization.property:jira-service-management",
@@ -1361,21 +1382,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:organization.user:jira-service-management",
-              "read:user:jira"
+              "manage:servicedesk-customer"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:servicedesk-customer"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:organization.user:jira-service-management",
@@ -1480,22 +1500,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:organization.user:jira-service-management",
-              "write:organization.user:jira-service-management",
-              "read:user:jira"
+              "manage:servicedesk-customer"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:servicedesk-customer"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:organization.user:jira-service-management",
@@ -1601,22 +1619,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:organization.user:jira-service-management",
-              "delete:organization.user:jira-service-management",
-              "read:user:jira"
+              "manage:servicedesk-customer"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:servicedesk-customer"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:organization.user:jira-service-management",
@@ -1776,21 +1792,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request:jira-service-management",
-              "read:user:jira"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request:jira-service-management",
@@ -1885,22 +1900,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request:jira-service-management",
-              "write:request:jira-service-management",
-              "read:user:jira"
+              "write:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "write:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request:jira-service-management",
@@ -1999,21 +2012,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request:jira-service-management",
-              "read:user:jira"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request:jira-service-management",
@@ -2118,21 +2130,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.approval:jira-service-management",
-              "read:user:jira"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.approval:jira-service-management",
@@ -2229,21 +2240,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.approval:jira-service-management",
-              "read:user:jira"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.approval:jira-service-management",
@@ -2371,22 +2381,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.approval:jira-service-management",
-              "write:request.approval:jira-service-management",
-              "read:user:jira"
+              "write:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "write:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.approval:jira-service-management",
@@ -2492,21 +2500,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.attachment:jira-service-management",
-              "read:user:jira"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.attachment:jira-service-management",
@@ -2621,22 +2628,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.attachment:jira-service-management",
-              "write:request.attachment:jira-service-management",
-              "read:user:jira"
+              "write:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "write:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.attachment:jira-service-management",
@@ -2734,21 +2739,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.attachment:jira-service-management",
-              "read:user:jira"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.attachment:jira-service-management",
@@ -2855,21 +2859,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.attachment:jira-service-management",
-              "read:user:jira"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.attachment:jira-service-management",
@@ -2991,21 +2994,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.comment:jira-service-management",
-              "read:user:jira"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.comment:jira-service-management",
@@ -3114,22 +3116,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.comment:jira-service-management",
-              "write:request.comment:jira-service-management",
-              "read:user:jira"
+              "write:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "write:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.comment:jira-service-management",
@@ -3238,21 +3238,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.comment:jira-service-management",
-              "read:user:jira"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.comment:jira-service-management",
@@ -3453,21 +3452,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.notification:jira-service-management",
-              "read:user:jira"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.notification:jira-service-management",
@@ -3544,22 +3542,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.notification:jira-service-management",
-              "write:request.notification:jira-service-management",
-              "read:user:jira"
+              "write:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "write:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.notification:jira-service-management",
@@ -3637,22 +3633,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.notification:jira-service-management",
-              "delete:request.notification:jira-service-management",
-              "read:user:jira"
+              "write:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "write:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.notification:jira-service-management",
@@ -3758,21 +3752,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.participant:jira-service-management",
-              "read:user:jira"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.participant:jira-service-management",
@@ -3885,22 +3878,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.participant:jira-service-management",
-              "write:request.participant:jira-service-management",
-              "read:user:jira"
+              "write:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "write:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.participant:jira-service-management",
@@ -4014,22 +4005,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.participant:jira-service-management",
-              "delete:request.participant:jira-service-management",
-              "read:user:jira"
+              "write:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "write:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.participant:jira-service-management",
@@ -4135,20 +4124,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.sla:jira-service-management"
+              "read:jira-work"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:jira-work"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.sla:jira-service-management"
@@ -4244,20 +4233,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.sla:jira-service-management"
+              "read:jira-work"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:jira-work"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.sla:jira-service-management"
@@ -4361,21 +4350,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.status:jira-service-management",
-              "read:user:jira"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.status:jira-service-management",
@@ -4480,21 +4468,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.status:jira-service-management",
-              "read:user:jira"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.status:jira-service-management",
@@ -4597,22 +4584,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.status:jira-service-management",
-              "write:request.status:jira-service-management",
-              "read:user:jira"
+              "write:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "write:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.status:jira-service-management",
@@ -4710,21 +4695,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.feedback:jira-service-management",
-              "read:user:jira"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.feedback:jira-service-management",
@@ -4838,22 +4822,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.feedback:jira-service-management",
-              "write:request.feedback:jira-service-management",
-              "read:user:jira"
+              "write:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "write:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.feedback:jira-service-management",
@@ -4937,22 +4919,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.feedback:jira-service-management",
-              "delete:request.feedback:jira-service-management",
-              "read:user:jira"
+              "write:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "write:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.feedback:jira-service-management",
@@ -5031,7 +5011,7 @@
                 "schema": {
                   "$ref": "#/components/schemas/PagedDTORequestTypeDTO"
                 },
-                "example": "{\"_expands\":[],\"size\":3,\"start\":3,\"limit\":3,\"isLastPage\":false,\"_links\":{\"base\":\"https://your-domain.atlassian.net/rest/servicedeskapi\",\"context\":\"context\",\"next\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype?start=6&limit=3\",\"prev\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype?start=0&limit=3\"},\"values\":[{\"_expands\":[],\"id\":\"11001\",\"_links\":{\"self\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11001\"},\"name\":\"Get IT Help\",\"description\":\"Get IT Help\",\"helpText\":\"Please tell us clearly the problem you have within 100 words.\",\"issueTypeId\":\"12345\",\"serviceDeskId\":\"28\",\"groupIds\":[\"12\"],\"icon\":{\"id\":\"12345\",\"_links\":{\"iconUrls\":{\"48x48\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=large\",\"24x24\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=small\",\"16x16\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=xsmall\",\"32x32\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=medium\"}}}},{\"_expands\":[],\"id\":\"11002\",\"_links\":{\"self\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11002\"},\"name\":\"Request a new account\",\"description\":\"Request a new account\",\"issueTypeId\":\"12345\",\"serviceDeskId\":\"28\",\"groupIds\":[\"13\",\"14\"],\"icon\":{\"id\":\"12346\",\"_links\":{\"iconUrls\":{\"48x48\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=large\",\"24x24\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=small\",\"16x16\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=xsmall\",\"32x32\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=medium\"}}}},{\"_expands\":[],\"id\":\"11003\",\"_links\":{\"self\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11003\"},\"name\":\"Hardware request\",\"description\":\"Request a hardware support\",\"issueTypeId\":\"12345\",\"serviceDeskId\":\"28\",\"groupIds\":[\"13\"],\"icon\":{\"id\":\"12347\",\"_links\":{\"iconUrls\":{\"48x48\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=large\",\"24x24\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=small\",\"16x16\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=xsmall\",\"32x32\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=medium\"}}}}]}"
+                "example": "{\"_expands\":[],\"size\":3,\"start\":3,\"limit\":3,\"isLastPage\":false,\"_links\":{\"base\":\"https://your-domain.atlassian.net/rest/servicedeskapi\",\"context\":\"context\",\"next\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype?start=6&limit=3\",\"prev\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype?start=0&limit=3\"},\"values\":[{\"_expands\":[],\"id\":\"11001\",\"_links\":{\"self\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11001\"},\"name\":\"Get IT Help\",\"description\":\"Get IT Help\",\"helpText\":\"Please tell us clearly the problem you have within 100 words.\",\"issueTypeId\":\"12345\",\"serviceDeskId\":\"28\",\"portalId\":\"2\",\"groupIds\":[\"12\"],\"icon\":{\"id\":\"12345\",\"_links\":{\"iconUrls\":{\"48x48\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=large\",\"24x24\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=small\",\"16x16\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=xsmall\",\"32x32\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=medium\"}}}},{\"_expands\":[],\"id\":\"11002\",\"_links\":{\"self\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11002\"},\"name\":\"Request a new account\",\"description\":\"Request a new account\",\"issueTypeId\":\"12345\",\"serviceDeskId\":\"28\",\"portalId\":\"2\",\"groupIds\":[\"13\",\"14\"],\"icon\":{\"id\":\"12346\",\"_links\":{\"iconUrls\":{\"48x48\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=large\",\"24x24\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=small\",\"16x16\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=xsmall\",\"32x32\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=medium\"}}}},{\"_expands\":[],\"id\":\"11003\",\"_links\":{\"self\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11003\"},\"name\":\"Hardware request\",\"description\":\"Request a hardware support\",\"issueTypeId\":\"12345\",\"serviceDeskId\":\"28\",\"portalId\":\"2\",\"groupIds\":[\"13\"],\"icon\":{\"id\":\"12347\",\"_links\":{\"iconUrls\":{\"48x48\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=large\",\"24x24\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=small\",\"16x16\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=xsmall\",\"32x32\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=medium\"}}}}]}"
               }
             }
           },
@@ -5060,20 +5040,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:requesttype:jira-service-management"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:requesttype:jira-service-management"
@@ -5149,20 +5129,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:servicedesk:jira-service-management"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk:jira-service-management"
@@ -5248,20 +5228,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:servicedesk:jira-service-management"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk:jira-service-management"
@@ -5365,21 +5345,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:request.attachment:jira-service-management",
-              "write:request.attachment:jira-service-management"
+              "write:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "write:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:request.attachment:jira-service-management",
@@ -5492,21 +5471,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:servicedesk.customer:jira-service-management",
-              "read:user:jira"
+              "manage:servicedesk-customer"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:servicedesk-customer"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk.customer:jira-service-management",
@@ -5616,21 +5594,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:servicedesk.customer:jira-service-management",
-              "write:servicedesk.customer:jira-service-management"
+              "manage:servicedesk-customer"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:servicedesk-customer"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk.customer:jira-service-management",
@@ -5739,21 +5716,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:servicedesk.customer:jira-service-management",
-              "delete:servicedesk.customer:jira-service-management"
+              "manage:servicedesk-customer"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:servicedesk-customer"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk.customer:jira-service-management",
@@ -5985,20 +5961,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:servicedesk.organization:jira-service-management"
+              "manage:servicedesk-customer"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:servicedesk-customer"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk.organization:jira-service-management"
@@ -6087,21 +6063,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:servicedesk.organization:jira-service-management",
-              "write:servicedesk.organization:jira-service-management"
+              "manage:servicedesk-customer"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:servicedesk-customer"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk.organization:jira-service-management",
@@ -6191,21 +6166,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:servicedesk.organization:jira-service-management",
-              "delete:servicedesk.organization:jira-service-management"
+              "manage:servicedesk-customer"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:servicedesk-customer"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk.organization:jira-service-management",
@@ -6319,22 +6293,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:queue:jira-service-management",
-              "read:user:jira",
-              "read:jql:jira"
+              "read:jira-work"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:jira-work"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:queue:jira-service-management",
@@ -6441,22 +6413,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:queue:jira-service-management",
-              "read:user:jira",
-              "read:jql:jira"
+              "read:jira-work"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:jira-work"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:queue:jira-service-management",
@@ -6572,22 +6542,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:queue:jira-service-management",
-              "read:user:jira",
-              "read:issue:jira"
+              "read:jira-work"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:jira-work"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:queue:jira-service-management",
@@ -6671,7 +6639,7 @@
                 "schema": {
                   "$ref": "#/components/schemas/PagedDTORequestTypeDTO"
                 },
-                "example": "{\"_expands\":[],\"size\":3,\"start\":3,\"limit\":3,\"isLastPage\":false,\"_links\":{\"base\":\"https://your-domain.atlassian.net/rest/servicedeskapi\",\"context\":\"context\",\"next\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype?start=6&limit=3\",\"prev\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype?start=0&limit=3\"},\"values\":[{\"_expands\":[],\"id\":\"11001\",\"_links\":{\"self\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11001\"},\"name\":\"Get IT Help\",\"description\":\"Get IT Help\",\"helpText\":\"Please tell us clearly the problem you have within 100 words.\",\"issueTypeId\":\"12345\",\"serviceDeskId\":\"28\",\"groupIds\":[\"12\"],\"icon\":{\"id\":\"12345\",\"_links\":{\"iconUrls\":{\"48x48\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=large\",\"24x24\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=small\",\"16x16\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=xsmall\",\"32x32\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=medium\"}}}},{\"_expands\":[],\"id\":\"11002\",\"_links\":{\"self\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11002\"},\"name\":\"Request a new account\",\"description\":\"Request a new account\",\"issueTypeId\":\"12345\",\"serviceDeskId\":\"28\",\"groupIds\":[\"13\",\"14\"],\"icon\":{\"id\":\"12346\",\"_links\":{\"iconUrls\":{\"48x48\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=large\",\"24x24\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=small\",\"16x16\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=xsmall\",\"32x32\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=medium\"}}}},{\"_expands\":[],\"id\":\"11003\",\"_links\":{\"self\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11003\"},\"name\":\"Hardware request\",\"description\":\"Request a hardware support\",\"issueTypeId\":\"12345\",\"serviceDeskId\":\"28\",\"groupIds\":[\"13\"],\"icon\":{\"id\":\"12347\",\"_links\":{\"iconUrls\":{\"48x48\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=large\",\"24x24\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=small\",\"16x16\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=xsmall\",\"32x32\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=medium\"}}}}]}"
+                "example": "{\"_expands\":[],\"size\":3,\"start\":3,\"limit\":3,\"isLastPage\":false,\"_links\":{\"base\":\"https://your-domain.atlassian.net/rest/servicedeskapi\",\"context\":\"context\",\"next\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype?start=6&limit=3\",\"prev\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype?start=0&limit=3\"},\"values\":[{\"_expands\":[],\"id\":\"11001\",\"_links\":{\"self\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11001\"},\"name\":\"Get IT Help\",\"description\":\"Get IT Help\",\"helpText\":\"Please tell us clearly the problem you have within 100 words.\",\"issueTypeId\":\"12345\",\"serviceDeskId\":\"28\",\"portalId\":\"2\",\"groupIds\":[\"12\"],\"icon\":{\"id\":\"12345\",\"_links\":{\"iconUrls\":{\"48x48\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=large\",\"24x24\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=small\",\"16x16\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=xsmall\",\"32x32\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=medium\"}}}},{\"_expands\":[],\"id\":\"11002\",\"_links\":{\"self\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11002\"},\"name\":\"Request a new account\",\"description\":\"Request a new account\",\"issueTypeId\":\"12345\",\"serviceDeskId\":\"28\",\"portalId\":\"2\",\"groupIds\":[\"13\",\"14\"],\"icon\":{\"id\":\"12346\",\"_links\":{\"iconUrls\":{\"48x48\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=large\",\"24x24\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=small\",\"16x16\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=xsmall\",\"32x32\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12346?size=medium\"}}}},{\"_expands\":[],\"id\":\"11003\",\"_links\":{\"self\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11003\"},\"name\":\"Hardware request\",\"description\":\"Request a hardware support\",\"issueTypeId\":\"12345\",\"serviceDeskId\":\"28\",\"portalId\":\"2\",\"groupIds\":[\"13\"],\"icon\":{\"id\":\"12347\",\"_links\":{\"iconUrls\":{\"48x48\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=large\",\"24x24\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=small\",\"16x16\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=xsmall\",\"32x32\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12347?size=medium\"}}}}]}"
               }
             }
           },
@@ -6720,20 +6688,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:requesttype:jira-service-management"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:requesttype:jira-service-management"
@@ -6784,7 +6752,7 @@
                 "schema": {
                   "$ref": "#/components/schemas/RequestTypeDTO"
                 },
-                "example": "{\"_expands\":[],\"id\":\"11001\",\"_links\":{\"self\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11001\"},\"name\":\"Get IT Help\",\"description\":\"Get IT Help\",\"helpText\":\"Please tell us clearly the problem you have within 100 words.\",\"issueTypeId\":\"12345\",\"serviceDeskId\":\"28\",\"groupIds\":[\"12\"],\"icon\":{\"id\":\"12345\",\"_links\":{\"iconUrls\":{\"48x48\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=large\",\"24x24\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=small\",\"16x16\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=xsmall\",\"32x32\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=medium\"}}}}"
+                "example": "{\"_expands\":[],\"id\":\"11001\",\"_links\":{\"self\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11001\"},\"name\":\"Get IT Help\",\"description\":\"Get IT Help\",\"helpText\":\"Please tell us clearly the problem you have within 100 words.\",\"issueTypeId\":\"12345\",\"serviceDeskId\":\"28\",\"portalId\":\"2\",\"groupIds\":[\"12\"],\"icon\":{\"id\":\"12345\",\"_links\":{\"iconUrls\":{\"48x48\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=large\",\"24x24\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=small\",\"16x16\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=xsmall\",\"32x32\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=medium\"}}}}"
               }
             }
           },
@@ -6858,7 +6826,7 @@
           "Servicedesk"
         ],
         "summary": "Get request type by id",
-        "description": "This method returns a customer request type from a service desk.\n\n**[Permissions](#permissions) required**: Permission to access the service desk.",
+        "description": "This method returns a customer request type from a service desk.\n\nThis operation can be accessed anonymously.\n\n**[Permissions](#permissions) required**: Permission to access the service desk.",
         "operationId": "getRequestTypeById",
         "parameters": [
           {
@@ -6899,12 +6867,12 @@
                 "schema": {
                   "$ref": "#/components/schemas/RequestTypeDTO"
                 },
-                "example": "{\"_expands\":[],\"id\":\"11001\",\"_links\":{\"self\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11001\"},\"name\":\"Get IT Help\",\"description\":\"Get IT Help\",\"helpText\":\"Please tell us clearly the problem you have within 100 words.\",\"issueTypeId\":\"12345\",\"serviceDeskId\":\"28\",\"groupIds\":[\"12\"],\"icon\":{\"id\":\"12345\",\"_links\":{\"iconUrls\":{\"48x48\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=large\",\"24x24\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=small\",\"16x16\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=xsmall\",\"32x32\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=medium\"}}}}"
+                "example": "{\"_expands\":[],\"id\":\"11001\",\"_links\":{\"self\":\"https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/28/requesttype/11001\"},\"name\":\"Get IT Help\",\"description\":\"Get IT Help\",\"helpText\":\"Please tell us clearly the problem you have within 100 words.\",\"issueTypeId\":\"12345\",\"serviceDeskId\":\"28\",\"portalId\":\"2\",\"groupIds\":[\"12\"],\"icon\":{\"id\":\"12345\",\"_links\":{\"iconUrls\":{\"48x48\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=large\",\"24x24\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=small\",\"16x16\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=xsmall\",\"32x32\":\"https://your-domain.atlassian.net/rest/api/2/universal_avatar/view/type/SD_REQTYPE/avatar/12345?size=medium\"}}}}"
               }
             }
           },
           "401": {
-            "description": "Returned if the user is not logged in.",
+            "description": "Returned if the user credentials are invalid.",
             "content": {
               "application/json": {
                 "schema": {
@@ -6948,20 +6916,21 @@
         "security": [
           {
             "OAuth2": [
-              "read:requesttype:jira-service-management"
+              "read:servicedesk-request"
             ]
-          }
+          },
+          {}
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:requesttype:jira-service-management"
@@ -7056,7 +7025,7 @@
         "deprecated": false,
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:jira-project"
@@ -7064,6 +7033,13 @@
           }
         ],
         "x-experimental": true,
+        "security": [
+          {
+            "OAuth2": [
+              "manage:jira-project"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "PROJECT_ADMIN"
       }
     },
@@ -7164,20 +7140,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:requesttype:jira-service-management"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:requesttype:jira-service-management"
@@ -7273,20 +7249,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:requesttype.property:jira-service-management"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:requesttype.property:jira-service-management"
@@ -7392,20 +7368,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:requesttype.property:jira-service-management"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:requesttype.property:jira-service-management"
@@ -7524,21 +7500,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:requesttype.property:jira-service-management",
-              "write:requesttype.property:jira-service-management"
+              "manage:jira-project"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:jira-project"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:requesttype.property:jira-service-management",
@@ -7645,21 +7620,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:requesttype.property:jira-service-management",
-              "delete:requesttype.property:jira-service-management"
+              "manage:jira-project"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "manage:jira-project"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:requesttype.property:jira-service-management",
@@ -7765,20 +7739,20 @@
         "security": [
           {
             "OAuth2": [
-              "read:requesttype:jira-service-management"
+              "read:servicedesk-request"
             ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
-            "state": "Deprecated",
+            "state": "Current",
             "scheme": "OAuth2",
             "scopes": [
               "read:servicedesk-request"
             ]
           },
           {
-            "state": "Current",
+            "state": "Beta",
             "scheme": "OAuth2",
             "scopes": [
               "read:requesttype:jira-service-management"
@@ -7791,20 +7765,309 @@
   },
   "components": {
     "schemas": {
-      "CustomerCreateDTO": {
+      "AdditionalCommentDTO": {
         "type": "object",
         "properties": {
-          "email": {
+          "body": {
             "type": "string",
-            "description": "Customer's email address."
+            "description": "Content of the comment."
+          }
+        },
+        "additionalProperties": false
+      },
+      "AttachmentCreateDTO": {
+        "type": "object",
+        "properties": {
+          "temporaryAttachmentIds": {
+            "type": "array",
+            "description": "List of IDs for the temporary attachments to be added to the customer request.",
+            "items": {
+              "type": "string"
+            }
           },
-          "fullName": {
-            "type": "string",
-            "description": "Deprecated, please use 'displayName'."
+          "additionalComment": {
+            "description": "Comment about the attachments.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AdditionalCommentDTO"
+              }
+            ]
           },
-          "displayName": {
+          "public": {
+            "type": "boolean",
+            "description": "Indicates whether the attachments are to be public (true) or private/internal (false)."
+          }
+        },
+        "additionalProperties": false
+      },
+      "AttachmentCreateResultDTO": {
+        "type": "object",
+        "properties": {
+          "comment": {
+            "description": "Details of the comment included with the attachments.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CommentDTO"
+              }
+            ]
+          },
+          "attachments": {
+            "description": "List of the attachments added.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedDTOAttachmentDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "AttachmentDTO": {
+        "type": "object",
+        "properties": {
+          "filename": {
             "type": "string",
-            "description": "Customer's name for display in the UI."
+            "description": "Filename of the item attached."
+          },
+          "author": {
+            "description": "Details of the user who attached the file.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserDTO"
+              }
+            ]
+          },
+          "created": {
+            "description": "Date the attachment was added.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DateDTO"
+              }
+            ]
+          },
+          "size": {
+            "type": "integer",
+            "description": "Size of the attachment in bytes.",
+            "format": "int64"
+          },
+          "mimeType": {
+            "type": "string",
+            "description": "MIME type of the attachment."
+          },
+          "_links": {
+            "description": "Various URLs for the attachment.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AttachmentLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "AttachmentLinkDTO": {
+        "type": "object",
+        "properties": {
+          "self": {
+            "type": "string",
+            "format": "uri"
+          },
+          "jiraRest": {
+            "type": "string",
+            "description": "REST API URL for the attachment",
+            "format": "uri"
+          },
+          "content": {
+            "type": "string",
+            "description": "URL for the attachment.",
+            "format": "uri"
+          },
+          "thumbnail": {
+            "type": "string",
+            "description": "URL for the attachment's thumbnail image.",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommentDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the comment."
+          },
+          "body": {
+            "type": "string",
+            "description": "Content of the comment."
+          },
+          "renderedBody": {
+            "description": "The rendered body of the comment.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RenderedValueDTO"
+              }
+            ]
+          },
+          "author": {
+            "description": "Details of the customer who authored the comment.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserDTO"
+              }
+            ]
+          },
+          "created": {
+            "description": "Date the comment was created.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DateDTO"
+              }
+            ]
+          },
+          "attachments": {
+            "description": "List of the attachments included in the comment.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedDTOAttachmentDTO"
+              }
+            ]
+          },
+          "_expands": {
+            "type": "array",
+            "description": "List of items that can be expanded in the response by specifying the expand query parameter.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "public": {
+            "type": "boolean",
+            "description": "Indicates whether the comment is public (true) or private/internal (false)."
+          },
+          "_links": {
+            "description": "REST API URL link to the comment.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SelfLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "DateDTO": {
+        "type": "object",
+        "properties": {
+          "iso8601": {
+            "type": "string",
+            "description": "Date in ISO8601 format."
+          },
+          "jira": {
+            "type": "string",
+            "description": "Date in the format used in the Jira REST APIs, which is ISO8601 format but extended with milliseconds. For example, 2016-09-28T23:08:32.097+1000."
+          },
+          "friendly": {
+            "type": "string",
+            "description": "Date in a user-friendly text format."
+          },
+          "epochMillis": {
+            "type": "integer",
+            "description": "Date as the number of milliseconds that have elapsed since 00:00:00 Coordinated Universal Time (UTC), 1 January 1970.",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedDTOAttachmentDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/AttachmentDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedLinkDTO": {
+        "type": "object",
+        "properties": {
+          "self": {
+            "type": "string",
+            "description": "REST API URL for the current page.",
+            "format": "uri"
+          },
+          "base": {
+            "type": "string",
+            "description": "Base URL for the REST API calls.",
+            "format": "uri"
+          },
+          "context": {
+            "type": "string"
+          },
+          "next": {
+            "type": "string",
+            "description": "REST API URL for the next page, if there is one.",
+            "format": "uri"
+          },
+          "prev": {
+            "type": "string",
+            "description": "REST API URL for the previous page, if there is one.",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RenderedValueDTO": {
+        "type": "object",
+        "properties": {
+          "html": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SelfLinkDTO": {
+        "type": "object",
+        "properties": {
+          "self": {
+            "type": "string",
+            "format": "uri"
           }
         },
         "additionalProperties": false
@@ -7873,15 +8136,6 @@
         },
         "additionalProperties": false
       },
-      "LinkableUserLinkDTO": {
-        "type": "object",
-        "properties": {
-          "_links": {
-            "$ref": "#/components/schemas/UserLinkDTO"
-          }
-        },
-        "additionalProperties": false
-      },
       "ErrorResponse": {
         "type": "object",
         "properties": {
@@ -7905,6 +8159,190 @@
             "items": {
               "type": "string"
             }
+          }
+        },
+        "additionalProperties": false
+      },
+      "LinkableAttachmentLinkDTO": {
+        "type": "object",
+        "properties": {
+          "_links": {
+            "$ref": "#/components/schemas/AttachmentLinkDTO"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommentCreateDTO": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "description": "Content of the comment."
+          },
+          "public": {
+            "type": "boolean",
+            "description": "Indicates whether the comment is public (true) or private/internal (false)."
+          }
+        },
+        "additionalProperties": false
+      },
+      "Linkable": {
+        "type": "object",
+        "properties": {
+          "_links": {
+            "$ref": "#/components/schemas/SelfLinkDTO"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Expandable": {
+        "type": "object",
+        "properties": {
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedDTOCommentDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/CommentDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "PropertyKey": {
+        "type": "object",
+        "properties": {
+          "self": {
+            "type": "string",
+            "description": "The URL of the property.",
+            "readOnly": true
+          },
+          "key": {
+            "type": "string",
+            "description": "The key of the property.",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Property key details."
+      },
+      "PropertyKeys": {
+        "type": "object",
+        "properties": {
+          "keys": {
+            "type": "array",
+            "description": "Property key details.",
+            "readOnly": true,
+            "items": {
+              "$ref": "#/components/schemas/PropertyKey"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "description": "List of property keys."
+      },
+      "EntityProperty": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The key of the property. Required on create and update."
+          },
+          "value": {
+            "description": "The value of the property. Required on create and update."
+          }
+        },
+        "additionalProperties": false,
+        "description": "An entity property, for more information see [Entity properties](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/)."
+      },
+      "RequestNotificationSubscriptionDTO": {
+        "type": "object",
+        "properties": {
+          "subscribed": {
+            "type": "boolean",
+            "description": "Indicates whether the user is subscribed (true) or not (false) to the request's notifications."
+          }
+        },
+        "additionalProperties": false
+      },
+      "SoftwareInfoDTO": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Jira Service Management version."
+          },
+          "platformVersion": {
+            "type": "string",
+            "description": "Jira Platform version upon which Service Desk is based."
+          },
+          "buildDate": {
+            "description": "Date of the current build.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DateDTO"
+              }
+            ]
+          },
+          "buildChangeSet": {
+            "type": "string",
+            "description": "Reference of the change set included in the build."
+          },
+          "isLicensedForUse": {
+            "type": "boolean",
+            "description": "Indicates whether the instance is licensed (true) or not (false)."
+          },
+          "_links": {
+            "description": "REST API URL of the instance.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SelfLinkDTO"
+              }
+            ]
           }
         },
         "additionalProperties": false
@@ -8020,35 +8458,6 @@
         },
         "additionalProperties": false
       },
-      "PagedLinkDTO": {
-        "type": "object",
-        "properties": {
-          "self": {
-            "type": "string",
-            "description": "REST API URL for the current page.",
-            "format": "uri"
-          },
-          "base": {
-            "type": "string",
-            "description": "Base URL for the REST API calls.",
-            "format": "uri"
-          },
-          "context": {
-            "type": "string"
-          },
-          "next": {
-            "type": "string",
-            "description": "REST API URL for the next page, if there is one.",
-            "format": "uri"
-          },
-          "prev": {
-            "type": "string",
-            "description": "REST API URL for the previous page, if there is one.",
-            "format": "uri"
-          }
-        },
-        "additionalProperties": false
-      },
       "RequestTypeDTO": {
         "type": "object",
         "properties": {
@@ -8075,6 +8484,10 @@
           "serviceDeskId": {
             "type": "string",
             "description": "ID of the service desk the request type belongs to."
+          },
+          "portalId": {
+            "type": "string",
+            "description": "ID of the customer portal associated with the service desk project."
           },
           "groupIds": {
             "type": "array",
@@ -8228,33 +8641,607 @@
         },
         "additionalProperties": false
       },
-      "SelfLinkDTO": {
+      "OrganizationDTO": {
         "type": "object",
         "properties": {
-          "self": {
+          "id": {
             "type": "string",
-            "format": "uri"
-          }
-        },
-        "additionalProperties": false
-      },
-      "Linkable": {
-        "type": "object",
-        "properties": {
+            "description": "A unique system generated ID for the organization."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the organization."
+          },
           "_links": {
-            "$ref": "#/components/schemas/SelfLinkDTO"
+            "description": "REST API URL to the organization.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SelfLinkDTO"
+              }
+            ]
           }
         },
         "additionalProperties": false
       },
-      "Expandable": {
+      "PagedDTOOrganizationDTO": {
         "type": "object",
         "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/OrganizationDTO"
+            }
+          },
           "_expands": {
             "type": "array",
             "items": {
               "type": "string"
             }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrganizationCreateDTO": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the organization."
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedDTOUserDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/UserDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "LinkableUserLinkDTO": {
+        "type": "object",
+        "properties": {
+          "_links": {
+            "$ref": "#/components/schemas/UserLinkDTO"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UsersOrganizationUpdateDTO": {
+        "type": "object",
+        "properties": {
+          "usernames": {
+            "type": "array",
+            "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details. Use `accountIds` instead.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "accountIds": {
+            "type": "array",
+            "description": "List of customers, specific by account IDs, to add to or remove from the organization.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "InsightWorkspaceDTO": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "description": "The workspace ID used as the identifier to access the Insight REST API."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Details of an insight workspace ID."
+      },
+      "PagedDTOInsightWorkspaceDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/InsightWorkspaceDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedDTORequestTypeGroupDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/RequestTypeGroupDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "RequestTypeGroupDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the request type group"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the request type group."
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerRequestStatusDTO": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Name of the status condition."
+          },
+          "statusCategory": {
+            "type": "string",
+            "description": "Status category the status belongs to.",
+            "enum": [
+              "UNDEFINED",
+              "NEW",
+              "INDETERMINATE",
+              "DONE"
+            ]
+          },
+          "statusDate": {
+            "description": "Date on which the status was attained.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DateDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedDTOCustomerRequestStatusDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/CustomerRequestStatusDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "ArticleDTO": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title of the article."
+          },
+          "excerpt": {
+            "type": "string",
+            "description": "Excerpt of the article which matches the given query string."
+          },
+          "source": {
+            "description": "Source of the article.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SourceDTO"
+              }
+            ]
+          },
+          "content": {
+            "$ref": "#/components/schemas/ContentDTO"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ContentDTO": {
+        "type": "object",
+        "properties": {
+          "iframeSrc": {
+            "type": "string",
+            "description": "Url containing the body of the article (without title), suitable for rendering in an iframe"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedDTOArticleDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/ArticleDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "SourceDTO": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Type of the knowledge base source",
+            "enum": [
+              "confluence"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "CSATFeedbackFullDTO": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Indicates the type of feedback, supported values: `csat`."
+          },
+          "rating": {
+            "type": "integer",
+            "description": "A numeric representation of the rating, this must be an integer value between 1 and 5.",
+            "format": "int32"
+          },
+          "comment": {
+            "description": "(Optional) The comment provided with this feedback.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AdditionalCommentDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApprovalDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the approval."
+          },
+          "name": {
+            "type": "string",
+            "description": "Description of the approval being sought or provided."
+          },
+          "finalDecision": {
+            "type": "string",
+            "description": "Outcome of the approval, based on the approvals provided by all approvers.",
+            "enum": [
+              "approved",
+              "declined",
+              "pending"
+            ]
+          },
+          "canAnswerApproval": {
+            "type": "boolean",
+            "description": "Indicates whether the user making the request is one of the approvers and can respond to the approval (true) or not (false)."
+          },
+          "approvers": {
+            "type": "array",
+            "description": "Detailed list of the users who must provide a response to the approval.",
+            "items": {
+              "$ref": "#/components/schemas/ApproverDTO"
+            }
+          },
+          "createdDate": {
+            "description": "Date the approval was created.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DateDTO"
+              }
+            ]
+          },
+          "completedDate": {
+            "description": "Date the approval was completed.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DateDTO"
+              }
+            ]
+          },
+          "_links": {
+            "description": "The REST API URL of the approval.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SelfLinkDTO"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApproverDTO": {
+        "type": "object",
+        "properties": {
+          "approver": {
+            "description": "Details of the User who is providing approval.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserDTO"
+              }
+            ]
+          },
+          "approverDecision": {
+            "type": "string",
+            "description": "Decision made by the approver.",
+            "enum": [
+              "approved",
+              "declined",
+              "pending"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApprovalDecisionRequestDTO": {
+        "type": "object",
+        "properties": {
+          "decision": {
+            "type": "string",
+            "description": "Response to the approval request.",
+            "enum": [
+              "approve",
+              "decline"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedDTOApprovalDTO": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in the page.",
+            "format": "int32"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Index of the first item returned in the page.",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
+            "format": "int32"
+          },
+          "isLastPage": {
+            "type": "boolean",
+            "description": "Indicates if this is the last page of records (true) or not (false)."
+          },
+          "values": {
+            "type": "array",
+            "description": "Details of the items included in the page.",
+            "items": {
+              "$ref": "#/components/schemas/ApprovalDTO"
+            }
+          },
+          "_expands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_links": {
+            "description": "List of the links relating to the page.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PagedLinkDTO"
+              }
+            ]
           }
         },
         "additionalProperties": false
@@ -8289,139 +9276,6 @@
           "channel": {
             "type": "string",
             "description": "(Experimental) Shows extra information for the request channel."
-          }
-        },
-        "additionalProperties": false
-      },
-      "AttachmentDTO": {
-        "type": "object",
-        "properties": {
-          "filename": {
-            "type": "string",
-            "description": "Filename of the item attached."
-          },
-          "author": {
-            "description": "Details of the user who attached the file.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/UserDTO"
-              }
-            ]
-          },
-          "created": {
-            "description": "Date the attachment was added.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DateDTO"
-              }
-            ]
-          },
-          "size": {
-            "type": "integer",
-            "description": "Size of the attachment in bytes.",
-            "format": "int64"
-          },
-          "mimeType": {
-            "type": "string",
-            "description": "MIME type of the attachment."
-          },
-          "_links": {
-            "description": "Various URLs for the attachment.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/AttachmentLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "AttachmentLinkDTO": {
-        "type": "object",
-        "properties": {
-          "self": {
-            "type": "string",
-            "format": "uri"
-          },
-          "jiraRest": {
-            "type": "string",
-            "description": "REST API URL for the attachment",
-            "format": "uri"
-          },
-          "content": {
-            "type": "string",
-            "description": "URL for the attachment.",
-            "format": "uri"
-          },
-          "thumbnail": {
-            "type": "string",
-            "description": "URL for the attachment's thumbnail image.",
-            "format": "uri"
-          }
-        },
-        "additionalProperties": false
-      },
-      "CommentDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "ID of the comment."
-          },
-          "body": {
-            "type": "string",
-            "description": "Content of the comment."
-          },
-          "renderedBody": {
-            "description": "The rendered body of the comment.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/RenderedValueDTO"
-              }
-            ]
-          },
-          "author": {
-            "description": "Details of the customer who authored the comment.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/UserDTO"
-              }
-            ]
-          },
-          "created": {
-            "description": "Date the comment was created.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DateDTO"
-              }
-            ]
-          },
-          "attachments": {
-            "description": "List of the attachments included in the comment.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedDTOAttachmentDTO"
-              }
-            ]
-          },
-          "_expands": {
-            "type": "array",
-            "description": "List of items that can be expanded in the response by specifying the expand query parameter.",
-            "items": {
-              "type": "string"
-            }
-          },
-          "public": {
-            "type": "boolean",
-            "description": "Indicates whether the comment is public (true) or private/internal (false)."
-          },
-          "_links": {
-            "description": "REST API URL link to the comment.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/SelfLinkDTO"
-              }
-            ]
           }
         },
         "additionalProperties": false
@@ -8652,57 +9506,6 @@
         },
         "additionalProperties": false
       },
-      "CustomerRequestStatusDTO": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "description": "Name of the status condition."
-          },
-          "statusCategory": {
-            "type": "string",
-            "description": "Status category the status belongs to.",
-            "enum": [
-              "UNDEFINED",
-              "NEW",
-              "INDETERMINATE",
-              "DONE"
-            ]
-          },
-          "statusDate": {
-            "description": "Date on which the status was attained.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DateDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "DateDTO": {
-        "type": "object",
-        "properties": {
-          "iso8601": {
-            "type": "string",
-            "description": "Date in ISO8601 format."
-          },
-          "jira": {
-            "type": "string",
-            "description": "Date in the format used in the Jira REST APIs, which is ISO8601 format but extended with milliseconds. For example, 2016-09-28T23:08:32.097+1000."
-          },
-          "friendly": {
-            "type": "string",
-            "description": "Date in a user-friendly text format."
-          },
-          "epochMillis": {
-            "type": "integer",
-            "description": "Date as the number of milliseconds that have elapsed since 00:00:00 Coordinated Universal Time (UTC), 1 January 1970.",
-            "format": "int64"
-          }
-        },
-        "additionalProperties": false
-      },
       "DurationDTO": {
         "type": "object",
         "properties": {
@@ -8714,144 +9517,6 @@
           "friendly": {
             "type": "string",
             "description": "Duration in a user-friendly text format."
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedDTOAttachmentDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/AttachmentDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedDTOCommentDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/CommentDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedDTOCustomerRequestStatusDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/CustomerRequestStatusDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
           }
         },
         "additionalProperties": false
@@ -8898,61 +9563,6 @@
                 "$ref": "#/components/schemas/PagedLinkDTO"
               }
             ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedDTOUserDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/UserDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "RenderedValueDTO": {
-        "type": "object",
-        "properties": {
-          "html": {
-            "type": "string"
           }
         },
         "additionalProperties": false
@@ -9199,97 +9809,21 @@
         },
         "additionalProperties": false
       },
-      "RequestTypeCreateDTO": {
+      "CustomerTransitionDTO": {
         "type": "object",
         "properties": {
-          "issueTypeId": {
+          "id": {
             "type": "string",
-            "description": "ID of the request type to add to the service desk."
+            "description": "ID of the transition."
           },
           "name": {
             "type": "string",
-            "description": "Name of the request type on the service desk."
-          },
-          "description": {
-            "type": "string",
-            "description": "Description of the request type on the service desk."
-          },
-          "helpText": {
-            "type": "string",
-            "description": "Help text for the request type on the service desk."
+            "description": "Name of the transition."
           }
         },
         "additionalProperties": false
       },
-      "AdditionalCommentDTO": {
-        "type": "object",
-        "properties": {
-          "body": {
-            "type": "string",
-            "description": "Content of the comment."
-          }
-        },
-        "additionalProperties": false
-      },
-      "CSATFeedbackFullDTO": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "description": "Indicates the type of feedback, supported values: `csat`."
-          },
-          "rating": {
-            "type": "integer",
-            "description": "A numeric representation of the rating, this must be an integer value between 1 and 5.",
-            "format": "int32"
-          },
-          "comment": {
-            "description": "(Optional) The comment provided with this feedback.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/AdditionalCommentDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "ArticleDTO": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string",
-            "description": "Title of the article."
-          },
-          "excerpt": {
-            "type": "string",
-            "description": "Excerpt of the article which matches the given query string."
-          },
-          "source": {
-            "description": "Source of the article.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/SourceDTO"
-              }
-            ]
-          },
-          "content": {
-            "$ref": "#/components/schemas/ContentDTO"
-          }
-        },
-        "additionalProperties": false
-      },
-      "ContentDTO": {
-        "type": "object",
-        "properties": {
-          "iframeSrc": {
-            "type": "string",
-            "description": "Url containing the body of the article (without title), suitable for rendering in an iframe"
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedDTOArticleDTO": {
+      "PagedDTOCustomerTransitionDTO": {
         "type": "object",
         "properties": {
           "size": {
@@ -9315,7 +9849,7 @@
             "type": "array",
             "description": "Details of the items included in the page.",
             "items": {
-              "$ref": "#/components/schemas/ArticleDTO"
+              "$ref": "#/components/schemas/CustomerTransitionDTO"
             }
           },
           "_expands": {
@@ -9335,84 +9869,38 @@
         },
         "additionalProperties": false
       },
-      "SourceDTO": {
+      "CustomerTransitionExecutionDTO": {
         "type": "object",
         "properties": {
-          "type": {
+          "id": {
             "type": "string",
-            "description": "Type of the knowledge base source",
-            "enum": [
-              "confluence"
+            "description": "ID of the transition to be performed."
+          },
+          "additionalComment": {
+            "description": "Comment explaining the reason for the transition.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AdditionalCommentDTO"
+              }
             ]
-          }
-        },
-        "additionalProperties": true
-      },
-      "PropertyKey": {
-        "type": "object",
-        "properties": {
-          "self": {
-            "type": "string",
-            "description": "The URL of the property.",
-            "readOnly": true
-          },
-          "key": {
-            "type": "string",
-            "description": "The key of the property.",
-            "readOnly": true
-          }
-        },
-        "additionalProperties": false,
-        "description": "Property key details."
-      },
-      "PropertyKeys": {
-        "type": "object",
-        "properties": {
-          "keys": {
-            "type": "array",
-            "description": "Property key details.",
-            "readOnly": true,
-            "items": {
-              "$ref": "#/components/schemas/PropertyKey"
-            }
-          }
-        },
-        "additionalProperties": false,
-        "description": "List of property keys."
-      },
-      "EntityProperty": {
-        "type": "object",
-        "properties": {
-          "key": {
-            "type": "string",
-            "description": "The key of the property. Required on create and update."
-          },
-          "value": {
-            "description": "The value of the property. Required on create and update."
-          }
-        },
-        "additionalProperties": false,
-        "description": "An entity property, for more information see [Entity properties](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/)."
-      },
-      "CommentCreateDTO": {
-        "type": "object",
-        "properties": {
-          "body": {
-            "type": "string",
-            "description": "Content of the comment."
-          },
-          "public": {
-            "type": "boolean",
-            "description": "Indicates whether the comment is public (true) or private/internal (false)."
           }
         },
         "additionalProperties": false
       },
-      "LinkableAttachmentLinkDTO": {
+      "CustomerCreateDTO": {
         "type": "object",
         "properties": {
-          "_links": {
-            "$ref": "#/components/schemas/AttachmentLinkDTO"
+          "email": {
+            "type": "string",
+            "description": "Customer's email address."
+          },
+          "fullName": {
+            "type": "string",
+            "description": "Deprecated, please use 'displayName'."
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Customer's name for display in the UI."
           }
         },
         "additionalProperties": false
@@ -9459,163 +9947,38 @@
         },
         "additionalProperties": false
       },
-      "PagedDTORequestTypeGroupDTO": {
+      "RequestTypeCreateDTO": {
         "type": "object",
         "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/RequestTypeGroupDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "RequestTypeGroupDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
+          "issueTypeId": {
             "type": "string",
-            "description": "ID of the request type group"
+            "description": "ID of the request type to add to the service desk."
           },
           "name": {
             "type": "string",
-            "description": "Name of the request type group."
-          }
-        },
-        "additionalProperties": false
-      },
-      "OrganizationDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
+            "description": "Name of the request type on the service desk."
+          },
+          "description": {
             "type": "string",
-            "description": "A unique system generated ID for the organization."
+            "description": "Description of the request type on the service desk."
           },
-          "name": {
+          "helpText": {
             "type": "string",
-            "description": "Name of the organization."
-          },
-          "_links": {
-            "description": "REST API URL to the organization.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/SelfLinkDTO"
-              }
-            ]
+            "description": "Help text for the request type on the service desk."
           }
         },
         "additionalProperties": false
       },
-      "PagedDTOOrganizationDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/OrganizationDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "OrganizationCreateDTO": {
+      "OrganizationServiceDeskUpdateDTO": {
         "required": [
-          "name"
+          "organizationId"
         ],
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "description": "Name of the organization."
-          }
-        },
-        "additionalProperties": false
-      },
-      "UsersOrganizationUpdateDTO": {
-        "type": "object",
-        "properties": {
-          "usernames": {
-            "type": "array",
-            "description": "This property is no longer available and will be removed from the documentation soon. See the [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/) for details. Use `accountIds` instead.",
-            "items": {
-              "type": "string"
-            }
-          },
-          "accountIds": {
-            "type": "array",
-            "description": "List of customers, specific by account IDs, to add to or remove from the organization.",
-            "items": {
-              "type": "string"
-            }
+          "organizationId": {
+            "type": "integer",
+            "description": "List of organizations, specified by 'ID' field values, to add to or remove from the service desk.",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -9996,14 +10359,14 @@
       "IncludedFields": {
         "type": "object",
         "properties": {
-          "actuallyIncluded": {
+          "included": {
             "uniqueItems": true,
             "type": "array",
             "items": {
               "type": "string"
             }
           },
-          "included": {
+          "actuallyIncluded": {
             "uniqueItems": true,
             "type": "array",
             "items": {
@@ -10513,30 +10876,6 @@
         "additionalProperties": false,
         "description": "User details permitted by the user's Atlassian Account privacy settings. However, be aware of these exceptions:\n\n *  User record deleted from Atlassian: This occurs as the result of a right to be forgotten request. In this case, `displayName` provides an indication and other parameters have default values or are blank (for example, email is blank).\n *  User record corrupted: This occurs as a results of events such as a server import and can only happen to deleted users. In this case, `accountId` returns *unknown* and all other parameters have fallback values.\n *  User record unavailable: This usually occurs due to an internal service outage. In this case, all parameters have fallback values."
       },
-      "OrganizationServiceDeskUpdateDTO": {
-        "required": [
-          "organizationId"
-        ],
-        "type": "object",
-        "properties": {
-          "organizationId": {
-            "type": "integer",
-            "description": "List of organizations, specified by 'ID' field values, to add to or remove from the service desk.",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "RequestNotificationSubscriptionDTO": {
-        "type": "object",
-        "properties": {
-          "subscribed": {
-            "type": "boolean",
-            "description": "Indicates whether the user is subscribed (true) or not (false) to the request's notifications."
-          }
-        },
-        "additionalProperties": false
-      },
       "PagedDTOServiceDeskDTO": {
         "type": "object",
         "properties": {
@@ -10577,367 +10916,6 @@
             "allOf": [
               {
                 "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "InsightWorkspaceDTO": {
-        "type": "object",
-        "properties": {
-          "workspaceId": {
-            "type": "string",
-            "description": "The workspace ID used as the identifier to access the Insight REST API."
-          }
-        },
-        "additionalProperties": false,
-        "description": "Details of an insight workspace ID."
-      },
-      "PagedDTOInsightWorkspaceDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/InsightWorkspaceDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "ApprovalDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "ID of the approval."
-          },
-          "name": {
-            "type": "string",
-            "description": "Description of the approval being sought or provided."
-          },
-          "finalDecision": {
-            "type": "string",
-            "description": "Outcome of the approval, based on the approvals provided by all approvers.",
-            "enum": [
-              "approved",
-              "declined",
-              "pending"
-            ]
-          },
-          "canAnswerApproval": {
-            "type": "boolean",
-            "description": "Indicates whether the user making the request is one of the approvers and can respond to the approval (true) or not (false)."
-          },
-          "approvers": {
-            "type": "array",
-            "description": "Detailed list of the users who must provide a response to the approval.",
-            "items": {
-              "$ref": "#/components/schemas/ApproverDTO"
-            }
-          },
-          "createdDate": {
-            "description": "Date the approval was created.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DateDTO"
-              }
-            ]
-          },
-          "completedDate": {
-            "description": "Date the approval was completed.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DateDTO"
-              }
-            ]
-          },
-          "_links": {
-            "description": "The REST API URL of the approval.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/SelfLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "ApproverDTO": {
-        "type": "object",
-        "properties": {
-          "approver": {
-            "description": "Details of the User who is providing approval.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/UserDTO"
-              }
-            ]
-          },
-          "approverDecision": {
-            "type": "string",
-            "description": "Decision made by the approver.",
-            "enum": [
-              "approved",
-              "declined",
-              "pending"
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "ApprovalDecisionRequestDTO": {
-        "type": "object",
-        "properties": {
-          "decision": {
-            "type": "string",
-            "description": "Response to the approval request.",
-            "enum": [
-              "approve",
-              "decline"
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedDTOApprovalDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/ApprovalDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "CustomerTransitionDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "ID of the transition."
-          },
-          "name": {
-            "type": "string",
-            "description": "Name of the transition."
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagedDTOCustomerTransitionDTO": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "description": "Number of items returned in the page.",
-            "format": "int32"
-          },
-          "start": {
-            "type": "integer",
-            "description": "Index of the first item returned in the page.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Number of items to be returned per page, up to the maximum set for these objects in the current implementation.",
-            "format": "int32"
-          },
-          "isLastPage": {
-            "type": "boolean",
-            "description": "Indicates if this is the last page of records (true) or not (false)."
-          },
-          "values": {
-            "type": "array",
-            "description": "Details of the items included in the page.",
-            "items": {
-              "$ref": "#/components/schemas/CustomerTransitionDTO"
-            }
-          },
-          "_expands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "_links": {
-            "description": "List of the links relating to the page.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "CustomerTransitionExecutionDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "ID of the transition to be performed."
-          },
-          "additionalComment": {
-            "description": "Comment explaining the reason for the transition.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/AdditionalCommentDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "SoftwareInfoDTO": {
-        "type": "object",
-        "properties": {
-          "version": {
-            "type": "string",
-            "description": "Jira Service Management version."
-          },
-          "platformVersion": {
-            "type": "string",
-            "description": "Jira Platform version upon which Service Desk is based."
-          },
-          "buildDate": {
-            "description": "Date of the current build.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DateDTO"
-              }
-            ]
-          },
-          "buildChangeSet": {
-            "type": "string",
-            "description": "Reference of the change set included in the build."
-          },
-          "isLicensedForUse": {
-            "type": "boolean",
-            "description": "Indicates whether the instance is licensed (true) or not (false)."
-          },
-          "_links": {
-            "description": "REST API URL of the instance.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/SelfLinkDTO"
-              }
-            ]
-          }
-        },
-        "additionalProperties": false
-      },
-      "AttachmentCreateDTO": {
-        "type": "object",
-        "properties": {
-          "temporaryAttachmentIds": {
-            "type": "array",
-            "description": "List of IDs for the temporary attachments to be added to the customer request.",
-            "items": {
-              "type": "string"
-            }
-          },
-          "additionalComment": {
-            "description": "Comment about the attachments.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/AdditionalCommentDTO"
-              }
-            ]
-          },
-          "public": {
-            "type": "boolean",
-            "description": "Indicates whether the attachments are to be public (true) or private/internal (false)."
-          }
-        },
-        "additionalProperties": false
-      },
-      "AttachmentCreateResultDTO": {
-        "type": "object",
-        "properties": {
-          "comment": {
-            "description": "Details of the comment included with the attachments.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CommentDTO"
-              }
-            ]
-          },
-          "attachments": {
-            "description": "List of the attachments added.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PagedDTOAttachmentDTO"
               }
             ]
           }

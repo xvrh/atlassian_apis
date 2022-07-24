@@ -4110,6 +4110,7 @@ class FeatureBean {
   final List<FeatureBeanPermissibleEstimationTypesItem>
       permissibleEstimationTypes;
   final String? featureId;
+  final String? learnMoreArticleId;
   final bool toggleLocked;
 
   FeatureBean(
@@ -4125,6 +4126,7 @@ class FeatureBean {
       List<FeatureBeanPermissibleEstimationTypesItem>?
           permissibleEstimationTypes,
       this.featureId,
+      this.learnMoreArticleId,
       bool? toggleLocked})
       : permissibleEstimationTypes = permissibleEstimationTypes ?? [],
         toggleLocked = toggleLocked ?? false;
@@ -4153,6 +4155,7 @@ class FeatureBean {
               .toList() ??
           [],
       featureId: json[r'featureId'] as String?,
+      learnMoreArticleId: json[r'learnMoreArticleId'] as String?,
       toggleLocked: json[r'toggleLocked'] as bool? ?? false,
     );
   }
@@ -4169,6 +4172,7 @@ class FeatureBean {
     var localisedGroup = this.localisedGroup;
     var permissibleEstimationTypes = this.permissibleEstimationTypes;
     var featureId = this.featureId;
+    var learnMoreArticleId = this.learnMoreArticleId;
     var toggleLocked = this.toggleLocked;
 
     final json = <String, Object?>{};
@@ -4204,6 +4208,9 @@ class FeatureBean {
     if (featureId != null) {
       json[r'featureId'] = featureId;
     }
+    if (learnMoreArticleId != null) {
+      json[r'learnMoreArticleId'] = learnMoreArticleId;
+    }
     json[r'toggleLocked'] = toggleLocked;
     return json;
   }
@@ -4221,6 +4228,7 @@ class FeatureBean {
       List<FeatureBeanPermissibleEstimationTypesItem>?
           permissibleEstimationTypes,
       String? featureId,
+      String? learnMoreArticleId,
       bool? toggleLocked}) {
     return FeatureBean(
       boardFeature: boardFeature ?? this.boardFeature,
@@ -4235,6 +4243,7 @@ class FeatureBean {
       permissibleEstimationTypes:
           permissibleEstimationTypes ?? this.permissibleEstimationTypes,
       featureId: featureId ?? this.featureId,
+      learnMoreArticleId: learnMoreArticleId ?? this.learnMoreArticleId,
       toggleLocked: toggleLocked ?? this.toggleLocked,
     );
   }
@@ -4455,6 +4464,7 @@ class FeatureResponseBeanFeaturesItem {
   final List<FeatureResponseBeanFeaturesItemPermissibleEstimationTypesItem>
       permissibleEstimationTypes;
   final String? featureId;
+  final String? learnMoreArticleId;
   final bool toggleLocked;
 
   FeatureResponseBeanFeaturesItem(
@@ -4470,6 +4480,7 @@ class FeatureResponseBeanFeaturesItem {
       List<FeatureResponseBeanFeaturesItemPermissibleEstimationTypesItem>?
           permissibleEstimationTypes,
       this.featureId,
+      this.learnMoreArticleId,
       bool? toggleLocked})
       : permissibleEstimationTypes = permissibleEstimationTypes ?? [],
         toggleLocked = toggleLocked ?? false;
@@ -4502,6 +4513,7 @@ class FeatureResponseBeanFeaturesItem {
               .toList() ??
           [],
       featureId: json[r'featureId'] as String?,
+      learnMoreArticleId: json[r'learnMoreArticleId'] as String?,
       toggleLocked: json[r'toggleLocked'] as bool? ?? false,
     );
   }
@@ -4518,6 +4530,7 @@ class FeatureResponseBeanFeaturesItem {
     var localisedGroup = this.localisedGroup;
     var permissibleEstimationTypes = this.permissibleEstimationTypes;
     var featureId = this.featureId;
+    var learnMoreArticleId = this.learnMoreArticleId;
     var toggleLocked = this.toggleLocked;
 
     final json = <String, Object?>{};
@@ -4553,6 +4566,9 @@ class FeatureResponseBeanFeaturesItem {
     if (featureId != null) {
       json[r'featureId'] = featureId;
     }
+    if (learnMoreArticleId != null) {
+      json[r'learnMoreArticleId'] = learnMoreArticleId;
+    }
     json[r'toggleLocked'] = toggleLocked;
     return json;
   }
@@ -4570,6 +4586,7 @@ class FeatureResponseBeanFeaturesItem {
       List<FeatureResponseBeanFeaturesItemPermissibleEstimationTypesItem>?
           permissibleEstimationTypes,
       String? featureId,
+      String? learnMoreArticleId,
       bool? toggleLocked}) {
     return FeatureResponseBeanFeaturesItem(
       boardFeature: boardFeature ?? this.boardFeature,
@@ -4584,6 +4601,7 @@ class FeatureResponseBeanFeaturesItem {
       permissibleEstimationTypes:
           permissibleEstimationTypes ?? this.permissibleEstimationTypes,
       featureId: featureId ?? this.featureId,
+      learnMoreArticleId: learnMoreArticleId ?? this.learnMoreArticleId,
       toggleLocked: toggleLocked ?? this.toggleLocked,
     );
   }
@@ -5238,24 +5256,20 @@ class HistoryMetadataParticipant {
 }
 
 class IncludedFields {
-  final List<String> included;
   final List<String> actuallyIncluded;
   final List<String> excluded;
+  final List<String> included;
 
   IncludedFields(
-      {List<String>? included,
-      List<String>? actuallyIncluded,
-      List<String>? excluded})
-      : included = included ?? [],
-        actuallyIncluded = actuallyIncluded ?? [],
-        excluded = excluded ?? [];
+      {List<String>? actuallyIncluded,
+      List<String>? excluded,
+      List<String>? included})
+      : actuallyIncluded = actuallyIncluded ?? [],
+        excluded = excluded ?? [],
+        included = included ?? [];
 
   factory IncludedFields.fromJson(Map<String, Object?> json) {
     return IncludedFields(
-      included: (json[r'included'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
       actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -5264,29 +5278,33 @@ class IncludedFields {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
+      included: (json[r'included'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
     );
   }
 
   Map<String, Object?> toJson() {
-    var included = this.included;
     var actuallyIncluded = this.actuallyIncluded;
     var excluded = this.excluded;
+    var included = this.included;
 
     final json = <String, Object?>{};
-    json[r'included'] = included;
     json[r'actuallyIncluded'] = actuallyIncluded;
     json[r'excluded'] = excluded;
+    json[r'included'] = included;
     return json;
   }
 
   IncludedFields copyWith(
-      {List<String>? included,
-      List<String>? actuallyIncluded,
-      List<String>? excluded}) {
+      {List<String>? actuallyIncluded,
+      List<String>? excluded,
+      List<String>? included}) {
     return IncludedFields(
-      included: included ?? this.included,
       actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
       excluded: excluded ?? this.excluded,
+      included: included ?? this.included,
     );
   }
 }
@@ -5513,24 +5531,20 @@ class IssueBean {
 }
 
 class IssueBeanFieldsToInclude {
-  final List<String> included;
   final List<String> actuallyIncluded;
   final List<String> excluded;
+  final List<String> included;
 
   IssueBeanFieldsToInclude(
-      {List<String>? included,
-      List<String>? actuallyIncluded,
-      List<String>? excluded})
-      : included = included ?? [],
-        actuallyIncluded = actuallyIncluded ?? [],
-        excluded = excluded ?? [];
+      {List<String>? actuallyIncluded,
+      List<String>? excluded,
+      List<String>? included})
+      : actuallyIncluded = actuallyIncluded ?? [],
+        excluded = excluded ?? [],
+        included = included ?? [];
 
   factory IssueBeanFieldsToInclude.fromJson(Map<String, Object?> json) {
     return IssueBeanFieldsToInclude(
-      included: (json[r'included'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
       actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -5539,29 +5553,33 @@ class IssueBeanFieldsToInclude {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
+      included: (json[r'included'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
     );
   }
 
   Map<String, Object?> toJson() {
-    var included = this.included;
     var actuallyIncluded = this.actuallyIncluded;
     var excluded = this.excluded;
+    var included = this.included;
 
     final json = <String, Object?>{};
-    json[r'included'] = included;
     json[r'actuallyIncluded'] = actuallyIncluded;
     json[r'excluded'] = excluded;
+    json[r'included'] = included;
     return json;
   }
 
   IssueBeanFieldsToInclude copyWith(
-      {List<String>? included,
-      List<String>? actuallyIncluded,
-      List<String>? excluded}) {
+      {List<String>? actuallyIncluded,
+      List<String>? excluded,
+      List<String>? included}) {
     return IssueBeanFieldsToInclude(
-      included: included ?? this.included,
       actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
       excluded: excluded ?? this.excluded,
+      included: included ?? this.included,
     );
   }
 }
@@ -8128,41 +8146,41 @@ class UserBeanAvatarUrls {
   /// The URL of the user's 32x32 pixel avatar.
   final String? $32X32;
 
-  /// The URL of the user's 24x24 pixel avatar.
-  final String? $24X24;
-
   /// The URL of the user's 48x48 pixel avatar.
   final String? $48X48;
+
+  /// The URL of the user's 24x24 pixel avatar.
+  final String? $24X24;
 
   /// The URL of the user's 16x16 pixel avatar.
   final String? $16X16;
 
-  UserBeanAvatarUrls({this.$32X32, this.$24X24, this.$48X48, this.$16X16});
+  UserBeanAvatarUrls({this.$32X32, this.$48X48, this.$24X24, this.$16X16});
 
   factory UserBeanAvatarUrls.fromJson(Map<String, Object?> json) {
     return UserBeanAvatarUrls(
       $32X32: json[r'32x32'] as String?,
-      $24X24: json[r'24x24'] as String?,
       $48X48: json[r'48x48'] as String?,
+      $24X24: json[r'24x24'] as String?,
       $16X16: json[r'16x16'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var $32X32 = this.$32X32;
-    var $24X24 = this.$24X24;
     var $48X48 = this.$48X48;
+    var $24X24 = this.$24X24;
     var $16X16 = this.$16X16;
 
     final json = <String, Object?>{};
     if ($32X32 != null) {
       json[r'32x32'] = $32X32;
     }
-    if ($24X24 != null) {
-      json[r'24x24'] = $24X24;
-    }
     if ($48X48 != null) {
       json[r'48x48'] = $48X48;
+    }
+    if ($24X24 != null) {
+      json[r'24x24'] = $24X24;
     }
     if ($16X16 != null) {
       json[r'16x16'] = $16X16;
@@ -8171,11 +8189,11 @@ class UserBeanAvatarUrls {
   }
 
   UserBeanAvatarUrls copyWith(
-      {String? $32X32, String? $24X24, String? $48X48, String? $16X16}) {
+      {String? $32X32, String? $48X48, String? $24X24, String? $16X16}) {
     return UserBeanAvatarUrls(
       $32X32: $32X32 ?? this.$32X32,
-      $24X24: $24X24 ?? this.$24X24,
       $48X48: $48X48 ?? this.$48X48,
+      $24X24: $24X24 ?? this.$24X24,
       $16X16: $16X16 ?? this.$16X16,
     );
   }

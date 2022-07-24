@@ -9,6 +9,10 @@ class JiraPlatformApi {
 
   JiraPlatformApi(this._client);
 
+  /// This resource represents an announcement banner. Use it to retrieve and
+  /// update banner configuration.
+  late final announcementBanner = AnnouncementBannerApi(_client);
+
   /// This resource supports
   /// [app migrations](https://developer.atlassian.com/platform/app-migration/).
   /// Use it to:
@@ -65,23 +69,18 @@ class JiraPlatformApi {
   late final groupAndUserPicker = GroupAndUserPickerApi(_client);
 
   /// This resource represents groups of users. Use it to get, create, find, and
-  /// delete groups as well as add and remove users from groups.
-  /// **[WARNING](https://support.atlassian.com/user-management/docs/create-and-update-groups/)
-  /// The standard Atlassian group names are default names only and can be
-  /// edited or deleted. ** For example, an admin or Atlassian support could
-  /// delete the default group jira-software-users or rename it to jsw-users at
-  /// any point.
+  /// delete groups as well as add and remove users from groups. ([WARNING] The
+  /// standard Atlassian group names are default names only and can be edited or
+  /// deleted. For example, an admin or Atlassian support could delete the
+  /// default group jira-software-users or rename it to jsw-users at any point.
+  /// See
+  /// https://support.atlassian.com/user-management/docs/create-and-update-groups/
+  /// for details.)
   late final groups = GroupsApi(_client);
 
   /// This resource represents information about the Jira instance. Use it to
   /// get license details.
   late final instanceInformation = InstanceInformationApi(_client);
-
-  /// Issue adjustments is an experimental feature available for **Forge apps
-  /// only**. It enables Forge apps to control how selected Jira fields behave
-  /// on global create issue dialog. For example: hide specific fields, set them
-  /// as required, etc.
-  late final issueAdjustmentsApps = IssueAdjustmentsAppsApi(_client);
 
   /// This resource represents issue attachments and the attachment settings for
   /// Jira. Use it to get the metadata for an attachment, delete an attachment,
@@ -191,8 +190,8 @@ class JiraPlatformApi {
   /// details of a notification scheme and a list of notification schemes.
   late final issueNotificationSchemes = IssueNotificationSchemesApi(_client);
 
-  /// This resource represents issue priorities. Use it to obtain a list of
-  /// issue priorities and details for individual issue priorities.
+  /// This resource represents issue priorities. Use it to get, create and
+  /// update issue priorities and details for individual issue priorities.
   late final issuePriorities = IssuePrioritiesApi(_client);
 
   /// This resource represents [issue](#api-group-Issues) properties, which
@@ -451,6 +450,10 @@ class JiraPlatformApi {
   /// This resource provides information about the Jira instance.
   late final serverInfo = ServerInfoApi(_client);
 
+  /// This resource represents statuses. Use it to search, get, create, delete,
+  /// and change statuses.
+  late final status = StatusApi(_client);
+
   /// This resource represents a
   /// [long-running asynchronous tasks](#async-operations). Use it to obtain
   /// details about the progress of a long-running task or cancel a long-running
@@ -461,6 +464,12 @@ class JiraPlatformApi {
   /// to get and set the time tracking provider, get and set the time tracking
   /// options, and disable time tracking.
   late final timeTracking = TimeTrackingApi(_client);
+
+  /// UI modifications is an experimental feature available for **Forge apps
+  /// only**. It enables Forge apps to control how selected Jira fields behave
+  /// on global create issue dialog. For example: hide specific fields, set them
+  /// as required, etc.
+  late final uiModificationsApps = UIModificationsAppsApi(_client);
 
   /// This resource represents [user](#api-group-Users) properties and provides
   /// for storing custom data against a user. Use it to get, create, and delete
@@ -577,6 +586,38 @@ class JiraPlatformApi {
 
 /// Jira Cloud platform REST API documentation
 
+class AnnouncementBannerApi {
+  final ApiClient _client;
+
+  AnnouncementBannerApi(this._client);
+
+  /// Returns the current announcement banner configuration.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<AnnouncementBannerConfiguration> getBanner() async {
+    return AnnouncementBannerConfiguration.fromJson(await _client.send(
+      'get',
+      'rest/api/3/announcementBanner',
+    ));
+  }
+
+  /// Updates the announcement banner configuration.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> setBanner(
+      {required AnnouncementBannerConfigurationUpdate body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/announcementBanner',
+      body: body.toJson(),
+    );
+  }
+}
+
+/// Jira Cloud platform REST API documentation
+
 class AppMigrationApi {
   final ApiClient _client;
 
@@ -590,14 +631,12 @@ class AppMigrationApi {
   /// request.
   Future<dynamic> updateIssueFields(
       {required String atlassianTransferId,
-      required String atlassianAccountId,
       required ConnectCustomFieldValues body}) async {
     return await _client.send(
       'put',
       'rest/atlassian-connect/1/migration/field',
       headers: {
         'Atlassian-Transfer-Id': 'null',
-        'Atlassian-Account-Id': 'null',
       },
       body: body.toJson(),
     );
@@ -608,7 +647,6 @@ class AppMigrationApi {
   /// migration.
   Future<void> updateEntityPropertiesValue(
       {required String atlassianTransferId,
-      required String atlassianAccountId,
       required String entityType,
       required List<EntityPropertyDetails> body}) async {
     await _client.send(
@@ -619,7 +657,6 @@ class AppMigrationApi {
       },
       headers: {
         'Atlassian-Transfer-Id': 'null',
-        'Atlassian-Account-Id': 'null',
       },
       body: body.map((i) => i.toJson()).toList(),
     );
@@ -1099,6 +1136,7 @@ class DashboardsApi {
       String? accountId,
       String? owner,
       String? groupname,
+      String? groupId,
       int? projectId,
       String? orderBy,
       int? startAt,
@@ -1113,6 +1151,7 @@ class DashboardsApi {
         if (accountId != null) 'accountId': accountId,
         if (owner != null) 'owner': owner,
         if (groupname != null) 'groupname': groupname,
+        if (groupId != null) 'groupId': groupId,
         if (projectId != null) 'projectId': '$projectId',
         if (orderBy != null) 'orderBy': orderBy,
         if (startAt != null) 'startAt': '$startAt',
@@ -2260,91 +2299,6 @@ class InstanceInformationApi {
       'get',
       'rest/api/3/instance/license',
     ));
-  }
-}
-
-/// Jira Cloud platform REST API documentation
-
-class IssueAdjustmentsAppsApi {
-  final ApiClient _client;
-
-  IssueAdjustmentsAppsApi(this._client);
-
-  /// Gets issue adjustments. Issue adjustments can only be retrieved by Forge
-  /// apps.
-  ///
-  /// **[Permissions](#permissions) required:** None.
-  Future<PageBeanIssueAdjustmentDetails> getIssueAdjustments(
-      {int? startAt, int? maxResults, String? expand}) async {
-    return PageBeanIssueAdjustmentDetails.fromJson(await _client.send(
-      'get',
-      'rest/api/3/issueAdjustments',
-      queryParameters: {
-        if (startAt != null) 'startAt': '$startAt',
-        if (maxResults != null) 'maxResults': '$maxResults',
-        if (expand != null) 'expand': expand,
-      },
-    ));
-  }
-
-  /// Creates an issue adjustment. Issue adjustment can only be created by Forge
-  /// apps.
-  ///
-  /// Each app can define up to 100 issue adjustments. Each issue adjustment can
-  /// define up to 1000 contexts.
-  ///
-  /// **[Permissions](#permissions) required:**
-  ///
-  ///  *  *None* if the issue adjustment is created without contexts.
-  ///  *  *Browse projects*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for one or
-  /// more projects, if the issue adjustment is created with contexts.
-  Future<IssueAdjustmentIdentifiers> createIssueAdjustment(
-      {required CreateIssueAdjustmentDetails body}) async {
-    return IssueAdjustmentIdentifiers.fromJson(await _client.send(
-      'post',
-      'rest/api/3/issueAdjustments',
-      body: body.toJson(),
-    ));
-  }
-
-  /// Updates an issue adjustment. Issue adjustment can only be updated by Forge
-  /// apps.
-  ///
-  /// Each issue adjustment can define up to 1000 contexts.
-  ///
-  /// **[Permissions](#permissions) required:**
-  ///
-  ///  *  *None* if the issue adjustment is created without contexts.
-  ///  *  *Browse projects*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for one or
-  /// more projects, if the issue adjustment is created with contexts.
-  Future<dynamic> updateIssueAdjustment(
-      {required String issueAdjustmentId,
-      required UpdateIssueAdjustmentDetails body}) async {
-    return await _client.send(
-      'put',
-      'rest/api/3/issueAdjustments/{issueAdjustmentId}',
-      pathParameters: {
-        'issueAdjustmentId': issueAdjustmentId,
-      },
-      body: body.toJson(),
-    );
-  }
-
-  /// Deletes an issue adjustment. All the contexts that belong to the issue
-  /// adjustment are deleted too. Issue adjustment can only be deleted by Forge
-  /// apps.
-  ///
-  /// **[Permissions](#permissions) required:** None.
-  Future<dynamic> deleteIssueAdjustment(String issueAdjustmentId) async {
-    return await _client.send(
-      'delete',
-      'rest/api/3/issueAdjustments/{issueAdjustmentId}',
-      pathParameters: {
-        'issueAdjustmentId': issueAdjustmentId,
-      },
-    );
   }
 }
 
@@ -4420,12 +4374,12 @@ class IssueFieldsApi {
   /// Returns a [paginated](#pagination) list of fields for Classic Jira
   /// projects. The list can include:
   ///
-  ///  *  all fields.
-  ///  *  specific fields, by defining `id`.
+  ///  *  all fields
+  ///  *  specific fields, by defining `id`
   ///  *  fields that contain a string in the field name or description, by
-  /// defining `query`.
+  /// defining `query`
   ///  *  specific fields that contain a string in the field name or
-  /// description, by defining `id` and `query`.
+  /// description, by defining `id` and `query`
   ///
   /// Only custom fields can be queried, `type` must be set to `custom`.
   ///
@@ -4450,6 +4404,33 @@ class IssueFieldsApi {
         if (query != null) 'query': query,
         if (orderBy != null) 'orderBy': orderBy,
         if (expand != null) 'expand': expand,
+      },
+    ));
+  }
+
+  /// Returns a [paginated](#pagination) list of fields in the trash. The list
+  /// may be restricted to fields whose field name or description partially
+  /// match a string.
+  ///
+  /// Only custom fields can be queried, `type` must be set to `custom`.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<PageBeanField> getTrashedFieldsPaginated(
+      {int? startAt,
+      int? maxResults,
+      List<String>? id,
+      String? query,
+      String? orderBy}) async {
+    return PageBeanField.fromJson(await _client.send(
+      'get',
+      'rest/api/3/field/search/trashed',
+      queryParameters: {
+        if (startAt != null) 'startAt': '$startAt',
+        if (maxResults != null) 'maxResults': '$maxResults',
+        if (id != null) 'id': id.map((e) => e).join(','),
+        if (query != null) 'query': query,
+        if (orderBy != null) 'orderBy': orderBy,
       },
     ));
   }
@@ -4879,6 +4860,46 @@ class IssuePrioritiesApi {
         .toList();
   }
 
+  /// Creates an issue priority.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<PriorityId> createPriority(
+      {required CreatePriorityDetails body}) async {
+    return PriorityId.fromJson(await _client.send(
+      'post',
+      'rest/api/3/priority',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Returns a [paginated](#pagination) list of priorities. The list can
+  /// contain all priorities or a subset determined by any combination of these
+  /// criteria:
+  ///
+  ///  *  a list of priority IDs. Any invalid priority IDs are ignored.
+  ///  *  whether the field configuration is a default. This returns priorities
+  /// from company-managed (classic) projects only, as there is no concept of
+  /// default priorities in team-managed projects.
+  ///
+  /// **[Permissions](#permissions) required:** Permission to access Jira.
+  Future<PageBeanPriority> searchPriorities(
+      {int? startAt,
+      int? maxResults,
+      List<String>? id,
+      bool? onlyDefault}) async {
+    return PageBeanPriority.fromJson(await _client.send(
+      'get',
+      'rest/api/3/priority/search',
+      queryParameters: {
+        if (startAt != null) 'startAt': '$startAt',
+        if (maxResults != null) 'maxResults': '$maxResults',
+        if (id != null) 'id': id.map((e) => e).join(','),
+        if (onlyDefault != null) 'onlyDefault': '$onlyDefault',
+      },
+    ));
+  }
+
   /// Returns an issue priority.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
@@ -4890,6 +4911,22 @@ class IssuePrioritiesApi {
         'id': id,
       },
     ));
+  }
+
+  /// Updates an issue priority.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> updatePriority(
+      {required String id, required UpdatePriorityDetails body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/priority/{id}',
+      pathParameters: {
+        'id': id,
+      },
+      body: body.toJson(),
+    );
   }
 }
 
@@ -6136,7 +6173,8 @@ class IssueTypeScreenSchemesApi {
   Future<PageBeanProjectDetails> getProjectsForIssueTypeScreenScheme(
       {required int issueTypeScreenSchemeId,
       int? startAt,
-      int? maxResults}) async {
+      int? maxResults,
+      String? query}) async {
     return PageBeanProjectDetails.fromJson(await _client.send(
       'get',
       'rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}/project',
@@ -6146,6 +6184,7 @@ class IssueTypeScreenSchemesApi {
       queryParameters: {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
+        if (query != null) 'query': query,
       },
     ));
   }
@@ -7333,15 +7372,51 @@ class IssuesApi {
   /// editable by the user. Use the information to populate the requests in
   /// [Edit issue](#api-rest-api-3-issue-issueIdOrKey-put).
   ///
+  /// This endpoint will check for these conditions:
+  ///
+  /// 1.  Field is available on a field screen - through screen, screen scheme,
+  /// issue type screen scheme, and issue type scheme configuration.
+  /// `overrideScreenSecurity=true` skips this condition.
+  /// 2.  Field is visible in the
+  /// [field configuration](https://support.atlassian.com/jira-cloud-administration/docs/change-a-field-configuration/).
+  /// `overrideScreenSecurity=true` skips this condition.
+  /// 3.  Field is shown on the issue: each field has different conditions here.
+  /// For example: Attachment field only shows if attachments are enabled.
+  /// Assignee only shows if user has permissions to assign the issue.
+  /// 4.  If a field is custom then it must have valid custom field context,
+  /// applicable for its project and issue type. All system fields are assumed
+  /// to have context in all projects and all issue types.
+  /// 5.  Issue has a project, issue type, and status defined.
+  /// 6.  Issue is assigned to a valid workflow, and the current status has
+  /// assigned a workflow step. `overrideEditableFlag=true` skips this
+  /// condition.
+  /// 7.  The current workflow step is editable. This is true by default, but
+  /// [can be disabled by setting](https://support.atlassian.com/jira-cloud-administration/docs/use-workflow-properties/)
+  /// the `jira.issue.editable` property to `false`. `overrideEditableFlag=true`
+  /// skips this condition.
+  /// 8.  User has
+  /// [Edit issues permission](https://support.atlassian.com/jira-cloud-administration/docs/permissions-for-company-managed-projects/).
+  /// 9.  Workflow permissions allow editing a field. This is true by default
+  /// but
+  /// [can be modified](https://support.atlassian.com/jira-cloud-administration/docs/use-workflow-properties/)
+  /// using `jira.permission.*` workflow properties.
+  ///
+  /// Fields hidden using
+  /// [Issue layout settings page](https://support.atlassian.com/jira-software-cloud/docs/configure-field-layout-in-the-issue-view/)
+  /// remain editable.
+  ///
   /// Connect apps having an app user with *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg), and Forge
   /// apps acting on behalf of users with *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg), can return
   /// additional details using:
   ///
-  ///  *  `overrideScreenSecurity` Returns hidden fields.
-  ///  *  `overrideEditableFlag` Returns uneditable fields. For example, where
-  /// an issue has a workflow status of closed none of its fields are editable.
+  ///  *  `overrideScreenSecurity` When this flag is `true`, then this endpoint
+  /// skips checking if fields are available through screens, and field
+  /// configuration (conditions 1. and 2. from the list above).
+  ///  *  `overrideEditableFlag` When this flag is `true`, then this endpoint
+  /// skips checking if workflow is present and if the current step is editable
+  /// (conditions 6. and 7. from the list above).
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -8418,8 +8493,8 @@ class PermissionsApi {
   PermissionsApi(this._client);
 
   /// Returns a list of permissions indicating which permissions the user has.
-  /// Details of the user's permissions can be obtained in a global, project, or
-  /// issue context.
+  /// Details of the user's permissions can be obtained in a global, project,
+  /// issue or comment context.
   ///
   /// The user is reported as having a project permission:
   ///
@@ -8431,6 +8506,11 @@ class PermissionsApi {
   ///  *  for an issue, where a project permission is determined using issue
   /// data, if the user has the permission in the issue. Otherwise, if the user
   /// has the project permission in the project containing the issue.
+  ///  *  for a comment, where the user has both the permission to browse the
+  /// comment and the project permission for the comment's parent issue. Only
+  /// the BROWSE_PROJECTS permission is supported. If a `commentId` is provided
+  /// whose `permissions` does not equal BROWSE_PROJECTS, a 400 error will be
+  /// returned.
   ///
   /// This means that users may be shown as having an issue permission (such as
   /// EDIT_ISSUES) in the global context or a project context but may not have
@@ -8452,7 +8532,8 @@ class PermissionsApi {
       String? issueId,
       String? permissions,
       String? projectUuid,
-      String? projectConfigurationUuid}) async {
+      String? projectConfigurationUuid,
+      String? commentId}) async {
     return Permissions.fromJson(await _client.send(
       'get',
       'rest/api/3/mypermissions',
@@ -8465,6 +8546,7 @@ class PermissionsApi {
         if (projectUuid != null) 'projectUuid': projectUuid,
         if (projectConfigurationUuid != null)
           'projectConfigurationUuid': projectConfigurationUuid,
+        if (commentId != null) 'commentId': commentId,
       },
     ));
   }
@@ -9291,7 +9373,8 @@ class ProjectRoleActorsApi {
       {required String projectIdOrKey,
       required int id,
       String? user,
-      String? group}) async {
+      String? group,
+      String? groupId}) async {
     await _client.send(
       'delete',
       'rest/api/3/project/{projectIdOrKey}/role/{id}',
@@ -9302,6 +9385,7 @@ class ProjectRoleActorsApi {
       queryParameters: {
         if (user != null) 'user': user,
         if (group != null) 'group': group,
+        if (groupId != null) 'groupId': groupId,
       },
     );
   }
@@ -9352,7 +9436,7 @@ class ProjectRoleActorsApi {
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<ProjectRole> deleteProjectRoleActorsFromRole(
-      {required int id, String? user, String? group}) async {
+      {required int id, String? user, String? groupId, String? group}) async {
     return ProjectRole.fromJson(await _client.send(
       'delete',
       'rest/api/3/role/{id}/actors',
@@ -9361,6 +9445,7 @@ class ProjectRoleActorsApi {
       },
       queryParameters: {
         if (user != null) 'user': user,
+        if (groupId != null) 'groupId': groupId,
         if (group != null) 'group': group,
       },
     ));
@@ -10762,6 +10847,120 @@ class ServerInfoApi {
 
 /// Jira Cloud platform REST API documentation
 
+class StatusApi {
+  final ApiClient _client;
+
+  StatusApi(this._client);
+
+  /// Returns a list of the statuses specified by one or more status IDs.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer projects*
+  /// [project permission.](https://confluence.atlassian.com/x/yodKLg)
+  ///  *  *Administer Jira*
+  /// [project permission.](https://confluence.atlassian.com/x/yodKLg)
+  Future<List<JiraStatus>> getStatusesById(
+      {String? expand, List<String>? id}) async {
+    return (await _client.send(
+      'get',
+      'rest/api/3/statuses',
+      queryParameters: {
+        if (expand != null) 'expand': expand,
+        if (id != null) 'id': id.map((e) => e).join(','),
+      },
+    ) as List<Object?>)
+        .map((i) => JiraStatus.fromJson(i as Map<String, Object?>? ?? const {}))
+        .toList();
+  }
+
+  /// Updates statuses by ID.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer projects*
+  /// [project permission.](https://confluence.atlassian.com/x/yodKLg)
+  ///  *  *Administer Jira*
+  /// [project permission.](https://confluence.atlassian.com/x/yodKLg)
+  Future<dynamic> updateStatuses({required StatusUpdateRequest body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/statuses',
+      body: body.toJson(),
+    );
+  }
+
+  /// Creates statuses for a global or project scope.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer projects*
+  /// [project permission.](https://confluence.atlassian.com/x/yodKLg)
+  ///  *  *Administer Jira*
+  /// [project permission.](https://confluence.atlassian.com/x/yodKLg)
+  Future<List<JiraStatus>> createStatuses(
+      {required StatusCreateRequest body}) async {
+    return (await _client.send(
+      'post',
+      'rest/api/3/statuses',
+      body: body.toJson(),
+    ) as List<Object?>)
+        .map((i) => JiraStatus.fromJson(i as Map<String, Object?>? ?? const {}))
+        .toList();
+  }
+
+  /// Deletes statuses by ID.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer projects*
+  /// [project permission.](https://confluence.atlassian.com/x/yodKLg)
+  ///  *  *Administer Jira*
+  /// [project permission.](https://confluence.atlassian.com/x/yodKLg)
+  Future<dynamic> deleteStatusesById({List<String>? id}) async {
+    return await _client.send(
+      'delete',
+      'rest/api/3/statuses',
+      queryParameters: {
+        if (id != null) 'id': id.map((e) => e).join(','),
+      },
+    );
+  }
+
+  /// Returns a
+  /// [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/#pagination)
+  /// list of statuses that match a search on name or project.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer projects*
+  /// [project permission.](https://confluence.atlassian.com/x/yodKLg)
+  ///  *  *Administer Jira*
+  /// [project permission.](https://confluence.atlassian.com/x/yodKLg)
+  Future<PageOfStatuses> search(
+      {String? expand,
+      String? projectId,
+      int? startAt,
+      int? maxResults,
+      String? searchString,
+      String? statusCategory}) async {
+    return PageOfStatuses.fromJson(await _client.send(
+      'get',
+      'rest/api/3/statuses/search',
+      queryParameters: {
+        if (expand != null) 'expand': expand,
+        if (projectId != null) 'projectId': projectId,
+        if (startAt != null) 'startAt': '$startAt',
+        if (maxResults != null) 'maxResults': '$maxResults',
+        if (searchString != null) 'searchString': searchString,
+        if (statusCategory != null) 'statusCategory': statusCategory,
+      },
+    ));
+  }
+}
+
+/// Jira Cloud platform REST API documentation
+
 class TasksApi {
   final ApiClient _client;
 
@@ -10885,6 +11084,91 @@ class TimeTrackingApi {
       'rest/api/3/configuration/timetracking/options',
       body: body.toJson(),
     ));
+  }
+}
+
+/// Jira Cloud platform REST API documentation
+
+class UIModificationsAppsApi {
+  final ApiClient _client;
+
+  UIModificationsAppsApi(this._client);
+
+  /// Gets UI modifications. UI modifications can only be retrieved by Forge
+  /// apps.
+  ///
+  /// **[Permissions](#permissions) required:** None.
+  Future<PageBeanUiModificationDetails> getUiModifications(
+      {int? startAt, int? maxResults, String? expand}) async {
+    return PageBeanUiModificationDetails.fromJson(await _client.send(
+      'get',
+      'rest/api/3/uiModifications',
+      queryParameters: {
+        if (startAt != null) 'startAt': '$startAt',
+        if (maxResults != null) 'maxResults': '$maxResults',
+        if (expand != null) 'expand': expand,
+      },
+    ));
+  }
+
+  /// Creates a UI modification. UI modification can only be created by Forge
+  /// apps.
+  ///
+  /// Each app can define up to 100 UI modifications. Each UI modification can
+  /// define up to 1000 contexts.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *None* if the UI modification is created without contexts.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for one or
+  /// more projects, if the UI modification is created with contexts.
+  Future<UiModificationIdentifiers> createUiModification(
+      {required CreateUiModificationDetails body}) async {
+    return UiModificationIdentifiers.fromJson(await _client.send(
+      'post',
+      'rest/api/3/uiModifications',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Updates a UI modification. UI modification can only be updated by Forge
+  /// apps.
+  ///
+  /// Each UI modification can define up to 1000 contexts.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *None* if the UI modification is created without contexts.
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for one or
+  /// more projects, if the UI modification is created with contexts.
+  Future<dynamic> updateUiModification(
+      {required String uiModificationId,
+      required UpdateUiModificationDetails body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/uiModifications/{uiModificationId}',
+      pathParameters: {
+        'uiModificationId': uiModificationId,
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Deletes a UI modification. All the contexts that belong to the UI
+  /// modification are deleted too. UI modification can only be deleted by Forge
+  /// apps.
+  ///
+  /// **[Permissions](#permissions) required:** None.
+  Future<dynamic> deleteUiModification(String uiModificationId) async {
+    return await _client.send(
+      'delete',
+      'rest/api/3/uiModifications/{uiModificationId}',
+      pathParameters: {
+        'uiModificationId': uiModificationId,
+      },
+    );
   }
 }
 
@@ -11242,11 +11526,10 @@ class UserSearchApi {
 
   /// Returns a list of users that match the search string and property.
   ///
-  /// This operation takes the users in the range defined by `startAt` and
-  /// `maxResults`, up to the thousandth user, and then returns only the users
-  /// from that range that match the search string and property. This means the
-  /// operation usually returns fewer users than specified in `maxResults`. To
-  /// get all the users who match the search string and property, use
+  /// This operation first applies a filter to match the search string and
+  /// property, and then takes the filtered users in the range defined by
+  /// `startAt` and `maxResults`, up to the thousandth user. To get all the
+  /// users who match the search string and property, use
   /// [Get all users](#api-rest-api-3-users-search-get) and filter the records
   /// in your code.
   ///
@@ -11688,7 +11971,8 @@ class UsersApi {
         .toList();
   }
 
-  /// Returns a list of all (active and inactive) users.
+  /// Returns a list of all users, including active users, inactive users and
+  /// previously deleted users that have an Atlassian account.
   ///
   /// Privacy controls are applied to the response based on the users'
   /// preferences. This could mean, for example, that the user's email address
@@ -11711,7 +11995,8 @@ class UsersApi {
         .toList();
   }
 
-  /// Returns a list of all (active and inactive) users.
+  /// Returns a list of all users, including active users, inactive users and
+  /// previously deleted users that have an Atlassian account.
   ///
   /// Privacy controls are applied to the response based on the users'
   /// preferences. This could mean, for example, that the user's email address
@@ -13159,7 +13444,7 @@ class WorkflowsApi {
   ///      *  `duedate`
   ///      *  `created`
   ///      *  `updated`
-  ///      *  `Resolved`
+  ///      *  `resolutiondate`
   ///  *  `date2` The second date field. Required, if `expression` is not
   /// passed. Allowed field types:
   ///
@@ -13170,7 +13455,7 @@ class WorkflowsApi {
   ///      *  `duedate`
   ///      *  `created`
   ///      *  `updated`
-  ///      *  `Resolved`
+  ///      *  `resolutiondate`
   ///  *  `expression` An expression specifying an offset. Required, if `date2`
   /// is not passed. Offsets are built with a number, with `-` as prefix for the
   /// past, and one of these time units: `d` for day, `w` for week, `m` for
@@ -13204,7 +13489,7 @@ class WorkflowsApi {
   ///      *  `duedate`
   ///      *  `created`
   ///      *  `updated`
-  ///      *  `Resolved`
+  ///      *  `resolutiondate`
   ///  *  `date2` The reference date. Allowed field types:
   ///
   ///      *  `com.atlassian.jira.plugin.system.customfieldtypes:datepicker`
@@ -13214,7 +13499,7 @@ class WorkflowsApi {
   ///      *  `duedate`
   ///      *  `created`
   ///      *  `updated`
-  ///      *  `Resolved`
+  ///      *  `resolutiondate`
   ///  *  `windowsDays` A positive integer indicating a number of days.
   ///
   /// ##### Field required validator #####
@@ -13628,6 +13913,10 @@ class WorkflowsApi {
   ///  *  `type` A Connect rule key in a form of `appKey__moduleKey`.
   ///  *  `value` The stringified JSON configuration of a Connect rule.
   ///
+  /// #### Forge rules ####
+  ///
+  /// Forge transition rules are not yet supported.
+  ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<WorkflowIDs> createWorkflow(
@@ -13699,18 +13988,31 @@ class ActorInputBean {
   /// `"user":["5b10a2844c20165700ede21g", "5b109f2e9729b51b54dc274d"]`.
   final List<String> user;
 
-  /// The name of the group to add as a default actor. This parameter accepts a
-  /// comma-separated list. For example,
-  /// `"group":["project-admin", "jira-developers"]`.
+  /// The ID of the group to add as a default actor. This parameter cannot be
+  /// used with the `group` parameter This parameter accepts a comma-separated
+  /// list. For example,
+  /// `"groupId":["77f6ab39-e755-4570-a6ae-2d7a8df0bcb8", "0c011f85-69ed-49c4-a801-3b18d0f771bc"]`.
+  final List<String> groupId;
+
+  /// The name of the group to add as a default actor. This parameter cannot be
+  /// used with the `groupId` parameter. As a group's name can change,use of
+  /// `groupId` is recommended. This parameter accepts a comma-separated list.
+  /// For example, `"group":["project-admin", "jira-developers"]`.
   final List<String> group;
 
-  ActorInputBean({List<String>? user, List<String>? group})
+  ActorInputBean(
+      {List<String>? user, List<String>? groupId, List<String>? group})
       : user = user ?? [],
+        groupId = groupId ?? [],
         group = group ?? [];
 
   factory ActorInputBean.fromJson(Map<String, Object?> json) {
     return ActorInputBean(
       user: (json[r'user'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      groupId: (json[r'groupId'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -13723,17 +14025,21 @@ class ActorInputBean {
 
   Map<String, Object?> toJson() {
     var user = this.user;
+    var groupId = this.groupId;
     var group = this.group;
 
     final json = <String, Object?>{};
     json[r'user'] = user;
+    json[r'groupId'] = groupId;
     json[r'group'] = group;
     return json;
   }
 
-  ActorInputBean copyWith({List<String>? user, List<String>? group}) {
+  ActorInputBean copyWith(
+      {List<String>? user, List<String>? groupId, List<String>? group}) {
     return ActorInputBean(
       user: user ?? this.user,
+      groupId: groupId ?? this.groupId,
       group: group ?? this.group,
     );
   }
@@ -13743,12 +14049,19 @@ class ActorsMap {
   /// The user account ID of the user to add.
   final List<String> user;
 
-  /// The name of the group to add.
+  /// The name of the group to add. This parameter cannot be used with the
+  /// `groupId` parameter. As a group's name can change, use of `groupId` is
+  /// recommended.
   final List<String> group;
 
-  ActorsMap({List<String>? user, List<String>? group})
+  /// The ID of the group to add. This parameter cannot be used with the `group`
+  /// parameter.
+  final List<String> groupId;
+
+  ActorsMap({List<String>? user, List<String>? group, List<String>? groupId})
       : user = user ?? [],
-        group = group ?? [];
+        group = group ?? [],
+        groupId = groupId ?? [];
 
   factory ActorsMap.fromJson(Map<String, Object?> json) {
     return ActorsMap(
@@ -13760,23 +14073,31 @@ class ActorsMap {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
+      groupId: (json[r'groupId'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
     );
   }
 
   Map<String, Object?> toJson() {
     var user = this.user;
     var group = this.group;
+    var groupId = this.groupId;
 
     final json = <String, Object?>{};
     json[r'user'] = user;
     json[r'group'] = group;
+    json[r'groupId'] = groupId;
     return json;
   }
 
-  ActorsMap copyWith({List<String>? user, List<String>? group}) {
+  ActorsMap copyWith(
+      {List<String>? user, List<String>? group, List<String>? groupId}) {
     return ActorsMap(
       user: user ?? this.user,
       group: group ?? this.group,
+      groupId: groupId ?? this.groupId,
     );
   }
 }
@@ -13831,6 +14152,167 @@ class AddGroupBean {
   AddGroupBean copyWith({String? name}) {
     return AddGroupBean(
       name: name ?? this.name,
+    );
+  }
+}
+
+/// Announcement banner configuration.
+class AnnouncementBannerConfiguration {
+  /// The text on the announcement banner.
+  final String? message;
+
+  /// Flag indicating if the announcement banner can be dismissed by the user.
+  final bool isDismissible;
+
+  /// Flag indicating if the announcement banner is enabled or not.
+  final bool isEnabled;
+
+  /// Hash of the banner data. The client detects updates by comparing hash IDs.
+  final String? hashId;
+
+  /// Visibility of the announcement banner.
+  final AnnouncementBannerConfigurationVisibility? visibility;
+
+  AnnouncementBannerConfiguration(
+      {this.message,
+      bool? isDismissible,
+      bool? isEnabled,
+      this.hashId,
+      this.visibility})
+      : isDismissible = isDismissible ?? false,
+        isEnabled = isEnabled ?? false;
+
+  factory AnnouncementBannerConfiguration.fromJson(Map<String, Object?> json) {
+    return AnnouncementBannerConfiguration(
+      message: json[r'message'] as String?,
+      isDismissible: json[r'isDismissible'] as bool? ?? false,
+      isEnabled: json[r'isEnabled'] as bool? ?? false,
+      hashId: json[r'hashId'] as String?,
+      visibility: json[r'visibility'] != null
+          ? AnnouncementBannerConfigurationVisibility.fromValue(
+              json[r'visibility']! as String)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var message = this.message;
+    var isDismissible = this.isDismissible;
+    var isEnabled = this.isEnabled;
+    var hashId = this.hashId;
+    var visibility = this.visibility;
+
+    final json = <String, Object?>{};
+    if (message != null) {
+      json[r'message'] = message;
+    }
+    json[r'isDismissible'] = isDismissible;
+    json[r'isEnabled'] = isEnabled;
+    if (hashId != null) {
+      json[r'hashId'] = hashId;
+    }
+    if (visibility != null) {
+      json[r'visibility'] = visibility.value;
+    }
+    return json;
+  }
+
+  AnnouncementBannerConfiguration copyWith(
+      {String? message,
+      bool? isDismissible,
+      bool? isEnabled,
+      String? hashId,
+      AnnouncementBannerConfigurationVisibility? visibility}) {
+    return AnnouncementBannerConfiguration(
+      message: message ?? this.message,
+      isDismissible: isDismissible ?? this.isDismissible,
+      isEnabled: isEnabled ?? this.isEnabled,
+      hashId: hashId ?? this.hashId,
+      visibility: visibility ?? this.visibility,
+    );
+  }
+}
+
+class AnnouncementBannerConfigurationVisibility {
+  static const public = AnnouncementBannerConfigurationVisibility._('PUBLIC');
+  static const private = AnnouncementBannerConfigurationVisibility._('PRIVATE');
+
+  static const values = [
+    public,
+    private,
+  ];
+  final String value;
+
+  const AnnouncementBannerConfigurationVisibility._(this.value);
+
+  static AnnouncementBannerConfigurationVisibility fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => AnnouncementBannerConfigurationVisibility._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// Configuration of the announcement banner.
+class AnnouncementBannerConfigurationUpdate {
+  /// The text on the announcement banner.
+  final String? message;
+
+  /// Flag indicating if the announcement banner can be dismissed by the user.
+  final bool isDismissible;
+
+  /// Flag indicating if the announcement banner is enabled or not.
+  final bool isEnabled;
+
+  /// Visibility of the announcement banner. Can be public or private.
+  final String? visibility;
+
+  AnnouncementBannerConfigurationUpdate(
+      {this.message, bool? isDismissible, bool? isEnabled, this.visibility})
+      : isDismissible = isDismissible ?? false,
+        isEnabled = isEnabled ?? false;
+
+  factory AnnouncementBannerConfigurationUpdate.fromJson(
+      Map<String, Object?> json) {
+    return AnnouncementBannerConfigurationUpdate(
+      message: json[r'message'] as String?,
+      isDismissible: json[r'isDismissible'] as bool? ?? false,
+      isEnabled: json[r'isEnabled'] as bool? ?? false,
+      visibility: json[r'visibility'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var message = this.message;
+    var isDismissible = this.isDismissible;
+    var isEnabled = this.isEnabled;
+    var visibility = this.visibility;
+
+    final json = <String, Object?>{};
+    if (message != null) {
+      json[r'message'] = message;
+    }
+    json[r'isDismissible'] = isDismissible;
+    json[r'isEnabled'] = isEnabled;
+    if (visibility != null) {
+      json[r'visibility'] = visibility;
+    }
+    return json;
+  }
+
+  AnnouncementBannerConfigurationUpdate copyWith(
+      {String? message,
+      bool? isDismissible,
+      bool? isEnabled,
+      String? visibility}) {
+    return AnnouncementBannerConfigurationUpdate(
+      message: message ?? this.message,
+      isDismissible: isDismissible ?? this.isDismissible,
+      isEnabled: isEnabled ?? this.isEnabled,
+      visibility: visibility ?? this.visibility,
     );
   }
 }
@@ -14476,23 +14958,23 @@ class AttachmentArchive {
 
 class AttachmentArchiveEntry {
   final int? entryIndex;
-  final String? abbreviatedName;
   final String? mediaType;
+  final String? abbreviatedName;
   final String? name;
   final int? size;
 
   AttachmentArchiveEntry(
       {this.entryIndex,
-      this.abbreviatedName,
       this.mediaType,
+      this.abbreviatedName,
       this.name,
       this.size});
 
   factory AttachmentArchiveEntry.fromJson(Map<String, Object?> json) {
     return AttachmentArchiveEntry(
       entryIndex: (json[r'entryIndex'] as num?)?.toInt(),
-      abbreviatedName: json[r'abbreviatedName'] as String?,
       mediaType: json[r'mediaType'] as String?,
+      abbreviatedName: json[r'abbreviatedName'] as String?,
       name: json[r'name'] as String?,
       size: (json[r'size'] as num?)?.toInt(),
     );
@@ -14500,8 +14982,8 @@ class AttachmentArchiveEntry {
 
   Map<String, Object?> toJson() {
     var entryIndex = this.entryIndex;
-    var abbreviatedName = this.abbreviatedName;
     var mediaType = this.mediaType;
+    var abbreviatedName = this.abbreviatedName;
     var name = this.name;
     var size = this.size;
 
@@ -14509,11 +14991,11 @@ class AttachmentArchiveEntry {
     if (entryIndex != null) {
       json[r'entryIndex'] = entryIndex;
     }
-    if (abbreviatedName != null) {
-      json[r'abbreviatedName'] = abbreviatedName;
-    }
     if (mediaType != null) {
       json[r'mediaType'] = mediaType;
+    }
+    if (abbreviatedName != null) {
+      json[r'abbreviatedName'] = abbreviatedName;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -14526,14 +15008,14 @@ class AttachmentArchiveEntry {
 
   AttachmentArchiveEntry copyWith(
       {int? entryIndex,
-      String? abbreviatedName,
       String? mediaType,
+      String? abbreviatedName,
       String? name,
       int? size}) {
     return AttachmentArchiveEntry(
       entryIndex: entryIndex ?? this.entryIndex,
-      abbreviatedName: abbreviatedName ?? this.abbreviatedName,
       mediaType: mediaType ?? this.mediaType,
+      abbreviatedName: abbreviatedName ?? this.abbreviatedName,
       name: name ?? this.name,
       size: size ?? this.size,
     );
@@ -16552,6 +17034,15 @@ class ComponentWithIssueCount {
   /// Count of issues for the component.
   final int? issueCount;
 
+  /// The description for the component.
+  final String? description;
+
+  /// The URL for this count of the issues contained in the component.
+  final String? self;
+
+  /// Not used.
+  final int? projectId;
+
   /// The key of the project to which the component is assigned.
   final String? project;
 
@@ -16574,19 +17065,19 @@ class ComponentWithIssueCount {
   /// The user details for the component's lead user.
   final User? lead;
 
+  /// The user assigned to issues created with this component, when
+  /// `assigneeType` does not identify a valid assignee.
+  final User? realAssignee;
+
+  /// Whether a user is associated with `assigneeType`. For example, if the
+  /// `assigneeType` is set to `COMPONENT_LEAD` but the component lead is not
+  /// set, then `false` is returned.
+  final bool isAssigneeTypeValid;
+
   /// The details of the user associated with `assigneeType`, if any. See
   /// `realAssignee` for details of the user assigned to issues created with
   /// this component.
   final User? assignee;
-
-  /// Not used.
-  final int? projectId;
-
-  /// The description for the component.
-  final String? description;
-
-  /// The URL for this count of the issues contained in the component.
-  final String? self;
 
   /// The type of the assignee that is assigned to issues created with this
   /// component, when an assignee cannot be set from the `assigneeType`. For
@@ -16604,15 +17095,6 @@ class ComponentWithIssueCount {
   ///  *  `PROJECT_DEFAULT` when none of the preceding cases are true.
   final ComponentWithIssueCountRealAssigneeType? realAssigneeType;
 
-  /// The user assigned to issues created with this component, when
-  /// `assigneeType` does not identify a valid assignee.
-  final User? realAssignee;
-
-  /// Whether a user is associated with `assigneeType`. For example, if the
-  /// `assigneeType` is set to `COMPONENT_LEAD` but the component lead is not
-  /// set, then `false` is returned.
-  final bool isAssigneeTypeValid;
-
   /// The name for the component.
   final String? name;
 
@@ -16621,16 +17103,16 @@ class ComponentWithIssueCount {
 
   ComponentWithIssueCount(
       {this.issueCount,
+      this.description,
+      this.self,
+      this.projectId,
       this.project,
       this.assigneeType,
       this.lead,
-      this.assignee,
-      this.projectId,
-      this.description,
-      this.self,
-      this.realAssigneeType,
       this.realAssignee,
       bool? isAssigneeTypeValid,
+      this.assignee,
+      this.realAssigneeType,
       this.name,
       this.id})
       : isAssigneeTypeValid = isAssigneeTypeValid ?? false;
@@ -16638,6 +17120,9 @@ class ComponentWithIssueCount {
   factory ComponentWithIssueCount.fromJson(Map<String, Object?> json) {
     return ComponentWithIssueCount(
       issueCount: (json[r'issueCount'] as num?)?.toInt(),
+      description: json[r'description'] as String?,
+      self: json[r'self'] as String?,
+      projectId: (json[r'projectId'] as num?)?.toInt(),
       project: json[r'project'] as String?,
       assigneeType: json[r'assigneeType'] != null
           ? ComponentWithIssueCountAssigneeType.fromValue(
@@ -16646,20 +17131,17 @@ class ComponentWithIssueCount {
       lead: json[r'lead'] != null
           ? User.fromJson(json[r'lead']! as Map<String, Object?>)
           : null,
-      assignee: json[r'assignee'] != null
-          ? User.fromJson(json[r'assignee']! as Map<String, Object?>)
-          : null,
-      projectId: (json[r'projectId'] as num?)?.toInt(),
-      description: json[r'description'] as String?,
-      self: json[r'self'] as String?,
-      realAssigneeType: json[r'realAssigneeType'] != null
-          ? ComponentWithIssueCountRealAssigneeType.fromValue(
-              json[r'realAssigneeType']! as String)
-          : null,
       realAssignee: json[r'realAssignee'] != null
           ? User.fromJson(json[r'realAssignee']! as Map<String, Object?>)
           : null,
       isAssigneeTypeValid: json[r'isAssigneeTypeValid'] as bool? ?? false,
+      assignee: json[r'assignee'] != null
+          ? User.fromJson(json[r'assignee']! as Map<String, Object?>)
+          : null,
+      realAssigneeType: json[r'realAssigneeType'] != null
+          ? ComponentWithIssueCountRealAssigneeType.fromValue(
+              json[r'realAssigneeType']! as String)
+          : null,
       name: json[r'name'] as String?,
       id: json[r'id'] as String?,
     );
@@ -16667,22 +17149,31 @@ class ComponentWithIssueCount {
 
   Map<String, Object?> toJson() {
     var issueCount = this.issueCount;
+    var description = this.description;
+    var self = this.self;
+    var projectId = this.projectId;
     var project = this.project;
     var assigneeType = this.assigneeType;
     var lead = this.lead;
-    var assignee = this.assignee;
-    var projectId = this.projectId;
-    var description = this.description;
-    var self = this.self;
-    var realAssigneeType = this.realAssigneeType;
     var realAssignee = this.realAssignee;
     var isAssigneeTypeValid = this.isAssigneeTypeValid;
+    var assignee = this.assignee;
+    var realAssigneeType = this.realAssigneeType;
     var name = this.name;
     var id = this.id;
 
     final json = <String, Object?>{};
     if (issueCount != null) {
       json[r'issueCount'] = issueCount;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (projectId != null) {
+      json[r'projectId'] = projectId;
     }
     if (project != null) {
       json[r'project'] = project;
@@ -16693,25 +17184,16 @@ class ComponentWithIssueCount {
     if (lead != null) {
       json[r'lead'] = lead.toJson();
     }
-    if (assignee != null) {
-      json[r'assignee'] = assignee.toJson();
-    }
-    if (projectId != null) {
-      json[r'projectId'] = projectId;
-    }
-    if (description != null) {
-      json[r'description'] = description;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (realAssigneeType != null) {
-      json[r'realAssigneeType'] = realAssigneeType.value;
-    }
     if (realAssignee != null) {
       json[r'realAssignee'] = realAssignee.toJson();
     }
     json[r'isAssigneeTypeValid'] = isAssigneeTypeValid;
+    if (assignee != null) {
+      json[r'assignee'] = assignee.toJson();
+    }
+    if (realAssigneeType != null) {
+      json[r'realAssigneeType'] = realAssigneeType.value;
+    }
     if (name != null) {
       json[r'name'] = name;
     }
@@ -16723,30 +17205,30 @@ class ComponentWithIssueCount {
 
   ComponentWithIssueCount copyWith(
       {int? issueCount,
+      String? description,
+      String? self,
+      int? projectId,
       String? project,
       ComponentWithIssueCountAssigneeType? assigneeType,
       User? lead,
-      User? assignee,
-      int? projectId,
-      String? description,
-      String? self,
-      ComponentWithIssueCountRealAssigneeType? realAssigneeType,
       User? realAssignee,
       bool? isAssigneeTypeValid,
+      User? assignee,
+      ComponentWithIssueCountRealAssigneeType? realAssigneeType,
       String? name,
       String? id}) {
     return ComponentWithIssueCount(
       issueCount: issueCount ?? this.issueCount,
+      description: description ?? this.description,
+      self: self ?? this.self,
+      projectId: projectId ?? this.projectId,
       project: project ?? this.project,
       assigneeType: assigneeType ?? this.assigneeType,
       lead: lead ?? this.lead,
-      assignee: assignee ?? this.assignee,
-      projectId: projectId ?? this.projectId,
-      description: description ?? this.description,
-      self: self ?? this.self,
-      realAssigneeType: realAssigneeType ?? this.realAssigneeType,
       realAssignee: realAssignee ?? this.realAssignee,
       isAssigneeTypeValid: isAssigneeTypeValid ?? this.isAssigneeTypeValid,
+      assignee: assignee ?? this.assignee,
+      realAssigneeType: realAssigneeType ?? this.realAssigneeType,
       name: name ?? this.name,
       id: id ?? this.id,
     );
@@ -17712,73 +18194,117 @@ class CreateCustomFieldContext {
   }
 }
 
-/// The details of an issue adjustment.
-class CreateIssueAdjustmentDetails {
-  /// The name of the issue adjustment. The maximum length is 255 characters.
+/// Details of an issue priority.
+class CreatePriorityDetails {
+  /// The name of the priority. Must be unique.
   final String name;
 
-  /// The description of the issue adjustment. The maximum length is 255
-  /// characters.
+  /// The description of the priority.
   final String? description;
 
-  /// The data of the issue adjustment. The maximum size of the data is 50000
-  /// characters.
-  final String? data;
+  /// The URL of an icon for the priority. Accepted protocols are HTTP and
+  /// HTTPS. Built in icons can also be used.
+  final CreatePriorityDetailsIconUrl? iconUrl;
 
-  /// List of contexts of the issue adjustment. The maximum number of contexts
-  /// is 1000.
-  final List<IssueAdjustmentContextDetails> contexts;
+  /// The status color of the priority in 3-digit or 6-digit hexadecimal format.
+  final String statusColor;
 
-  CreateIssueAdjustmentDetails(
+  CreatePriorityDetails(
       {required this.name,
       this.description,
-      this.data,
-      List<IssueAdjustmentContextDetails>? contexts})
-      : contexts = contexts ?? [];
+      this.iconUrl,
+      required this.statusColor});
 
-  factory CreateIssueAdjustmentDetails.fromJson(Map<String, Object?> json) {
-    return CreateIssueAdjustmentDetails(
+  factory CreatePriorityDetails.fromJson(Map<String, Object?> json) {
+    return CreatePriorityDetails(
       name: json[r'name'] as String? ?? '',
       description: json[r'description'] as String?,
-      data: json[r'data'] as String?,
-      contexts: (json[r'contexts'] as List<Object?>?)
-              ?.map((i) => IssueAdjustmentContextDetails.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+      iconUrl: json[r'iconUrl'] != null
+          ? CreatePriorityDetailsIconUrl.fromValue(json[r'iconUrl']! as String)
+          : null,
+      statusColor: json[r'statusColor'] as String? ?? '',
     );
   }
 
   Map<String, Object?> toJson() {
     var name = this.name;
     var description = this.description;
-    var data = this.data;
-    var contexts = this.contexts;
+    var iconUrl = this.iconUrl;
+    var statusColor = this.statusColor;
 
     final json = <String, Object?>{};
     json[r'name'] = name;
     if (description != null) {
       json[r'description'] = description;
     }
-    if (data != null) {
-      json[r'data'] = data;
+    if (iconUrl != null) {
+      json[r'iconUrl'] = iconUrl.value;
     }
-    json[r'contexts'] = contexts.map((i) => i.toJson()).toList();
+    json[r'statusColor'] = statusColor;
     return json;
   }
 
-  CreateIssueAdjustmentDetails copyWith(
+  CreatePriorityDetails copyWith(
       {String? name,
       String? description,
-      String? data,
-      List<IssueAdjustmentContextDetails>? contexts}) {
-    return CreateIssueAdjustmentDetails(
+      CreatePriorityDetailsIconUrl? iconUrl,
+      String? statusColor}) {
+    return CreatePriorityDetails(
       name: name ?? this.name,
       description: description ?? this.description,
-      data: data ?? this.data,
-      contexts: contexts ?? this.contexts,
+      iconUrl: iconUrl ?? this.iconUrl,
+      statusColor: statusColor ?? this.statusColor,
     );
   }
+}
+
+class CreatePriorityDetailsIconUrl {
+  static const imagesIconsPrioritiesBlockerPng =
+      CreatePriorityDetailsIconUrl._('/images/icons/priorities/blocker.png');
+  static const imagesIconsPrioritiesCriticalPng =
+      CreatePriorityDetailsIconUrl._('/images/icons/priorities/critical.png');
+  static const imagesIconsPrioritiesHighPng =
+      CreatePriorityDetailsIconUrl._('/images/icons/priorities/high.png');
+  static const imagesIconsPrioritiesHighestPng =
+      CreatePriorityDetailsIconUrl._('/images/icons/priorities/highest.png');
+  static const imagesIconsPrioritiesLowPng =
+      CreatePriorityDetailsIconUrl._('/images/icons/priorities/low.png');
+  static const imagesIconsPrioritiesLowestPng =
+      CreatePriorityDetailsIconUrl._('/images/icons/priorities/lowest.png');
+  static const imagesIconsPrioritiesMajorPng =
+      CreatePriorityDetailsIconUrl._('/images/icons/priorities/major.png');
+  static const imagesIconsPrioritiesMediumPng =
+      CreatePriorityDetailsIconUrl._('/images/icons/priorities/medium.png');
+  static const imagesIconsPrioritiesMinorPng =
+      CreatePriorityDetailsIconUrl._('/images/icons/priorities/minor.png');
+  static const imagesIconsPrioritiesTrivialPng =
+      CreatePriorityDetailsIconUrl._('/images/icons/priorities/trivial.png');
+
+  static const values = [
+    imagesIconsPrioritiesBlockerPng,
+    imagesIconsPrioritiesCriticalPng,
+    imagesIconsPrioritiesHighPng,
+    imagesIconsPrioritiesHighestPng,
+    imagesIconsPrioritiesLowPng,
+    imagesIconsPrioritiesLowestPng,
+    imagesIconsPrioritiesMajorPng,
+    imagesIconsPrioritiesMediumPng,
+    imagesIconsPrioritiesMinorPng,
+    imagesIconsPrioritiesTrivialPng,
+  ];
+  final String value;
+
+  const CreatePriorityDetailsIconUrl._(this.value);
+
+  static CreatePriorityDetailsIconUrl fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => CreatePriorityDetailsIconUrl._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 /// Details about the project.
@@ -18114,6 +18640,12 @@ class CreateProjectDetailsProjectTemplateKey {
   static const comAtlassianServicedeskSimplifiedGeneralServiceDesk =
       CreateProjectDetailsProjectTemplateKey._(
           'com.atlassian.servicedesk:simplified-general-service-desk');
+  static const comAtlassianServicedeskSimplifiedGeneralServiceDeskIt =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:simplified-general-service-desk-it');
+  static const comAtlassianServicedeskSimplifiedGeneralServiceDeskBusiness =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:simplified-general-service-desk-business');
   static const comAtlassianServicedeskSimplifiedInternalServiceDesk =
       CreateProjectDetailsProjectTemplateKey._(
           'com.atlassian.servicedesk:simplified-internal-service-desk');
@@ -18162,6 +18694,8 @@ class CreateProjectDetailsProjectTemplateKey {
     comPyxisGreenhopperJiraGhSimplifiedScrumClassic,
     comAtlassianServicedeskSimplifiedItServiceManagement,
     comAtlassianServicedeskSimplifiedGeneralServiceDesk,
+    comAtlassianServicedeskSimplifiedGeneralServiceDeskIt,
+    comAtlassianServicedeskSimplifiedGeneralServiceDeskBusiness,
     comAtlassianServicedeskSimplifiedInternalServiceDesk,
     comAtlassianServicedeskSimplifiedExternalServiceDesk,
     comAtlassianServicedeskSimplifiedHrServiceDesk,
@@ -18189,6 +18723,75 @@ class CreateProjectDetailsProjectTemplateKey {
 
   @override
   String toString() => value;
+}
+
+/// The details of a UI modification.
+class CreateUiModificationDetails {
+  /// The name of the UI modification. The maximum length is 255 characters.
+  final String name;
+
+  /// The description of the UI modification. The maximum length is 255
+  /// characters.
+  final String? description;
+
+  /// The data of the UI modification. The maximum size of the data is 50000
+  /// characters.
+  final String? data;
+
+  /// List of contexts of the UI modification. The maximum number of contexts is
+  /// 1000.
+  final List<UiModificationContextDetails> contexts;
+
+  CreateUiModificationDetails(
+      {required this.name,
+      this.description,
+      this.data,
+      List<UiModificationContextDetails>? contexts})
+      : contexts = contexts ?? [];
+
+  factory CreateUiModificationDetails.fromJson(Map<String, Object?> json) {
+    return CreateUiModificationDetails(
+      name: json[r'name'] as String? ?? '',
+      description: json[r'description'] as String?,
+      data: json[r'data'] as String?,
+      contexts: (json[r'contexts'] as List<Object?>?)
+              ?.map((i) => UiModificationContextDetails.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var description = this.description;
+    var data = this.data;
+    var contexts = this.contexts;
+
+    final json = <String, Object?>{};
+    json[r'name'] = name;
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (data != null) {
+      json[r'data'] = data;
+    }
+    json[r'contexts'] = contexts.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  CreateUiModificationDetails copyWith(
+      {String? name,
+      String? description,
+      String? data,
+      List<UiModificationContextDetails>? contexts}) {
+    return CreateUiModificationDetails(
+      name: name ?? this.name,
+      description: description ?? this.description,
+      data: data ?? this.data,
+      contexts: contexts ?? this.contexts,
+    );
+  }
 }
 
 class CreateUpdateRoleRequestBean {
@@ -20822,8 +21425,9 @@ class CustomFieldValueUpdate {
   /// the milliseconds part is ignored.
   ///  *  `user` the value must be an object that contains the `accountId`
   /// field.
-  ///  *  `group` the value must be an object that contains the group `name`
-  /// field.
+  ///  *  `group` the value must be an object that contains the group `name` or
+  /// `groupId` field. Because group names can change, we recommend using
+  /// `groupId`.
   ///
   /// A list of appropriate values must be provided if the field is of the
   /// `list`
@@ -24842,7 +25446,7 @@ class GroupLabelType {
   String toString() => value;
 }
 
-/// Details about a group name.
+/// Details about a group.
 class GroupName {
   /// The name of group.
   final String? name;
@@ -25400,25 +26004,25 @@ class IdOrKeyBean {
 }
 
 class IncludedFields {
-  final List<String> actuallyIncluded;
   final List<String> included;
+  final List<String> actuallyIncluded;
   final List<String> excluded;
 
   IncludedFields(
-      {List<String>? actuallyIncluded,
-      List<String>? included,
+      {List<String>? included,
+      List<String>? actuallyIncluded,
       List<String>? excluded})
-      : actuallyIncluded = actuallyIncluded ?? [],
-        included = included ?? [],
+      : included = included ?? [],
+        actuallyIncluded = actuallyIncluded ?? [],
         excluded = excluded ?? [];
 
   factory IncludedFields.fromJson(Map<String, Object?> json) {
     return IncludedFields(
-      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
+      included: (json[r'included'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      included: (json[r'included'] as List<Object?>?)
+      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -25430,219 +26034,25 @@ class IncludedFields {
   }
 
   Map<String, Object?> toJson() {
-    var actuallyIncluded = this.actuallyIncluded;
     var included = this.included;
+    var actuallyIncluded = this.actuallyIncluded;
     var excluded = this.excluded;
 
     final json = <String, Object?>{};
-    json[r'actuallyIncluded'] = actuallyIncluded;
     json[r'included'] = included;
+    json[r'actuallyIncluded'] = actuallyIncluded;
     json[r'excluded'] = excluded;
     return json;
   }
 
   IncludedFields copyWith(
-      {List<String>? actuallyIncluded,
-      List<String>? included,
+      {List<String>? included,
+      List<String>? actuallyIncluded,
       List<String>? excluded}) {
     return IncludedFields(
-      actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
       included: included ?? this.included,
+      actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
       excluded: excluded ?? this.excluded,
-    );
-  }
-}
-
-/// The details of an issue adjustment's context, which define where to activate
-/// the issue adjustment.
-class IssueAdjustmentContextDetails {
-  /// The ID of the issue adjustment context.
-  final String? id;
-
-  /// The project ID of the context.
-  final String projectId;
-
-  /// The issue type ID of the context.
-  final String issueTypeId;
-
-  /// The view type of the context. Only `GIC` (Global Issue Create) is
-  /// supported.
-  final String viewType;
-
-  /// Whether a context is available. For example, when a project is deleted the
-  /// context becomes unavailable.
-  final bool isAvailable;
-
-  IssueAdjustmentContextDetails(
-      {this.id,
-      required this.projectId,
-      required this.issueTypeId,
-      required this.viewType,
-      bool? isAvailable})
-      : isAvailable = isAvailable ?? false;
-
-  factory IssueAdjustmentContextDetails.fromJson(Map<String, Object?> json) {
-    return IssueAdjustmentContextDetails(
-      id: json[r'id'] as String?,
-      projectId: json[r'projectId'] as String? ?? '',
-      issueTypeId: json[r'issueTypeId'] as String? ?? '',
-      viewType: json[r'viewType'] as String? ?? '',
-      isAvailable: json[r'isAvailable'] as bool? ?? false,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var projectId = this.projectId;
-    var issueTypeId = this.issueTypeId;
-    var viewType = this.viewType;
-    var isAvailable = this.isAvailable;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    json[r'projectId'] = projectId;
-    json[r'issueTypeId'] = issueTypeId;
-    json[r'viewType'] = viewType;
-    json[r'isAvailable'] = isAvailable;
-    return json;
-  }
-
-  IssueAdjustmentContextDetails copyWith(
-      {String? id,
-      String? projectId,
-      String? issueTypeId,
-      String? viewType,
-      bool? isAvailable}) {
-    return IssueAdjustmentContextDetails(
-      id: id ?? this.id,
-      projectId: projectId ?? this.projectId,
-      issueTypeId: issueTypeId ?? this.issueTypeId,
-      viewType: viewType ?? this.viewType,
-      isAvailable: isAvailable ?? this.isAvailable,
-    );
-  }
-}
-
-/// The details of an issue adjustment.
-class IssueAdjustmentDetails {
-  /// The ID of the issue adjustment.
-  final String id;
-
-  /// The name of the issue adjustment. The maximum length is 255 characters.
-  final String name;
-
-  /// The description of the issue adjustment. The maximum length is 255
-  /// characters.
-  final String? description;
-
-  /// The URL of the issue adjustment.
-  final String self;
-
-  /// The data of the issue adjustment. The maximum size of the data is 50000
-  /// characters.
-  final String? data;
-
-  /// List of contexts of the issue adjustment. The maximum number of contexts
-  /// is 1000.
-  final List<IssueAdjustmentContextDetails> contexts;
-
-  IssueAdjustmentDetails(
-      {required this.id,
-      required this.name,
-      this.description,
-      required this.self,
-      this.data,
-      List<IssueAdjustmentContextDetails>? contexts})
-      : contexts = contexts ?? [];
-
-  factory IssueAdjustmentDetails.fromJson(Map<String, Object?> json) {
-    return IssueAdjustmentDetails(
-      id: json[r'id'] as String? ?? '',
-      name: json[r'name'] as String? ?? '',
-      description: json[r'description'] as String?,
-      self: json[r'self'] as String? ?? '',
-      data: json[r'data'] as String?,
-      contexts: (json[r'contexts'] as List<Object?>?)
-              ?.map((i) => IssueAdjustmentContextDetails.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var name = this.name;
-    var description = this.description;
-    var self = this.self;
-    var data = this.data;
-    var contexts = this.contexts;
-
-    final json = <String, Object?>{};
-    json[r'id'] = id;
-    json[r'name'] = name;
-    if (description != null) {
-      json[r'description'] = description;
-    }
-    json[r'self'] = self;
-    if (data != null) {
-      json[r'data'] = data;
-    }
-    json[r'contexts'] = contexts.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  IssueAdjustmentDetails copyWith(
-      {String? id,
-      String? name,
-      String? description,
-      String? self,
-      String? data,
-      List<IssueAdjustmentContextDetails>? contexts}) {
-    return IssueAdjustmentDetails(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      description: description ?? this.description,
-      self: self ?? this.self,
-      data: data ?? this.data,
-      contexts: contexts ?? this.contexts,
-    );
-  }
-}
-
-/// Identifiers for an issue adjustment.
-class IssueAdjustmentIdentifiers {
-  /// The ID of the issue adjustment.
-  final String id;
-
-  /// The URL of the issue adjustment.
-  final String self;
-
-  IssueAdjustmentIdentifiers({required this.id, required this.self});
-
-  factory IssueAdjustmentIdentifiers.fromJson(Map<String, Object?> json) {
-    return IssueAdjustmentIdentifiers(
-      id: json[r'id'] as String? ?? '',
-      self: json[r'self'] as String? ?? '',
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var self = this.self;
-
-    final json = <String, Object?>{};
-    json[r'id'] = id;
-    json[r'self'] = self;
-    return json;
-  }
-
-  IssueAdjustmentIdentifiers copyWith({String? id, String? self}) {
-    return IssueAdjustmentIdentifiers(
-      id: id ?? this.id,
-      self: self ?? this.self,
     );
   }
 }
@@ -29835,6 +30245,125 @@ class JiraExpressionsComplexityValueBean {
   }
 }
 
+/// Details of a status.
+class JiraStatus {
+  /// The ID of the status.
+  final String? id;
+
+  /// The name of the status.
+  final String? name;
+
+  /// The category of the status.
+  final JiraStatusStatusCategory? statusCategory;
+  final StatusScope? scope;
+
+  /// The description of the status.
+  final String? description;
+
+  /// Projects and issue types where the status is used. Only available if the
+  /// `usages` expand is requested.
+  final List<ProjectIssueTypes> usages;
+
+  JiraStatus(
+      {this.id,
+      this.name,
+      this.statusCategory,
+      this.scope,
+      this.description,
+      List<ProjectIssueTypes>? usages})
+      : usages = usages ?? [];
+
+  factory JiraStatus.fromJson(Map<String, Object?> json) {
+    return JiraStatus(
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      statusCategory: json[r'statusCategory'] != null
+          ? JiraStatusStatusCategory.fromValue(
+              json[r'statusCategory']! as String)
+          : null,
+      scope: json[r'scope'] != null
+          ? StatusScope.fromJson(json[r'scope']! as Map<String, Object?>)
+          : null,
+      description: json[r'description'] as String?,
+      usages: (json[r'usages'] as List<Object?>?)
+              ?.map((i) => ProjectIssueTypes.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+    var statusCategory = this.statusCategory;
+    var scope = this.scope;
+    var description = this.description;
+    var usages = this.usages;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (statusCategory != null) {
+      json[r'statusCategory'] = statusCategory.value;
+    }
+    if (scope != null) {
+      json[r'scope'] = scope.toJson();
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    json[r'usages'] = usages.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  JiraStatus copyWith(
+      {String? id,
+      String? name,
+      JiraStatusStatusCategory? statusCategory,
+      StatusScope? scope,
+      String? description,
+      List<ProjectIssueTypes>? usages}) {
+    return JiraStatus(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      statusCategory: statusCategory ?? this.statusCategory,
+      scope: scope ?? this.scope,
+      description: description ?? this.description,
+      usages: usages ?? this.usages,
+    );
+  }
+}
+
+class JiraStatusStatusCategory {
+  static const todo = JiraStatusStatusCategory._('TODO');
+  static const inProgress = JiraStatusStatusCategory._('IN_PROGRESS');
+  static const done = JiraStatusStatusCategory._('DONE');
+
+  static const values = [
+    todo,
+    inProgress,
+    done,
+  ];
+  final String value;
+
+  const JiraStatusStatusCategory._(this.value);
+
+  static JiraStatusStatusCategory fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => JiraStatusStatusCategory._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 /// A list of JQL queries to parse.
 class JqlQueriesToParse {
   /// A list of queries to parse.
@@ -31368,8 +31897,9 @@ class MultipleCustomFieldValuesUpdate {
   /// the milliseconds part is ignored.
   ///  *  `user` the value must be an object that contains the `accountId`
   /// field.
-  ///  *  `group` the value must be an object that contains the group `name`
-  /// field.
+  ///  *  `group` the value must be an object that contains the group `name` or
+  /// `groupId` field. Because group names can change, we recommend using
+  /// `groupId`.
   ///
   /// A list of appropriate values must be provided if the field is of the
   /// `list`
@@ -31508,12 +32038,10 @@ class NewUserDetails {
   /// The email address for the user.
   final String emailAddress;
 
-  /// A suggested display name for the user. If the user has an Atlassian
+  /// This property is no longer available. If the user has an Atlassian
   /// account, their display name is not changed. If the user does not have an
-  /// Atlassian account, this display name is used as a suggestion for creating
-  /// an account. The user is sent an email asking them to set their display
-  /// name and privacy preferences.
-  final String displayName;
+  /// Atlassian account, they are sent an email asking them set up an account.
+  final String? displayName;
 
   /// Deprecated, do not use.
   final List<String> applicationKeys;
@@ -31524,7 +32052,7 @@ class NewUserDetails {
       this.name,
       this.password,
       required this.emailAddress,
-      required this.displayName,
+      this.displayName,
       List<String>? applicationKeys})
       : applicationKeys = applicationKeys ?? [];
 
@@ -31535,7 +32063,7 @@ class NewUserDetails {
       name: json[r'name'] as String?,
       password: json[r'password'] as String?,
       emailAddress: json[r'emailAddress'] as String? ?? '',
-      displayName: json[r'displayName'] as String? ?? '',
+      displayName: json[r'displayName'] as String?,
       applicationKeys: (json[r'applicationKeys'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -31566,7 +32094,9 @@ class NewUserDetails {
       json[r'password'] = password;
     }
     json[r'emailAddress'] = emailAddress;
-    json[r'displayName'] = displayName;
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
     json[r'applicationKeys'] = applicationKeys;
     return json;
   }
@@ -34188,106 +34718,6 @@ class PageBeanGroupDetails {
 }
 
 /// A page of items.
-class PageBeanIssueAdjustmentDetails {
-  /// The URL of the page.
-  final String? self;
-
-  /// If there is another page of results, the URL of the next page.
-  final String? nextPage;
-
-  /// The maximum number of items that could be returned.
-  final int? maxResults;
-
-  /// The index of the first item returned.
-  final int? startAt;
-
-  /// The number of items returned.
-  final int? total;
-
-  /// Whether this is the last page.
-  final bool isLast;
-
-  /// The list of items.
-  final List<IssueAdjustmentDetails> values;
-
-  PageBeanIssueAdjustmentDetails(
-      {this.self,
-      this.nextPage,
-      this.maxResults,
-      this.startAt,
-      this.total,
-      bool? isLast,
-      List<IssueAdjustmentDetails>? values})
-      : isLast = isLast ?? false,
-        values = values ?? [];
-
-  factory PageBeanIssueAdjustmentDetails.fromJson(Map<String, Object?> json) {
-    return PageBeanIssueAdjustmentDetails(
-      self: json[r'self'] as String?,
-      nextPage: json[r'nextPage'] as String?,
-      maxResults: (json[r'maxResults'] as num?)?.toInt(),
-      startAt: (json[r'startAt'] as num?)?.toInt(),
-      total: (json[r'total'] as num?)?.toInt(),
-      isLast: json[r'isLast'] as bool? ?? false,
-      values: (json[r'values'] as List<Object?>?)
-              ?.map((i) => IssueAdjustmentDetails.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var self = this.self;
-    var nextPage = this.nextPage;
-    var maxResults = this.maxResults;
-    var startAt = this.startAt;
-    var total = this.total;
-    var isLast = this.isLast;
-    var values = this.values;
-
-    final json = <String, Object?>{};
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (nextPage != null) {
-      json[r'nextPage'] = nextPage;
-    }
-    if (maxResults != null) {
-      json[r'maxResults'] = maxResults;
-    }
-    if (startAt != null) {
-      json[r'startAt'] = startAt;
-    }
-    if (total != null) {
-      json[r'total'] = total;
-    }
-    json[r'isLast'] = isLast;
-    json[r'values'] = values.map((i) => i.toJson()).toList();
-    return json;
-  }
-
-  PageBeanIssueAdjustmentDetails copyWith(
-      {String? self,
-      String? nextPage,
-      int? maxResults,
-      int? startAt,
-      int? total,
-      bool? isLast,
-      List<IssueAdjustmentDetails>? values}) {
-    return PageBeanIssueAdjustmentDetails(
-      self: self ?? this.self,
-      nextPage: nextPage ?? this.nextPage,
-      maxResults: maxResults ?? this.maxResults,
-      startAt: startAt ?? this.startAt,
-      total: total ?? this.total,
-      isLast: isLast ?? this.isLast,
-      values: values ?? this.values,
-    );
-  }
-}
-
-/// A page of items.
 class PageBeanIssueFieldOption {
   /// The URL of the page.
   final String? self;
@@ -35291,6 +35721,106 @@ class PageBeanNotificationScheme {
 }
 
 /// A page of items.
+class PageBeanPriority {
+  /// The URL of the page.
+  final String? self;
+
+  /// If there is another page of results, the URL of the next page.
+  final String? nextPage;
+
+  /// The maximum number of items that could be returned.
+  final int? maxResults;
+
+  /// The index of the first item returned.
+  final int? startAt;
+
+  /// The number of items returned.
+  final int? total;
+
+  /// Whether this is the last page.
+  final bool isLast;
+
+  /// The list of items.
+  final List<Priority> values;
+
+  PageBeanPriority(
+      {this.self,
+      this.nextPage,
+      this.maxResults,
+      this.startAt,
+      this.total,
+      bool? isLast,
+      List<Priority>? values})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageBeanPriority.fromJson(Map<String, Object?> json) {
+    return PageBeanPriority(
+      self: json[r'self'] as String?,
+      nextPage: json[r'nextPage'] as String?,
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      isLast: json[r'isLast'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) =>
+                  Priority.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var self = this.self;
+    var nextPage = this.nextPage;
+    var maxResults = this.maxResults;
+    var startAt = this.startAt;
+    var total = this.total;
+    var isLast = this.isLast;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (nextPage != null) {
+      json[r'nextPage'] = nextPage;
+    }
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'isLast'] = isLast;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageBeanPriority copyWith(
+      {String? self,
+      String? nextPage,
+      int? maxResults,
+      int? startAt,
+      int? total,
+      bool? isLast,
+      List<Priority>? values}) {
+    return PageBeanPriority(
+      self: self ?? this.self,
+      nextPage: nextPage ?? this.nextPage,
+      maxResults: maxResults ?? this.maxResults,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      isLast: isLast ?? this.isLast,
+      values: values ?? this.values,
+    );
+  }
+}
+
+/// A page of items.
 class PageBeanProject {
   /// The URL of the page.
   final String? self;
@@ -35878,6 +36408,106 @@ class PageBeanString {
       bool? isLast,
       List<String>? values}) {
     return PageBeanString(
+      self: self ?? this.self,
+      nextPage: nextPage ?? this.nextPage,
+      maxResults: maxResults ?? this.maxResults,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      isLast: isLast ?? this.isLast,
+      values: values ?? this.values,
+    );
+  }
+}
+
+/// A page of items.
+class PageBeanUiModificationDetails {
+  /// The URL of the page.
+  final String? self;
+
+  /// If there is another page of results, the URL of the next page.
+  final String? nextPage;
+
+  /// The maximum number of items that could be returned.
+  final int? maxResults;
+
+  /// The index of the first item returned.
+  final int? startAt;
+
+  /// The number of items returned.
+  final int? total;
+
+  /// Whether this is the last page.
+  final bool isLast;
+
+  /// The list of items.
+  final List<UiModificationDetails> values;
+
+  PageBeanUiModificationDetails(
+      {this.self,
+      this.nextPage,
+      this.maxResults,
+      this.startAt,
+      this.total,
+      bool? isLast,
+      List<UiModificationDetails>? values})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageBeanUiModificationDetails.fromJson(Map<String, Object?> json) {
+    return PageBeanUiModificationDetails(
+      self: json[r'self'] as String?,
+      nextPage: json[r'nextPage'] as String?,
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      isLast: json[r'isLast'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => UiModificationDetails.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var self = this.self;
+    var nextPage = this.nextPage;
+    var maxResults = this.maxResults;
+    var startAt = this.startAt;
+    var total = this.total;
+    var isLast = this.isLast;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (nextPage != null) {
+      json[r'nextPage'] = nextPage;
+    }
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'isLast'] = isLast;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageBeanUiModificationDetails copyWith(
+      {String? self,
+      String? nextPage,
+      int? maxResults,
+      int? startAt,
+      int? total,
+      bool? isLast,
+      List<UiModificationDetails>? values}) {
+    return PageBeanUiModificationDetails(
       self: self ?? this.self,
       nextPage: nextPage ?? this.nextPage,
       maxResults: maxResults ?? this.maxResults,
@@ -36903,6 +37533,105 @@ class PageOfDashboards {
   }
 }
 
+class PageOfStatuses {
+  /// The index of the first item returned on the page.
+  final int? startAt;
+
+  /// Number of items that satisfy the search.
+  final int? total;
+
+  /// Whether this is the last page.
+  final bool isLast;
+
+  /// The maximum number of items that could be returned.
+  final int? maxResults;
+
+  /// The list of items.
+  final List<JiraStatus> values;
+
+  /// The URL of this page.
+  final String? self;
+
+  /// The URL of the next page of results, if any.
+  final String? nextPage;
+
+  PageOfStatuses(
+      {this.startAt,
+      this.total,
+      bool? isLast,
+      this.maxResults,
+      List<JiraStatus>? values,
+      this.self,
+      this.nextPage})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageOfStatuses.fromJson(Map<String, Object?> json) {
+    return PageOfStatuses(
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      isLast: json[r'isLast'] as bool? ?? false,
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) =>
+                  JiraStatus.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      self: json[r'self'] as String?,
+      nextPage: json[r'nextPage'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var startAt = this.startAt;
+    var total = this.total;
+    var isLast = this.isLast;
+    var maxResults = this.maxResults;
+    var values = this.values;
+    var self = this.self;
+    var nextPage = this.nextPage;
+
+    final json = <String, Object?>{};
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'isLast'] = isLast;
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (nextPage != null) {
+      json[r'nextPage'] = nextPage;
+    }
+    return json;
+  }
+
+  PageOfStatuses copyWith(
+      {int? startAt,
+      int? total,
+      bool? isLast,
+      int? maxResults,
+      List<JiraStatus>? values,
+      String? self,
+      String? nextPage}) {
+    return PageOfStatuses(
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      isLast: isLast ?? this.isLast,
+      maxResults: maxResults ?? this.maxResults,
+      values: values ?? this.values,
+      self: self ?? this.self,
+      nextPage: nextPage ?? this.nextPage,
+    );
+  }
+}
+
 /// Paginated list of worklog details
 class PageOfWorklogs {
   /// The index of the first item returned on the page.
@@ -37685,6 +38414,34 @@ class Priority {
       name: name ?? this.name,
       id: id ?? this.id,
       isDefault: isDefault ?? this.isDefault,
+    );
+  }
+}
+
+/// The ID of an issue priority.
+class PriorityId {
+  /// The ID of the issue priority.
+  final String id;
+
+  PriorityId({required this.id});
+
+  factory PriorityId.fromJson(Map<String, Object?> json) {
+    return PriorityId(
+      id: json[r'id'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    return json;
+  }
+
+  PriorityId copyWith({String? id}) {
+    return PriorityId(
+      id: id ?? this.id,
     );
   }
 }
@@ -38962,6 +39719,34 @@ class ProjectFeatureStateState {
   String toString() => value;
 }
 
+/// Project ID details.
+class ProjectId {
+  /// The ID of the project.
+  final String id;
+
+  ProjectId({required this.id});
+
+  factory ProjectId.fromJson(Map<String, Object?> json) {
+    return ProjectId(
+      id: json[r'id'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    return json;
+  }
+
+  ProjectId copyWith({String? id}) {
+    return ProjectId(
+      id: id ?? this.id,
+    );
+  }
+}
+
 /// The identifiers for a project.
 class ProjectIdentifierBean {
   /// The ID of the project.
@@ -39364,6 +40149,49 @@ class ProjectIssueTypeMappings {
   }
 }
 
+/// Projects and issue types where the status is used. Only available if the
+/// `usages` expand is requested.
+class ProjectIssueTypes {
+  final ProjectId? project;
+
+  /// IDs of the issue types
+  final List<String> issueTypes;
+
+  ProjectIssueTypes({this.project, List<String>? issueTypes})
+      : issueTypes = issueTypes ?? [];
+
+  factory ProjectIssueTypes.fromJson(Map<String, Object?> json) {
+    return ProjectIssueTypes(
+      project: json[r'project'] != null
+          ? ProjectId.fromJson(json[r'project']! as Map<String, Object?>)
+          : null,
+      issueTypes: (json[r'issueTypes'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var project = this.project;
+    var issueTypes = this.issueTypes;
+
+    final json = <String, Object?>{};
+    if (project != null) {
+      json[r'project'] = project.toJson();
+    }
+    json[r'issueTypes'] = issueTypes;
+    return json;
+  }
+
+  ProjectIssueTypes copyWith({ProjectId? project, List<String>? issueTypes}) {
+    return ProjectIssueTypes(
+      project: project ?? this.project,
+      issueTypes: issueTypes ?? this.issueTypes,
+    );
+  }
+}
+
 /// Details of an issue type hierarchy level.
 class ProjectIssueTypesHierarchyLevel {
   /// The ID of the issue type hierarchy level. This property is deprecated, see
@@ -39433,34 +40261,27 @@ class ProjectIssueTypesHierarchyLevel {
 class ProjectLandingPageInfo {
   final String? url;
   final String? projectKey;
-  final String? projectType;
-  final int? boardId;
   final bool simplified;
+  final Map<String, dynamic>? attributes;
 
   ProjectLandingPageInfo(
-      {this.url,
-      this.projectKey,
-      this.projectType,
-      this.boardId,
-      bool? simplified})
+      {this.url, this.projectKey, bool? simplified, this.attributes})
       : simplified = simplified ?? false;
 
   factory ProjectLandingPageInfo.fromJson(Map<String, Object?> json) {
     return ProjectLandingPageInfo(
       url: json[r'url'] as String?,
       projectKey: json[r'projectKey'] as String?,
-      projectType: json[r'projectType'] as String?,
-      boardId: (json[r'boardId'] as num?)?.toInt(),
       simplified: json[r'simplified'] as bool? ?? false,
+      attributes: json[r'attributes'] as Map<String, Object?>?,
     );
   }
 
   Map<String, Object?> toJson() {
     var url = this.url;
     var projectKey = this.projectKey;
-    var projectType = this.projectType;
-    var boardId = this.boardId;
     var simplified = this.simplified;
+    var attributes = this.attributes;
 
     final json = <String, Object?>{};
     if (url != null) {
@@ -39469,28 +40290,23 @@ class ProjectLandingPageInfo {
     if (projectKey != null) {
       json[r'projectKey'] = projectKey;
     }
-    if (projectType != null) {
-      json[r'projectType'] = projectType;
-    }
-    if (boardId != null) {
-      json[r'boardId'] = boardId;
-    }
     json[r'simplified'] = simplified;
+    if (attributes != null) {
+      json[r'attributes'] = attributes;
+    }
     return json;
   }
 
   ProjectLandingPageInfo copyWith(
       {String? url,
       String? projectKey,
-      String? projectType,
-      int? boardId,
-      bool? simplified}) {
+      bool? simplified,
+      Map<String, dynamic>? attributes}) {
     return ProjectLandingPageInfo(
       url: url ?? this.url,
       projectKey: projectKey ?? this.projectKey,
-      projectType: projectType ?? this.projectType,
-      boardId: boardId ?? this.boardId,
       simplified: simplified ?? this.simplified,
+      attributes: attributes ?? this.attributes,
     );
   }
 }
@@ -39673,10 +40489,19 @@ class ProjectRoleActorsUpdateBean {
   /// role IDs.
   final int? id;
 
-  /// The actors to add to the project role. Add groups using
-  /// `atlassian-group-role-actor` and a list of group names. For example,
-  /// `"atlassian-group-role-actor":["another","administrators"]}`. Add users
-  /// using `atlassian-user-role-actor` and a list of account IDs. For example,
+  /// The actors to add to the project role.
+  ///
+  /// Add groups using:
+  ///
+  ///  *  `atlassian-group-role-actor` and a list of group names.
+  ///  *  `atlassian-group-role-actor-id` and a list of group IDs.
+  ///
+  /// As a group's name can change, use of `atlassian-group-role-actor-id` is
+  /// recommended. For example,
+  /// `"atlassian-group-role-actor-id":["eef79f81-0b89-4fca-a736-4be531a10869","77f6ab39-e755-4570-a6ae-2d7a8df0bcb8"]`.
+  ///
+  /// Add users using `atlassian-user-role-actor` and a list of account IDs. For
+  /// example,
   /// `"atlassian-user-role-actor":["12345678-9abc-def1-2345-6789abcdef12", "abcdef12-3456-789a-bcde-f123456789ab"]`.
   final Map<String, dynamic>? categorisedActors;
 
@@ -39841,18 +40666,23 @@ class ProjectRoleGroup {
   /// recommended to identify the group.
   final String? name;
 
-  ProjectRoleGroup({this.displayName, this.name});
+  /// The ID of the group.
+  final String? groupId;
+
+  ProjectRoleGroup({this.displayName, this.name, this.groupId});
 
   factory ProjectRoleGroup.fromJson(Map<String, Object?> json) {
     return ProjectRoleGroup(
       displayName: json[r'displayName'] as String?,
       name: json[r'name'] as String?,
+      groupId: json[r'groupId'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var displayName = this.displayName;
     var name = this.name;
+    var groupId = this.groupId;
 
     final json = <String, Object?>{};
     if (displayName != null) {
@@ -39861,13 +40691,18 @@ class ProjectRoleGroup {
     if (name != null) {
       json[r'name'] = name;
     }
+    if (groupId != null) {
+      json[r'groupId'] = groupId;
+    }
     return json;
   }
 
-  ProjectRoleGroup copyWith({String? displayName, String? name}) {
+  ProjectRoleGroup copyWith(
+      {String? displayName, String? name, String? groupId}) {
     return ProjectRoleGroup(
       displayName: displayName ?? this.displayName,
       name: name ?? this.name,
+      groupId: groupId ?? this.groupId,
     );
   }
 }
@@ -42243,7 +43078,8 @@ class SharePermission {
   final ProjectRole? role;
 
   /// The group that the filter is shared with. For a request, specify the
-  /// `name` property for the group.
+  /// `groupId` or `name` property for the group. As a group's name can change,
+  /// use of `groupId` is recommended.
   final GroupName? group;
 
   /// The user account ID that the filter is shared with. For a request, specify
@@ -43097,6 +43933,119 @@ class StatusCategory {
   }
 }
 
+/// Details of the status being created.
+class StatusCreate {
+  /// The name of the status.
+  final String name;
+
+  /// The category of the status.
+  final StatusCreateStatusCategory statusCategory;
+
+  /// The description of the status.
+  final String? description;
+
+  StatusCreate(
+      {required this.name, required this.statusCategory, this.description});
+
+  factory StatusCreate.fromJson(Map<String, Object?> json) {
+    return StatusCreate(
+      name: json[r'name'] as String? ?? '',
+      statusCategory: StatusCreateStatusCategory.fromValue(
+          json[r'statusCategory'] as String? ?? ''),
+      description: json[r'description'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var statusCategory = this.statusCategory;
+    var description = this.description;
+
+    final json = <String, Object?>{};
+    json[r'name'] = name;
+    json[r'statusCategory'] = statusCategory.value;
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    return json;
+  }
+
+  StatusCreate copyWith(
+      {String? name,
+      StatusCreateStatusCategory? statusCategory,
+      String? description}) {
+    return StatusCreate(
+      name: name ?? this.name,
+      statusCategory: statusCategory ?? this.statusCategory,
+      description: description ?? this.description,
+    );
+  }
+}
+
+class StatusCreateStatusCategory {
+  static const todo = StatusCreateStatusCategory._('TODO');
+  static const inProgress = StatusCreateStatusCategory._('IN_PROGRESS');
+  static const done = StatusCreateStatusCategory._('DONE');
+
+  static const values = [
+    todo,
+    inProgress,
+    done,
+  ];
+  final String value;
+
+  const StatusCreateStatusCategory._(this.value);
+
+  static StatusCreateStatusCategory fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => StatusCreateStatusCategory._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// Details of the statuses being created and their scope.
+class StatusCreateRequest {
+  /// Details of the statuses being created.
+  final List<StatusCreate> statuses;
+  final StatusScope scope;
+
+  StatusCreateRequest({required this.statuses, required this.scope});
+
+  factory StatusCreateRequest.fromJson(Map<String, Object?> json) {
+    return StatusCreateRequest(
+      statuses: (json[r'statuses'] as List<Object?>?)
+              ?.map((i) =>
+                  StatusCreate.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      scope: StatusScope.fromJson(
+          json[r'scope'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var statuses = this.statuses;
+    var scope = this.scope;
+
+    final json = <String, Object?>{};
+    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
+    json[r'scope'] = scope.toJson();
+    return json;
+  }
+
+  StatusCreateRequest copyWith(
+      {List<StatusCreate>? statuses, StatusScope? scope}) {
+    return StatusCreateRequest(
+      statuses: statuses ?? this.statuses,
+      scope: scope ?? this.scope,
+    );
+  }
+}
+
 /// A status.
 class StatusDetails {
   /// The URL of the status.
@@ -43229,6 +44178,185 @@ class StatusMapping {
       issueTypeId: issueTypeId ?? this.issueTypeId,
       statusId: statusId ?? this.statusId,
       newStatusId: newStatusId ?? this.newStatusId,
+    );
+  }
+}
+
+/// The scope of the status.
+class StatusScope {
+  /// The scope of the status. `GLOBAL` for company-managed projects and
+  /// `PROJECT` for team-managed projects.
+  final StatusScopeType type;
+  final ProjectId? project;
+
+  StatusScope({required this.type, this.project});
+
+  factory StatusScope.fromJson(Map<String, Object?> json) {
+    return StatusScope(
+      type: StatusScopeType.fromValue(json[r'type'] as String? ?? ''),
+      project: json[r'project'] != null
+          ? ProjectId.fromJson(json[r'project']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var project = this.project;
+
+    final json = <String, Object?>{};
+    json[r'type'] = type.value;
+    if (project != null) {
+      json[r'project'] = project.toJson();
+    }
+    return json;
+  }
+
+  StatusScope copyWith({StatusScopeType? type, ProjectId? project}) {
+    return StatusScope(
+      type: type ?? this.type,
+      project: project ?? this.project,
+    );
+  }
+}
+
+class StatusScopeType {
+  static const project = StatusScopeType._('PROJECT');
+  static const global = StatusScopeType._('GLOBAL');
+
+  static const values = [
+    project,
+    global,
+  ];
+  final String value;
+
+  const StatusScopeType._(this.value);
+
+  static StatusScopeType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => StatusScopeType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// Details of the status being updated.
+class StatusUpdate {
+  /// The ID of the status.
+  final String id;
+
+  /// The name of the status.
+  final String name;
+
+  /// The category of the status.
+  final StatusUpdateStatusCategory statusCategory;
+
+  /// The description of the status.
+  final String? description;
+
+  StatusUpdate(
+      {required this.id,
+      required this.name,
+      required this.statusCategory,
+      this.description});
+
+  factory StatusUpdate.fromJson(Map<String, Object?> json) {
+    return StatusUpdate(
+      id: json[r'id'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      statusCategory: StatusUpdateStatusCategory.fromValue(
+          json[r'statusCategory'] as String? ?? ''),
+      description: json[r'description'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+    var statusCategory = this.statusCategory;
+    var description = this.description;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    json[r'name'] = name;
+    json[r'statusCategory'] = statusCategory.value;
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    return json;
+  }
+
+  StatusUpdate copyWith(
+      {String? id,
+      String? name,
+      StatusUpdateStatusCategory? statusCategory,
+      String? description}) {
+    return StatusUpdate(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      statusCategory: statusCategory ?? this.statusCategory,
+      description: description ?? this.description,
+    );
+  }
+}
+
+class StatusUpdateStatusCategory {
+  static const todo = StatusUpdateStatusCategory._('TODO');
+  static const inProgress = StatusUpdateStatusCategory._('IN_PROGRESS');
+  static const done = StatusUpdateStatusCategory._('DONE');
+
+  static const values = [
+    todo,
+    inProgress,
+    done,
+  ];
+  final String value;
+
+  const StatusUpdateStatusCategory._(this.value);
+
+  static StatusUpdateStatusCategory fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => StatusUpdateStatusCategory._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// The list of statuses that will be updated.
+class StatusUpdateRequest {
+  /// The list of statuses that will be updated.
+  final List<StatusUpdate> statuses;
+
+  StatusUpdateRequest({List<StatusUpdate>? statuses})
+      : statuses = statuses ?? [];
+
+  factory StatusUpdateRequest.fromJson(Map<String, Object?> json) {
+    return StatusUpdateRequest(
+      statuses: (json[r'statuses'] as List<Object?>?)
+              ?.map((i) =>
+                  StatusUpdate.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var statuses = this.statuses;
+
+    final json = <String, Object?>{};
+    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  StatusUpdateRequest copyWith({List<StatusUpdate>? statuses}) {
+    return StatusUpdateRequest(
+      statuses: statuses ?? this.statuses,
     );
   }
 }
@@ -44213,6 +45341,200 @@ class Transitions {
   }
 }
 
+/// The details of a UI modification's context, which define where to activate
+/// the UI modification.
+class UiModificationContextDetails {
+  /// The ID of the UI modification context.
+  final String? id;
+
+  /// The project ID of the context.
+  final String projectId;
+
+  /// The issue type ID of the context.
+  final String issueTypeId;
+
+  /// The view type of the context. Only `GIC` (Global Issue Create) is
+  /// supported.
+  final String viewType;
+
+  /// Whether a context is available. For example, when a project is deleted the
+  /// context becomes unavailable.
+  final bool isAvailable;
+
+  UiModificationContextDetails(
+      {this.id,
+      required this.projectId,
+      required this.issueTypeId,
+      required this.viewType,
+      bool? isAvailable})
+      : isAvailable = isAvailable ?? false;
+
+  factory UiModificationContextDetails.fromJson(Map<String, Object?> json) {
+    return UiModificationContextDetails(
+      id: json[r'id'] as String?,
+      projectId: json[r'projectId'] as String? ?? '',
+      issueTypeId: json[r'issueTypeId'] as String? ?? '',
+      viewType: json[r'viewType'] as String? ?? '',
+      isAvailable: json[r'isAvailable'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var projectId = this.projectId;
+    var issueTypeId = this.issueTypeId;
+    var viewType = this.viewType;
+    var isAvailable = this.isAvailable;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    json[r'projectId'] = projectId;
+    json[r'issueTypeId'] = issueTypeId;
+    json[r'viewType'] = viewType;
+    json[r'isAvailable'] = isAvailable;
+    return json;
+  }
+
+  UiModificationContextDetails copyWith(
+      {String? id,
+      String? projectId,
+      String? issueTypeId,
+      String? viewType,
+      bool? isAvailable}) {
+    return UiModificationContextDetails(
+      id: id ?? this.id,
+      projectId: projectId ?? this.projectId,
+      issueTypeId: issueTypeId ?? this.issueTypeId,
+      viewType: viewType ?? this.viewType,
+      isAvailable: isAvailable ?? this.isAvailable,
+    );
+  }
+}
+
+/// The details of a UI modification.
+class UiModificationDetails {
+  /// The ID of the UI modification.
+  final String id;
+
+  /// The name of the UI modification. The maximum length is 255 characters.
+  final String name;
+
+  /// The description of the UI modification. The maximum length is 255
+  /// characters.
+  final String? description;
+
+  /// The URL of the UI modification.
+  final String self;
+
+  /// The data of the UI modification. The maximum size of the data is 50000
+  /// characters.
+  final String? data;
+
+  /// List of contexts of the UI modification. The maximum number of contexts is
+  /// 1000.
+  final List<UiModificationContextDetails> contexts;
+
+  UiModificationDetails(
+      {required this.id,
+      required this.name,
+      this.description,
+      required this.self,
+      this.data,
+      List<UiModificationContextDetails>? contexts})
+      : contexts = contexts ?? [];
+
+  factory UiModificationDetails.fromJson(Map<String, Object?> json) {
+    return UiModificationDetails(
+      id: json[r'id'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      description: json[r'description'] as String?,
+      self: json[r'self'] as String? ?? '',
+      data: json[r'data'] as String?,
+      contexts: (json[r'contexts'] as List<Object?>?)
+              ?.map((i) => UiModificationContextDetails.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+    var description = this.description;
+    var self = this.self;
+    var data = this.data;
+    var contexts = this.contexts;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    json[r'name'] = name;
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    json[r'self'] = self;
+    if (data != null) {
+      json[r'data'] = data;
+    }
+    json[r'contexts'] = contexts.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  UiModificationDetails copyWith(
+      {String? id,
+      String? name,
+      String? description,
+      String? self,
+      String? data,
+      List<UiModificationContextDetails>? contexts}) {
+    return UiModificationDetails(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      self: self ?? this.self,
+      data: data ?? this.data,
+      contexts: contexts ?? this.contexts,
+    );
+  }
+}
+
+/// Identifiers for a UI modification.
+class UiModificationIdentifiers {
+  /// The ID of the UI modification.
+  final String id;
+
+  /// The URL of the UI modification.
+  final String self;
+
+  UiModificationIdentifiers({required this.id, required this.self});
+
+  factory UiModificationIdentifiers.fromJson(Map<String, Object?> json) {
+    return UiModificationIdentifiers(
+      id: json[r'id'] as String? ?? '',
+      self: json[r'self'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var self = this.self;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    json[r'self'] = self;
+    return json;
+  }
+
+  UiModificationIdentifiers copyWith({String? id, String? self}) {
+    return UiModificationIdentifiers(
+      id: id ?? this.id,
+      self: self ?? this.self,
+    );
+  }
+}
+
 class UnrestrictedUserEmail {
   /// The accountId of the user
   final String? accountId;
@@ -44469,48 +45791,40 @@ class UpdateFieldConfigurationSchemeDetails {
   }
 }
 
-/// The details of an issue adjustment.
-class UpdateIssueAdjustmentDetails {
-  /// The name of the issue adjustment. The maximum length is 255 characters.
+/// Details of an issue priority.
+class UpdatePriorityDetails {
+  /// The name of the priority. Must be unique.
   final String? name;
 
-  /// The description of the issue adjustment. The maximum length is 255
-  /// characters.
+  /// The description of the priority.
   final String? description;
 
-  /// The data of the issue adjustment. The maximum size of the data is 50000
-  /// characters.
-  final String? data;
+  /// The URL of an icon for the priority. Accepted protocols are HTTP and
+  /// HTTPS. Built in icons can also be used.
+  final UpdatePriorityDetailsIconUrl? iconUrl;
 
-  /// List of contexts of the issue adjustment. The maximum number of contexts
-  /// is 1000. If provided, replaces all existing contexts.
-  final List<IssueAdjustmentContextDetails> contexts;
+  /// The status color of the priority in 3-digit or 6-digit hexadecimal format.
+  final String? statusColor;
 
-  UpdateIssueAdjustmentDetails(
-      {this.name,
-      this.description,
-      this.data,
-      List<IssueAdjustmentContextDetails>? contexts})
-      : contexts = contexts ?? [];
+  UpdatePriorityDetails(
+      {this.name, this.description, this.iconUrl, this.statusColor});
 
-  factory UpdateIssueAdjustmentDetails.fromJson(Map<String, Object?> json) {
-    return UpdateIssueAdjustmentDetails(
+  factory UpdatePriorityDetails.fromJson(Map<String, Object?> json) {
+    return UpdatePriorityDetails(
       name: json[r'name'] as String?,
       description: json[r'description'] as String?,
-      data: json[r'data'] as String?,
-      contexts: (json[r'contexts'] as List<Object?>?)
-              ?.map((i) => IssueAdjustmentContextDetails.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+      iconUrl: json[r'iconUrl'] != null
+          ? UpdatePriorityDetailsIconUrl.fromValue(json[r'iconUrl']! as String)
+          : null,
+      statusColor: json[r'statusColor'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var name = this.name;
     var description = this.description;
-    var data = this.data;
-    var contexts = this.contexts;
+    var iconUrl = this.iconUrl;
+    var statusColor = this.statusColor;
 
     final json = <String, Object?>{};
     if (name != null) {
@@ -44519,25 +45833,76 @@ class UpdateIssueAdjustmentDetails {
     if (description != null) {
       json[r'description'] = description;
     }
-    if (data != null) {
-      json[r'data'] = data;
+    if (iconUrl != null) {
+      json[r'iconUrl'] = iconUrl.value;
     }
-    json[r'contexts'] = contexts.map((i) => i.toJson()).toList();
+    if (statusColor != null) {
+      json[r'statusColor'] = statusColor;
+    }
     return json;
   }
 
-  UpdateIssueAdjustmentDetails copyWith(
+  UpdatePriorityDetails copyWith(
       {String? name,
       String? description,
-      String? data,
-      List<IssueAdjustmentContextDetails>? contexts}) {
-    return UpdateIssueAdjustmentDetails(
+      UpdatePriorityDetailsIconUrl? iconUrl,
+      String? statusColor}) {
+    return UpdatePriorityDetails(
       name: name ?? this.name,
       description: description ?? this.description,
-      data: data ?? this.data,
-      contexts: contexts ?? this.contexts,
+      iconUrl: iconUrl ?? this.iconUrl,
+      statusColor: statusColor ?? this.statusColor,
     );
   }
+}
+
+class UpdatePriorityDetailsIconUrl {
+  static const imagesIconsPrioritiesBlockerPng =
+      UpdatePriorityDetailsIconUrl._('/images/icons/priorities/blocker.png');
+  static const imagesIconsPrioritiesCriticalPng =
+      UpdatePriorityDetailsIconUrl._('/images/icons/priorities/critical.png');
+  static const imagesIconsPrioritiesHighPng =
+      UpdatePriorityDetailsIconUrl._('/images/icons/priorities/high.png');
+  static const imagesIconsPrioritiesHighestPng =
+      UpdatePriorityDetailsIconUrl._('/images/icons/priorities/highest.png');
+  static const imagesIconsPrioritiesLowPng =
+      UpdatePriorityDetailsIconUrl._('/images/icons/priorities/low.png');
+  static const imagesIconsPrioritiesLowestPng =
+      UpdatePriorityDetailsIconUrl._('/images/icons/priorities/lowest.png');
+  static const imagesIconsPrioritiesMajorPng =
+      UpdatePriorityDetailsIconUrl._('/images/icons/priorities/major.png');
+  static const imagesIconsPrioritiesMediumPng =
+      UpdatePriorityDetailsIconUrl._('/images/icons/priorities/medium.png');
+  static const imagesIconsPrioritiesMinorPng =
+      UpdatePriorityDetailsIconUrl._('/images/icons/priorities/minor.png');
+  static const imagesIconsPrioritiesTrivialPng =
+      UpdatePriorityDetailsIconUrl._('/images/icons/priorities/trivial.png');
+
+  static const values = [
+    imagesIconsPrioritiesBlockerPng,
+    imagesIconsPrioritiesCriticalPng,
+    imagesIconsPrioritiesHighPng,
+    imagesIconsPrioritiesHighestPng,
+    imagesIconsPrioritiesLowPng,
+    imagesIconsPrioritiesLowestPng,
+    imagesIconsPrioritiesMajorPng,
+    imagesIconsPrioritiesMediumPng,
+    imagesIconsPrioritiesMinorPng,
+    imagesIconsPrioritiesTrivialPng,
+  ];
+  final String value;
+
+  const UpdatePriorityDetailsIconUrl._(this.value);
+
+  static UpdatePriorityDetailsIconUrl fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => UpdatePriorityDetailsIconUrl._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 /// Details about the project.
@@ -44887,6 +46252,77 @@ class UpdateScreenTypes {
       create: create ?? this.create,
       view: view ?? this.view,
       default$: default$ ?? this.default$,
+    );
+  }
+}
+
+/// The details of a UI modification.
+class UpdateUiModificationDetails {
+  /// The name of the UI modification. The maximum length is 255 characters.
+  final String? name;
+
+  /// The description of the UI modification. The maximum length is 255
+  /// characters.
+  final String? description;
+
+  /// The data of the UI modification. The maximum size of the data is 50000
+  /// characters.
+  final String? data;
+
+  /// List of contexts of the UI modification. The maximum number of contexts is
+  /// 1000. If provided, replaces all existing contexts.
+  final List<UiModificationContextDetails> contexts;
+
+  UpdateUiModificationDetails(
+      {this.name,
+      this.description,
+      this.data,
+      List<UiModificationContextDetails>? contexts})
+      : contexts = contexts ?? [];
+
+  factory UpdateUiModificationDetails.fromJson(Map<String, Object?> json) {
+    return UpdateUiModificationDetails(
+      name: json[r'name'] as String?,
+      description: json[r'description'] as String?,
+      data: json[r'data'] as String?,
+      contexts: (json[r'contexts'] as List<Object?>?)
+              ?.map((i) => UiModificationContextDetails.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var description = this.description;
+    var data = this.data;
+    var contexts = this.contexts;
+
+    final json = <String, Object?>{};
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (data != null) {
+      json[r'data'] = data;
+    }
+    json[r'contexts'] = contexts.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  UpdateUiModificationDetails copyWith(
+      {String? name,
+      String? description,
+      String? data,
+      List<UiModificationContextDetails>? contexts}) {
+    return UpdateUiModificationDetails(
+      name: name ?? this.name,
+      description: description ?? this.description,
+      data: data ?? this.data,
+      contexts: contexts ?? this.contexts,
     );
   }
 }
@@ -45341,44 +46777,44 @@ class UserBean {
 }
 
 class UserBeanAvatarUrls {
+  /// The URL of the user's 16x16 pixel avatar.
+  final String? $16X16;
+
   /// The URL of the user's 24x24 pixel avatar.
   final String? $24X24;
 
   /// The URL of the user's 32x32 pixel avatar.
   final String? $32X32;
 
-  /// The URL of the user's 16x16 pixel avatar.
-  final String? $16X16;
-
   /// The URL of the user's 48x48 pixel avatar.
   final String? $48X48;
 
-  UserBeanAvatarUrls({this.$24X24, this.$32X32, this.$16X16, this.$48X48});
+  UserBeanAvatarUrls({this.$16X16, this.$24X24, this.$32X32, this.$48X48});
 
   factory UserBeanAvatarUrls.fromJson(Map<String, Object?> json) {
     return UserBeanAvatarUrls(
+      $16X16: json[r'16x16'] as String?,
       $24X24: json[r'24x24'] as String?,
       $32X32: json[r'32x32'] as String?,
-      $16X16: json[r'16x16'] as String?,
       $48X48: json[r'48x48'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
+    var $16X16 = this.$16X16;
     var $24X24 = this.$24X24;
     var $32X32 = this.$32X32;
-    var $16X16 = this.$16X16;
     var $48X48 = this.$48X48;
 
     final json = <String, Object?>{};
+    if ($16X16 != null) {
+      json[r'16x16'] = $16X16;
+    }
     if ($24X24 != null) {
       json[r'24x24'] = $24X24;
     }
     if ($32X32 != null) {
       json[r'32x32'] = $32X32;
-    }
-    if ($16X16 != null) {
-      json[r'16x16'] = $16X16;
     }
     if ($48X48 != null) {
       json[r'48x48'] = $48X48;
@@ -45387,11 +46823,11 @@ class UserBeanAvatarUrls {
   }
 
   UserBeanAvatarUrls copyWith(
-      {String? $24X24, String? $32X32, String? $16X16, String? $48X48}) {
+      {String? $16X16, String? $24X24, String? $32X32, String? $48X48}) {
     return UserBeanAvatarUrls(
+      $16X16: $16X16 ?? this.$16X16,
       $24X24: $24X24 ?? this.$24X24,
       $32X32: $32X32 ?? this.$32X32,
-      $16X16: $16X16 ?? this.$16X16,
       $48X48: $48X48 ?? this.$48X48,
     );
   }
@@ -46632,7 +48068,8 @@ class Visibility {
   /// a group use `identifier`.
   final String? value;
 
-  /// The ID of the group or role that visibility of this item is restricted to.
+  /// The ID of the group or the name of the role that visibility of this item
+  /// is restricted to.
   final String? identifier;
 
   Visibility({this.type, this.value, this.identifier});
@@ -47082,7 +48519,8 @@ class WebhookRegistrationDetails {
   final List<WebhookDetails> webhooks;
 
   /// The URL that specifies where to send the webhooks. This URL must use the
-  /// same base URL as the Connect app.
+  /// same base URL as the Connect app. Only a single URL per app is allowed to
+  /// be registered.
   final String url;
 
   WebhookRegistrationDetails({required this.webhooks, required this.url});

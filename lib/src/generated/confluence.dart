@@ -34,6 +34,8 @@ class ConfluenceApi {
 
   late final contentRestrictions = ContentRestrictionsApi(_client);
 
+  late final contentStates = ContentStatesApi(_client);
+
   late final contentVersions = ContentVersionsApi(_client);
 
   late final contentWatches = ContentWatchesApi(_client);
@@ -1871,6 +1873,141 @@ class ContentRestrictionsApi {
         if (accountId != null) 'accountId': accountId,
       },
     );
+  }
+}
+
+/// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
+
+class ContentStatesApi {
+  final ApiClient _client;
+
+  ContentStatesApi(this._client);
+
+  /// Gets the current content state of the draft or current version of content.
+  /// To specify the draft version, set
+  /// the parameter status to draft, otherwise archived or current will get the
+  /// relevant published state.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the content.
+  Future<ContentStateResponse> getContentState(
+      {required String id, String? status}) async {
+    return ContentStateResponse.fromJson(await _client.send(
+      'get',
+      'wiki/rest/api/content/{id}/state',
+      pathParameters: {
+        'id': id,
+      },
+      queryParameters: {
+        if (status != null) 'status': status,
+      },
+    ));
+  }
+
+  /// Sets the content state of the content specified and creates a new version
+  /// (publishes the content without changing the body) of the content with the
+  /// new state.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the content.
+  Future<ContentStateResponse> setContentState(
+      {required String id,
+      String? status,
+      required ContentStateRestInput body}) async {
+    return ContentStateResponse.fromJson(await _client.send(
+      'put',
+      'wiki/rest/api/content/{id}/state',
+      pathParameters: {
+        'id': id,
+      },
+      queryParameters: {
+        if (status != null) 'status': status,
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Removes the content state of the content specified and creates a new
+  /// version
+  /// (publishes the content without changing the body) of the content with the
+  /// new status.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the content.
+  Future<ContentStateResponse> removeContentState(
+      {required String id, String? status}) async {
+    return ContentStateResponse.fromJson(await _client.send(
+      'delete',
+      'wiki/rest/api/content/{id}/state',
+      pathParameters: {
+        'id': id,
+      },
+      queryParameters: {
+        if (status != null) 'status': status,
+      },
+    ));
+  }
+
+  /// Gets content states that are available for the content to be set as.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the content.
+  Future<AvailableContentStates> getAvailableContentStates(String id) async {
+    return AvailableContentStates.fromJson(await _client.send(
+      'get',
+      'wiki/rest/api/content/{id}/state/available',
+      pathParameters: {
+        'id': id,
+      },
+    ));
+  }
+
+  /// Get custom content states that authenticated user has created.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**
+  /// Must have user authentication.
+  Future<List<ContentState>> getCustomContentStates() async {
+    return (await _client.send(
+      'get',
+      'wiki/rest/api/content-states',
+    ) as List<Object?>)
+        .map((i) =>
+            ContentState.fromJson(i as Map<String, Object?>? ?? const {}))
+        .toList();
+  }
+
+  /// Get content states that are suggested in the space.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Space view permission
+  Future<List<ContentState>> getSpaceContentStates(String spaceKey) async {
+    return (await _client.send(
+      'get',
+      'wiki/rest/api/space/{spaceKey}/state',
+      pathParameters: {
+        'spaceKey': spaceKey,
+      },
+    ) as List<Object?>)
+        .map((i) =>
+            ContentState.fromJson(i as Map<String, Object?>? ?? const {}))
+        .toList();
+  }
+
+  /// Get object describing whether content states are allowed at all, if custom
+  /// content states or space content states
+  /// are restricted, and a list of space content states allowed for the space
+  /// if they are not restricted.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Space admin permission
+  Future<ContentStateSettings> getContentStateSettings(String spaceKey) async {
+    return ContentStateSettings.fromJson(await _client.send(
+      'get',
+      'wiki/rest/api/space/{spaceKey}/state/settings',
+      pathParameters: {
+        'spaceKey': spaceKey,
+      },
+    ));
   }
 }
 
@@ -4144,17 +4281,12 @@ class UsersApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
   Future<User> getUser(
-      {String? key,
-      String? username,
-      String? accountId,
-      List<String>? expand}) async {
+      {required String accountId, List<String>? expand}) async {
     return User.fromJson(await _client.send(
       'get',
       'wiki/rest/api/user',
       queryParameters: {
-        if (key != null) 'key': key,
-        if (username != null) 'username': username,
-        if (accountId != null) 'accountId': accountId,
+        'accountId': accountId,
         if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
@@ -4196,18 +4328,12 @@ class UsersApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
   Future<GroupArrayWithLinks> getGroupMembershipsForUser(
-      {String? key,
-      String? username,
-      String? accountId,
-      int? start,
-      int? limit}) async {
+      {required String accountId, int? start, int? limit}) async {
     return GroupArrayWithLinks.fromJson(await _client.send(
       'get',
       'wiki/rest/api/user/memberof',
       queryParameters: {
-        if (key != null) 'key': key,
-        if (username != null) 'username': username,
-        if (accountId != null) 'accountId': accountId,
+        'accountId': accountId,
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
       },
@@ -5456,6 +5582,51 @@ class AuditRecordCreateAuthorType {
 
   @override
   String toString() => value;
+}
+
+class AvailableContentStates {
+  /// space suggested content states that can be used in the space
+  final List<ContentState> spaceContentStates;
+  final List<ContentState> customContentStates;
+
+  AvailableContentStates(
+      {required this.spaceContentStates, required this.customContentStates});
+
+  factory AvailableContentStates.fromJson(Map<String, Object?> json) {
+    return AvailableContentStates(
+      spaceContentStates: (json[r'spaceContentStates'] as List<Object?>?)
+              ?.map((i) =>
+                  ContentState.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      customContentStates: (json[r'customContentStates'] as List<Object?>?)
+              ?.map((i) =>
+                  ContentState.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var spaceContentStates = this.spaceContentStates;
+    var customContentStates = this.customContentStates;
+
+    final json = <String, Object?>{};
+    json[r'spaceContentStates'] =
+        spaceContentStates.map((i) => i.toJson()).toList();
+    json[r'customContentStates'] =
+        customContentStates.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  AvailableContentStates copyWith(
+      {List<ContentState>? spaceContentStates,
+      List<ContentState>? customContentStates}) {
+    return AvailableContentStates(
+      spaceContentStates: spaceContentStates ?? this.spaceContentStates,
+      customContentStates: customContentStates ?? this.customContentStates,
+    );
+  }
 }
 
 class BlueprintTemplate {
@@ -10555,6 +10726,202 @@ class ContentRestrictionsExpandable {
   }
 }
 
+class ContentState {
+  /// identifier of content state. If 0, 1, or 2, this is a default space state
+  final int id;
+
+  /// name of content state.
+  final String name;
+
+  /// hex string representing color of state
+  final String color;
+
+  ContentState({required this.id, required this.name, required this.color});
+
+  factory ContentState.fromJson(Map<String, Object?> json) {
+    return ContentState(
+      id: (json[r'id'] as num?)?.toInt() ?? 0,
+      name: json[r'name'] as String? ?? '',
+      color: json[r'color'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+    var color = this.color;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    json[r'name'] = name;
+    json[r'color'] = color;
+    return json;
+  }
+
+  ContentState copyWith({int? id, String? name, String? color}) {
+    return ContentState(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      color: color ?? this.color,
+    );
+  }
+}
+
+class ContentStateResponse {
+  /// Null or content state
+  final ContentState? contentState;
+
+  /// Timestamp of last publish event where content state changed
+  final String? lastUpdated;
+
+  ContentStateResponse({this.contentState, this.lastUpdated});
+
+  factory ContentStateResponse.fromJson(Map<String, Object?> json) {
+    return ContentStateResponse(
+      contentState: json[r'contentState'] != null
+          ? ContentState.fromJson(
+              json[r'contentState']! as Map<String, Object?>)
+          : null,
+      lastUpdated: json[r'lastUpdated'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var contentState = this.contentState;
+    var lastUpdated = this.lastUpdated;
+
+    final json = <String, Object?>{};
+    if (contentState != null) {
+      json[r'contentState'] = contentState.toJson();
+    }
+    if (lastUpdated != null) {
+      json[r'lastUpdated'] = lastUpdated;
+    }
+    return json;
+  }
+
+  ContentStateResponse copyWith(
+      {ContentState? contentState, String? lastUpdated}) {
+    return ContentStateResponse(
+      contentState: contentState ?? this.contentState,
+      lastUpdated: lastUpdated ?? this.lastUpdated,
+    );
+  }
+}
+
+class ContentStateRestInput {
+  /// name of content state
+  final String? name;
+
+  /// Color of state. Must be in 6 digit hex form (#FFFFFF)
+  final String? color;
+
+  /// id of state
+  final int? id;
+
+  ContentStateRestInput({this.name, this.color, this.id});
+
+  factory ContentStateRestInput.fromJson(Map<String, Object?> json) {
+    return ContentStateRestInput(
+      name: json[r'name'] as String?,
+      color: json[r'color'] as String?,
+      id: (json[r'id'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var color = this.color;
+    var id = this.id;
+
+    final json = <String, Object?>{};
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (color != null) {
+      json[r'color'] = color;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    return json;
+  }
+
+  ContentStateRestInput copyWith({String? name, String? color, int? id}) {
+    return ContentStateRestInput(
+      name: name ?? this.name,
+      color: color ?? this.color,
+      id: id ?? this.id,
+    );
+  }
+}
+
+class ContentStateSettings {
+  /// Whether users can place any content states on content
+  final bool contentStatesAllowed;
+
+  /// Whether users can place their custom states on content
+  final bool customContentStatesAllowed;
+
+  /// Whether users can place space suggested states on content
+  final bool spaceContentStatesAllowed;
+
+  /// space suggested content states that users can choose from
+  final List<ContentState> spaceContentStates;
+
+  ContentStateSettings(
+      {required this.contentStatesAllowed,
+      required this.customContentStatesAllowed,
+      required this.spaceContentStatesAllowed,
+      List<ContentState>? spaceContentStates})
+      : spaceContentStates = spaceContentStates ?? [];
+
+  factory ContentStateSettings.fromJson(Map<String, Object?> json) {
+    return ContentStateSettings(
+      contentStatesAllowed: json[r'contentStatesAllowed'] as bool? ?? false,
+      customContentStatesAllowed:
+          json[r'customContentStatesAllowed'] as bool? ?? false,
+      spaceContentStatesAllowed:
+          json[r'spaceContentStatesAllowed'] as bool? ?? false,
+      spaceContentStates: (json[r'spaceContentStates'] as List<Object?>?)
+              ?.map((i) =>
+                  ContentState.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var contentStatesAllowed = this.contentStatesAllowed;
+    var customContentStatesAllowed = this.customContentStatesAllowed;
+    var spaceContentStatesAllowed = this.spaceContentStatesAllowed;
+    var spaceContentStates = this.spaceContentStates;
+
+    final json = <String, Object?>{};
+    json[r'contentStatesAllowed'] = contentStatesAllowed;
+    json[r'customContentStatesAllowed'] = customContentStatesAllowed;
+    json[r'spaceContentStatesAllowed'] = spaceContentStatesAllowed;
+    json[r'spaceContentStates'] =
+        spaceContentStates.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  ContentStateSettings copyWith(
+      {bool? contentStatesAllowed,
+      bool? customContentStatesAllowed,
+      bool? spaceContentStatesAllowed,
+      List<ContentState>? spaceContentStates}) {
+    return ContentStateSettings(
+      contentStatesAllowed: contentStatesAllowed ?? this.contentStatesAllowed,
+      customContentStatesAllowed:
+          customContentStatesAllowed ?? this.customContentStatesAllowed,
+      spaceContentStatesAllowed:
+          spaceContentStatesAllowed ?? this.spaceContentStatesAllowed,
+      spaceContentStates: spaceContentStates ?? this.spaceContentStates,
+    );
+  }
+}
+
 class ContentTemplate {
   final String templateId;
   final ContentTemplateOriginalTemplate? originalTemplate;
@@ -11348,7 +11715,7 @@ class ContentUpdate {
 
   /// The updated title of the content. If you are not changing this field, set
   /// this to the current `title`.
-  final String title;
+  final String? title;
 
   /// The type of content. Set this to the current type of the content. For
   /// example, - page - blogpost - comment - attachment
@@ -11375,7 +11742,7 @@ class ContentUpdate {
 
   ContentUpdate(
       {required this.version,
-      required this.title,
+      this.title,
       required this.type,
       this.status,
       List<ContentUpdateAncestorsItem>? ancestors,
@@ -11386,7 +11753,7 @@ class ContentUpdate {
     return ContentUpdate(
       version: ContentUpdateVersion.fromJson(
           json[r'version'] as Map<String, Object?>? ?? const {}),
-      title: json[r'title'] as String? ?? '',
+      title: json[r'title'] as String?,
       type: json[r'type'] as String? ?? '',
       status: json[r'status'] != null
           ? ContentUpdateStatus.fromValue(json[r'status']! as String)
@@ -11412,7 +11779,9 @@ class ContentUpdate {
 
     final json = <String, Object?>{};
     json[r'version'] = version.toJson();
-    json[r'title'] = title;
+    if (title != null) {
+      json[r'title'] = title;
+    }
     json[r'type'] = type;
     if (status != null) {
       json[r'status'] = status.value;
@@ -11512,6 +11881,7 @@ class ContentUpdateBody {
   final ContentBodyCreate? editor;
   final ContentBodyCreate? editor2;
   final ContentBodyCreate? wiki;
+  final ContentBodyCreate? atlasDocFormat;
   final ContentBodyCreate? anonymousExportView;
 
   ContentUpdateBody(
@@ -11522,6 +11892,7 @@ class ContentUpdateBody {
       this.editor,
       this.editor2,
       this.wiki,
+      this.atlasDocFormat,
       this.anonymousExportView});
 
   factory ContentUpdateBody.fromJson(Map<String, Object?> json) {
@@ -11551,6 +11922,10 @@ class ContentUpdateBody {
       wiki: json[r'wiki'] != null
           ? ContentBodyCreate.fromJson(json[r'wiki']! as Map<String, Object?>)
           : null,
+      atlasDocFormat: json[r'atlas_doc_format'] != null
+          ? ContentBodyCreate.fromJson(
+              json[r'atlas_doc_format']! as Map<String, Object?>)
+          : null,
       anonymousExportView: json[r'anonymous_export_view'] != null
           ? ContentBodyCreate.fromJson(
               json[r'anonymous_export_view']! as Map<String, Object?>)
@@ -11566,6 +11941,7 @@ class ContentUpdateBody {
     var editor = this.editor;
     var editor2 = this.editor2;
     var wiki = this.wiki;
+    var atlasDocFormat = this.atlasDocFormat;
     var anonymousExportView = this.anonymousExportView;
 
     final json = <String, Object?>{};
@@ -11590,6 +11966,9 @@ class ContentUpdateBody {
     if (wiki != null) {
       json[r'wiki'] = wiki.toJson();
     }
+    if (atlasDocFormat != null) {
+      json[r'atlas_doc_format'] = atlasDocFormat.toJson();
+    }
     if (anonymousExportView != null) {
       json[r'anonymous_export_view'] = anonymousExportView.toJson();
     }
@@ -11604,6 +11983,7 @@ class ContentUpdateBody {
       ContentBodyCreate? editor,
       ContentBodyCreate? editor2,
       ContentBodyCreate? wiki,
+      ContentBodyCreate? atlasDocFormat,
       ContentBodyCreate? anonymousExportView}) {
     return ContentUpdateBody(
       view: view ?? this.view,
@@ -11613,6 +11993,7 @@ class ContentUpdateBody {
       editor: editor ?? this.editor,
       editor2: editor2 ?? this.editor2,
       wiki: wiki ?? this.wiki,
+      atlasDocFormat: atlasDocFormat ?? this.atlasDocFormat,
       anonymousExportView: anonymousExportView ?? this.anonymousExportView,
     );
   }
