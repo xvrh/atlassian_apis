@@ -42,10 +42,15 @@ class CustomerApi {
   ///
   /// **[Permissions](#permissions) required**: Jira Administrator Global
   /// permission
-  Future<UserDTO> createCustomer({required CustomerCreateDTO body}) async {
+  Future<UserDTO> createCustomer(
+      {bool? strictConflictStatusCode, required CustomerCreateDTO body}) async {
     return UserDTO.fromJson(await _client.send(
       'post',
       'rest/servicedeskapi/customer',
+      queryParameters: {
+        if (strictConflictStatusCode != null)
+          'strictConflictStatusCode': '$strictConflictStatusCode',
+      },
       body: body.toJson(),
     ));
   }
@@ -1379,6 +1384,8 @@ class ServicedeskApi {
   }
 
   /// This method returns a customer request type from a service desk.
+  ///
+  /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required**: Permission to access the service
   /// desk.
@@ -4032,25 +4039,25 @@ class I18nErrorMessage {
 }
 
 class IncludedFields {
-  final List<String> actuallyIncluded;
   final List<String> included;
+  final List<String> actuallyIncluded;
   final List<String> excluded;
 
   IncludedFields(
-      {List<String>? actuallyIncluded,
-      List<String>? included,
+      {List<String>? included,
+      List<String>? actuallyIncluded,
       List<String>? excluded})
-      : actuallyIncluded = actuallyIncluded ?? [],
-        included = included ?? [],
+      : included = included ?? [],
+        actuallyIncluded = actuallyIncluded ?? [],
         excluded = excluded ?? [];
 
   factory IncludedFields.fromJson(Map<String, Object?> json) {
     return IncludedFields(
-      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
+      included: (json[r'included'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      included: (json[r'included'] as List<Object?>?)
+      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -4062,24 +4069,24 @@ class IncludedFields {
   }
 
   Map<String, Object?> toJson() {
-    var actuallyIncluded = this.actuallyIncluded;
     var included = this.included;
+    var actuallyIncluded = this.actuallyIncluded;
     var excluded = this.excluded;
 
     final json = <String, Object?>{};
-    json[r'actuallyIncluded'] = actuallyIncluded;
     json[r'included'] = included;
+    json[r'actuallyIncluded'] = actuallyIncluded;
     json[r'excluded'] = excluded;
     return json;
   }
 
   IncludedFields copyWith(
-      {List<String>? actuallyIncluded,
-      List<String>? included,
+      {List<String>? included,
+      List<String>? actuallyIncluded,
       List<String>? excluded}) {
     return IncludedFields(
-      actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
       included: included ?? this.included,
+      actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
       excluded: excluded ?? this.excluded,
     );
   }
@@ -7110,6 +7117,9 @@ class RequestTypeDTO {
   /// ID of the service desk the request type belongs to.
   final String? serviceDeskId;
 
+  /// ID of the customer portal associated with the service desk project.
+  final String? portalId;
+
   /// List of the request type groups the request type belongs to.
   final List<String> groupIds;
 
@@ -7137,6 +7147,7 @@ class RequestTypeDTO {
       this.helpText,
       this.issueTypeId,
       this.serviceDeskId,
+      this.portalId,
       List<String>? groupIds,
       this.icon,
       this.fields,
@@ -7154,6 +7165,7 @@ class RequestTypeDTO {
       helpText: json[r'helpText'] as String?,
       issueTypeId: json[r'issueTypeId'] as String?,
       serviceDeskId: json[r'serviceDeskId'] as String?,
+      portalId: json[r'portalId'] as String?,
       groupIds: (json[r'groupIds'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -7183,6 +7195,7 @@ class RequestTypeDTO {
     var helpText = this.helpText;
     var issueTypeId = this.issueTypeId;
     var serviceDeskId = this.serviceDeskId;
+    var portalId = this.portalId;
     var groupIds = this.groupIds;
     var icon = this.icon;
     var fields = this.fields;
@@ -7209,6 +7222,9 @@ class RequestTypeDTO {
     if (serviceDeskId != null) {
       json[r'serviceDeskId'] = serviceDeskId;
     }
+    if (portalId != null) {
+      json[r'portalId'] = portalId;
+    }
     json[r'groupIds'] = groupIds;
     if (icon != null) {
       json[r'icon'] = icon.toJson();
@@ -7233,6 +7249,7 @@ class RequestTypeDTO {
       String? helpText,
       String? issueTypeId,
       String? serviceDeskId,
+      String? portalId,
       List<String>? groupIds,
       RequestTypeIconDTO? icon,
       CustomerRequestCreateMetaDTO? fields,
@@ -7246,6 +7263,7 @@ class RequestTypeDTO {
       helpText: helpText ?? this.helpText,
       issueTypeId: issueTypeId ?? this.issueTypeId,
       serviceDeskId: serviceDeskId ?? this.serviceDeskId,
+      portalId: portalId ?? this.portalId,
       groupIds: groupIds ?? this.groupIds,
       icon: icon ?? this.icon,
       fields: fields ?? this.fields,
