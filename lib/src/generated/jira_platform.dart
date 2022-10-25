@@ -188,6 +188,34 @@ class JiraPlatformApi {
   /// This resource represents notification schemes, lists of events and the
   /// recipients who will receive notifications for those events. Use it to get
   /// details of a notification scheme and a list of notification schemes.
+  ///
+  /// ### About notification schemes ###
+  ///
+  /// A notification scheme is a list of events and recipients who will receive
+  /// notifications for those events. The list is contained within the
+  /// `notificationSchemeEvents` object and contains pairs of `events` and
+  /// `notifications`:
+  ///
+  ///  *  `event` Identifies the type of event. The events can be
+  /// [Jira system events](https://confluence.atlassian.com/x/8YdKLg#Creatinganotificationscheme-eventsEvents)
+  /// or [custom events](https://confluence.atlassian.com/x/AIlKLg).
+  ///  *  `notifications` Identifies the
+  /// [recipients](https://confluence.atlassian.com/x/8YdKLg#Creatinganotificationscheme-recipientsRecipients)
+  /// of notifications for each event. Recipients can be any of the following
+  /// types:
+  ///
+  ///      *  `CurrentAssignee`
+  ///      *  `Reporter`
+  ///      *  `CurrentUser`
+  ///      *  `ProjectLead`
+  ///      *  `ComponentLead`
+  ///      *  `User` (the `parameter` is the user key)
+  ///      *  `Group` (the `parameter` is the group name)
+  ///      *  `ProjectRole` (the `parameter` is the project role ID)
+  ///      *  `EmailAddress`
+  ///      *  `AllWatchers`
+  ///      *  `UserCustomField` (the `parameter` is the ID of the custom field)
+  ///      *  `GroupCustomField`(the `parameter` is the ID of the custom field)
   late final issueNotificationSchemes = IssueNotificationSchemesApi(_client);
 
   /// This resource represents issue priorities. Use it to get, create and
@@ -2161,7 +2189,9 @@ class GroupsApi {
       {int? startAt,
       int? maxResults,
       List<String>? groupId,
-      List<String>? groupName}) async {
+      List<String>? groupName,
+      String? accessType,
+      String? applicationKey}) async {
     return PageBeanGroupDetails.fromJson(await _client.send(
       'get',
       'rest/api/3/group/bulk',
@@ -2170,6 +2200,8 @@ class GroupsApi {
         if (maxResults != null) 'maxResults': '$maxResults',
         if (groupId != null) 'groupId': groupId.map((e) => e).join(','),
         if (groupName != null) 'groupName': groupName.map((e) => e).join(','),
+        if (accessType != null) 'accessType': accessType,
+        if (applicationKey != null) 'applicationKey': applicationKey,
       },
     ));
   }
@@ -2262,6 +2294,11 @@ class GroupsApi {
   /// [project permission](https://confluence.atlassian.com/x/yodKLg). Anonymous
   /// calls and calls by users without the required permission return an empty
   /// list.
+  ///
+  /// *Browse users and groups*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Without
+  /// this permission, calls where query is not an exact match to an existing
+  /// group will return an empty list.
   Future<FoundGroups> findGroups(
       {String? accountId,
       String? query,
@@ -2952,6 +2989,7 @@ class IssueCommentsApi {
       {required String issueIdOrKey,
       required String id,
       bool? notifyUsers,
+      bool? overrideEditableFlag,
       String? expand,
       required Comment body}) async {
     return Comment.fromJson(await _client.send(
@@ -2963,6 +3001,8 @@ class IssueCommentsApi {
       },
       queryParameters: {
         if (notifyUsers != null) 'notifyUsers': '$notifyUsers',
+        if (overrideEditableFlag != null)
+          'overrideEditableFlag': '$overrideEditableFlag',
         if (expand != null) 'expand': expand,
       },
       body: body.toJson(),
@@ -4771,34 +4811,6 @@ class IssueNotificationSchemesApi {
   /// [notification schemes](https://confluence.atlassian.com/x/8YdKLg) ordered
   /// by display name.
   ///
-  /// ### About notification schemes ###
-  ///
-  /// A notification scheme is a list of events and recipients who will receive
-  /// notifications for those events. The list is contained within the
-  /// `notificationSchemeEvents` object and contains pairs of `events` and
-  /// `notifications`:
-  ///
-  ///  *  `event` Identifies the type of event. The events can be
-  /// [Jira system events](https://confluence.atlassian.com/x/8YdKLg#Creatinganotificationscheme-eventsEvents)
-  /// or [custom events](https://confluence.atlassian.com/x/AIlKLg).
-  ///  *  `notifications` Identifies the
-  /// [recipients](https://confluence.atlassian.com/x/8YdKLg#Creatinganotificationscheme-recipientsRecipients)
-  /// of notifications for each event. Recipients can be any of the following
-  /// types:
-  ///
-  ///      *  `CurrentAssignee`
-  ///      *  `Reporter`
-  ///      *  `CurrentUser`
-  ///      *  `ProjectLead`
-  ///      *  `ComponentLead`
-  ///      *  `User` (the `parameter` is the user key)
-  ///      *  `Group` (the `parameter` is the group name)
-  ///      *  `ProjectRole` (the `parameter` is the project role ID)
-  ///      *  `EmailAddress`
-  ///      *  `AllWatchers`
-  ///      *  `UserCustomField` (the `parameter` is the ID of the custom field)
-  ///      *  `GroupCustomField`(the `parameter` is the ID of the custom field)
-  ///
   /// *Note that you should allow for events without recipients to appear in
   /// responses.*
   ///
@@ -4873,6 +4885,31 @@ class IssuePrioritiesApi {
     ));
   }
 
+  /// Sets default issue priority.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> setDefaultPriority(
+      {required SetDefaultPriorityRequest body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/priority/default',
+      body: body.toJson(),
+    );
+  }
+
+  /// Changes the order of issue priorities.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> movePriorities({required ReorderIssuePriorities body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/priority/move',
+      body: body.toJson(),
+    );
+  }
+
   /// Returns a [paginated](#pagination) list of priorities. The list can
   /// contain all priorities or a subset determined by any combination of these
   /// criteria:
@@ -4927,6 +4964,28 @@ class IssuePrioritiesApi {
       },
       body: body.toJson(),
     );
+  }
+
+  /// Deletes an issue priority.
+  ///
+  /// This operation is [asynchronous](#async). Follow the `location` link in
+  /// the response to determine the status of the task and use
+  /// [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<TaskProgressBeanObject> deletePriority(
+      {required String id, required String replaceWith}) async {
+    return TaskProgressBeanObject.fromJson(await _client.send(
+      'delete',
+      'rest/api/3/priority/{id}',
+      pathParameters: {
+        'id': id,
+      },
+      queryParameters: {
+        'replaceWith': replaceWith,
+      },
+    ));
   }
 }
 
@@ -5418,6 +5477,72 @@ class IssueResolutionsApi {
         .toList();
   }
 
+  /// Creates an issue resolution.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<ResolutionId> createResolution(
+      {required CreateResolutionDetails body}) async {
+    return ResolutionId.fromJson(await _client.send(
+      'post',
+      'rest/api/3/resolution',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Sets default issue resolution.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> setDefaultResolution(
+      {required SetDefaultResolutionRequest body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/resolution/default',
+      body: body.toJson(),
+    );
+  }
+
+  /// Changes the order of issue resolutions.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> moveResolutions(
+      {required ReorderIssueResolutionsRequest body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/resolution/move',
+      body: body.toJson(),
+    );
+  }
+
+  /// Returns a [paginated](#pagination) list of resolutions. The list can
+  /// contain all resolutions or a subset determined by any combination of these
+  /// criteria:
+  ///
+  ///  *  a list of resolutions IDs.
+  ///  *  whether the field configuration is a default. This returns resolutions
+  /// from company-managed (classic) projects only, as there is no concept of
+  /// default resolutions in team-managed projects.
+  ///
+  /// **[Permissions](#permissions) required:** Permission to access Jira.
+  Future<PageBeanResolutionJsonBean> searchResolutions(
+      {int? startAt,
+      int? maxResults,
+      List<String>? id,
+      bool? onlyDefault}) async {
+    return PageBeanResolutionJsonBean.fromJson(await _client.send(
+      'get',
+      'rest/api/3/resolution/search',
+      queryParameters: {
+        if (startAt != null) 'startAt': '$startAt',
+        if (maxResults != null) 'maxResults': '$maxResults',
+        if (id != null) 'id': id.map((e) => e).join(','),
+        if (onlyDefault != null) 'onlyDefault': '$onlyDefault',
+      },
+    ));
+  }
+
   /// Returns an issue resolution value.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
@@ -5427,6 +5552,44 @@ class IssueResolutionsApi {
       'rest/api/3/resolution/{id}',
       pathParameters: {
         'id': id,
+      },
+    ));
+  }
+
+  /// Updates an issue resolution.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> updateResolution(
+      {required String id, required UpdateResolutionDetails body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/resolution/{id}',
+      pathParameters: {
+        'id': id,
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Deletes an issue resolution.
+  ///
+  /// This operation is [asynchronous](#async). Follow the `location` link in
+  /// the response to determine the status of the task and use
+  /// [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<TaskProgressBeanObject> deleteResolution(
+      {required String id, required String replaceWith}) async {
+    return TaskProgressBeanObject.fromJson(await _client.send(
+      'delete',
+      'rest/api/3/resolution/{id}',
+      pathParameters: {
+        'id': id,
+      },
+      queryParameters: {
+        'replaceWith': replaceWith,
       },
     ));
   }
@@ -7995,9 +8158,7 @@ class JiraSettingsApi {
   /// subtasks, time tracking, and others) are enabled. If time tracking is
   /// enabled, this operation also returns the time tracking configuration.
   ///
-  /// This operation can be accessed anonymously.
-  ///
-  /// **[Permissions](#permissions) required:** None.
+  /// **[Permissions](#permissions) required:** Permission to access Jira.
   Future<Configuration> getConfiguration() async {
     return Configuration.fromJson(await _client.send(
       'get',
@@ -12049,6 +12210,10 @@ class WebhooksApi {
 
   /// Registers webhooks.
   ///
+  /// **NOTE:** for non-public OAuth apps, webhooks are delivered only if there
+  /// is a match between the app owner and the user who registered a dynamic
+  /// webhook.
+  ///
   /// **[Permissions](#permissions) required:** Only
   /// [Connect](https://developer.atlassian.com/cloud/jira/platform/#connect-apps)
   /// and
@@ -14896,40 +15061,41 @@ class Attachment {
 }
 
 class AttachmentArchive {
+  final List<AttachmentArchiveEntry> entries;
   final bool moreAvailable;
   final int? totalNumberOfEntriesAvailable;
   final int? totalEntryCount;
-  final List<AttachmentArchiveEntry> entries;
 
   AttachmentArchive(
-      {bool? moreAvailable,
+      {List<AttachmentArchiveEntry>? entries,
+      bool? moreAvailable,
       this.totalNumberOfEntriesAvailable,
-      this.totalEntryCount,
-      List<AttachmentArchiveEntry>? entries})
-      : moreAvailable = moreAvailable ?? false,
-        entries = entries ?? [];
+      this.totalEntryCount})
+      : entries = entries ?? [],
+        moreAvailable = moreAvailable ?? false;
 
   factory AttachmentArchive.fromJson(Map<String, Object?> json) {
     return AttachmentArchive(
-      moreAvailable: json[r'moreAvailable'] as bool? ?? false,
-      totalNumberOfEntriesAvailable:
-          (json[r'totalNumberOfEntriesAvailable'] as num?)?.toInt(),
-      totalEntryCount: (json[r'totalEntryCount'] as num?)?.toInt(),
       entries: (json[r'entries'] as List<Object?>?)
               ?.map((i) => AttachmentArchiveEntry.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
+      moreAvailable: json[r'moreAvailable'] as bool? ?? false,
+      totalNumberOfEntriesAvailable:
+          (json[r'totalNumberOfEntriesAvailable'] as num?)?.toInt(),
+      totalEntryCount: (json[r'totalEntryCount'] as num?)?.toInt(),
     );
   }
 
   Map<String, Object?> toJson() {
+    var entries = this.entries;
     var moreAvailable = this.moreAvailable;
     var totalNumberOfEntriesAvailable = this.totalNumberOfEntriesAvailable;
     var totalEntryCount = this.totalEntryCount;
-    var entries = this.entries;
 
     final json = <String, Object?>{};
+    json[r'entries'] = entries.map((i) => i.toJson()).toList();
     json[r'moreAvailable'] = moreAvailable;
     if (totalNumberOfEntriesAvailable != null) {
       json[r'totalNumberOfEntriesAvailable'] = totalNumberOfEntriesAvailable;
@@ -14937,59 +15103,61 @@ class AttachmentArchive {
     if (totalEntryCount != null) {
       json[r'totalEntryCount'] = totalEntryCount;
     }
-    json[r'entries'] = entries.map((i) => i.toJson()).toList();
     return json;
   }
 
   AttachmentArchive copyWith(
-      {bool? moreAvailable,
+      {List<AttachmentArchiveEntry>? entries,
+      bool? moreAvailable,
       int? totalNumberOfEntriesAvailable,
-      int? totalEntryCount,
-      List<AttachmentArchiveEntry>? entries}) {
+      int? totalEntryCount}) {
     return AttachmentArchive(
+      entries: entries ?? this.entries,
       moreAvailable: moreAvailable ?? this.moreAvailable,
       totalNumberOfEntriesAvailable:
           totalNumberOfEntriesAvailable ?? this.totalNumberOfEntriesAvailable,
       totalEntryCount: totalEntryCount ?? this.totalEntryCount,
-      entries: entries ?? this.entries,
     );
   }
 }
 
 class AttachmentArchiveEntry {
-  final int? entryIndex;
-  final String? mediaType;
-  final String? abbreviatedName;
   final String? name;
   final int? size;
+  final String? mediaType;
+  final String? abbreviatedName;
+  final int? entryIndex;
 
   AttachmentArchiveEntry(
-      {this.entryIndex,
+      {this.name,
+      this.size,
       this.mediaType,
       this.abbreviatedName,
-      this.name,
-      this.size});
+      this.entryIndex});
 
   factory AttachmentArchiveEntry.fromJson(Map<String, Object?> json) {
     return AttachmentArchiveEntry(
-      entryIndex: (json[r'entryIndex'] as num?)?.toInt(),
-      mediaType: json[r'mediaType'] as String?,
-      abbreviatedName: json[r'abbreviatedName'] as String?,
       name: json[r'name'] as String?,
       size: (json[r'size'] as num?)?.toInt(),
+      mediaType: json[r'mediaType'] as String?,
+      abbreviatedName: json[r'abbreviatedName'] as String?,
+      entryIndex: (json[r'entryIndex'] as num?)?.toInt(),
     );
   }
 
   Map<String, Object?> toJson() {
-    var entryIndex = this.entryIndex;
-    var mediaType = this.mediaType;
-    var abbreviatedName = this.abbreviatedName;
     var name = this.name;
     var size = this.size;
+    var mediaType = this.mediaType;
+    var abbreviatedName = this.abbreviatedName;
+    var entryIndex = this.entryIndex;
 
     final json = <String, Object?>{};
-    if (entryIndex != null) {
-      json[r'entryIndex'] = entryIndex;
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (size != null) {
+      json[r'size'] = size;
     }
     if (mediaType != null) {
       json[r'mediaType'] = mediaType;
@@ -14997,27 +15165,24 @@ class AttachmentArchiveEntry {
     if (abbreviatedName != null) {
       json[r'abbreviatedName'] = abbreviatedName;
     }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (size != null) {
-      json[r'size'] = size;
+    if (entryIndex != null) {
+      json[r'entryIndex'] = entryIndex;
     }
     return json;
   }
 
   AttachmentArchiveEntry copyWith(
-      {int? entryIndex,
+      {String? name,
+      int? size,
       String? mediaType,
       String? abbreviatedName,
-      String? name,
-      int? size}) {
+      int? entryIndex}) {
     return AttachmentArchiveEntry(
-      entryIndex: entryIndex ?? this.entryIndex,
-      mediaType: mediaType ?? this.mediaType,
-      abbreviatedName: abbreviatedName ?? this.abbreviatedName,
       name: name ?? this.name,
       size: size ?? this.size,
+      mediaType: mediaType ?? this.mediaType,
+      abbreviatedName: abbreviatedName ?? this.abbreviatedName,
+      entryIndex: entryIndex ?? this.entryIndex,
     );
   }
 }
@@ -17034,17 +17199,23 @@ class ComponentWithIssueCount {
   /// Count of issues for the component.
   final int? issueCount;
 
+  /// The name for the component.
+  final String? name;
+
+  /// The unique identifier for the component.
+  final String? id;
+
   /// The description for the component.
   final String? description;
 
   /// The URL for this count of the issues contained in the component.
   final String? self;
 
-  /// Not used.
-  final int? projectId;
-
   /// The key of the project to which the component is assigned.
   final String? project;
+
+  /// The user details for the component's lead user.
+  final User? lead;
 
   /// The nominal user type used to determine the assignee for issues created
   /// with this component. See `realAssigneeType` for details on how the type of
@@ -17062,8 +17233,13 @@ class ComponentWithIssueCount {
   /// component is in.
   final ComponentWithIssueCountAssigneeType? assigneeType;
 
-  /// The user details for the component's lead user.
-  final User? lead;
+  /// Not used.
+  final int? projectId;
+
+  /// The details of the user associated with `assigneeType`, if any. See
+  /// `realAssignee` for details of the user assigned to issues created with
+  /// this component.
+  final User? assignee;
 
   /// The user assigned to issues created with this component, when
   /// `assigneeType` does not identify a valid assignee.
@@ -17073,11 +17249,6 @@ class ComponentWithIssueCount {
   /// `assigneeType` is set to `COMPONENT_LEAD` but the component lead is not
   /// set, then `false` is returned.
   final bool isAssigneeTypeValid;
-
-  /// The details of the user associated with `assigneeType`, if any. See
-  /// `realAssignee` for details of the user assigned to issues created with
-  /// this component.
-  final User? assignee;
 
   /// The type of the assignee that is assigned to issues created with this
   /// component, when an assignee cannot be set from the `assigneeType`. For
@@ -17095,104 +17266,70 @@ class ComponentWithIssueCount {
   ///  *  `PROJECT_DEFAULT` when none of the preceding cases are true.
   final ComponentWithIssueCountRealAssigneeType? realAssigneeType;
 
-  /// The name for the component.
-  final String? name;
-
-  /// The unique identifier for the component.
-  final String? id;
-
   ComponentWithIssueCount(
       {this.issueCount,
+      this.name,
+      this.id,
       this.description,
       this.self,
-      this.projectId,
       this.project,
-      this.assigneeType,
       this.lead,
+      this.assigneeType,
+      this.projectId,
+      this.assignee,
       this.realAssignee,
       bool? isAssigneeTypeValid,
-      this.assignee,
-      this.realAssigneeType,
-      this.name,
-      this.id})
+      this.realAssigneeType})
       : isAssigneeTypeValid = isAssigneeTypeValid ?? false;
 
   factory ComponentWithIssueCount.fromJson(Map<String, Object?> json) {
     return ComponentWithIssueCount(
       issueCount: (json[r'issueCount'] as num?)?.toInt(),
+      name: json[r'name'] as String?,
+      id: json[r'id'] as String?,
       description: json[r'description'] as String?,
       self: json[r'self'] as String?,
-      projectId: (json[r'projectId'] as num?)?.toInt(),
       project: json[r'project'] as String?,
+      lead: json[r'lead'] != null
+          ? User.fromJson(json[r'lead']! as Map<String, Object?>)
+          : null,
       assigneeType: json[r'assigneeType'] != null
           ? ComponentWithIssueCountAssigneeType.fromValue(
               json[r'assigneeType']! as String)
           : null,
-      lead: json[r'lead'] != null
-          ? User.fromJson(json[r'lead']! as Map<String, Object?>)
+      projectId: (json[r'projectId'] as num?)?.toInt(),
+      assignee: json[r'assignee'] != null
+          ? User.fromJson(json[r'assignee']! as Map<String, Object?>)
           : null,
       realAssignee: json[r'realAssignee'] != null
           ? User.fromJson(json[r'realAssignee']! as Map<String, Object?>)
           : null,
       isAssigneeTypeValid: json[r'isAssigneeTypeValid'] as bool? ?? false,
-      assignee: json[r'assignee'] != null
-          ? User.fromJson(json[r'assignee']! as Map<String, Object?>)
-          : null,
       realAssigneeType: json[r'realAssigneeType'] != null
           ? ComponentWithIssueCountRealAssigneeType.fromValue(
               json[r'realAssigneeType']! as String)
           : null,
-      name: json[r'name'] as String?,
-      id: json[r'id'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var issueCount = this.issueCount;
-    var description = this.description;
-    var self = this.self;
-    var projectId = this.projectId;
-    var project = this.project;
-    var assigneeType = this.assigneeType;
-    var lead = this.lead;
-    var realAssignee = this.realAssignee;
-    var isAssigneeTypeValid = this.isAssigneeTypeValid;
-    var assignee = this.assignee;
-    var realAssigneeType = this.realAssigneeType;
     var name = this.name;
     var id = this.id;
+    var description = this.description;
+    var self = this.self;
+    var project = this.project;
+    var lead = this.lead;
+    var assigneeType = this.assigneeType;
+    var projectId = this.projectId;
+    var assignee = this.assignee;
+    var realAssignee = this.realAssignee;
+    var isAssigneeTypeValid = this.isAssigneeTypeValid;
+    var realAssigneeType = this.realAssigneeType;
 
     final json = <String, Object?>{};
     if (issueCount != null) {
       json[r'issueCount'] = issueCount;
-    }
-    if (description != null) {
-      json[r'description'] = description;
-    }
-    if (self != null) {
-      json[r'self'] = self;
-    }
-    if (projectId != null) {
-      json[r'projectId'] = projectId;
-    }
-    if (project != null) {
-      json[r'project'] = project;
-    }
-    if (assigneeType != null) {
-      json[r'assigneeType'] = assigneeType.value;
-    }
-    if (lead != null) {
-      json[r'lead'] = lead.toJson();
-    }
-    if (realAssignee != null) {
-      json[r'realAssignee'] = realAssignee.toJson();
-    }
-    json[r'isAssigneeTypeValid'] = isAssigneeTypeValid;
-    if (assignee != null) {
-      json[r'assignee'] = assignee.toJson();
-    }
-    if (realAssigneeType != null) {
-      json[r'realAssigneeType'] = realAssigneeType.value;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -17200,37 +17337,65 @@ class ComponentWithIssueCount {
     if (id != null) {
       json[r'id'] = id;
     }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (project != null) {
+      json[r'project'] = project;
+    }
+    if (lead != null) {
+      json[r'lead'] = lead.toJson();
+    }
+    if (assigneeType != null) {
+      json[r'assigneeType'] = assigneeType.value;
+    }
+    if (projectId != null) {
+      json[r'projectId'] = projectId;
+    }
+    if (assignee != null) {
+      json[r'assignee'] = assignee.toJson();
+    }
+    if (realAssignee != null) {
+      json[r'realAssignee'] = realAssignee.toJson();
+    }
+    json[r'isAssigneeTypeValid'] = isAssigneeTypeValid;
+    if (realAssigneeType != null) {
+      json[r'realAssigneeType'] = realAssigneeType.value;
+    }
     return json;
   }
 
   ComponentWithIssueCount copyWith(
       {int? issueCount,
+      String? name,
+      String? id,
       String? description,
       String? self,
-      int? projectId,
       String? project,
-      ComponentWithIssueCountAssigneeType? assigneeType,
       User? lead,
+      ComponentWithIssueCountAssigneeType? assigneeType,
+      int? projectId,
+      User? assignee,
       User? realAssignee,
       bool? isAssigneeTypeValid,
-      User? assignee,
-      ComponentWithIssueCountRealAssigneeType? realAssigneeType,
-      String? name,
-      String? id}) {
+      ComponentWithIssueCountRealAssigneeType? realAssigneeType}) {
     return ComponentWithIssueCount(
       issueCount: issueCount ?? this.issueCount,
-      description: description ?? this.description,
-      self: self ?? this.self,
-      projectId: projectId ?? this.projectId,
-      project: project ?? this.project,
-      assigneeType: assigneeType ?? this.assigneeType,
-      lead: lead ?? this.lead,
-      realAssignee: realAssignee ?? this.realAssignee,
-      isAssigneeTypeValid: isAssigneeTypeValid ?? this.isAssigneeTypeValid,
-      assignee: assignee ?? this.assignee,
-      realAssigneeType: realAssigneeType ?? this.realAssigneeType,
       name: name ?? this.name,
       id: id ?? this.id,
+      description: description ?? this.description,
+      self: self ?? this.self,
+      project: project ?? this.project,
+      lead: lead ?? this.lead,
+      assigneeType: assigneeType ?? this.assigneeType,
+      projectId: projectId ?? this.projectId,
+      assignee: assignee ?? this.assignee,
+      realAssignee: realAssignee ?? this.realAssignee,
+      isAssigneeTypeValid: isAssigneeTypeValid ?? this.isAssigneeTypeValid,
+      realAssigneeType: realAssigneeType ?? this.realAssigneeType,
     );
   }
 }
@@ -18661,6 +18826,15 @@ class CreateProjectDetailsProjectTemplateKey {
   static const comAtlassianServicedeskSimplifiedLegalServiceDesk =
       CreateProjectDetailsProjectTemplateKey._(
           'com.atlassian.servicedesk:simplified-legal-service-desk');
+  static const comAtlassianServicedeskSimplifiedMarketingServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:simplified-marketing-service-desk');
+  static const comAtlassianServicedeskSimplifiedFinanceServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:simplified-finance-service-desk');
+  static const comAtlassianServicedeskSimplifiedAnalyticsServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:simplified-analytics-service-desk');
   static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedContentManagement =
       CreateProjectDetailsProjectTemplateKey._(
           'com.atlassian.jira-core-project-templates:jira-core-simplified-content-management');
@@ -18701,6 +18875,9 @@ class CreateProjectDetailsProjectTemplateKey {
     comAtlassianServicedeskSimplifiedHrServiceDesk,
     comAtlassianServicedeskSimplifiedFacilitiesServiceDesk,
     comAtlassianServicedeskSimplifiedLegalServiceDesk,
+    comAtlassianServicedeskSimplifiedMarketingServiceDesk,
+    comAtlassianServicedeskSimplifiedFinanceServiceDesk,
+    comAtlassianServicedeskSimplifiedAnalyticsServiceDesk,
     comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedContentManagement,
     comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedDocumentApproval,
     comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedLeadTracking,
@@ -18723,6 +18900,43 @@ class CreateProjectDetailsProjectTemplateKey {
 
   @override
   String toString() => value;
+}
+
+/// Details of an issue resolution.
+class CreateResolutionDetails {
+  /// The name of the resolution. Must be unique (case-insensitive).
+  final String name;
+
+  /// The description of the resolution.
+  final String? description;
+
+  CreateResolutionDetails({required this.name, this.description});
+
+  factory CreateResolutionDetails.fromJson(Map<String, Object?> json) {
+    return CreateResolutionDetails(
+      name: json[r'name'] as String? ?? '',
+      description: json[r'description'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var description = this.description;
+
+    final json = <String, Object?>{};
+    json[r'name'] = name;
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    return json;
+  }
+
+  CreateResolutionDetails copyWith({String? name, String? description}) {
+    return CreateResolutionDetails(
+      name: name ?? this.name,
+      description: description ?? this.description,
+    );
+  }
 }
 
 /// The details of a UI modification.
@@ -21538,6 +21752,9 @@ class Dashboard {
   /// Whether the current user has permission to edit the dashboard.
   final bool isWritable;
 
+  /// Whether the current dashboard is system dashboard.
+  final bool systemDashboard;
+
   Dashboard(
       {this.description,
       this.id,
@@ -21551,11 +21768,13 @@ class Dashboard {
       List<SharePermission>? editPermissions,
       this.automaticRefreshMs,
       this.view,
-      bool? isWritable})
+      bool? isWritable,
+      bool? systemDashboard})
       : isFavourite = isFavourite ?? false,
         sharePermissions = sharePermissions ?? [],
         editPermissions = editPermissions ?? [],
-        isWritable = isWritable ?? false;
+        isWritable = isWritable ?? false,
+        systemDashboard = systemDashboard ?? false;
 
   factory Dashboard.fromJson(Map<String, Object?> json) {
     return Dashboard(
@@ -21582,6 +21801,7 @@ class Dashboard {
       automaticRefreshMs: (json[r'automaticRefreshMs'] as num?)?.toInt(),
       view: json[r'view'] as String?,
       isWritable: json[r'isWritable'] as bool? ?? false,
+      systemDashboard: json[r'systemDashboard'] as bool? ?? false,
     );
   }
 
@@ -21599,6 +21819,7 @@ class Dashboard {
     var automaticRefreshMs = this.automaticRefreshMs;
     var view = this.view;
     var isWritable = this.isWritable;
+    var systemDashboard = this.systemDashboard;
 
     final json = <String, Object?>{};
     if (description != null) {
@@ -21633,6 +21854,7 @@ class Dashboard {
       json[r'view'] = view;
     }
     json[r'isWritable'] = isWritable;
+    json[r'systemDashboard'] = systemDashboard;
     return json;
   }
 
@@ -21649,7 +21871,8 @@ class Dashboard {
       List<SharePermission>? editPermissions,
       int? automaticRefreshMs,
       String? view,
-      bool? isWritable}) {
+      bool? isWritable,
+      bool? systemDashboard}) {
     return Dashboard(
       description: description ?? this.description,
       id: id ?? this.id,
@@ -21664,6 +21887,7 @@ class Dashboard {
       automaticRefreshMs: automaticRefreshMs ?? this.automaticRefreshMs,
       view: view ?? this.view,
       isWritable: isWritable ?? this.isWritable,
+      systemDashboard: systemDashboard ?? this.systemDashboard,
     );
   }
 }
@@ -23812,6 +24036,12 @@ class FieldReferenceData {
   /// Whether the content of this field can be searched.
   final FieldReferenceDataSearchable? searchable;
 
+  /// Whether this field has been deprecated.
+  final FieldReferenceDataDeprecated? deprecated;
+
+  /// The searcher key of the field, only passed when the field is deprecated.
+  final String? deprecatedSearcherKey;
+
   /// Whether the field provide auto-complete suggestions.
   final FieldReferenceDataAuto? auto;
 
@@ -23829,6 +24059,8 @@ class FieldReferenceData {
       this.displayName,
       this.orderable,
       this.searchable,
+      this.deprecated,
+      this.deprecatedSearcherKey,
       this.auto,
       this.cfid,
       List<String>? operators,
@@ -23847,6 +24079,11 @@ class FieldReferenceData {
           ? FieldReferenceDataSearchable.fromValue(
               json[r'searchable']! as String)
           : null,
+      deprecated: json[r'deprecated'] != null
+          ? FieldReferenceDataDeprecated.fromValue(
+              json[r'deprecated']! as String)
+          : null,
+      deprecatedSearcherKey: json[r'deprecatedSearcherKey'] as String?,
       auto: json[r'auto'] != null
           ? FieldReferenceDataAuto.fromValue(json[r'auto']! as String)
           : null,
@@ -23867,6 +24104,8 @@ class FieldReferenceData {
     var displayName = this.displayName;
     var orderable = this.orderable;
     var searchable = this.searchable;
+    var deprecated = this.deprecated;
+    var deprecatedSearcherKey = this.deprecatedSearcherKey;
     var auto = this.auto;
     var cfid = this.cfid;
     var operators = this.operators;
@@ -23885,6 +24124,12 @@ class FieldReferenceData {
     if (searchable != null) {
       json[r'searchable'] = searchable.value;
     }
+    if (deprecated != null) {
+      json[r'deprecated'] = deprecated.value;
+    }
+    if (deprecatedSearcherKey != null) {
+      json[r'deprecatedSearcherKey'] = deprecatedSearcherKey;
+    }
     if (auto != null) {
       json[r'auto'] = auto.value;
     }
@@ -23901,6 +24146,8 @@ class FieldReferenceData {
       String? displayName,
       FieldReferenceDataOrderable? orderable,
       FieldReferenceDataSearchable? searchable,
+      FieldReferenceDataDeprecated? deprecated,
+      String? deprecatedSearcherKey,
       FieldReferenceDataAuto? auto,
       String? cfid,
       List<String>? operators,
@@ -23910,6 +24157,9 @@ class FieldReferenceData {
       displayName: displayName ?? this.displayName,
       orderable: orderable ?? this.orderable,
       searchable: searchable ?? this.searchable,
+      deprecated: deprecated ?? this.deprecated,
+      deprecatedSearcherKey:
+          deprecatedSearcherKey ?? this.deprecatedSearcherKey,
       auto: auto ?? this.auto,
       cfid: cfid ?? this.cfid,
       operators: operators ?? this.operators,
@@ -23964,6 +24214,29 @@ class FieldReferenceDataSearchable {
   String toString() => value;
 }
 
+class FieldReferenceDataDeprecated {
+  static const true$ = FieldReferenceDataDeprecated._('true');
+  static const false$ = FieldReferenceDataDeprecated._('false');
+
+  static const values = [
+    true$,
+    false$,
+  ];
+  final String value;
+
+  const FieldReferenceDataDeprecated._(this.value);
+
+  static FieldReferenceDataDeprecated fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => FieldReferenceDataDeprecated._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 class FieldReferenceDataAuto {
   static const true$ = FieldReferenceDataAuto._('true');
   static const false$ = FieldReferenceDataAuto._('false');
@@ -24001,7 +24274,10 @@ class FieldUpdateOperation {
   /// The value to edit in the field.
   final dynamic edit;
 
-  FieldUpdateOperation({this.add, this.set, this.remove, this.edit});
+  /// The field value to copy from another issue.
+  final dynamic copy;
+
+  FieldUpdateOperation({this.add, this.set, this.remove, this.edit, this.copy});
 
   factory FieldUpdateOperation.fromJson(Map<String, Object?> json) {
     return FieldUpdateOperation(
@@ -24009,6 +24285,7 @@ class FieldUpdateOperation {
       set: json[r'set'],
       remove: json[r'remove'],
       edit: json[r'edit'],
+      copy: json[r'copy'],
     );
   }
 
@@ -24017,6 +24294,7 @@ class FieldUpdateOperation {
     var set = this.set;
     var remove = this.remove;
     var edit = this.edit;
+    var copy = this.copy;
 
     final json = <String, Object?>{};
     if (add != null) {
@@ -24031,16 +24309,20 @@ class FieldUpdateOperation {
     if (edit != null) {
       json[r'edit'] = edit;
     }
+    if (copy != null) {
+      json[r'copy'] = copy;
+    }
     return json;
   }
 
   FieldUpdateOperation copyWith(
-      {dynamic add, dynamic set, dynamic remove, dynamic edit}) {
+      {dynamic add, dynamic set, dynamic remove, dynamic edit, dynamic copy}) {
     return FieldUpdateOperation(
       add: add ?? this.add,
       set: set ?? this.set,
       remove: remove ?? this.remove,
       edit: edit ?? this.edit,
+      copy: copy ?? this.copy,
     );
   }
 }
@@ -26004,20 +26286,24 @@ class IdOrKeyBean {
 }
 
 class IncludedFields {
+  final List<String> excluded;
   final List<String> included;
   final List<String> actuallyIncluded;
-  final List<String> excluded;
 
   IncludedFields(
-      {List<String>? included,
-      List<String>? actuallyIncluded,
-      List<String>? excluded})
-      : included = included ?? [],
-        actuallyIncluded = actuallyIncluded ?? [],
-        excluded = excluded ?? [];
+      {List<String>? excluded,
+      List<String>? included,
+      List<String>? actuallyIncluded})
+      : excluded = excluded ?? [],
+        included = included ?? [],
+        actuallyIncluded = actuallyIncluded ?? [];
 
   factory IncludedFields.fromJson(Map<String, Object?> json) {
     return IncludedFields(
+      excluded: (json[r'excluded'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
       included: (json[r'included'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -26026,33 +26312,29 @@ class IncludedFields {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      excluded: (json[r'excluded'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
     );
   }
 
   Map<String, Object?> toJson() {
+    var excluded = this.excluded;
     var included = this.included;
     var actuallyIncluded = this.actuallyIncluded;
-    var excluded = this.excluded;
 
     final json = <String, Object?>{};
+    json[r'excluded'] = excluded;
     json[r'included'] = included;
     json[r'actuallyIncluded'] = actuallyIncluded;
-    json[r'excluded'] = excluded;
     return json;
   }
 
   IncludedFields copyWith(
-      {List<String>? included,
-      List<String>? actuallyIncluded,
-      List<String>? excluded}) {
+      {List<String>? excluded,
+      List<String>? included,
+      List<String>? actuallyIncluded}) {
     return IncludedFields(
+      excluded: excluded ?? this.excluded,
       included: included ?? this.included,
       actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
-      excluded: excluded ?? this.excluded,
     );
   }
 }
@@ -29099,6 +29381,7 @@ class IssueUpdateDetails {
 
 /// A list of editable field details.
 class IssueUpdateMetadata {
+  /// A list of editable field details.
   final Map<String, dynamic>? fields;
 
   IssueUpdateMetadata({this.fields});
@@ -30890,11 +31173,15 @@ class JsonContextVariable {
 }
 
 class JsonNode {
+  final bool array;
+  final Map<String, dynamic>? fields;
+  final bool null$;
   final Map<String, dynamic>? elements;
+  final bool containerNode;
+  final bool valueNode;
   final bool pojo;
   final bool number;
   final bool integralNumber;
-  final bool floatingPointNumber;
   final bool int$;
   final bool long;
   final bool double$;
@@ -30903,10 +31190,9 @@ class JsonNode {
   final bool textual;
   final bool boolean;
   final bool binary;
-  final bool containerNode;
-  final bool missingNode;
   final bool object;
-  final bool valueNode;
+  final bool missingNode;
+  final bool floatingPointNumber;
   final num? numberValue;
   final JsonNodeNumberType? numberType;
   final int? intValue;
@@ -30920,19 +31206,20 @@ class JsonNode {
   final int? valueAsLong;
   final num? valueAsDouble;
   final bool valueAsBoolean;
+  final Map<String, dynamic>? fieldNames;
   final String? textValue;
   final String? valueAsText;
-  final Map<String, dynamic>? fieldNames;
-  final bool array;
-  final Map<String, dynamic>? fields;
-  final bool null$;
 
   JsonNode(
-      {this.elements,
+      {bool? array,
+      this.fields,
+      bool? null$,
+      this.elements,
+      bool? containerNode,
+      bool? valueNode,
       bool? pojo,
       bool? number,
       bool? integralNumber,
-      bool? floatingPointNumber,
       bool? int$,
       bool? long,
       bool? double$,
@@ -30941,10 +31228,9 @@ class JsonNode {
       bool? textual,
       bool? boolean,
       bool? binary,
-      bool? containerNode,
-      bool? missingNode,
       bool? object,
-      bool? valueNode,
+      bool? missingNode,
+      bool? floatingPointNumber,
       this.numberValue,
       this.numberType,
       this.intValue,
@@ -30958,16 +31244,16 @@ class JsonNode {
       this.valueAsLong,
       this.valueAsDouble,
       bool? valueAsBoolean,
-      this.textValue,
-      this.valueAsText,
       this.fieldNames,
-      bool? array,
-      this.fields,
-      bool? null$})
-      : pojo = pojo ?? false,
+      this.textValue,
+      this.valueAsText})
+      : array = array ?? false,
+        null$ = null$ ?? false,
+        containerNode = containerNode ?? false,
+        valueNode = valueNode ?? false,
+        pojo = pojo ?? false,
         number = number ?? false,
         integralNumber = integralNumber ?? false,
-        floatingPointNumber = floatingPointNumber ?? false,
         int$ = int$ ?? false,
         long = long ?? false,
         double$ = double$ ?? false,
@@ -30976,23 +31262,24 @@ class JsonNode {
         textual = textual ?? false,
         boolean = boolean ?? false,
         binary = binary ?? false,
-        containerNode = containerNode ?? false,
-        missingNode = missingNode ?? false,
         object = object ?? false,
-        valueNode = valueNode ?? false,
+        missingNode = missingNode ?? false,
+        floatingPointNumber = floatingPointNumber ?? false,
         booleanValue = booleanValue ?? false,
         binaryValue = binaryValue ?? [],
-        valueAsBoolean = valueAsBoolean ?? false,
-        array = array ?? false,
-        null$ = null$ ?? false;
+        valueAsBoolean = valueAsBoolean ?? false;
 
   factory JsonNode.fromJson(Map<String, Object?> json) {
     return JsonNode(
+      array: json[r'array'] as bool? ?? false,
+      fields: json[r'fields'] as Map<String, Object?>?,
+      null$: json[r'null'] as bool? ?? false,
       elements: json[r'elements'] as Map<String, Object?>?,
+      containerNode: json[r'containerNode'] as bool? ?? false,
+      valueNode: json[r'valueNode'] as bool? ?? false,
       pojo: json[r'pojo'] as bool? ?? false,
       number: json[r'number'] as bool? ?? false,
       integralNumber: json[r'integralNumber'] as bool? ?? false,
-      floatingPointNumber: json[r'floatingPointNumber'] as bool? ?? false,
       int$: json[r'int'] as bool? ?? false,
       long: json[r'long'] as bool? ?? false,
       double$: json[r'double'] as bool? ?? false,
@@ -31001,10 +31288,9 @@ class JsonNode {
       textual: json[r'textual'] as bool? ?? false,
       boolean: json[r'boolean'] as bool? ?? false,
       binary: json[r'binary'] as bool? ?? false,
-      containerNode: json[r'containerNode'] as bool? ?? false,
-      missingNode: json[r'missingNode'] as bool? ?? false,
       object: json[r'object'] as bool? ?? false,
-      valueNode: json[r'valueNode'] as bool? ?? false,
+      missingNode: json[r'missingNode'] as bool? ?? false,
+      floatingPointNumber: json[r'floatingPointNumber'] as bool? ?? false,
       numberValue: json[r'numberValue'] as num?,
       numberType: json[r'numberType'] != null
           ? JsonNodeNumberType.fromValue(json[r'numberType']! as String)
@@ -31023,21 +31309,22 @@ class JsonNode {
       valueAsLong: (json[r'valueAsLong'] as num?)?.toInt(),
       valueAsDouble: json[r'valueAsDouble'] as num?,
       valueAsBoolean: json[r'valueAsBoolean'] as bool? ?? false,
+      fieldNames: json[r'fieldNames'] as Map<String, Object?>?,
       textValue: json[r'textValue'] as String?,
       valueAsText: json[r'valueAsText'] as String?,
-      fieldNames: json[r'fieldNames'] as Map<String, Object?>?,
-      array: json[r'array'] as bool? ?? false,
-      fields: json[r'fields'] as Map<String, Object?>?,
-      null$: json[r'null'] as bool? ?? false,
     );
   }
 
   Map<String, Object?> toJson() {
+    var array = this.array;
+    var fields = this.fields;
+    var null$ = this.null$;
     var elements = this.elements;
+    var containerNode = this.containerNode;
+    var valueNode = this.valueNode;
     var pojo = this.pojo;
     var number = this.number;
     var integralNumber = this.integralNumber;
-    var floatingPointNumber = this.floatingPointNumber;
     var int$ = this.int$;
     var long = this.long;
     var double$ = this.double$;
@@ -31046,10 +31333,9 @@ class JsonNode {
     var textual = this.textual;
     var boolean = this.boolean;
     var binary = this.binary;
-    var containerNode = this.containerNode;
-    var missingNode = this.missingNode;
     var object = this.object;
-    var valueNode = this.valueNode;
+    var missingNode = this.missingNode;
+    var floatingPointNumber = this.floatingPointNumber;
     var numberValue = this.numberValue;
     var numberType = this.numberType;
     var intValue = this.intValue;
@@ -31063,21 +31349,24 @@ class JsonNode {
     var valueAsLong = this.valueAsLong;
     var valueAsDouble = this.valueAsDouble;
     var valueAsBoolean = this.valueAsBoolean;
+    var fieldNames = this.fieldNames;
     var textValue = this.textValue;
     var valueAsText = this.valueAsText;
-    var fieldNames = this.fieldNames;
-    var array = this.array;
-    var fields = this.fields;
-    var null$ = this.null$;
 
     final json = <String, Object?>{};
+    json[r'array'] = array;
+    if (fields != null) {
+      json[r'fields'] = fields;
+    }
+    json[r'null'] = null$;
     if (elements != null) {
       json[r'elements'] = elements;
     }
+    json[r'containerNode'] = containerNode;
+    json[r'valueNode'] = valueNode;
     json[r'pojo'] = pojo;
     json[r'number'] = number;
     json[r'integralNumber'] = integralNumber;
-    json[r'floatingPointNumber'] = floatingPointNumber;
     json[r'int'] = int$;
     json[r'long'] = long;
     json[r'double'] = double$;
@@ -31086,10 +31375,9 @@ class JsonNode {
     json[r'textual'] = textual;
     json[r'boolean'] = boolean;
     json[r'binary'] = binary;
-    json[r'containerNode'] = containerNode;
-    json[r'missingNode'] = missingNode;
     json[r'object'] = object;
-    json[r'valueNode'] = valueNode;
+    json[r'missingNode'] = missingNode;
+    json[r'floatingPointNumber'] = floatingPointNumber;
     if (numberValue != null) {
       json[r'numberValue'] = numberValue;
     }
@@ -31123,29 +31411,28 @@ class JsonNode {
       json[r'valueAsDouble'] = valueAsDouble;
     }
     json[r'valueAsBoolean'] = valueAsBoolean;
+    if (fieldNames != null) {
+      json[r'fieldNames'] = fieldNames;
+    }
     if (textValue != null) {
       json[r'textValue'] = textValue;
     }
     if (valueAsText != null) {
       json[r'valueAsText'] = valueAsText;
     }
-    if (fieldNames != null) {
-      json[r'fieldNames'] = fieldNames;
-    }
-    json[r'array'] = array;
-    if (fields != null) {
-      json[r'fields'] = fields;
-    }
-    json[r'null'] = null$;
     return json;
   }
 
   JsonNode copyWith(
-      {Map<String, dynamic>? elements,
+      {bool? array,
+      Map<String, dynamic>? fields,
+      bool? null$,
+      Map<String, dynamic>? elements,
+      bool? containerNode,
+      bool? valueNode,
       bool? pojo,
       bool? number,
       bool? integralNumber,
-      bool? floatingPointNumber,
       bool? int$,
       bool? long,
       bool? double$,
@@ -31154,10 +31441,9 @@ class JsonNode {
       bool? textual,
       bool? boolean,
       bool? binary,
-      bool? containerNode,
-      bool? missingNode,
       bool? object,
-      bool? valueNode,
+      bool? missingNode,
+      bool? floatingPointNumber,
       num? numberValue,
       JsonNodeNumberType? numberType,
       int? intValue,
@@ -31171,18 +31457,19 @@ class JsonNode {
       int? valueAsLong,
       num? valueAsDouble,
       bool? valueAsBoolean,
-      String? textValue,
-      String? valueAsText,
       Map<String, dynamic>? fieldNames,
-      bool? array,
-      Map<String, dynamic>? fields,
-      bool? null$}) {
+      String? textValue,
+      String? valueAsText}) {
     return JsonNode(
+      array: array ?? this.array,
+      fields: fields ?? this.fields,
+      null$: null$ ?? this.null$,
       elements: elements ?? this.elements,
+      containerNode: containerNode ?? this.containerNode,
+      valueNode: valueNode ?? this.valueNode,
       pojo: pojo ?? this.pojo,
       number: number ?? this.number,
       integralNumber: integralNumber ?? this.integralNumber,
-      floatingPointNumber: floatingPointNumber ?? this.floatingPointNumber,
       int$: int$ ?? this.int$,
       long: long ?? this.long,
       double$: double$ ?? this.double$,
@@ -31191,10 +31478,9 @@ class JsonNode {
       textual: textual ?? this.textual,
       boolean: boolean ?? this.boolean,
       binary: binary ?? this.binary,
-      containerNode: containerNode ?? this.containerNode,
-      missingNode: missingNode ?? this.missingNode,
       object: object ?? this.object,
-      valueNode: valueNode ?? this.valueNode,
+      missingNode: missingNode ?? this.missingNode,
+      floatingPointNumber: floatingPointNumber ?? this.floatingPointNumber,
       numberValue: numberValue ?? this.numberValue,
       numberType: numberType ?? this.numberType,
       intValue: intValue ?? this.intValue,
@@ -31208,12 +31494,9 @@ class JsonNode {
       valueAsLong: valueAsLong ?? this.valueAsLong,
       valueAsDouble: valueAsDouble ?? this.valueAsDouble,
       valueAsBoolean: valueAsBoolean ?? this.valueAsBoolean,
+      fieldNames: fieldNames ?? this.fieldNames,
       textValue: textValue ?? this.textValue,
       valueAsText: valueAsText ?? this.valueAsText,
-      fieldNames: fieldNames ?? this.fieldNames,
-      array: array ?? this.array,
-      fields: fields ?? this.fields,
-      null$: null$ ?? this.null$,
     );
   }
 }
@@ -36021,6 +36304,106 @@ class PageBeanProjectDetails {
 }
 
 /// A page of items.
+class PageBeanResolutionJsonBean {
+  /// The URL of the page.
+  final String? self;
+
+  /// If there is another page of results, the URL of the next page.
+  final String? nextPage;
+
+  /// The maximum number of items that could be returned.
+  final int? maxResults;
+
+  /// The index of the first item returned.
+  final int? startAt;
+
+  /// The number of items returned.
+  final int? total;
+
+  /// Whether this is the last page.
+  final bool isLast;
+
+  /// The list of items.
+  final List<ResolutionJsonBean> values;
+
+  PageBeanResolutionJsonBean(
+      {this.self,
+      this.nextPage,
+      this.maxResults,
+      this.startAt,
+      this.total,
+      bool? isLast,
+      List<ResolutionJsonBean>? values})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageBeanResolutionJsonBean.fromJson(Map<String, Object?> json) {
+    return PageBeanResolutionJsonBean(
+      self: json[r'self'] as String?,
+      nextPage: json[r'nextPage'] as String?,
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      isLast: json[r'isLast'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => ResolutionJsonBean.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var self = this.self;
+    var nextPage = this.nextPage;
+    var maxResults = this.maxResults;
+    var startAt = this.startAt;
+    var total = this.total;
+    var isLast = this.isLast;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (nextPage != null) {
+      json[r'nextPage'] = nextPage;
+    }
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'isLast'] = isLast;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageBeanResolutionJsonBean copyWith(
+      {String? self,
+      String? nextPage,
+      int? maxResults,
+      int? startAt,
+      int? total,
+      bool? isLast,
+      List<ResolutionJsonBean>? values}) {
+    return PageBeanResolutionJsonBean(
+      self: self ?? this.self,
+      nextPage: nextPage ?? this.nextPage,
+      maxResults: maxResults ?? this.maxResults,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      isLast: isLast ?? this.isLast,
+      values: values ?? this.values,
+    );
+  }
+}
+
+/// A page of items.
 class PageBeanScreen {
   /// The URL of the page.
   final String? self;
@@ -37778,54 +38161,54 @@ class PagedListUserDetailsApplicationUser {
 
 class PaginatedResponseComment {
   final int? total;
-  final List<Comment> results;
   final int? maxResults;
   final int? startAt;
+  final List<Comment> results;
 
   PaginatedResponseComment(
-      {this.total, List<Comment>? results, this.maxResults, this.startAt})
+      {this.total, this.maxResults, this.startAt, List<Comment>? results})
       : results = results ?? [];
 
   factory PaginatedResponseComment.fromJson(Map<String, Object?> json) {
     return PaginatedResponseComment(
       total: (json[r'total'] as num?)?.toInt(),
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
       results: (json[r'results'] as List<Object?>?)
               ?.map((i) =>
                   Comment.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      maxResults: (json[r'maxResults'] as num?)?.toInt(),
-      startAt: (json[r'startAt'] as num?)?.toInt(),
     );
   }
 
   Map<String, Object?> toJson() {
     var total = this.total;
-    var results = this.results;
     var maxResults = this.maxResults;
     var startAt = this.startAt;
+    var results = this.results;
 
     final json = <String, Object?>{};
     if (total != null) {
       json[r'total'] = total;
     }
-    json[r'results'] = results.map((i) => i.toJson()).toList();
     if (maxResults != null) {
       json[r'maxResults'] = maxResults;
     }
     if (startAt != null) {
       json[r'startAt'] = startAt;
     }
+    json[r'results'] = results.map((i) => i.toJson()).toList();
     return json;
   }
 
   PaginatedResponseComment copyWith(
-      {int? total, List<Comment>? results, int? maxResults, int? startAt}) {
+      {int? total, int? maxResults, int? startAt, List<Comment>? results}) {
     return PaginatedResponseComment(
       total: total ?? this.total,
-      results: results ?? this.results,
       maxResults: maxResults ?? this.maxResults,
       startAt: startAt ?? this.startAt,
+      results: results ?? this.results,
     );
   }
 }
@@ -40261,27 +40644,59 @@ class ProjectIssueTypesHierarchyLevel {
 class ProjectLandingPageInfo {
   final String? url;
   final String? projectKey;
-  final bool simplified;
+  final String? projectType;
   final Map<String, dynamic>? attributes;
+  final bool simplified;
+  final int? boardId;
+  final int? queueId;
+  final String? queueName;
+  final String? queueCategory;
+  final String? boardName;
+  final bool simpleBoard;
 
   ProjectLandingPageInfo(
-      {this.url, this.projectKey, bool? simplified, this.attributes})
-      : simplified = simplified ?? false;
+      {this.url,
+      this.projectKey,
+      this.projectType,
+      this.attributes,
+      bool? simplified,
+      this.boardId,
+      this.queueId,
+      this.queueName,
+      this.queueCategory,
+      this.boardName,
+      bool? simpleBoard})
+      : simplified = simplified ?? false,
+        simpleBoard = simpleBoard ?? false;
 
   factory ProjectLandingPageInfo.fromJson(Map<String, Object?> json) {
     return ProjectLandingPageInfo(
       url: json[r'url'] as String?,
       projectKey: json[r'projectKey'] as String?,
-      simplified: json[r'simplified'] as bool? ?? false,
+      projectType: json[r'projectType'] as String?,
       attributes: json[r'attributes'] as Map<String, Object?>?,
+      simplified: json[r'simplified'] as bool? ?? false,
+      boardId: (json[r'boardId'] as num?)?.toInt(),
+      queueId: (json[r'queueId'] as num?)?.toInt(),
+      queueName: json[r'queueName'] as String?,
+      queueCategory: json[r'queueCategory'] as String?,
+      boardName: json[r'boardName'] as String?,
+      simpleBoard: json[r'simpleBoard'] as bool? ?? false,
     );
   }
 
   Map<String, Object?> toJson() {
     var url = this.url;
     var projectKey = this.projectKey;
-    var simplified = this.simplified;
+    var projectType = this.projectType;
     var attributes = this.attributes;
+    var simplified = this.simplified;
+    var boardId = this.boardId;
+    var queueId = this.queueId;
+    var queueName = this.queueName;
+    var queueCategory = this.queueCategory;
+    var boardName = this.boardName;
+    var simpleBoard = this.simpleBoard;
 
     final json = <String, Object?>{};
     if (url != null) {
@@ -40290,23 +40705,56 @@ class ProjectLandingPageInfo {
     if (projectKey != null) {
       json[r'projectKey'] = projectKey;
     }
-    json[r'simplified'] = simplified;
+    if (projectType != null) {
+      json[r'projectType'] = projectType;
+    }
     if (attributes != null) {
       json[r'attributes'] = attributes;
     }
+    json[r'simplified'] = simplified;
+    if (boardId != null) {
+      json[r'boardId'] = boardId;
+    }
+    if (queueId != null) {
+      json[r'queueId'] = queueId;
+    }
+    if (queueName != null) {
+      json[r'queueName'] = queueName;
+    }
+    if (queueCategory != null) {
+      json[r'queueCategory'] = queueCategory;
+    }
+    if (boardName != null) {
+      json[r'boardName'] = boardName;
+    }
+    json[r'simpleBoard'] = simpleBoard;
     return json;
   }
 
   ProjectLandingPageInfo copyWith(
       {String? url,
       String? projectKey,
+      String? projectType,
+      Map<String, dynamic>? attributes,
       bool? simplified,
-      Map<String, dynamic>? attributes}) {
+      int? boardId,
+      int? queueId,
+      String? queueName,
+      String? queueCategory,
+      String? boardName,
+      bool? simpleBoard}) {
     return ProjectLandingPageInfo(
       url: url ?? this.url,
       projectKey: projectKey ?? this.projectKey,
-      simplified: simplified ?? this.simplified,
+      projectType: projectType ?? this.projectType,
       attributes: attributes ?? this.attributes,
+      simplified: simplified ?? this.simplified,
+      boardId: boardId ?? this.boardId,
+      queueId: queueId ?? this.queueId,
+      queueName: queueName ?? this.queueName,
+      queueCategory: queueCategory ?? this.queueCategory,
+      boardName: boardName ?? this.boardName,
+      simpleBoard: simpleBoard ?? this.simpleBoard,
     );
   }
 }
@@ -40366,11 +40814,11 @@ class ProjectRole {
   /// Whether the calling user is part of this role.
   final bool currentUserRole;
 
-  /// Whether the roles are configurable for this project.
-  final bool roleConfigurable;
-
   /// Whether this role is the admin role for the project.
   final bool admin;
+
+  /// Whether the roles are configurable for this project.
+  final bool roleConfigurable;
 
   /// Whether this role is the default role for the project
   final bool default$;
@@ -40384,13 +40832,13 @@ class ProjectRole {
       this.scope,
       this.translatedName,
       bool? currentUserRole,
-      bool? roleConfigurable,
       bool? admin,
+      bool? roleConfigurable,
       bool? default$})
       : actors = actors ?? [],
         currentUserRole = currentUserRole ?? false,
-        roleConfigurable = roleConfigurable ?? false,
         admin = admin ?? false,
+        roleConfigurable = roleConfigurable ?? false,
         default$ = default$ ?? false;
 
   factory ProjectRole.fromJson(Map<String, Object?> json) {
@@ -40409,8 +40857,8 @@ class ProjectRole {
           : null,
       translatedName: json[r'translatedName'] as String?,
       currentUserRole: json[r'currentUserRole'] as bool? ?? false,
-      roleConfigurable: json[r'roleConfigurable'] as bool? ?? false,
       admin: json[r'admin'] as bool? ?? false,
+      roleConfigurable: json[r'roleConfigurable'] as bool? ?? false,
       default$: json[r'default'] as bool? ?? false,
     );
   }
@@ -40424,8 +40872,8 @@ class ProjectRole {
     var scope = this.scope;
     var translatedName = this.translatedName;
     var currentUserRole = this.currentUserRole;
-    var roleConfigurable = this.roleConfigurable;
     var admin = this.admin;
+    var roleConfigurable = this.roleConfigurable;
     var default$ = this.default$;
 
     final json = <String, Object?>{};
@@ -40449,8 +40897,8 @@ class ProjectRole {
       json[r'translatedName'] = translatedName;
     }
     json[r'currentUserRole'] = currentUserRole;
-    json[r'roleConfigurable'] = roleConfigurable;
     json[r'admin'] = admin;
+    json[r'roleConfigurable'] = roleConfigurable;
     json[r'default'] = default$;
     return json;
   }
@@ -40464,8 +40912,8 @@ class ProjectRole {
       Scope? scope,
       String? translatedName,
       bool? currentUserRole,
-      bool? roleConfigurable,
       bool? admin,
+      bool? roleConfigurable,
       bool? default$}) {
     return ProjectRole(
       self: self ?? this.self,
@@ -40476,8 +40924,8 @@ class ProjectRole {
       scope: scope ?? this.scope,
       translatedName: translatedName ?? this.translatedName,
       currentUserRole: currentUserRole ?? this.currentUserRole,
-      roleConfigurable: roleConfigurable ?? this.roleConfigurable,
       admin: admin ?? this.admin,
+      roleConfigurable: roleConfigurable ?? this.roleConfigurable,
       default$: default$ ?? this.default$,
     );
   }
@@ -41412,6 +41860,111 @@ class RemoveOptionFromIssuesResult {
   }
 }
 
+/// Change the order of issue priorities.
+class ReorderIssuePriorities {
+  /// The list of issue IDs to be reordered. Cannot contain duplicates nor after
+  /// ID.
+  final List<String> ids;
+
+  /// The ID of the priority. Required if `position` isn't provided.
+  final String? after;
+
+  /// The position for issue priorities to be moved to. Required if `after`
+  /// isn't provided.
+  final String? position;
+
+  ReorderIssuePriorities({required this.ids, this.after, this.position});
+
+  factory ReorderIssuePriorities.fromJson(Map<String, Object?> json) {
+    return ReorderIssuePriorities(
+      ids: (json[r'ids'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      after: json[r'after'] as String?,
+      position: json[r'position'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var ids = this.ids;
+    var after = this.after;
+    var position = this.position;
+
+    final json = <String, Object?>{};
+    json[r'ids'] = ids;
+    if (after != null) {
+      json[r'after'] = after;
+    }
+    if (position != null) {
+      json[r'position'] = position;
+    }
+    return json;
+  }
+
+  ReorderIssuePriorities copyWith(
+      {List<String>? ids, String? after, String? position}) {
+    return ReorderIssuePriorities(
+      ids: ids ?? this.ids,
+      after: after ?? this.after,
+      position: position ?? this.position,
+    );
+  }
+}
+
+/// Change the order of issue resolutions.
+class ReorderIssueResolutionsRequest {
+  /// The list of resolution IDs to be reordered. Cannot contain duplicates nor
+  /// after ID.
+  final List<String> ids;
+
+  /// The ID of the resolution. Required if `position` isn't provided.
+  final String? after;
+
+  /// The position for issue resolutions to be moved to. Required if `after`
+  /// isn't provided.
+  final String? position;
+
+  ReorderIssueResolutionsRequest(
+      {required this.ids, this.after, this.position});
+
+  factory ReorderIssueResolutionsRequest.fromJson(Map<String, Object?> json) {
+    return ReorderIssueResolutionsRequest(
+      ids: (json[r'ids'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      after: json[r'after'] as String?,
+      position: json[r'position'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var ids = this.ids;
+    var after = this.after;
+    var position = this.position;
+
+    final json = <String, Object?>{};
+    json[r'ids'] = ids;
+    if (after != null) {
+      json[r'after'] = after;
+    }
+    if (position != null) {
+      json[r'position'] = position;
+    }
+    return json;
+  }
+
+  ReorderIssueResolutionsRequest copyWith(
+      {List<String>? ids, String? after, String? position}) {
+    return ReorderIssueResolutionsRequest(
+      ids: ids ?? this.ids,
+      after: after ?? this.after,
+      position: position ?? this.position,
+    );
+  }
+}
+
 /// Details of an issue resolution.
 class Resolution {
   /// The URL of the issue resolution.
@@ -41470,6 +42023,108 @@ class Resolution {
   }
 }
 
+/// The ID of an issue resolution.
+class ResolutionId {
+  /// The ID of the issue resolution.
+  final String id;
+
+  ResolutionId({required this.id});
+
+  factory ResolutionId.fromJson(Map<String, Object?> json) {
+    return ResolutionId(
+      id: json[r'id'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    return json;
+  }
+
+  ResolutionId copyWith({String? id}) {
+    return ResolutionId(
+      id: id ?? this.id,
+    );
+  }
+}
+
+class ResolutionJsonBean {
+  final String? self;
+  final String? id;
+  final String? description;
+  final String? iconUrl;
+  final String? name;
+  final bool default$;
+
+  ResolutionJsonBean(
+      {this.self,
+      this.id,
+      this.description,
+      this.iconUrl,
+      this.name,
+      bool? default$})
+      : default$ = default$ ?? false;
+
+  factory ResolutionJsonBean.fromJson(Map<String, Object?> json) {
+    return ResolutionJsonBean(
+      self: json[r'self'] as String?,
+      id: json[r'id'] as String?,
+      description: json[r'description'] as String?,
+      iconUrl: json[r'iconUrl'] as String?,
+      name: json[r'name'] as String?,
+      default$: json[r'default'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var self = this.self;
+    var id = this.id;
+    var description = this.description;
+    var iconUrl = this.iconUrl;
+    var name = this.name;
+    var default$ = this.default$;
+
+    final json = <String, Object?>{};
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (iconUrl != null) {
+      json[r'iconUrl'] = iconUrl;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    json[r'default'] = default$;
+    return json;
+  }
+
+  ResolutionJsonBean copyWith(
+      {String? self,
+      String? id,
+      String? description,
+      String? iconUrl,
+      String? name,
+      bool? default$}) {
+    return ResolutionJsonBean(
+      self: self ?? this.self,
+      id: id ?? this.id,
+      description: description ?? this.description,
+      iconUrl: iconUrl ?? this.iconUrl,
+      name: name ?? this.name,
+      default$: default$ ?? this.default$,
+    );
+  }
+}
+
 /// Details of the permission.
 class RestrictedPermission {
   /// The ID of the permission. Either `id` or `key` must be specified. Use
@@ -41514,47 +42169,47 @@ class RestrictedPermission {
 }
 
 class RichText {
-  final bool emptyAdf;
-  final bool finalised;
-  final bool valueSet;
   final bool empty;
+  final bool emptyAdf;
+  final bool valueSet;
+  final bool finalised;
 
-  RichText({bool? emptyAdf, bool? finalised, bool? valueSet, bool? empty})
-      : emptyAdf = emptyAdf ?? false,
-        finalised = finalised ?? false,
+  RichText({bool? empty, bool? emptyAdf, bool? valueSet, bool? finalised})
+      : empty = empty ?? false,
+        emptyAdf = emptyAdf ?? false,
         valueSet = valueSet ?? false,
-        empty = empty ?? false;
+        finalised = finalised ?? false;
 
   factory RichText.fromJson(Map<String, Object?> json) {
     return RichText(
-      emptyAdf: json[r'emptyAdf'] as bool? ?? false,
-      finalised: json[r'finalised'] as bool? ?? false,
-      valueSet: json[r'valueSet'] as bool? ?? false,
       empty: json[r'empty'] as bool? ?? false,
+      emptyAdf: json[r'emptyAdf'] as bool? ?? false,
+      valueSet: json[r'valueSet'] as bool? ?? false,
+      finalised: json[r'finalised'] as bool? ?? false,
     );
   }
 
   Map<String, Object?> toJson() {
-    var emptyAdf = this.emptyAdf;
-    var finalised = this.finalised;
-    var valueSet = this.valueSet;
     var empty = this.empty;
+    var emptyAdf = this.emptyAdf;
+    var valueSet = this.valueSet;
+    var finalised = this.finalised;
 
     final json = <String, Object?>{};
-    json[r'emptyAdf'] = emptyAdf;
-    json[r'finalised'] = finalised;
-    json[r'valueSet'] = valueSet;
     json[r'empty'] = empty;
+    json[r'emptyAdf'] = emptyAdf;
+    json[r'valueSet'] = valueSet;
+    json[r'finalised'] = finalised;
     return json;
   }
 
   RichText copyWith(
-      {bool? emptyAdf, bool? finalised, bool? valueSet, bool? empty}) {
+      {bool? empty, bool? emptyAdf, bool? valueSet, bool? finalised}) {
     return RichText(
-      emptyAdf: emptyAdf ?? this.emptyAdf,
-      finalised: finalised ?? this.finalised,
-      valueSet: valueSet ?? this.valueSet,
       empty: empty ?? this.empty,
+      emptyAdf: emptyAdf ?? this.emptyAdf,
+      valueSet: valueSet ?? this.valueSet,
+      finalised: finalised ?? this.finalised,
     );
   }
 }
@@ -43040,6 +43695,108 @@ class ServerInformation {
   }
 }
 
+class ServiceManagementNavigationInfo {
+  final int? queueId;
+  final String? queueName;
+  final String? queueCategory;
+
+  ServiceManagementNavigationInfo(
+      {this.queueId, this.queueName, this.queueCategory});
+
+  factory ServiceManagementNavigationInfo.fromJson(Map<String, Object?> json) {
+    return ServiceManagementNavigationInfo(
+      queueId: (json[r'queueId'] as num?)?.toInt(),
+      queueName: json[r'queueName'] as String?,
+      queueCategory: json[r'queueCategory'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var queueId = this.queueId;
+    var queueName = this.queueName;
+    var queueCategory = this.queueCategory;
+
+    final json = <String, Object?>{};
+    if (queueId != null) {
+      json[r'queueId'] = queueId;
+    }
+    if (queueName != null) {
+      json[r'queueName'] = queueName;
+    }
+    if (queueCategory != null) {
+      json[r'queueCategory'] = queueCategory;
+    }
+    return json;
+  }
+
+  ServiceManagementNavigationInfo copyWith(
+      {int? queueId, String? queueName, String? queueCategory}) {
+    return ServiceManagementNavigationInfo(
+      queueId: queueId ?? this.queueId,
+      queueName: queueName ?? this.queueName,
+      queueCategory: queueCategory ?? this.queueCategory,
+    );
+  }
+}
+
+/// The new default issue priority.
+class SetDefaultPriorityRequest {
+  /// The ID of the new default issue priority. Must be an existing ID or null.
+  /// Setting this to null erases the default priority setting.
+  final String id;
+
+  SetDefaultPriorityRequest({required this.id});
+
+  factory SetDefaultPriorityRequest.fromJson(Map<String, Object?> json) {
+    return SetDefaultPriorityRequest(
+      id: json[r'id'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    return json;
+  }
+
+  SetDefaultPriorityRequest copyWith({String? id}) {
+    return SetDefaultPriorityRequest(
+      id: id ?? this.id,
+    );
+  }
+}
+
+/// The new default issue resolution.
+class SetDefaultResolutionRequest {
+  /// The ID of the new default issue resolution. Must be an existing ID or
+  /// null. Setting this to null erases the default resolution setting.
+  final String id;
+
+  SetDefaultResolutionRequest({required this.id});
+
+  factory SetDefaultResolutionRequest.fromJson(Map<String, Object?> json) {
+    return SetDefaultResolutionRequest(
+      id: json[r'id'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    return json;
+  }
+
+  SetDefaultResolutionRequest copyWith({String? id}) {
+    return SetDefaultResolutionRequest(
+      id: id ?? this.id,
+    );
+  }
+}
+
 /// Details of a share permission for the filter.
 class SharePermission {
   /// The unique identifier of the share permission.
@@ -43698,7 +44455,7 @@ class SimplifiedHierarchyLevel {
   /// The external UUID of the hierarchy level. This property is deprecated, see
   /// [Change notice: Removing hierarchy level IDs from next-gen APIs](https://developer.atlassian.com/cloud/jira/platform/change-notice-removing-hierarchy-level-ids-from-next-gen-apis/).
   final String? externalUuid;
-  final SimplifiedHierarchyLevelGlobalHierarchyLevel? globalHierarchyLevel;
+  final int? hierarchyLevelNumber;
 
   SimplifiedHierarchyLevel(
       {this.id,
@@ -43709,7 +44466,7 @@ class SimplifiedHierarchyLevel {
       this.level,
       List<int>? issueTypeIds,
       this.externalUuid,
-      this.globalHierarchyLevel})
+      this.hierarchyLevelNumber})
       : issueTypeIds = issueTypeIds ?? [];
 
   factory SimplifiedHierarchyLevel.fromJson(Map<String, Object?> json) {
@@ -43726,10 +44483,7 @@ class SimplifiedHierarchyLevel {
               .toList() ??
           [],
       externalUuid: json[r'externalUuid'] as String?,
-      globalHierarchyLevel: json[r'globalHierarchyLevel'] != null
-          ? SimplifiedHierarchyLevelGlobalHierarchyLevel.fromValue(
-              json[r'globalHierarchyLevel']! as String)
-          : null,
+      hierarchyLevelNumber: (json[r'hierarchyLevelNumber'] as num?)?.toInt(),
     );
   }
 
@@ -43742,7 +44496,7 @@ class SimplifiedHierarchyLevel {
     var level = this.level;
     var issueTypeIds = this.issueTypeIds;
     var externalUuid = this.externalUuid;
-    var globalHierarchyLevel = this.globalHierarchyLevel;
+    var hierarchyLevelNumber = this.hierarchyLevelNumber;
 
     final json = <String, Object?>{};
     if (id != null) {
@@ -43767,8 +44521,8 @@ class SimplifiedHierarchyLevel {
     if (externalUuid != null) {
       json[r'externalUuid'] = externalUuid;
     }
-    if (globalHierarchyLevel != null) {
-      json[r'globalHierarchyLevel'] = globalHierarchyLevel.value;
+    if (hierarchyLevelNumber != null) {
+      json[r'hierarchyLevelNumber'] = hierarchyLevelNumber;
     }
     return json;
   }
@@ -43782,7 +44536,7 @@ class SimplifiedHierarchyLevel {
       int? level,
       List<int>? issueTypeIds,
       String? externalUuid,
-      SimplifiedHierarchyLevelGlobalHierarchyLevel? globalHierarchyLevel}) {
+      int? hierarchyLevelNumber}) {
     return SimplifiedHierarchyLevel(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -43793,35 +44547,65 @@ class SimplifiedHierarchyLevel {
       level: level ?? this.level,
       issueTypeIds: issueTypeIds ?? this.issueTypeIds,
       externalUuid: externalUuid ?? this.externalUuid,
-      globalHierarchyLevel: globalHierarchyLevel ?? this.globalHierarchyLevel,
+      hierarchyLevelNumber: hierarchyLevelNumber ?? this.hierarchyLevelNumber,
     );
   }
 }
 
-class SimplifiedHierarchyLevelGlobalHierarchyLevel {
-  static const subtask =
-      SimplifiedHierarchyLevelGlobalHierarchyLevel._('SUBTASK');
-  static const base = SimplifiedHierarchyLevelGlobalHierarchyLevel._('BASE');
-  static const epic = SimplifiedHierarchyLevelGlobalHierarchyLevel._('EPIC');
+class SoftwareNavigationInfo {
+  final int? boardId;
+  final String? boardName;
+  final int? totalBoardsInProject;
+  final bool simpleBoard;
 
-  static const values = [
-    subtask,
-    base,
-    epic,
-  ];
-  final String value;
+  SoftwareNavigationInfo(
+      {this.boardId,
+      this.boardName,
+      this.totalBoardsInProject,
+      bool? simpleBoard})
+      : simpleBoard = simpleBoard ?? false;
 
-  const SimplifiedHierarchyLevelGlobalHierarchyLevel._(this.value);
+  factory SoftwareNavigationInfo.fromJson(Map<String, Object?> json) {
+    return SoftwareNavigationInfo(
+      boardId: (json[r'boardId'] as num?)?.toInt(),
+      boardName: json[r'boardName'] as String?,
+      totalBoardsInProject: (json[r'totalBoardsInProject'] as num?)?.toInt(),
+      simpleBoard: json[r'simpleBoard'] as bool? ?? false,
+    );
+  }
 
-  static SimplifiedHierarchyLevelGlobalHierarchyLevel fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => SimplifiedHierarchyLevelGlobalHierarchyLevel._(value));
+  Map<String, Object?> toJson() {
+    var boardId = this.boardId;
+    var boardName = this.boardName;
+    var totalBoardsInProject = this.totalBoardsInProject;
+    var simpleBoard = this.simpleBoard;
 
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
+    final json = <String, Object?>{};
+    if (boardId != null) {
+      json[r'boardId'] = boardId;
+    }
+    if (boardName != null) {
+      json[r'boardName'] = boardName;
+    }
+    if (totalBoardsInProject != null) {
+      json[r'totalBoardsInProject'] = totalBoardsInProject;
+    }
+    json[r'simpleBoard'] = simpleBoard;
+    return json;
+  }
 
-  @override
-  String toString() => value;
+  SoftwareNavigationInfo copyWith(
+      {int? boardId,
+      String? boardName,
+      int? totalBoardsInProject,
+      bool? simpleBoard}) {
+    return SoftwareNavigationInfo(
+      boardId: boardId ?? this.boardId,
+      boardName: boardName ?? this.boardName,
+      totalBoardsInProject: totalBoardsInProject ?? this.totalBoardsInProject,
+      simpleBoard: simpleBoard ?? this.simpleBoard,
+    );
+  }
 }
 
 /// The status of the item.
@@ -46099,6 +46883,43 @@ class UpdateProjectDetailsAssigneeType {
 
   @override
   String toString() => value;
+}
+
+/// Details of an issue resolution.
+class UpdateResolutionDetails {
+  /// The name of the resolution. Must be unique.
+  final String name;
+
+  /// The description of the resolution.
+  final String? description;
+
+  UpdateResolutionDetails({required this.name, this.description});
+
+  factory UpdateResolutionDetails.fromJson(Map<String, Object?> json) {
+    return UpdateResolutionDetails(
+      name: json[r'name'] as String? ?? '',
+      description: json[r'description'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var description = this.description;
+
+    final json = <String, Object?>{};
+    json[r'name'] = name;
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    return json;
+  }
+
+  UpdateResolutionDetails copyWith({String? name, String? description}) {
+    return UpdateResolutionDetails(
+      name: name ?? this.name,
+      description: description ?? this.description,
+    );
+  }
 }
 
 /// Details of a screen.
@@ -48579,6 +49400,34 @@ class WebhooksExpirationDate {
   WebhooksExpirationDate copyWith({int? expirationDate}) {
     return WebhooksExpirationDate(
       expirationDate: expirationDate ?? this.expirationDate,
+    );
+  }
+}
+
+class WorkManagementNavigationInfo {
+  final String? boardName;
+
+  WorkManagementNavigationInfo({this.boardName});
+
+  factory WorkManagementNavigationInfo.fromJson(Map<String, Object?> json) {
+    return WorkManagementNavigationInfo(
+      boardName: json[r'boardName'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var boardName = this.boardName;
+
+    final json = <String, Object?>{};
+    if (boardName != null) {
+      json[r'boardName'] = boardName;
+    }
+    return json;
+  }
+
+  WorkManagementNavigationInfo copyWith({String? boardName}) {
+    return WorkManagementNavigationInfo(
+      boardName: boardName ?? this.boardName,
     );
   }
 }

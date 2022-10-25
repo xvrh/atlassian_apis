@@ -220,12 +220,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:audit-log:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -279,13 +279,13 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:audit-log:confluence",
               "write:audit-log:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -374,12 +374,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:audit-log:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -420,12 +420,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:audit-log:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -475,12 +475,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:audit-log:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -588,12 +588,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:audit-log:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -749,12 +749,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -837,12 +837,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -924,12 +924,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -1016,12 +1016,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -1106,12 +1106,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -1206,12 +1206,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "search:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -1342,12 +1342,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -1463,12 +1463,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -1541,12 +1541,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -1617,12 +1617,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -1704,12 +1704,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -1804,12 +1804,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -1909,12 +1909,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -2018,12 +2018,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-file"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -2132,12 +2132,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-file"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -2229,13 +2229,13 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-file",
               "write:confluence-props"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -2340,12 +2340,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-file"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -2420,12 +2420,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "readonly:content.attachment:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -2544,12 +2544,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -2655,12 +2655,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -2737,12 +2737,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -2858,12 +2858,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -2949,12 +2949,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -3037,12 +3037,269 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
+              "read:confluence-content.all"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
               "read:confluence-content.all"
             ]
           },
           {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "read:content.metadata:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/wiki/rest/api/content/{id}/history/{version}/macro/id/{macroId}/convert/{to}": {
+      "get": {
+        "tags": [
+          "Content - macro body"
+        ],
+        "summary": "Get macro body by macro ID and convert the representation synchronously",
+        "description": "Returns the body of a macro in format specified in path, for the given macro ID.\nThis includes information like the name of the macro, the body of the macro,\nand any macro parameters.\n\nAbout the macro ID: When a macro is created in a new version of content,\nConfluence will generate a random ID for it, unless an ID is specified\n(by an app). The macro ID will look similar to this: '50884bd9-0cb8-41d5-98be-f80943c14f96'.\nThe ID is then persisted as new versions of content are created, and is\nonly modified by Confluence if there are conflicting IDs.\n\nNote, to preserve backwards compatibility this resource will also match on\nthe hash of the macro body, even if a macro ID is found. This check will\neventually become redundant, as macro IDs are generated for pages and\ntransparently propagate out to all instances.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content that the macro is in.",
+        "operationId": "getAndConvertMacroBodyByMacroId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID for the content that contains the macro.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "description": "The version of the content that contains the macro. Specifying `0` as the `version` will return\nthe macro body for the latest content version.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "macroId",
+            "in": "path",
+            "description": "The ID of the macro. This is usually passed by the app that the\nmacro is in. Otherwise, find the macro ID by querying the desired\ncontent and version, then expanding the body in storage format.\nFor example, '/content/196611/version/7?expand=content.body.storage'.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "in": "path",
+            "required": true,
+            "description": "The content representation to return the macro in.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/bodyConversionExpand"
+          },
+          {
+            "name": "spaceKeyContext",
+            "in": "query",
+            "description": "The space key used for resolving embedded content (page includes,\nfiles, and links) in the content body. For example, if the source content\ncontains the link `<ac:link><ri:page ri:content-title=\"Example page\" /><ac:link>`\nand the `spaceKeyContext=TEST` parameter is provided, then the link\nwill be converted to a link to the \"Example page\" page in the \"TEST\" space.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "embeddedContentRender",
+            "in": "query",
+            "description": "Mode used for rendering embedded content, like attachments.\n\n- `current` renders the embedded content using the latest version.\n- `version-at-save` renders the embedded content using the version at\nthe time of save.",
+            "schema": {
+              "type": "string",
+              "default": "current",
+              "enum": [
+                "current",
+                "version-at-save"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested content body is returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if invalid content representation is requested, or context is missing."
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if;\n\n- There is no content with the given ID.\n- The calling user does not have permission to view the content.\n- The macro does not exist in the specified version.\n- There is no macro matching the given macro ID or hash.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
             "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:confluence-content.all"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:confluence-content.all"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "read:content.metadata:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/wiki/rest/api/content/{id}/history/{version}/macro/id/{macroId}/convert/async/{to}": {
+      "get": {
+        "tags": [
+          "Content - macro body"
+        ],
+        "summary": "Get macro body by macro ID and convert representation Asynchronously",
+        "description": "Returns Async Id of the conversion task which will convert the macro into a content body of the desired format.\nThe result will be available for 5 minutes after completion of the conversion.\n\nAbout the macro ID: When a macro is created in a new version of content,\nConfluence will generate a random ID for it, unless an ID is specified\n(by an app). The macro ID will look similar to this: '884bd9-0cb8-41d5-98be-f80943c14f96'.\nThe ID is then persisted as new versions of content are created, and is\nonly modified by Confluence if there are conflicting IDs.\n\nNote, to preserve backwards compatibility this resource will also match on\nthe hash of the macro body, even if a macro ID is found. This check will\neventually become redundant, as macro IDs are generated for pages and\ntransparently propagate out to all instances.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content that the macro is in.",
+        "operationId": "getAndAsyncConvertMacroBodyByMacroId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID for the content that contains the macro.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "description": "The version of the content that contains the macro. Specifying `0` as the `version` will return\nthe macro body for the latest content version.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "macroId",
+            "in": "path",
+            "description": "The ID of the macro. For apps, this is passed to the macro by the Connect/Forge framework.\nOtherwise, find the macro ID by querying the desired\ncontent and version, then expanding the body in storage format.\nFor example, '/content/196611/version/7?expand=content.body.storage'.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "in": "path",
+            "required": true,
+            "description": "The content representation to return the macro in.\nCurrently, the following conversions are allowed:\n\n- `export_view`\n- `styled_view`\n- `view`",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "export_view",
+                "view",
+                "styled_view"
+              ]
+            }
+          },
+          {
+            "$ref": "#/components/parameters/bodyConversionExpand"
+          },
+          {
+            "name": "allowCache",
+            "in": "query",
+            "description": "If this field is false, the cache will erase its current value and begin a conversion.\nIf this field is true, the cache will not erase its current value, and will set the status of the\nresult in cache to RERUNNING. Once the data is updated, the status will change to COMPLETED. \nLarge macros that take long to convert, and who want to show intermediate, but potentially stale data, immediately should set this field to true.\nCache values are stored per macro per user per content and expansions.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "spaceKeyContext",
+            "in": "query",
+            "description": "The space key used for resolving embedded content (page includes,\nfiles, and links) in the content body. For example, if the source content\ncontains the link `<ac:link><ri:page ri:content-title=\"Example page\" /><ac:link>`\nand the `spaceKeyContext=TEST` parameter is provided, then the link\nwill be converted to a link to the \"Example page\" page in the \"TEST\" space.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "embeddedContentRender",
+            "in": "query",
+            "description": "Mode used for rendering embedded content, like attachments.\n\n- `current` renders the embedded content using the latest version.\n- `version-at-save` renders the embedded content using the version at\nthe time of save.",
+            "schema": {
+              "type": "string",
+              "default": "current",
+              "enum": [
+                "current",
+                "version-at-save"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested macro conversion request is created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AsyncId"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if;\n\n- There is no content with the given ID.\n- The calling user does not have permission to view the content.\n- The macro does not exist in the specified version.\n- There is no macro matching the given macro ID or hash.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:confluence-content.all"
+            ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -3140,12 +3397,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -3228,12 +3485,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -3299,12 +3556,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -3374,12 +3631,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -3460,12 +3717,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -3547,12 +3804,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -3630,12 +3887,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -3721,12 +3978,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -3810,12 +4067,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.permission"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -3926,12 +4183,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-props"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -4007,12 +4264,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-props"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -4124,12 +4381,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-props"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -4222,12 +4479,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-props"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -4314,12 +4571,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-props"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -4385,12 +4642,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-props"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -4493,12 +4750,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.all"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -4588,12 +4845,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -4685,12 +4942,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -4779,12 +5036,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -4868,12 +5125,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.all"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -4981,12 +5238,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.all"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -5065,12 +5322,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.all"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -5143,12 +5400,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -5221,12 +5478,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -5305,12 +5562,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.all"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -5391,12 +5648,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -5477,12 +5734,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -5553,12 +5810,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.all"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -5631,12 +5888,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -5709,12 +5966,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -5742,7 +5999,7 @@
           "Content states"
         ],
         "summary": "Get content state",
-        "description": "Gets the current content state of the draft or current version of content. To specify the draft version, set\nthe parameter status to draft, otherwise archived or current will get the relevant published state.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content.",
+        "description": "Gets the current content state of the draft or current version of content. To specify the draft version, set\nthe parameter status to draft, otherwise archived or current will get the relevant published state.\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content.",
         "operationId": "getContentState",
         "parameters": [
           {
@@ -5757,9 +6014,10 @@
           {
             "name": "status",
             "in": "query",
-            "description": "Set status to one of [current,draft,archived].",
+            "description": "Set status to one of [current,draft,archived]. Default value is current.",
             "schema": {
               "type": "string",
+              "default": "current",
               "enum": [
                 "current",
                 "draft",
@@ -5789,6 +6047,32 @@
             "description": "Returned if the content with given id can not be found."
           }
         },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:confluence-content.summary"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:confluence-content.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "read:content-details:confluence"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "put": {
@@ -5796,7 +6080,7 @@
           "Content states"
         ],
         "summary": "Set the content state of a content and publishes a new version of the content.",
-        "description": "Sets the content state of the content specified and creates a new version\n(publishes the content without changing the body) of the content with the new state.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the content.",
+        "description": "Sets the content state of the content specified and creates a new version\n(publishes the content without changing the body) of the content with the new state.\n\nYou may pass in either an id of a state, or the name and color of a desired new state.\nIf all 3 are passed in, id will be used.\nIf the name and color passed in already exist under the current user's existing custom states, the existing state will be reused.\nIf custom states are disabled in the space of the content (which can be determined by getting the content state space settings of the content's space)\nthen this set will fail.\n\nYou may not remove a content state via this PUT request. You must use the DELETE method. A specified state is required in the body of this request.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the content.",
         "operationId": "setContentState",
         "requestBody": {
           "description": "Content state fields for state. Pass in id for an existing state, or new name and color for best matching existing state, or new state if allowed in space.",
@@ -5806,7 +6090,8 @@
                 "$ref": "#/components/schemas/ContentStateRestInput"
               }
             }
-          }
+          },
+          "required": true
         },
         "parameters": [
           {
@@ -5855,6 +6140,33 @@
             "description": "Returned if the content with given id can not be found."
           }
         },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "write:confluence-content"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "write:content:confluence",
+              "read:content-details:confluence"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       },
       "delete": {
@@ -5908,7 +6220,34 @@
             "description": "Returned if the content with given id can not be found."
           }
         },
-        "x-atlassian-connect-scope": "DELETE"
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "write:confluence-content"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "write:content:confluence",
+              "read:content-details:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "WRITE"
       }
     },
     "/wiki/rest/api/content/{id}/state/available": {
@@ -5917,7 +6256,7 @@
           "Content states"
         ],
         "summary": "Gets available content states for content.",
-        "description": "Gets content states that are available for the content to be set as.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the content.",
+        "description": "Gets content states that are available for the content to be set as.\nWill return all enabled Space Content States.\nWill only return most the 3 most recently published custom content states to match UI editor list.\nTo get all custom content states, use the /content-states endpoint.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the content.",
         "operationId": "getAvailableContentStates",
         "parameters": [
           {
@@ -5954,6 +6293,32 @@
             "description": "Returned if the content with given id can not be found."
           }
         },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "write:confluence-content"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "write:content:confluence"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -6029,12 +6394,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -6119,12 +6484,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -6212,12 +6577,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -6282,12 +6647,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -6310,6 +6675,86 @@
       }
     },
     "/wiki/rest/api/content-states": {
+      "put": {
+        "tags": [
+          "Content states"
+        ],
+        "summary": "Bulk set content state of many contents",
+        "description": "Creates a long running task that sets content state of draft or published versions of pages specified.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**\nContent Edit Permission for a content to have its state set via this endpoint.",
+        "operationId": "bulkSetContentStates",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": true,
+            "description": "Set status to one of [current,draft].",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "current",
+                "draft"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The content state and ids to set it to.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkContentStateSetInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Returned if a task to set content states is created. Returns the taskId.\nThis task id can be passed into /wiki/rest/api/content-states/task/{taskId} for a result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AsyncId"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if too many contents, no contents, no content state, or no status are passed in."
+          },
+          "404": {
+            "description": "Returned if content cannot be found with the provided context."
+          }
+        },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "write:content:confluence",
+              "read:content-details:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "INACCESSIBLE"
+      },
       "get": {
         "tags": [
           "Content states"
@@ -6335,7 +6780,195 @@
             "description": "Returned if user is not authenticated."
           }
         },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:user.property:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:user.property:confluence"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "read:user.property:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/wiki/rest/api/content-states/delete": {
+      "post": {
+        "tags": [
+          "Content states"
+        ],
+        "summary": "Bulk remove content states from content",
+        "description": "Creates a long running task that Removes content state from draft or published versions of pages specified.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**\nContent Edit Permission for a content to have its state removed via this endpoint.",
+        "operationId": "bulkRemoveContentStates",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": true,
+            "description": "Set status to one of [current,draft].",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "current",
+                "draft"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "ids"
+                ],
+                "properties": {
+                  "ids": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ContentId"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returned if a task to remove content states is created. Returns the taskId.\nThis task id can be passed into /wiki/rest/api/content-states/task/{taskId}",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AsyncId"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if too many contents, no contents, no content state, or no status are passed in."
+          },
+          "401": {
+            "description": "Returned if user not authenticated."
+          },
+          "403": {
+            "description": "Returned if user not found or does not have permission for content stat"
+          },
+          "404": {
+            "description": "Returned if content cannot be found with the provided context."
+          }
+        },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "write:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "write:content:confluence",
+              "read:content-details:confluence"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
+      }
+    },
+    "/wiki/rest/api/content-states/task/{taskId}": {
+      "get": {
+        "tags": [
+          "Content states"
+        ],
+        "summary": "Get update on long running task for setting of content state.",
+        "description": "Get Status of long running task that was previously created to set or remove content states from content.\nUser must first create a task by passing in details to /wiki/rest/api/content-states PUT or DELETE endpoints.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**\nMust have created long running task",
+        "operationId": "getTaskUpdate",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "taskId returned by put or delete requests to /wiki/rest/api/content-states",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Task found. State of task is returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentStateBulkSetTaskUpdate"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User not authenticated."
+          },
+          "404": {
+            "description": "No long running task by calling user with given taskId found."
+          }
+        },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "read:confluence-content"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:confluence-content"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "read:content:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
       }
     },
     "/wiki/rest/api/contentbody/convert/{to}": {
@@ -6355,9 +6988,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "$ref": "#/components/parameters/contentExpand"
           },
           {
             "name": "spaceKeyContext",
@@ -6387,6 +7017,9 @@
                 "version-at-save"
               ]
             }
+          },
+          {
+            "$ref": "#/components/parameters/bodyConversionExpand"
           }
         ],
         "requestBody": {
@@ -6422,12 +7055,213 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
+              "read:confluence-content.all"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
               "read:confluence-content.all"
             ]
           },
           {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "read:content.metadata:confluence"
+            ]
+          }
+        ],
+        "x-codegen-request-body-name": "body",
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/wiki/rest/api/contentbody/convert/async/{to}": {
+      "post": {
+        "tags": [
+          "Content body"
+        ],
+        "summary": "Asynchronously convert content body",
+        "description": "Converts a content body from one format to another format asynchronously.\nReturns the asyncId for the asynchronous task.\n\nSupported conversions:\n\n- storage: export_view\n\nNo other conversions are supported at the moment.\nOnce a conversion is completed, it will be available for 5 minutes at the result endpoint.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nIf request specifies 'contentIdContext', 'View' permission for the space, and permission to view the content.",
+        "operationId": "asyncConvertContentBodyRequest",
+        "parameters": [
+          {
+            "name": "to",
+            "in": "path",
+            "description": "The name of the target format for the content body.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "export_view"
+              ]
+            }
+          },
+          {
+            "$ref": "#/components/parameters/bodyConversionExpand"
+          },
+          {
+            "name": "spaceKeyContext",
+            "in": "query",
+            "description": "The space key used for resolving embedded content (page includes,\nfiles, and links) in the content body. For example, if the source content\ncontains the link `<ac:link><ri:page ri:content-title=\"Example page\" /><ac:link>`\nand the `spaceKeyContext=TEST` parameter is provided, then the link\nwill be converted to a link to the \"Example page\" page in the \"TEST\" space.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "contentIdContext",
+            "in": "query",
+            "description": "The content ID used to find the space for resolving embedded content\n(page includes, files, and links) in the content body. For example,\nif the source content contains the link `<ac:link><ri:page ri:content-title=\"Example page\" /><ac:link>`\nand the `contentIdContext=123` parameter is provided, then the link\nwill be converted to a link to the \"Example page\" page in the same space\nthat has the content with ID=123. Note, `spaceKeyContext` will be ignored\nif this parameter is provided.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "allowCache",
+            "in": "query",
+            "description": "If this field is false, the cache will erase its current value and begin a new conversion.\nIf this field is true, the cache will not erase its current value, and will set the status of the\nasync conversion to RERUNNING. Once the data is updated, the status will change to COMPLETED. \nLarge macros that take long to convert, and whose data need not immediately up to date (same as previous conversion's result within last 5 minutes)\nshould set this fields to true. Cache values are stored per user per content body and expansions.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "embeddedContentRender",
+            "in": "query",
+            "description": "Mode used for rendering embedded content, like attachments.\n\n- `current` renders the embedded content using the latest version.\n- `version-at-save` renders the embedded content using the version at\nthe time of save.",
+            "schema": {
+              "type": "string",
+              "default": "current",
+              "enum": [
+                "current",
+                "version-at-save"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The content body to convert.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContentBodyCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Returned if the content is added to the messaging queue for conversion. This id will be available for 5 minutes after the conversion is complete.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AsyncId"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned\n- if the content body or conversion context is invalid or null\n- if the value is improperly formed\n- any conversion type other than export_view",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if content cannot be found with the provided context.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
             "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:confluence-content.all"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:confluence-content.all"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "read:content.metadata:confluence"
+            ]
+          }
+        ],
+        "x-codegen-request-body-name": "body",
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/wiki/rest/api/contentbody/convert/async/{id}": {
+      "get": {
+        "tags": [
+          "Content body"
+        ],
+        "summary": "Get asynchronously converted content body from the id or the current status of the task.",
+        "description": "Returns the asynchronous content body for the corresponding id if the task is complete \nor returns the status of the task.\n\nAfter the task is completed, the result can be obtained for 5 minutes, or until an identical conversion request is made again,\nwith allowCache query param set to false.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nIf request specifies 'contentIdContext', 'View' permission for the space, and permission to view the content.",
+        "operationId": "asyncConvertContentBodyResponse",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The asyncId of the macro task to get the converted body.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if successfully found an async conversion task associated with the id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AsyncContentBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if the async id is invalid.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the request was not made by an anonymous user and user is not authenticated.",
+            "content": {}
+          },
+          "403": {
+            "description": "Returned if the requesting user is not the user who made the conversion request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if async macro conversion task cannot be found with the provided id.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:confluence-content.all"
+            ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -6610,12 +7444,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.all"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -6679,12 +7513,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:inlinetask:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -6753,13 +7587,13 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:inlinetask:confluence",
               "write:inlinetask:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -6856,12 +7690,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -6949,12 +7783,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-groups"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -7019,12 +7853,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-groups"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -7089,12 +7923,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-groups"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -7153,12 +7987,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-groups"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -7217,12 +8051,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-groups"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -7285,12 +8119,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-groups"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -7423,12 +8257,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-groups"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -7584,12 +8418,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-groups"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -7665,12 +8499,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-groups"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -7743,12 +8577,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-groups"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -7842,12 +8676,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-groups"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -7924,12 +8758,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-groups"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -8002,12 +8836,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-groups"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -8079,12 +8913,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:content.metadata:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -8140,12 +8974,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-space.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -8323,12 +9157,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -8498,12 +9332,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -8653,12 +9487,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -8805,12 +9639,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -8988,12 +9822,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -9125,10 +9959,12 @@
           {
             "name": "sitePermissionTypeFilter",
             "in": "query",
+            "description": "Filters users by permission type.  Use NONE to default to licensed users, EXTERNALCOLLABORATOR\nfor external/guest users, and ALL to include all permission types.",
             "schema": {
               "type": "string",
               "default": "none",
               "enum": [
+                "all",
                 "externalCollaborator",
                 "none"
               ]
@@ -9177,12 +10013,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "search:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -9280,12 +10116,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:content-details:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -9340,12 +10176,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "manage:confluence-configuration"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -9415,12 +10251,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "manage:confluence-configuration"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -9499,12 +10335,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "manage:confluence-configuration"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -9566,12 +10402,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "manage:confluence-configuration"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -9655,12 +10491,12 @@
         "deprecated": true,
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "manage:confluence-configuration"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -9712,12 +10548,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "manage:confluence-configuration"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -9785,12 +10621,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "manage:confluence-configuration"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -9838,12 +10674,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "manage:confluence-configuration"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -9902,12 +10738,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "manage:confluence-configuration"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -10066,12 +10902,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-space.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -10136,12 +10972,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-space"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -10211,12 +11047,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-space"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -10285,12 +11121,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-space.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -10362,12 +11198,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-space"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -10431,12 +11267,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-space"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -10549,12 +11385,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -10637,13 +11473,13 @@
         "x-codegen-request-body-name": "body",
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:space.permission:confluence",
               "write:space.permission:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -10714,13 +11550,13 @@
         "x-codegen-request-body-name": "body",
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:space.permission:confluence",
               "write:space.permission:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -10788,12 +11624,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:space.permission:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -10896,12 +11732,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -10999,12 +11835,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-props"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -11088,12 +11924,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-props"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -11180,12 +12016,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-props"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -11278,12 +12114,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-props"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -11370,12 +12206,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-props"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -11441,12 +12277,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-props"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -11509,12 +12345,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-space.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -11586,12 +12422,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-space"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -11621,7 +12457,7 @@
           "Content states"
         ],
         "summary": "Get space suggested content states",
-        "description": "Get content states that are suggested in the space. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nSpace view permission",
+        "description": "Get content states that are suggested in the space.\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nSpace view permission",
         "operationId": "getSpaceContentStates",
         "parameters": [
           {
@@ -11661,12 +12497,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-space.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -11728,6 +12564,150 @@
             "description": "Returned if the space with given key can not be found."
           }
         },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:confluence-space.summary"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:confluence-space.summary"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "read:space.setting:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/wiki/rest/api/space/{spaceKey}/state/content": {
+      "get": {
+        "tags": [
+          "Content states"
+        ],
+        "summary": "Get content in space with given content state",
+        "description": "Finds paginated content with \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nSpace View Permission",
+        "operationId": "getContentsWithState",
+        "parameters": [
+          {
+            "name": "spaceKey",
+            "in": "path",
+            "description": "The key of the space to be queried for its content state settings.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "state-id",
+            "in": "query",
+            "description": "The id of the content state to filter content by",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "expand",
+            "in": "query",
+            "description": "A multi-value parameter indicating which properties of the content to expand.\nOptions include: space, version, history, children, etc.\n\nEx: space,version",
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of results to return",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 0,
+              "format": "int32",
+              "default": 25
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "description": "Number of result to start returning. (0 indexed)",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if search was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentArray"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if limit or start are out of range, stateId is omitted."
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing from the request."
+          },
+          "403": {
+            "description": "Returned if user does not have space view permission."
+          },
+          "404": {
+            "description": "Returned if the space with given key can not be found."
+          }
+        },
+        "security": [
+          {
+            "oAuthDefinitions": [
+              "read:confluence-content.all"
+            ]
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:confluence-content.all"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "read:content:confluence"
+            ]
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -11768,12 +12748,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-space.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -11844,12 +12824,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-space"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -11902,12 +12882,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-space"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -11982,13 +12962,13 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:watcher:confluence",
               "read:user:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -12076,12 +13056,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-space.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -12161,12 +13141,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-space"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -12241,12 +13221,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-space"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -12310,12 +13290,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -12379,12 +13359,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -12483,12 +13463,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -12585,12 +13565,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -12650,12 +13630,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -12706,12 +13686,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -12796,12 +13776,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-user"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -12867,12 +13847,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-user"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -12940,12 +13920,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-user"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -13026,12 +14006,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-user"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -13119,12 +14099,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-user"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -13196,12 +14176,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -13265,12 +14245,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -13344,12 +14324,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -13421,12 +14401,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -13500,12 +14480,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -13569,12 +14549,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -13646,12 +14626,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -13725,12 +14705,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -13794,12 +14774,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:confluence-content"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -14002,12 +14982,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-user"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -14233,12 +15213,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -14326,12 +15306,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:confluence-content.summary"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -14425,12 +15405,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:user.property:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -14505,12 +15485,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "read:user.property:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -14587,12 +15567,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:user.property:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -14674,12 +15654,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:user.property:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -14746,12 +15726,12 @@
         },
         "security": [
           {
+            "basicAuth": []
+          },
+          {
             "oAuthDefinitions": [
               "write:user.property:confluence"
             ]
-          },
-          {
-            "basicAuth": []
           }
         ],
         "x-atlassian-oauth2-scopes": [
@@ -14813,6 +15793,17 @@
             "type": "string"
           },
           "objectType": {
+            "type": "string"
+          }
+        }
+      },
+      "AsyncId": {
+        "required": [
+          "asyncId"
+        ],
+        "type": "object",
+        "properties": {
+          "asyncId": {
             "type": "string"
           }
         }
@@ -15120,14 +16111,15 @@
               "type": "object",
               "$ref": "#/components/schemas/ContentState"
             },
-            "description": "space suggested content states that can be used in the space"
+            "description": "Space suggested content states that can be used in the space. This can be null if space content states are disabled in the space.\nThis list can be empty if there are no space content states defined in the space.\nAll spaces start with 3 default space content states, and this can be modified in the UI under space settings."
           },
           "customContentStates": {
             "type": "array",
             "items": {
               "type": "object",
               "$ref": "#/components/schemas/ContentState"
-            }
+            },
+            "description": "Custom content states that can be used by the user on the content of this call.\nThis can be null if custom content states are disabled in the space of the content.\nThis list can be empty if there are no custom content states defined by the user.\nThis will at most have 3 of the most recently published content states. \nOnly the calling user has access to place these states on content, but all users can see these states once they are placed."
           }
         }
       },
@@ -15635,6 +16627,9 @@
               "schedulePublishDate": {
                 "type": "string"
               },
+              "schedulePublishInfo": {
+                "type": "string"
+              },
               "macroRenderedOutput": {
                 "type": "string"
               }
@@ -15777,6 +16772,100 @@
           }
         },
         "additionalProperties": true
+      },
+      "AsyncContentBody": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "representation": {
+            "type": "string",
+            "enum": [
+              "view",
+              "export_view",
+              "styled_view",
+              "storage",
+              "editor",
+              "editor2",
+              "anonymous_export_view",
+              "wiki",
+              "atlas_doc_format"
+            ]
+          },
+          "renderTaskId": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "status": {
+            "description": "Rerunning is reserved for when the job is working, but there is a previous run's value in the cache. You may choose to continue polling, or use the cached value.",
+            "type": "string",
+            "enum": [
+              "WORKING",
+              "QUEUED",
+              "FAILED",
+              "COMPLETED",
+              "RERUNNING"
+            ]
+          },
+          "embeddedContent": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmbeddedContent"
+            }
+          },
+          "webresource": {
+            "$ref": "#/components/schemas/WebResourceDependencies"
+          },
+          "mediaToken": {
+            "type": "object",
+            "properties": {
+              "collectionIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "contentId": {
+                "type": "string"
+              },
+              "expiryDateTime": {
+                "type": "string"
+              },
+              "fileIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "token": {
+                "type": "string"
+              }
+            }
+          },
+          "_expandable": {
+            "type": "object",
+            "properties": {
+              "content": {
+                "type": "string"
+              },
+              "embeddedContent": {
+                "type": "string"
+              },
+              "webresource": {
+                "type": "string"
+              },
+              "mediaToken": {
+                "type": "string"
+              }
+            }
+          },
+          "_links": {
+            "$ref": "#/components/schemas/GenericLinks"
+          }
+        }
       },
       "ContentBody": {
         "required": [
@@ -16272,6 +17361,9 @@
           "createdBy": {
             "$ref": "#/components/schemas/User"
           },
+          "ownedBy": {
+            "$ref": "#/components/schemas/User"
+          },
           "createdDate": {
             "type": "string",
             "format": "date-time"
@@ -16306,6 +17398,9 @@
                 "type": "string"
               },
               "nextVersion": {
+                "type": "string"
+              },
+              "ownedBy": {
                 "type": "string"
               }
             }
@@ -16990,6 +18085,54 @@
           "$ref": "#/components/schemas/AddContentRestriction"
         }
       },
+      "BulkContentStateSetInput": {
+        "type": "object",
+        "required": [
+          "ids",
+          "contentState"
+        ],
+        "properties": {
+          "ids": {
+            "description": "maximum number of ids you can pass in is 300",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContentId"
+            }
+          },
+          "contentState": {
+            "$ref": "#/components/schemas/ContentStateInput"
+          }
+        }
+      },
+      "ContentPageResponse": {
+        "required": [
+          "limit",
+          "results",
+          "size",
+          "start"
+        ],
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Content"
+            }
+          },
+          "start": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "ContentState": {
         "required": [
           "id",
@@ -17013,20 +18156,91 @@
           }
         }
       },
+      "ContentStateBulkSetTaskUpdate": {
+        "required": [
+          "set",
+          "failed",
+          "success",
+          "percentage"
+        ],
+        "properties": {
+          "set": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContentId"
+            }
+          },
+          "failed": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContentStateFailure"
+            }
+          },
+          "percentage": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "message": {
+            "type": "string"
+          },
+          "state": {
+            "$ref": "#/components/schemas/ContentState"
+          },
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "ContentStateFailure": {
+        "required": [
+          "contentId",
+          "failureReason"
+        ],
+        "type": "object",
+        "properties": {
+          "contentId": {
+            "$ref": "#/components/schemas/ContentId"
+          },
+          "failureReason": {
+            "type": "string"
+          }
+        },
+        "description": "Object describing why a content state set failed"
+      },
+      "ContentStateInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "color": {
+            "description": "Color of state. Must be in 6 digit hex form (#FFFFFF). The default colors offered in the UI are:\n #ff7452 (red),\n #2684ff (blue),\n #ffc400 (yellow),\n #57d9a3 (green), and\n #8777d9 (purple)",
+            "type": "string"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "spaceKey": {
+            "type": "string"
+          }
+        }
+      },
       "ContentStateRestInput": {
         "type": "object",
         "properties": {
           "name": {
             "type": "string",
-            "description": "name of content state"
+            "description": "Name of content state. Maximum 20 characters."
           },
           "color": {
             "type": "string",
-            "description": "Color of state. Must be in 6 digit hex form (#FFFFFF)"
+            "description": "Color of state. Must be in 6 digit hex form (#FFFFFF). The default colors offered in the UI are:\n #ff7452 (red),\n #2684ff (blue),\n #ffc400 (yellow),\n #57d9a3 (green), and\n #8777d9 (purple)"
           },
           "id": {
             "type": "integer",
-            "description": "id of state",
+            "description": "id of state. This can be 0,1, or 2 if you wish to specify a default space state.",
             "format": "int64"
           }
         }
@@ -18053,6 +19267,10 @@
         ],
         "type": "object",
         "properties": {
+          "ari": {
+            "type": "string",
+            "description": "the ARI for the long task, based on its ID"
+          },
           "id": {
             "type": "string",
             "description": "a unique identifier for the long task"
@@ -18207,6 +19425,10 @@
         ],
         "type": "object",
         "properties": {
+          "ari": {
+            "type": "string",
+            "description": "the ARI for the long task, based on its ID"
+          },
           "id": {
             "type": "string"
           },
@@ -18324,6 +19546,10 @@
         ],
         "type": "object",
         "properties": {
+          "ari": {
+            "type": "string",
+            "description": "the ARI for the long task, based on its ID"
+          },
           "id": {
             "type": "string"
           },
@@ -19761,6 +20987,9 @@
               }
             }
           },
+          "spaceKey": {
+            "type": "string"
+          },
           "_links": {
             "$ref": "#/components/schemas/GenericLinks"
           }
@@ -20453,7 +21682,7 @@
       },
       "UsersUserKeys": {
         "required": [
-          "userKeys"
+          "userAccountIds"
         ],
         "nullable": true,
         "type": "object",
@@ -21151,6 +22380,19 @@
           }
         }
       },
+      "bodyConversionExpand": {
+        "name": "expand",
+        "in": "query",
+        "description": "A multi-value parameter indicating which properties of the content to expand and populate. Expands are dependent on the\n`to` conversion format and may be irrelevant for certain conversions (e.g. `macroRenderedOutput` is redundant when\nconverting to `view` format). \n\nIf rendering to `view` format, and the body content being converted includes arbitrary nested content (such as macros); then it is \nnecessary to include webresource expands in the request. Webresources for content body are the batched JS and CSS dependencies for\nany nested dynamic content (i.e. macros).\n\n- `embeddedContent` returns metadata for nested content (e.g. page included using page include macro)\n- `mediaToken` returns JWT token for retrieving attachment data from Media API\n- `macroRenderedOutput` additionally converts body to view format\n- `webresource.superbatch.uris.js` returns all common JS dependencies as static URLs\n- `webresource.superbatch.uris.css` returns all common CSS dependencies as static URLs\n- `webresource.superbatch.uris.all` returns all common dependencies as static URLs\n- `webresource.superbatch.tags.all` returns all common JS dependencies as html `<script>` tags\n- `webresource.superbatch.tags.css` returns all common CSS dependencies as html `<style>` tags\n- `webresource.superbatch.tags.js` returns all common dependencies as html `<script>` and `<style>` tags\n- `webresource.uris.js` returns JS dependencies specific to conversion\n- `webresource.uris.css` returns CSS dependencies specific to conversion\n- `webresource.uris.all` returns all dependencies specific to conversion     \n- `webresource.tags.all` returns common JS dependencies as html `<script>` tags\n- `webresource.tags.css` returns common CSS dependencies as html `<style>` tags\n- `webresource.tags.js` returns common dependencies as html `<script>` and `<style>` tags",
+        "style": "form",
+        "explode": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
       "contentExpandWithSubExpandLimit": {
         "name": "expand",
         "in": "query",
@@ -21319,7 +22561,7 @@
       {
         "title": "Authentication and authorization",
         "anchor": "auth",
-        "body": "**Authentication:** If you are building a Cloud app, authentication is implemented via JWT (see [Authentication for apps](https://developer.atlassian.com/cloud/confluence/authentication-for-apps/)). Otherwise, if you are authenticating directly against the REST API, the REST API supports basic auth (see [Basic auth for REST APIs](https://developer.atlassian.com/cloud/confluence/basic-auth-for-rest-apis/)).\n\n**Authorization:** If you are building a Cloud app, authorization can be implemented by [scopes](https://developer.atlassian.com/cloud/confluence/scopes/) or by [OAuth 2.0 user impersonation](https://developer.atlassian.com/cloud/confluence/oauth-2-jwt-bearer-tokens-for-apps). Otherwise, if you are making calls directly against the REST API, authorization is based on the user used in the authentication process.\n\nSee [Security overview](https://developer.atlassian.com/cloud/jira/platform/security-overview/) for more details on authentication and authorization."
+        "body": "**Authentication:** If you are building a Cloud app, authentication is implemented via JWT or OAuth 2.0, depending on what you are building (see [Security overview](https://developer.atlassian.com/cloud/confluence/security-overview/)). Otherwise, if you are authenticating directly against the REST API, the REST API supports basic auth (see [Basic auth for REST APIs](https://developer.atlassian.com/cloud/confluence/basic-auth-for-rest-apis/)).\n\n**Authorization:** If you are building a Cloud app, authorization can be implemented by [scopes](https://developer.atlassian.com/cloud/confluence/scopes/) or by [OAuth 2.0 user impersonation](https://developer.atlassian.com/cloud/confluence/oauth-2-jwt-bearer-tokens-for-apps). Otherwise, if you are making calls directly against the REST API, authorization is based on the user used in the authentication process.\n\nSee [Security overview](https://developer.atlassian.com/cloud/confluence/security-overview/) for more details on authentication and authorization."
       },
       {
         "title": "Status codes",

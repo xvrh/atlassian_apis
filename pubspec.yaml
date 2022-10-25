@@ -17,7 +17,7 @@ dev_dependencies:
   dart_style:
   json_annotation:
   json_serializable:
-  pedantic:
+  lints:
   pub_semver:
   test:
   yaml:

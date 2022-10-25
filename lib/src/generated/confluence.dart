@@ -1122,6 +1122,99 @@ class ContentMacroBodyApi {
       },
     ));
   }
+
+  /// Returns the body of a macro in format specified in path, for the given
+  /// macro ID.
+  /// This includes information like the name of the macro, the body of the
+  /// macro,
+  /// and any macro parameters.
+  ///
+  /// About the macro ID: When a macro is created in a new version of content,
+  /// Confluence will generate a random ID for it, unless an ID is specified
+  /// (by an app). The macro ID will look similar to this:
+  /// '50884bd9-0cb8-41d5-98be-f80943c14f96'.
+  /// The ID is then persisted as new versions of content are created, and is
+  /// only modified by Confluence if there are conflicting IDs.
+  ///
+  /// Note, to preserve backwards compatibility this resource will also match on
+  /// the hash of the macro body, even if a macro ID is found. This check will
+  /// eventually become redundant, as macro IDs are generated for pages and
+  /// transparently propagate out to all instances.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the content that the macro is in.
+  Future<ContentBody> getAndConvertMacroBodyByMacroId(
+      {required String id,
+      required int version,
+      required String macroId,
+      required String to,
+      List<String>? expand,
+      String? spaceKeyContext,
+      String? embeddedContentRender}) async {
+    return ContentBody.fromJson(await _client.send(
+      'get',
+      'wiki/rest/api/content/{id}/history/{version}/macro/id/{macroId}/convert/{to}',
+      pathParameters: {
+        'id': id,
+        'version': '$version',
+        'macroId': macroId,
+        'to': to,
+      },
+      queryParameters: {
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
+        if (spaceKeyContext != null) 'spaceKeyContext': spaceKeyContext,
+        if (embeddedContentRender != null)
+          'embeddedContentRender': embeddedContentRender,
+      },
+    ));
+  }
+
+  /// Returns Async Id of the conversion task which will convert the macro into
+  /// a content body of the desired format.
+  /// The result will be available for 5 minutes after completion of the
+  /// conversion.
+  ///
+  /// About the macro ID: When a macro is created in a new version of content,
+  /// Confluence will generate a random ID for it, unless an ID is specified
+  /// (by an app). The macro ID will look similar to this:
+  /// '884bd9-0cb8-41d5-98be-f80943c14f96'.
+  /// The ID is then persisted as new versions of content are created, and is
+  /// only modified by Confluence if there are conflicting IDs.
+  ///
+  /// Note, to preserve backwards compatibility this resource will also match on
+  /// the hash of the macro body, even if a macro ID is found. This check will
+  /// eventually become redundant, as macro IDs are generated for pages and
+  /// transparently propagate out to all instances.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the content that the macro is in.
+  Future<AsyncId> getAndAsyncConvertMacroBodyByMacroId(
+      {required String id,
+      required int version,
+      required String macroId,
+      required String to,
+      List<String>? expand,
+      bool? allowCache,
+      String? spaceKeyContext,
+      String? embeddedContentRender}) async {
+    return AsyncId.fromJson(await _client.send(
+      'get',
+      'wiki/rest/api/content/{id}/history/{version}/macro/id/{macroId}/convert/async/{to}',
+      pathParameters: {
+        'id': id,
+        'version': '$version',
+        'macroId': macroId,
+        'to': to,
+      },
+      queryParameters: {
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
+        if (allowCache != null) 'allowCache': '$allowCache',
+        if (spaceKeyContext != null) 'spaceKeyContext': spaceKeyContext,
+        if (embeddedContentRender != null)
+          'embeddedContentRender': embeddedContentRender,
+      },
+    ));
+  }
 }
 
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
@@ -1146,10 +1239,10 @@ class ContentBodyApi {
   /// and permission to view the content.
   Future<ContentBody> convertContentBody(
       {required String to,
-      List<String>? expand,
       String? spaceKeyContext,
       String? contentIdContext,
       String? embeddedContentRender,
+      List<String>? expand,
       required ContentBodyCreate body}) async {
     return ContentBody.fromJson(await _client.send(
       'post',
@@ -1158,13 +1251,74 @@ class ContentBodyApi {
         'to': to,
       },
       queryParameters: {
-        if (expand != null) 'expand': expand.map((e) => e).join(','),
         if (spaceKeyContext != null) 'spaceKeyContext': spaceKeyContext,
         if (contentIdContext != null) 'contentIdContext': contentIdContext,
         if (embeddedContentRender != null)
           'embeddedContentRender': embeddedContentRender,
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
       body: body.toJson(),
+    ));
+  }
+
+  /// Converts a content body from one format to another format asynchronously.
+  /// Returns the asyncId for the asynchronous task.
+  ///
+  /// Supported conversions:
+  ///
+  /// - storage: export_view
+  ///
+  /// No other conversions are supported at the moment.
+  /// Once a conversion is completed, it will be available for 5 minutes at the
+  /// result endpoint.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// If request specifies 'contentIdContext', 'View' permission for the space,
+  /// and permission to view the content.
+  Future<AsyncId> asyncConvertContentBodyRequest(
+      {required String to,
+      List<String>? expand,
+      String? spaceKeyContext,
+      String? contentIdContext,
+      bool? allowCache,
+      String? embeddedContentRender,
+      required ContentBodyCreate body}) async {
+    return AsyncId.fromJson(await _client.send(
+      'post',
+      'wiki/rest/api/contentbody/convert/async/{to}',
+      pathParameters: {
+        'to': to,
+      },
+      queryParameters: {
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
+        if (spaceKeyContext != null) 'spaceKeyContext': spaceKeyContext,
+        if (contentIdContext != null) 'contentIdContext': contentIdContext,
+        if (allowCache != null) 'allowCache': '$allowCache',
+        if (embeddedContentRender != null)
+          'embeddedContentRender': embeddedContentRender,
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Returns the asynchronous content body for the corresponding id if the task
+  /// is complete
+  /// or returns the status of the task.
+  ///
+  /// After the task is completed, the result can be obtained for 5 minutes, or
+  /// until an identical conversion request is made again,
+  /// with allowCache query param set to false.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// If request specifies 'contentIdContext', 'View' permission for the space,
+  /// and permission to view the content.
+  Future<AsyncContentBody> asyncConvertContentBodyResponse(String id) async {
+    return AsyncContentBody.fromJson(await _client.send(
+      'get',
+      'wiki/rest/api/contentbody/convert/async/{id}',
+      pathParameters: {
+        'id': id,
+      },
     ));
   }
 }
@@ -1887,7 +2041,6 @@ class ContentStatesApi {
   /// To specify the draft version, set
   /// the parameter status to draft, otherwise archived or current will get the
   /// relevant published state.
-  ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content.
   Future<ContentStateResponse> getContentState(
@@ -1907,6 +2060,19 @@ class ContentStatesApi {
   /// Sets the content state of the content specified and creates a new version
   /// (publishes the content without changing the body) of the content with the
   /// new state.
+  ///
+  /// You may pass in either an id of a state, or the name and color of a
+  /// desired new state.
+  /// If all 3 are passed in, id will be used.
+  /// If the name and color passed in already exist under the current user's
+  /// existing custom states, the existing state will be reused.
+  /// If custom states are disabled in the space of the content (which can be
+  /// determined by getting the content state space settings of the content's
+  /// space)
+  /// then this set will fail.
+  ///
+  /// You may not remove a content state via this PUT request. You must use the
+  /// DELETE method. A specified state is required in the body of this request.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to edit the content.
@@ -1949,6 +2115,10 @@ class ContentStatesApi {
   }
 
   /// Gets content states that are available for the content to be set as.
+  /// Will return all enabled Space Content States.
+  /// Will only return most the 3 most recently published custom content states
+  /// to match UI editor list.
+  /// To get all custom content states, use the /content-states endpoint.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to edit the content.
@@ -1959,6 +2129,24 @@ class ContentStatesApi {
       pathParameters: {
         'id': id,
       },
+    ));
+  }
+
+  /// Creates a long running task that sets content state of draft or published
+  /// versions of pages specified.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**
+  /// Content Edit Permission for a content to have its state set via this
+  /// endpoint.
+  Future<AsyncId> bulkSetContentStates(
+      {required String status, required BulkContentStateSetInput body}) async {
+    return AsyncId.fromJson(await _client.send(
+      'put',
+      'wiki/rest/api/content-states',
+      queryParameters: {
+        'status': status,
+      },
+      body: body.toJson(),
     ));
   }
 
@@ -1976,8 +2164,42 @@ class ContentStatesApi {
         .toList();
   }
 
-  /// Get content states that are suggested in the space.
+  /// Creates a long running task that Removes content state from draft or
+  /// published versions of pages specified.
   ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**
+  /// Content Edit Permission for a content to have its state removed via this
+  /// endpoint.
+  Future<AsyncId> bulkRemoveContentStates(
+      {required String status, required dynamic body}) async {
+    return AsyncId.fromJson(await _client.send(
+      'post',
+      'wiki/rest/api/content-states/delete',
+      queryParameters: {
+        'status': status,
+      },
+      body: body,
+    ));
+  }
+
+  /// Get Status of long running task that was previously created to set or
+  /// remove content states from content.
+  /// User must first create a task by passing in details to
+  /// /wiki/rest/api/content-states PUT or DELETE endpoints.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**
+  /// Must have created long running task
+  Future<ContentStateBulkSetTaskUpdate> getTaskUpdate(String taskId) async {
+    return ContentStateBulkSetTaskUpdate.fromJson(await _client.send(
+      'get',
+      'wiki/rest/api/content-states/task/{taskId}',
+      pathParameters: {
+        'taskId': taskId,
+      },
+    ));
+  }
+
+  /// Get content states that are suggested in the space.
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Space view permission
   Future<List<ContentState>> getSpaceContentStates(String spaceKey) async {
@@ -2006,6 +2228,31 @@ class ContentStatesApi {
       'wiki/rest/api/space/{spaceKey}/state/settings',
       pathParameters: {
         'spaceKey': spaceKey,
+      },
+    ));
+  }
+
+  /// Finds paginated content with
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Space View Permission
+  Future<ContentArray> getContentsWithState(
+      {required String spaceKey,
+      required int stateId,
+      List<String>? expand,
+      int? limit,
+      int? start}) async {
+    return ContentArray.fromJson(await _client.send(
+      'get',
+      'wiki/rest/api/space/{spaceKey}/state/content',
+      pathParameters: {
+        'spaceKey': spaceKey,
+      },
+      queryParameters: {
+        'state-id': '$stateId',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
+        if (limit != null) 'limit': '$limit',
+        if (start != null) 'start': '$start',
       },
     ));
   }
@@ -4828,6 +5075,358 @@ class AffectedObject {
   }
 }
 
+class AsyncContentBody {
+  final String? value;
+  final AsyncContentBodyRepresentation? representation;
+  final String? renderTaskId;
+  final String? error;
+
+  /// Rerunning is reserved for when the job is working, but there is a previous
+  /// run's value in the cache. You may choose to continue polling, or use the
+  /// cached value.
+  final AsyncContentBodyStatus? status;
+  final List<EmbeddedContent> embeddedContent;
+  final WebResourceDependencies? webresource;
+  final AsyncContentBodyMediaToken? mediaToken;
+  final AsyncContentBodyExpandable? expandable;
+  final GenericLinks? links;
+
+  AsyncContentBody(
+      {this.value,
+      this.representation,
+      this.renderTaskId,
+      this.error,
+      this.status,
+      List<EmbeddedContent>? embeddedContent,
+      this.webresource,
+      this.mediaToken,
+      this.expandable,
+      this.links})
+      : embeddedContent = embeddedContent ?? [];
+
+  factory AsyncContentBody.fromJson(Map<String, Object?> json) {
+    return AsyncContentBody(
+      value: json[r'value'] as String?,
+      representation: json[r'representation'] != null
+          ? AsyncContentBodyRepresentation.fromValue(
+              json[r'representation']! as String)
+          : null,
+      renderTaskId: json[r'renderTaskId'] as String?,
+      error: json[r'error'] as String?,
+      status: json[r'status'] != null
+          ? AsyncContentBodyStatus.fromValue(json[r'status']! as String)
+          : null,
+      embeddedContent: (json[r'embeddedContent'] as List<Object?>?)
+              ?.map((i) => EmbeddedContent.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      webresource: json[r'webresource'] != null
+          ? WebResourceDependencies.fromJson(
+              json[r'webresource']! as Map<String, Object?>)
+          : null,
+      mediaToken: json[r'mediaToken'] != null
+          ? AsyncContentBodyMediaToken.fromJson(
+              json[r'mediaToken']! as Map<String, Object?>)
+          : null,
+      expandable: json[r'_expandable'] != null
+          ? AsyncContentBodyExpandable.fromJson(
+              json[r'_expandable']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? GenericLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var value = this.value;
+    var representation = this.representation;
+    var renderTaskId = this.renderTaskId;
+    var error = this.error;
+    var status = this.status;
+    var embeddedContent = this.embeddedContent;
+    var webresource = this.webresource;
+    var mediaToken = this.mediaToken;
+    var expandable = this.expandable;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (value != null) {
+      json[r'value'] = value;
+    }
+    if (representation != null) {
+      json[r'representation'] = representation.value;
+    }
+    if (renderTaskId != null) {
+      json[r'renderTaskId'] = renderTaskId;
+    }
+    if (error != null) {
+      json[r'error'] = error;
+    }
+    if (status != null) {
+      json[r'status'] = status.value;
+    }
+    json[r'embeddedContent'] = embeddedContent.map((i) => i.toJson()).toList();
+    if (webresource != null) {
+      json[r'webresource'] = webresource.toJson();
+    }
+    if (mediaToken != null) {
+      json[r'mediaToken'] = mediaToken.toJson();
+    }
+    if (expandable != null) {
+      json[r'_expandable'] = expandable.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  AsyncContentBody copyWith(
+      {String? value,
+      AsyncContentBodyRepresentation? representation,
+      String? renderTaskId,
+      String? error,
+      AsyncContentBodyStatus? status,
+      List<EmbeddedContent>? embeddedContent,
+      WebResourceDependencies? webresource,
+      AsyncContentBodyMediaToken? mediaToken,
+      AsyncContentBodyExpandable? expandable,
+      GenericLinks? links}) {
+    return AsyncContentBody(
+      value: value ?? this.value,
+      representation: representation ?? this.representation,
+      renderTaskId: renderTaskId ?? this.renderTaskId,
+      error: error ?? this.error,
+      status: status ?? this.status,
+      embeddedContent: embeddedContent ?? this.embeddedContent,
+      webresource: webresource ?? this.webresource,
+      mediaToken: mediaToken ?? this.mediaToken,
+      expandable: expandable ?? this.expandable,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class AsyncContentBodyRepresentation {
+  static const view = AsyncContentBodyRepresentation._('view');
+  static const exportView = AsyncContentBodyRepresentation._('export_view');
+  static const styledView = AsyncContentBodyRepresentation._('styled_view');
+  static const storage = AsyncContentBodyRepresentation._('storage');
+  static const editor = AsyncContentBodyRepresentation._('editor');
+  static const editor2 = AsyncContentBodyRepresentation._('editor2');
+  static const anonymousExportView =
+      AsyncContentBodyRepresentation._('anonymous_export_view');
+  static const wiki = AsyncContentBodyRepresentation._('wiki');
+  static const atlasDocFormat =
+      AsyncContentBodyRepresentation._('atlas_doc_format');
+
+  static const values = [
+    view,
+    exportView,
+    styledView,
+    storage,
+    editor,
+    editor2,
+    anonymousExportView,
+    wiki,
+    atlasDocFormat,
+  ];
+  final String value;
+
+  const AsyncContentBodyRepresentation._(this.value);
+
+  static AsyncContentBodyRepresentation fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => AsyncContentBodyRepresentation._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class AsyncContentBodyStatus {
+  static const working = AsyncContentBodyStatus._('WORKING');
+  static const queued = AsyncContentBodyStatus._('QUEUED');
+  static const failed = AsyncContentBodyStatus._('FAILED');
+  static const completed = AsyncContentBodyStatus._('COMPLETED');
+  static const rerunning = AsyncContentBodyStatus._('RERUNNING');
+
+  static const values = [
+    working,
+    queued,
+    failed,
+    completed,
+    rerunning,
+  ];
+  final String value;
+
+  const AsyncContentBodyStatus._(this.value);
+
+  static AsyncContentBodyStatus fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => AsyncContentBodyStatus._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class AsyncContentBodyExpandable {
+  final String? content;
+  final String? embeddedContent;
+  final String? webresource;
+  final String? mediaToken;
+
+  AsyncContentBodyExpandable(
+      {this.content, this.embeddedContent, this.webresource, this.mediaToken});
+
+  factory AsyncContentBodyExpandable.fromJson(Map<String, Object?> json) {
+    return AsyncContentBodyExpandable(
+      content: json[r'content'] as String?,
+      embeddedContent: json[r'embeddedContent'] as String?,
+      webresource: json[r'webresource'] as String?,
+      mediaToken: json[r'mediaToken'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var content = this.content;
+    var embeddedContent = this.embeddedContent;
+    var webresource = this.webresource;
+    var mediaToken = this.mediaToken;
+
+    final json = <String, Object?>{};
+    if (content != null) {
+      json[r'content'] = content;
+    }
+    if (embeddedContent != null) {
+      json[r'embeddedContent'] = embeddedContent;
+    }
+    if (webresource != null) {
+      json[r'webresource'] = webresource;
+    }
+    if (mediaToken != null) {
+      json[r'mediaToken'] = mediaToken;
+    }
+    return json;
+  }
+
+  AsyncContentBodyExpandable copyWith(
+      {String? content,
+      String? embeddedContent,
+      String? webresource,
+      String? mediaToken}) {
+    return AsyncContentBodyExpandable(
+      content: content ?? this.content,
+      embeddedContent: embeddedContent ?? this.embeddedContent,
+      webresource: webresource ?? this.webresource,
+      mediaToken: mediaToken ?? this.mediaToken,
+    );
+  }
+}
+
+class AsyncContentBodyMediaToken {
+  final List<String> collectionIds;
+  final String? contentId;
+  final String? expiryDateTime;
+  final List<String> fileIds;
+  final String? token;
+
+  AsyncContentBodyMediaToken(
+      {List<String>? collectionIds,
+      this.contentId,
+      this.expiryDateTime,
+      List<String>? fileIds,
+      this.token})
+      : collectionIds = collectionIds ?? [],
+        fileIds = fileIds ?? [];
+
+  factory AsyncContentBodyMediaToken.fromJson(Map<String, Object?> json) {
+    return AsyncContentBodyMediaToken(
+      collectionIds: (json[r'collectionIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      contentId: json[r'contentId'] as String?,
+      expiryDateTime: json[r'expiryDateTime'] as String?,
+      fileIds: (json[r'fileIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      token: json[r'token'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var collectionIds = this.collectionIds;
+    var contentId = this.contentId;
+    var expiryDateTime = this.expiryDateTime;
+    var fileIds = this.fileIds;
+    var token = this.token;
+
+    final json = <String, Object?>{};
+    json[r'collectionIds'] = collectionIds;
+    if (contentId != null) {
+      json[r'contentId'] = contentId;
+    }
+    if (expiryDateTime != null) {
+      json[r'expiryDateTime'] = expiryDateTime;
+    }
+    json[r'fileIds'] = fileIds;
+    if (token != null) {
+      json[r'token'] = token;
+    }
+    return json;
+  }
+
+  AsyncContentBodyMediaToken copyWith(
+      {List<String>? collectionIds,
+      String? contentId,
+      String? expiryDateTime,
+      List<String>? fileIds,
+      String? token}) {
+    return AsyncContentBodyMediaToken(
+      collectionIds: collectionIds ?? this.collectionIds,
+      contentId: contentId ?? this.contentId,
+      expiryDateTime: expiryDateTime ?? this.expiryDateTime,
+      fileIds: fileIds ?? this.fileIds,
+      token: token ?? this.token,
+    );
+  }
+}
+
+class AsyncId {
+  final String asyncId;
+
+  AsyncId({required this.asyncId});
+
+  factory AsyncId.fromJson(Map<String, Object?> json) {
+    return AsyncId(
+      asyncId: json[r'asyncId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var asyncId = this.asyncId;
+
+    final json = <String, Object?>{};
+    json[r'asyncId'] = asyncId;
+    return json;
+  }
+
+  AsyncId copyWith({String? asyncId}) {
+    return AsyncId(
+      asyncId: asyncId ?? this.asyncId,
+    );
+  }
+}
+
 class AttachmentUpdate {
   /// The attachment version. Set this to the current version number of the
   /// attachment. Note, the version number only needs to be incremented when
@@ -5585,8 +6184,23 @@ class AuditRecordCreateAuthorType {
 }
 
 class AvailableContentStates {
-  /// space suggested content states that can be used in the space
+  /// Space suggested content states that can be used in the space. This can be
+  /// null if space content states are disabled in the space.
+  /// This list can be empty if there are no space content states defined in the
+  /// space.
+  /// All spaces start with 3 default space content states, and this can be
+  /// modified in the UI under space settings.
   final List<ContentState> spaceContentStates;
+
+  /// Custom content states that can be used by the user on the content of this
+  /// call.
+  /// This can be null if custom content states are disabled in the space of the
+  /// content.
+  /// This list can be empty if there are no custom content states defined by
+  /// the user.
+  /// This will at most have 3 of the most recently published content states.
+  /// Only the calling user has access to place these states on content, but all
+  /// users can see these states once they are placed.
   final List<ContentState> customContentStates;
 
   AvailableContentStates(
@@ -5908,6 +6522,43 @@ class Breadcrumb {
       label: label ?? this.label,
       url: url ?? this.url,
       separator: separator ?? this.separator,
+    );
+  }
+}
+
+class BulkContentStateSetInput {
+  /// maximum number of ids you can pass in is 300
+  final List<String> ids;
+  final ContentStateInput contentState;
+
+  BulkContentStateSetInput({required this.ids, required this.contentState});
+
+  factory BulkContentStateSetInput.fromJson(Map<String, Object?> json) {
+    return BulkContentStateSetInput(
+      ids: (json[r'ids'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      contentState: ContentStateInput.fromJson(
+          json[r'contentState'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var ids = this.ids;
+    var contentState = this.contentState;
+
+    final json = <String, Object?>{};
+    json[r'ids'] = ids;
+    json[r'contentState'] = contentState.toJson();
+    return json;
+  }
+
+  BulkContentStateSetInput copyWith(
+      {List<String>? ids, ContentStateInput? contentState}) {
+    return BulkContentStateSetInput(
+      ids: ids ?? this.ids,
+      contentState: contentState ?? this.contentState,
     );
   }
 }
@@ -8895,6 +9546,7 @@ class ContentExpandable {
   final String? space;
   final String? extensions;
   final String? schedulePublishDate;
+  final String? schedulePublishInfo;
   final String? macroRenderedOutput;
 
   ContentExpandable(
@@ -8912,6 +9564,7 @@ class ContentExpandable {
       this.space,
       this.extensions,
       this.schedulePublishDate,
+      this.schedulePublishInfo,
       this.macroRenderedOutput});
 
   factory ContentExpandable.fromJson(Map<String, Object?> json) {
@@ -8930,6 +9583,7 @@ class ContentExpandable {
       space: json[r'space'] as String?,
       extensions: json[r'extensions'] as String?,
       schedulePublishDate: json[r'schedulePublishDate'] as String?,
+      schedulePublishInfo: json[r'schedulePublishInfo'] as String?,
       macroRenderedOutput: json[r'macroRenderedOutput'] as String?,
     );
   }
@@ -8949,6 +9603,7 @@ class ContentExpandable {
     var space = this.space;
     var extensions = this.extensions;
     var schedulePublishDate = this.schedulePublishDate;
+    var schedulePublishInfo = this.schedulePublishInfo;
     var macroRenderedOutput = this.macroRenderedOutput;
 
     final json = <String, Object?>{};
@@ -8994,6 +9649,9 @@ class ContentExpandable {
     if (schedulePublishDate != null) {
       json[r'schedulePublishDate'] = schedulePublishDate;
     }
+    if (schedulePublishInfo != null) {
+      json[r'schedulePublishInfo'] = schedulePublishInfo;
+    }
     if (macroRenderedOutput != null) {
       json[r'macroRenderedOutput'] = macroRenderedOutput;
     }
@@ -9015,6 +9673,7 @@ class ContentExpandable {
       String? space,
       String? extensions,
       String? schedulePublishDate,
+      String? schedulePublishInfo,
       String? macroRenderedOutput}) {
     return ContentExpandable(
       childTypes: childTypes ?? this.childTypes,
@@ -9031,6 +9690,7 @@ class ContentExpandable {
       space: space ?? this.space,
       extensions: extensions ?? this.extensions,
       schedulePublishDate: schedulePublishDate ?? this.schedulePublishDate,
+      schedulePublishInfo: schedulePublishInfo ?? this.schedulePublishInfo,
       macroRenderedOutput: macroRenderedOutput ?? this.macroRenderedOutput,
     );
   }
@@ -9039,6 +9699,7 @@ class ContentExpandable {
 class ContentHistory {
   final bool latest;
   final User? createdBy;
+  final User? ownedBy;
   final DateTime? createdDate;
   final Version? lastUpdated;
   final Version? previousVersion;
@@ -9050,6 +9711,7 @@ class ContentHistory {
   ContentHistory(
       {required this.latest,
       this.createdBy,
+      this.ownedBy,
       this.createdDate,
       this.lastUpdated,
       this.previousVersion,
@@ -9063,6 +9725,9 @@ class ContentHistory {
       latest: json[r'latest'] as bool? ?? false,
       createdBy: json[r'createdBy'] != null
           ? User.fromJson(json[r'createdBy']! as Map<String, Object?>)
+          : null,
+      ownedBy: json[r'ownedBy'] != null
+          ? User.fromJson(json[r'ownedBy']! as Map<String, Object?>)
           : null,
       createdDate: DateTime.tryParse(json[r'createdDate'] as String? ?? ''),
       lastUpdated: json[r'lastUpdated'] != null
@@ -9091,6 +9756,7 @@ class ContentHistory {
   Map<String, Object?> toJson() {
     var latest = this.latest;
     var createdBy = this.createdBy;
+    var ownedBy = this.ownedBy;
     var createdDate = this.createdDate;
     var lastUpdated = this.lastUpdated;
     var previousVersion = this.previousVersion;
@@ -9103,6 +9769,9 @@ class ContentHistory {
     json[r'latest'] = latest;
     if (createdBy != null) {
       json[r'createdBy'] = createdBy.toJson();
+    }
+    if (ownedBy != null) {
+      json[r'ownedBy'] = ownedBy.toJson();
     }
     if (createdDate != null) {
       json[r'createdDate'] = createdDate.toIso8601String();
@@ -9131,6 +9800,7 @@ class ContentHistory {
   ContentHistory copyWith(
       {bool? latest,
       User? createdBy,
+      User? ownedBy,
       DateTime? createdDate,
       Version? lastUpdated,
       Version? previousVersion,
@@ -9141,6 +9811,7 @@ class ContentHistory {
     return ContentHistory(
       latest: latest ?? this.latest,
       createdBy: createdBy ?? this.createdBy,
+      ownedBy: ownedBy ?? this.ownedBy,
       createdDate: createdDate ?? this.createdDate,
       lastUpdated: lastUpdated ?? this.lastUpdated,
       previousVersion: previousVersion ?? this.previousVersion,
@@ -9187,12 +9858,14 @@ class ContentHistoryExpandable {
   final String? previousVersion;
   final String? contributors;
   final String? nextVersion;
+  final String? ownedBy;
 
   ContentHistoryExpandable(
       {this.lastUpdated,
       this.previousVersion,
       this.contributors,
-      this.nextVersion});
+      this.nextVersion,
+      this.ownedBy});
 
   factory ContentHistoryExpandable.fromJson(Map<String, Object?> json) {
     return ContentHistoryExpandable(
@@ -9200,6 +9873,7 @@ class ContentHistoryExpandable {
       previousVersion: json[r'previousVersion'] as String?,
       contributors: json[r'contributors'] as String?,
       nextVersion: json[r'nextVersion'] as String?,
+      ownedBy: json[r'ownedBy'] as String?,
     );
   }
 
@@ -9208,6 +9882,7 @@ class ContentHistoryExpandable {
     var previousVersion = this.previousVersion;
     var contributors = this.contributors;
     var nextVersion = this.nextVersion;
+    var ownedBy = this.ownedBy;
 
     final json = <String, Object?>{};
     if (lastUpdated != null) {
@@ -9222,6 +9897,9 @@ class ContentHistoryExpandable {
     if (nextVersion != null) {
       json[r'nextVersion'] = nextVersion;
     }
+    if (ownedBy != null) {
+      json[r'ownedBy'] = ownedBy;
+    }
     return json;
   }
 
@@ -9229,12 +9907,14 @@ class ContentHistoryExpandable {
       {String? lastUpdated,
       String? previousVersion,
       String? contributors,
-      String? nextVersion}) {
+      String? nextVersion,
+      String? ownedBy}) {
     return ContentHistoryExpandable(
       lastUpdated: lastUpdated ?? this.lastUpdated,
       previousVersion: previousVersion ?? this.previousVersion,
       contributors: contributors ?? this.contributors,
       nextVersion: nextVersion ?? this.nextVersion,
+      ownedBy: ownedBy ?? this.ownedBy,
     );
   }
 }
@@ -9666,6 +10346,56 @@ class ContentMetadataCurrentuserViewed {
     return ContentMetadataCurrentuserViewed(
       lastSeen: lastSeen ?? this.lastSeen,
       friendlyLastSeen: friendlyLastSeen ?? this.friendlyLastSeen,
+    );
+  }
+}
+
+class ContentPageResponse {
+  final List<Content> results;
+  final int start;
+  final int limit;
+  final int size;
+
+  ContentPageResponse(
+      {required this.results,
+      required this.start,
+      required this.limit,
+      required this.size});
+
+  factory ContentPageResponse.fromJson(Map<String, Object?> json) {
+    return ContentPageResponse(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) =>
+                  Content.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      start: (json[r'start'] as num?)?.toInt() ?? 0,
+      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
+      size: (json[r'size'] as num?)?.toInt() ?? 0,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var start = this.start;
+    var limit = this.limit;
+    var size = this.size;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    json[r'start'] = start;
+    json[r'limit'] = limit;
+    json[r'size'] = size;
+    return json;
+  }
+
+  ContentPageResponse copyWith(
+      {List<Content>? results, int? start, int? limit, int? size}) {
+    return ContentPageResponse(
+      results: results ?? this.results,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
+      size: size ?? this.size,
     );
   }
 }
@@ -10767,6 +11497,172 @@ class ContentState {
   }
 }
 
+class ContentStateBulkSetTaskUpdate {
+  final List<String> set;
+  final List<ContentStateFailure> failed;
+  final int percentage;
+  final String? message;
+  final ContentState? state;
+  final bool success;
+
+  ContentStateBulkSetTaskUpdate(
+      {required this.set,
+      required this.failed,
+      required this.percentage,
+      this.message,
+      this.state,
+      required this.success});
+
+  factory ContentStateBulkSetTaskUpdate.fromJson(Map<String, Object?> json) {
+    return ContentStateBulkSetTaskUpdate(
+      set: (json[r'set'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      failed: (json[r'failed'] as List<Object?>?)
+              ?.map((i) => ContentStateFailure.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      percentage: (json[r'percentage'] as num?)?.toInt() ?? 0,
+      message: json[r'message'] as String?,
+      state: json[r'state'] != null
+          ? ContentState.fromJson(json[r'state']! as Map<String, Object?>)
+          : null,
+      success: json[r'success'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var set = this.set;
+    var failed = this.failed;
+    var percentage = this.percentage;
+    var message = this.message;
+    var state = this.state;
+    var success = this.success;
+
+    final json = <String, Object?>{};
+    json[r'set'] = set;
+    json[r'failed'] = failed.map((i) => i.toJson()).toList();
+    json[r'percentage'] = percentage;
+    if (message != null) {
+      json[r'message'] = message;
+    }
+    if (state != null) {
+      json[r'state'] = state.toJson();
+    }
+    json[r'success'] = success;
+    return json;
+  }
+
+  ContentStateBulkSetTaskUpdate copyWith(
+      {List<String>? set,
+      List<ContentStateFailure>? failed,
+      int? percentage,
+      String? message,
+      ContentState? state,
+      bool? success}) {
+    return ContentStateBulkSetTaskUpdate(
+      set: set ?? this.set,
+      failed: failed ?? this.failed,
+      percentage: percentage ?? this.percentage,
+      message: message ?? this.message,
+      state: state ?? this.state,
+      success: success ?? this.success,
+    );
+  }
+}
+
+/// Object describing why a content state set failed
+class ContentStateFailure {
+  final String contentId;
+  final String failureReason;
+
+  ContentStateFailure({required this.contentId, required this.failureReason});
+
+  factory ContentStateFailure.fromJson(Map<String, Object?> json) {
+    return ContentStateFailure(
+      contentId: json[r'contentId'] as String? ?? '',
+      failureReason: json[r'failureReason'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var contentId = this.contentId;
+    var failureReason = this.failureReason;
+
+    final json = <String, Object?>{};
+    json[r'contentId'] = contentId;
+    json[r'failureReason'] = failureReason;
+    return json;
+  }
+
+  ContentStateFailure copyWith({String? contentId, String? failureReason}) {
+    return ContentStateFailure(
+      contentId: contentId ?? this.contentId,
+      failureReason: failureReason ?? this.failureReason,
+    );
+  }
+}
+
+class ContentStateInput {
+  final String? name;
+
+  /// Color of state. Must be in 6 digit hex form (#FFFFFF). The default colors
+  /// offered in the UI are:
+  ///  #ff7452 (red),
+  ///  #2684ff (blue),
+  ///  #ffc400 (yellow),
+  ///  #57d9a3 (green), and
+  ///  #8777d9 (purple)
+  final String? color;
+  final int? id;
+  final String? spaceKey;
+
+  ContentStateInput({this.name, this.color, this.id, this.spaceKey});
+
+  factory ContentStateInput.fromJson(Map<String, Object?> json) {
+    return ContentStateInput(
+      name: json[r'name'] as String?,
+      color: json[r'color'] as String?,
+      id: (json[r'id'] as num?)?.toInt(),
+      spaceKey: json[r'spaceKey'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var color = this.color;
+    var id = this.id;
+    var spaceKey = this.spaceKey;
+
+    final json = <String, Object?>{};
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (color != null) {
+      json[r'color'] = color;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (spaceKey != null) {
+      json[r'spaceKey'] = spaceKey;
+    }
+    return json;
+  }
+
+  ContentStateInput copyWith(
+      {String? name, String? color, int? id, String? spaceKey}) {
+    return ContentStateInput(
+      name: name ?? this.name,
+      color: color ?? this.color,
+      id: id ?? this.id,
+      spaceKey: spaceKey ?? this.spaceKey,
+    );
+  }
+}
+
 class ContentStateResponse {
   /// Null or content state
   final ContentState? contentState;
@@ -10810,13 +11706,20 @@ class ContentStateResponse {
 }
 
 class ContentStateRestInput {
-  /// name of content state
+  /// Name of content state. Maximum 20 characters.
   final String? name;
 
-  /// Color of state. Must be in 6 digit hex form (#FFFFFF)
+  /// Color of state. Must be in 6 digit hex form (#FFFFFF). The default colors
+  /// offered in the UI are:
+  ///  #ff7452 (red),
+  ///  #2684ff (blue),
+  ///  #ffc400 (yellow),
+  ///  #57d9a3 (green), and
+  ///  #8777d9 (purple)
   final String? color;
 
-  /// id of state
+  /// id of state. This can be 0,1, or 2 if you wish to specify a default space
+  /// state.
   final int? id;
 
   ContentStateRestInput({this.name, this.color, this.id});
@@ -13254,14 +14157,18 @@ class LabeledContentPageResponse {
 }
 
 class LongTask {
+  /// the ARI for the long task, based on its ID
+  final String? ari;
+
   /// a unique identifier for the long task
   final String id;
   final LongTaskLinks links;
 
-  LongTask({required this.id, required this.links});
+  LongTask({this.ari, required this.id, required this.links});
 
   factory LongTask.fromJson(Map<String, Object?> json) {
     return LongTask(
+      ari: json[r'ari'] as String?,
       id: json[r'id'] as String? ?? '',
       links: LongTaskLinks.fromJson(
           json[r'links'] as Map<String, Object?>? ?? const {}),
@@ -13269,17 +14176,22 @@ class LongTask {
   }
 
   Map<String, Object?> toJson() {
+    var ari = this.ari;
     var id = this.id;
     var links = this.links;
 
     final json = <String, Object?>{};
+    if (ari != null) {
+      json[r'ari'] = ari;
+    }
     json[r'id'] = id;
     json[r'links'] = links.toJson();
     return json;
   }
 
-  LongTask copyWith({String? id, LongTaskLinks? links}) {
+  LongTask copyWith({String? ari, String? id, LongTaskLinks? links}) {
     return LongTask(
+      ari: ari ?? this.ari,
       id: id ?? this.id,
       links: links ?? this.links,
     );
@@ -13339,6 +14251,8 @@ class LongTaskLinks {
 /// - `INITIALIZING_TASK` - Message when initializing task
 /// - `UNKNOWN_STATUS` - Message when status is unknown
 class LongTaskStatus {
+  /// the ARI for the long task, based on its ID
+  final String? ari;
   final String id;
   final LongTaskStatusName name;
   final int elapsedTime;
@@ -13351,7 +14265,8 @@ class LongTaskStatus {
   final LongTaskStatusAdditionalDetails? additionalDetails;
 
   LongTaskStatus(
-      {required this.id,
+      {this.ari,
+      required this.id,
       required this.name,
       required this.elapsedTime,
       required this.percentageComplete,
@@ -13365,6 +14280,7 @@ class LongTaskStatus {
 
   factory LongTaskStatus.fromJson(Map<String, Object?> json) {
     return LongTaskStatus(
+      ari: json[r'ari'] as String?,
       id: json[r'id'] as String? ?? '',
       name: LongTaskStatusName.fromJson(
           json[r'name'] as Map<String, Object?>? ?? const {}),
@@ -13391,6 +14307,7 @@ class LongTaskStatus {
   }
 
   Map<String, Object?> toJson() {
+    var ari = this.ari;
     var id = this.id;
     var name = this.name;
     var elapsedTime = this.elapsedTime;
@@ -13403,6 +14320,9 @@ class LongTaskStatus {
     var additionalDetails = this.additionalDetails;
 
     final json = <String, Object?>{};
+    if (ari != null) {
+      json[r'ari'] = ari;
+    }
     json[r'id'] = id;
     json[r'name'] = name.toJson();
     json[r'elapsedTime'] = elapsedTime;
@@ -13421,7 +14341,8 @@ class LongTaskStatus {
   }
 
   LongTaskStatus copyWith(
-      {String? id,
+      {String? ari,
+      String? id,
       LongTaskStatusName? name,
       int? elapsedTime,
       int? percentageComplete,
@@ -13432,6 +14353,7 @@ class LongTaskStatus {
       List<Message>? errors,
       LongTaskStatusAdditionalDetails? additionalDetails}) {
     return LongTaskStatus(
+      ari: ari ?? this.ari,
       id: id ?? this.id,
       name: name ?? this.name,
       elapsedTime: elapsedTime ?? this.elapsedTime,
@@ -13622,6 +14544,8 @@ class LongTaskStatusName {
 /// - `INITIALIZING_TASK` - Message when initializing task
 /// - `UNKNOWN_STATUS` - Message when status is unknown
 class LongTaskStatusWithLinks {
+  /// the ARI for the long task, based on its ID
+  final String? ari;
   final String id;
   final LongTaskStatusWithLinksName name;
   final int elapsedTime;
@@ -13635,7 +14559,8 @@ class LongTaskStatusWithLinks {
   final LongTaskStatusWithLinksAdditionalDetails? additionalDetails;
 
   LongTaskStatusWithLinks(
-      {required this.id,
+      {this.ari,
+      required this.id,
       required this.name,
       required this.elapsedTime,
       required this.percentageComplete,
@@ -13650,6 +14575,7 @@ class LongTaskStatusWithLinks {
 
   factory LongTaskStatusWithLinks.fromJson(Map<String, Object?> json) {
     return LongTaskStatusWithLinks(
+      ari: json[r'ari'] as String?,
       id: json[r'id'] as String? ?? '',
       name: LongTaskStatusWithLinksName.fromJson(
           json[r'name'] as Map<String, Object?>? ?? const {}),
@@ -13678,6 +14604,7 @@ class LongTaskStatusWithLinks {
   }
 
   Map<String, Object?> toJson() {
+    var ari = this.ari;
     var id = this.id;
     var name = this.name;
     var elapsedTime = this.elapsedTime;
@@ -13691,6 +14618,9 @@ class LongTaskStatusWithLinks {
     var additionalDetails = this.additionalDetails;
 
     final json = <String, Object?>{};
+    if (ari != null) {
+      json[r'ari'] = ari;
+    }
     json[r'id'] = id;
     json[r'name'] = name.toJson();
     json[r'elapsedTime'] = elapsedTime;
@@ -13710,7 +14640,8 @@ class LongTaskStatusWithLinks {
   }
 
   LongTaskStatusWithLinks copyWith(
-      {String? id,
+      {String? ari,
+      String? id,
       LongTaskStatusWithLinksName? name,
       int? elapsedTime,
       int? percentageComplete,
@@ -13722,6 +14653,7 @@ class LongTaskStatusWithLinks {
       List<Message>? errors,
       LongTaskStatusWithLinksAdditionalDetails? additionalDetails}) {
     return LongTaskStatusWithLinks(
+      ari: ari ?? this.ari,
       id: id ?? this.id,
       name: name ?? this.name,
       elapsedTime: elapsedTime ?? this.elapsedTime,
@@ -17645,10 +18577,14 @@ class SpaceSettings {
   /// without overriding the space home.
   final bool routeOverrideEnabled;
   final SpaceSettingsEditor? editor;
+  final String? spaceKey;
   final GenericLinks links;
 
   SpaceSettings(
-      {required this.routeOverrideEnabled, this.editor, required this.links});
+      {required this.routeOverrideEnabled,
+      this.editor,
+      this.spaceKey,
+      required this.links});
 
   factory SpaceSettings.fromJson(Map<String, Object?> json) {
     return SpaceSettings(
@@ -17657,6 +18593,7 @@ class SpaceSettings {
           ? SpaceSettingsEditor.fromJson(
               json[r'editor']! as Map<String, Object?>)
           : null,
+      spaceKey: json[r'spaceKey'] as String?,
       links: GenericLinks.fromJson(
           json[r'_links'] as Map<String, Object?>? ?? const {}),
     );
@@ -17665,12 +18602,16 @@ class SpaceSettings {
   Map<String, Object?> toJson() {
     var routeOverrideEnabled = this.routeOverrideEnabled;
     var editor = this.editor;
+    var spaceKey = this.spaceKey;
     var links = this.links;
 
     final json = <String, Object?>{};
     json[r'routeOverrideEnabled'] = routeOverrideEnabled;
     if (editor != null) {
       json[r'editor'] = editor.toJson();
+    }
+    if (spaceKey != null) {
+      json[r'spaceKey'] = spaceKey;
     }
     json[r'_links'] = links.toJson();
     return json;
@@ -17679,10 +18620,12 @@ class SpaceSettings {
   SpaceSettings copyWith(
       {bool? routeOverrideEnabled,
       SpaceSettingsEditor? editor,
+      String? spaceKey,
       GenericLinks? links}) {
     return SpaceSettings(
       routeOverrideEnabled: routeOverrideEnabled ?? this.routeOverrideEnabled,
       editor: editor ?? this.editor,
+      spaceKey: spaceKey ?? this.spaceKey,
       links: links ?? this.links,
     );
   }
@@ -19649,8 +20592,9 @@ class UsersUserKeys {
   final List<String> userKeys;
   final GenericLinks? links;
 
-  UsersUserKeys({List<User>? users, required this.userKeys, this.links})
-      : users = users ?? [];
+  UsersUserKeys({List<User>? users, List<String>? userKeys, this.links})
+      : users = users ?? [],
+        userKeys = userKeys ?? [];
 
   factory UsersUserKeys.fromJson(Map<String, Object?> json) {
     return UsersUserKeys(

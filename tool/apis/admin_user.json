@@ -328,6 +328,9 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound.Account"
+          },
+          "429": {
+            "description": "Rate limited due to too many requests. For more information, see [Rate limiting](https://developer.atlassian.com/cloud/jira/platform/rate-limiting/)."
           }
         }
       }

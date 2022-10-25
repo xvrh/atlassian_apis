@@ -1,50 +1,24 @@
-include: package:pedantic/analysis_options.yaml
-
+include: package:lints/recommended.yaml
 analyzer:
-  strong-mode:
-    implicit-casts: false
-
+  language:
+    strict-casts: true
 linter:
   rules:
-    - avoid_dynamic_calls
-    - avoid_escaping_inner_quotes
-    - avoid_returning_null_for_void
-    - avoid_setters_without_getters
-    - avoid_unnecessary_containers
-    - await_only_futures
-    - camel_case_types
-    - cast_nullable_to_non_nullable
-    - close_sinks
-    - constant_identifier_names
-    - empty_statements
-    - exhaustive_cases
-    - file_names
-    - hash_and_equals
-    - iterable_contains_unrelated_type
-    - list_remove_unrelated_type
-    - no_adjacent_strings_in_list
-    - no_default_cases
-    - no_logic_in_create_state
-    - non_constant_identifier_names
-    - only_throw_errors
-    - overridden_fields
-    - package_names
-    - prefer_inlined_adds
-    - prefer_interpolation_to_compose_strings
-    - prefer_is_not_operator
-    - prefer_iterable_whereType
-    - prefer_null_aware_operators
-    - prefer_typing_uninitialized_variables
-    - sized_box_for_whitespace
-    - sort_pub_dependencies
-    - test_types_in_equals
-    - unnecessary_brace_in_string_interps
-    - unnecessary_getters_setters
-    - unnecessary_parenthesis
-    - unnecessary_statements
-    - unnecessary_string_escapes
-    - unnecessary_string_interpolations
-    - use_full_hex_values_for_flutter_colors
-    - use_raw_strings
-    - valid_regexps
-    - void_checks
+    avoid_dynamic_calls: true
+    avoid_returning_null_for_future: true
+    avoid_setters_without_getters: true
+    cancel_subscriptions: true
+    cast_nullable_to_non_nullable: true
+    close_sinks: true
+    no_adjacent_strings_in_list: true
+    no_default_cases: true
+    omit_local_variable_types: true
+    only_throw_errors: true
+    prefer_relative_imports: true
+    prefer_single_quotes: true
+    sort_pub_dependencies: true
+    test_types_in_equals: true
+    unawaited_futures: true
+    unnecessary_parenthesis: true
+    unnecessary_statements: true
+    use_raw_strings: true
