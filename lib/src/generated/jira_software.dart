@@ -826,7 +826,7 @@ class BuildsApi {
       {required Map<String, dynamic> body}) async {
     return await _client.send(
       'post',
-      'builds/0.1/bulk',
+      'rest/builds/0.1/bulk',
       body: body,
     ) as Map<String, Object?>;
   }
@@ -850,11 +850,11 @@ class BuildsApi {
   ///
   /// Only Connect apps that define the `jiraBuildInfoProvider` module, and
   /// on-premise integrations, can access this resource.
-  /// This resource requires the 'WRITE' scope for Connect apps.
+  /// This resource requires the 'DELETE' scope for Connect apps.
   Future<void> deleteBuildsByProperty({int? updateSequenceNumber}) async {
     await _client.send(
       'delete',
-      'builds/0.1/bulkByProperties',
+      'rest/builds/0.1/bulkByProperties',
       queryParameters: {
         if (updateSequenceNumber != null)
           '_updateSequenceNumber': '$updateSequenceNumber',
@@ -870,12 +870,12 @@ class BuildsApi {
   ///
   /// Only Connect apps that define the `jiraBuildInfoProvider` module, and
   /// on-premise integrations, can access this resource.
-  /// This resource requires the 'WRITE' scope for Connect apps.
+  /// This resource requires the 'READ' scope for Connect apps.
   Future<dynamic> getBuildByKey(
       {required String pipelineId, required int buildNumber}) async {
     return await _client.send(
       'get',
-      'builds/0.1/pipelines/{pipelineId}/builds/{buildNumber}',
+      'rest/builds/0.1/pipelines/{pipelineId}/builds/{buildNumber}',
       pathParameters: {
         'pipelineId': pipelineId,
         'buildNumber': '$buildNumber',
@@ -892,14 +892,14 @@ class BuildsApi {
   ///
   /// Only Connect apps that define the `jiraBuildInfoProvider` module, and
   /// on-premise integrations, can access this resource.
-  /// This resource requires the 'WRITE' scope for Connect apps.
+  /// This resource requires the 'DELETE' scope for Connect apps.
   Future<void> deleteBuildByKey(
       {required String pipelineId,
       required int buildNumber,
       int? updateSequenceNumber}) async {
     await _client.send(
       'delete',
-      'builds/0.1/pipelines/{pipelineId}/builds/{buildNumber}',
+      'rest/builds/0.1/pipelines/{pipelineId}/builds/{buildNumber}',
       pathParameters: {
         'pipelineId': pipelineId,
         'buildNumber': '$buildNumber',
@@ -943,7 +943,7 @@ class DeploymentsApi {
   Future<dynamic> submitDeployments({required dynamic body}) async {
     return await _client.send(
       'post',
-      'deployments/0.1/bulk',
+      'rest/deployments/0.1/bulk',
       body: body,
     );
   }
@@ -970,7 +970,7 @@ class DeploymentsApi {
   Future<void> deleteDeploymentsByProperty({int? updateSequenceNumber}) async {
     await _client.send(
       'delete',
-      'deployments/0.1/bulkByProperties',
+      'rest/deployments/0.1/bulkByProperties',
       queryParameters: {
         if (updateSequenceNumber != null)
           '_updateSequenceNumber': '$updateSequenceNumber',
@@ -993,7 +993,7 @@ class DeploymentsApi {
       required int deploymentSequenceNumber}) async {
     return await _client.send(
       'get',
-      'deployments/0.1/pipelines/{pipelineId}/environments/{environmentId}/deployments/{deploymentSequenceNumber}',
+      'rest/deployments/0.1/pipelines/{pipelineId}/environments/{environmentId}/deployments/{deploymentSequenceNumber}',
       pathParameters: {
         'pipelineId': pipelineId,
         'environmentId': environmentId,
@@ -1019,7 +1019,7 @@ class DeploymentsApi {
       int? updateSequenceNumber}) async {
     await _client.send(
       'delete',
-      'deployments/0.1/pipelines/{pipelineId}/environments/{environmentId}/deployments/{deploymentSequenceNumber}',
+      'rest/deployments/0.1/pipelines/{pipelineId}/environments/{environmentId}/deployments/{deploymentSequenceNumber}',
       pathParameters: {
         'pipelineId': pipelineId,
         'environmentId': environmentId,
@@ -1033,16 +1033,16 @@ class DeploymentsApi {
   }
 
   /// Retrieve the  Deployment gating status for the given `pipelineId +
-  /// environmentId + deploymentSequenceNumber` combination. Only apps that
-  /// define the `jiraDeploymentInfoProvider` module can access this resource.
-  /// This resource requires the 'READ' scope.
+  /// environmentId + deploymentSequenceNumber` combination.
+  /// Only apps that define the `jiraDeploymentInfoProvider` module can access
+  /// this resource. This resource requires the 'READ' scope.
   Future<dynamic> getDeploymentGatingStatusByKey(
       {required String pipelineId,
       required String environmentId,
       required int deploymentSequenceNumber}) async {
     return await _client.send(
       'get',
-      'deployments/0.1/pipelines/{pipelineId}/environments/{environmentId}/deployments/{deploymentSequenceNumber}/gating-status',
+      'rest/deployments/0.1/pipelines/{pipelineId}/environments/{environmentId}/deployments/{deploymentSequenceNumber}/gating-status',
       pathParameters: {
         'pipelineId': pipelineId,
         'environmentId': environmentId,
@@ -1071,7 +1071,7 @@ class DevelopmentInformationApi {
       required Map<String, dynamic> body}) async {
     return await _client.send(
       'post',
-      'devinfo/0.10/bulk',
+      'rest/devinfo/0.10/bulk',
       body: body,
     ) as Map<String, Object?>;
   }
@@ -1083,7 +1083,7 @@ class DevelopmentInformationApi {
       {required String repositoryId, required String authorization}) async {
     return await _client.send(
       'get',
-      'devinfo/0.10/repository/{repositoryId}',
+      'rest/devinfo/0.10/repository/{repositoryId}',
       pathParameters: {
         'repositoryId': repositoryId,
       },
@@ -1098,7 +1098,7 @@ class DevelopmentInformationApi {
       required String authorization}) async {
     await _client.send(
       'delete',
-      'devinfo/0.10/repository/{repositoryId}',
+      'rest/devinfo/0.10/repository/{repositoryId}',
       pathParameters: {
         'repositoryId': repositoryId,
       },
@@ -1122,7 +1122,7 @@ class DevelopmentInformationApi {
       {required String authorization, int? updateSequenceId}) async {
     await _client.send(
       'delete',
-      'devinfo/0.10/bulkByProperties',
+      'rest/devinfo/0.10/bulkByProperties',
       queryParameters: {
         if (updateSequenceId != null) '_updateSequenceId': '$updateSequenceId',
       },
@@ -1142,7 +1142,7 @@ class DevelopmentInformationApi {
       {required String authorization, int? updateSequenceId}) async {
     return await _client.send(
       'get',
-      'devinfo/0.10/existsByProperties',
+      'rest/devinfo/0.10/existsByProperties',
       queryParameters: {
         if (updateSequenceId != null) '_updateSequenceId': '$updateSequenceId',
       },
@@ -1159,7 +1159,7 @@ class DevelopmentInformationApi {
       required String authorization}) async {
     await _client.send(
       'delete',
-      'devinfo/0.10/repository/{repositoryId}/{entityType}/{entityId}',
+      'rest/devinfo/0.10/repository/{repositoryId}/{entityType}/{entityId}',
       pathParameters: {
         'repositoryId': repositoryId,
         'entityType': entityType,
@@ -1349,12 +1349,13 @@ class FeatureFlagsApi {
   /// is validated individually prior to submission. Details of which Feature
   /// Flags failed submission (if any) are available in the response object.
   ///
-  /// Only apps that define the Feature Flags module can access this resource.
-  /// This resource requires the 'WRITE' scope.
+  /// Only Connect apps that define the `jiraFeatureFlagInfoProvider` module can
+  /// access this resource.
+  /// This resource requires the 'WRITE' scope for Connect apps.
   Future<dynamic> submitFeatureFlags({required dynamic body}) async {
     return await _client.send(
       'post',
-      'featureflags/0.1/bulk',
+      'rest/featureflags/0.1/bulk',
       body: body,
     );
   }
@@ -1373,12 +1374,13 @@ class FeatureFlagsApi {
   /// Deletion is performed asynchronously. The getFeatureFlagById operation can
   /// be used to confirm that data has been deleted successfully (if needed).
   ///
-  /// Only apps that define the Feature Flags module can access this resource.
-  /// This resource requires the 'DELETE' scope.
+  /// Only Connect apps that define the `jiraFeatureFlagInfoProvider` module can
+  /// access this resource.
+  /// This resource requires the 'DELETE' scope for Connect apps.
   Future<void> deleteFeatureFlagsByProperty({int? updateSequenceId}) async {
     await _client.send(
       'delete',
-      'featureflags/0.1/bulkByProperties',
+      'rest/featureflags/0.1/bulkByProperties',
       queryParameters: {
         if (updateSequenceId != null) '_updateSequenceId': '$updateSequenceId',
       },
@@ -1390,12 +1392,13 @@ class FeatureFlagsApi {
   /// The result will be what is currently stored, ignoring any pending updates
   /// or deletes.
   ///
-  /// Only apps that define the Feature Flags module can access this resource.
-  /// This resource requires the 'READ' scope.
+  /// Only Connect apps that define the `jiraFeatureFlagInfoProvider` module can
+  /// access this resource.
+  /// This resource requires the 'READ' scope for Connect apps.
   Future<dynamic> getFeatureFlagById(String featureFlagId) async {
     return await _client.send(
       'get',
-      'featureflags/0.1/flag/{featureFlagId}',
+      'rest/featureflags/0.1/flag/{featureFlagId}',
       pathParameters: {
         'featureFlagId': featureFlagId,
       },
@@ -1407,13 +1410,14 @@ class FeatureFlagsApi {
   /// Deletion is performed asynchronously. The getFeatureFlagById operation can
   /// be used to confirm that data has been deleted successfully (if needed).
   ///
-  /// Only apps that define the Feature Flags module can access this resource.
-  /// This resource requires the 'DELETE' scope.
+  /// Only Connect apps that define the `jiraFeatureFlagInfoProvider` module can
+  /// access this resource.
+  /// This resource requires the 'DELETE' scope for Connect apps.
   Future<void> deleteFeatureFlagById(
       {required String featureFlagId, int? updateSequenceId}) async {
     await _client.send(
       'delete',
-      'featureflags/0.1/flag/{featureFlagId}',
+      'rest/featureflags/0.1/flag/{featureFlagId}',
       pathParameters: {
         'featureFlagId': featureFlagId,
       },
@@ -1563,7 +1567,7 @@ class RemoteLinksApi {
       {required Map<String, dynamic> body}) async {
     return await _client.send(
       'post',
-      'remotelinks/1.0/bulk',
+      'rest/remotelinks/1.0/bulk',
       body: body,
     ) as Map<String, Object?>;
   }
@@ -1588,12 +1592,12 @@ class RemoteLinksApi {
   ///
   /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module, and
   /// on-premise integrations, can access this resource.
-  /// This resource requires the 'WRITE' scope for Connect apps.
+  /// This resource requires the 'DELETE' scope for Connect apps.
   Future<void> deleteRemoteLinksByProperty(
       {int? updateSequenceNumber, Map<String, dynamic>? params}) async {
     await _client.send(
       'delete',
-      'remotelinks/1.0/bulkByProperties',
+      'rest/remotelinks/1.0/bulkByProperties',
       queryParameters: {
         if (updateSequenceNumber != null)
           '_updateSequenceNumber': '$updateSequenceNumber',
@@ -1609,11 +1613,11 @@ class RemoteLinksApi {
   ///
   /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module, and
   /// on-premise integrations, can access this resource.
-  /// This resource requires the 'WRITE' scope for Connect apps.
+  /// This resource requires the 'READ' scope for Connect apps.
   Future<dynamic> getRemoteLinkById(String remoteLinkId) async {
     return await _client.send(
       'get',
-      'remotelinks/1.0/remotelink/{remoteLinkId}',
+      'rest/remotelinks/1.0/remotelink/{remoteLinkId}',
       pathParameters: {
         'remoteLinkId': remoteLinkId,
       },
@@ -1628,12 +1632,12 @@ class RemoteLinksApi {
   ///
   /// Only Connect apps that define the `jiraRemoteLinkInfoProvider` module, and
   /// on-premise integrations, can access this resource.
-  /// This resource requires the 'WRITE' scope for Connect apps.
+  /// This resource requires the 'DELETE' scope for Connect apps.
   Future<void> deleteRemoteLinkById(
       {required String remoteLinkId, int? updateSequenceNumber}) async {
     await _client.send(
       'delete',
-      'remotelinks/1.0/remotelink/{remoteLinkId}',
+      'rest/remotelinks/1.0/remotelink/{remoteLinkId}',
       pathParameters: {
         'remoteLinkId': remoteLinkId,
       },
@@ -5256,20 +5260,24 @@ class HistoryMetadataParticipant {
 }
 
 class IncludedFields {
+  final List<String> included;
   final List<String> actuallyIncluded;
   final List<String> excluded;
-  final List<String> included;
 
   IncludedFields(
-      {List<String>? actuallyIncluded,
-      List<String>? excluded,
-      List<String>? included})
-      : actuallyIncluded = actuallyIncluded ?? [],
-        excluded = excluded ?? [],
-        included = included ?? [];
+      {List<String>? included,
+      List<String>? actuallyIncluded,
+      List<String>? excluded})
+      : included = included ?? [],
+        actuallyIncluded = actuallyIncluded ?? [],
+        excluded = excluded ?? [];
 
   factory IncludedFields.fromJson(Map<String, Object?> json) {
     return IncludedFields(
+      included: (json[r'included'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
       actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -5278,33 +5286,29 @@ class IncludedFields {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      included: (json[r'included'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
     );
   }
 
   Map<String, Object?> toJson() {
+    var included = this.included;
     var actuallyIncluded = this.actuallyIncluded;
     var excluded = this.excluded;
-    var included = this.included;
 
     final json = <String, Object?>{};
+    json[r'included'] = included;
     json[r'actuallyIncluded'] = actuallyIncluded;
     json[r'excluded'] = excluded;
-    json[r'included'] = included;
     return json;
   }
 
   IncludedFields copyWith(
-      {List<String>? actuallyIncluded,
-      List<String>? excluded,
-      List<String>? included}) {
+      {List<String>? included,
+      List<String>? actuallyIncluded,
+      List<String>? excluded}) {
     return IncludedFields(
+      included: included ?? this.included,
       actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
       excluded: excluded ?? this.excluded,
-      included: included ?? this.included,
     );
   }
 }
@@ -5531,20 +5535,24 @@ class IssueBean {
 }
 
 class IssueBeanFieldsToInclude {
+  final List<String> included;
   final List<String> actuallyIncluded;
   final List<String> excluded;
-  final List<String> included;
 
   IssueBeanFieldsToInclude(
-      {List<String>? actuallyIncluded,
-      List<String>? excluded,
-      List<String>? included})
-      : actuallyIncluded = actuallyIncluded ?? [],
-        excluded = excluded ?? [],
-        included = included ?? [];
+      {List<String>? included,
+      List<String>? actuallyIncluded,
+      List<String>? excluded})
+      : included = included ?? [],
+        actuallyIncluded = actuallyIncluded ?? [],
+        excluded = excluded ?? [];
 
   factory IssueBeanFieldsToInclude.fromJson(Map<String, Object?> json) {
     return IssueBeanFieldsToInclude(
+      included: (json[r'included'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
       actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -5553,33 +5561,29 @@ class IssueBeanFieldsToInclude {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      included: (json[r'included'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
     );
   }
 
   Map<String, Object?> toJson() {
+    var included = this.included;
     var actuallyIncluded = this.actuallyIncluded;
     var excluded = this.excluded;
-    var included = this.included;
 
     final json = <String, Object?>{};
+    json[r'included'] = included;
     json[r'actuallyIncluded'] = actuallyIncluded;
     json[r'excluded'] = excluded;
-    json[r'included'] = included;
     return json;
   }
 
   IssueBeanFieldsToInclude copyWith(
-      {List<String>? actuallyIncluded,
-      List<String>? excluded,
-      List<String>? included}) {
+      {List<String>? included,
+      List<String>? actuallyIncluded,
+      List<String>? excluded}) {
     return IssueBeanFieldsToInclude(
+      included: included ?? this.included,
       actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
       excluded: excluded ?? this.excluded,
-      included: included ?? this.included,
     );
   }
 }
@@ -8143,58 +8147,58 @@ class UserBean {
 }
 
 class UserBeanAvatarUrls {
-  /// The URL of the user's 32x32 pixel avatar.
-  final String? $32X32;
-
-  /// The URL of the user's 48x48 pixel avatar.
-  final String? $48X48;
-
   /// The URL of the user's 24x24 pixel avatar.
   final String? $24X24;
 
   /// The URL of the user's 16x16 pixel avatar.
   final String? $16X16;
 
-  UserBeanAvatarUrls({this.$32X32, this.$48X48, this.$24X24, this.$16X16});
+  /// The URL of the user's 48x48 pixel avatar.
+  final String? $48X48;
+
+  /// The URL of the user's 32x32 pixel avatar.
+  final String? $32X32;
+
+  UserBeanAvatarUrls({this.$24X24, this.$16X16, this.$48X48, this.$32X32});
 
   factory UserBeanAvatarUrls.fromJson(Map<String, Object?> json) {
     return UserBeanAvatarUrls(
-      $32X32: json[r'32x32'] as String?,
-      $48X48: json[r'48x48'] as String?,
       $24X24: json[r'24x24'] as String?,
       $16X16: json[r'16x16'] as String?,
+      $48X48: json[r'48x48'] as String?,
+      $32X32: json[r'32x32'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var $32X32 = this.$32X32;
-    var $48X48 = this.$48X48;
     var $24X24 = this.$24X24;
     var $16X16 = this.$16X16;
+    var $48X48 = this.$48X48;
+    var $32X32 = this.$32X32;
 
     final json = <String, Object?>{};
-    if ($32X32 != null) {
-      json[r'32x32'] = $32X32;
-    }
-    if ($48X48 != null) {
-      json[r'48x48'] = $48X48;
-    }
     if ($24X24 != null) {
       json[r'24x24'] = $24X24;
     }
     if ($16X16 != null) {
       json[r'16x16'] = $16X16;
     }
+    if ($48X48 != null) {
+      json[r'48x48'] = $48X48;
+    }
+    if ($32X32 != null) {
+      json[r'32x32'] = $32X32;
+    }
     return json;
   }
 
   UserBeanAvatarUrls copyWith(
-      {String? $32X32, String? $48X48, String? $24X24, String? $16X16}) {
+      {String? $24X24, String? $16X16, String? $48X48, String? $32X32}) {
     return UserBeanAvatarUrls(
-      $32X32: $32X32 ?? this.$32X32,
-      $48X48: $48X48 ?? this.$48X48,
       $24X24: $24X24 ?? this.$24X24,
       $16X16: $16X16 ?? this.$16X16,
+      $48X48: $48X48 ?? this.$48X48,
+      $32X32: $32X32 ?? this.$32X32,
     );
   }
 }

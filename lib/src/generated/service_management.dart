@@ -9,11 +9,11 @@ class ServiceManagementApi {
 
   ServiceManagementApi(this._client);
 
+  late final assets = AssetsApi(_client);
+
   late final customer = CustomerApi(_client);
 
   late final info = InfoApi(_client);
-
-  late final insight = InsightApi(_client);
 
   late final knowledgebase = KnowledgebaseApi(_client);
 
@@ -26,6 +26,44 @@ class ServiceManagementApi {
   late final servicedesk = ServicedeskApi(_client);
 
   void close() => _client.close();
+}
+
+/// Public REST API for Jira Service Management
+
+class AssetsApi {
+  final ApiClient _client;
+
+  AssetsApi(this._client);
+
+  /// Returns a list of Assets workspace IDs. Include a workspace ID in the path
+  /// to access the
+  /// [Assets REST APIs](https://developer.atlassian.com/cloud/assets/rest).
+  ///
+  /// **[Permissions](#permissions) required**: Any
+  Future<PagedDTOAssetsWorkspaceDTO> getAssetsWorkspaces(
+      {int? start, int? limit}) async {
+    return PagedDTOAssetsWorkspaceDTO.fromJson(await _client.send(
+      'get',
+      'rest/servicedeskapi/assets/workspace',
+      queryParameters: {
+        if (start != null) 'start': '$start',
+        if (limit != null) 'limit': '$limit',
+      },
+    ));
+  }
+
+  /// This endpoint is deprecated, please use /assets/workspace/.
+  Future<PagedDTOInsightWorkspaceDTO> getInsightWorkspaces(
+      {int? start, int? limit}) async {
+    return PagedDTOInsightWorkspaceDTO.fromJson(await _client.send(
+      'get',
+      'rest/servicedeskapi/insight/workspace',
+      queryParameters: {
+        if (start != null) 'start': '$start',
+        if (limit != null) 'limit': '$limit',
+      },
+    ));
+  }
 }
 
 /// Public REST API for Jira Service Management
@@ -72,31 +110,6 @@ class InfoApi {
     return SoftwareInfoDTO.fromJson(await _client.send(
       'get',
       'rest/servicedeskapi/info',
-    ));
-  }
-}
-
-/// Public REST API for Jira Service Management
-
-class InsightApi {
-  final ApiClient _client;
-
-  InsightApi(this._client);
-
-  /// Returns a list of Insight workspace IDs. Include a workspace ID in the
-  /// path to access the
-  /// [Insight REST APIs](https://developer.atlassian.com/cloud/insight/rest).
-  ///
-  /// **[Permissions](#permissions) required**: Any
-  Future<PagedDTOInsightWorkspaceDTO> getInsightWorkspaces(
-      {int? start, int? limit}) async {
-    return PagedDTOInsightWorkspaceDTO.fromJson(await _client.send(
-      'get',
-      'rest/servicedeskapi/insight/workspace',
-      queryParameters: {
-        if (start != null) 'start': '$start',
-        if (limit != null) 'limit': '$limit',
-      },
     ));
   }
 }
@@ -1931,6 +1944,36 @@ class ArticleDTO {
       excerpt: excerpt ?? this.excerpt,
       source: source ?? this.source,
       content: content ?? this.content,
+    );
+  }
+}
+
+/// Details of an Assets workspace ID.
+class AssetsWorkspaceDTO {
+  /// The workspace ID used as the identifier to access the Assets REST API.
+  final String? workspaceId;
+
+  AssetsWorkspaceDTO({this.workspaceId});
+
+  factory AssetsWorkspaceDTO.fromJson(Map<String, Object?> json) {
+    return AssetsWorkspaceDTO(
+      workspaceId: json[r'workspaceId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var workspaceId = this.workspaceId;
+
+    final json = <String, Object?>{};
+    if (workspaceId != null) {
+      json[r'workspaceId'] = workspaceId;
+    }
+    return json;
+  }
+
+  AssetsWorkspaceDTO copyWith({String? workspaceId}) {
+    return AssetsWorkspaceDTO(
+      workspaceId: workspaceId ?? this.workspaceId,
     );
   }
 }
@@ -4039,25 +4082,25 @@ class I18nErrorMessage {
 }
 
 class IncludedFields {
-  final List<String> included;
   final List<String> actuallyIncluded;
+  final List<String> included;
   final List<String> excluded;
 
   IncludedFields(
-      {List<String>? included,
-      List<String>? actuallyIncluded,
+      {List<String>? actuallyIncluded,
+      List<String>? included,
       List<String>? excluded})
-      : included = included ?? [],
-        actuallyIncluded = actuallyIncluded ?? [],
+      : actuallyIncluded = actuallyIncluded ?? [],
+        included = included ?? [],
         excluded = excluded ?? [];
 
   factory IncludedFields.fromJson(Map<String, Object?> json) {
     return IncludedFields(
-      included: (json[r'included'] as List<Object?>?)
+      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
+      included: (json[r'included'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -4069,24 +4112,24 @@ class IncludedFields {
   }
 
   Map<String, Object?> toJson() {
-    var included = this.included;
     var actuallyIncluded = this.actuallyIncluded;
+    var included = this.included;
     var excluded = this.excluded;
 
     final json = <String, Object?>{};
-    json[r'included'] = included;
     json[r'actuallyIncluded'] = actuallyIncluded;
+    json[r'included'] = included;
     json[r'excluded'] = excluded;
     return json;
   }
 
   IncludedFields copyWith(
-      {List<String>? included,
-      List<String>? actuallyIncluded,
+      {List<String>? actuallyIncluded,
+      List<String>? included,
       List<String>? excluded}) {
     return IncludedFields(
-      included: included ?? this.included,
       actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
+      included: included ?? this.included,
       excluded: excluded ?? this.excluded,
     );
   }
@@ -5172,6 +5215,108 @@ class PagedDTOArticleDTO {
       List<String>? expands,
       PagedLinkDTO? links}) {
     return PagedDTOArticleDTO(
+      size: size ?? this.size,
+      start: start ?? this.start,
+      limit: limit ?? this.limit,
+      isLastPage: isLastPage ?? this.isLastPage,
+      values: values ?? this.values,
+      expands: expands ?? this.expands,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class PagedDTOAssetsWorkspaceDTO {
+  /// Number of items returned in the page.
+  final int? size;
+
+  /// Index of the first item returned in the page.
+  final int? start;
+
+  /// Number of items to be returned per page, up to the maximum set for these
+  /// objects in the current implementation.
+  final int? limit;
+
+  /// Indicates if this is the last page of records (true) or not (false).
+  final bool isLastPage;
+
+  /// Details of the items included in the page.
+  final List<AssetsWorkspaceDTO> values;
+  final List<String> expands;
+
+  /// List of the links relating to the page.
+  final PagedLinkDTO? links;
+
+  PagedDTOAssetsWorkspaceDTO(
+      {this.size,
+      this.start,
+      this.limit,
+      bool? isLastPage,
+      List<AssetsWorkspaceDTO>? values,
+      List<String>? expands,
+      this.links})
+      : isLastPage = isLastPage ?? false,
+        values = values ?? [],
+        expands = expands ?? [];
+
+  factory PagedDTOAssetsWorkspaceDTO.fromJson(Map<String, Object?> json) {
+    return PagedDTOAssetsWorkspaceDTO(
+      size: (json[r'size'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
+      limit: (json[r'limit'] as num?)?.toInt(),
+      isLastPage: json[r'isLastPage'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => AssetsWorkspaceDTO.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      expands: (json[r'_expands'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      links: json[r'_links'] != null
+          ? PagedLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var size = this.size;
+    var start = this.start;
+    var limit = this.limit;
+    var isLastPage = this.isLastPage;
+    var values = this.values;
+    var expands = this.expands;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (size != null) {
+      json[r'size'] = size;
+    }
+    if (start != null) {
+      json[r'start'] = start;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
+    json[r'isLastPage'] = isLastPage;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    json[r'_expands'] = expands;
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PagedDTOAssetsWorkspaceDTO copyWith(
+      {int? size,
+      int? start,
+      int? limit,
+      bool? isLastPage,
+      List<AssetsWorkspaceDTO>? values,
+      List<String>? expands,
+      PagedLinkDTO? links}) {
+    return PagedDTOAssetsWorkspaceDTO(
       size: size ?? this.size,
       start: start ?? this.start,
       limit: limit ?? this.limit,
