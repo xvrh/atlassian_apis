@@ -10,6 +10,7 @@ linter:
     cancel_subscriptions: true
     cast_nullable_to_non_nullable: true
     close_sinks: true
+    discarded_futures: true
     no_adjacent_strings_in_list: true
     no_default_cases: true
     omit_local_variable_types: true
@@ -22,3 +23,4 @@ linter:
     unnecessary_parenthesis: true
     unnecessary_statements: true
     use_raw_strings: true
+    use_super_parameters: true

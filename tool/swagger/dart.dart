@@ -1126,8 +1126,7 @@ bool _isObsolete(String? comment) =>
 extension<T> on Iterable<T> {
   List<T> stableSortedBy<K extends Comparable<K>>(K Function(T element) keyOf) {
     var elements = [...this];
-    mergeSort(elements,
-        compare: (a, b) => keyOf(a as T).compareTo(keyOf(b as T)));
+    mergeSort(elements, compare: (a, b) => keyOf(a).compareTo(keyOf(b)));
     return elements;
   }
 }
