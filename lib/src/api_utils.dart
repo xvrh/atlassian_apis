@@ -121,7 +121,6 @@ class ApiException implements Exception {
         }
       } catch (e) {
         // Fail to parse as Json
-
       }
       errorMessage ??= response.body;
     }
