@@ -9,41 +9,66 @@ class AdminOrganizationApi {
 
   AdminOrganizationApi(this._client);
 
-  /// Returns a list of your organizations (based on your API key).
-  Future<OrgPage> getOrgs({String? cursor}) async {
-    return OrgPage.fromJson(await _client.send(
-      'get',
-      'orgs',
-      queryParameters: {
-        if (cursor != null) 'cursor': cursor,
-      },
-    ));
-  }
+  /// Org Directory APIs
+  late final directory = DirectoryApi(_client);
 
-  /// Returns information about a single organization by ID
-  Future<Org> getOrgById(String orgId) async {
-    return Org.fromJson(await _client.send(
-      'get',
-      'orgs/{orgId}',
+  /// Domain APIs
+  late final domains = DomainsApi(_client);
+
+  /// Events APIs
+  late final events = EventsApi(_client);
+
+  /// Orgs APIs
+  late final orgs = OrgsApi(_client);
+
+  /// Policies APIs
+  late final policies = PoliciesApi(_client);
+
+  /// Orgs Users APIs
+  late final users = UsersApi(_client);
+
+  void close() => _client.close();
+}
+
+class DirectoryApi {
+  final ApiClient _client;
+
+  DirectoryApi(this._client);
+
+  /// You can use this to remove a specififed user(s) from the organization
+  /// directory.
+  ///
+  /// The API authentication header supports
+  /// [Organization API Keys](https://support.atlassian.com/organization-administration/docs/manage-an-organization-with-the-admin-apis/).
+  /// API keys allow you to manage your organization. Copy the values for your
+  /// Organization ID and API key and call the API.
+  ///  API Key is used as an Authentication header Bearer token to call the API.
+  ///
+  /// **The API is available for customers using the new user management
+  /// experience only. Learn more about the
+  /// [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**
+  ///
+  /// **The API is currently in a limited functionality mode and does not
+  /// produce access
+  /// [audit logs](https://support.atlassian.com/organization-administration/docs/track-organization-activities-from-the-audit-log/)
+  /// for removed users.**
+  Future<void> removeUserFromOrganizationDirectory(
+      {required String orgId, required String accountId}) async {
+    await _client.send(
+      'delete',
+      'orgs/{orgId}/directory/users/{accountId}',
       pathParameters: {
         'orgId': orgId,
+        'accountId': accountId,
       },
-    ));
+    );
   }
+}
 
-  /// Returns a list of users in an organization.
-  Future<UserPage> getUsers({required String orgId, String? cursor}) async {
-    return UserPage.fromJson(await _client.send(
-      'get',
-      'orgs/{orgId}/users',
-      pathParameters: {
-        'orgId': orgId,
-      },
-      queryParameters: {
-        if (cursor != null) 'cursor': cursor,
-      },
-    ));
-  }
+class DomainsApi {
+  final ApiClient _client;
+
+  DomainsApi(this._client);
 
   /// Returns a list of domains in an organization one page at a time.
   Future<DomainPage> getDomains({required String orgId, String? cursor}) async {
@@ -71,6 +96,12 @@ class AdminOrganizationApi {
       },
     ));
   }
+}
+
+class EventsApi {
+  final ApiClient _client;
+
+  EventsApi(this._client);
 
   /// Returns an audit log of events from an organization one page at a time.
   Future<EventPage> getEvents(
@@ -119,6 +150,40 @@ class AdminOrganizationApi {
       },
     ));
   }
+}
+
+class OrgsApi {
+  final ApiClient _client;
+
+  OrgsApi(this._client);
+
+  /// Returns a list of your organizations (based on your API key).
+  Future<OrgPage> getOrgs({String? cursor}) async {
+    return OrgPage.fromJson(await _client.send(
+      'get',
+      'orgs',
+      queryParameters: {
+        if (cursor != null) 'cursor': cursor,
+      },
+    ));
+  }
+
+  /// Returns information about a single organization by ID
+  Future<Org> getOrgById(String orgId) async {
+    return Org.fromJson(await _client.send(
+      'get',
+      'orgs/{orgId}',
+      pathParameters: {
+        'orgId': orgId,
+      },
+    ));
+  }
+}
+
+class PoliciesApi {
+  final ApiClient _client;
+
+  PoliciesApi(this._client);
 
   /// Returns information about org policies
   Future<PolicyPage> getPolicies(
@@ -253,6 +318,26 @@ class AdminOrganizationApi {
         'policyId': policyId,
       },
     );
+  }
+}
+
+class UsersApi {
+  final ApiClient _client;
+
+  UsersApi(this._client);
+
+  /// Returns a list of users in an organization.
+  Future<UserPage> getUsers({required String orgId, String? cursor}) async {
+    return UserPage.fromJson(await _client.send(
+      'get',
+      'orgs/{orgId}/users',
+      pathParameters: {
+        'orgId': orgId,
+      },
+      queryParameters: {
+        if (cursor != null) 'cursor': cursor,
+      },
+    ));
   }
 }
 

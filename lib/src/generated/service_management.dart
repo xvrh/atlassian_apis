@@ -509,6 +509,10 @@ class RequestApi {
   ///
   /// **Response limitations**: For customers, only a request they created, was
   /// created on their behalf, or they are participating in will be returned.
+  ///
+  /// **Note:** `requestFieldValues` does not include hidden fields. To get a
+  /// list of request type fields that includes hidden fields, see
+  /// [/rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/field](https://developer.atlassian.com/cloud/jira/service-desk/rest/api-group-servicedesk/#api-rest-servicedeskapi-servicedesk-servicedeskid-requesttype-requesttypeid-field-get)
   Future<CustomerRequestDTO> getCustomerRequestByIdOrKey(
       {required String issueIdOrKey, List<String>? expand}) async {
     return CustomerRequestDTO.fromJson(await _client.send(
@@ -1091,6 +1095,11 @@ class ServicedeskApi {
   /// instance that the user has permission to access. Use this method where you
   /// need a list of service desks or need to locate a service desk by name or
   /// keyword.
+  ///
+  /// **Note:** This method will be slow if the instance has hundreds of service
+  /// desks. If you want to fetch a single service desk by its ID, use
+  /// [/rest/servicedeskapi/servicedesk/{serviceDeskId}](./#api-rest-servicedeskapi-servicedesk-servicedeskid-get)
+  /// instead.
   ///
   /// **[Permissions](#permissions) required**: Any
   Future<PagedDTOServiceDeskDTO> getServiceDesks(
@@ -2958,7 +2967,7 @@ class CustomerRequestDTO {
   final UserDTO? reporter;
 
   /// JSON map of Jira field IDs and their values representing the content of
-  /// the request.
+  /// the request. This list does not include hidden fields.
   final List<CustomerRequestFieldValueDTO> requestFieldValues;
 
   /// Status of the request.
@@ -4082,25 +4091,25 @@ class I18nErrorMessage {
 }
 
 class IncludedFields {
-  final List<String> actuallyIncluded;
   final List<String> included;
+  final List<String> actuallyIncluded;
   final List<String> excluded;
 
   IncludedFields(
-      {List<String>? actuallyIncluded,
-      List<String>? included,
+      {List<String>? included,
+      List<String>? actuallyIncluded,
       List<String>? excluded})
-      : actuallyIncluded = actuallyIncluded ?? [],
-        included = included ?? [],
+      : included = included ?? [],
+        actuallyIncluded = actuallyIncluded ?? [],
         excluded = excluded ?? [];
 
   factory IncludedFields.fromJson(Map<String, Object?> json) {
     return IncludedFields(
-      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
+      included: (json[r'included'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      included: (json[r'included'] as List<Object?>?)
+      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -4112,24 +4121,24 @@ class IncludedFields {
   }
 
   Map<String, Object?> toJson() {
-    var actuallyIncluded = this.actuallyIncluded;
     var included = this.included;
+    var actuallyIncluded = this.actuallyIncluded;
     var excluded = this.excluded;
 
     final json = <String, Object?>{};
-    json[r'actuallyIncluded'] = actuallyIncluded;
     json[r'included'] = included;
+    json[r'actuallyIncluded'] = actuallyIncluded;
     json[r'excluded'] = excluded;
     return json;
   }
 
   IncludedFields copyWith(
-      {List<String>? actuallyIncluded,
-      List<String>? included,
+      {List<String>? included,
+      List<String>? actuallyIncluded,
       List<String>? excluded}) {
     return IncludedFields(
-      actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
       included: included ?? this.included,
+      actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
       excluded: excluded ?? this.excluded,
     );
   }
@@ -7034,6 +7043,7 @@ class RequestCreateDTO {
 
   /// (Experimental) Shows extra information for the request channel.
   final String? channel;
+  final bool adfRequest;
 
   RequestCreateDTO(
       {this.serviceDeskId,
@@ -7041,8 +7051,10 @@ class RequestCreateDTO {
       this.requestFieldValues,
       List<String>? requestParticipants,
       this.raiseOnBehalfOf,
-      this.channel})
-      : requestParticipants = requestParticipants ?? [];
+      this.channel,
+      bool? adfRequest})
+      : requestParticipants = requestParticipants ?? [],
+        adfRequest = adfRequest ?? false;
 
   factory RequestCreateDTO.fromJson(Map<String, Object?> json) {
     return RequestCreateDTO(
@@ -7055,6 +7067,7 @@ class RequestCreateDTO {
           [],
       raiseOnBehalfOf: json[r'raiseOnBehalfOf'] as String?,
       channel: json[r'channel'] as String?,
+      adfRequest: json[r'adfRequest'] as bool? ?? false,
     );
   }
 
@@ -7065,6 +7078,7 @@ class RequestCreateDTO {
     var requestParticipants = this.requestParticipants;
     var raiseOnBehalfOf = this.raiseOnBehalfOf;
     var channel = this.channel;
+    var adfRequest = this.adfRequest;
 
     final json = <String, Object?>{};
     if (serviceDeskId != null) {
@@ -7083,6 +7097,7 @@ class RequestCreateDTO {
     if (channel != null) {
       json[r'channel'] = channel;
     }
+    json[r'adfRequest'] = adfRequest;
     return json;
   }
 
@@ -7092,7 +7107,8 @@ class RequestCreateDTO {
       Map<String, dynamic>? requestFieldValues,
       List<String>? requestParticipants,
       String? raiseOnBehalfOf,
-      String? channel}) {
+      String? channel,
+      bool? adfRequest}) {
     return RequestCreateDTO(
       serviceDeskId: serviceDeskId ?? this.serviceDeskId,
       requestTypeId: requestTypeId ?? this.requestTypeId,
@@ -7100,6 +7116,7 @@ class RequestCreateDTO {
       requestParticipants: requestParticipants ?? this.requestParticipants,
       raiseOnBehalfOf: raiseOnBehalfOf ?? this.raiseOnBehalfOf,
       channel: channel ?? this.channel,
+      adfRequest: adfRequest ?? this.adfRequest,
     );
   }
 }

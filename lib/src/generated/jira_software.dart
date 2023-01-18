@@ -8150,55 +8150,55 @@ class UserBeanAvatarUrls {
   /// The URL of the user's 24x24 pixel avatar.
   final String? $24X24;
 
-  /// The URL of the user's 16x16 pixel avatar.
-  final String? $16X16;
+  /// The URL of the user's 32x32 pixel avatar.
+  final String? $32X32;
 
   /// The URL of the user's 48x48 pixel avatar.
   final String? $48X48;
 
-  /// The URL of the user's 32x32 pixel avatar.
-  final String? $32X32;
+  /// The URL of the user's 16x16 pixel avatar.
+  final String? $16X16;
 
-  UserBeanAvatarUrls({this.$24X24, this.$16X16, this.$48X48, this.$32X32});
+  UserBeanAvatarUrls({this.$24X24, this.$32X32, this.$48X48, this.$16X16});
 
   factory UserBeanAvatarUrls.fromJson(Map<String, Object?> json) {
     return UserBeanAvatarUrls(
       $24X24: json[r'24x24'] as String?,
-      $16X16: json[r'16x16'] as String?,
-      $48X48: json[r'48x48'] as String?,
       $32X32: json[r'32x32'] as String?,
+      $48X48: json[r'48x48'] as String?,
+      $16X16: json[r'16x16'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var $24X24 = this.$24X24;
-    var $16X16 = this.$16X16;
-    var $48X48 = this.$48X48;
     var $32X32 = this.$32X32;
+    var $48X48 = this.$48X48;
+    var $16X16 = this.$16X16;
 
     final json = <String, Object?>{};
     if ($24X24 != null) {
       json[r'24x24'] = $24X24;
     }
-    if ($16X16 != null) {
-      json[r'16x16'] = $16X16;
+    if ($32X32 != null) {
+      json[r'32x32'] = $32X32;
     }
     if ($48X48 != null) {
       json[r'48x48'] = $48X48;
     }
-    if ($32X32 != null) {
-      json[r'32x32'] = $32X32;
+    if ($16X16 != null) {
+      json[r'16x16'] = $16X16;
     }
     return json;
   }
 
   UserBeanAvatarUrls copyWith(
-      {String? $24X24, String? $16X16, String? $48X48, String? $32X32}) {
+      {String? $24X24, String? $32X32, String? $48X48, String? $16X16}) {
     return UserBeanAvatarUrls(
       $24X24: $24X24 ?? this.$24X24,
-      $16X16: $16X16 ?? this.$16X16,
-      $48X48: $48X48 ?? this.$48X48,
       $32X32: $32X32 ?? this.$32X32,
+      $48X48: $48X48 ?? this.$48X48,
+      $16X16: $16X16 ?? this.$16X16,
     );
   }
 }

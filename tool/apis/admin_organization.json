@@ -9,11 +9,37 @@
       "bearerAuth": []
     }
   ],
+  "tags": [
+    {
+      "name": "Orgs",
+      "description": "Orgs APIs"
+    },
+    {
+      "name": "Users",
+      "description": "Orgs Users APIs"
+    },
+    {
+      "name": "Domains",
+      "description": "Domain APIs"
+    },
+    {
+      "name": "Events",
+      "description": "Events APIs"
+    },
+    {
+      "name": "Policies",
+      "description": "Policies APIs"
+    },
+    {
+      "name": "Directory",
+      "description": "Org Directory APIs"
+    }
+  ],
   "paths": {
     "/orgs": {
       "get": {
         "tags": [
-          "orgs"
+          "Orgs"
         ],
         "operationId": "getOrgs",
         "summary": "Get organizations",
@@ -58,7 +84,7 @@
     "/orgs/{orgId}": {
       "get": {
         "tags": [
-          "orgs"
+          "Orgs"
         ],
         "operationId": "getOrgById",
         "summary": "Get an organization by ID",
@@ -103,7 +129,7 @@
     "/orgs/{orgId}/users": {
       "get": {
         "tags": [
-          "users"
+          "Users"
         ],
         "operationId": "getUsers",
         "summary": "Get users in an organization",
@@ -160,7 +186,7 @@
     "/orgs/{orgId}/domains": {
       "get": {
         "tags": [
-          "domains"
+          "Domains"
         ],
         "operationId": "getDomains",
         "summary": "Get domains in an organization",
@@ -217,7 +243,7 @@
     "/orgs/{orgId}/domains/{domainId}": {
       "get": {
         "tags": [
-          "domains"
+          "Domains"
         ],
         "operationId": "getDomainById",
         "summary": "Get domain by ID",
@@ -284,7 +310,7 @@
     "/orgs/{orgId}/events": {
       "get": {
         "tags": [
-          "events"
+          "Events"
         ],
         "operationId": "getEvents",
         "summary": "Get an audit log of events",
@@ -388,7 +414,7 @@
     "/orgs/{orgId}/events/{eventId}": {
       "get": {
         "tags": [
-          "events"
+          "Events"
         ],
         "operationId": "getEventById",
         "summary": "Get an event by ID",
@@ -456,7 +482,7 @@
     "/orgs/{orgId}/event-actions": {
       "get": {
         "tags": [
-          "events"
+          "Events"
         ],
         "operationId": "getEventActions",
         "summary": "Get list of event actions",
@@ -501,7 +527,7 @@
     "/orgs/{orgId}/policies": {
       "get": {
         "tags": [
-          "policies"
+          "Policies"
         ],
         "operationId": "getPolicies",
         "summary": "Get list of policies",
@@ -559,7 +585,7 @@
       },
       "post": {
         "tags": [
-          "policies"
+          "Policies"
         ],
         "operationId": "createPolicy",
         "summary": "Create a policy",
@@ -613,7 +639,7 @@
     "/orgs/{orgId}/policies/{policyId}": {
       "get": {
         "tags": [
-          "policies"
+          "Policies"
         ],
         "operationId": "getPolicyById",
         "summary": "Get a policy by ID",
@@ -679,7 +705,7 @@
       },
       "put": {
         "tags": [
-          "policies"
+          "Policies"
         ],
         "operationId": "updatePolicy",
         "summary": "Update a policy",
@@ -757,7 +783,7 @@
       },
       "delete": {
         "tags": [
-          "policies"
+          "Policies"
         ],
         "operationId": "deletePolicy",
         "summary": "Delete a policy",
@@ -821,7 +847,7 @@
     "/orgs/{orgId}/policies/{policyId}/resources": {
       "post": {
         "tags": [
-          "policies"
+          "Policies"
         ],
         "operationId": "addResourceToPolicy",
         "summary": "Add Resource to Policy",
@@ -898,7 +924,7 @@
     "/orgs/{orgId}/policies/{policyId}/resources/{resourceId}": {
       "put": {
         "tags": [
-          "policies"
+          "Policies"
         ],
         "operationId": "updatePolicyResource",
         "summary": "Update Policy Resource",
@@ -985,7 +1011,7 @@
       },
       "delete": {
         "tags": [
-          "policies"
+          "Policies"
         ],
         "operationId": "deletePolicyResource",
         "summary": "Delete Policy Resource",
@@ -1065,8 +1091,8 @@
     "/orgs/{orgId}/policies/{policyId}/validate": {
       "get": {
         "tags": [
-          "policies",
-          "validate"
+          "Policies",
+          "Validate"
         ],
         "summary": "Validate Policy",
         "description": "Validate a policy based on specific requirements. For example, Trigger CDEN validation by pushing a task into the SQS dns-validation queue",
@@ -1109,6 +1135,56 @@
           }
         }
       }
+    },
+    "/orgs/{orgId}/directory/users/{accountId}": {
+      "delete": {
+        "tags": [
+          "Directory"
+        ],
+        "x-experimental": true,
+        "summary": "Remove user from organization directory",
+        "description": "You can use this to remove a specififed user(s) from the organization directory. \n\nThe API authentication header supports [Organization API Keys](https://support.atlassian.com/organization-administration/docs/manage-an-organization-with-the-admin-apis/). API keys allow you to manage your organization. Copy the values for your Organization ID and API key and call the API.\n API Key is used as an Authentication header Bearer token to call the API.\n\n**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n\n**The API is currently in a limited functionality mode and does not produce access [audit logs](https://support.atlassian.com/organization-administration/docs/track-organization-activities-from-the-audit-log/) for removed users.**\n",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "description": "Your organization is identified by a Unique ID. You get your organization ID and Organization API key simultaneously.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "description": "Unique ID of the user's account that you are deleting.\nUse the [Jira User Search API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-users-search-get) to get the accountId (if Jira is available for your Organization). **Jira APIs use a different [authentication method ](https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/).**",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User was removed from organization directory. Everything went fine, nothing to return."
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error.Unauthenticated"
+          },
+          "403": {
+            "description": "You do not have permission to remove the user"
+          },
+          "404": {
+            "description": "Organization is not supported"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error.RateLimited"
+          }
+        }
+      }
     }
   },
   "servers": [
@@ -1126,7 +1202,7 @@
       {
         "title": "Authentication and authorization",
         "anchor": "auth",
-        "body": "To use the organizations REST API you must have a valid API key. The API key protects the API\nand ensures that you have permission to update and disable the accounts owned by your organization.\nYou can use the same API key for the organizations REST API and the user management REST API.\nFor more information, see [Create an API key](https://confluence.atlassian.com/x/jPnJOQ).\n\nOnce you have your API key, you can provide it as a bearer token\nin the `Authorization` part of your HTTPS header."
+        "body": "API keys allow you to manage your organization. To make requests to the API with the client of your choice, [Create an API key](https://support.atlassian.com/organization-administration/docs/manage-an-organization-with-the-admin-apis/).\nCopy the values for your Organization ID and API key. You'll need those to call the API.\n\nNote: Make sure you store these values in a safe place, as we won't show them to you again. \nAPI Key is used as an Authentication header Bearer token to call the API"
       },
       {
         "title": "Version and URI",
@@ -1137,6 +1213,11 @@
         "title": "Pagination",
         "anchor": "Pagination",
         "body": "\nThe organizations REST API uses pagination to conserve server resources and limit response size. If there are more results available after the current page, a link to the next page of results is included in the JSON. You can use the `cursor` parameter to set a specific starting point for the results."
+      },
+      {
+        "title": "Experimental features",
+        "anchor": "Experimental features",
+        "body": "\nMethods marked as experimental may change without an earlier notice. We are looking for your feedback for these methods."
       }
     ]
   },
@@ -1234,6 +1315,28 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/ProxyError"
+            }
+          }
+        }
+      },
+      "Error.Unauthorized": {
+        "description": "The consumer could not be authenticated.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "key"
+              ],
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "enum": [
+                    "unauthorized",
+                    "asapUnauthorizedIssuer"
+                  ]
+                }
+              }
             }
           }
         }

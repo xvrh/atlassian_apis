@@ -717,6 +717,9 @@ class AppPropertiesApi {
   ///
   /// **[Permissions](#permissions) required:** Only a Connect app whose key
   /// matches `addonKey` can make this request.
+  /// Additionally, Forge apps published on the Marketplace can access
+  /// properties of Connect apps they were
+  /// [migrated from](https://developer.atlassian.com/platform/forge/build-a-connect-on-forge-app/).
   Future<PropertyKeys> getAddonProperties(String addonKey) async {
     return PropertyKeys.fromJson(await _client.send(
       'get',
@@ -731,6 +734,9 @@ class AppPropertiesApi {
   ///
   /// **[Permissions](#permissions) required:** Only a Connect app whose key
   /// matches `addonKey` can make this request.
+  /// Additionally, Forge apps published on the Marketplace can access
+  /// properties of Connect apps they were
+  /// [migrated from](https://developer.atlassian.com/platform/forge/build-a-connect-on-forge-app/).
   Future<EntityProperty> getAddonProperty(
       {required String addonKey, required String propertyKey}) async {
     return EntityProperty.fromJson(await _client.send(
@@ -2305,6 +2311,7 @@ class GroupsApi {
       List<String>? exclude,
       List<String>? excludeId,
       int? maxResults,
+      bool? caseInsensitive,
       String? userName}) async {
     return FoundGroups.fromJson(await _client.send(
       'get',
@@ -2315,6 +2322,7 @@ class GroupsApi {
         if (exclude != null) 'exclude': exclude.map((e) => e).join(','),
         if (excludeId != null) 'excludeId': excludeId.map((e) => e).join(','),
         if (maxResults != null) 'maxResults': '$maxResults',
+        if (caseInsensitive != null) 'caseInsensitive': '$caseInsensitive',
         if (userName != null) 'userName': userName,
       },
     ));
@@ -2352,7 +2360,7 @@ class IssueAttachmentsApi {
   /// for details.
   ///
   /// To return a thumbnail of the attachment, use
-  /// [Download attachment thumbnail](#api-rest-api-3-attachment-thumbnail-id-get).
+  /// [Get attachment thumbnail](#api-rest-api-3-attachment-thumbnail-id-get).
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -2398,7 +2406,7 @@ class IssueAttachmentsApi {
   /// Returns the thumbnail of an attachment.
   ///
   /// To return the attachment contents, use
-  /// [Download attachment content](#api-rest-api-3-attachment-content-id-get).
+  /// [Get attachment content](#api-rest-api-3-attachment-content-id-get).
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -4461,6 +4469,7 @@ class IssueFieldsApi {
       int? maxResults,
       List<String>? id,
       String? query,
+      String? expand,
       String? orderBy}) async {
     return PageBeanField.fromJson(await _client.send(
       'get',
@@ -4470,6 +4479,7 @@ class IssueFieldsApi {
         if (maxResults != null) 'maxResults': '$maxResults',
         if (id != null) 'id': id.map((e) => e).join(','),
         if (query != null) 'query': query,
+        if (expand != null) 'expand': expand,
         if (orderBy != null) 'orderBy': orderBy,
       },
     ));
@@ -4809,23 +4819,74 @@ class IssueNotificationSchemesApi {
 
   /// Returns a [paginated](#pagination) list of
   /// [notification schemes](https://confluence.atlassian.com/x/8YdKLg) ordered
-  /// by display name.
+  /// by the display name.
   ///
   /// *Note that you should allow for events without recipients to appear in
   /// responses.*
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira,
-  /// however the user must have permission to administer at least one project
+  /// however, the user must have permission to administer at least one project
   /// associated with a notification scheme for it to be returned.
   Future<PageBeanNotificationScheme> getNotificationSchemes(
-      {int? startAt, int? maxResults, String? expand}) async {
+      {int? startAt,
+      int? maxResults,
+      List<String>? id,
+      List<String>? projectId,
+      bool? onlyDefault,
+      String? expand}) async {
     return PageBeanNotificationScheme.fromJson(await _client.send(
       'get',
       'rest/api/3/notificationscheme',
       queryParameters: {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
+        if (id != null) 'id': id.map((e) => e).join(','),
+        if (projectId != null) 'projectId': projectId.map((e) => e).join(','),
+        if (onlyDefault != null) 'onlyDefault': '$onlyDefault',
         if (expand != null) 'expand': expand,
+      },
+    ));
+  }
+
+  /// Creates a notification scheme with notifications. You can create up to
+  /// 1000 notifications per request.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<NotificationSchemeId> createNotificationScheme(
+      {required CreateNotificationSchemeDetails body}) async {
+    return NotificationSchemeId.fromJson(await _client.send(
+      'post',
+      'rest/api/3/notificationscheme',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Returns a [paginated](#pagination) mapping of project that have
+  /// notification scheme assigned. You can provide either one or multiple
+  /// notification scheme IDs or project IDs to filter by. If you don't provide
+  /// any, this will return a list of all mappings. Note that only
+  /// company-managed (classic) projects are supported. This is because
+  /// team-managed projects don't have a concept of a default notification
+  /// scheme. The mappings are ordered by projectId.
+  ///
+  /// **[Permissions](#permissions) required:** Permission to access Jira.
+  Future<PageBeanNotificationSchemeAndProjectMappingJsonBean>
+      getNotificationSchemeToProjectMappings(
+          {String? startAt,
+          String? maxResults,
+          List<String>? notificationSchemeId,
+          List<String>? projectId}) async {
+    return PageBeanNotificationSchemeAndProjectMappingJsonBean.fromJson(
+        await _client.send(
+      'get',
+      'rest/api/3/notificationscheme/project',
+      queryParameters: {
+        if (startAt != null) 'startAt': startAt,
+        if (maxResults != null) 'maxResults': maxResults,
+        if (notificationSchemeId != null)
+          'notificationSchemeId': notificationSchemeId.map((e) => e).join(','),
+        if (projectId != null) 'projectId': projectId.map((e) => e).join(','),
       },
     ));
   }
@@ -4836,7 +4897,7 @@ class IssueNotificationSchemesApi {
   /// notifications for those events.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira,
-  /// however the user must have permission to administer at least one project
+  /// however, the user must have permission to administer at least one project
   /// associated with the notification scheme.
   Future<NotificationScheme> getNotificationScheme(
       {required int id, String? expand}) async {
@@ -4850,6 +4911,71 @@ class IssueNotificationSchemesApi {
         if (expand != null) 'expand': expand,
       },
     ));
+  }
+
+  /// Updates a notification scheme.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> updateNotificationScheme(
+      {required String id,
+      required UpdateNotificationSchemeDetails body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/notificationscheme/{id}',
+      pathParameters: {
+        'id': id,
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Adds notifications to a notifications scheme. You can add up to 1000
+  /// notifications per request.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> addNotifications(
+      {required String id, required AddNotificationsDetails body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/notificationscheme/{id}/notification',
+      pathParameters: {
+        'id': id,
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Deletes a notification scheme.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> deleteNotificationScheme(String notificationSchemeId) async {
+    return await _client.send(
+      'delete',
+      'rest/api/3/notificationscheme/{notificationSchemeId}',
+      pathParameters: {
+        'notificationSchemeId': notificationSchemeId,
+      },
+    );
+  }
+
+  /// Removes a notification from a notification scheme.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> removeNotificationFromNotificationScheme(
+      {required String notificationSchemeId,
+      required String notificationId}) async {
+    return await _client.send(
+      'delete',
+      'rest/api/3/notificationscheme/{notificationSchemeId}/notification/{notificationId}',
+      pathParameters: {
+        'notificationSchemeId': notificationSchemeId,
+        'notificationId': notificationId,
+      },
+    );
   }
 }
 
@@ -10238,12 +10364,16 @@ class ProjectsApi {
   /// |
   /// | `service_desk` |
   /// `com.atlassian.servicedesk:simplified-it-service-management`,
-  /// `com.atlassian.servicedesk:simplified-general-service-desk`,
+  /// `com.atlassian.servicedesk:simplified-general-service-desk-it`,
+  /// `com.atlassian.servicedesk:simplified-general-service-desk-business`,
   /// `com.atlassian.servicedesk:simplified-internal-service-desk`,
   /// `com.atlassian.servicedesk:simplified-external-service-desk`,
   /// `com.atlassian.servicedesk:simplified-hr-service-desk`,
   /// `com.atlassian.servicedesk:simplified-facilities-service-desk`,
-  /// `com.atlassian.servicedesk:simplified-legal-service-desk` |
+  /// `com.atlassian.servicedesk:simplified-legal-service-desk`,
+  /// `com.atlassian.servicedesk:simplified-analytics-service-desk`,
+  /// `com.atlassian.servicedesk:simplified-marketing-service-desk`,
+  /// `com.atlassian.servicedesk:simplified-finance-service-desk` |
   /// | `software` | `com.pyxis.greenhopper.jira:gh-simplified-agility-kanban`,
   /// `com.pyxis.greenhopper.jira:gh-simplified-agility-scrum`,
   /// `com.pyxis.greenhopper.jira:gh-simplified-basic`,
@@ -10466,7 +10596,8 @@ class ProjectsApi {
     ));
   }
 
-  /// Restores a project from the Jira recycle bin.
+  /// Restores a project that has been archived or placed in the Jira recycle
+  /// bin.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
@@ -10551,9 +10682,9 @@ class ProjectsApi {
   }
 
   /// Gets a [notification scheme](https://confluence.atlassian.com/x/8YdKLg)
-  /// associated with the project. See the
-  /// [Get notification scheme](#api-rest-api-3-notificationscheme-id-get)
-  /// resource for more information about notification schemes.
+  /// associated with the project. Deprecated, use
+  /// [Get notification schemes paginated](#api-rest-api-3-notificationscheme-get)
+  /// supporting search and pagination.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or
@@ -13136,8 +13267,7 @@ class WorkflowTransitionRulesApi {
   ///  *  matching one or more transition rule keys.
   ///
   /// Only workflows containing transition rules created by the calling Connect
-  /// app are returned. However, if a workflow is returned all transition rules
-  /// that match the filters are returned for that workflow.
+  /// app are returned.
   ///
   /// Due to server-side optimizations, workflows with an empty list of rules
   /// may be returned; these workflows can be ignored.
@@ -14321,6 +14451,43 @@ class AddGroupBean {
   }
 }
 
+/// Details of notifications which should be added to the notification scheme.
+class AddNotificationsDetails {
+  /// The list of notifications which should be added to the notification
+  /// scheme.
+  final List<NotificationSchemeEventDetails> notificationSchemeEvents;
+
+  AddNotificationsDetails({required this.notificationSchemeEvents});
+
+  factory AddNotificationsDetails.fromJson(Map<String, Object?> json) {
+    return AddNotificationsDetails(
+      notificationSchemeEvents:
+          (json[r'notificationSchemeEvents'] as List<Object?>?)
+                  ?.map((i) => NotificationSchemeEventDetails.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+                  .toList() ??
+              [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var notificationSchemeEvents = this.notificationSchemeEvents;
+
+    final json = <String, Object?>{};
+    json[r'notificationSchemeEvents'] =
+        notificationSchemeEvents.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  AddNotificationsDetails copyWith(
+      {List<NotificationSchemeEventDetails>? notificationSchemeEvents}) {
+    return AddNotificationsDetails(
+      notificationSchemeEvents:
+          notificationSchemeEvents ?? this.notificationSchemeEvents,
+    );
+  }
+}
+
 /// Announcement banner configuration.
 class AnnouncementBannerConfiguration {
   /// The text on the announcement banner.
@@ -15061,128 +15228,128 @@ class Attachment {
 }
 
 class AttachmentArchive {
-  final List<AttachmentArchiveEntry> entries;
   final bool moreAvailable;
-  final int? totalNumberOfEntriesAvailable;
   final int? totalEntryCount;
+  final int? totalNumberOfEntriesAvailable;
+  final List<AttachmentArchiveEntry> entries;
 
   AttachmentArchive(
-      {List<AttachmentArchiveEntry>? entries,
-      bool? moreAvailable,
+      {bool? moreAvailable,
+      this.totalEntryCount,
       this.totalNumberOfEntriesAvailable,
-      this.totalEntryCount})
-      : entries = entries ?? [],
-        moreAvailable = moreAvailable ?? false;
+      List<AttachmentArchiveEntry>? entries})
+      : moreAvailable = moreAvailable ?? false,
+        entries = entries ?? [];
 
   factory AttachmentArchive.fromJson(Map<String, Object?> json) {
     return AttachmentArchive(
+      moreAvailable: json[r'moreAvailable'] as bool? ?? false,
+      totalEntryCount: (json[r'totalEntryCount'] as num?)?.toInt(),
+      totalNumberOfEntriesAvailable:
+          (json[r'totalNumberOfEntriesAvailable'] as num?)?.toInt(),
       entries: (json[r'entries'] as List<Object?>?)
               ?.map((i) => AttachmentArchiveEntry.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      moreAvailable: json[r'moreAvailable'] as bool? ?? false,
-      totalNumberOfEntriesAvailable:
-          (json[r'totalNumberOfEntriesAvailable'] as num?)?.toInt(),
-      totalEntryCount: (json[r'totalEntryCount'] as num?)?.toInt(),
     );
   }
 
   Map<String, Object?> toJson() {
-    var entries = this.entries;
     var moreAvailable = this.moreAvailable;
-    var totalNumberOfEntriesAvailable = this.totalNumberOfEntriesAvailable;
     var totalEntryCount = this.totalEntryCount;
+    var totalNumberOfEntriesAvailable = this.totalNumberOfEntriesAvailable;
+    var entries = this.entries;
 
     final json = <String, Object?>{};
-    json[r'entries'] = entries.map((i) => i.toJson()).toList();
     json[r'moreAvailable'] = moreAvailable;
-    if (totalNumberOfEntriesAvailable != null) {
-      json[r'totalNumberOfEntriesAvailable'] = totalNumberOfEntriesAvailable;
-    }
     if (totalEntryCount != null) {
       json[r'totalEntryCount'] = totalEntryCount;
     }
+    if (totalNumberOfEntriesAvailable != null) {
+      json[r'totalNumberOfEntriesAvailable'] = totalNumberOfEntriesAvailable;
+    }
+    json[r'entries'] = entries.map((i) => i.toJson()).toList();
     return json;
   }
 
   AttachmentArchive copyWith(
-      {List<AttachmentArchiveEntry>? entries,
-      bool? moreAvailable,
+      {bool? moreAvailable,
+      int? totalEntryCount,
       int? totalNumberOfEntriesAvailable,
-      int? totalEntryCount}) {
+      List<AttachmentArchiveEntry>? entries}) {
     return AttachmentArchive(
-      entries: entries ?? this.entries,
       moreAvailable: moreAvailable ?? this.moreAvailable,
+      totalEntryCount: totalEntryCount ?? this.totalEntryCount,
       totalNumberOfEntriesAvailable:
           totalNumberOfEntriesAvailable ?? this.totalNumberOfEntriesAvailable,
-      totalEntryCount: totalEntryCount ?? this.totalEntryCount,
+      entries: entries ?? this.entries,
     );
   }
 }
 
 class AttachmentArchiveEntry {
+  final int? entryIndex;
+  final String? abbreviatedName;
+  final String? mediaType;
   final String? name;
   final int? size;
-  final String? mediaType;
-  final String? abbreviatedName;
-  final int? entryIndex;
 
   AttachmentArchiveEntry(
-      {this.name,
-      this.size,
-      this.mediaType,
+      {this.entryIndex,
       this.abbreviatedName,
-      this.entryIndex});
+      this.mediaType,
+      this.name,
+      this.size});
 
   factory AttachmentArchiveEntry.fromJson(Map<String, Object?> json) {
     return AttachmentArchiveEntry(
+      entryIndex: (json[r'entryIndex'] as num?)?.toInt(),
+      abbreviatedName: json[r'abbreviatedName'] as String?,
+      mediaType: json[r'mediaType'] as String?,
       name: json[r'name'] as String?,
       size: (json[r'size'] as num?)?.toInt(),
-      mediaType: json[r'mediaType'] as String?,
-      abbreviatedName: json[r'abbreviatedName'] as String?,
-      entryIndex: (json[r'entryIndex'] as num?)?.toInt(),
     );
   }
 
   Map<String, Object?> toJson() {
+    var entryIndex = this.entryIndex;
+    var abbreviatedName = this.abbreviatedName;
+    var mediaType = this.mediaType;
     var name = this.name;
     var size = this.size;
-    var mediaType = this.mediaType;
-    var abbreviatedName = this.abbreviatedName;
-    var entryIndex = this.entryIndex;
 
     final json = <String, Object?>{};
+    if (entryIndex != null) {
+      json[r'entryIndex'] = entryIndex;
+    }
+    if (abbreviatedName != null) {
+      json[r'abbreviatedName'] = abbreviatedName;
+    }
+    if (mediaType != null) {
+      json[r'mediaType'] = mediaType;
+    }
     if (name != null) {
       json[r'name'] = name;
     }
     if (size != null) {
       json[r'size'] = size;
     }
-    if (mediaType != null) {
-      json[r'mediaType'] = mediaType;
-    }
-    if (abbreviatedName != null) {
-      json[r'abbreviatedName'] = abbreviatedName;
-    }
-    if (entryIndex != null) {
-      json[r'entryIndex'] = entryIndex;
-    }
     return json;
   }
 
   AttachmentArchiveEntry copyWith(
-      {String? name,
-      int? size,
-      String? mediaType,
+      {int? entryIndex,
       String? abbreviatedName,
-      int? entryIndex}) {
+      String? mediaType,
+      String? name,
+      int? size}) {
     return AttachmentArchiveEntry(
+      entryIndex: entryIndex ?? this.entryIndex,
+      abbreviatedName: abbreviatedName ?? this.abbreviatedName,
+      mediaType: mediaType ?? this.mediaType,
       name: name ?? this.name,
       size: size ?? this.size,
-      mediaType: mediaType ?? this.mediaType,
-      abbreviatedName: abbreviatedName ?? this.abbreviatedName,
-      entryIndex: entryIndex ?? this.entryIndex,
     );
   }
 }
@@ -17199,17 +17366,8 @@ class ComponentWithIssueCount {
   /// Count of issues for the component.
   final int? issueCount;
 
-  /// The name for the component.
-  final String? name;
-
-  /// The unique identifier for the component.
-  final String? id;
-
   /// The description for the component.
   final String? description;
-
-  /// The URL for this count of the issues contained in the component.
-  final String? self;
 
   /// The key of the project to which the component is assigned.
   final String? project;
@@ -17241,14 +17399,12 @@ class ComponentWithIssueCount {
   /// this component.
   final User? assignee;
 
+  /// The URL for this count of the issues contained in the component.
+  final String? self;
+
   /// The user assigned to issues created with this component, when
   /// `assigneeType` does not identify a valid assignee.
   final User? realAssignee;
-
-  /// Whether a user is associated with `assigneeType`. For example, if the
-  /// `assigneeType` is set to `COMPONENT_LEAD` but the component lead is not
-  /// set, then `false` is returned.
-  final bool isAssigneeTypeValid;
 
   /// The type of the assignee that is assigned to issues created with this
   /// component, when an assignee cannot be set from the `assigneeType`. For
@@ -17266,29 +17422,37 @@ class ComponentWithIssueCount {
   ///  *  `PROJECT_DEFAULT` when none of the preceding cases are true.
   final ComponentWithIssueCountRealAssigneeType? realAssigneeType;
 
+  /// Whether a user is associated with `assigneeType`. For example, if the
+  /// `assigneeType` is set to `COMPONENT_LEAD` but the component lead is not
+  /// set, then `false` is returned.
+  final bool isAssigneeTypeValid;
+
+  /// The name for the component.
+  final String? name;
+
+  /// The unique identifier for the component.
+  final String? id;
+
   ComponentWithIssueCount(
       {this.issueCount,
-      this.name,
-      this.id,
       this.description,
-      this.self,
       this.project,
       this.lead,
       this.assigneeType,
       this.projectId,
       this.assignee,
+      this.self,
       this.realAssignee,
+      this.realAssigneeType,
       bool? isAssigneeTypeValid,
-      this.realAssigneeType})
+      this.name,
+      this.id})
       : isAssigneeTypeValid = isAssigneeTypeValid ?? false;
 
   factory ComponentWithIssueCount.fromJson(Map<String, Object?> json) {
     return ComponentWithIssueCount(
       issueCount: (json[r'issueCount'] as num?)?.toInt(),
-      name: json[r'name'] as String?,
-      id: json[r'id'] as String?,
       description: json[r'description'] as String?,
-      self: json[r'self'] as String?,
       project: json[r'project'] as String?,
       lead: json[r'lead'] != null
           ? User.fromJson(json[r'lead']! as Map<String, Object?>)
@@ -17301,47 +17465,41 @@ class ComponentWithIssueCount {
       assignee: json[r'assignee'] != null
           ? User.fromJson(json[r'assignee']! as Map<String, Object?>)
           : null,
+      self: json[r'self'] as String?,
       realAssignee: json[r'realAssignee'] != null
           ? User.fromJson(json[r'realAssignee']! as Map<String, Object?>)
           : null,
-      isAssigneeTypeValid: json[r'isAssigneeTypeValid'] as bool? ?? false,
       realAssigneeType: json[r'realAssigneeType'] != null
           ? ComponentWithIssueCountRealAssigneeType.fromValue(
               json[r'realAssigneeType']! as String)
           : null,
+      isAssigneeTypeValid: json[r'isAssigneeTypeValid'] as bool? ?? false,
+      name: json[r'name'] as String?,
+      id: json[r'id'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var issueCount = this.issueCount;
-    var name = this.name;
-    var id = this.id;
     var description = this.description;
-    var self = this.self;
     var project = this.project;
     var lead = this.lead;
     var assigneeType = this.assigneeType;
     var projectId = this.projectId;
     var assignee = this.assignee;
+    var self = this.self;
     var realAssignee = this.realAssignee;
-    var isAssigneeTypeValid = this.isAssigneeTypeValid;
     var realAssigneeType = this.realAssigneeType;
+    var isAssigneeTypeValid = this.isAssigneeTypeValid;
+    var name = this.name;
+    var id = this.id;
 
     final json = <String, Object?>{};
     if (issueCount != null) {
       json[r'issueCount'] = issueCount;
     }
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (id != null) {
-      json[r'id'] = id;
-    }
     if (description != null) {
       json[r'description'] = description;
-    }
-    if (self != null) {
-      json[r'self'] = self;
     }
     if (project != null) {
       json[r'project'] = project;
@@ -17358,44 +17516,53 @@ class ComponentWithIssueCount {
     if (assignee != null) {
       json[r'assignee'] = assignee.toJson();
     }
+    if (self != null) {
+      json[r'self'] = self;
+    }
     if (realAssignee != null) {
       json[r'realAssignee'] = realAssignee.toJson();
     }
-    json[r'isAssigneeTypeValid'] = isAssigneeTypeValid;
     if (realAssigneeType != null) {
       json[r'realAssigneeType'] = realAssigneeType.value;
+    }
+    json[r'isAssigneeTypeValid'] = isAssigneeTypeValid;
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (id != null) {
+      json[r'id'] = id;
     }
     return json;
   }
 
   ComponentWithIssueCount copyWith(
       {int? issueCount,
-      String? name,
-      String? id,
       String? description,
-      String? self,
       String? project,
       User? lead,
       ComponentWithIssueCountAssigneeType? assigneeType,
       int? projectId,
       User? assignee,
+      String? self,
       User? realAssignee,
+      ComponentWithIssueCountRealAssigneeType? realAssigneeType,
       bool? isAssigneeTypeValid,
-      ComponentWithIssueCountRealAssigneeType? realAssigneeType}) {
+      String? name,
+      String? id}) {
     return ComponentWithIssueCount(
       issueCount: issueCount ?? this.issueCount,
-      name: name ?? this.name,
-      id: id ?? this.id,
       description: description ?? this.description,
-      self: self ?? this.self,
       project: project ?? this.project,
       lead: lead ?? this.lead,
       assigneeType: assigneeType ?? this.assigneeType,
       projectId: projectId ?? this.projectId,
       assignee: assignee ?? this.assignee,
+      self: self ?? this.self,
       realAssignee: realAssignee ?? this.realAssignee,
-      isAssigneeTypeValid: isAssigneeTypeValid ?? this.isAssigneeTypeValid,
       realAssigneeType: realAssigneeType ?? this.realAssigneeType,
+      isAssigneeTypeValid: isAssigneeTypeValid ?? this.isAssigneeTypeValid,
+      name: name ?? this.name,
+      id: id ?? this.id,
     );
   }
 }
@@ -18359,6 +18526,65 @@ class CreateCustomFieldContext {
   }
 }
 
+/// Details of an notification scheme.
+class CreateNotificationSchemeDetails {
+  /// The name of the notification scheme. Must be unique (case-insensitive).
+  final String name;
+
+  /// The description of the notification scheme.
+  final String? description;
+
+  /// The list of notifications which should be added to the notification
+  /// scheme.
+  final List<NotificationSchemeEventDetails> notificationSchemeEvents;
+
+  CreateNotificationSchemeDetails(
+      {required this.name,
+      this.description,
+      List<NotificationSchemeEventDetails>? notificationSchemeEvents})
+      : notificationSchemeEvents = notificationSchemeEvents ?? [];
+
+  factory CreateNotificationSchemeDetails.fromJson(Map<String, Object?> json) {
+    return CreateNotificationSchemeDetails(
+      name: json[r'name'] as String? ?? '',
+      description: json[r'description'] as String?,
+      notificationSchemeEvents:
+          (json[r'notificationSchemeEvents'] as List<Object?>?)
+                  ?.map((i) => NotificationSchemeEventDetails.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+                  .toList() ??
+              [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var description = this.description;
+    var notificationSchemeEvents = this.notificationSchemeEvents;
+
+    final json = <String, Object?>{};
+    json[r'name'] = name;
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    json[r'notificationSchemeEvents'] =
+        notificationSchemeEvents.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  CreateNotificationSchemeDetails copyWith(
+      {String? name,
+      String? description,
+      List<NotificationSchemeEventDetails>? notificationSchemeEvents}) {
+    return CreateNotificationSchemeDetails(
+      name: name ?? this.name,
+      description: description ?? this.description,
+      notificationSchemeEvents:
+          notificationSchemeEvents ?? this.notificationSchemeEvents,
+    );
+  }
+}
+
 /// Details of an issue priority.
 class CreatePriorityDetails {
   /// The name of the priority. Must be unique.
@@ -18835,6 +19061,9 @@ class CreateProjectDetailsProjectTemplateKey {
   static const comAtlassianServicedeskSimplifiedAnalyticsServiceDesk =
       CreateProjectDetailsProjectTemplateKey._(
           'com.atlassian.servicedesk:simplified-analytics-service-desk');
+  static const comAtlassianServicedeskSimplifiedHalpServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:simplified-halp-service-desk');
   static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedContentManagement =
       CreateProjectDetailsProjectTemplateKey._(
           'com.atlassian.jira-core-project-templates:jira-core-simplified-content-management');
@@ -18878,6 +19107,7 @@ class CreateProjectDetailsProjectTemplateKey {
     comAtlassianServicedeskSimplifiedMarketingServiceDesk,
     comAtlassianServicedeskSimplifiedFinanceServiceDesk,
     comAtlassianServicedeskSimplifiedAnalyticsServiceDesk,
+    comAtlassianServicedeskSimplifiedHalpServiceDesk,
     comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedContentManagement,
     comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedDocumentApproval,
     comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedLeadTracking,
@@ -19604,7 +19834,10 @@ class CreatedIssue {
   /// The response code and messages related to any requested transition.
   final NestedResponse? transition;
 
-  CreatedIssue({this.id, this.key, this.self, this.transition});
+  /// The response code and messages related to any requested watchers.
+  final NestedResponse? watchers;
+
+  CreatedIssue({this.id, this.key, this.self, this.transition, this.watchers});
 
   factory CreatedIssue.fromJson(Map<String, Object?> json) {
     return CreatedIssue(
@@ -19615,6 +19848,9 @@ class CreatedIssue {
           ? NestedResponse.fromJson(
               json[r'transition']! as Map<String, Object?>)
           : null,
+      watchers: json[r'watchers'] != null
+          ? NestedResponse.fromJson(json[r'watchers']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -19623,6 +19859,7 @@ class CreatedIssue {
     var key = this.key;
     var self = this.self;
     var transition = this.transition;
+    var watchers = this.watchers;
 
     final json = <String, Object?>{};
     if (id != null) {
@@ -19637,16 +19874,24 @@ class CreatedIssue {
     if (transition != null) {
       json[r'transition'] = transition.toJson();
     }
+    if (watchers != null) {
+      json[r'watchers'] = watchers.toJson();
+    }
     return json;
   }
 
   CreatedIssue copyWith(
-      {String? id, String? key, String? self, NestedResponse? transition}) {
+      {String? id,
+      String? key,
+      String? self,
+      NestedResponse? transition,
+      NestedResponse? watchers}) {
     return CreatedIssue(
       id: id ?? this.id,
       key: key ?? this.key,
       self: self ?? this.self,
       transition: transition ?? this.transition,
+      watchers: watchers ?? this.watchers,
     );
   }
 }
@@ -20024,41 +20269,56 @@ class CustomFieldContextDefaultValueFloat {
 
 /// The default value for a Forge date time custom field.
 class CustomFieldContextDefaultValueForgeDateTimeField {
+  /// The ID of the context.
+  final String contextId;
+
   /// The default date-time in ISO format. Ignored if `useCurrent` is true.
   final String? dateTime;
 
   /// Whether to use the current date.
   final bool useCurrent;
+  final String type;
 
   CustomFieldContextDefaultValueForgeDateTimeField(
-      {this.dateTime, bool? useCurrent})
+      {required this.contextId,
+      this.dateTime,
+      bool? useCurrent,
+      required this.type})
       : useCurrent = useCurrent ?? false;
 
   factory CustomFieldContextDefaultValueForgeDateTimeField.fromJson(
       Map<String, Object?> json) {
     return CustomFieldContextDefaultValueForgeDateTimeField(
+      contextId: json[r'contextId'] as String? ?? '',
       dateTime: json[r'dateTime'] as String?,
       useCurrent: json[r'useCurrent'] as bool? ?? false,
+      type: json[r'type'] as String? ?? '',
     );
   }
 
   Map<String, Object?> toJson() {
+    var contextId = this.contextId;
     var dateTime = this.dateTime;
     var useCurrent = this.useCurrent;
+    var type = this.type;
 
     final json = <String, Object?>{};
+    json[r'contextId'] = contextId;
     if (dateTime != null) {
       json[r'dateTime'] = dateTime;
     }
     json[r'useCurrent'] = useCurrent;
+    json[r'type'] = type;
     return json;
   }
 
   CustomFieldContextDefaultValueForgeDateTimeField copyWith(
-      {String? dateTime, bool? useCurrent}) {
+      {String? contextId, String? dateTime, bool? useCurrent, String? type}) {
     return CustomFieldContextDefaultValueForgeDateTimeField(
+      contextId: contextId ?? this.contextId,
       dateTime: dateTime ?? this.dateTime,
       useCurrent: useCurrent ?? this.useCurrent,
+      type: type ?? this.type,
     );
   }
 }
@@ -20070,33 +20330,38 @@ class CustomFieldContextDefaultValueForgeGroupField {
 
   /// The ID of the the default group.
   final String groupId;
+  final String type;
 
   CustomFieldContextDefaultValueForgeGroupField(
-      {required this.contextId, required this.groupId});
+      {required this.contextId, required this.groupId, required this.type});
 
   factory CustomFieldContextDefaultValueForgeGroupField.fromJson(
       Map<String, Object?> json) {
     return CustomFieldContextDefaultValueForgeGroupField(
       contextId: json[r'contextId'] as String? ?? '',
       groupId: json[r'groupId'] as String? ?? '',
+      type: json[r'type'] as String? ?? '',
     );
   }
 
   Map<String, Object?> toJson() {
     var contextId = this.contextId;
     var groupId = this.groupId;
+    var type = this.type;
 
     final json = <String, Object?>{};
     json[r'contextId'] = contextId;
     json[r'groupId'] = groupId;
+    json[r'type'] = type;
     return json;
   }
 
   CustomFieldContextDefaultValueForgeGroupField copyWith(
-      {String? contextId, String? groupId}) {
+      {String? contextId, String? groupId, String? type}) {
     return CustomFieldContextDefaultValueForgeGroupField(
       contextId: contextId ?? this.contextId,
       groupId: groupId ?? this.groupId,
+      type: type ?? this.type,
     );
   }
 }
@@ -20108,9 +20373,10 @@ class CustomFieldContextDefaultValueForgeMultiGroupField {
 
   /// The IDs of the default groups.
   final List<String> groupIds;
+  final String type;
 
   CustomFieldContextDefaultValueForgeMultiGroupField(
-      {required this.contextId, required this.groupIds});
+      {required this.contextId, required this.groupIds, required this.type});
 
   factory CustomFieldContextDefaultValueForgeMultiGroupField.fromJson(
       Map<String, Object?> json) {
@@ -20120,24 +20386,28 @@ class CustomFieldContextDefaultValueForgeMultiGroupField {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
+      type: json[r'type'] as String? ?? '',
     );
   }
 
   Map<String, Object?> toJson() {
     var contextId = this.contextId;
     var groupIds = this.groupIds;
+    var type = this.type;
 
     final json = <String, Object?>{};
     json[r'contextId'] = contextId;
     json[r'groupIds'] = groupIds;
+    json[r'type'] = type;
     return json;
   }
 
   CustomFieldContextDefaultValueForgeMultiGroupField copyWith(
-      {String? contextId, List<String>? groupIds}) {
+      {String? contextId, List<String>? groupIds, String? type}) {
     return CustomFieldContextDefaultValueForgeMultiGroupField(
       contextId: contextId ?? this.contextId,
       groupIds: groupIds ?? this.groupIds,
+      type: type ?? this.type,
     );
   }
 }
@@ -20189,9 +20459,10 @@ class CustomFieldContextDefaultValueForgeMultiUserField {
 
   /// The IDs of the default users.
   final List<String> accountIds;
+  final String type;
 
   CustomFieldContextDefaultValueForgeMultiUserField(
-      {required this.contextId, required this.accountIds});
+      {required this.contextId, required this.accountIds, required this.type});
 
   factory CustomFieldContextDefaultValueForgeMultiUserField.fromJson(
       Map<String, Object?> json) {
@@ -20201,53 +20472,71 @@ class CustomFieldContextDefaultValueForgeMultiUserField {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
+      type: json[r'type'] as String? ?? '',
     );
   }
 
   Map<String, Object?> toJson() {
     var contextId = this.contextId;
     var accountIds = this.accountIds;
+    var type = this.type;
 
     final json = <String, Object?>{};
     json[r'contextId'] = contextId;
     json[r'accountIds'] = accountIds;
+    json[r'type'] = type;
     return json;
   }
 
   CustomFieldContextDefaultValueForgeMultiUserField copyWith(
-      {String? contextId, List<String>? accountIds}) {
+      {String? contextId, List<String>? accountIds, String? type}) {
     return CustomFieldContextDefaultValueForgeMultiUserField(
       contextId: contextId ?? this.contextId,
       accountIds: accountIds ?? this.accountIds,
+      type: type ?? this.type,
     );
   }
 }
 
 /// Default value for a Forge number custom field.
 class CustomFieldContextDefaultValueForgeNumberField {
+  /// The ID of the context.
+  final String contextId;
+
   /// The default floating-point number.
   final num number;
+  final String type;
 
-  CustomFieldContextDefaultValueForgeNumberField({required this.number});
+  CustomFieldContextDefaultValueForgeNumberField(
+      {required this.contextId, required this.number, required this.type});
 
   factory CustomFieldContextDefaultValueForgeNumberField.fromJson(
       Map<String, Object?> json) {
     return CustomFieldContextDefaultValueForgeNumberField(
+      contextId: json[r'contextId'] as String? ?? '',
       number: json[r'number'] as num? ?? 0,
+      type: json[r'type'] as String? ?? '',
     );
   }
 
   Map<String, Object?> toJson() {
+    var contextId = this.contextId;
     var number = this.number;
+    var type = this.type;
 
     final json = <String, Object?>{};
+    json[r'contextId'] = contextId;
     json[r'number'] = number;
+    json[r'type'] = type;
     return json;
   }
 
-  CustomFieldContextDefaultValueForgeNumberField copyWith({num? number}) {
+  CustomFieldContextDefaultValueForgeNumberField copyWith(
+      {String? contextId, num? number, String? type}) {
     return CustomFieldContextDefaultValueForgeNumberField(
+      contextId: contextId ?? this.contextId,
       number: number ?? this.number,
+      type: type ?? this.type,
     );
   }
 }
@@ -20292,31 +20581,45 @@ class CustomFieldContextDefaultValueForgeObjectField {
 
 /// The default text for a Forge string custom field.
 class CustomFieldContextDefaultValueForgeStringField {
+  /// The ID of the context.
+  final String contextId;
+
   /// The default text. The maximum length is 254 characters.
   final String? text;
+  final String type;
 
-  CustomFieldContextDefaultValueForgeStringField({this.text});
+  CustomFieldContextDefaultValueForgeStringField(
+      {required this.contextId, this.text, required this.type});
 
   factory CustomFieldContextDefaultValueForgeStringField.fromJson(
       Map<String, Object?> json) {
     return CustomFieldContextDefaultValueForgeStringField(
+      contextId: json[r'contextId'] as String? ?? '',
       text: json[r'text'] as String?,
+      type: json[r'type'] as String? ?? '',
     );
   }
 
   Map<String, Object?> toJson() {
+    var contextId = this.contextId;
     var text = this.text;
+    var type = this.type;
 
     final json = <String, Object?>{};
+    json[r'contextId'] = contextId;
     if (text != null) {
       json[r'text'] = text;
     }
+    json[r'type'] = type;
     return json;
   }
 
-  CustomFieldContextDefaultValueForgeStringField copyWith({String? text}) {
+  CustomFieldContextDefaultValueForgeStringField copyWith(
+      {String? contextId, String? text, String? type}) {
     return CustomFieldContextDefaultValueForgeStringField(
+      contextId: contextId ?? this.contextId,
       text: text ?? this.text,
+      type: type ?? this.type,
     );
   }
 }
@@ -20329,11 +20632,13 @@ class CustomFieldContextDefaultValueForgeUserField {
   /// The ID of the default user.
   final String accountId;
   final UserFilter userFilter;
+  final String type;
 
   CustomFieldContextDefaultValueForgeUserField(
       {required this.contextId,
       required this.accountId,
-      required this.userFilter});
+      required this.userFilter,
+      required this.type});
 
   factory CustomFieldContextDefaultValueForgeUserField.fromJson(
       Map<String, Object?> json) {
@@ -20342,6 +20647,7 @@ class CustomFieldContextDefaultValueForgeUserField {
       accountId: json[r'accountId'] as String? ?? '',
       userFilter: UserFilter.fromJson(
           json[r'userFilter'] as Map<String, Object?>? ?? const {}),
+      type: json[r'type'] as String? ?? '',
     );
   }
 
@@ -20349,20 +20655,26 @@ class CustomFieldContextDefaultValueForgeUserField {
     var contextId = this.contextId;
     var accountId = this.accountId;
     var userFilter = this.userFilter;
+    var type = this.type;
 
     final json = <String, Object?>{};
     json[r'contextId'] = contextId;
     json[r'accountId'] = accountId;
     json[r'userFilter'] = userFilter.toJson();
+    json[r'type'] = type;
     return json;
   }
 
   CustomFieldContextDefaultValueForgeUserField copyWith(
-      {String? contextId, String? accountId, UserFilter? userFilter}) {
+      {String? contextId,
+      String? accountId,
+      UserFilter? userFilter,
+      String? type}) {
     return CustomFieldContextDefaultValueForgeUserField(
       contextId: contextId ?? this.contextId,
       accountId: accountId ?? this.accountId,
       userFilter: userFilter ?? this.userFilter,
+      type: type ?? this.type,
     );
   }
 }
@@ -23077,6 +23389,9 @@ class Field {
 
   /// Number of contexts where the field is used.
   final int? contextsCount;
+
+  /// Number of projects where the field is used.
+  final int? projectsCount;
   final FieldLastUsed? lastUsed;
 
   Field(
@@ -23090,6 +23405,7 @@ class Field {
       this.searcherKey,
       this.screensCount,
       this.contextsCount,
+      this.projectsCount,
       this.lastUsed})
       : isLocked = isLocked ?? false,
         isUnscreenable = isUnscreenable ?? false;
@@ -23107,6 +23423,7 @@ class Field {
       searcherKey: json[r'searcherKey'] as String?,
       screensCount: (json[r'screensCount'] as num?)?.toInt(),
       contextsCount: (json[r'contextsCount'] as num?)?.toInt(),
+      projectsCount: (json[r'projectsCount'] as num?)?.toInt(),
       lastUsed: json[r'lastUsed'] != null
           ? FieldLastUsed.fromJson(json[r'lastUsed']! as Map<String, Object?>)
           : null,
@@ -23124,6 +23441,7 @@ class Field {
     var searcherKey = this.searcherKey;
     var screensCount = this.screensCount;
     var contextsCount = this.contextsCount;
+    var projectsCount = this.projectsCount;
     var lastUsed = this.lastUsed;
 
     final json = <String, Object?>{};
@@ -23147,6 +23465,9 @@ class Field {
     if (contextsCount != null) {
       json[r'contextsCount'] = contextsCount;
     }
+    if (projectsCount != null) {
+      json[r'projectsCount'] = projectsCount;
+    }
     if (lastUsed != null) {
       json[r'lastUsed'] = lastUsed.toJson();
     }
@@ -23164,6 +23485,7 @@ class Field {
       String? searcherKey,
       int? screensCount,
       int? contextsCount,
+      int? projectsCount,
       FieldLastUsed? lastUsed}) {
     return Field(
       id: id ?? this.id,
@@ -23176,6 +23498,7 @@ class Field {
       searcherKey: searcherKey ?? this.searcherKey,
       screensCount: screensCount ?? this.screensCount,
       contextsCount: contextsCount ?? this.contextsCount,
+      projectsCount: projectsCount ?? this.projectsCount,
       lastUsed: lastUsed ?? this.lastUsed,
     );
   }
@@ -26287,16 +26610,16 @@ class IdOrKeyBean {
 
 class IncludedFields {
   final List<String> excluded;
-  final List<String> included;
   final List<String> actuallyIncluded;
+  final List<String> included;
 
   IncludedFields(
       {List<String>? excluded,
-      List<String>? included,
-      List<String>? actuallyIncluded})
+      List<String>? actuallyIncluded,
+      List<String>? included})
       : excluded = excluded ?? [],
-        included = included ?? [],
-        actuallyIncluded = actuallyIncluded ?? [];
+        actuallyIncluded = actuallyIncluded ?? [],
+        included = included ?? [];
 
   factory IncludedFields.fromJson(Map<String, Object?> json) {
     return IncludedFields(
@@ -26304,11 +26627,11 @@ class IncludedFields {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      included: (json[r'included'] as List<Object?>?)
+      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
+      included: (json[r'included'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -26317,24 +26640,24 @@ class IncludedFields {
 
   Map<String, Object?> toJson() {
     var excluded = this.excluded;
-    var included = this.included;
     var actuallyIncluded = this.actuallyIncluded;
+    var included = this.included;
 
     final json = <String, Object?>{};
     json[r'excluded'] = excluded;
-    json[r'included'] = included;
     json[r'actuallyIncluded'] = actuallyIncluded;
+    json[r'included'] = included;
     return json;
   }
 
   IncludedFields copyWith(
       {List<String>? excluded,
-      List<String>? included,
-      List<String>? actuallyIncluded}) {
+      List<String>? actuallyIncluded,
+      List<String>? included}) {
     return IncludedFields(
       excluded: excluded ?? this.excluded,
-      included: included ?? this.included,
       actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
+      included: included ?? this.included,
     );
   }
 }
@@ -29381,7 +29704,6 @@ class IssueUpdateDetails {
 
 /// A list of editable field details.
 class IssueUpdateMetadata {
-  /// A list of editable field details.
   final Map<String, dynamic>? fields;
 
   IssueUpdateMetadata({this.fields});
@@ -31173,12 +31495,12 @@ class JsonContextVariable {
 }
 
 class JsonNode {
-  final bool array;
-  final Map<String, dynamic>? fields;
-  final bool null$;
   final Map<String, dynamic>? elements;
-  final bool containerNode;
+  final bool floatingPointNumber;
   final bool valueNode;
+  final bool containerNode;
+  final bool missingNode;
+  final bool object;
   final bool pojo;
   final bool number;
   final bool integralNumber;
@@ -31190,9 +31512,6 @@ class JsonNode {
   final bool textual;
   final bool boolean;
   final bool binary;
-  final bool object;
-  final bool missingNode;
-  final bool floatingPointNumber;
   final num? numberValue;
   final JsonNodeNumberType? numberType;
   final int? intValue;
@@ -31209,14 +31528,17 @@ class JsonNode {
   final Map<String, dynamic>? fieldNames;
   final String? textValue;
   final String? valueAsText;
+  final bool array;
+  final Map<String, dynamic>? fields;
+  final bool null$;
 
   JsonNode(
-      {bool? array,
-      this.fields,
-      bool? null$,
-      this.elements,
-      bool? containerNode,
+      {this.elements,
+      bool? floatingPointNumber,
       bool? valueNode,
+      bool? containerNode,
+      bool? missingNode,
+      bool? object,
       bool? pojo,
       bool? number,
       bool? integralNumber,
@@ -31228,9 +31550,6 @@ class JsonNode {
       bool? textual,
       bool? boolean,
       bool? binary,
-      bool? object,
-      bool? missingNode,
-      bool? floatingPointNumber,
       this.numberValue,
       this.numberType,
       this.intValue,
@@ -31246,11 +31565,15 @@ class JsonNode {
       bool? valueAsBoolean,
       this.fieldNames,
       this.textValue,
-      this.valueAsText})
-      : array = array ?? false,
-        null$ = null$ ?? false,
-        containerNode = containerNode ?? false,
+      this.valueAsText,
+      bool? array,
+      this.fields,
+      bool? null$})
+      : floatingPointNumber = floatingPointNumber ?? false,
         valueNode = valueNode ?? false,
+        containerNode = containerNode ?? false,
+        missingNode = missingNode ?? false,
+        object = object ?? false,
         pojo = pojo ?? false,
         number = number ?? false,
         integralNumber = integralNumber ?? false,
@@ -31262,21 +31585,20 @@ class JsonNode {
         textual = textual ?? false,
         boolean = boolean ?? false,
         binary = binary ?? false,
-        object = object ?? false,
-        missingNode = missingNode ?? false,
-        floatingPointNumber = floatingPointNumber ?? false,
         booleanValue = booleanValue ?? false,
         binaryValue = binaryValue ?? [],
-        valueAsBoolean = valueAsBoolean ?? false;
+        valueAsBoolean = valueAsBoolean ?? false,
+        array = array ?? false,
+        null$ = null$ ?? false;
 
   factory JsonNode.fromJson(Map<String, Object?> json) {
     return JsonNode(
-      array: json[r'array'] as bool? ?? false,
-      fields: json[r'fields'] as Map<String, Object?>?,
-      null$: json[r'null'] as bool? ?? false,
       elements: json[r'elements'] as Map<String, Object?>?,
-      containerNode: json[r'containerNode'] as bool? ?? false,
+      floatingPointNumber: json[r'floatingPointNumber'] as bool? ?? false,
       valueNode: json[r'valueNode'] as bool? ?? false,
+      containerNode: json[r'containerNode'] as bool? ?? false,
+      missingNode: json[r'missingNode'] as bool? ?? false,
+      object: json[r'object'] as bool? ?? false,
       pojo: json[r'pojo'] as bool? ?? false,
       number: json[r'number'] as bool? ?? false,
       integralNumber: json[r'integralNumber'] as bool? ?? false,
@@ -31288,9 +31610,6 @@ class JsonNode {
       textual: json[r'textual'] as bool? ?? false,
       boolean: json[r'boolean'] as bool? ?? false,
       binary: json[r'binary'] as bool? ?? false,
-      object: json[r'object'] as bool? ?? false,
-      missingNode: json[r'missingNode'] as bool? ?? false,
-      floatingPointNumber: json[r'floatingPointNumber'] as bool? ?? false,
       numberValue: json[r'numberValue'] as num?,
       numberType: json[r'numberType'] != null
           ? JsonNodeNumberType.fromValue(json[r'numberType']! as String)
@@ -31312,16 +31631,19 @@ class JsonNode {
       fieldNames: json[r'fieldNames'] as Map<String, Object?>?,
       textValue: json[r'textValue'] as String?,
       valueAsText: json[r'valueAsText'] as String?,
+      array: json[r'array'] as bool? ?? false,
+      fields: json[r'fields'] as Map<String, Object?>?,
+      null$: json[r'null'] as bool? ?? false,
     );
   }
 
   Map<String, Object?> toJson() {
-    var array = this.array;
-    var fields = this.fields;
-    var null$ = this.null$;
     var elements = this.elements;
-    var containerNode = this.containerNode;
+    var floatingPointNumber = this.floatingPointNumber;
     var valueNode = this.valueNode;
+    var containerNode = this.containerNode;
+    var missingNode = this.missingNode;
+    var object = this.object;
     var pojo = this.pojo;
     var number = this.number;
     var integralNumber = this.integralNumber;
@@ -31333,9 +31655,6 @@ class JsonNode {
     var textual = this.textual;
     var boolean = this.boolean;
     var binary = this.binary;
-    var object = this.object;
-    var missingNode = this.missingNode;
-    var floatingPointNumber = this.floatingPointNumber;
     var numberValue = this.numberValue;
     var numberType = this.numberType;
     var intValue = this.intValue;
@@ -31352,18 +31671,19 @@ class JsonNode {
     var fieldNames = this.fieldNames;
     var textValue = this.textValue;
     var valueAsText = this.valueAsText;
+    var array = this.array;
+    var fields = this.fields;
+    var null$ = this.null$;
 
     final json = <String, Object?>{};
-    json[r'array'] = array;
-    if (fields != null) {
-      json[r'fields'] = fields;
-    }
-    json[r'null'] = null$;
     if (elements != null) {
       json[r'elements'] = elements;
     }
-    json[r'containerNode'] = containerNode;
+    json[r'floatingPointNumber'] = floatingPointNumber;
     json[r'valueNode'] = valueNode;
+    json[r'containerNode'] = containerNode;
+    json[r'missingNode'] = missingNode;
+    json[r'object'] = object;
     json[r'pojo'] = pojo;
     json[r'number'] = number;
     json[r'integralNumber'] = integralNumber;
@@ -31375,9 +31695,6 @@ class JsonNode {
     json[r'textual'] = textual;
     json[r'boolean'] = boolean;
     json[r'binary'] = binary;
-    json[r'object'] = object;
-    json[r'missingNode'] = missingNode;
-    json[r'floatingPointNumber'] = floatingPointNumber;
     if (numberValue != null) {
       json[r'numberValue'] = numberValue;
     }
@@ -31420,16 +31737,21 @@ class JsonNode {
     if (valueAsText != null) {
       json[r'valueAsText'] = valueAsText;
     }
+    json[r'array'] = array;
+    if (fields != null) {
+      json[r'fields'] = fields;
+    }
+    json[r'null'] = null$;
     return json;
   }
 
   JsonNode copyWith(
-      {bool? array,
-      Map<String, dynamic>? fields,
-      bool? null$,
-      Map<String, dynamic>? elements,
-      bool? containerNode,
+      {Map<String, dynamic>? elements,
+      bool? floatingPointNumber,
       bool? valueNode,
+      bool? containerNode,
+      bool? missingNode,
+      bool? object,
       bool? pojo,
       bool? number,
       bool? integralNumber,
@@ -31441,9 +31763,6 @@ class JsonNode {
       bool? textual,
       bool? boolean,
       bool? binary,
-      bool? object,
-      bool? missingNode,
-      bool? floatingPointNumber,
       num? numberValue,
       JsonNodeNumberType? numberType,
       int? intValue,
@@ -31459,14 +31778,17 @@ class JsonNode {
       bool? valueAsBoolean,
       Map<String, dynamic>? fieldNames,
       String? textValue,
-      String? valueAsText}) {
+      String? valueAsText,
+      bool? array,
+      Map<String, dynamic>? fields,
+      bool? null$}) {
     return JsonNode(
-      array: array ?? this.array,
-      fields: fields ?? this.fields,
-      null$: null$ ?? this.null$,
       elements: elements ?? this.elements,
-      containerNode: containerNode ?? this.containerNode,
+      floatingPointNumber: floatingPointNumber ?? this.floatingPointNumber,
       valueNode: valueNode ?? this.valueNode,
+      containerNode: containerNode ?? this.containerNode,
+      missingNode: missingNode ?? this.missingNode,
+      object: object ?? this.object,
       pojo: pojo ?? this.pojo,
       number: number ?? this.number,
       integralNumber: integralNumber ?? this.integralNumber,
@@ -31478,9 +31800,6 @@ class JsonNode {
       textual: textual ?? this.textual,
       boolean: boolean ?? this.boolean,
       binary: binary ?? this.binary,
-      object: object ?? this.object,
-      missingNode: missingNode ?? this.missingNode,
-      floatingPointNumber: floatingPointNumber ?? this.floatingPointNumber,
       numberValue: numberValue ?? this.numberValue,
       numberType: numberType ?? this.numberType,
       intValue: intValue ?? this.intValue,
@@ -31497,6 +31816,9 @@ class JsonNode {
       fieldNames: fieldNames ?? this.fieldNames,
       textValue: textValue ?? this.textValue,
       valueAsText: valueAsText ?? this.valueAsText,
+      array: array ?? this.array,
+      fields: fields ?? this.fields,
+      null$: null$ ?? this.null$,
     );
   }
 }
@@ -32738,6 +33060,9 @@ class NotificationScheme {
   /// The scope of the notification scheme.
   final Scope? scope;
 
+  /// The list of project IDs associated with the notification scheme.
+  final List<int> projects;
+
   NotificationScheme(
       {this.expand,
       this.id,
@@ -32745,8 +33070,10 @@ class NotificationScheme {
       this.name,
       this.description,
       List<NotificationSchemeEvent>? notificationSchemeEvents,
-      this.scope})
-      : notificationSchemeEvents = notificationSchemeEvents ?? [];
+      this.scope,
+      List<int>? projects})
+      : notificationSchemeEvents = notificationSchemeEvents ?? [],
+        projects = projects ?? [];
 
   factory NotificationScheme.fromJson(Map<String, Object?> json) {
     return NotificationScheme(
@@ -32764,6 +33091,10 @@ class NotificationScheme {
       scope: json[r'scope'] != null
           ? Scope.fromJson(json[r'scope']! as Map<String, Object?>)
           : null,
+      projects: (json[r'projects'] as List<Object?>?)
+              ?.map((i) => (i as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
     );
   }
 
@@ -32775,6 +33106,7 @@ class NotificationScheme {
     var description = this.description;
     var notificationSchemeEvents = this.notificationSchemeEvents;
     var scope = this.scope;
+    var projects = this.projects;
 
     final json = <String, Object?>{};
     if (expand != null) {
@@ -32797,6 +33129,7 @@ class NotificationScheme {
     if (scope != null) {
       json[r'scope'] = scope.toJson();
     }
+    json[r'projects'] = projects;
     return json;
   }
 
@@ -32807,7 +33140,8 @@ class NotificationScheme {
       String? name,
       String? description,
       List<NotificationSchemeEvent>? notificationSchemeEvents,
-      Scope? scope}) {
+      Scope? scope,
+      List<int>? projects}) {
     return NotificationScheme(
       expand: expand ?? this.expand,
       id: id ?? this.id,
@@ -32817,6 +33151,45 @@ class NotificationScheme {
       notificationSchemeEvents:
           notificationSchemeEvents ?? this.notificationSchemeEvents,
       scope: scope ?? this.scope,
+      projects: projects ?? this.projects,
+    );
+  }
+}
+
+class NotificationSchemeAndProjectMappingJsonBean {
+  final String? notificationSchemeId;
+  final String? projectId;
+
+  NotificationSchemeAndProjectMappingJsonBean(
+      {this.notificationSchemeId, this.projectId});
+
+  factory NotificationSchemeAndProjectMappingJsonBean.fromJson(
+      Map<String, Object?> json) {
+    return NotificationSchemeAndProjectMappingJsonBean(
+      notificationSchemeId: json[r'notificationSchemeId'] as String?,
+      projectId: json[r'projectId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var notificationSchemeId = this.notificationSchemeId;
+    var projectId = this.projectId;
+
+    final json = <String, Object?>{};
+    if (notificationSchemeId != null) {
+      json[r'notificationSchemeId'] = notificationSchemeId;
+    }
+    if (projectId != null) {
+      json[r'projectId'] = projectId;
+    }
+    return json;
+  }
+
+  NotificationSchemeAndProjectMappingJsonBean copyWith(
+      {String? notificationSchemeId, String? projectId}) {
+    return NotificationSchemeAndProjectMappingJsonBean(
+      notificationSchemeId: notificationSchemeId ?? this.notificationSchemeId,
+      projectId: projectId ?? this.projectId,
     );
   }
 }
@@ -32859,6 +33232,145 @@ class NotificationSchemeEvent {
     return NotificationSchemeEvent(
       event: event ?? this.event,
       notifications: notifications ?? this.notifications,
+    );
+  }
+}
+
+/// Details of a notification scheme event.
+class NotificationSchemeEventDetails {
+  /// The ID of the event.
+  final NotificationSchemeEventTypeId event;
+
+  /// The list of notifications mapped to a specified event.
+  final List<NotificationSchemeNotificationDetails> notifications;
+
+  NotificationSchemeEventDetails(
+      {required this.event, required this.notifications});
+
+  factory NotificationSchemeEventDetails.fromJson(Map<String, Object?> json) {
+    return NotificationSchemeEventDetails(
+      event: NotificationSchemeEventTypeId.fromJson(
+          json[r'event'] as Map<String, Object?>? ?? const {}),
+      notifications: (json[r'notifications'] as List<Object?>?)
+              ?.map((i) => NotificationSchemeNotificationDetails.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var event = this.event;
+    var notifications = this.notifications;
+
+    final json = <String, Object?>{};
+    json[r'event'] = event.toJson();
+    json[r'notifications'] = notifications.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  NotificationSchemeEventDetails copyWith(
+      {NotificationSchemeEventTypeId? event,
+      List<NotificationSchemeNotificationDetails>? notifications}) {
+    return NotificationSchemeEventDetails(
+      event: event ?? this.event,
+      notifications: notifications ?? this.notifications,
+    );
+  }
+}
+
+/// The ID of an event that is being mapped to notifications.
+class NotificationSchemeEventTypeId {
+  /// The ID of the notification scheme event.
+  final String id;
+
+  NotificationSchemeEventTypeId({required this.id});
+
+  factory NotificationSchemeEventTypeId.fromJson(Map<String, Object?> json) {
+    return NotificationSchemeEventTypeId(
+      id: json[r'id'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    return json;
+  }
+
+  NotificationSchemeEventTypeId copyWith({String? id}) {
+    return NotificationSchemeEventTypeId(
+      id: id ?? this.id,
+    );
+  }
+}
+
+/// The ID of a notification scheme.
+class NotificationSchemeId {
+  /// The ID of a notification scheme.
+  final String id;
+
+  NotificationSchemeId({required this.id});
+
+  factory NotificationSchemeId.fromJson(Map<String, Object?> json) {
+    return NotificationSchemeId(
+      id: json[r'id'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    return json;
+  }
+
+  NotificationSchemeId copyWith({String? id}) {
+    return NotificationSchemeId(
+      id: id ?? this.id,
+    );
+  }
+}
+
+/// Details of a notification within a notification scheme.
+class NotificationSchemeNotificationDetails {
+  /// The notification type, e.g `CurrentAssignee`, `Group`, `EmailAddress`.
+  final String notificationType;
+
+  /// The value corresponding to the specified notification type.
+  final String? parameter;
+
+  NotificationSchemeNotificationDetails(
+      {required this.notificationType, this.parameter});
+
+  factory NotificationSchemeNotificationDetails.fromJson(
+      Map<String, Object?> json) {
+    return NotificationSchemeNotificationDetails(
+      notificationType: json[r'notificationType'] as String? ?? '',
+      parameter: json[r'parameter'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var notificationType = this.notificationType;
+    var parameter = this.parameter;
+
+    final json = <String, Object?>{};
+    json[r'notificationType'] = notificationType;
+    if (parameter != null) {
+      json[r'parameter'] = parameter;
+    }
+    return json;
+  }
+
+  NotificationSchemeNotificationDetails copyWith(
+      {String? notificationType, String? parameter}) {
+    return NotificationSchemeNotificationDetails(
+      notificationType: notificationType ?? this.notificationType,
+      parameter: parameter ?? this.parameter,
     );
   }
 }
@@ -36004,6 +36516,107 @@ class PageBeanNotificationScheme {
 }
 
 /// A page of items.
+class PageBeanNotificationSchemeAndProjectMappingJsonBean {
+  /// The URL of the page.
+  final String? self;
+
+  /// If there is another page of results, the URL of the next page.
+  final String? nextPage;
+
+  /// The maximum number of items that could be returned.
+  final int? maxResults;
+
+  /// The index of the first item returned.
+  final int? startAt;
+
+  /// The number of items returned.
+  final int? total;
+
+  /// Whether this is the last page.
+  final bool isLast;
+
+  /// The list of items.
+  final List<NotificationSchemeAndProjectMappingJsonBean> values;
+
+  PageBeanNotificationSchemeAndProjectMappingJsonBean(
+      {this.self,
+      this.nextPage,
+      this.maxResults,
+      this.startAt,
+      this.total,
+      bool? isLast,
+      List<NotificationSchemeAndProjectMappingJsonBean>? values})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageBeanNotificationSchemeAndProjectMappingJsonBean.fromJson(
+      Map<String, Object?> json) {
+    return PageBeanNotificationSchemeAndProjectMappingJsonBean(
+      self: json[r'self'] as String?,
+      nextPage: json[r'nextPage'] as String?,
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      isLast: json[r'isLast'] as bool? ?? false,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => NotificationSchemeAndProjectMappingJsonBean.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var self = this.self;
+    var nextPage = this.nextPage;
+    var maxResults = this.maxResults;
+    var startAt = this.startAt;
+    var total = this.total;
+    var isLast = this.isLast;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (nextPage != null) {
+      json[r'nextPage'] = nextPage;
+    }
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'isLast'] = isLast;
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageBeanNotificationSchemeAndProjectMappingJsonBean copyWith(
+      {String? self,
+      String? nextPage,
+      int? maxResults,
+      int? startAt,
+      int? total,
+      bool? isLast,
+      List<NotificationSchemeAndProjectMappingJsonBean>? values}) {
+    return PageBeanNotificationSchemeAndProjectMappingJsonBean(
+      self: self ?? this.self,
+      nextPage: nextPage ?? this.nextPage,
+      maxResults: maxResults ?? this.maxResults,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      isLast: isLast ?? this.isLast,
+      values: values ?? this.values,
+    );
+  }
+}
+
+/// A page of items.
 class PageBeanPriority {
   /// The URL of the page.
   final String? self;
@@ -38160,20 +38773,20 @@ class PagedListUserDetailsApplicationUser {
 }
 
 class PaginatedResponseComment {
-  final int? total;
   final int? maxResults;
   final int? startAt;
+  final int? total;
   final List<Comment> results;
 
   PaginatedResponseComment(
-      {this.total, this.maxResults, this.startAt, List<Comment>? results})
+      {this.maxResults, this.startAt, this.total, List<Comment>? results})
       : results = results ?? [];
 
   factory PaginatedResponseComment.fromJson(Map<String, Object?> json) {
     return PaginatedResponseComment(
-      total: (json[r'total'] as num?)?.toInt(),
       maxResults: (json[r'maxResults'] as num?)?.toInt(),
       startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
       results: (json[r'results'] as List<Object?>?)
               ?.map((i) =>
                   Comment.fromJson(i as Map<String, Object?>? ?? const {}))
@@ -38183,31 +38796,31 @@ class PaginatedResponseComment {
   }
 
   Map<String, Object?> toJson() {
-    var total = this.total;
     var maxResults = this.maxResults;
     var startAt = this.startAt;
+    var total = this.total;
     var results = this.results;
 
     final json = <String, Object?>{};
-    if (total != null) {
-      json[r'total'] = total;
-    }
     if (maxResults != null) {
       json[r'maxResults'] = maxResults;
     }
     if (startAt != null) {
       json[r'startAt'] = startAt;
     }
+    if (total != null) {
+      json[r'total'] = total;
+    }
     json[r'results'] = results.map((i) => i.toJson()).toList();
     return json;
   }
 
   PaginatedResponseComment copyWith(
-      {int? total, int? maxResults, int? startAt, List<Comment>? results}) {
+      {int? maxResults, int? startAt, int? total, List<Comment>? results}) {
     return PaginatedResponseComment(
-      total: total ?? this.total,
       maxResults: maxResults ?? this.maxResults,
       startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
       results: results ?? this.results,
     );
   }
@@ -40645,27 +41258,27 @@ class ProjectLandingPageInfo {
   final String? url;
   final String? projectKey;
   final String? projectType;
-  final Map<String, dynamic>? attributes;
   final bool simplified;
   final int? boardId;
+  final String? boardName;
+  final bool simpleBoard;
   final int? queueId;
   final String? queueName;
   final String? queueCategory;
-  final String? boardName;
-  final bool simpleBoard;
+  final Map<String, dynamic>? attributes;
 
   ProjectLandingPageInfo(
       {this.url,
       this.projectKey,
       this.projectType,
-      this.attributes,
       bool? simplified,
       this.boardId,
+      this.boardName,
+      bool? simpleBoard,
       this.queueId,
       this.queueName,
       this.queueCategory,
-      this.boardName,
-      bool? simpleBoard})
+      this.attributes})
       : simplified = simplified ?? false,
         simpleBoard = simpleBoard ?? false;
 
@@ -40674,14 +41287,14 @@ class ProjectLandingPageInfo {
       url: json[r'url'] as String?,
       projectKey: json[r'projectKey'] as String?,
       projectType: json[r'projectType'] as String?,
-      attributes: json[r'attributes'] as Map<String, Object?>?,
       simplified: json[r'simplified'] as bool? ?? false,
       boardId: (json[r'boardId'] as num?)?.toInt(),
+      boardName: json[r'boardName'] as String?,
+      simpleBoard: json[r'simpleBoard'] as bool? ?? false,
       queueId: (json[r'queueId'] as num?)?.toInt(),
       queueName: json[r'queueName'] as String?,
       queueCategory: json[r'queueCategory'] as String?,
-      boardName: json[r'boardName'] as String?,
-      simpleBoard: json[r'simpleBoard'] as bool? ?? false,
+      attributes: json[r'attributes'] as Map<String, Object?>?,
     );
   }
 
@@ -40689,14 +41302,14 @@ class ProjectLandingPageInfo {
     var url = this.url;
     var projectKey = this.projectKey;
     var projectType = this.projectType;
-    var attributes = this.attributes;
     var simplified = this.simplified;
     var boardId = this.boardId;
+    var boardName = this.boardName;
+    var simpleBoard = this.simpleBoard;
     var queueId = this.queueId;
     var queueName = this.queueName;
     var queueCategory = this.queueCategory;
-    var boardName = this.boardName;
-    var simpleBoard = this.simpleBoard;
+    var attributes = this.attributes;
 
     final json = <String, Object?>{};
     if (url != null) {
@@ -40708,13 +41321,14 @@ class ProjectLandingPageInfo {
     if (projectType != null) {
       json[r'projectType'] = projectType;
     }
-    if (attributes != null) {
-      json[r'attributes'] = attributes;
-    }
     json[r'simplified'] = simplified;
     if (boardId != null) {
       json[r'boardId'] = boardId;
     }
+    if (boardName != null) {
+      json[r'boardName'] = boardName;
+    }
+    json[r'simpleBoard'] = simpleBoard;
     if (queueId != null) {
       json[r'queueId'] = queueId;
     }
@@ -40724,10 +41338,9 @@ class ProjectLandingPageInfo {
     if (queueCategory != null) {
       json[r'queueCategory'] = queueCategory;
     }
-    if (boardName != null) {
-      json[r'boardName'] = boardName;
+    if (attributes != null) {
+      json[r'attributes'] = attributes;
     }
-    json[r'simpleBoard'] = simpleBoard;
     return json;
   }
 
@@ -40735,26 +41348,26 @@ class ProjectLandingPageInfo {
       {String? url,
       String? projectKey,
       String? projectType,
-      Map<String, dynamic>? attributes,
       bool? simplified,
       int? boardId,
+      String? boardName,
+      bool? simpleBoard,
       int? queueId,
       String? queueName,
       String? queueCategory,
-      String? boardName,
-      bool? simpleBoard}) {
+      Map<String, dynamic>? attributes}) {
     return ProjectLandingPageInfo(
       url: url ?? this.url,
       projectKey: projectKey ?? this.projectKey,
       projectType: projectType ?? this.projectType,
-      attributes: attributes ?? this.attributes,
       simplified: simplified ?? this.simplified,
       boardId: boardId ?? this.boardId,
+      boardName: boardName ?? this.boardName,
+      simpleBoard: simpleBoard ?? this.simpleBoard,
       queueId: queueId ?? this.queueId,
       queueName: queueName ?? this.queueName,
       queueCategory: queueCategory ?? this.queueCategory,
-      boardName: boardName ?? this.boardName,
-      simpleBoard: simpleBoard ?? this.simpleBoard,
+      attributes: attributes ?? this.attributes,
     );
   }
 }
@@ -42169,47 +42782,47 @@ class RestrictedPermission {
 }
 
 class RichText {
-  final bool empty;
   final bool emptyAdf;
-  final bool valueSet;
   final bool finalised;
+  final bool valueSet;
+  final bool empty;
 
-  RichText({bool? empty, bool? emptyAdf, bool? valueSet, bool? finalised})
-      : empty = empty ?? false,
-        emptyAdf = emptyAdf ?? false,
+  RichText({bool? emptyAdf, bool? finalised, bool? valueSet, bool? empty})
+      : emptyAdf = emptyAdf ?? false,
+        finalised = finalised ?? false,
         valueSet = valueSet ?? false,
-        finalised = finalised ?? false;
+        empty = empty ?? false;
 
   factory RichText.fromJson(Map<String, Object?> json) {
     return RichText(
-      empty: json[r'empty'] as bool? ?? false,
       emptyAdf: json[r'emptyAdf'] as bool? ?? false,
-      valueSet: json[r'valueSet'] as bool? ?? false,
       finalised: json[r'finalised'] as bool? ?? false,
+      valueSet: json[r'valueSet'] as bool? ?? false,
+      empty: json[r'empty'] as bool? ?? false,
     );
   }
 
   Map<String, Object?> toJson() {
-    var empty = this.empty;
     var emptyAdf = this.emptyAdf;
-    var valueSet = this.valueSet;
     var finalised = this.finalised;
+    var valueSet = this.valueSet;
+    var empty = this.empty;
 
     final json = <String, Object?>{};
-    json[r'empty'] = empty;
     json[r'emptyAdf'] = emptyAdf;
-    json[r'valueSet'] = valueSet;
     json[r'finalised'] = finalised;
+    json[r'valueSet'] = valueSet;
+    json[r'empty'] = empty;
     return json;
   }
 
   RichText copyWith(
-      {bool? empty, bool? emptyAdf, bool? valueSet, bool? finalised}) {
+      {bool? emptyAdf, bool? finalised, bool? valueSet, bool? empty}) {
     return RichText(
-      empty: empty ?? this.empty,
       emptyAdf: emptyAdf ?? this.emptyAdf,
-      valueSet: valueSet ?? this.valueSet,
       finalised: finalised ?? this.finalised,
+      valueSet: valueSet ?? this.valueSet,
+      empty: empty ?? this.empty,
     );
   }
 }
@@ -43391,7 +44004,20 @@ class SecurityLevel {
   /// The name of the issue level security item.
   final String? name;
 
-  SecurityLevel({this.self, this.id, this.description, this.name});
+  /// Whether the issue level security item is the default.
+  final bool isDefault;
+
+  /// The ID of the issue level security scheme.
+  final String? issueSecuritySchemeId;
+
+  SecurityLevel(
+      {this.self,
+      this.id,
+      this.description,
+      this.name,
+      bool? isDefault,
+      this.issueSecuritySchemeId})
+      : isDefault = isDefault ?? false;
 
   factory SecurityLevel.fromJson(Map<String, Object?> json) {
     return SecurityLevel(
@@ -43399,6 +44025,8 @@ class SecurityLevel {
       id: json[r'id'] as String?,
       description: json[r'description'] as String?,
       name: json[r'name'] as String?,
+      isDefault: json[r'isDefault'] as bool? ?? false,
+      issueSecuritySchemeId: json[r'issueSecuritySchemeId'] as String?,
     );
   }
 
@@ -43407,6 +44035,8 @@ class SecurityLevel {
     var id = this.id;
     var description = this.description;
     var name = this.name;
+    var isDefault = this.isDefault;
+    var issueSecuritySchemeId = this.issueSecuritySchemeId;
 
     final json = <String, Object?>{};
     if (self != null) {
@@ -43421,16 +44051,28 @@ class SecurityLevel {
     if (name != null) {
       json[r'name'] = name;
     }
+    json[r'isDefault'] = isDefault;
+    if (issueSecuritySchemeId != null) {
+      json[r'issueSecuritySchemeId'] = issueSecuritySchemeId;
+    }
     return json;
   }
 
   SecurityLevel copyWith(
-      {String? self, String? id, String? description, String? name}) {
+      {String? self,
+      String? id,
+      String? description,
+      String? name,
+      bool? isDefault,
+      String? issueSecuritySchemeId}) {
     return SecurityLevel(
       self: self ?? this.self,
       id: id ?? this.id,
       description: description ?? this.description,
       name: name ?? this.name,
+      isDefault: isDefault ?? this.isDefault,
+      issueSecuritySchemeId:
+          issueSecuritySchemeId ?? this.issueSecuritySchemeId,
     );
   }
 }
@@ -46569,6 +47211,46 @@ class UpdateFieldConfigurationSchemeDetails {
   UpdateFieldConfigurationSchemeDetails copyWith(
       {String? name, String? description}) {
     return UpdateFieldConfigurationSchemeDetails(
+      name: name ?? this.name,
+      description: description ?? this.description,
+    );
+  }
+}
+
+/// Details of a notification scheme.
+class UpdateNotificationSchemeDetails {
+  /// The name of the notification scheme. Must be unique.
+  final String? name;
+
+  /// The description of the notification scheme.
+  final String? description;
+
+  UpdateNotificationSchemeDetails({this.name, this.description});
+
+  factory UpdateNotificationSchemeDetails.fromJson(Map<String, Object?> json) {
+    return UpdateNotificationSchemeDetails(
+      name: json[r'name'] as String?,
+      description: json[r'description'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var description = this.description;
+
+    final json = <String, Object?>{};
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    return json;
+  }
+
+  UpdateNotificationSchemeDetails copyWith(
+      {String? name, String? description}) {
+    return UpdateNotificationSchemeDetails(
       name: name ?? this.name,
       description: description ?? this.description,
     );
