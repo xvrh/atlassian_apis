@@ -12,7 +12,7 @@ dependencies:
 
 dev_dependencies:
   analyzer:
-  build_runner:
+  build_runner: any
   collection:
   dart_style:
   json_annotation:
