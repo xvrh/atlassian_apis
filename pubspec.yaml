@@ -16,7 +16,7 @@ dev_dependencies:
   collection:
   dart_style:
   json_annotation:
-  json_serializable:
+  json_serializable: any
   lints:
   pub_semver:
   test:
