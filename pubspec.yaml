@@ -19,5 +19,5 @@ dev_dependencies:
   json_serializable:
   lints:
   pub_semver:
-  test:
+  test: any
   yaml:
