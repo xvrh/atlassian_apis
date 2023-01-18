@@ -139,6 +139,10 @@
     {
       "name": "Users",
       "description": ""
+    },
+    {
+      "name": "User properties",
+      "description": ""
     }
   ],
   "paths": {
@@ -829,6 +833,9 @@
           "403": {
             "description": "Returned if;\n\n- The space that the content is being created in does not exist.\n- If the requesting user does not have permission to create content in it.",
             "content": {}
+          },
+          "404": {
+            "description": "Returned if;\n\n- The parent content is invalid -- user does not have permission or it does not exist."
           },
           "413": {
             "description": "Returned if request is too large.  Requests for this resource can be at most 5242880 bytes",
@@ -3518,7 +3525,7 @@
           "Content labels"
         ],
         "summary": "Remove label from content using query parameter",
-        "description": "Removes a label from a piece of content. This is similar to\n[Remove label from content](#api-content-id-label-label-delete)\nexcept that the label name is specified via a query parameter.\n\nUse this method if the label name has \"/\" characters, as\n[Remove label from content using query parameter](#api-content-id-label-delete)\ndoes not accept \"/\" characters for the label name.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the content.",
+        "description": "Removes a label from a piece of content. Labels can't be deleted from archived content.\nThis is similar to [Remove label from content](#api-content-id-label-label-delete)\nexcept that the label name is specified via a query parameter.\n\nUse this method if the label name has \"/\" characters, as\n[Remove label from content using query parameter](#api-content-id-label-delete)\ndoes not accept \"/\" characters for the label name.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the content.",
         "operationId": "removeLabelFromContentUsingQueryParameter",
         "parameters": [
           {
@@ -3589,7 +3596,7 @@
           "Content labels"
         ],
         "summary": "Remove label from content",
-        "description": "Removes a label from a piece of content. This is similar to\n[Remove label from content using query parameter](#api-content-id-label-delete)\nexcept that the label name is specified via a path parameter.\n\nUse this method if the label name does not have \"/\" characters, as the path\nparameter does not accept \"/\" characters for security reasons. Otherwise,\nuse [Remove label from content using query parameter](#api-content-id-label-delete).\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the content.",
+        "description": "Removes a label from a piece of content. Labels can't be deleted from archived content.\nThis is similar to [Remove label from content using query parameter](#api-content-id-label-delete)\nexcept that the label name is specified via a path parameter.\n\nUse this method if the label name does not have \"/\" characters, as the path\nparameter does not accept \"/\" characters for security reasons. Otherwise,\nuse [Remove label from content using query parameter](#api-content-id-label-delete).\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the content.",
         "operationId": "removeLabelFromContent",
         "parameters": [
           {
@@ -6753,7 +6760,7 @@
             ]
           }
         ],
-        "x-atlassian-connect-scope": "INACCESSIBLE"
+        "x-atlassian-connect-scope": "WRITE"
       },
       "get": {
         "tags": [
@@ -6902,7 +6909,7 @@
             ]
           }
         ],
-        "x-atlassian-connect-scope": "INACCESSIBLE"
+        "x-atlassian-connect-scope": "WRITE"
       }
     },
     "/wiki/rest/api/content-states/task/{taskId}": {
@@ -15006,6 +15013,7 @@
             ]
           }
         ],
+        "deprecated": true,
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -15336,7 +15344,7 @@
     "/wiki/rest/api/user/{userId}/property": {
       "get": {
         "tags": [
-          "Experimental"
+          "User properties"
         ],
         "summary": "Get user properties",
         "description": "Returns the properties for a user as list of property keys. For more information\nabout user properties, see [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).\n`Note`, these properties stored against a user are on a Confluence site level and not space/content level.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
@@ -15429,7 +15437,7 @@
     "/wiki/rest/api/user/{userId}/property/{key}": {
       "get": {
         "tags": [
-          "Experimental"
+          "User properties"
         ],
         "summary": "Get user property",
         "description": "Returns the property corresponding to `key` for a user. For more information\nabout user properties, see [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).\n`Note`, these properties stored against a user are on a Confluence site level and not space/content level.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
@@ -15507,7 +15515,7 @@
       },
       "put": {
         "tags": [
-          "Experimental"
+          "User properties"
         ],
         "summary": "Update user property",
         "description": "Updates a property for the given user. Note, you cannot update the key of a user property, only the value.\nFor more information about user properties, see\n[Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).\n`Note`, these properties stored against a user are on a Confluence site level and not space/content level.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
@@ -15590,7 +15598,7 @@
       },
       "post": {
         "tags": [
-          "Experimental"
+          "User properties"
         ],
         "summary": "Create user property by key",
         "description": "Creates a property for a user. For more information  about user properties, see [Confluence entity properties]\n(https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).\n`Note`, these properties stored against a user are on a Confluence site level and not space/content level.\n\n`Note:` the number of properties which could be created per app in a tenant for each user might be\nrestricted by fixed system limits.\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
@@ -15677,7 +15685,7 @@
       },
       "delete": {
         "tags": [
-          "Experimental"
+          "User properties"
         ],
         "summary": "Delete user property",
         "description": "Deletes a property for the given user.\nFor more information about user properties, see\n[Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).\n`Note`, these properties stored against a user are on a Confluence site level and not space/content level.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
@@ -16505,6 +16513,9 @@
               "dynamic": {
                 "$ref": "#/components/schemas/ContentBody"
               },
+              "raw": {
+                "$ref": "#/components/schemas/ContentBody"
+              },
               "_expandable": {
                 "type": "object",
                 "properties": {
@@ -16888,7 +16899,8 @@
               "editor2",
               "anonymous_export_view",
               "wiki",
-              "atlas_doc_format"
+              "atlas_doc_format",
+              "raw"
             ]
           },
           "embeddedContent": {
@@ -18578,6 +18590,11 @@
                 "type": "integer",
                 "description": "The version number.",
                 "format": "int32"
+              },
+              "message": {
+                "type": "string",
+                "description": "An optional message to be stored with the corresponding version.",
+                "nullable": true
               }
             },
             "description": "The new version for the updated content. Set this to the current version number incremented by one, unless you are changing the status to 'draft' which must have a version number of 1.\n\nTo get the current version number, use [Get content by ID](#api-content-id-get) and retrieve `version.number`."
@@ -18586,7 +18603,7 @@
             "nullable": true,
             "maxLength": 255,
             "type": "string",
-            "description": "The updated title of the content. If you are not changing this field, set this to the current `title`."
+            "description": "The updated title of the content. If you are updating a non-draft `page` or `blogpost`, title is required. If you are not changing the title, set this field to the the current title."
           },
           "type": {
             "nullable": true,

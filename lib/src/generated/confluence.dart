@@ -76,6 +76,8 @@ class ConfluenceApi {
 
   late final themes = ThemesApi(_client);
 
+  late final userProperties = UserPropertiesApi(_client);
+
   late final users = UsersApi(_client);
 
   void close() => _client.close();
@@ -1414,7 +1416,9 @@ class ContentLabelsApi {
     ));
   }
 
-  /// Removes a label from a piece of content. This is similar to
+  /// Removes a label from a piece of content. Labels can't be deleted from
+  /// archived content.
+  /// This is similar to
   /// [Remove label from content](#api-content-id-label-label-delete)
   /// except that the label name is specified via a query parameter.
   ///
@@ -1438,7 +1442,9 @@ class ContentLabelsApi {
     );
   }
 
-  /// Removes a label from a piece of content. This is similar to
+  /// Removes a label from a piece of content. Labels can't be deleted from
+  /// archived content.
+  /// This is similar to
   /// [Remove label from content using query parameter](#api-content-id-label-delete)
   /// except that the label name is specified via a path parameter.
   ///
@@ -2874,121 +2880,6 @@ class ExperimentalApi {
       queryParameters: {
         'name': name,
         if (prefix != null) 'prefix': prefix,
-      },
-    );
-  }
-
-  /// Returns the properties for a user as list of property keys. For more
-  /// information
-  /// about user properties, see
-  /// [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
-  /// `Note`, these properties stored against a user are on a Confluence site
-  /// level and not space/content level.
-  ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to access the Confluence site ('Can use' global permission).
-  Future<UserPropertyKeyArray> getUserProperties(
-      {required String userId, int? start, int? limit}) async {
-    return UserPropertyKeyArray.fromJson(await _client.send(
-      'get',
-      'wiki/rest/api/user/{userId}/property',
-      pathParameters: {
-        'userId': userId,
-      },
-      queryParameters: {
-        if (start != null) 'start': '$start',
-        if (limit != null) 'limit': '$limit',
-      },
-    ));
-  }
-
-  /// Returns the property corresponding to `key` for a user. For more
-  /// information
-  /// about user properties, see
-  /// [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
-  /// `Note`, these properties stored against a user are on a Confluence site
-  /// level and not space/content level.
-  ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to access the Confluence site ('Can use' global permission).
-  Future<UserProperty> getUserProperty(
-      {required String userId, required String key}) async {
-    return UserProperty.fromJson(await _client.send(
-      'get',
-      'wiki/rest/api/user/{userId}/property/{key}',
-      pathParameters: {
-        'userId': userId,
-        'key': key,
-      },
-    ));
-  }
-
-  /// Updates a property for the given user. Note, you cannot update the key of
-  /// a user property, only the value.
-  /// For more information about user properties, see
-  /// [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
-  /// `Note`, these properties stored against a user are on a Confluence site
-  /// level and not space/content level.
-  ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to access the Confluence site ('Can use' global permission).
-  Future<void> updateUserProperty(
-      {required String userId,
-      required String key,
-      required UserPropertyUpdate body}) async {
-    await _client.send(
-      'put',
-      'wiki/rest/api/user/{userId}/property/{key}',
-      pathParameters: {
-        'userId': userId,
-        'key': key,
-      },
-      body: body.toJson(),
-    );
-  }
-
-  /// Creates a property for a user. For more information  about user
-  /// properties, see [Confluence entity properties]
-  /// (https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
-  /// `Note`, these properties stored against a user are on a Confluence site
-  /// level and not space/content level.
-  ///
-  /// `Note:` the number of properties which could be created per app in a
-  /// tenant for each user might be
-  /// restricted by fixed system limits.
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to access the Confluence site ('Can use' global permission).
-  Future<void> createUserProperty(
-      {required String userId,
-      required String key,
-      required UserPropertyCreate body}) async {
-    await _client.send(
-      'post',
-      'wiki/rest/api/user/{userId}/property/{key}',
-      pathParameters: {
-        'userId': userId,
-        'key': key,
-      },
-      body: body.toJson(),
-    );
-  }
-
-  /// Deletes a property for the given user.
-  /// For more information about user properties, see
-  /// [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
-  /// `Note`, these properties stored against a user are on a Confluence site
-  /// level and not space/content level.
-  ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to access the Confluence site ('Can use' global permission).
-  Future<void> deleteUserProperty(
-      {required String userId, required String key}) async {
-    await _client.send(
-      'delete',
-      'wiki/rest/api/user/{userId}/property/{key}',
-      pathParameters: {
-        'userId': userId,
-        'key': key,
       },
     );
   }
@@ -4505,6 +4396,129 @@ class ThemesApi {
       'wiki/rest/api/space/{spaceKey}/theme',
       pathParameters: {
         'spaceKey': spaceKey,
+      },
+    );
+  }
+}
+
+/// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
+
+class UserPropertiesApi {
+  final ApiClient _client;
+
+  UserPropertiesApi(this._client);
+
+  /// Returns the properties for a user as list of property keys. For more
+  /// information
+  /// about user properties, see
+  /// [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+  /// `Note`, these properties stored against a user are on a Confluence site
+  /// level and not space/content level.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  Future<UserPropertyKeyArray> getUserProperties(
+      {required String userId, int? start, int? limit}) async {
+    return UserPropertyKeyArray.fromJson(await _client.send(
+      'get',
+      'wiki/rest/api/user/{userId}/property',
+      pathParameters: {
+        'userId': userId,
+      },
+      queryParameters: {
+        if (start != null) 'start': '$start',
+        if (limit != null) 'limit': '$limit',
+      },
+    ));
+  }
+
+  /// Returns the property corresponding to `key` for a user. For more
+  /// information
+  /// about user properties, see
+  /// [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+  /// `Note`, these properties stored against a user are on a Confluence site
+  /// level and not space/content level.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  Future<UserProperty> getUserProperty(
+      {required String userId, required String key}) async {
+    return UserProperty.fromJson(await _client.send(
+      'get',
+      'wiki/rest/api/user/{userId}/property/{key}',
+      pathParameters: {
+        'userId': userId,
+        'key': key,
+      },
+    ));
+  }
+
+  /// Updates a property for the given user. Note, you cannot update the key of
+  /// a user property, only the value.
+  /// For more information about user properties, see
+  /// [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+  /// `Note`, these properties stored against a user are on a Confluence site
+  /// level and not space/content level.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  Future<void> updateUserProperty(
+      {required String userId,
+      required String key,
+      required UserPropertyUpdate body}) async {
+    await _client.send(
+      'put',
+      'wiki/rest/api/user/{userId}/property/{key}',
+      pathParameters: {
+        'userId': userId,
+        'key': key,
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Creates a property for a user. For more information  about user
+  /// properties, see [Confluence entity properties]
+  /// (https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+  /// `Note`, these properties stored against a user are on a Confluence site
+  /// level and not space/content level.
+  ///
+  /// `Note:` the number of properties which could be created per app in a
+  /// tenant for each user might be
+  /// restricted by fixed system limits.
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  Future<void> createUserProperty(
+      {required String userId,
+      required String key,
+      required UserPropertyCreate body}) async {
+    await _client.send(
+      'post',
+      'wiki/rest/api/user/{userId}/property/{key}',
+      pathParameters: {
+        'userId': userId,
+        'key': key,
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Deletes a property for the given user.
+  /// For more information about user properties, see
+  /// [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+  /// `Note`, these properties stored against a user are on a Confluence site
+  /// level and not space/content level.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  Future<void> deleteUserProperty(
+      {required String userId, required String key}) async {
+    await _client.send(
+      'delete',
+      'wiki/rest/api/user/{userId}/property/{key}',
+      pathParameters: {
+        'userId': userId,
+        'key': key,
       },
     );
   }
@@ -7874,6 +7888,7 @@ class ContentBodyRepresentation {
       ContentBodyRepresentation._('anonymous_export_view');
   static const wiki = ContentBodyRepresentation._('wiki');
   static const atlasDocFormat = ContentBodyRepresentation._('atlas_doc_format');
+  static const raw = ContentBodyRepresentation._('raw');
 
   static const values = [
     view,
@@ -7885,6 +7900,7 @@ class ContentBodyRepresentation {
     anonymousExportView,
     wiki,
     atlasDocFormat,
+    raw,
   ];
   final String value;
 
@@ -8196,6 +8212,7 @@ class ContentBodyValue {
   final ContentBody? anonymousExportView;
   final ContentBody? atlasDocFormat;
   final ContentBody? dynamic$;
+  final ContentBody? raw;
   final ContentBodyValueExpandable? expandable;
 
   ContentBodyValue(
@@ -8209,6 +8226,7 @@ class ContentBodyValue {
       this.anonymousExportView,
       this.atlasDocFormat,
       this.dynamic$,
+      this.raw,
       this.expandable});
 
   factory ContentBodyValue.fromJson(Map<String, Object?> json) {
@@ -8245,6 +8263,9 @@ class ContentBodyValue {
       dynamic$: json[r'dynamic'] != null
           ? ContentBody.fromJson(json[r'dynamic']! as Map<String, Object?>)
           : null,
+      raw: json[r'raw'] != null
+          ? ContentBody.fromJson(json[r'raw']! as Map<String, Object?>)
+          : null,
       expandable: json[r'_expandable'] != null
           ? ContentBodyValueExpandable.fromJson(
               json[r'_expandable']! as Map<String, Object?>)
@@ -8263,6 +8284,7 @@ class ContentBodyValue {
     var anonymousExportView = this.anonymousExportView;
     var atlasDocFormat = this.atlasDocFormat;
     var dynamic$ = this.dynamic$;
+    var raw = this.raw;
     var expandable = this.expandable;
 
     final json = <String, Object?>{};
@@ -8296,6 +8318,9 @@ class ContentBodyValue {
     if (dynamic$ != null) {
       json[r'dynamic'] = dynamic$.toJson();
     }
+    if (raw != null) {
+      json[r'raw'] = raw.toJson();
+    }
     if (expandable != null) {
       json[r'_expandable'] = expandable.toJson();
     }
@@ -8313,6 +8338,7 @@ class ContentBodyValue {
       ContentBody? anonymousExportView,
       ContentBody? atlasDocFormat,
       ContentBody? dynamic$,
+      ContentBody? raw,
       ContentBodyValueExpandable? expandable}) {
     return ContentBodyValue(
       view: view ?? this.view,
@@ -8325,6 +8351,7 @@ class ContentBodyValue {
       anonymousExportView: anonymousExportView ?? this.anonymousExportView,
       atlasDocFormat: atlasDocFormat ?? this.atlasDocFormat,
       dynamic$: dynamic$ ?? this.dynamic$,
+      raw: raw ?? this.raw,
       expandable: expandable ?? this.expandable,
     );
   }
@@ -12616,8 +12643,9 @@ class ContentUpdate {
   /// [Get content by ID](#api-content-id-get) and retrieve `version.number`.
   final ContentUpdateVersion version;
 
-  /// The updated title of the content. If you are not changing this field, set
-  /// this to the current `title`.
+  /// The updated title of the content. If you are updating a non-draft `page`
+  /// or `blogpost`, title is required. If you are not changing the title, set
+  /// this field to the the current title.
   final String? title;
 
   /// The type of content. Set this to the current type of the content. For
@@ -12912,25 +12940,34 @@ class ContentUpdateVersion {
   /// The version number.
   final int number;
 
-  ContentUpdateVersion({required this.number});
+  /// An optional message to be stored with the corresponding version.
+  final String? message;
+
+  ContentUpdateVersion({required this.number, this.message});
 
   factory ContentUpdateVersion.fromJson(Map<String, Object?> json) {
     return ContentUpdateVersion(
       number: (json[r'number'] as num?)?.toInt() ?? 0,
+      message: json[r'message'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var number = this.number;
+    var message = this.message;
 
     final json = <String, Object?>{};
     json[r'number'] = number;
+    if (message != null) {
+      json[r'message'] = message;
+    }
     return json;
   }
 
-  ContentUpdateVersion copyWith({int? number}) {
+  ContentUpdateVersion copyWith({int? number, String? message}) {
     return ContentUpdateVersion(
       number: number ?? this.number,
+      message: message ?? this.message,
     );
   }
 }
