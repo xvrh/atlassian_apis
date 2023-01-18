@@ -11,7 +11,7 @@ dependencies:
   path: ^1.8.0
 
 dev_dependencies:
-  analyzer:
+  analyzer: any
   build_runner:
   collection:
   dart_style:
