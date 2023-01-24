@@ -131,7 +131,7 @@ class ApiException implements Exception {
 
   @override
   String toString() =>
-      'JiraException($statusCode, $reasonPhrase, url: $url, message: $errorMessage)';
+      'ApiException($statusCode, $reasonPhrase, url: $url, message: $errorMessage)';
 
   static void checkResponse(Response response) {
     if (response.statusCode >= 200 && response.statusCode < 400) return;

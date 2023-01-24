@@ -170,6 +170,13 @@ class JiraSoftwareApi {
   /// | Yes      |
   late final remoteLinks = RemoteLinksApi(_client);
 
+  /// APIs related to integrating Security information with Jira Software. These
+  /// APIs are available to Atlassian Connect
+  /// apps. To use these APIs you must have the Security module in your app's
+  /// descriptor. Read more about Jira Software modules
+  /// [here](https://developer.atlassian.com/cloud/jira/software/about-jira-modules/).
+  late final securityInformation = SecurityInformationApi(_client);
+
   /// Apis related to sprints
   late final sprint = SprintApi(_client);
 
@@ -1644,6 +1651,166 @@ class RemoteLinksApi {
       queryParameters: {
         if (updateSequenceNumber != null)
           '_updateSequenceNumber': '$updateSequenceNumber',
+      },
+    );
+  }
+}
+
+/// Jira Software Cloud REST API documentation
+
+class SecurityInformationApi {
+  final ApiClient _client;
+
+  SecurityInformationApi(this._client);
+
+  /// Insert Security Workspace IDs to establish a relationship between them and
+  /// the Jira site the app is installed on. If a relationship between the
+  /// workspace ID and Jira already exists then the workspace ID will be ignored
+  /// and Jira will process the rest of the entries.
+  ///
+  /// Only Connect apps that define the `jiraSecurityInfoProvider` module can
+  /// access this resource.
+  /// This resource requires the 'WRITE' scope for Connect apps.
+  Future<void> submitWorkspaces({required dynamic body}) async {
+    await _client.send(
+      'post',
+      'rest/security/1.0/linkedWorkspaces/bulk',
+      body: body,
+    );
+  }
+
+  /// Bulk delete all linked Security Workspaces that match the given request.
+  ///
+  /// Only Connect apps that define the `jiraSecurityInfoProvider` module can
+  /// access this resource.
+  /// This resource requires the 'DELETE' scope for Connect apps.
+  ///
+  /// e.g. DELETE /bulk?workspaceIds=111-222-333,444-555-666
+  Future<void> deleteLinkedWorkspaces() async {
+    await _client.send(
+      'delete',
+      'rest/security/1.0/linkedWorkspaces/bulk',
+    );
+  }
+
+  /// Retrieve all Security Workspaces linked with the Jira site.
+  ///
+  /// The result will be what is currently stored, ignoring any pending updates
+  /// or deletes.
+  ///
+  /// Only Connect apps that define the `jiraSecurityInfoProvider` module can
+  /// access this resource.
+  /// This resource requires the 'READ' scope for Connect apps.
+  Future<dynamic> getLinkedWorkspaces() async {
+    return await _client.send(
+      'get',
+      'rest/security/1.0/linkedWorkspaces',
+    );
+  }
+
+  /// Retrieve a specific Security Workspace linked to the Jira site for the
+  /// given workspace ID.
+  ///
+  /// The result will be what is currently stored, ignoring any pending updates
+  /// or deletes.
+  ///
+  /// Only Connect apps that define the `jiraSecurityInfoProvider` module can
+  /// access this resource.
+  /// This resource requires the 'READ' scope for Connect apps.
+  Future<dynamic> getLinkedWorkspaceById(String workspaceId) async {
+    return await _client.send(
+      'get',
+      'rest/security/1.0/linkedWorkspaces/{workspaceId}',
+      pathParameters: {
+        'workspaceId': workspaceId,
+      },
+    );
+  }
+
+  /// Update / Insert Vulnerability data.
+  ///
+  /// Vulnerabilities are identified by their ID, any existing Vulnerability
+  /// data with the same ID will be replaced if it exists and the
+  /// updateSequenceNumber of the existing data is less than the incoming data.
+  ///
+  /// Submissions are performed asynchronously. Most updates are available
+  /// within a short period of time but may take some time during peak load
+  /// and/or maintenance times. The GET vulnerability endpoint can be used to
+  /// confirm that data has been stored successfully (if needed).
+  ///
+  /// In the case of multiple Vulnerabilities being submitted in one request,
+  /// each is validated individually prior to submission. Details of
+  /// Vulnerabilities that failed submission (if any) are available in the
+  /// response object.
+  ///
+  /// A maximum of 1000 vulnerabilities can be submitted in one request.
+  ///
+  /// Only Connect apps that define the `jiraSecurityInfoProvider` module can
+  /// access this resource.
+  /// This resource requires the 'WRITE' scope for Connect apps.
+  Future<dynamic> submitVulnerabilities({required dynamic body}) async {
+    return await _client.send(
+      'post',
+      'rest/security/1.0/bulk',
+      body: body,
+    );
+  }
+
+  /// Bulk delete all Vulnerabilities that match the given request.
+  ///
+  /// One or more query params must be supplied to specify Properties to delete
+  /// by.
+  /// If more than one Property is provided, data will be deleted that matches
+  /// ALL of the Properties (e.g. treated as an AND).
+  /// Read the POST bulk endpoint documentation for more details.
+  ///
+  /// e.g. DELETE /bulkByProperties?accountId=account-123&createdBy=user-456
+  ///
+  /// Deletion is performed asynchronously. The GET vulnerability endpoint can
+  /// be used to confirm that data has been deleted successfully (if needed).
+  ///
+  /// Only Connect apps that define the `jiraSecurityInfoProvider` module can
+  /// access this resource.
+  /// This resource requires the 'DELETE' scope for Connect apps.
+  Future<void> deleteVulnerabilitiesByProperty() async {
+    await _client.send(
+      'delete',
+      'rest/security/1.0/bulkByProperties',
+    );
+  }
+
+  /// Retrieve the currently stored Vulnerability data for the given ID.
+  ///
+  /// The result will be what is currently stored, ignoring any pending updates
+  /// or deletes.
+  ///
+  /// Only Connect apps that define the `jiraSecurityInfoProvider` module can
+  /// access this resource.
+  /// This resource requires the 'READ' scope for Connect apps.
+  Future<dynamic> getVulnerabilityById(String vulnerabilityId) async {
+    return await _client.send(
+      'get',
+      'rest/security/1.0/vulnerability/{vulnerabilityId}',
+      pathParameters: {
+        'vulnerabilityId': vulnerabilityId,
+      },
+    );
+  }
+
+  /// Delete the Vulnerability data currently stored for the given ID.
+  ///
+  /// Deletion is performed asynchronously. The GET vulnerability endpoint can
+  /// be used to confirm that data has been deleted successfully (if needed).
+  ///
+  /// Only Connect apps that define the `jiraSecurityInfoProvider` module can
+  /// access this resource.
+  /// This resource requires the 'DELETE' scope for Connect apps.
+  Future<void> deleteVulnerabilityById(String vulnerabilityId) async {
+    await _client.send(
+      'delete',
+      'rest/security/1.0/vulnerability/{vulnerabilityId}',
+      pathParameters: {
+        'vulnerabilityId': vulnerabilityId,
       },
     );
   }
