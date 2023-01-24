@@ -1,3 +1,6 @@
+## 0.11.0
+- Update to the latest API schemas
+
 ## 0.10.0
 - Update to the latest API schemas
 

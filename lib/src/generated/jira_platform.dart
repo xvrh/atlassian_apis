@@ -15229,14 +15229,14 @@ class Attachment {
 
 class AttachmentArchive {
   final bool moreAvailable;
-  final int? totalEntryCount;
   final int? totalNumberOfEntriesAvailable;
+  final int? totalEntryCount;
   final List<AttachmentArchiveEntry> entries;
 
   AttachmentArchive(
       {bool? moreAvailable,
-      this.totalEntryCount,
       this.totalNumberOfEntriesAvailable,
+      this.totalEntryCount,
       List<AttachmentArchiveEntry>? entries})
       : moreAvailable = moreAvailable ?? false,
         entries = entries ?? [];
@@ -15244,9 +15244,9 @@ class AttachmentArchive {
   factory AttachmentArchive.fromJson(Map<String, Object?> json) {
     return AttachmentArchive(
       moreAvailable: json[r'moreAvailable'] as bool? ?? false,
-      totalEntryCount: (json[r'totalEntryCount'] as num?)?.toInt(),
       totalNumberOfEntriesAvailable:
           (json[r'totalNumberOfEntriesAvailable'] as num?)?.toInt(),
+      totalEntryCount: (json[r'totalEntryCount'] as num?)?.toInt(),
       entries: (json[r'entries'] as List<Object?>?)
               ?.map((i) => AttachmentArchiveEntry.fromJson(
                   i as Map<String, Object?>? ?? const {}))
@@ -15257,17 +15257,17 @@ class AttachmentArchive {
 
   Map<String, Object?> toJson() {
     var moreAvailable = this.moreAvailable;
-    var totalEntryCount = this.totalEntryCount;
     var totalNumberOfEntriesAvailable = this.totalNumberOfEntriesAvailable;
+    var totalEntryCount = this.totalEntryCount;
     var entries = this.entries;
 
     final json = <String, Object?>{};
     json[r'moreAvailable'] = moreAvailable;
-    if (totalEntryCount != null) {
-      json[r'totalEntryCount'] = totalEntryCount;
-    }
     if (totalNumberOfEntriesAvailable != null) {
       json[r'totalNumberOfEntriesAvailable'] = totalNumberOfEntriesAvailable;
+    }
+    if (totalEntryCount != null) {
+      json[r'totalEntryCount'] = totalEntryCount;
     }
     json[r'entries'] = entries.map((i) => i.toJson()).toList();
     return json;
@@ -15275,14 +15275,14 @@ class AttachmentArchive {
 
   AttachmentArchive copyWith(
       {bool? moreAvailable,
-      int? totalEntryCount,
       int? totalNumberOfEntriesAvailable,
+      int? totalEntryCount,
       List<AttachmentArchiveEntry>? entries}) {
     return AttachmentArchive(
       moreAvailable: moreAvailable ?? this.moreAvailable,
-      totalEntryCount: totalEntryCount ?? this.totalEntryCount,
       totalNumberOfEntriesAvailable:
           totalNumberOfEntriesAvailable ?? this.totalNumberOfEntriesAvailable,
+      totalEntryCount: totalEntryCount ?? this.totalEntryCount,
       entries: entries ?? this.entries,
     );
   }
@@ -15291,33 +15291,33 @@ class AttachmentArchive {
 class AttachmentArchiveEntry {
   final int? entryIndex;
   final String? abbreviatedName;
-  final String? mediaType;
   final String? name;
   final int? size;
+  final String? mediaType;
 
   AttachmentArchiveEntry(
       {this.entryIndex,
       this.abbreviatedName,
-      this.mediaType,
       this.name,
-      this.size});
+      this.size,
+      this.mediaType});
 
   factory AttachmentArchiveEntry.fromJson(Map<String, Object?> json) {
     return AttachmentArchiveEntry(
       entryIndex: (json[r'entryIndex'] as num?)?.toInt(),
       abbreviatedName: json[r'abbreviatedName'] as String?,
-      mediaType: json[r'mediaType'] as String?,
       name: json[r'name'] as String?,
       size: (json[r'size'] as num?)?.toInt(),
+      mediaType: json[r'mediaType'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var entryIndex = this.entryIndex;
     var abbreviatedName = this.abbreviatedName;
-    var mediaType = this.mediaType;
     var name = this.name;
     var size = this.size;
+    var mediaType = this.mediaType;
 
     final json = <String, Object?>{};
     if (entryIndex != null) {
@@ -15326,14 +15326,14 @@ class AttachmentArchiveEntry {
     if (abbreviatedName != null) {
       json[r'abbreviatedName'] = abbreviatedName;
     }
-    if (mediaType != null) {
-      json[r'mediaType'] = mediaType;
-    }
     if (name != null) {
       json[r'name'] = name;
     }
     if (size != null) {
       json[r'size'] = size;
+    }
+    if (mediaType != null) {
+      json[r'mediaType'] = mediaType;
     }
     return json;
   }
@@ -15341,15 +15341,15 @@ class AttachmentArchiveEntry {
   AttachmentArchiveEntry copyWith(
       {int? entryIndex,
       String? abbreviatedName,
-      String? mediaType,
       String? name,
-      int? size}) {
+      int? size,
+      String? mediaType}) {
     return AttachmentArchiveEntry(
       entryIndex: entryIndex ?? this.entryIndex,
       abbreviatedName: abbreviatedName ?? this.abbreviatedName,
-      mediaType: mediaType ?? this.mediaType,
       name: name ?? this.name,
       size: size ?? this.size,
+      mediaType: mediaType ?? this.mediaType,
     );
   }
 }
@@ -17366,14 +17366,8 @@ class ComponentWithIssueCount {
   /// Count of issues for the component.
   final int? issueCount;
 
-  /// The description for the component.
-  final String? description;
-
-  /// The key of the project to which the component is assigned.
-  final String? project;
-
-  /// The user details for the component's lead user.
-  final User? lead;
+  /// Not used.
+  final int? projectId;
 
   /// The nominal user type used to determine the assignee for issues created
   /// with this component. See `realAssigneeType` for details on how the type of
@@ -17391,20 +17385,22 @@ class ComponentWithIssueCount {
   /// component is in.
   final ComponentWithIssueCountAssigneeType? assigneeType;
 
-  /// Not used.
-  final int? projectId;
+  /// The user details for the component's lead user.
+  final User? lead;
+
+  /// The user assigned to issues created with this component, when
+  /// `assigneeType` does not identify a valid assignee.
+  final User? realAssignee;
+
+  /// Whether a user is associated with `assigneeType`. For example, if the
+  /// `assigneeType` is set to `COMPONENT_LEAD` but the component lead is not
+  /// set, then `false` is returned.
+  final bool isAssigneeTypeValid;
 
   /// The details of the user associated with `assigneeType`, if any. See
   /// `realAssignee` for details of the user assigned to issues created with
   /// this component.
   final User? assignee;
-
-  /// The URL for this count of the issues contained in the component.
-  final String? self;
-
-  /// The user assigned to issues created with this component, when
-  /// `assigneeType` does not identify a valid assignee.
-  final User? realAssignee;
 
   /// The type of the assignee that is assigned to issues created with this
   /// component, when an assignee cannot be set from the `assigneeType`. For
@@ -17422,81 +17418,110 @@ class ComponentWithIssueCount {
   ///  *  `PROJECT_DEFAULT` when none of the preceding cases are true.
   final ComponentWithIssueCountRealAssigneeType? realAssigneeType;
 
-  /// Whether a user is associated with `assigneeType`. For example, if the
-  /// `assigneeType` is set to `COMPONENT_LEAD` but the component lead is not
-  /// set, then `false` is returned.
-  final bool isAssigneeTypeValid;
-
   /// The name for the component.
   final String? name;
 
   /// The unique identifier for the component.
   final String? id;
 
+  /// The description for the component.
+  final String? description;
+
+  /// The key of the project to which the component is assigned.
+  final String? project;
+
+  /// The URL for this count of the issues contained in the component.
+  final String? self;
+
   ComponentWithIssueCount(
       {this.issueCount,
+      this.projectId,
+      this.assigneeType,
+      this.lead,
+      this.realAssignee,
+      bool? isAssigneeTypeValid,
+      this.assignee,
+      this.realAssigneeType,
+      this.name,
+      this.id,
       this.description,
       this.project,
-      this.lead,
-      this.assigneeType,
-      this.projectId,
-      this.assignee,
-      this.self,
-      this.realAssignee,
-      this.realAssigneeType,
-      bool? isAssigneeTypeValid,
-      this.name,
-      this.id})
+      this.self})
       : isAssigneeTypeValid = isAssigneeTypeValid ?? false;
 
   factory ComponentWithIssueCount.fromJson(Map<String, Object?> json) {
     return ComponentWithIssueCount(
       issueCount: (json[r'issueCount'] as num?)?.toInt(),
-      description: json[r'description'] as String?,
-      project: json[r'project'] as String?,
-      lead: json[r'lead'] != null
-          ? User.fromJson(json[r'lead']! as Map<String, Object?>)
-          : null,
+      projectId: (json[r'projectId'] as num?)?.toInt(),
       assigneeType: json[r'assigneeType'] != null
           ? ComponentWithIssueCountAssigneeType.fromValue(
               json[r'assigneeType']! as String)
           : null,
-      projectId: (json[r'projectId'] as num?)?.toInt(),
-      assignee: json[r'assignee'] != null
-          ? User.fromJson(json[r'assignee']! as Map<String, Object?>)
+      lead: json[r'lead'] != null
+          ? User.fromJson(json[r'lead']! as Map<String, Object?>)
           : null,
-      self: json[r'self'] as String?,
       realAssignee: json[r'realAssignee'] != null
           ? User.fromJson(json[r'realAssignee']! as Map<String, Object?>)
+          : null,
+      isAssigneeTypeValid: json[r'isAssigneeTypeValid'] as bool? ?? false,
+      assignee: json[r'assignee'] != null
+          ? User.fromJson(json[r'assignee']! as Map<String, Object?>)
           : null,
       realAssigneeType: json[r'realAssigneeType'] != null
           ? ComponentWithIssueCountRealAssigneeType.fromValue(
               json[r'realAssigneeType']! as String)
           : null,
-      isAssigneeTypeValid: json[r'isAssigneeTypeValid'] as bool? ?? false,
       name: json[r'name'] as String?,
       id: json[r'id'] as String?,
+      description: json[r'description'] as String?,
+      project: json[r'project'] as String?,
+      self: json[r'self'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var issueCount = this.issueCount;
-    var description = this.description;
-    var project = this.project;
-    var lead = this.lead;
-    var assigneeType = this.assigneeType;
     var projectId = this.projectId;
-    var assignee = this.assignee;
-    var self = this.self;
+    var assigneeType = this.assigneeType;
+    var lead = this.lead;
     var realAssignee = this.realAssignee;
-    var realAssigneeType = this.realAssigneeType;
     var isAssigneeTypeValid = this.isAssigneeTypeValid;
+    var assignee = this.assignee;
+    var realAssigneeType = this.realAssigneeType;
     var name = this.name;
     var id = this.id;
+    var description = this.description;
+    var project = this.project;
+    var self = this.self;
 
     final json = <String, Object?>{};
     if (issueCount != null) {
       json[r'issueCount'] = issueCount;
+    }
+    if (projectId != null) {
+      json[r'projectId'] = projectId;
+    }
+    if (assigneeType != null) {
+      json[r'assigneeType'] = assigneeType.value;
+    }
+    if (lead != null) {
+      json[r'lead'] = lead.toJson();
+    }
+    if (realAssignee != null) {
+      json[r'realAssignee'] = realAssignee.toJson();
+    }
+    json[r'isAssigneeTypeValid'] = isAssigneeTypeValid;
+    if (assignee != null) {
+      json[r'assignee'] = assignee.toJson();
+    }
+    if (realAssigneeType != null) {
+      json[r'realAssigneeType'] = realAssigneeType.value;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (id != null) {
+      json[r'id'] = id;
     }
     if (description != null) {
       json[r'description'] = description;
@@ -17504,65 +17529,40 @@ class ComponentWithIssueCount {
     if (project != null) {
       json[r'project'] = project;
     }
-    if (lead != null) {
-      json[r'lead'] = lead.toJson();
-    }
-    if (assigneeType != null) {
-      json[r'assigneeType'] = assigneeType.value;
-    }
-    if (projectId != null) {
-      json[r'projectId'] = projectId;
-    }
-    if (assignee != null) {
-      json[r'assignee'] = assignee.toJson();
-    }
     if (self != null) {
       json[r'self'] = self;
-    }
-    if (realAssignee != null) {
-      json[r'realAssignee'] = realAssignee.toJson();
-    }
-    if (realAssigneeType != null) {
-      json[r'realAssigneeType'] = realAssigneeType.value;
-    }
-    json[r'isAssigneeTypeValid'] = isAssigneeTypeValid;
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (id != null) {
-      json[r'id'] = id;
     }
     return json;
   }
 
   ComponentWithIssueCount copyWith(
       {int? issueCount,
+      int? projectId,
+      ComponentWithIssueCountAssigneeType? assigneeType,
+      User? lead,
+      User? realAssignee,
+      bool? isAssigneeTypeValid,
+      User? assignee,
+      ComponentWithIssueCountRealAssigneeType? realAssigneeType,
+      String? name,
+      String? id,
       String? description,
       String? project,
-      User? lead,
-      ComponentWithIssueCountAssigneeType? assigneeType,
-      int? projectId,
-      User? assignee,
-      String? self,
-      User? realAssignee,
-      ComponentWithIssueCountRealAssigneeType? realAssigneeType,
-      bool? isAssigneeTypeValid,
-      String? name,
-      String? id}) {
+      String? self}) {
     return ComponentWithIssueCount(
       issueCount: issueCount ?? this.issueCount,
-      description: description ?? this.description,
-      project: project ?? this.project,
-      lead: lead ?? this.lead,
-      assigneeType: assigneeType ?? this.assigneeType,
       projectId: projectId ?? this.projectId,
-      assignee: assignee ?? this.assignee,
-      self: self ?? this.self,
+      assigneeType: assigneeType ?? this.assigneeType,
+      lead: lead ?? this.lead,
       realAssignee: realAssignee ?? this.realAssignee,
-      realAssigneeType: realAssigneeType ?? this.realAssigneeType,
       isAssigneeTypeValid: isAssigneeTypeValid ?? this.isAssigneeTypeValid,
+      assignee: assignee ?? this.assignee,
+      realAssigneeType: realAssigneeType ?? this.realAssigneeType,
       name: name ?? this.name,
       id: id ?? this.id,
+      description: description ?? this.description,
+      project: project ?? this.project,
+      self: self ?? this.self,
     );
   }
 }
@@ -26610,16 +26610,16 @@ class IdOrKeyBean {
 
 class IncludedFields {
   final List<String> excluded;
-  final List<String> actuallyIncluded;
   final List<String> included;
+  final List<String> actuallyIncluded;
 
   IncludedFields(
       {List<String>? excluded,
-      List<String>? actuallyIncluded,
-      List<String>? included})
+      List<String>? included,
+      List<String>? actuallyIncluded})
       : excluded = excluded ?? [],
-        actuallyIncluded = actuallyIncluded ?? [],
-        included = included ?? [];
+        included = included ?? [],
+        actuallyIncluded = actuallyIncluded ?? [];
 
   factory IncludedFields.fromJson(Map<String, Object?> json) {
     return IncludedFields(
@@ -26627,11 +26627,11 @@ class IncludedFields {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
+      included: (json[r'included'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      included: (json[r'included'] as List<Object?>?)
+      actuallyIncluded: (json[r'actuallyIncluded'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
@@ -26640,24 +26640,24 @@ class IncludedFields {
 
   Map<String, Object?> toJson() {
     var excluded = this.excluded;
-    var actuallyIncluded = this.actuallyIncluded;
     var included = this.included;
+    var actuallyIncluded = this.actuallyIncluded;
 
     final json = <String, Object?>{};
     json[r'excluded'] = excluded;
-    json[r'actuallyIncluded'] = actuallyIncluded;
     json[r'included'] = included;
+    json[r'actuallyIncluded'] = actuallyIncluded;
     return json;
   }
 
   IncludedFields copyWith(
       {List<String>? excluded,
-      List<String>? actuallyIncluded,
-      List<String>? included}) {
+      List<String>? included,
+      List<String>? actuallyIncluded}) {
     return IncludedFields(
       excluded: excluded ?? this.excluded,
-      actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
       included: included ?? this.included,
+      actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
     );
   }
 }
@@ -29704,6 +29704,7 @@ class IssueUpdateDetails {
 
 /// A list of editable field details.
 class IssueUpdateMetadata {
+  /// A list of editable field details.
   final Map<String, dynamic>? fields;
 
   IssueUpdateMetadata({this.fields});
@@ -31496,6 +31497,9 @@ class JsonContextVariable {
 
 class JsonNode {
   final Map<String, dynamic>? elements;
+  final bool array;
+  final Map<String, dynamic>? fields;
+  final bool null$;
   final bool floatingPointNumber;
   final bool valueNode;
   final bool containerNode;
@@ -31525,15 +31529,15 @@ class JsonNode {
   final int? valueAsLong;
   final num? valueAsDouble;
   final bool valueAsBoolean;
-  final Map<String, dynamic>? fieldNames;
   final String? textValue;
   final String? valueAsText;
-  final bool array;
-  final Map<String, dynamic>? fields;
-  final bool null$;
+  final Map<String, dynamic>? fieldNames;
 
   JsonNode(
       {this.elements,
+      bool? array,
+      this.fields,
+      bool? null$,
       bool? floatingPointNumber,
       bool? valueNode,
       bool? containerNode,
@@ -31563,13 +31567,12 @@ class JsonNode {
       this.valueAsLong,
       this.valueAsDouble,
       bool? valueAsBoolean,
-      this.fieldNames,
       this.textValue,
       this.valueAsText,
-      bool? array,
-      this.fields,
-      bool? null$})
-      : floatingPointNumber = floatingPointNumber ?? false,
+      this.fieldNames})
+      : array = array ?? false,
+        null$ = null$ ?? false,
+        floatingPointNumber = floatingPointNumber ?? false,
         valueNode = valueNode ?? false,
         containerNode = containerNode ?? false,
         missingNode = missingNode ?? false,
@@ -31587,13 +31590,14 @@ class JsonNode {
         binary = binary ?? false,
         booleanValue = booleanValue ?? false,
         binaryValue = binaryValue ?? [],
-        valueAsBoolean = valueAsBoolean ?? false,
-        array = array ?? false,
-        null$ = null$ ?? false;
+        valueAsBoolean = valueAsBoolean ?? false;
 
   factory JsonNode.fromJson(Map<String, Object?> json) {
     return JsonNode(
       elements: json[r'elements'] as Map<String, Object?>?,
+      array: json[r'array'] as bool? ?? false,
+      fields: json[r'fields'] as Map<String, Object?>?,
+      null$: json[r'null'] as bool? ?? false,
       floatingPointNumber: json[r'floatingPointNumber'] as bool? ?? false,
       valueNode: json[r'valueNode'] as bool? ?? false,
       containerNode: json[r'containerNode'] as bool? ?? false,
@@ -31628,17 +31632,17 @@ class JsonNode {
       valueAsLong: (json[r'valueAsLong'] as num?)?.toInt(),
       valueAsDouble: json[r'valueAsDouble'] as num?,
       valueAsBoolean: json[r'valueAsBoolean'] as bool? ?? false,
-      fieldNames: json[r'fieldNames'] as Map<String, Object?>?,
       textValue: json[r'textValue'] as String?,
       valueAsText: json[r'valueAsText'] as String?,
-      array: json[r'array'] as bool? ?? false,
-      fields: json[r'fields'] as Map<String, Object?>?,
-      null$: json[r'null'] as bool? ?? false,
+      fieldNames: json[r'fieldNames'] as Map<String, Object?>?,
     );
   }
 
   Map<String, Object?> toJson() {
     var elements = this.elements;
+    var array = this.array;
+    var fields = this.fields;
+    var null$ = this.null$;
     var floatingPointNumber = this.floatingPointNumber;
     var valueNode = this.valueNode;
     var containerNode = this.containerNode;
@@ -31668,17 +31672,19 @@ class JsonNode {
     var valueAsLong = this.valueAsLong;
     var valueAsDouble = this.valueAsDouble;
     var valueAsBoolean = this.valueAsBoolean;
-    var fieldNames = this.fieldNames;
     var textValue = this.textValue;
     var valueAsText = this.valueAsText;
-    var array = this.array;
-    var fields = this.fields;
-    var null$ = this.null$;
+    var fieldNames = this.fieldNames;
 
     final json = <String, Object?>{};
     if (elements != null) {
       json[r'elements'] = elements;
     }
+    json[r'array'] = array;
+    if (fields != null) {
+      json[r'fields'] = fields;
+    }
+    json[r'null'] = null$;
     json[r'floatingPointNumber'] = floatingPointNumber;
     json[r'valueNode'] = valueNode;
     json[r'containerNode'] = containerNode;
@@ -31728,25 +31734,23 @@ class JsonNode {
       json[r'valueAsDouble'] = valueAsDouble;
     }
     json[r'valueAsBoolean'] = valueAsBoolean;
-    if (fieldNames != null) {
-      json[r'fieldNames'] = fieldNames;
-    }
     if (textValue != null) {
       json[r'textValue'] = textValue;
     }
     if (valueAsText != null) {
       json[r'valueAsText'] = valueAsText;
     }
-    json[r'array'] = array;
-    if (fields != null) {
-      json[r'fields'] = fields;
+    if (fieldNames != null) {
+      json[r'fieldNames'] = fieldNames;
     }
-    json[r'null'] = null$;
     return json;
   }
 
   JsonNode copyWith(
       {Map<String, dynamic>? elements,
+      bool? array,
+      Map<String, dynamic>? fields,
+      bool? null$,
       bool? floatingPointNumber,
       bool? valueNode,
       bool? containerNode,
@@ -31776,14 +31780,14 @@ class JsonNode {
       int? valueAsLong,
       num? valueAsDouble,
       bool? valueAsBoolean,
-      Map<String, dynamic>? fieldNames,
       String? textValue,
       String? valueAsText,
-      bool? array,
-      Map<String, dynamic>? fields,
-      bool? null$}) {
+      Map<String, dynamic>? fieldNames}) {
     return JsonNode(
       elements: elements ?? this.elements,
+      array: array ?? this.array,
+      fields: fields ?? this.fields,
+      null$: null$ ?? this.null$,
       floatingPointNumber: floatingPointNumber ?? this.floatingPointNumber,
       valueNode: valueNode ?? this.valueNode,
       containerNode: containerNode ?? this.containerNode,
@@ -31813,12 +31817,9 @@ class JsonNode {
       valueAsLong: valueAsLong ?? this.valueAsLong,
       valueAsDouble: valueAsDouble ?? this.valueAsDouble,
       valueAsBoolean: valueAsBoolean ?? this.valueAsBoolean,
-      fieldNames: fieldNames ?? this.fieldNames,
       textValue: textValue ?? this.textValue,
       valueAsText: valueAsText ?? this.valueAsText,
-      array: array ?? this.array,
-      fields: fields ?? this.fields,
-      null$: null$ ?? this.null$,
+      fieldNames: fieldNames ?? this.fieldNames,
     );
   }
 }
@@ -41258,42 +41259,42 @@ class ProjectLandingPageInfo {
   final String? url;
   final String? projectKey;
   final String? projectType;
-  final bool simplified;
   final int? boardId;
   final String? boardName;
   final bool simpleBoard;
   final int? queueId;
   final String? queueName;
   final String? queueCategory;
+  final bool simplified;
   final Map<String, dynamic>? attributes;
 
   ProjectLandingPageInfo(
       {this.url,
       this.projectKey,
       this.projectType,
-      bool? simplified,
       this.boardId,
       this.boardName,
       bool? simpleBoard,
       this.queueId,
       this.queueName,
       this.queueCategory,
+      bool? simplified,
       this.attributes})
-      : simplified = simplified ?? false,
-        simpleBoard = simpleBoard ?? false;
+      : simpleBoard = simpleBoard ?? false,
+        simplified = simplified ?? false;
 
   factory ProjectLandingPageInfo.fromJson(Map<String, Object?> json) {
     return ProjectLandingPageInfo(
       url: json[r'url'] as String?,
       projectKey: json[r'projectKey'] as String?,
       projectType: json[r'projectType'] as String?,
-      simplified: json[r'simplified'] as bool? ?? false,
       boardId: (json[r'boardId'] as num?)?.toInt(),
       boardName: json[r'boardName'] as String?,
       simpleBoard: json[r'simpleBoard'] as bool? ?? false,
       queueId: (json[r'queueId'] as num?)?.toInt(),
       queueName: json[r'queueName'] as String?,
       queueCategory: json[r'queueCategory'] as String?,
+      simplified: json[r'simplified'] as bool? ?? false,
       attributes: json[r'attributes'] as Map<String, Object?>?,
     );
   }
@@ -41302,13 +41303,13 @@ class ProjectLandingPageInfo {
     var url = this.url;
     var projectKey = this.projectKey;
     var projectType = this.projectType;
-    var simplified = this.simplified;
     var boardId = this.boardId;
     var boardName = this.boardName;
     var simpleBoard = this.simpleBoard;
     var queueId = this.queueId;
     var queueName = this.queueName;
     var queueCategory = this.queueCategory;
+    var simplified = this.simplified;
     var attributes = this.attributes;
 
     final json = <String, Object?>{};
@@ -41321,7 +41322,6 @@ class ProjectLandingPageInfo {
     if (projectType != null) {
       json[r'projectType'] = projectType;
     }
-    json[r'simplified'] = simplified;
     if (boardId != null) {
       json[r'boardId'] = boardId;
     }
@@ -41338,6 +41338,7 @@ class ProjectLandingPageInfo {
     if (queueCategory != null) {
       json[r'queueCategory'] = queueCategory;
     }
+    json[r'simplified'] = simplified;
     if (attributes != null) {
       json[r'attributes'] = attributes;
     }
@@ -41348,25 +41349,25 @@ class ProjectLandingPageInfo {
       {String? url,
       String? projectKey,
       String? projectType,
-      bool? simplified,
       int? boardId,
       String? boardName,
       bool? simpleBoard,
       int? queueId,
       String? queueName,
       String? queueCategory,
+      bool? simplified,
       Map<String, dynamic>? attributes}) {
     return ProjectLandingPageInfo(
       url: url ?? this.url,
       projectKey: projectKey ?? this.projectKey,
       projectType: projectType ?? this.projectType,
-      simplified: simplified ?? this.simplified,
       boardId: boardId ?? this.boardId,
       boardName: boardName ?? this.boardName,
       simpleBoard: simpleBoard ?? this.simpleBoard,
       queueId: queueId ?? this.queueId,
       queueName: queueName ?? this.queueName,
       queueCategory: queueCategory ?? this.queueCategory,
+      simplified: simplified ?? this.simplified,
       attributes: attributes ?? this.attributes,
     );
   }
@@ -42782,47 +42783,47 @@ class RestrictedPermission {
 }
 
 class RichText {
+  final bool empty;
   final bool emptyAdf;
   final bool finalised;
   final bool valueSet;
-  final bool empty;
 
-  RichText({bool? emptyAdf, bool? finalised, bool? valueSet, bool? empty})
-      : emptyAdf = emptyAdf ?? false,
+  RichText({bool? empty, bool? emptyAdf, bool? finalised, bool? valueSet})
+      : empty = empty ?? false,
+        emptyAdf = emptyAdf ?? false,
         finalised = finalised ?? false,
-        valueSet = valueSet ?? false,
-        empty = empty ?? false;
+        valueSet = valueSet ?? false;
 
   factory RichText.fromJson(Map<String, Object?> json) {
     return RichText(
+      empty: json[r'empty'] as bool? ?? false,
       emptyAdf: json[r'emptyAdf'] as bool? ?? false,
       finalised: json[r'finalised'] as bool? ?? false,
       valueSet: json[r'valueSet'] as bool? ?? false,
-      empty: json[r'empty'] as bool? ?? false,
     );
   }
 
   Map<String, Object?> toJson() {
+    var empty = this.empty;
     var emptyAdf = this.emptyAdf;
     var finalised = this.finalised;
     var valueSet = this.valueSet;
-    var empty = this.empty;
 
     final json = <String, Object?>{};
+    json[r'empty'] = empty;
     json[r'emptyAdf'] = emptyAdf;
     json[r'finalised'] = finalised;
     json[r'valueSet'] = valueSet;
-    json[r'empty'] = empty;
     return json;
   }
 
   RichText copyWith(
-      {bool? emptyAdf, bool? finalised, bool? valueSet, bool? empty}) {
+      {bool? empty, bool? emptyAdf, bool? finalised, bool? valueSet}) {
     return RichText(
+      empty: empty ?? this.empty,
       emptyAdf: emptyAdf ?? this.emptyAdf,
       finalised: finalised ?? this.finalised,
       valueSet: valueSet ?? this.valueSet,
-      empty: empty ?? this.empty,
     );
   }
 }

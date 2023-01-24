@@ -15430,7 +15430,6 @@
             ]
           }
         ],
-        "x-experimental": true,
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -15510,7 +15509,6 @@
             ]
           }
         ],
-        "x-experimental": true,
         "x-atlassian-connect-scope": "READ"
       },
       "put": {
@@ -15593,7 +15591,6 @@
           }
         ],
         "x-codegen-request-body-name": "body",
-        "x-experimental": true,
         "x-atlassian-connect-scope": "WRITE"
       },
       "post": {
@@ -15680,7 +15677,6 @@
           }
         ],
         "x-codegen-request-body-name": "body",
-        "x-experimental": true,
         "x-atlassian-connect-scope": "WRITE"
       },
       "delete": {
@@ -15751,7 +15747,6 @@
             ]
           }
         ],
-        "x-experimental": true,
         "x-atlassian-connect-scope": "WRITE"
       }
     }
