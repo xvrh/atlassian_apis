@@ -1,9 +1,6 @@
-//--- example
-
 import 'dart:convert';
 import 'dart:io';
 import 'package:atlassian_apis/confluence_v2.dart';
-import 'package:http/http.dart';
 
 void main() async {
   // Create Confluence API from an authenticated client
@@ -15,7 +12,8 @@ void main() async {
   var confluence = ConfluenceV2Api(atlassianClient);
 
   // Get a page
-  //var page = await confluence.page.getPageById(id: 2198995148);
+  var page = await confluence.page.getPageById(id: 2198995148);
+  print(page.title);
 
   // Get page attachments
   var attachments =
@@ -27,7 +25,6 @@ void main() async {
   // Close the http client
   confluence.close();
 }
-//---
 
 void printJson(object) {
   print(jsonEncode(object));
