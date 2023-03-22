@@ -65,7 +65,7 @@
     },
     {
       "name": "Security Information",
-      "description": "APIs related to integrating Security information with Jira Software. These APIs are available to Atlassian Connect\napps. To use these APIs you must have the Security module in your app's descriptor. Read more about Jira Software modules [here](https://developer.atlassian.com/cloud/jira/software/about-jira-modules/).\n"
+      "description": "Send security information to Jira Software and enable your teams to turn unplanned vulnerabilities into planned and tracked work.\n\nSecurity is everyone's responsibility, and the security feature in Jira lets you triage and track relevant vulnerabilities as a team. Discuss and prioritise issues, minimise errors and duplication, and plan security work to complete in your sprints.\n\nAPIs related to integrating Security information with Jira Software are available to Atlassian Connect apps. To use these APIs you must have the Security module in your app's descriptor. Read more about Jira Software modules [here](https://developer.atlassian.com/cloud/jira/software/about-jira-modules/).\n"
     }
   ],
   "paths": {
@@ -12081,7 +12081,8 @@
                     "description": "The IDs of Security Workspaces to link to this Jira site.\n",
                     "type": "array",
                     "items": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "[a-zA-Z0-9\\-_.~@:{}=]+(/[a-zA-Z0-9\\-_.~@:{}=]+)*"
                     },
                     "example": [
                       "111-222-333",
@@ -12209,7 +12210,7 @@
       },
       "delete": {
         "operationId": "deleteLinkedWorkspaces",
-        "summary": "Delete linked Security Workpaces",
+        "summary": "Delete linked Security Workspaces",
         "tags": [
           "Security Information"
         ],
@@ -12602,7 +12603,7 @@
                           "example": "curl/libcurl3 - Buffer Override"
                         },
                         "description": {
-                          "description": "A description of the issue in Markdown format. Will be shown in the UI and used when creating Jira Issues.\n",
+                          "description": "A description of the issue in markdown format that will be shown in the UI and used when creating Jira Issues. HTML tags are not supported in the markdown format. For creating a new line `\\n` can be used. Read more about the accepted markdown transformations [here](https://atlaskit.atlassian.com/packages/editor/editor-markdown-transformer).\n",
                           "type": "string",
                           "maxLength": 5000,
                           "example": "## Overview\n\n\nAffected versions of this package are vulnerable to MeltLeak"
@@ -12700,50 +12701,34 @@
                           ],
                           "example": "open"
                         },
+                        "additionalInfo": {
+                          "title": "VulnerabilityAdditionalInfo",
+                          "description": "Extra information (optional). This data will be shown in the security feature under the vulnerability displayName.\n",
+                          "type": "object",
+                          "required": [
+                            "content"
+                          ],
+                          "properties": {
+                            "content": {
+                              "description": "The content of the additionalInfo.\n",
+                              "type": "string",
+                              "maxLength": 255,
+                              "example": "More information on the vulnerability, as a string"
+                            },
+                            "url": {
+                              "description": "Optional URL linking to the information\n",
+                              "type": "string",
+                              "format": "uri",
+                              "maxLength": 2000,
+                              "example": "https://example.com/project/CWE-123/additionalInfo"
+                            }
+                          }
+                        },
                         "associations": {
                           "description": "The entities to associate the Security Vulnerability information with.\n",
                           "type": "array",
                           "items": {
                             "anyOf": [
-                              {
-                                "title": "IssueKeysAssociation",
-                                "description": "An association type referencing issues in Jira.\n",
-                                "type": "object",
-                                "required": [
-                                  "associationType",
-                                  "values"
-                                ],
-                                "properties": {
-                                  "associationType": {
-                                    "description": "Defines the asssociation type.\n",
-                                    "type": "string",
-                                    "enum": [
-                                      "issueKeys"
-                                    ],
-                                    "example": "issueKeys"
-                                  },
-                                  "values": {
-                                    "description": "The Jira issue keys to associate the Security information with.\n\nThe number of values counted across all associationTypes (issueKeys,\nissueIdOrKeys and serviceIdOrKeys) must not exceed a limit of 500.\n",
-                                    "type": "array",
-                                    "items": {
-                                      "title": "IssueKey",
-                                      "description": "An issue key that references an issue in Jira.\n",
-                                      "type": "string",
-                                      "pattern": "^\\w{1,255}-\\d{1,255}$",
-                                      "example": "ABC-123"
-                                    },
-                                    "minItems": 1,
-                                    "maxItems": 500
-                                  }
-                                },
-                                "example": {
-                                  "associationType": "issueKeys",
-                                  "values": [
-                                    "ABC-123",
-                                    "ABC-456"
-                                  ]
-                                }
-                              },
                               {
                                 "title": "ServiceIdOrKeysAssociation",
                                 "description": "An association type referencing service id or keys.\n",
@@ -12762,7 +12747,7 @@
                                     "example": "serviceIdOrKeys"
                                   },
                                   "values": {
-                                    "description": "The service id or keys to associate the Security information with.\n\nThe number of values counted across all associationTypes (issueKeys,\nissueIdOrKeys and serviceIdOrKeys) must not exceed a limit of 500.\n",
+                                    "description": "The service id or keys to associate the Security information with.\n\nThe number of values counted across all associationTypes (serviceIdOrKeys) must not exceed a limit of 500.\n",
                                     "type": "array",
                                     "items": {
                                       "title": "ServiceIdOrKeys",
@@ -12858,49 +12843,10 @@
                       }
                     },
                     "unknownAssociations": {
-                      "description": "Associations (e.g. Issue Keys or Service IDs) that are not known on this Jira instance (if any).\n\nThese may be invalid keys (e.g. `UTF-8` is sometimes incorrectly identified as a Jira issue key), or they may be for projects that no longer exist.\n\nIf a Vulnerability has been associated with any other association other than those in this array it will still be stored against those valid associations.\nIf a Vulnerability was only associated with the associations in this array, it is deemed to be invalid and it won't be persisted.\n",
+                      "description": "Associations (e.g. Service IDs) that are not known on this Jira instance (if any).\n\nIf a Vulnerability has been associated with any other association other than those in this array it will still be stored against those valid associations.\nIf a Vulnerability was only associated with the associations in this array, it is deemed to be invalid and it won't be persisted.\n",
                       "type": "array",
                       "items": {
                         "anyOf": [
-                          {
-                            "title": "IssueKeysAssociation",
-                            "description": "An association type referencing issues in Jira.\n",
-                            "type": "object",
-                            "required": [
-                              "associationType",
-                              "values"
-                            ],
-                            "properties": {
-                              "associationType": {
-                                "description": "Defines the asssociation type.\n",
-                                "type": "string",
-                                "enum": [
-                                  "issueKeys"
-                                ],
-                                "example": "issueKeys"
-                              },
-                              "values": {
-                                "description": "The Jira issue keys to associate the Security information with.\n\nThe number of values counted across all associationTypes (issueKeys,\nissueIdOrKeys and serviceIdOrKeys) must not exceed a limit of 500.\n",
-                                "type": "array",
-                                "items": {
-                                  "title": "IssueKey",
-                                  "description": "An issue key that references an issue in Jira.\n",
-                                  "type": "string",
-                                  "pattern": "^\\w{1,255}-\\d{1,255}$",
-                                  "example": "ABC-123"
-                                },
-                                "minItems": 1,
-                                "maxItems": 500
-                              }
-                            },
-                            "example": {
-                              "associationType": "issueKeys",
-                              "values": [
-                                "ABC-123",
-                                "ABC-456"
-                              ]
-                            }
-                          },
                           {
                             "title": "ServiceIdOrKeysAssociation",
                             "description": "An association type referencing service id or keys.\n",
@@ -12919,7 +12865,7 @@
                                 "example": "serviceIdOrKeys"
                               },
                               "values": {
-                                "description": "The service id or keys to associate the Security information with.\n\nThe number of values counted across all associationTypes (issueKeys,\nissueIdOrKeys and serviceIdOrKeys) must not exceed a limit of 500.\n",
+                                "description": "The service id or keys to associate the Security information with.\n\nThe number of values counted across all associationTypes (serviceIdOrKeys) must not exceed a limit of 500.\n",
                                 "type": "array",
                                 "items": {
                                   "title": "ServiceIdOrKeys",
@@ -13240,7 +13186,7 @@
                       "example": "curl/libcurl3 - Buffer Override"
                     },
                     "description": {
-                      "description": "A description of the issue in Markdown format. Will be shown in the UI and used when creating Jira Issues.\n",
+                      "description": "A description of the issue in markdown format that will be shown in the UI and used when creating Jira Issues. HTML tags are not supported in the markdown format. For creating a new line `\\n` can be used. Read more about the accepted markdown transformations [here](https://atlaskit.atlassian.com/packages/editor/editor-markdown-transformer).\n",
                       "type": "string",
                       "maxLength": 5000,
                       "example": "## Overview\n\n\nAffected versions of this package are vulnerable to MeltLeak"
@@ -13338,50 +13284,34 @@
                       ],
                       "example": "open"
                     },
+                    "additionalInfo": {
+                      "title": "VulnerabilityAdditionalInfo",
+                      "description": "Extra information (optional). This data will be shown in the security feature under the vulnerability displayName.\n",
+                      "type": "object",
+                      "required": [
+                        "content"
+                      ],
+                      "properties": {
+                        "content": {
+                          "description": "The content of the additionalInfo.\n",
+                          "type": "string",
+                          "maxLength": 255,
+                          "example": "More information on the vulnerability, as a string"
+                        },
+                        "url": {
+                          "description": "Optional URL linking to the information\n",
+                          "type": "string",
+                          "format": "uri",
+                          "maxLength": 2000,
+                          "example": "https://example.com/project/CWE-123/additionalInfo"
+                        }
+                      }
+                    },
                     "associations": {
                       "description": "The entities to associate the Security Vulnerability information with.\n",
                       "type": "array",
                       "items": {
                         "anyOf": [
-                          {
-                            "title": "IssueKeysAssociation",
-                            "description": "An association type referencing issues in Jira.\n",
-                            "type": "object",
-                            "required": [
-                              "associationType",
-                              "values"
-                            ],
-                            "properties": {
-                              "associationType": {
-                                "description": "Defines the asssociation type.\n",
-                                "type": "string",
-                                "enum": [
-                                  "issueKeys"
-                                ],
-                                "example": "issueKeys"
-                              },
-                              "values": {
-                                "description": "The Jira issue keys to associate the Security information with.\n\nThe number of values counted across all associationTypes (issueKeys,\nissueIdOrKeys and serviceIdOrKeys) must not exceed a limit of 500.\n",
-                                "type": "array",
-                                "items": {
-                                  "title": "IssueKey",
-                                  "description": "An issue key that references an issue in Jira.\n",
-                                  "type": "string",
-                                  "pattern": "^\\w{1,255}-\\d{1,255}$",
-                                  "example": "ABC-123"
-                                },
-                                "minItems": 1,
-                                "maxItems": 500
-                              }
-                            },
-                            "example": {
-                              "associationType": "issueKeys",
-                              "values": [
-                                "ABC-123",
-                                "ABC-456"
-                              ]
-                            }
-                          },
                           {
                             "title": "ServiceIdOrKeysAssociation",
                             "description": "An association type referencing service id or keys.\n",
@@ -13400,7 +13330,7 @@
                                 "example": "serviceIdOrKeys"
                               },
                               "values": {
-                                "description": "The service id or keys to associate the Security information with.\n\nThe number of values counted across all associationTypes (issueKeys,\nissueIdOrKeys and serviceIdOrKeys) must not exceed a limit of 500.\n",
+                                "description": "The service id or keys to associate the Security information with.\n\nThe number of values counted across all associationTypes (serviceIdOrKeys) must not exceed a limit of 500.\n",
                                 "type": "array",
                                 "items": {
                                   "title": "ServiceIdOrKeys",

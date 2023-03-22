@@ -9,33 +9,61 @@ class AdminUserApi {
 
   AdminUserApi(this._client);
 
-  /// Returns the set of permissions you have for managing the specified
-  /// Atlassian account
-  Future<Map<String, dynamic>> getUserManagementPermissions(
-      {required String accountId, List<String>? privileges}) async {
-    return await _client.send(
+  /// Api Token APIs
+  late final apiTokens = ApiTokensApi(_client);
+
+  /// Email APIs
+  late final email = EmailApi(_client);
+
+  /// Lifecycle APIs
+  late final lifecycle = LifecycleApi(_client);
+
+  /// Manage APIs
+  late final manage = ManageApi(_client);
+
+  /// Profile APIs
+  late final profile = ProfileApi(_client);
+
+  void close() => _client.close();
+}
+
+class ApiTokensApi {
+  final ApiClient _client;
+
+  ApiTokensApi(this._client);
+
+  /// Gets the API tokens owned by the specified user.
+  Future<List<ApiTokenModel>> getAPITokens(String accountId) async {
+    return (await _client.send(
       'get',
-      'users/{account_id}/manage',
+      'users/{account_id}/manage/api-tokens',
       pathParameters: {
         'account_id': accountId,
       },
-      queryParameters: {
-        if (privileges != null)
-          'privileges': privileges.map((e) => e).join(','),
-      },
-    ) as Map<String, Object?>;
+    ) as List<Object?>)
+        .map((i) =>
+            ApiTokenModel.fromJson(i as Map<String, Object?>? ?? const {}))
+        .toList();
   }
 
-  /// Returns information about a single Atlassian account by ID
-  Future<Map<String, dynamic>> getProfile(String accountId) async {
-    return await _client.send(
-      'get',
-      'users/{account_id}/manage/profile',
+  /// Deletes a specifid API token by ID.
+  Future<void> deleteAPIToken(
+      {required String accountId, required String tokenId}) async {
+    await _client.send(
+      'delete',
+      'users/{account_id}/manage/api-tokens/{tokenId}',
       pathParameters: {
         'account_id': accountId,
+        'tokenId': tokenId,
       },
-    ) as Map<String, Object?>;
+    );
   }
+}
+
+class EmailApi {
+  final ApiClient _client;
+
+  EmailApi(this._client);
 
   /// Sets the specified user's email address. Before using this endpoint, you
   /// must [verify the target domain](https://confluence.atlassian.com/x/gjcWN)
@@ -54,32 +82,12 @@ class AdminUserApi {
       body: body,
     );
   }
+}
 
-  /// Gets the API tokens owned by the specified user.
-  Future<List<Map<String, dynamic>>> getAPITokens(String accountId) async {
-    return (await _client.send(
-      'get',
-      'users/{accountId}/manage/api-tokens',
-      pathParameters: {
-        'account_id': accountId,
-      },
-    ) as List<Object?>)
-        .map((i) => i as Map<String, Object?>? ?? {})
-        .toList();
-  }
+class LifecycleApi {
+  final ApiClient _client;
 
-  /// Deletes a specifid API token by ID.
-  Future<void> deleteAPIToken(
-      {required String accountId, required String tokenId}) async {
-    await _client.send(
-      'delete',
-      'users/{accountId}/manage/api-tokens/{tokenId}',
-      pathParameters: {
-        'account_id': accountId,
-        'tokenId': tokenId,
-      },
-    );
-  }
+  LifecycleApi(this._client);
 
   ///
   /// Deactivate the specified user account. The permission to make use of this
@@ -113,6 +121,94 @@ class AdminUserApi {
         'account_id': accountId,
       },
     );
+  }
+
+  /// This API will:
+  /// - Delete a managed account from Atlassian Administration.
+  /// - Withdraw complete access to all products and services listed in
+  /// Atlassian Administration.
+  /// - Remove reference to the account from all lists under Directory in
+  /// Atlassian Administration.
+  ///
+  /// Deleting an account is permanent. If you think you’ll need the account
+  /// again, we recommend you
+  /// [deactivate](https://support.atlassian.com/user-management/docs/deactivate-a-managed-account/)it
+  /// instead.
+  ///
+  /// Before you permanently delete the account, you’ll have a 14-day grace
+  /// period, during which the account will appear as temporarily deactivated.
+  ///
+  /// Learn more about
+  /// [scheduled account deletion](https://support.atlassian.com/user-management/docs/delete-a-managed-account/).
+  ///
+  /// Learn the fastest way to get the paramaters and delete account with a
+  /// detailed
+  /// [tutorial](https://developer.atlassian.com/cloud/admin/user-management/delete-managed-account/#delete-account).
+  ///
+  Future<void> deleteAccount(String accountId) async {
+    await _client.send(
+      'post',
+      'users/{account_id}/manage/lifecycle/delete',
+      pathParameters: {
+        'account_id': accountId,
+      },
+    );
+  }
+
+  /// This API will:
+  ///  - Cancel the scheduled deletion of the specified managed account.
+  ///  - Restore and activate the user’s account.
+  ///
+  ///  You can cancel the deletion within the 14-day grace period of scheduling
+  /// delete managed account. After that the account is permanently deleted.
+  Future<void> cancelDeleteAccount(String accountId) async {
+    await _client.send(
+      'post',
+      'users/{account_id}/manage/lifecycle/cancel-delete',
+      pathParameters: {
+        'account_id': accountId,
+      },
+    );
+  }
+}
+
+class ManageApi {
+  final ApiClient _client;
+
+  ManageApi(this._client);
+
+  /// Returns the set of permissions you have for managing the specified
+  /// Atlassian account
+  Future<Map<String, dynamic>> getUserManagementPermissions(
+      {required String accountId, List<String>? privileges}) async {
+    return await _client.send(
+      'get',
+      'users/{account_id}/manage',
+      pathParameters: {
+        'account_id': accountId,
+      },
+      queryParameters: {
+        if (privileges != null)
+          'privileges': privileges.map((e) => e).join(','),
+      },
+    ) as Map<String, Object?>;
+  }
+}
+
+class ProfileApi {
+  final ApiClient _client;
+
+  ProfileApi(this._client);
+
+  /// Returns information about a single Atlassian account by ID
+  Future<Map<String, dynamic>> getProfile(String accountId) async {
+    return await _client.send(
+      'get',
+      'users/{account_id}/manage/profile',
+      pathParameters: {
+        'account_id': accountId,
+      },
+    ) as Map<String, Object?>;
   }
 }
 
@@ -188,6 +284,64 @@ class AccountCharacteristics {
   AccountCharacteristics copyWith({bool? notMentionable}) {
     return AccountCharacteristics(
       notMentionable: notMentionable ?? this.notMentionable,
+    );
+  }
+}
+
+/// API Token information
+class ApiTokenModel {
+  /// Human readable description for the token.
+  final String label;
+
+  /// Timestamp last time the token was used to Authenticate as a UTC-ISO8601
+  /// string
+  final String? lastAccess;
+
+  /// Timestamp of when the token was generated as a UTC-ISO8601 string
+  final String createdAt;
+
+  /// Container token id. This is the identifier of the system user associated
+  /// with the container token.
+  final String id;
+
+  ApiTokenModel(
+      {required this.label,
+      this.lastAccess,
+      required this.createdAt,
+      required this.id});
+
+  factory ApiTokenModel.fromJson(Map<String, Object?> json) {
+    return ApiTokenModel(
+      label: json[r'label'] as String? ?? '',
+      lastAccess: json[r'lastAccess'] as String?,
+      createdAt: json[r'createdAt'] as String? ?? '',
+      id: json[r'id'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var label = this.label;
+    var lastAccess = this.lastAccess;
+    var createdAt = this.createdAt;
+    var id = this.id;
+
+    final json = <String, Object?>{};
+    json[r'label'] = label;
+    if (lastAccess != null) {
+      json[r'lastAccess'] = lastAccess;
+    }
+    json[r'createdAt'] = createdAt;
+    json[r'id'] = id;
+    return json;
+  }
+
+  ApiTokenModel copyWith(
+      {String? label, String? lastAccess, String? createdAt, String? id}) {
+    return ApiTokenModel(
+      label: label ?? this.label,
+      lastAccess: lastAccess ?? this.lastAccess,
+      createdAt: createdAt ?? this.createdAt,
+      id: id ?? this.id,
     );
   }
 }

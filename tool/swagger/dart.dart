@@ -382,10 +382,12 @@ class Operation {
       //throw Exception(
       //    'Several ${responses.map((p) => p.key)} ${path.operationId} ${_api.name}');
     }
-    var response = responses.first.value;
+    var responseEntry = responses.first;
+    var response = responseEntry.value;
 
     var returnTypeName = 'void';
     DartType? returnDartType;
+    var followRedirects = true;
     if (response.content.isNotEmpty) {
       var firstResponseContent = response.content.entries.first.value;
       var responseSchema = firstResponseContent.schema;
@@ -397,6 +399,9 @@ class Operation {
           firstResponseContent.example != null) {
         returnTypeName = 'dynamic';
       }
+    } else if (responseEntry.key == '302') {
+      returnTypeName = 'Uri';
+      followRedirects = false;
     }
 
     buffer.writeln(documentationComment(path.description, indent: 2));
@@ -435,6 +440,9 @@ class Operation {
           parametersCode += ', file: file';
         }
       }
+    }
+    if (!followRedirects) {
+      parametersCode += ', followRedirects: false';
     }
 
     var sendCode =

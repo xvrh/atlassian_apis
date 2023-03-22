@@ -29,7 +29,9 @@ class ApiClient {
     Map<String, String>? headers,
     dynamic body,
     MultipartFile? file,
+    bool? followRedirects,
   }) async {
+    followRedirects ??= true;
     var path = pathTemplate;
 
     if (pathParameters != null) {
@@ -78,10 +80,16 @@ class ApiClient {
 
     request
       ..headers[_headerExperimental] = 'opt-in'
-      ..headers['User-Agent'] = 'Dart/atlassian_apis';
+      ..headers['User-Agent'] = 'Dart/atlassian_apis'
+      ..followRedirects = followRedirects;
 
     var response = await Response.fromStream(await _client.send(request));
     ApiException.checkResponse(response);
+
+    if (response.statusCode == 302) {
+      assert(T == Uri);
+      return (Uri.parse(response.headers['location'] ?? '')) as T;
+    }
 
     var decoded = _decode(response);
     return decoded as T;

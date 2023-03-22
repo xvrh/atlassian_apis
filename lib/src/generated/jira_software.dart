@@ -170,10 +170,18 @@ class JiraSoftwareApi {
   /// | Yes      |
   late final remoteLinks = RemoteLinksApi(_client);
 
-  /// APIs related to integrating Security information with Jira Software. These
-  /// APIs are available to Atlassian Connect
-  /// apps. To use these APIs you must have the Security module in your app's
-  /// descriptor. Read more about Jira Software modules
+  /// Send security information to Jira Software and enable your teams to turn
+  /// unplanned vulnerabilities into planned and tracked work.
+  ///
+  /// Security is everyone's responsibility, and the security feature in Jira
+  /// lets you triage and track relevant vulnerabilities as a team. Discuss and
+  /// prioritise issues, minimise errors and duplication, and plan security work
+  /// to complete in your sprints.
+  ///
+  /// APIs related to integrating Security information with Jira Software are
+  /// available to Atlassian Connect apps. To use these APIs you must have the
+  /// Security module in your app's descriptor. Read more about Jira Software
+  /// modules
   /// [here](https://developer.atlassian.com/cloud/jira/software/about-jira-modules/).
   late final securityInformation = SecurityInformationApi(_client);
 

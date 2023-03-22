@@ -35,8 +35,25 @@ class DirectoryApi {
 
   DirectoryApi(this._client);
 
-  /// You can use this to remove a specififed user(s) from the organization
-  /// directory.
+  /// This API will return the last active date of a user for each product
+  /// listed in Atlassian Administration.
+  ///
+  /// Active is defined as viewing a product's page for a minimum of 2 seconds.
+  ///
+  /// Last activity data can be delayed up to 4 hours.
+  Future<UserProductAccess> getUserSLastActiveDate(
+      {required String orgId, required String accountId}) async {
+    return UserProductAccess.fromJson(await _client.send(
+      'get',
+      'orgs/{orgId}/directory/users/{accountId}/last-active-dates',
+      pathParameters: {
+        'orgId': orgId,
+        'accountId': accountId,
+      },
+    ));
+  }
+
+  /// Removes all access the user has to products managed by the organization.
   ///
   /// The API authentication header supports
   /// [Organization API Keys](https://support.atlassian.com/organization-administration/docs/manage-an-organization-with-the-admin-apis/).
@@ -47,12 +64,7 @@ class DirectoryApi {
   /// **The API is available for customers using the new user management
   /// experience only. Learn more about the
   /// [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**
-  ///
-  /// **The API is currently in a limited functionality mode and does not
-  /// produce access
-  /// [audit logs](https://support.atlassian.com/organization-administration/docs/track-organization-activities-from-the-audit-log/)
-  /// for removed users.**
-  Future<void> removeUserFromOrganizationDirectory(
+  Future<void> removeUserAccess(
       {required String orgId, required String accountId}) async {
     await _client.send(
       'delete',
@@ -62,6 +74,41 @@ class DirectoryApi {
         'accountId': accountId,
       },
     );
+  }
+
+  /// Suspends user's access in your organization. Suspended users cannot access
+  /// your organization’s products.
+  ///
+  /// **The API is available for customers using the new user management
+  /// experience only. Learn more about the
+  /// [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**
+  Future<GenericActionSuccessModel> suspendUserAccess(
+      {required String orgId, required String accountId}) async {
+    return GenericActionSuccessModel.fromJson(await _client.send(
+      'post',
+      'orgs/{orgId}/directory/users/{accountId}/suspend-access',
+      pathParameters: {
+        'orgId': orgId,
+        'accountId': accountId,
+      },
+    ));
+  }
+
+  /// Restore user's access in your organization.
+  ///
+  /// **The API is available for customers using the new user management
+  /// experience only. Learn more about the
+  /// [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**
+  Future<GenericActionSuccessModel> restoreUserAccess(
+      {required String orgId, required String accountId}) async {
+    return GenericActionSuccessModel.fromJson(await _client.send(
+      'post',
+      'orgs/{orgId}/directory/users/{accountId}/restore-access',
+      pathParameters: {
+        'orgId': orgId,
+        'accountId': accountId,
+      },
+    ));
   }
 }
 
@@ -383,11 +430,13 @@ class ApplicationError {
   ///   - `ADMIN-400-2` - Invalid domain identifier
   ///   - `ADMIN-400-3` - Invalid time date
   ///   - `ADMIN-400-4` - Invalid resource
+  ///   - `ADMIN-403-3` - Not allowed to manage the org
   ///   - `ADMIN-404-1` - Unknown resource
   ///   - `ADMIN-404-2` - Organization not found
   ///   - `ADMIN-404-3` - Domain not found
   ///   - `ADMIN-404-4` - Event not found
   ///   - `ADMIN-404-5` - Policy not found
+  ///   - `ADMIN-404-8` - User not found
   ///   - `ADMIN-405-1` - Method not supported
   ///   - `ADMIN-429-1` - Limit exceeded
   ///   - `ADMIN-500-1` - Internal error
@@ -1081,6 +1130,38 @@ class ErrorPolicyResourceNotFoundModel {
   }
 }
 
+/// A list of application errors
+class ErrorsApplicationErrorsModel {
+  final List<ApplicationError> errors;
+
+  ErrorsApplicationErrorsModel({List<ApplicationError>? errors})
+      : errors = errors ?? [];
+
+  factory ErrorsApplicationErrorsModel.fromJson(Map<String, Object?> json) {
+    return ErrorsApplicationErrorsModel(
+      errors: (json[r'errors'] as List<Object?>?)
+              ?.map((i) => ApplicationError.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var errors = this.errors;
+
+    final json = <String, Object?>{};
+    json[r'errors'] = errors.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  ErrorsApplicationErrorsModel copyWith({List<ApplicationError>? errors}) {
+    return ErrorsApplicationErrorsModel(
+      errors: errors ?? this.errors,
+    );
+  }
+}
+
 class Event {
   final EventModel? data;
 
@@ -1667,6 +1748,36 @@ class EventPageMeta {
     return EventPageMeta(
       next: next ?? this.next,
       pageSize: pageSize ?? this.pageSize,
+    );
+  }
+}
+
+class GenericActionSuccessModel {
+  /// A description of the entities affected, and changes made as a result of
+  /// calling this API.
+  final String? message;
+
+  GenericActionSuccessModel({this.message});
+
+  factory GenericActionSuccessModel.fromJson(Map<String, Object?> json) {
+    return GenericActionSuccessModel(
+      message: json[r'message'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var message = this.message;
+
+    final json = <String, Object?>{};
+    if (message != null) {
+      json[r'message'] = message;
+    }
+    return json;
+  }
+
+  GenericActionSuccessModel copyWith({String? message}) {
+    return GenericActionSuccessModel(
+      message: message ?? this.message,
     );
   }
 }
@@ -3646,6 +3757,68 @@ class UserPageMeta {
   UserPageMeta copyWith({int? total}) {
     return UserPageMeta(
       total: total ?? this.total,
+    );
+  }
+}
+
+class UserProductAccess {
+  final UserProductAccessModel? data;
+
+  UserProductAccess({this.data});
+
+  factory UserProductAccess.fromJson(Map<String, Object?> json) {
+    return UserProductAccess(
+      data: json[r'data'] != null
+          ? UserProductAccessModel.fromJson(
+              json[r'data']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var data = this.data;
+
+    final json = <String, Object?>{};
+    if (data != null) {
+      json[r'data'] = data.toJson();
+    }
+    return json;
+  }
+
+  UserProductAccess copyWith({UserProductAccessModel? data}) {
+    return UserProductAccess(
+      data: data ?? this.data,
+    );
+  }
+}
+
+class UserProductAccessModel {
+  /// Products which the User is using
+  final List<Product> productAccess;
+
+  UserProductAccessModel({required this.productAccess});
+
+  factory UserProductAccessModel.fromJson(Map<String, Object?> json) {
+    return UserProductAccessModel(
+      productAccess: (json[r'product_access'] as List<Object?>?)
+              ?.map((i) =>
+                  Product.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var productAccess = this.productAccess;
+
+    final json = <String, Object?>{};
+    json[r'product_access'] = productAccess.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  UserProductAccessModel copyWith({List<Product>? productAccess}) {
+    return UserProductAccessModel(
+      productAccess: productAccess ?? this.productAccess,
     );
   }
 }

@@ -618,7 +618,8 @@
           "Content"
         ],
         "summary": "Get content",
-        "description": "Returns all content in a Confluence instance.\n\nBy default, the following objects are expanded: `space`, `history`, `version`.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).\nOnly content that the user has permission to view will be returned.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns all content in a Confluence instance.\n\nBy default, the following objects are expanded: `space`, `history`, `version`.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).\nOnly content that the user has permission to view will be returned.",
         "operationId": "getContent",
         "parameters": [
           {
@@ -784,7 +785,8 @@
           "Content"
         ],
         "summary": "Create content",
-        "description": "Creates a new piece of content or publishes an existing draft.\n\nTo publish a draft, add the `id` and `status` properties to the body of the request.\nSet the `id` to the ID of the draft and set the `status` to 'current'. When the\nrequest is sent, a new piece of content will be created and the metadata from the\ndraft will be transferred into it.\n\nBy default, the following objects are expanded: `space`, `history`, `version`.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'Add' permission for the\nspace that the content will be created in, and permission to view the draft if publishing a draft.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nCreates a new piece of content or publishes an existing draft.\n\nTo publish a draft, add the `id` and `status` properties to the body of the request.\nSet the `id` to the ID of the draft and set the `status` to 'current'. When the\nrequest is sent, a new piece of content will be created and the metadata from the\ndraft will be transferred into it.\n\nBy default, the following objects are expanded: `space`, `history`, `version`.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'Add' permission for the\nspace that the content will be created in, and permission to view the draft if publishing a draft.",
         "operationId": "createContent",
         "parameters": [
           {
@@ -1246,7 +1248,8 @@
           "Content"
         ],
         "summary": "Get content by ID",
-        "description": "Returns a single piece of content, like a page or a blog post.\n\nBy default, the following objects are expanded: `space`, `history`, `version`.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content. If the content is a blog post, 'View' permission\nfor the space is required.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns a single piece of content, like a page or a blog post.\n\nBy default, the following objects are expanded: `space`, `history`, `version`.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content. If the content is a blog post, 'View' permission\nfor the space is required.",
         "operationId": "getContentById",
         "parameters": [
           {
@@ -1380,7 +1383,8 @@
           "Content"
         ],
         "summary": "Update content",
-        "description": "Updates a piece of content. Use this method to update the title or body\nof a piece of content, change the status, change the parent page, and more.\n\nNote, updating draft content is currently not supported.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the content.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nUpdates a piece of content. Use this method to update the title or body\nof a piece of content, change the status, change the parent page, and more.\n\nNote, updating draft content is currently not supported.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the content.",
         "operationId": "updateContent",
         "parameters": [
           {
@@ -1503,7 +1507,8 @@
           "Content"
         ],
         "summary": "Delete content",
-        "description": "Moves a piece of content to the space's trash or purges it from the trash,\ndepending on the content's type and status:\n\n- If the content's type is `page` or `blogpost` and its status is `current`,\nit will be trashed.\n- If the content's type is `page` or `blogpost` and its status is `trashed`,\nthe content will be purged from the trash and deleted permanently. Note,\nyou must also set the `status` query parameter to `trashed` in your request.\n- If the content's type is `comment` or `attachment`, it will be deleted\npermanently without being trashed.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Delete' permission for the space that the content is in.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nMoves a piece of content to the space's trash or purges it from the trash,\ndepending on the content's type and status:\n\n- If the content's type is `page` or `blogpost` and its status is `current`,\nit will be trashed.\n- If the content's type is `page` or `blogpost` and its status is `trashed`,\nthe content will be purged from the trash and deleted permanently. Note,\nyou must also set the `status` query parameter to `trashed` in your request.\n- If the content's type is `comment` or `attachment`, it will be deleted\npermanently without being trashed.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Delete' permission for the space that the content is in.",
         "operationId": "deleteContent",
         "parameters": [
           {
@@ -1657,7 +1662,8 @@
           "Content - children and descendants"
         ],
         "summary": "Get content children",
-        "description": "Returns a map of the direct children of a piece of content. A piece of content\nhas different types of child content, depending on its type. These are\nthe default parent-child content type relationships:\n\n- `page`: child content is `page`, `comment`, `attachment`\n- `blogpost`: child content is `comment`, `attachment`\n- `attachment`: child content is `comment`\n- `comment`: child content is `attachment`\n\nApps can override these default relationships. Apps can also introduce\nnew content types that create new parent-child content relationships.\n\nNote, the map will always include all child content types that are valid\nfor the content. However, if the content has no instances of a child content\ntype, the map will contain an empty array for that child content type.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'View' permission for the space,\nand permission to view the content if it is a page.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns a map of the direct children of a piece of content. A piece of content\nhas different types of child content, depending on its type. These are\nthe default parent-child content type relationships:\n\n- `page`: child content is `page`, `comment`, `attachment`\n- `blogpost`: child content is `comment`, `attachment`\n- `attachment`: child content is `comment`\n- `comment`: child content is `attachment`\n\nApps can override these default relationships. Apps can also introduce\nnew content types that create new parent-child content relationships.\n\nNote, the map will always include all child content types that are valid\nfor the content. However, if the content has no instances of a child content\ntype, the map will contain an empty array for that child content type.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'View' permission for the space,\nand permission to view the content if it is a page.",
         "operationId": "getContentChildren",
         "parameters": [
           {
@@ -1844,7 +1850,8 @@
           "Content - attachments"
         ],
         "summary": "Get attachments",
-        "description": "Returns the attachments for a piece of content.\n\nBy default, the following objects are expanded: `metadata`.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content. If the content is a blog post, 'View' permission\nfor the space is required.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns the attachments for a piece of content.\n\nBy default, the following objects are expanded: `metadata`.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content. If the content is a blog post, 'View' permission\nfor the space is required.",
         "operationId": "getAttachments",
         "parameters": [
           {
@@ -2460,7 +2467,8 @@
           "Content comments"
         ],
         "summary": "Get content comments",
-        "description": "Returns the comments on a piece of content.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'View' permission for the space,\nand permission to view the content if it is a page.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns the comments on a piece of content.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'View' permission for the space,\nand permission to view the content if it is a page.",
         "operationId": "getContentComments",
         "parameters": [
           {
@@ -2584,7 +2592,8 @@
           "Content - children and descendants"
         ],
         "summary": "Get content children by type",
-        "description": "Returns all children of a given type, for a piece of content.\nA piece of content has different types of child content, depending on its type:\n\n- `page`: child content is `page`, `comment`, `attachment`\n- `blogpost`: child content is `comment`, `attachment`\n- `attachment`: child content is `comment`\n- `comment`: child content is `attachment`\n\nCustom content types that are provided by apps can also be returned.\n\nNote, this method only returns direct children. To return children at all\nlevels, use [Get descendants by type](#api-content-id-descendant-type-get).\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'View' permission for the space,\nand permission to view the content if it is a page.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns all children of a given type, for a piece of content.\nA piece of content has different types of child content, depending on its type:\n\n- `page`: child content is `page`, `comment`, `attachment`\n- `blogpost`: child content is `comment`, `attachment`\n- `attachment`: child content is `comment`\n- `comment`: child content is `attachment`\n\nCustom content types that are provided by apps can also be returned.\n\nNote, this method only returns direct children. To return children at all\nlevels, use [Get descendants by type](#api-content-id-descendant-type-get).\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'View' permission for the space,\nand permission to view the content if it is a page.",
         "operationId": "getContentChildrenByType",
         "parameters": [
           {
@@ -2898,7 +2907,8 @@
           "Content"
         ],
         "summary": "Get content history",
-        "description": "Returns the most recent update for a piece of content.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: Permission to view the content.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns the most recent update for a piece of content.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: Permission to view the content.",
         "operationId": "getHistoryForContent",
         "parameters": [
           {
@@ -3334,7 +3344,8 @@
           "Content labels"
         ],
         "summary": "Get labels for content",
-        "description": "Returns the labels on a piece of content.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space and permission to view the content if it is a page.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns the labels on a piece of content.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space and permission to view the content if it is a page.",
         "operationId": "getLabelsForContent",
         "parameters": [
           {
@@ -6335,7 +6346,8 @@
           "Content versions"
         ],
         "summary": "Get content versions",
-        "description": "Returns the versions for a piece of content in descending order.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content. If the content is a blog post, 'View' permission\nfor the space is required.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns the versions for a piece of content in descending order.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content. If the content is a blog post, 'View' permission\nfor the space is required.",
         "operationId": "getContentVersions",
         "parameters": [
           {
@@ -6526,7 +6538,8 @@
           "Content versions"
         ],
         "summary": "Get content version",
-        "description": "Returns a version for a piece of content.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content. If the content is a blog post, 'View' permission\nfor the space is required.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns a version for a piece of content.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content. If the content is a blog post, 'View' permission\nfor the space is required.",
         "operationId": "getContentVersion",
         "parameters": [
           {
@@ -7297,7 +7310,8 @@
           "Inline tasks"
         ],
         "summary": "Get inline tasks based on search parameters",
-        "description": "Returns inline tasks based on the search query.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission). Only tasks\nin contents that the user has permission to view are returned.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns inline tasks based on the search query.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission). Only tasks\nin contents that the user has permission to view are returned.",
         "operationId": "searchTasks",
         "parameters": [
           {
@@ -7484,7 +7498,8 @@
           "Inline tasks"
         ],
         "summary": "Get inline task based on global ID",
-        "description": "Returns inline task based on the global ID.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content associated with the task.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns inline task based on the global ID.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content associated with the task.",
         "operationId": "getTaskById",
         "parameters": [
           {
@@ -9863,7 +9878,7 @@
           "Search"
         ],
         "summary": "Search content",
-        "description": "Searches for content using the\n[Confluence Query Language (CQL)](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/)\n\nExample initial call:\n```\n/wiki/rest/api/search?cql=type=page&limit=25\n```\n\nExample response:\n```\n{\n  \"results\": [\n    { ... },\n    { ... },\n    ...\n    { ... }\n  ],\n  \"limit\": 25,\n  \"size\": 25,\n  ...\n  \"_links\": {\n    \"base\": \"<url>\",\n    \"context\": \"<url>\",\n    \"next\": \"/rest/api/search?cql=type=page&limit=25&cursor=raNDoMsTRiNg\",\n    \"self\": \"<url>\"\n  }\n}\n```\n\nWhen additional results are available, returns `next` and `prev` URLs to retrieve them in subsequent calls. The URLs each contain a cursor that points to the appropriate set of results. Use `limit` to specify the number of results returned in each call.\n\nExample subsequent call (taken from example response):\n```\n/wiki/rest/api/search?cql=type=page&limit=25&cursor=raNDoMsTRiNg\n```\nThe response to this will have a `prev` URL similar to the `next` in the example response.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the entities. Note, only entities that the user has\npermission to view will be returned.",
+        "description": "Searches for content using the\n[Confluence Query Language (CQL)](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/).\n\n**Note that CQL input queries submitted through the `/wiki/rest/api/search` endpoint no longer support user-specific fields like `user`, `user.fullname`, `user.accountid`, and `user.userkey`.** \nSee this [deprecation notice](https://developer.atlassian.com/cloud/confluence/deprecation-notice-search-api/) for more details.\n\nExample initial call:\n```\n/wiki/rest/api/search?cql=type=page&limit=25\n```\n\nExample response:\n```\n{\n  \"results\": [\n    { ... },\n    { ... },\n    ...\n    { ... }\n  ],\n  \"limit\": 25,\n  \"size\": 25,\n  ...\n  \"_links\": {\n    \"base\": \"<url>\",\n    \"context\": \"<url>\",\n    \"next\": \"/rest/api/search?cql=type=page&limit=25&cursor=raNDoMsTRiNg\",\n    \"self\": \"<url>\"\n  }\n}\n```\n\nWhen additional results are available, returns `next` and `prev` URLs to retrieve them in subsequent calls. The URLs each contain a cursor that points to the appropriate set of results. Use `limit` to specify the number of results returned in each call.\n\nExample subsequent call (taken from example response):\n```\n/wiki/rest/api/search?cql=type=page&limit=25&cursor=raNDoMsTRiNg\n```\nThe response to this will have a `prev` URL similar to the `next` in the example response.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the entities. Note, only entities that the user has\npermission to view will be returned.",
         "operationId": "searchByCQL",
         "parameters": [
           {
@@ -10053,7 +10068,7 @@
           "Search"
         ],
         "summary": "Search users",
-        "description": "Searches for users using user-specific queries from the\n[Confluence Query Language (CQL)](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/).\n\nNote that some user fields may be set to null depending on the user's privacy settings.\nThese are: email, profilePicture, displayName, and timeZone.",
+        "description": "Searches for users using user-specific queries from the\n[Confluence Query Language (CQL)](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/).\n\nNote that CQL input queries submitted through the `/wiki/rest/api/search/user` endpoint only support user-specific fields like `user`, `user.fullname`, `user.accountid`, and `user.userkey`.\n\nNote that some user fields may be set to null depending on the user's privacy settings.\nThese are: email, profilePicture, displayName, and timeZone.",
         "operationId": "searchUser",
         "parameters": [
           {
@@ -10778,7 +10793,8 @@
           "Space"
         ],
         "summary": "Get spaces",
-        "description": "Returns all spaces. The returned spaces are ordered alphabetically in\nascending order by space key.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).\nNote, the returned list will only contain spaces that the current user\nhas permission to view.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns all spaces. The returned spaces are ordered alphabetically in\nascending order by space key.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).\nNote, the returned list will only contain spaces that the current user\nhas permission to view.",
         "operationId": "getSpaces",
         "parameters": [
           {
@@ -11090,7 +11106,8 @@
           "Space"
         ],
         "summary": "Get space",
-        "description": "Returns a space. This includes information like the name, description,\nand permissions, but not the content in the space.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns a space. This includes information like the name, description,\nand permissions, but not the content in the space.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space.",
         "operationId": "getSpace",
         "parameters": [
           {
@@ -11308,7 +11325,8 @@
           "Space"
         ],
         "summary": "Get content for space",
-        "description": "Returns all content in a space. The returned content is grouped by type\n(pages then blogposts), then ordered by content ID in ascending order.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space. Note, the returned list will only\ncontain content that the current user has permission to view.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns all content in a space. The returned content is grouped by type\n(pages then blogposts), then ordered by content ID in ascending order.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space. Note, the returned list will only\ncontain content that the current user has permission to view.",
         "operationId": "getContentForSpace",
         "parameters": [
           {
@@ -11657,7 +11675,8 @@
           "Space"
         ],
         "summary": "Get content by type for space",
-        "description": "Returns all content of a given type, in a space. The returned content is\nordered by content ID in ascending order.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space. Note, the returned list will only\ncontain content that the current user has permission to view.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns all content of a given type, in a space. The returned content is\nordered by content ID in ascending order.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space. Note, the returned list will only\ncontain content that the current user has permission to view.",
         "operationId": "getContentByTypeForSpace",
         "parameters": [
           {
@@ -11772,7 +11791,8 @@
           "Space properties"
         ],
         "summary": "Get space properties",
-        "description": "Returns all properties for the given space. Space properties are a key-value storage associated with a space.\n\n**[Permissions required](https://confluence.atlassian.com/x/_AozKw)**: ‘View’ permission for the space.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns all properties for the given space. Space properties are a key-value storage associated with a space.\n\n**[Permissions required](https://confluence.atlassian.com/x/_AozKw)**: ‘View’ permission for the space.",
         "operationId": "getSpaceProperties",
         "parameters": [
           {
@@ -11873,7 +11893,8 @@
           "Space properties"
         ],
         "summary": "Create space property",
-        "description": "Creates a new space property.\n\n**[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:\n‘Admin’ permission for the space.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nCreates a new space property.\n\n**[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:\n‘Admin’ permission for the space.",
         "operationId": "createSpaceProperty",
         "parameters": [
           {
@@ -11966,7 +11987,8 @@
           "Space properties"
         ],
         "summary": "Get space property",
-        "description": "Returns a space property.\n\n**[Permissions required](https://confluence.atlassian.com/x/_AozKw)**: ‘View’ permission for the space.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns a space property.\n\n**[Permissions required](https://confluence.atlassian.com/x/_AozKw)**: ‘View’ permission for the space.",
         "operationId": "getSpaceProperty",
         "parameters": [
           {
@@ -12054,7 +12076,8 @@
           "Space properties"
         ],
         "summary": "Update space property",
-        "description": "Updates a space property. Note, you cannot update the key of a space\nproperty, only the value.\n\n**[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:\n‘Admin’ permission for the space.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nUpdates a space property. Note, you cannot update the key of a space\nproperty, only the value.\n\n**[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:\n‘Admin’ permission for the space.",
         "operationId": "updateSpaceProperty",
         "parameters": [
           {
@@ -12154,7 +12177,8 @@
           "Space properties"
         ],
         "summary": "Create space property for key",
-        "description": "Creates a new space property. This is the same as `POST\n/wiki/rest/api/space/{spaceKey}/property` but the key for the property is passed as a\npath parameter, rather than in the request body.\n\n**[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:\n‘Admin’ permission for the space.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nCreates a new space property. This is the same as `POST\n/wiki/rest/api/space/{spaceKey}/property` but the key for the property is passed as a\npath parameter, rather than in the request body.\n\n**[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:\n‘Admin’ permission for the space.",
         "operationId": "createSpacePropertyForKey",
         "parameters": [
           {
@@ -12246,7 +12270,8 @@
           "Space properties"
         ],
         "summary": "Delete space property",
-        "description": "Deletes a space property.\n\n**[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:\n‘Admin’ permission for the space.",
+        "deprecated": true,
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nDeletes a space property.\n\n**[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:\n‘Admin’ permission for the space.",
         "operationId": "deleteSpaceProperty",
         "parameters": [
           {
@@ -13291,7 +13316,11 @@
             "content": {}
           },
           "403": {
-            "description": "Returned if the calling user does not have permission to update the\ntemplate.",
+            "description": "Returned if the calling user does not have permission.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the calling user does not have permission to update the\ntemplate or if the template doesn't exist.",
             "content": {}
           }
         },
@@ -17116,6 +17145,7 @@
             }
           }
         },
+        "additionalProperties": true,
         "description": "Shows whether a piece of content has attachments, comments, or child pages.\nNote, this doesn't actually contain the child objects."
       },
       "ContentCreate": {
