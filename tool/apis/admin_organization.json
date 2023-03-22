@@ -1136,14 +1136,115 @@
         }
       }
     },
+    "/orgs/{orgId}/directory/users/{accountId}/last-active-dates": {
+      "get": {
+        "tags": [
+          "Directory"
+        ],
+        "x-experimental": true,
+        "summary": "Get user’s last active date",
+        "description": "This API will return the last active date of a user for each product listed in Atlassian Administration.\n\nActive is defined as viewing a product's page for a minimum of 2 seconds.\n\nLast activity data can be delayed up to 4 hours.\n",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "description": "Your organization is identified by a Unique ID. You get your organization ID and Organization API key simultaneously.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "description": "Unique ID of the user's account.\nUse the [Jira User Search API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-users-search-get) to get the accountId (if Jira is available for your Organization). **Jira APIs use a different [authentication method ](https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/).**",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProductAccess"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-400-4`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized\n\nExpected values for `ApplicationError.code`: (see type description for details)\n  - `ADMIN-401-2`\n\nExpected values for `ProxyError.code`: (see type description for details)\n  - `401`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ProxyError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-403-3`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-404-8`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many API requests\n\nExpected values for `ProxyError.code`: (see type description for details)\n- `429`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProxyError"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    },
     "/orgs/{orgId}/directory/users/{accountId}": {
       "delete": {
         "tags": [
           "Directory"
         ],
-        "x-experimental": true,
-        "summary": "Remove user from organization directory",
-        "description": "You can use this to remove a specififed user(s) from the organization directory. \n\nThe API authentication header supports [Organization API Keys](https://support.atlassian.com/organization-administration/docs/manage-an-organization-with-the-admin-apis/). API keys allow you to manage your organization. Copy the values for your Organization ID and API key and call the API.\n API Key is used as an Authentication header Bearer token to call the API.\n\n**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n\n**The API is currently in a limited functionality mode and does not produce access [audit logs](https://support.atlassian.com/organization-administration/docs/track-organization-activities-from-the-audit-log/) for removed users.**\n",
+        "summary": "Remove user access",
+        "description": "Removes all access the user has to products managed by the organization.\n\nThe API authentication header supports [Organization API Keys](https://support.atlassian.com/organization-administration/docs/manage-an-organization-with-the-admin-apis/). API keys allow you to manage your organization. Copy the values for your Organization ID and API key and call the API.\n API Key is used as an Authentication header Bearer token to call the API.\n\n**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n",
         "parameters": [
           {
             "name": "orgId",
@@ -1166,22 +1267,259 @@
         ],
         "responses": {
           "204": {
-            "description": "User was removed from organization directory. Everything went fine, nothing to return."
+            "description": "User access removed from organization. Everything went fine, nothing to return."
           },
           "400": {
-            "description": "Validation error"
+            "description": "Bad request\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-400-4`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
           },
           "401": {
-            "$ref": "#/components/responses/Error.Unauthenticated"
+            "description": "Unauthorized\n\nExpected values for `ApplicationError.code`: (see type description for details)\n  - `ADMIN-401-2`\n\nExpected values for `ProxyError.code`: (see type description for details)\n  - `401`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ProxyError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                    }
+                  ]
+                }
+              }
+            }
           },
           "403": {
-            "description": "You do not have permission to remove the user"
-          },
-          "404": {
-            "description": "Organization is not supported"
+            "description": "Forbidden\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-403-3`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
           },
           "429": {
-            "$ref": "#/components/responses/Error.RateLimited"
+            "description": "Too many API requests\n\nExpected values for `ProxyError.code`: (see type description for details)\n- `429`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProxyError"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    },
+    "/orgs/{orgId}/directory/users/{accountId}/suspend-access": {
+      "post": {
+        "tags": [
+          "Directory"
+        ],
+        "summary": "Suspend user access",
+        "description": "Suspends user's access in your organization. Suspended users cannot access your organization’s products.\n\n**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "description": "Your organization is identified by a Unique ID. You get your organization ID and Organization API key simultaneously.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "description": "Unique ID of the user's account that you are suspending.\nUse the [Jira User Search API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-users-search-get) to get the accountId (if Jira is available for your Organization). **Jira APIs use a different [authentication method ](https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/).**",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User was successfully suspended in the organization directory.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericActionSuccessModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-400-4`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized\n\nExpected values for `ApplicationError.code`: (see type description for details)\n  - `ADMIN-401-2`\n\nExpected values for `ProxyError.code`: (see type description for details)\n  - `401`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ProxyError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-403-3`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-404-8`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many API requests\n\nExpected values for `ProxyError.code`: (see type description for details)\n- `429`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProxyError"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    },
+    "/orgs/{orgId}/directory/users/{accountId}/restore-access": {
+      "post": {
+        "tags": [
+          "Directory"
+        ],
+        "summary": "Restore user access",
+        "description": "Restore user's access in your organization.\n\n**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "description": "Your organization is identified by a Unique ID. You get your organization ID and Organization API key simultaneously.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "description": "Unique ID of the user's account that you are restoring.\nUse the [Jira User Search API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-users-search-get) to get the accountId (if Jira is available for your Organization). **Jira APIs use a different [authentication method ](https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/).**",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User's access is successfully restored in the organization directory.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericActionSuccessModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-400-4`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized\n\nExpected values for `ApplicationError.code`: (see type description for details)\n  - `ADMIN-401-2`\n\nExpected values for `ProxyError.code`: (see type description for details)\n  - `401`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ProxyError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-403-3`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-404-8`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many API requests\n\nExpected values for `ProxyError.code`: (see type description for details)\n- `429`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProxyError"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
           }
         }
       }
@@ -1601,6 +1939,30 @@
             "type": "object",
             "$ref": "#/components/schemas/LinkPageModel",
             "description": "Links for Pagination."
+          }
+        }
+      },
+      "UserProductAccessModel": {
+        "type": "object",
+        "required": [
+          "product_access"
+        ],
+        "properties": {
+          "product_access": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Product"
+            },
+            "description": "Products which the User is using"
+          }
+        }
+      },
+      "UserProductAccess": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "$ref": "#/components/schemas/UserProductAccessModel"
           }
         }
       },
@@ -2350,6 +2712,16 @@
           }
         }
       },
+      "GenericActionSuccessModel": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "User 389439742983287 has been successfully removed from the organization.",
+            "description": "A description of the entities affected, and changes made as a result of calling this API."
+          }
+        }
+      },
       "ApplicationError": {
         "type": "object",
         "properties": {
@@ -2363,7 +2735,8 @@
           },
           "code": {
             "type": "string",
-            "description": "An application-specific error code:\n  - `ADMIN-400-1` - Invalid page cursor\n  - `ADMIN-400-2` - Invalid domain identifier\n  - `ADMIN-400-3` - Invalid time date\n  - `ADMIN-400-4` - Invalid resource\n  - `ADMIN-404-1` - Unknown resource\n  - `ADMIN-404-2` - Organization not found\n  - `ADMIN-404-3` - Domain not found\n  - `ADMIN-404-4` - Event not found\n  - `ADMIN-404-5` - Policy not found\n  - `ADMIN-405-1` - Method not supported\n  - `ADMIN-429-1` - Limit exceeded\n  - `ADMIN-500-1` - Internal error\n"
+            "example": "ADMIN-XXX-X",
+            "description": "An application-specific error code:\n  - `ADMIN-400-1` - Invalid page cursor\n  - `ADMIN-400-2` - Invalid domain identifier\n  - `ADMIN-400-3` - Invalid time date\n  - `ADMIN-400-4` - Invalid resource\n  - `ADMIN-403-3` - Not allowed to manage the org\n  - `ADMIN-404-1` - Unknown resource\n  - `ADMIN-404-2` - Organization not found\n  - `ADMIN-404-3` - Domain not found\n  - `ADMIN-404-4` - Event not found\n  - `ADMIN-404-5` - Policy not found\n  - `ADMIN-404-8` - User not found\n  - `ADMIN-405-1` - Method not supported\n  - `ADMIN-429-1` - Limit exceeded\n  - `ADMIN-500-1` - Internal error\n"
           },
           "title": {
             "type": "string",
@@ -2417,6 +2790,19 @@
           "requestId": {
             "type": "string",
             "description": "Id of the request."
+          }
+        }
+      },
+      "Errors.ApplicationErrors.Model": {
+        "type": "object",
+        "title": "ApplicationErrors",
+        "description": "A list of application errors",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicationError"
+            }
           }
         }
       },

@@ -32,6 +32,11 @@ class Api {
       Uri.https('developer.atlassian.com', 'cloud/confluence/swagger.v3.json'),
     ),
     Api(
+      'confluence_v2',
+      Uri.https(
+          'developer.atlassian.com', 'cloud/confluence/openapi-v2.v3.json'),
+    ),
+    Api(
       'admin_organization',
       Uri.https('developer.atlassian.com',
           'cloud/admin/organization/swagger.v3.json'),

@@ -258,6 +258,9 @@ class ContentApi {
 
   ContentApi(this._client);
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Returns all content in a Confluence instance.
   ///
   /// By default, the following objects are expanded: `space`, `history`,
@@ -295,6 +298,9 @@ class ContentApi {
     ));
   }
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Creates a new piece of content or publishes an existing draft.
   ///
   /// To publish a draft, add the `id` and `status` properties to the body of
@@ -469,6 +475,9 @@ class ContentApi {
     ));
   }
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Returns a single piece of content, like a page or a blog post.
   ///
   /// By default, the following objects are expanded: `space`, `history`,
@@ -502,6 +511,9 @@ class ContentApi {
     ));
   }
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Updates a piece of content. Use this method to update the title or body
   /// of a piece of content, change the status, change the parent page, and
   /// more.
@@ -529,6 +541,9 @@ class ContentApi {
     ));
   }
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Moves a piece of content to the space's trash or purges it from the trash,
   /// depending on the content's type and status:
   ///
@@ -558,6 +573,9 @@ class ContentApi {
     );
   }
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Returns the most recent update for a piece of content.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -584,6 +602,9 @@ class ContentAttachmentsApi {
 
   ContentAttachmentsApi(this._client);
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Returns the attachments for a piece of content.
   ///
   /// By default, the following objects are expanded: `metadata`.
@@ -809,9 +830,9 @@ class ContentAttachmentsApi {
   }
 
   /// Redirects the client to a URL that serves an attachment's binary data.
-  Future<void> downloadAttatchment(
+  Future<Uri> downloadAttachment(
       {required String id, required String attachmentId, int? version}) async {
-    await _client.send(
+    return await _client.send(
       'get',
       'wiki/rest/api/content/{id}/child/attachment/{attachmentId}/download',
       pathParameters: {
@@ -821,6 +842,7 @@ class ContentAttachmentsApi {
       queryParameters: {
         if (version != null) 'version': '$version',
       },
+      followRedirects: false,
     );
   }
 }
@@ -832,6 +854,9 @@ class ContentChildrenAndDescendantsApi {
 
   ContentChildrenAndDescendantsApi(this._client);
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Returns a map of the direct children of a piece of content. A piece of
   /// content
   /// has different types of child content, depending on its type. These are
@@ -896,6 +921,9 @@ class ContentChildrenAndDescendantsApi {
     ) as Map<String, Object?>;
   }
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Returns all children of a given type, for a piece of content.
   /// A piece of content has different types of child content, depending on its
   /// type:
@@ -1332,6 +1360,9 @@ class ContentCommentsApi {
 
   ContentCommentsApi(this._client);
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Returns the comments on a piece of content.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -1370,6 +1401,9 @@ class ContentLabelsApi {
 
   ContentLabelsApi(this._client);
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Returns the labels on a piece of content.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -2271,6 +2305,9 @@ class ContentVersionsApi {
 
   ContentVersionsApi(this._client);
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Returns the versions for a piece of content in descending order.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -2319,6 +2356,9 @@ class ContentVersionsApi {
     ));
   }
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Returns a version for a piece of content.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -3164,6 +3204,9 @@ class InlineTasksApi {
 
   InlineTasksApi(this._client);
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Returns inline tasks based on the search query.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -3207,6 +3250,9 @@ class InlineTasksApi {
     ));
   }
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Returns inline task based on the global ID.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -3529,7 +3575,14 @@ class SearchApi {
   SearchApi(this._client);
 
   /// Searches for content using the
-  /// [Confluence Query Language (CQL)](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/)
+  /// [Confluence Query Language (CQL)](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/).
+  ///
+  /// **Note that CQL input queries submitted through the
+  /// `/wiki/rest/api/search` endpoint no longer support user-specific fields
+  /// like `user`, `user.fullname`, `user.accountid`, and `user.userkey`.**
+  /// See this
+  /// [deprecation notice](https://developer.atlassian.com/cloud/confluence/deprecation-notice-search-api/)
+  /// for more details.
   ///
   /// Example initial call:
   /// ```
@@ -3612,6 +3665,10 @@ class SearchApi {
 
   /// Searches for users using user-specific queries from the
   /// [Confluence Query Language (CQL)](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/).
+  ///
+  /// Note that CQL input queries submitted through the
+  /// `/wiki/rest/api/search/user` endpoint only support user-specific fields
+  /// like `user`, `user.fullname`, `user.accountid`, and `user.userkey`.
   ///
   /// Note that some user fields may be set to null depending on the user's
   /// privacy settings.
@@ -3753,6 +3810,9 @@ class SpaceApi {
 
   SpaceApi(this._client);
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Returns all spaces. The returned spaces are ordered alphabetically in
   /// ascending order by space key.
   ///
@@ -3817,6 +3877,9 @@ class SpaceApi {
     ));
   }
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Returns a space. This includes information like the name, description,
   /// and permissions, but not the content in the space.
   ///
@@ -3873,6 +3936,9 @@ class SpaceApi {
     ));
   }
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Returns all content in a space. The returned content is grouped by type
   /// (pages then blogposts), then ordered by content ID in ascending order.
   ///
@@ -3900,6 +3966,9 @@ class SpaceApi {
     ) as Map<String, Object?>;
   }
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Returns all content of a given type, in a space. The returned content is
   /// ordered by content ID in ascending order.
   ///
@@ -4013,6 +4082,9 @@ class SpacePropertiesApi {
 
   SpacePropertiesApi(this._client);
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Returns all properties for the given space. Space properties are a
   /// key-value storage associated with a space.
   ///
@@ -4037,6 +4109,9 @@ class SpacePropertiesApi {
     ));
   }
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Creates a new space property.
   ///
   /// **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:
@@ -4053,6 +4128,9 @@ class SpacePropertiesApi {
     ));
   }
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Returns a space property.
   ///
   /// **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:
@@ -4074,6 +4152,9 @@ class SpacePropertiesApi {
     ));
   }
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Updates a space property. Note, you cannot update the key of a space
   /// property, only the value.
   ///
@@ -4094,6 +4175,9 @@ class SpacePropertiesApi {
     ));
   }
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Creates a new space property. This is the same as `POST
   /// /wiki/rest/api/space/{spaceKey}/property` but the key for the property is
   /// passed as a
@@ -4116,6 +4200,9 @@ class SpacePropertiesApi {
     ));
   }
 
+  /// Deprecated, use
+  /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+  ///
   /// Deletes a space property.
   ///
   /// **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:

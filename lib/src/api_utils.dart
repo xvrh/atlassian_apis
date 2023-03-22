@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:path/path.dart' as p;
@@ -29,7 +30,9 @@ class ApiClient {
     Map<String, String>? headers,
     dynamic body,
     MultipartFile? file,
+    bool? followRedirects,
   }) async {
+    followRedirects ??= true;
     var path = pathTemplate;
 
     if (pathParameters != null) {
@@ -78,10 +81,16 @@ class ApiClient {
 
     request
       ..headers[_headerExperimental] = 'opt-in'
-      ..headers['User-Agent'] = 'Dart/atlassian_apis';
+      ..headers['User-Agent'] = 'Dart/atlassian_apis'
+      ..followRedirects = followRedirects;
 
     var response = await Response.fromStream(await _client.send(request));
     ApiException.checkResponse(response);
+
+    if (response.statusCode == 302) {
+      assert(T == Uri);
+      return (Uri.parse(response.headers['location'] ?? '')) as T;
+    }
 
     var decoded = _decode(response);
     return decoded as T;
@@ -158,4 +167,27 @@ class BasicAuthenticationClient extends BaseClient {
     innerClient.close();
     super.close();
   }
+}
+
+class MultiEntityResult<T> with IterableMixin<T> {
+  final List<T> result;
+
+  MultiEntityResult(this.result);
+
+  factory MultiEntityResult.fromJson(
+    Map<String, dynamic> json, {
+    required T Function(dynamic) reviver,
+  }) {
+    var results = <T>[];
+    var list = json['results'] as List<dynamic>;
+    for (var item in list) {
+      results.add(reviver(item));
+    }
+    return MultiEntityResult(results);
+  }
+
+  @override
+  Iterator<T> get iterator => result.iterator;
+
+  //TODO: handle cursor and a way to loop through all the pages easily
 }
