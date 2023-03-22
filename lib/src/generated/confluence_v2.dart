@@ -76,21 +76,22 @@ class AttachmentApi {
       String? filename,
       int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'blogposts/{id}/attachments',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (mediaType != null) 'mediaType': mediaType,
-            if (filename != null) 'filename': filename,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => Attachment.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'blogposts/{id}/attachments',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (mediaType != null) 'mediaType': mediaType,
+          if (filename != null) 'filename': filename,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Attachment.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Returns the attachments of specific custom content. The number of results
@@ -109,21 +110,22 @@ class AttachmentApi {
       String? filename,
       int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'custom-content/{id}/attachments',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (mediaType != null) 'mediaType': mediaType,
-            if (filename != null) 'filename': filename,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => Attachment.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'custom-content/{id}/attachments',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (mediaType != null) 'mediaType': mediaType,
+          if (filename != null) 'filename': filename,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Attachment.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Returns the attachments of specific page. The number of results is limited
@@ -141,21 +143,22 @@ class AttachmentApi {
       String? filename,
       int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'pages/{id}/attachments',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (mediaType != null) 'mediaType': mediaType,
-            if (filename != null) 'filename': filename,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => Attachment.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'pages/{id}/attachments',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (mediaType != null) 'mediaType': mediaType,
+          if (filename != null) 'filename': filename,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Attachment.fromJson(v as Map<String, Object?>),
+    );
   }
 }
 
@@ -177,15 +180,16 @@ class BlogPostApi {
   Future<MultiEntityResult<BlogPost>> getBlogPosts(
       {String? cursor, int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'blogposts',
-          queryParameters: {
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => BlogPost.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'blogposts',
+        queryParameters: {
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => BlogPost.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Creates a new blog post in the space specified by the spaceId.
@@ -266,19 +270,20 @@ class BlogPostApi {
   Future<MultiEntityResult<BlogPost>> getLabelBlogPosts(
       {required int id, String? sort, String? cursor, int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'labels/{id}/blogposts',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => BlogPost.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'labels/{id}/blogposts',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => BlogPost.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Returns all blog posts in a space. The number of results is limited by the
@@ -293,18 +298,19 @@ class BlogPostApi {
   Future<MultiEntityResult<BlogPost>> getBlogPostsInSpace(
       {required int id, String? cursor, int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'spaces/{id}/blogposts',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => BlogPost.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'spaces/{id}/blogposts',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => BlogPost.fromJson(v as Map<String, Object?>),
+    );
   }
 }
 
@@ -326,19 +332,20 @@ class ChildrenApi {
   Future<MultiEntityResult<Page>> getChildPages(
       {required int id, String? cursor, int? limit, String? sort}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'pages/{id}/children',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-            if (sort != null) 'sort': sort,
-          },
-        ),
-        reviver: (v) => Page.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'pages/{id}/children',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+          if (sort != null) 'sort': sort,
+        },
+      ),
+      reviver: (v) => Page.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Returns all child custom content for given custom content id. The number
@@ -353,19 +360,20 @@ class ChildrenApi {
   Future<MultiEntityResult<Page>> getChildCustomContent(
       {required int id, String? cursor, int? limit, String? sort}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'custom-content/{id}/children',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-            if (sort != null) 'sort': sort,
-          },
-        ),
-        reviver: (v) => Page.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'custom-content/{id}/children',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+          if (sort != null) 'sort': sort,
+        },
+      ),
+      reviver: (v) => Page.fromJson(v as Map<String, Object?>),
+    );
   }
 }
 
@@ -390,20 +398,21 @@ class CommentApi {
       String? cursor,
       int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'pages/{id}/footer-comments',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (bodyFormat != null) 'body-format': bodyFormat,
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => PageCommentModel.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'pages/{id}/footer-comments',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (bodyFormat != null) 'body-format': bodyFormat,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => PageCommentModel.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Returns the root inline comments of specific page. The number of results
@@ -420,21 +429,22 @@ class CommentApi {
       String? cursor,
       int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'pages/{id}/inline-comments',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (bodyFormat != null) 'body-format': bodyFormat,
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) =>
-            PageInlineCommentModel.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'pages/{id}/inline-comments',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (bodyFormat != null) 'body-format': bodyFormat,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) =>
+          PageInlineCommentModel.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Returns the root footer comments of specific blog post. The number of
@@ -453,21 +463,21 @@ class CommentApi {
       String? cursor,
       int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'blogposts/{id}/footer-comments',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (bodyFormat != null) 'body-format': bodyFormat,
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) =>
-            BlogPostCommentModel.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'blogposts/{id}/footer-comments',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (bodyFormat != null) 'body-format': bodyFormat,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => BlogPostCommentModel.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Returns the root inline comments of specific blog post. The number of
@@ -487,21 +497,22 @@ class CommentApi {
           String? cursor,
           int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'blogposts/{id}/inline-comments',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (bodyFormat != null) 'body-format': bodyFormat,
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) =>
-            BlogPostInlineCommentModel.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'blogposts/{id}/inline-comments',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (bodyFormat != null) 'body-format': bodyFormat,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) =>
+          BlogPostInlineCommentModel.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Create a footer comment. This can be at the top level (specifying pageId
@@ -589,21 +600,21 @@ class CommentApi {
       String? cursor,
       int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'footer-comments/{id}/children',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (bodyFormat != null) 'body-format': bodyFormat,
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) =>
-            ChildrenCommentModel.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'footer-comments/{id}/children',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (bodyFormat != null) 'body-format': bodyFormat,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => ChildrenCommentModel.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Create an inline comment. This can be at the top level (specifying pageId
@@ -696,21 +707,22 @@ class CommentApi {
           String? cursor,
           int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'inline-comments/{id}/children',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (bodyFormat != null) 'body-format': bodyFormat,
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) =>
-            InlineCommentChildrenModel.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'inline-comments/{id}/children',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (bodyFormat != null) 'body-format': bodyFormat,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) =>
+          InlineCommentChildrenModel.fromJson(v as Map<String, Object?>),
+    );
   }
 }
 
@@ -732,20 +744,21 @@ class ContentPropertiesApi {
       String? cursor,
       int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'attachments/{attachment-id}/properties',
-          pathParameters: {
-            'attachment-id': attachmentId,
-          },
-          queryParameters: {
-            if (key != null) 'key': key,
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'attachments/{attachment-id}/properties',
+        pathParameters: {
+          'attachment-id': attachmentId,
+        },
+        queryParameters: {
+          if (key != null) 'key': key,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Retrieves a specific Content Property by ID that is attached to a
@@ -776,20 +789,21 @@ class ContentPropertiesApi {
       String? cursor,
       int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'blogposts/{blogpost-id}/properties',
-          pathParameters: {
-            'blogpost-id': '$blogpostId',
-          },
-          queryParameters: {
-            if (key != null) 'key': key,
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'blogposts/{blogpost-id}/properties',
+        pathParameters: {
+          'blogpost-id': '$blogpostId',
+        },
+        queryParameters: {
+          if (key != null) 'key': key,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Retrieves a specific Content Property by ID that is attached to a
@@ -820,20 +834,21 @@ class ContentPropertiesApi {
       String? cursor,
       int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'custom-content/{custom-content-id}/properties',
-          pathParameters: {
-            'custom-content-id': '$customContentId',
-          },
-          queryParameters: {
-            if (key != null) 'key': key,
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'custom-content/{custom-content-id}/properties',
+        pathParameters: {
+          'custom-content-id': '$customContentId',
+        },
+        queryParameters: {
+          if (key != null) 'key': key,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Retrieves a specific Content Property by ID that is attached to a
@@ -864,20 +879,21 @@ class ContentPropertiesApi {
       String? cursor,
       int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'pages/{page-id}/properties',
-          pathParameters: {
-            'page-id': '$pageId',
-          },
-          queryParameters: {
-            if (key != null) 'key': key,
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'pages/{page-id}/properties',
+        pathParameters: {
+          'page-id': '$pageId',
+        },
+        queryParameters: {
+          if (key != null) 'key': key,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Retrieves a specific Content Property by ID that is attached to a
@@ -908,20 +924,21 @@ class ContentPropertiesApi {
       String? cursor,
       int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'comments/{comment-id}/properties',
-          pathParameters: {
-            'comment-id': '$commentId',
-          },
-          queryParameters: {
-            if (key != null) 'key': key,
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'comments/{comment-id}/properties',
+        pathParameters: {
+          'comment-id': '$commentId',
+        },
+        queryParameters: {
+          if (key != null) 'key': key,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Retrieves a specific Content Property by ID that is attached to a
@@ -965,20 +982,21 @@ class CustomContentApi {
       int? limit,
       String? bodyFormat}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'blogposts/{id}/custom-content',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            'type': type,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-            if (bodyFormat != null) 'body-format': bodyFormat,
-          },
-        ),
-        reviver: (v) => CustomContent.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'blogposts/{id}/custom-content',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          'type': type,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+          if (bodyFormat != null) 'body-format': bodyFormat,
+        },
+      ),
+      reviver: (v) => CustomContent.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Returns all custom content for a given type. The number of results is
@@ -995,17 +1013,18 @@ class CustomContentApi {
       int? limit,
       String? bodyFormat}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'custom-content',
-          queryParameters: {
-            'type': type,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-            if (bodyFormat != null) 'body-format': bodyFormat,
-          },
-        ),
-        reviver: (v) => CustomContent.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'custom-content',
+        queryParameters: {
+          'type': type,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+          if (bodyFormat != null) 'body-format': bodyFormat,
+        },
+      ),
+      reviver: (v) => CustomContent.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Creates a new custom content in the given space, page, blogpost or other
@@ -1091,20 +1110,21 @@ class CustomContentApi {
       int? limit,
       String? bodyFormat}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'pages/{id}/custom-content',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            'type': type,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-            if (bodyFormat != null) 'body-format': bodyFormat,
-          },
-        ),
-        reviver: (v) => CustomContent.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'pages/{id}/custom-content',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          'type': type,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+          if (bodyFormat != null) 'body-format': bodyFormat,
+        },
+      ),
+      reviver: (v) => CustomContent.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Returns all custom content for a given type within a given space. The
@@ -1122,20 +1142,21 @@ class CustomContentApi {
       int? limit,
       String? bodyFormat}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'spaces/{id}/custom-content',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            'type': type,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-            if (bodyFormat != null) 'body-format': bodyFormat,
-          },
-        ),
-        reviver: (v) => CustomContent.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'spaces/{id}/custom-content',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          'type': type,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+          if (bodyFormat != null) 'body-format': bodyFormat,
+        },
+      ),
+      reviver: (v) => CustomContent.fromJson(v as Map<String, Object?>),
+    );
   }
 }
 
@@ -1161,20 +1182,21 @@ class LabelApi {
       String? cursor,
       int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'attachments/{id}/labels',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (prefix != null) 'prefix': prefix,
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => Label.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'attachments/{id}/labels',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (prefix != null) 'prefix': prefix,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Label.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Returns the labels of specific blog post. The number of results is limited
@@ -1192,20 +1214,21 @@ class LabelApi {
       String? cursor,
       int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'blogposts/{id}/labels',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (prefix != null) 'prefix': prefix,
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => Label.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'blogposts/{id}/labels',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (prefix != null) 'prefix': prefix,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Label.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Returns the labels for a specific piece of custom content. The number of
@@ -1223,20 +1246,21 @@ class LabelApi {
       String? cursor,
       int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'custom-content/{id}/labels',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (prefix != null) 'prefix': prefix,
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => Label.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'custom-content/{id}/labels',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (prefix != null) 'prefix': prefix,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Label.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Returns the labels of specific page. The number of results is limited by
@@ -1253,20 +1277,21 @@ class LabelApi {
       String? cursor,
       int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'pages/{id}/labels',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (prefix != null) 'prefix': prefix,
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => Label.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'pages/{id}/labels',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (prefix != null) 'prefix': prefix,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Label.fromJson(v as Map<String, Object?>),
+    );
   }
 }
 
@@ -1287,19 +1312,20 @@ class PageApi {
   Future<MultiEntityResult<Page>> getLabelPages(
       {required int id, String? sort, String? cursor, int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'labels/{id}/pages',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (sort != null) 'sort': sort,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => Page.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'labels/{id}/pages',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Page.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Returns all pages. The number of results is limited by the `limit`
@@ -1312,15 +1338,16 @@ class PageApi {
   /// Only pages that the user has permission to view will be returned.
   Future<MultiEntityResult<Page>> getPages({String? cursor, int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'pages',
-          queryParameters: {
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => Page.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'pages',
+        queryParameters: {
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Page.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Creates a page in the space.
@@ -1404,18 +1431,19 @@ class PageApi {
   Future<MultiEntityResult<Page>> getPagesInSpace(
       {required int id, String? cursor, int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'spaces/{id}/pages',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => Page.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'spaces/{id}/pages',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Page.fromJson(v as Map<String, Object?>),
+    );
   }
 }
 
@@ -1445,23 +1473,24 @@ class SpaceApi {
       String? cursor,
       int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'spaces',
-          queryParameters: {
-            if (ids != null) 'ids': ids.map((e) => '$e').join(','),
-            if (keys != null) 'keys': keys.map((e) => e).join(','),
-            if (type != null) 'type': type,
-            if (status != null) 'status': status,
-            if (labels != null) 'labels': labels.map((e) => e).join(','),
-            if (sort != null) 'sort': sort,
-            if (descriptionFormat != null)
-              'description-format': descriptionFormat,
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => Space.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'spaces',
+        queryParameters: {
+          if (ids != null) 'ids': ids.map((e) => '$e').join(','),
+          if (keys != null) 'keys': keys.map((e) => e).join(','),
+          if (type != null) 'type': type,
+          if (status != null) 'status': status,
+          if (labels != null) 'labels': labels.map((e) => e).join(','),
+          if (sort != null) 'sort': sort,
+          if (descriptionFormat != null)
+            'description-format': descriptionFormat,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Space.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Returns a specific space.
@@ -1621,36 +1650,36 @@ class TaskApi {
       String? cursor,
       int? limit}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'tasks',
-          queryParameters: {
-            if (bodyFormat != null) 'body-format': bodyFormat,
-            if (includeBlankTasks != null)
-              'include-blank-tasks': '$includeBlankTasks',
-            if (status != null) 'status': status,
-            if (spaceId != null) 'space-id': spaceId.map((e) => '$e').join(','),
-            if (pageId != null) 'page-id': pageId.map((e) => '$e').join(','),
-            if (blogpostId != null)
-              'blogpost-id': blogpostId.map((e) => '$e').join(','),
-            if (createdBy != null)
-              'created-by': createdBy.map((e) => e).join(','),
-            if (assignedTo != null)
-              'assigned-to': assignedTo.map((e) => e).join(','),
-            if (completedBy != null)
-              'completed-by': completedBy.map((e) => e).join(','),
-            if (createdAtFrom != null) 'created-at-from': '$createdAtFrom',
-            if (createdAtTo != null) 'created-at-to': '$createdAtTo',
-            if (dueAtFrom != null) 'due-at-from': '$dueAtFrom',
-            if (dueAtTo != null) 'due-at-to': '$dueAtTo',
-            if (completedAtFrom != null)
-              'completed-at-from': '$completedAtFrom',
-            if (completedAtTo != null) 'completed-at-to': '$completedAtTo',
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-          },
-        ),
-        reviver: (v) => Task.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'tasks',
+        queryParameters: {
+          if (bodyFormat != null) 'body-format': bodyFormat,
+          if (includeBlankTasks != null)
+            'include-blank-tasks': '$includeBlankTasks',
+          if (status != null) 'status': status,
+          if (spaceId != null) 'space-id': spaceId.map((e) => '$e').join(','),
+          if (pageId != null) 'page-id': pageId.map((e) => '$e').join(','),
+          if (blogpostId != null)
+            'blogpost-id': blogpostId.map((e) => '$e').join(','),
+          if (createdBy != null)
+            'created-by': createdBy.map((e) => e).join(','),
+          if (assignedTo != null)
+            'assigned-to': assignedTo.map((e) => e).join(','),
+          if (completedBy != null)
+            'completed-by': completedBy.map((e) => e).join(','),
+          if (createdAtFrom != null) 'created-at-from': '$createdAtFrom',
+          if (createdAtTo != null) 'created-at-to': '$createdAtTo',
+          if (dueAtFrom != null) 'due-at-from': '$dueAtFrom',
+          if (dueAtTo != null) 'due-at-to': '$dueAtTo',
+          if (completedAtFrom != null) 'completed-at-from': '$completedAtFrom',
+          if (completedAtTo != null) 'completed-at-to': '$completedAtTo',
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Task.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Returns a specific task.
@@ -1686,19 +1715,20 @@ class VersionApi {
   Future<MultiEntityResult<Version>> getAttachmentVersions(
       {required int id, String? cursor, int? limit, String? sort}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'attachments/{id}/versions',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-            if (sort != null) 'sort': sort,
-          },
-        ),
-        reviver: (v) => Version.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'attachments/{id}/versions',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+          if (sort != null) 'sort': sort,
+        },
+      ),
+      reviver: (v) => Version.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Retrieves version details for the specified attachment and version number.
@@ -1724,19 +1754,20 @@ class VersionApi {
   Future<MultiEntityResult<Version>> getBlogPostVersions(
       {required int id, String? cursor, int? limit, String? sort}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'blogposts/{id}/versions',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-            if (sort != null) 'sort': sort,
-          },
-        ),
-        reviver: (v) => Version.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'blogposts/{id}/versions',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+          if (sort != null) 'sort': sort,
+        },
+      ),
+      reviver: (v) => Version.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Retrieves version details for the specified blog post and version number.
@@ -1762,19 +1793,20 @@ class VersionApi {
   Future<MultiEntityResult<Version>> getPageVersions(
       {required int id, String? cursor, int? limit, String? sort}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'pages/{id}/versions',
-          pathParameters: {
-            'id': '$id',
-          },
-          queryParameters: {
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-            if (sort != null) 'sort': sort,
-          },
-        ),
-        reviver: (v) => Version.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'pages/{id}/versions',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+          if (sort != null) 'sort': sort,
+        },
+      ),
+      reviver: (v) => Version.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Retrieves version details for the specified page and version number.
@@ -1804,19 +1836,20 @@ class VersionApi {
       int? limit,
       String? sort}) async {
     return MultiEntityResult.fromJson(
-        await _client.send(
-          'get',
-          'custom-content/{custom-content-id}/versions',
-          pathParameters: {
-            'custom-content-id': '$customContentId',
-          },
-          queryParameters: {
-            if (cursor != null) 'cursor': cursor,
-            if (limit != null) 'limit': '$limit',
-            if (sort != null) 'sort': sort,
-          },
-        ),
-        reviver: (v) => Version.fromJson(v as Map<String, Object?>));
+      await _client.send(
+        'get',
+        'custom-content/{custom-content-id}/versions',
+        pathParameters: {
+          'custom-content-id': '$customContentId',
+        },
+        queryParameters: {
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+          if (sort != null) 'sort': sort,
+        },
+      ),
+      reviver: (v) => Version.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Retrieves version details for the specified custom content and version
