@@ -5,6 +5,8 @@ import 'swagger/dart.dart' as dart;
 import 'swagger/swagger_spec.dart';
 import 'update_swagger_files.dart' show Api;
 
+// ignore_for_file: avoid_dynamic_calls
+
 void main() {
   for (var api in Api.all) {
     var jsonSpec =
@@ -28,7 +30,6 @@ void main() {
 
 void fixApi(String name, Map<String, dynamic> api) {
   if (name == 'service_management') {
-    // ignore: avoid_dynamic_calls
     var schemas = api['components']!['schemas']! as Map<String, dynamic>;
     schemas['TemporaryAttachments'] = jsonDecode(r'''
       {
@@ -56,12 +57,17 @@ void fixApi(String name, Map<String, dynamic> api) {
         },
         "additionalProperties": false
       }''');
-    // ignore: avoid_dynamic_calls
     var content = api['paths'][
                 '/rest/servicedeskapi/servicedesk/{serviceDeskId}/attachTemporaryFile']
             ['post']['responses']['201']['content']['application/json']
         as Map<String, dynamic>;
     assert(!content.containsKey('schema'));
     content['schema'] = {r'$ref': '#/components/schemas/TemporaryAttachments'};
+  } else if (name == 'confluence') {
+    var downloadEndpoint = api['paths'][
+            '/wiki/rest/api/content/{id}/child/attachment/{attachmentId}/download']
+        ['get'] as Map<String, dynamic>;
+    assert(downloadEndpoint['operationId'] == 'downloadAttatchment');
+    downloadEndpoint['operationId'] = 'downloadAttachment';
   }
 }

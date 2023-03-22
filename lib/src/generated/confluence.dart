@@ -830,7 +830,7 @@ class ContentAttachmentsApi {
   }
 
   /// Redirects the client to a URL that serves an attachment's binary data.
-  Future<Uri> downloadAttatchment(
+  Future<Uri> downloadAttachment(
       {required String id, required String attachmentId, int? version}) async {
     return await _client.send(
       'get',
