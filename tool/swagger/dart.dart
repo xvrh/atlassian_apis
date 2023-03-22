@@ -101,6 +101,7 @@ class Api {
   DartType typeFromSchema(sw.Schema schema) {
     var type = schema.type;
     var ref = schema.ref;
+    var title = schema.title;
     if (ref != null) {
       if (ref.startsWith('#/components/responses/')) {
         var response = _spec.components
@@ -117,6 +118,10 @@ class Api {
       }
     } else if (type == 'array') {
       return ListDartType(this, typeFromSchema(schema.items!));
+    } else if (title != null && title.startsWith('MultiEntityResult<')) {
+      var match = RegExp('<([^>]+)>').firstMatch(title)!;
+      var typeName = match.group(1)!;
+      return MultiEntityResult(this, typeName);
     } else if (type == 'object') {
       return MapDartType.withDynamic(this);
     } else {
@@ -998,6 +1003,38 @@ class MapDartType extends DartType {
       return '$code ?? {}';
     }
     return code;
+  }
+}
+
+class MultiEntityResult extends DartType {
+  final DartType _itemType;
+
+  MultiEntityResult(Api api, String itemType)
+      : _itemType = DartType(api, itemType),
+        super(api, 'MultiEntityResult') {
+    genericParameters.add(_itemType);
+  }
+
+  @override
+  String get defaultValue => simpleType?.defaultValue ?? '{}';
+
+  @override
+  String toJsonCode(
+      PropertyName propertyName, Map<DartType, String> genericTypes) {
+    var itemJsonCode = _itemType.toJsonCode(PropertyName('v'), genericTypes);
+    if (itemJsonCode != 'v') {
+      return '${propertyName.camelCased}.map((k, v) => MapEntry(k, $itemJsonCode))';
+    } else {
+      return propertyName.camelCased;
+    }
+  }
+
+  @override
+  String fromJsonCode(String accessor, Map<DartType, String> genericTypes,
+      {required bool accessorIsNullable, required bool targetIsNullable}) {
+    var itemCode = _itemType.fromJsonCode('v', genericTypes,
+        accessorIsNullable: false, targetIsNullable: false);
+    return 'MultiEntityResult.fromJson($accessor, reviver: (v) => $itemCode,)';
   }
 }
 

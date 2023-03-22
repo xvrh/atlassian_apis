@@ -31,6 +31,9 @@ const _replacements = {
 final _digitRegex = RegExp('[0-9]');
 
 String dartIdentifier(String input) {
+  if (input.startsWith('-')) {
+    input = '$input desc';
+  }
   for (var replace in _replacements.entries) {
     input = input.replaceAll(replace.key, replace.value);
   }
