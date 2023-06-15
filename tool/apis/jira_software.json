@@ -12078,7 +12078,7 @@
                 "properties": {
                   "workspaceIds": {
                     "title": "Security Workspace IDs",
-                    "description": "The IDs of Security Workspaces to link to this Jira site.\n",
+                    "description": "The IDs of Security Workspaces to link to this Jira site. These must follow this regex pattern: `[a-zA-Z0-9\\\\-_.~@:{}=]+(\\/[a-zA-Z0-9\\\\-_.~@:{}=]+)*`\n",
                     "type": "array",
                     "items": {
                       "type": "string",
@@ -12536,6 +12536,16 @@
                   "vulnerabilities"
                 ],
                 "properties": {
+                  "operationType": {
+                    "type": "string",
+                    "description": "Indicates the operation being performed by the provider system when sending this data. \"NORMAL\" - Data received during real-time, user-triggered actions (e.g. user closed or updated a vulnerability). \"SCAN\" - Data sent through some automated process (e.g. some periodically scheduled repository scan). \"BACKFILL\" - Data received while backfilling existing data (e.g. pushing historical vulnerabilities when re-connect a workspace). Default is \"NORMAL\". \"NORMAL\" traffic has higher priority but tighter rate limits, \"SCAN\" traffic has medium priority and looser limits, \"BACKFILL\" has lower priority and much looser limits\n",
+                    "example": "SCAN",
+                    "enum": [
+                      "NORMAL",
+                      "SCAN",
+                      "BACKFILL"
+                    ]
+                  },
                   "properties": {
                     "title": "Properties",
                     "description": "Properties assigned to vulnerability data that can then be used for delete / query operations.\n\nExamples might be an account or user ID that can then be used to clean up data if an account is removed from the Provider system.\n\nProperties are supplied as key/value pairs, and a maximum of 5 properties can be supplied, keys cannot contain ':' or start with '_'.\n",
@@ -12553,7 +12563,7 @@
                   "vulnerabilities": {
                     "type": "array",
                     "items": {
-                      "title": "Vulnerability",
+                      "title": "Vulnerability details",
                       "required": [
                         "schemaVersion",
                         "id",
@@ -12585,16 +12595,17 @@
                           "example": "111-222-333"
                         },
                         "updateSequenceNumber": {
-                          "description": "An ID used to apply an ordering to updates for this Vulnerability in the case of out-of-order receipt of update requests.\n\nThis can be any monotonically increasing number. A suggested implementation is to use epoch millis from the Provider system, but other alternatives are valid (e.g. a Provider could store a counter against each Vulnerability and increment that on each update to Jira).\n\nUpdates for a Vulnerability that are received with an updateSqeuenceId lower than what is currently stored will be ignored.\n",
+                          "description": "An ID used to apply an ordering to updates for this Vulnerability in the case of out-of-order receipt of update requests.\n\nThis can be any monotonically increasing number. A suggested implementation is to use epoch millis from the Provider system, but other alternatives are valid (e.g. a Provider could store a counter against each Vulnerability and increment that on each update to Jira).\n\nUpdates for a Vulnerability that are received with an updateSequenceId lower than what is currently stored will be ignored.\n",
                           "type": "integer",
                           "format": "int64",
                           "example": 1523494301448
                         },
                         "containerId": {
-                          "description": "The identifier of the Container where this Vulnerability was found. Must be unique for a given Provider.\n",
+                          "description": "The identifier of the Container where this Vulnerability was found. Must be unique for a given Provider. This must follow this regex pattern: `[a-zA-Z0-9\\\\-_.~@:{}=]+(/[a-zA-Z0-9\\\\-_.~@:{}=]+)*`\n",
                           "type": "string",
                           "maxLength": 255,
-                          "example": "111-222-333"
+                          "example": "111-222-333",
+                          "pattern": "[a-zA-Z0-9\\-_.~@:{}=]+(/[a-zA-Z0-9\\-_.~@:{}=]+)*"
                         },
                         "displayName": {
                           "description": "The human-readable name for the Vulnerability. Will be shown in the UI.\n\nIf not provided, will use the ID for display.\n",
@@ -12664,7 +12675,7 @@
                           "description": "The identifying information for the Vulnerability.\n",
                           "type": "array",
                           "items": {
-                            "title": "Identifyer",
+                            "title": "Identifier",
                             "description": "The identifiers object that contains public/private information identifying the Vulnerability.\n",
                             "required": [
                               "displayName",
@@ -12739,7 +12750,7 @@
                                 ],
                                 "properties": {
                                   "associationType": {
-                                    "description": "Defines the asssociation type.\n",
+                                    "description": "Defines the association type.\n",
                                     "type": "string",
                                     "enum": [
                                       "serviceIdOrKeys"
@@ -12857,7 +12868,7 @@
                             ],
                             "properties": {
                               "associationType": {
-                                "description": "Defines the asssociation type.\n",
+                                "description": "Defines the association type.\n",
                                 "type": "string",
                                 "enum": [
                                   "serviceIdOrKeys"
@@ -12960,7 +12971,33 @@
             }
           },
           "429": {
-            "description": "API rate limit has been exceeded.\n"
+            "description": "API rate limit has been exceeded.\n",
+            "headers": {
+              "X-RateLimit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "The number of remaining possible requests in current rate limit window."
+              },
+              "X-RateLimit-Reset": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "The date in ISO 8601 format when the rate limit values will be next reset."
+              },
+              "X-RateLimit-Limit": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "The maximum possible requests in a window of one minute."
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "The number of seconds to wait before making a follow-up request."
+              }
+            }
           },
           "503": {
             "description": "Service is unavailable due to maintenance or other reasons.\n"
@@ -13137,6 +13174,7 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "title": "Vulnerability details",
                   "required": [
                     "schemaVersion",
                     "id",
@@ -13168,16 +13206,17 @@
                       "example": "111-222-333"
                     },
                     "updateSequenceNumber": {
-                      "description": "An ID used to apply an ordering to updates for this Vulnerability in the case of out-of-order receipt of update requests.\n\nThis can be any monotonically increasing number. A suggested implementation is to use epoch millis from the Provider system, but other alternatives are valid (e.g. a Provider could store a counter against each Vulnerability and increment that on each update to Jira).\n\nUpdates for a Vulnerability that are received with an updateSqeuenceId lower than what is currently stored will be ignored.\n",
+                      "description": "An ID used to apply an ordering to updates for this Vulnerability in the case of out-of-order receipt of update requests.\n\nThis can be any monotonically increasing number. A suggested implementation is to use epoch millis from the Provider system, but other alternatives are valid (e.g. a Provider could store a counter against each Vulnerability and increment that on each update to Jira).\n\nUpdates for a Vulnerability that are received with an updateSequenceId lower than what is currently stored will be ignored.\n",
                       "type": "integer",
                       "format": "int64",
                       "example": 1523494301448
                     },
                     "containerId": {
-                      "description": "The identifier of the Container where this Vulnerability was found. Must be unique for a given Provider.\n",
+                      "description": "The identifier of the Container where this Vulnerability was found. Must be unique for a given Provider. This must follow this regex pattern: `[a-zA-Z0-9\\\\-_.~@:{}=]+(/[a-zA-Z0-9\\\\-_.~@:{}=]+)*`\n",
                       "type": "string",
                       "maxLength": 255,
-                      "example": "111-222-333"
+                      "example": "111-222-333",
+                      "pattern": "[a-zA-Z0-9\\-_.~@:{}=]+(/[a-zA-Z0-9\\-_.~@:{}=]+)*"
                     },
                     "displayName": {
                       "description": "The human-readable name for the Vulnerability. Will be shown in the UI.\n\nIf not provided, will use the ID for display.\n",
@@ -13247,7 +13286,7 @@
                       "description": "The identifying information for the Vulnerability.\n",
                       "type": "array",
                       "items": {
-                        "title": "Identifyer",
+                        "title": "Identifier",
                         "description": "The identifiers object that contains public/private information identifying the Vulnerability.\n",
                         "required": [
                           "displayName",
@@ -13322,7 +13361,7 @@
                             ],
                             "properties": {
                               "associationType": {
-                                "description": "Defines the asssociation type.\n",
+                                "description": "Defines the association type.\n",
                                 "type": "string",
                                 "enum": [
                                   "serviceIdOrKeys"

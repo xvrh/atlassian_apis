@@ -27,6 +27,9 @@ class AdminOrganizationApi {
   /// Orgs Users APIs
   late final users = UsersApi(_client);
 
+  /// Org Workspaces APIs
+  late final workspaces = WorkspacesApi(_client);
+
   void close() => _client.close();
 }
 
@@ -35,40 +38,59 @@ class DirectoryApi {
 
   DirectoryApi(this._client);
 
-  /// This API will return the last active date of a user for each product
-  /// listed in Atlassian Administration.
+  /// **Additional response parameters of the API (for e.g., `added_to_org`) are
+  /// available only to customers using the new user management experience.**
+  /// Learn more about the
+  /// [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).
   ///
-  /// Active is defined as viewing a product's page for a minimum of 2 seconds.
+  /// Specifications:
+  /// - Return a user’s last active date for each product listed in Atlassian
+  /// Administration.
+  /// - Active is defined as viewing a product's page for a minimum of 2
+  /// seconds.
+  /// - The data for the last activity may be delayed by up to 4 hours.
+  /// - If the user has not accessed a product, the `product_access` response
+  /// field will be empty.
   ///
-  /// Last activity data can be delayed up to 4 hours.
-  Future<UserProductAccess> getUserSLastActiveDate(
-      {required String orgId, required String accountId}) async {
-    return UserProductAccess.fromJson(await _client.send(
+  /// Learn the fastest way to call the API with a detailed
+  /// [tutorial](https://developer.atlassian.com/cloud/admin/organization/user-last-active-dates/).
+  Future<UserProductAccessActivityPage> userSLastActiveDates(
+      {required String orgId,
+      required String accountId,
+      String? cursor}) async {
+    return UserProductAccessActivityPage.fromJson(await _client.send(
       'get',
-      'orgs/{orgId}/directory/users/{accountId}/last-active-dates',
+      'v1/orgs/{orgId}/directory/users/{accountId}/last-active-dates',
       pathParameters: {
         'orgId': orgId,
         'accountId': accountId,
       },
+      queryParameters: {
+        if (cursor != null) 'cursor': cursor,
+      },
     ));
   }
 
-  /// Removes all access the user has to products managed by the organization.
-  ///
-  /// The API authentication header supports
-  /// [Organization API Keys](https://support.atlassian.com/organization-administration/docs/manage-an-organization-with-the-admin-apis/).
-  /// API keys allow you to manage your organization. Copy the values for your
-  /// Organization ID and API key and call the API.
-  ///  API Key is used as an Authentication header Bearer token to call the API.
-  ///
   /// **The API is available for customers using the new user management
-  /// experience only. Learn more about the
-  /// [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**
+  /// experience only.** Learn more about the
+  /// [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).
+  ///
+  /// Specifications:
+  /// - Remove user access to products listed in Atlassian Administration.
+  /// - Remove users from **Users** and **Groups** in **Directory**.
+  /// - Make product licenses available for active users.
+  ///
+  /// Users with emails whose domain is claimed can still be found in **Managed
+  /// accounts** in **Directory**.
+  ///
+  /// Learn the fastest way to call the API with a detailed
+  /// [tutorial](https://developer.atlassian.com/cloud/admin/organization/remove-user/).
+  ///
   Future<void> removeUserAccess(
       {required String orgId, required String accountId}) async {
     await _client.send(
       'delete',
-      'orgs/{orgId}/directory/users/{accountId}',
+      'v1/orgs/{orgId}/directory/users/{accountId}',
       pathParameters: {
         'orgId': orgId,
         'accountId': accountId,
@@ -76,17 +98,22 @@ class DirectoryApi {
     );
   }
 
-  /// Suspends user's access in your organization. Suspended users cannot access
-  /// your organization’s products.
-  ///
   /// **The API is available for customers using the new user management
-  /// experience only. Learn more about the
-  /// [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**
+  /// experience only.** Learn more about the
+  /// [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).
+  ///
+  /// Specifications:
+  /// - Suspend user access to products listed in Atlassian Administration.
+  /// - Make product licenses available for active users.
+  /// - Maintain respective users in **Groups** for easy restoration.
+  ///
+  /// Learn the fastest way to call the API with a detailed
+  /// [tutorial](https://developer.atlassian.com/cloud/admin/organization/suspend-user/).
   Future<GenericActionSuccessModel> suspendUserAccess(
       {required String orgId, required String accountId}) async {
     return GenericActionSuccessModel.fromJson(await _client.send(
       'post',
-      'orgs/{orgId}/directory/users/{accountId}/suspend-access',
+      'v1/orgs/{orgId}/directory/users/{accountId}/suspend-access',
       pathParameters: {
         'orgId': orgId,
         'accountId': accountId,
@@ -94,18 +121,86 @@ class DirectoryApi {
     ));
   }
 
-  /// Restore user's access in your organization.
-  ///
   /// **The API is available for customers using the new user management
-  /// experience only. Learn more about the
-  /// [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**
+  /// experience only.** Learn more about the
+  /// [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).
+  ///
+  /// Specifications:
+  /// - Restore access of an existing user to products listed in Atlassian
+  /// Administration.
+  /// - Retract the suspend user action.
+  ///
+  /// Learn the fastest way to call the API with a detailed
+  /// [tutorial](https://developer.atlassian.com/cloud/admin/organization/restore-user/).
   Future<GenericActionSuccessModel> restoreUserAccess(
       {required String orgId, required String accountId}) async {
     return GenericActionSuccessModel.fromJson(await _client.send(
       'post',
-      'orgs/{orgId}/directory/users/{accountId}/restore-access',
+      'v1/orgs/{orgId}/directory/users/{accountId}/restore-access',
       pathParameters: {
         'orgId': orgId,
+        'accountId': accountId,
+      },
+    ));
+  }
+
+  /// **The API is available for customers using the new user management
+  /// experience only. Learn more about the
+  /// [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**
+  ///
+  /// This API will:
+  /// - Add user to a group.
+  /// - Assign multiple permissions to user at once.
+  /// - Easily manage permissions, content access, notification schemes, and
+  /// roles.
+  ///
+  /// This API will not:
+  /// - Make modifications to group memberships that are synchronized through
+  /// SCIM. To make changes to these memberships, you will need to modify them
+  /// within your external identity provider. Learn more about
+  /// [configuring user provisioning with an identity provider](https://support.atlassian.com/provisioning-users/docs/configure-user-provisioning-with-an-identity-provider/).
+  Future<GenericActionSuccessModel> addUserToGroup(
+      {required String orgId,
+      required String groupId,
+      required AddGroupMembershipInput body}) async {
+    return GenericActionSuccessModel.fromJson(await _client.send(
+      'post',
+      'v1/orgs/{orgId}/directory/groups/{groupId}/memberships',
+      pathParameters: {
+        'orgId': orgId,
+        'groupId': groupId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// **The API is available for customers using the new user management
+  /// experience only. Learn more about the
+  /// [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**
+  ///
+  /// This API will:
+  /// - Remove user from a group.
+  /// - Remove multiple permissions for user at once.
+  /// - Easily manage permissions, content access, notification schemes, and
+  /// roles.
+  ///
+  /// This API will not:
+  /// - Make modifications to group memberships that are synchronized through
+  /// SCIM. To make changes to these memberships, you will need to modify them
+  /// within your external identity provider. Learn more about
+  /// [configuring user provisioning with an identity provider](https://support.atlassian.com/provisioning-users/docs/configure-user-provisioning-with-an-identity-provider/).
+  /// - Modify `site-admin` group and therefore revoke org-admin role from a
+  /// user.
+  Future<GenericActionSuccessModel> removeUserFromGroup(
+      {required String orgId,
+      required String groupId,
+      required String accountId}) async {
+    return GenericActionSuccessModel.fromJson(await _client.send(
+      'delete',
+      'v1/orgs/{orgId}/directory/groups/{groupId}/memberships/{accountId}',
+      pathParameters: {
+        'orgId': orgId,
+        'groupId': groupId,
         'accountId': accountId,
       },
     ));
@@ -121,7 +216,7 @@ class DomainsApi {
   Future<DomainPage> getDomains({required String orgId, String? cursor}) async {
     return DomainPage.fromJson(await _client.send(
       'get',
-      'orgs/{orgId}/domains',
+      'v1/orgs/{orgId}/domains',
       pathParameters: {
         'orgId': orgId,
       },
@@ -136,7 +231,7 @@ class DomainsApi {
       {required String orgId, required String domainId}) async {
     return Domain.fromJson(await _client.send(
       'get',
-      'orgs/{orgId}/domains/{domainId}',
+      'v1/orgs/{orgId}/domains/{domainId}',
       pathParameters: {
         'orgId': orgId,
         'domainId': domainId,
@@ -160,7 +255,7 @@ class EventsApi {
       String? action}) async {
     return EventPage.fromJson(await _client.send(
       'get',
-      'orgs/{orgId}/events',
+      'v1/orgs/{orgId}/events',
       pathParameters: {
         'orgId': orgId,
       },
@@ -179,7 +274,7 @@ class EventsApi {
       {required String orgId, required String eventId}) async {
     return Event.fromJson(await _client.send(
       'get',
-      'orgs/{orgId}/events/{eventId}',
+      'v1/orgs/{orgId}/events/{eventId}',
       pathParameters: {
         'orgId': orgId,
         'eventId': eventId,
@@ -191,7 +286,7 @@ class EventsApi {
   Future<EventActions> getEventActions(String orgId) async {
     return EventActions.fromJson(await _client.send(
       'get',
-      'orgs/{orgId}/event-actions',
+      'v1/orgs/{orgId}/event-actions',
       pathParameters: {
         'orgId': orgId,
       },
@@ -208,7 +303,7 @@ class OrgsApi {
   Future<OrgPage> getOrgs({String? cursor}) async {
     return OrgPage.fromJson(await _client.send(
       'get',
-      'orgs',
+      'v1/orgs',
       queryParameters: {
         if (cursor != null) 'cursor': cursor,
       },
@@ -219,7 +314,7 @@ class OrgsApi {
   Future<Org> getOrgById(String orgId) async {
     return Org.fromJson(await _client.send(
       'get',
-      'orgs/{orgId}',
+      'v1/orgs/{orgId}',
       pathParameters: {
         'orgId': orgId,
       },
@@ -237,7 +332,7 @@ class PoliciesApi {
       {required String orgId, String? cursor, String? type}) async {
     return PolicyPage.fromJson(await _client.send(
       'get',
-      'orgs/{orgId}/policies',
+      'v1/orgs/{orgId}/policies',
       pathParameters: {
         'orgId': orgId,
       },
@@ -253,7 +348,7 @@ class PoliciesApi {
       {required String orgId, required PolicyCreateInput body}) async {
     return Policy.fromJson(await _client.send(
       'post',
-      'orgs/{orgId}/policies',
+      'v1/orgs/{orgId}/policies',
       pathParameters: {
         'orgId': orgId,
       },
@@ -266,7 +361,7 @@ class PoliciesApi {
       {required String orgId, required String policyId}) async {
     return Policy.fromJson(await _client.send(
       'get',
-      'orgs/{orgId}/policies/{policyId}',
+      'v1/orgs/{orgId}/policies/{policyId}',
       pathParameters: {
         'orgId': orgId,
         'policyId': policyId,
@@ -281,7 +376,7 @@ class PoliciesApi {
       required PolicyUpdateInput body}) async {
     return Policy.fromJson(await _client.send(
       'put',
-      'orgs/{orgId}/policies/{policyId}',
+      'v1/orgs/{orgId}/policies/{policyId}',
       pathParameters: {
         'orgId': orgId,
         'policyId': policyId,
@@ -295,7 +390,7 @@ class PoliciesApi {
       {required String orgId, required String policyId}) async {
     await _client.send(
       'delete',
-      'orgs/{orgId}/policies/{policyId}',
+      'v1/orgs/{orgId}/policies/{policyId}',
       pathParameters: {
         'orgId': orgId,
         'policyId': policyId,
@@ -310,7 +405,7 @@ class PoliciesApi {
       required ResourceInput body}) async {
     return Policy.fromJson(await _client.send(
       'post',
-      'orgs/{orgId}/policies/{policyId}/resources',
+      'v1/orgs/{orgId}/policies/{policyId}/resources',
       pathParameters: {
         'orgId': orgId,
         'policyId': policyId,
@@ -327,7 +422,7 @@ class PoliciesApi {
       required ResourceUpdateInput body}) async {
     return Policy.fromJson(await _client.send(
       'put',
-      'orgs/{orgId}/policies/{policyId}/resources/{resourceId}',
+      'v1/orgs/{orgId}/policies/{policyId}/resources/{resourceId}',
       pathParameters: {
         'orgId': orgId,
         'policyId': policyId,
@@ -344,7 +439,7 @@ class PoliciesApi {
       required String resourceId}) async {
     return Policy.fromJson(await _client.send(
       'delete',
-      'orgs/{orgId}/policies/{policyId}/resources/{resourceId}',
+      'v1/orgs/{orgId}/policies/{policyId}/resources/{resourceId}',
       pathParameters: {
         'orgId': orgId,
         'policyId': policyId,
@@ -359,7 +454,7 @@ class PoliciesApi {
       {required String orgId, required String policyId}) async {
     await _client.send(
       'get',
-      'orgs/{orgId}/policies/{policyId}/validate',
+      'v1/orgs/{orgId}/policies/{policyId}/validate',
       pathParameters: {
         'orgId': orgId,
         'policyId': policyId,
@@ -377,7 +472,7 @@ class UsersApi {
   Future<UserPage> getUsers({required String orgId, String? cursor}) async {
     return UserPage.fromJson(await _client.send(
       'get',
-      'orgs/{orgId}/users',
+      'v1/orgs/{orgId}/users',
       pathParameters: {
         'orgId': orgId,
       },
@@ -385,6 +480,66 @@ class UsersApi {
         if (cursor != null) 'cursor': cursor,
       },
     ));
+  }
+}
+
+class WorkspacesApi {
+  final ApiClient _client;
+
+  WorkspacesApi(this._client);
+
+  /// A workspace refers to a specific instance of an Atlassian product that is
+  /// accessed through a unique URL. Whenever a user initiates or adds a new
+  /// product instance, it results in the creation of a distinct workspace.
+  ///
+  /// This API will:
+  /// - Return a paginated list of workspaces in a given org
+  /// - Return more details about an organization's products (including product
+  /// URL).
+  Future<PageDataResponseV2> queryWorkspacesV2(
+      {required String orgId, required SearchWorkspacesRequestV2 body}) async {
+    return PageDataResponseV2.fromJson(await _client.send(
+      'post',
+      'v2/orgs/{orgId}/workspaces',
+      pathParameters: {
+        'orgId': orgId,
+      },
+      body: body.toJson(),
+    ));
+  }
+}
+
+class AddGroupMembershipInput {
+  /// Unique ID of the user's account that you are adding to the group.
+  /// Use the
+  /// [Jira User Search API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-users-search-get)
+  /// to get the accountId (if Jira is available for your Organization). **Jira
+  /// APIs use a different
+  /// [authentication method ](https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/).**
+  /// If you don’t have Jira, export a .csv of the user list. Learn how to
+  /// [export users from a site](https://support.atlassian.com/organization-administration/docs/export-users-from-a-site/).
+  final String accountId;
+
+  AddGroupMembershipInput({required this.accountId});
+
+  factory AddGroupMembershipInput.fromJson(Map<String, Object?> json) {
+    return AddGroupMembershipInput(
+      accountId: json[r'account_id'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var accountId = this.accountId;
+
+    final json = <String, Object?>{};
+    json[r'account_id'] = accountId;
+    return json;
+  }
+
+  AddGroupMembershipInput copyWith({String? accountId}) {
+    return AddGroupMembershipInput(
+      accountId: accountId ?? this.accountId,
+    );
   }
 }
 
@@ -418,6 +573,38 @@ class AllowIfContainedRule {
   }
 }
 
+/// Returns workspaces matching all of the nested query variants. Absence of
+/// nested variants makes this operator no-op.
+class AndOperator {
+  final List<QueryVariants> and;
+
+  AndOperator({List<QueryVariants>? and}) : and = and ?? [];
+
+  factory AndOperator.fromJson(Map<String, Object?> json) {
+    return AndOperator(
+      and: (json[r'and'] as List<Object?>?)
+              ?.map((i) => QueryVariants.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var and = this.and;
+
+    final json = <String, Object?>{};
+    json[r'and'] = and.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  AndOperator copyWith({List<QueryVariants>? and}) {
+    return AndOperator(
+      and: and ?? this.and,
+    );
+  }
+}
+
 class ApplicationError {
   /// A unique identifier for this particular occurrence of the error.
   final String? id;
@@ -426,26 +613,30 @@ class ApplicationError {
   final String? status;
 
   /// An application-specific error code:
-  ///   - `ADMIN-400-1` - Invalid page cursor
-  ///   - `ADMIN-400-2` - Invalid domain identifier
-  ///   - `ADMIN-400-3` - Invalid time date
-  ///   - `ADMIN-400-4` - Invalid resource
-  ///   - `ADMIN-403-3` - Not allowed to manage the org
-  ///   - `ADMIN-404-1` - Unknown resource
-  ///   - `ADMIN-404-2` - Organization not found
-  ///   - `ADMIN-404-3` - Domain not found
-  ///   - `ADMIN-404-4` - Event not found
-  ///   - `ADMIN-404-5` - Policy not found
-  ///   - `ADMIN-404-8` - User not found
-  ///   - `ADMIN-405-1` - Method not supported
-  ///   - `ADMIN-429-1` - Limit exceeded
-  ///   - `ADMIN-500-1` - Internal error
+  ///   - `ADMIN-400-1`  - Invalid page cursor
+  ///   - `ADMIN-400-2`  - Invalid domain identifier
+  ///   - `ADMIN-400-3`  - Invalid time date
+  ///   - `ADMIN-400-4`  - Invalid resource
+  ///   - `ADMIN-400-24` - Invalid request body
+  ///   - `ADMIN-403-3`  - Not allowed to manage the org
+  ///   - `ADMIN-403-5`  - Not allowed to manage the group
+  ///   - `ADMIN-404-1`  - Unknown resource
+  ///   - `ADMIN-404-2`  - Organization not found
+  ///   - `ADMIN-404-3`  - Domain not found
+  ///   - `ADMIN-404-4`  - Event not found
+  ///   - `ADMIN-404-5`  - Policy not found
+  ///   - `ADMIN-404-8`  - User not found
+  ///   - `ADMIN-404-10` - Group not found
+  ///   - `ADMIN-405-1`  - Method not supported
+  ///   - `ADMIN-429-1`  - Limit exceeded
+  ///   - `ADMIN-500-1`  - Internal error
   final String? code;
 
-  /// Human-readable summary of the error
+  /// Human-readable summary of the error.
   final String? title;
 
-  /// Human-readable explanation specific to this occurrence of the error.
+  /// Human-readable explanation specific to this occurrence of the error, and a
+  /// suggested action to resolve it.
   final String? detail;
 
   ApplicationError({this.id, this.status, this.code, this.title, this.detail});
@@ -498,6 +689,36 @@ class ApplicationError {
       code: code ?? this.code,
       title: title ?? this.title,
       detail: detail ?? this.detail,
+    );
+  }
+}
+
+/// Cursors for REST API pagination
+class CursorNextPageModel {
+  /// Cursor to fetch next page
+  final String? next;
+
+  CursorNextPageModel({this.next});
+
+  factory CursorNextPageModel.fromJson(Map<String, Object?> json) {
+    return CursorNextPageModel(
+      next: json[r'next'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var next = this.next;
+
+    final json = <String, Object?>{};
+    if (next != null) {
+      json[r'next'] = next;
+    }
+    return json;
+  }
+
+  CursorNextPageModel copyWith({String? next}) {
+    return CursorNextPageModel(
+      next: next ?? this.next,
     );
   }
 }
@@ -790,6 +1011,95 @@ class DomainPage {
     return DomainPage(
       data: data ?? this.data,
       links: links ?? this.links,
+    );
+  }
+}
+
+class EntitlementModelV2 {
+  final String? id;
+  final String? type;
+  final EntitlementModelV2Attributes? attributes;
+
+  EntitlementModelV2({this.id, this.type, this.attributes});
+
+  factory EntitlementModelV2.fromJson(Map<String, Object?> json) {
+    return EntitlementModelV2(
+      id: json[r'id'] as String?,
+      type: json[r'type'] as String?,
+      attributes: json[r'attributes'] != null
+          ? EntitlementModelV2Attributes.fromJson(
+              json[r'attributes']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var type = this.type;
+    var attributes = this.attributes;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (attributes != null) {
+      json[r'attributes'] = attributes.toJson();
+    }
+    return json;
+  }
+
+  EntitlementModelV2 copyWith(
+      {String? id, String? type, EntitlementModelV2Attributes? attributes}) {
+    return EntitlementModelV2(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      attributes: attributes ?? this.attributes,
+    );
+  }
+}
+
+class EntitlementModelV2Attributes {
+  final String? key;
+  final String? planKey;
+  final String? plan;
+
+  EntitlementModelV2Attributes({this.key, this.planKey, this.plan});
+
+  factory EntitlementModelV2Attributes.fromJson(Map<String, Object?> json) {
+    return EntitlementModelV2Attributes(
+      key: json[r'key'] as String?,
+      planKey: json[r'planKey'] as String?,
+      plan: json[r'plan'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+    var planKey = this.planKey;
+    var plan = this.plan;
+
+    final json = <String, Object?>{};
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    if (planKey != null) {
+      json[r'planKey'] = planKey;
+    }
+    if (plan != null) {
+      json[r'plan'] = plan;
+    }
+    return json;
+  }
+
+  EntitlementModelV2Attributes copyWith(
+      {String? key, String? planKey, String? plan}) {
+    return EntitlementModelV2Attributes(
+      key: key ?? this.key,
+      planKey: planKey ?? this.planKey,
+      plan: plan ?? this.plan,
     );
   }
 }
@@ -1752,6 +2062,185 @@ class EventPageMeta {
   }
 }
 
+/// Returns workspaces, which contains listed features.
+class FeatureFilter {
+  final List<String> value;
+
+  FeatureFilter({List<String>? value}) : value = value ?? [];
+
+  factory FeatureFilter.fromJson(Map<String, Object?> json) {
+    return FeatureFilter(
+      value: (json[r'value'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    json[r'value'] = value;
+    return json;
+  }
+
+  FeatureFilter copyWith({List<String>? value}) {
+    return FeatureFilter(
+      value: value ?? this.value,
+    );
+  }
+}
+
+class FeatureModelV2 {
+  final String? id;
+  final String? type;
+  final FeatureModelV2Attributes? attributes;
+
+  FeatureModelV2({this.id, this.type, this.attributes});
+
+  factory FeatureModelV2.fromJson(Map<String, Object?> json) {
+    return FeatureModelV2(
+      id: json[r'id'] as String?,
+      type: json[r'type'] as String?,
+      attributes: json[r'attributes'] != null
+          ? FeatureModelV2Attributes.fromJson(
+              json[r'attributes']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var type = this.type;
+    var attributes = this.attributes;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (attributes != null) {
+      json[r'attributes'] = attributes.toJson();
+    }
+    return json;
+  }
+
+  FeatureModelV2 copyWith(
+      {String? id, String? type, FeatureModelV2Attributes? attributes}) {
+    return FeatureModelV2(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      attributes: attributes ?? this.attributes,
+    );
+  }
+}
+
+class FeatureModelV2Attributes {
+  final Map<String, dynamic>? fields;
+
+  FeatureModelV2Attributes({this.fields});
+
+  factory FeatureModelV2Attributes.fromJson(Map<String, Object?> json) {
+    return FeatureModelV2Attributes(
+      fields: json[r'fields'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fields = this.fields;
+
+    final json = <String, Object?>{};
+    if (fields != null) {
+      json[r'fields'] = fields;
+    }
+    return json;
+  }
+
+  FeatureModelV2Attributes copyWith({Map<String, dynamic>? fields}) {
+    return FeatureModelV2Attributes(
+      fields: fields ?? this.fields,
+    );
+  }
+}
+
+/// Returns workspaces where a specified event field has one of the specified
+/// values. Absent of values makes this operator no-op.
+class FieldOperand {
+  final String? name;
+  final FieldOperandField? field;
+
+  FieldOperand({this.name, this.field});
+
+  factory FieldOperand.fromJson(Map<String, Object?> json) {
+    return FieldOperand(
+      name: json[r'name'] as String?,
+      field: json[r'field'] != null
+          ? FieldOperandField.fromJson(json[r'field']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var field = this.field;
+
+    final json = <String, Object?>{};
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (field != null) {
+      json[r'field'] = field.toJson();
+    }
+    return json;
+  }
+
+  FieldOperand copyWith({String? name, FieldOperandField? field}) {
+    return FieldOperand(
+      name: name ?? this.name,
+      field: field ?? this.field,
+    );
+  }
+}
+
+class FieldOperandField {
+  final String? name;
+  final List<String> values;
+
+  FieldOperandField({this.name, List<String>? values}) : values = values ?? [];
+
+  factory FieldOperandField.fromJson(Map<String, Object?> json) {
+    return FieldOperandField(
+      name: json[r'name'] as String?,
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    json[r'values'] = values;
+    return json;
+  }
+
+  FieldOperandField copyWith({String? name, List<String>? values}) {
+    return FieldOperandField(
+      name: name ?? this.name,
+      values: values ?? this.values,
+    );
+  }
+}
+
 class GenericActionSuccessModel {
   /// A description of the entities affected, and changes made as a result of
   /// calling this API.
@@ -2032,6 +2521,55 @@ class Meta {
           migrationStartDateTime ?? this.migrationStartDateTime,
       migrationEndDataTime: migrationEndDataTime ?? this.migrationEndDataTime,
       atlassianAccountId: atlassianAccountId ?? this.atlassianAccountId,
+    );
+  }
+}
+
+class MetaV2 {
+  final int? pageSize;
+  final int? startIndex;
+  final int? endIndex;
+  final int? total;
+
+  MetaV2({this.pageSize, this.startIndex, this.endIndex, this.total});
+
+  factory MetaV2.fromJson(Map<String, Object?> json) {
+    return MetaV2(
+      pageSize: (json[r'pageSize'] as num?)?.toInt(),
+      startIndex: (json[r'startIndex'] as num?)?.toInt(),
+      endIndex: (json[r'endIndex'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var pageSize = this.pageSize;
+    var startIndex = this.startIndex;
+    var endIndex = this.endIndex;
+    var total = this.total;
+
+    final json = <String, Object?>{};
+    if (pageSize != null) {
+      json[r'pageSize'] = pageSize;
+    }
+    if (startIndex != null) {
+      json[r'startIndex'] = startIndex;
+    }
+    if (endIndex != null) {
+      json[r'endIndex'] = endIndex;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    return json;
+  }
+
+  MetaV2 copyWith({int? pageSize, int? startIndex, int? endIndex, int? total}) {
+    return MetaV2(
+      pageSize: pageSize ?? this.pageSize,
+      startIndex: startIndex ?? this.startIndex,
+      endIndex: endIndex ?? this.endIndex,
+      total: total ?? this.total,
     );
   }
 }
@@ -2444,6 +2982,56 @@ class OrgPage {
   }
 }
 
+class PageDataResponseV2 {
+  final List<WorkspaceModel> data;
+  final LinkPageModel? links;
+  final MetaV2? meta;
+
+  PageDataResponseV2({List<WorkspaceModel>? data, this.links, this.meta})
+      : data = data ?? [];
+
+  factory PageDataResponseV2.fromJson(Map<String, Object?> json) {
+    return PageDataResponseV2(
+      data: (json[r'data'] as List<Object?>?)
+              ?.map((i) => WorkspaceModel.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      links: json[r'links'] != null
+          ? LinkPageModel.fromJson(json[r'links']! as Map<String, Object?>)
+          : null,
+      meta: json[r'meta'] != null
+          ? MetaV2.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var data = this.data;
+    var links = this.links;
+    var meta = this.meta;
+
+    final json = <String, Object?>{};
+    json[r'data'] = data.map((i) => i.toJson()).toList();
+    if (links != null) {
+      json[r'links'] = links.toJson();
+    }
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    return json;
+  }
+
+  PageDataResponseV2 copyWith(
+      {List<WorkspaceModel>? data, LinkPageModel? links, MetaV2? meta}) {
+    return PageDataResponseV2(
+      data: data ?? this.data,
+      links: links ?? this.links,
+      meta: meta ?? this.meta,
+    );
+  }
+}
+
 class Policy {
   final PolicyModel? data;
 
@@ -2689,6 +3277,36 @@ class PolicyCreateModelAttributesStatus {
   String toString() => value;
 }
 
+/// Returns workspaces, which contains listed policies.
+class PolicyFilter {
+  final List<String> value;
+
+  PolicyFilter({List<String>? value}) : value = value ?? [];
+
+  factory PolicyFilter.fromJson(Map<String, Object?> json) {
+    return PolicyFilter(
+      value: (json[r'value'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    json[r'value'] = value;
+    return json;
+  }
+
+  PolicyFilter copyWith({List<String>? value}) {
+    return PolicyFilter(
+      value: value ?? this.value,
+    );
+  }
+}
+
 class PolicyModel {
   /// Unique identifier of the Policy
   final String id;
@@ -2876,6 +3494,80 @@ class PolicyModelAttributesStatus {
 
   @override
   String toString() => value;
+}
+
+class PolicyModelV2 {
+  final String? id;
+  final String? type;
+  final PolicyModelV2Attributes? attributes;
+
+  PolicyModelV2({this.id, this.type, this.attributes});
+
+  factory PolicyModelV2.fromJson(Map<String, Object?> json) {
+    return PolicyModelV2(
+      id: json[r'id'] as String?,
+      type: json[r'type'] as String?,
+      attributes: json[r'attributes'] != null
+          ? PolicyModelV2Attributes.fromJson(
+              json[r'attributes']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var type = this.type;
+    var attributes = this.attributes;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (attributes != null) {
+      json[r'attributes'] = attributes.toJson();
+    }
+    return json;
+  }
+
+  PolicyModelV2 copyWith(
+      {String? id, String? type, PolicyModelV2Attributes? attributes}) {
+    return PolicyModelV2(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      attributes: attributes ?? this.attributes,
+    );
+  }
+}
+
+class PolicyModelV2Attributes {
+  final Map<String, dynamic>? fields;
+
+  PolicyModelV2Attributes({this.fields});
+
+  factory PolicyModelV2Attributes.fromJson(Map<String, Object?> json) {
+    return PolicyModelV2Attributes(
+      fields: json[r'fields'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fields = this.fields;
+
+    final json = <String, Object?>{};
+    if (fields != null) {
+      json[r'fields'] = fields;
+    }
+    return json;
+  }
+
+  PolicyModelV2Attributes copyWith({Map<String, dynamic>? fields}) {
+    return PolicyModelV2Attributes(
+      fields: fields ?? this.fields,
+    );
+  }
 }
 
 class PolicyPage {
@@ -3326,6 +4018,20 @@ class ProxyError {
   }
 }
 
+/// Possible operators/operand in the event query.
+class QueryVariants {
+  QueryVariants();
+
+  factory QueryVariants.fromJson(Map<String, Object?> json) {
+    return QueryVariants();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
 class Resource {
   final String id;
 
@@ -3496,6 +4202,213 @@ class ResourceUpdateInput {
       links: links ?? this.links,
     );
   }
+}
+
+class Sandbox {
+  final SandboxType? type;
+
+  Sandbox({this.type});
+
+  factory Sandbox.fromJson(Map<String, Object?> json) {
+    return Sandbox(
+      type: json[r'type'] != null
+          ? SandboxType.fromValue(json[r'type']! as String)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    if (type != null) {
+      json[r'type'] = type.value;
+    }
+    return json;
+  }
+
+  Sandbox copyWith({SandboxType? type}) {
+    return Sandbox(
+      type: type ?? this.type,
+    );
+  }
+}
+
+class SandboxType {
+  static const child = SandboxType._('CHILD');
+  static const none = SandboxType._('NONE');
+
+  static const values = [
+    child,
+    none,
+  ];
+  final String value;
+
+  const SandboxType._(this.value);
+
+  static SandboxType fromValue(String value) => values
+      .firstWhere((e) => e.value == value, orElse: () => SandboxType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// Returns workspaces, which partially contain the specified text in workspace
+/// name or url.
+class SearchWorkspacesOperand {
+  final String? value;
+
+  SearchWorkspacesOperand({this.value});
+
+  factory SearchWorkspacesOperand.fromJson(Map<String, Object?> json) {
+    return SearchWorkspacesOperand(
+      value: json[r'value'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    if (value != null) {
+      json[r'value'] = value;
+    }
+    return json;
+  }
+
+  SearchWorkspacesOperand copyWith({String? value}) {
+    return SearchWorkspacesOperand(
+      value: value ?? this.value,
+    );
+  }
+}
+
+/// Workspaces request supporting enhanced Workspace searching.
+class SearchWorkspacesRequestV2 {
+  final QueryVariants? query;
+
+  /// Specifies the maximum page size.
+  final int? limit;
+  final List<SortField> sort;
+
+  /// A base-64 encoded continuation token used for pagination. When a cursor is
+  /// provided in the request body, no other properties may be present.
+  final String? cursor;
+
+  SearchWorkspacesRequestV2(
+      {this.query, this.limit, List<SortField>? sort, this.cursor})
+      : sort = sort ?? [];
+
+  factory SearchWorkspacesRequestV2.fromJson(Map<String, Object?> json) {
+    return SearchWorkspacesRequestV2(
+      query: json[r'query'] != null
+          ? QueryVariants.fromJson(json[r'query']! as Map<String, Object?>)
+          : null,
+      limit: (json[r'limit'] as num?)?.toInt(),
+      sort: (json[r'sort'] as List<Object?>?)
+              ?.map((i) =>
+                  SortField.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      cursor: json[r'cursor'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var query = this.query;
+    var limit = this.limit;
+    var sort = this.sort;
+    var cursor = this.cursor;
+
+    final json = <String, Object?>{};
+    if (query != null) {
+      json[r'query'] = query.toJson();
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
+    json[r'sort'] = sort.map((i) => i.toJson()).toList();
+    if (cursor != null) {
+      json[r'cursor'] = cursor;
+    }
+    return json;
+  }
+
+  SearchWorkspacesRequestV2 copyWith(
+      {QueryVariants? query,
+      int? limit,
+      List<SortField>? sort,
+      String? cursor}) {
+    return SearchWorkspacesRequestV2(
+      query: query ?? this.query,
+      limit: limit ?? this.limit,
+      sort: sort ?? this.sort,
+      cursor: cursor ?? this.cursor,
+    );
+  }
+}
+
+class SortField {
+  final String? field;
+  final SortFieldOrder? order;
+
+  SortField({this.field, this.order});
+
+  factory SortField.fromJson(Map<String, Object?> json) {
+    return SortField(
+      field: json[r'field'] as String?,
+      order: json[r'order'] != null
+          ? SortFieldOrder.fromValue(json[r'order']! as String)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var field = this.field;
+    var order = this.order;
+
+    final json = <String, Object?>{};
+    if (field != null) {
+      json[r'field'] = field;
+    }
+    if (order != null) {
+      json[r'order'] = order.value;
+    }
+    return json;
+  }
+
+  SortField copyWith({String? field, SortFieldOrder? order}) {
+    return SortField(
+      field: field ?? this.field,
+      order: order ?? this.order,
+    );
+  }
+}
+
+class SortFieldOrder {
+  static const asc = SortFieldOrder._('asc');
+  static const desc = SortFieldOrder._('desc');
+
+  static const values = [
+    asc,
+    desc,
+  ];
+  final String value;
+
+  const SortFieldOrder._(this.value);
+
+  static SortFieldOrder fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => SortFieldOrder._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 class User {
@@ -3761,64 +4674,456 @@ class UserPageMeta {
   }
 }
 
-class UserProductAccess {
+class UserProductAccessActivityPage {
   final UserProductAccessModel? data;
+  final CursorNextPageModel? links;
 
-  UserProductAccess({this.data});
+  UserProductAccessActivityPage({this.data, this.links});
 
-  factory UserProductAccess.fromJson(Map<String, Object?> json) {
-    return UserProductAccess(
+  factory UserProductAccessActivityPage.fromJson(Map<String, Object?> json) {
+    return UserProductAccessActivityPage(
       data: json[r'data'] != null
           ? UserProductAccessModel.fromJson(
               json[r'data']! as Map<String, Object?>)
+          : null,
+      links: json[r'links'] != null
+          ? CursorNextPageModel.fromJson(
+              json[r'links']! as Map<String, Object?>)
           : null,
     );
   }
 
   Map<String, Object?> toJson() {
     var data = this.data;
+    var links = this.links;
 
     final json = <String, Object?>{};
     if (data != null) {
       json[r'data'] = data.toJson();
     }
+    if (links != null) {
+      json[r'links'] = links.toJson();
+    }
     return json;
   }
 
-  UserProductAccess copyWith({UserProductAccessModel? data}) {
-    return UserProductAccess(
+  UserProductAccessActivityPage copyWith(
+      {UserProductAccessModel? data, CursorNextPageModel? links}) {
+    return UserProductAccessActivityPage(
       data: data ?? this.data,
+      links: links ?? this.links,
     );
   }
 }
 
 class UserProductAccessModel {
-  /// Products which the User is using
-  final List<Product> productAccess;
+  /// Products accessed by the user
+  final List<UserProductLastActive> productAccess;
 
-  UserProductAccessModel({required this.productAccess});
+  /// Date the user was added to the organization in ISO 8601 format.
+  final String? addedToOrg;
+
+  UserProductAccessModel({required this.productAccess, this.addedToOrg});
 
   factory UserProductAccessModel.fromJson(Map<String, Object?> json) {
     return UserProductAccessModel(
       productAccess: (json[r'product_access'] as List<Object?>?)
-              ?.map((i) =>
-                  Product.fromJson(i as Map<String, Object?>? ?? const {}))
+              ?.map((i) => UserProductLastActive.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      addedToOrg: json[r'added_to_org'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var productAccess = this.productAccess;
+    var addedToOrg = this.addedToOrg;
+
+    final json = <String, Object?>{};
+    json[r'product_access'] = productAccess.map((i) => i.toJson()).toList();
+    if (addedToOrg != null) {
+      json[r'added_to_org'] = addedToOrg;
+    }
+    return json;
+  }
+
+  UserProductAccessModel copyWith(
+      {List<UserProductLastActive>? productAccess, String? addedToOrg}) {
+    return UserProductAccessModel(
+      productAccess: productAccess ?? this.productAccess,
+      addedToOrg: addedToOrg ?? this.addedToOrg,
+    );
+  }
+}
+
+class UserProductLastActive {
+  /// Unique ID of the Product instance
+  final String id;
+
+  /// Unique key of the Product
+  final UserProductLastActiveKey key;
+
+  /// Last active date for a product
+  final String? lastActive;
+
+  UserProductLastActive({required this.id, required this.key, this.lastActive});
+
+  factory UserProductLastActive.fromJson(Map<String, Object?> json) {
+    return UserProductLastActive(
+      id: json[r'id'] as String? ?? '',
+      key: UserProductLastActiveKey.fromValue(json[r'key'] as String? ?? ''),
+      lastActive: json[r'last_active'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var key = this.key;
+    var lastActive = this.lastActive;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    json[r'key'] = key.value;
+    if (lastActive != null) {
+      json[r'last_active'] = lastActive;
+    }
+    return json;
+  }
+
+  UserProductLastActive copyWith(
+      {String? id, UserProductLastActiveKey? key, String? lastActive}) {
+    return UserProductLastActive(
+      id: id ?? this.id,
+      key: key ?? this.key,
+      lastActive: lastActive ?? this.lastActive,
+    );
+  }
+}
+
+class UserProductLastActiveKey {
+  static const jiraSoftware = UserProductLastActiveKey._('jira-software');
+  static const jiraServiceDesk =
+      UserProductLastActiveKey._('jira-service-desk');
+  static const jiraCore = UserProductLastActiveKey._('jira-core');
+  static const jiraOps = UserProductLastActiveKey._('jira-ops');
+  static const stride = UserProductLastActiveKey._('stride');
+  static const hipchat = UserProductLastActiveKey._('hipchat');
+  static const confluence = UserProductLastActiveKey._('confluence');
+  static const bitbucket = UserProductLastActiveKey._('bitbucket');
+  static const trello = UserProductLastActiveKey._('trello');
+  static const opsgenie = UserProductLastActiveKey._('opsgenie');
+  static const statuspage = UserProductLastActiveKey._('statuspage');
+
+  static const values = [
+    jiraSoftware,
+    jiraServiceDesk,
+    jiraCore,
+    jiraOps,
+    stride,
+    hipchat,
+    confluence,
+    bitbucket,
+    trello,
+    opsgenie,
+    statuspage,
+  ];
+  final String value;
+
+  const UserProductLastActiveKey._(this.value);
+
+  static UserProductLastActiveKey fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => UserProductLastActiveKey._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class WorkspaceModel {
+  final String? id;
+  final String? type;
+  final WorkspaceModelAttributes? attributes;
+  final LinkSelfModel? links;
+  final Map<String, dynamic>? relationships;
+
+  WorkspaceModel(
+      {this.id, this.type, this.attributes, this.links, this.relationships});
+
+  factory WorkspaceModel.fromJson(Map<String, Object?> json) {
+    return WorkspaceModel(
+      id: json[r'id'] as String?,
+      type: json[r'type'] as String?,
+      attributes: json[r'attributes'] != null
+          ? WorkspaceModelAttributes.fromJson(
+              json[r'attributes']! as Map<String, Object?>)
+          : null,
+      links: json[r'links'] != null
+          ? LinkSelfModel.fromJson(json[r'links']! as Map<String, Object?>)
+          : null,
+      relationships: json[r'relationships'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var type = this.type;
+    var attributes = this.attributes;
+    var links = this.links;
+    var relationships = this.relationships;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (attributes != null) {
+      json[r'attributes'] = attributes.toJson();
+    }
+    if (links != null) {
+      json[r'links'] = links.toJson();
+    }
+    if (relationships != null) {
+      json[r'relationships'] = relationships;
+    }
+    return json;
+  }
+
+  WorkspaceModel copyWith(
+      {String? id,
+      String? type,
+      WorkspaceModelAttributes? attributes,
+      LinkSelfModel? links,
+      Map<String, dynamic>? relationships}) {
+    return WorkspaceModel(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      attributes: attributes ?? this.attributes,
+      links: links ?? this.links,
+      relationships: relationships ?? this.relationships,
+    );
+  }
+}
+
+class WorkspaceModelAttributes {
+  final String? name;
+  final String? typeKey;
+  final String? type;
+  final String? owner;
+  final WorkspaceModelAttributesStatus? status;
+  final List<String> statusDetails;
+  final Map<String, dynamic>? icons;
+  final Map<String, dynamic>? avatars;
+  final List<String> labels;
+  final Sandbox? sandbox;
+  final int? usage;
+  final int? capacity;
+  final String? createdAt;
+  final String? createdBy;
+  final String? updatedAt;
+  final String? hostUrl;
+  final String? realm;
+  final List<String> regions;
+
+  WorkspaceModelAttributes(
+      {this.name,
+      this.typeKey,
+      this.type,
+      this.owner,
+      this.status,
+      List<String>? statusDetails,
+      this.icons,
+      this.avatars,
+      List<String>? labels,
+      this.sandbox,
+      this.usage,
+      this.capacity,
+      this.createdAt,
+      this.createdBy,
+      this.updatedAt,
+      this.hostUrl,
+      this.realm,
+      List<String>? regions})
+      : statusDetails = statusDetails ?? [],
+        labels = labels ?? [],
+        regions = regions ?? [];
+
+  factory WorkspaceModelAttributes.fromJson(Map<String, Object?> json) {
+    return WorkspaceModelAttributes(
+      name: json[r'name'] as String?,
+      typeKey: json[r'typeKey'] as String?,
+      type: json[r'type'] as String?,
+      owner: json[r'owner'] as String?,
+      status: json[r'status'] != null
+          ? WorkspaceModelAttributesStatus.fromValue(json[r'status']! as String)
+          : null,
+      statusDetails: (json[r'statusDetails'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      icons: json[r'icons'] as Map<String, Object?>?,
+      avatars: json[r'avatars'] as Map<String, Object?>?,
+      labels: (json[r'labels'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      sandbox: json[r'sandbox'] != null
+          ? Sandbox.fromJson(json[r'sandbox']! as Map<String, Object?>)
+          : null,
+      usage: (json[r'usage'] as num?)?.toInt(),
+      capacity: (json[r'capacity'] as num?)?.toInt(),
+      createdAt: json[r'createdAt'] as String?,
+      createdBy: json[r'createdBy'] as String?,
+      updatedAt: json[r'updatedAt'] as String?,
+      hostUrl: json[r'hostUrl'] as String?,
+      realm: json[r'realm'] as String?,
+      regions: (json[r'regions'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
     );
   }
 
   Map<String, Object?> toJson() {
-    var productAccess = this.productAccess;
+    var name = this.name;
+    var typeKey = this.typeKey;
+    var type = this.type;
+    var owner = this.owner;
+    var status = this.status;
+    var statusDetails = this.statusDetails;
+    var icons = this.icons;
+    var avatars = this.avatars;
+    var labels = this.labels;
+    var sandbox = this.sandbox;
+    var usage = this.usage;
+    var capacity = this.capacity;
+    var createdAt = this.createdAt;
+    var createdBy = this.createdBy;
+    var updatedAt = this.updatedAt;
+    var hostUrl = this.hostUrl;
+    var realm = this.realm;
+    var regions = this.regions;
 
     final json = <String, Object?>{};
-    json[r'product_access'] = productAccess.map((i) => i.toJson()).toList();
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (typeKey != null) {
+      json[r'typeKey'] = typeKey;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (owner != null) {
+      json[r'owner'] = owner;
+    }
+    if (status != null) {
+      json[r'status'] = status.value;
+    }
+    json[r'statusDetails'] = statusDetails;
+    if (icons != null) {
+      json[r'icons'] = icons;
+    }
+    if (avatars != null) {
+      json[r'avatars'] = avatars;
+    }
+    json[r'labels'] = labels;
+    if (sandbox != null) {
+      json[r'sandbox'] = sandbox.toJson();
+    }
+    if (usage != null) {
+      json[r'usage'] = usage;
+    }
+    if (capacity != null) {
+      json[r'capacity'] = capacity;
+    }
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt;
+    }
+    if (createdBy != null) {
+      json[r'createdBy'] = createdBy;
+    }
+    if (updatedAt != null) {
+      json[r'updatedAt'] = updatedAt;
+    }
+    if (hostUrl != null) {
+      json[r'hostUrl'] = hostUrl;
+    }
+    if (realm != null) {
+      json[r'realm'] = realm;
+    }
+    json[r'regions'] = regions;
     return json;
   }
 
-  UserProductAccessModel copyWith({List<Product>? productAccess}) {
-    return UserProductAccessModel(
-      productAccess: productAccess ?? this.productAccess,
+  WorkspaceModelAttributes copyWith(
+      {String? name,
+      String? typeKey,
+      String? type,
+      String? owner,
+      WorkspaceModelAttributesStatus? status,
+      List<String>? statusDetails,
+      Map<String, dynamic>? icons,
+      Map<String, dynamic>? avatars,
+      List<String>? labels,
+      Sandbox? sandbox,
+      int? usage,
+      int? capacity,
+      String? createdAt,
+      String? createdBy,
+      String? updatedAt,
+      String? hostUrl,
+      String? realm,
+      List<String>? regions}) {
+    return WorkspaceModelAttributes(
+      name: name ?? this.name,
+      typeKey: typeKey ?? this.typeKey,
+      type: type ?? this.type,
+      owner: owner ?? this.owner,
+      status: status ?? this.status,
+      statusDetails: statusDetails ?? this.statusDetails,
+      icons: icons ?? this.icons,
+      avatars: avatars ?? this.avatars,
+      labels: labels ?? this.labels,
+      sandbox: sandbox ?? this.sandbox,
+      usage: usage ?? this.usage,
+      capacity: capacity ?? this.capacity,
+      createdAt: createdAt ?? this.createdAt,
+      createdBy: createdBy ?? this.createdBy,
+      updatedAt: updatedAt ?? this.updatedAt,
+      hostUrl: hostUrl ?? this.hostUrl,
+      realm: realm ?? this.realm,
+      regions: regions ?? this.regions,
     );
   }
+}
+
+class WorkspaceModelAttributesStatus {
+  static const online = WorkspaceModelAttributesStatus._('online');
+  static const offline = WorkspaceModelAttributesStatus._('offline');
+  static const deprecated = WorkspaceModelAttributesStatus._('deprecated');
+
+  static const values = [
+    online,
+    offline,
+    deprecated,
+  ];
+  final String value;
+
+  const WorkspaceModelAttributesStatus._(this.value);
+
+  static WorkspaceModelAttributesStatus fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => WorkspaceModelAttributesStatus._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }

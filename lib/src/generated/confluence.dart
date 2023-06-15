@@ -205,7 +205,7 @@ class AuditApi {
 
   /// Sets the retention period for records in the audit log. The retention
   /// period
-  /// can be set to a maximum of 20 years.
+  /// can be set to a maximum of 1 year.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'Confluence Administrator' global permission.
@@ -547,15 +547,15 @@ class ContentApi {
   /// Moves a piece of content to the space's trash or purges it from the trash,
   /// depending on the content's type and status:
   ///
-  /// - If the content's type is `page` or `blogpost` and its status is
-  /// `current`,
+  /// - If the content's type is `page`,`blogpost`, or `attachment` and its
+  /// status is `current`,
   /// it will be trashed.
-  /// - If the content's type is `page` or `blogpost` and its status is
-  /// `trashed`,
+  /// - If the content's type is `page`,`blogpost`, or `attachment` and its
+  /// status is `trashed`,
   /// the content will be purged from the trash and deleted permanently. Note,
   /// you must also set the `status` query parameter to `trashed` in your
   /// request.
-  /// - If the content's type is `comment` or `attachment`, it will be deleted
+  /// - If the content's type is `comment`, it will be deleted
   /// permanently without being trashed.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -758,7 +758,7 @@ class ContentAttachmentsApi {
   Future<Content> updateAttachmentProperties(
       {required String id,
       required String attachmentId,
-      required Content body}) async {
+      required AttachmentPropertiesUpdateBody body}) async {
     return Content.fromJson(await _client.send(
       'put',
       'wiki/rest/api/content/{id}/child/attachment/{attachmentId}',
@@ -4742,31 +4742,6 @@ class UsersApi {
       },
     ));
   }
-
-  /// Returns the accountIds for the users specified in the key or username
-  /// parameters. Note that multiple key and username parameters can be
-  /// specified.
-  ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// 'Confluence Administrator' global permission if specifying a user,
-  /// otherwise
-  /// permission to access the Confluence site ('Can use' global permission).
-  Future<MigratedUserArray> getBulkUserMigration(
-      {List<String>? key,
-      List<String>? username,
-      int? start,
-      int? limit}) async {
-    return MigratedUserArray.fromJson(await _client.send(
-      'get',
-      'wiki/rest/api/user/bulk/migration',
-      queryParameters: {
-        if (key != null) 'key': key.map((e) => e).join(','),
-        if (username != null) 'username': username.map((e) => e).join(','),
-        if (start != null) 'start': '$start',
-        if (limit != null) 'limit': '$limit',
-      },
-    ));
-  }
 }
 
 class LabeledContentType {
@@ -5524,6 +5499,130 @@ class AsyncId {
   AsyncId copyWith({String? asyncId}) {
     return AsyncId(
       asyncId: asyncId ?? this.asyncId,
+    );
+  }
+}
+
+class AttachmentPropertiesUpdateBody {
+  final String id;
+
+  /// Set this to "attachment"
+  final String type;
+  final String? status;
+  final String? title;
+  final Container? container;
+  final AttachmentPropertiesUpdateBodyMetadata? metadata;
+  final Map<String, dynamic>? extensions;
+  final Version version;
+
+  AttachmentPropertiesUpdateBody(
+      {required this.id,
+      required this.type,
+      this.status,
+      this.title,
+      this.container,
+      this.metadata,
+      this.extensions,
+      required this.version});
+
+  factory AttachmentPropertiesUpdateBody.fromJson(Map<String, Object?> json) {
+    return AttachmentPropertiesUpdateBody(
+      id: json[r'id'] as String? ?? '',
+      type: json[r'type'] as String? ?? '',
+      status: json[r'status'] as String?,
+      title: json[r'title'] as String?,
+      container: json[r'container'] != null
+          ? Container.fromJson(json[r'container']! as Map<String, Object?>)
+          : null,
+      metadata: json[r'metadata'] != null
+          ? AttachmentPropertiesUpdateBodyMetadata.fromJson(
+              json[r'metadata']! as Map<String, Object?>)
+          : null,
+      extensions: json[r'extensions'] as Map<String, Object?>?,
+      version: Version.fromJson(
+          json[r'version'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var type = this.type;
+    var status = this.status;
+    var title = this.title;
+    var container = this.container;
+    var metadata = this.metadata;
+    var extensions = this.extensions;
+    var version = this.version;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    json[r'type'] = type;
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (container != null) {
+      json[r'container'] = container.toJson();
+    }
+    if (metadata != null) {
+      json[r'metadata'] = metadata.toJson();
+    }
+    if (extensions != null) {
+      json[r'extensions'] = extensions;
+    }
+    json[r'version'] = version.toJson();
+    return json;
+  }
+
+  AttachmentPropertiesUpdateBody copyWith(
+      {String? id,
+      String? type,
+      String? status,
+      String? title,
+      Container? container,
+      AttachmentPropertiesUpdateBodyMetadata? metadata,
+      Map<String, dynamic>? extensions,
+      Version? version}) {
+    return AttachmentPropertiesUpdateBody(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      status: status ?? this.status,
+      title: title ?? this.title,
+      container: container ?? this.container,
+      metadata: metadata ?? this.metadata,
+      extensions: extensions ?? this.extensions,
+      version: version ?? this.version,
+    );
+  }
+}
+
+class AttachmentPropertiesUpdateBodyMetadata {
+  final String? mediaType;
+
+  AttachmentPropertiesUpdateBodyMetadata({this.mediaType});
+
+  factory AttachmentPropertiesUpdateBodyMetadata.fromJson(
+      Map<String, Object?> json) {
+    return AttachmentPropertiesUpdateBodyMetadata(
+      mediaType: json[r'mediaType'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var mediaType = this.mediaType;
+
+    final json = <String, Object?>{};
+    if (mediaType != null) {
+      json[r'mediaType'] = mediaType;
+    }
+    return json;
+  }
+
+  AttachmentPropertiesUpdateBodyMetadata copyWith({String? mediaType}) {
+    return AttachmentPropertiesUpdateBodyMetadata(
+      mediaType: mediaType ?? this.mediaType,
     );
   }
 }
@@ -8564,7 +8663,8 @@ class ContentBodyValueExpandable {
   }
 }
 
-/// Shows whether a piece of content has attachments, comments, or child pages.
+/// Shows whether a piece of content has attachments, comments, or child
+/// pages/whiteboards.
 /// Note, this doesn't actually contain the child objects.
 class ContentChildType {
   final ContentChildTypeAttachment? attachment;
@@ -8696,20 +8796,22 @@ class ContentChildTypeComment {
 }
 
 class ContentChildTypeExpandable {
-  final Map<String, dynamic>? all;
-  final Map<String, dynamic>? attachment;
-  final Map<String, dynamic>? comment;
-  final Map<String, dynamic>? page;
+  final String? all;
+  final String? attachment;
+  final String? comment;
+  final String? page;
+  final String? whiteboard;
 
   ContentChildTypeExpandable(
-      {this.all, this.attachment, this.comment, this.page});
+      {this.all, this.attachment, this.comment, this.page, this.whiteboard});
 
   factory ContentChildTypeExpandable.fromJson(Map<String, Object?> json) {
     return ContentChildTypeExpandable(
-      all: json[r'all'] as Map<String, Object?>?,
-      attachment: json[r'attachment'] as Map<String, Object?>?,
-      comment: json[r'comment'] as Map<String, Object?>?,
-      page: json[r'page'] as Map<String, Object?>?,
+      all: json[r'all'] as String?,
+      attachment: json[r'attachment'] as String?,
+      comment: json[r'comment'] as String?,
+      page: json[r'page'] as String?,
+      whiteboard: json[r'whiteboard'] as String?,
     );
   }
 
@@ -8718,6 +8820,7 @@ class ContentChildTypeExpandable {
     var attachment = this.attachment;
     var comment = this.comment;
     var page = this.page;
+    var whiteboard = this.whiteboard;
 
     final json = <String, Object?>{};
     if (all != null) {
@@ -8732,19 +8835,24 @@ class ContentChildTypeExpandable {
     if (page != null) {
       json[r'page'] = page;
     }
+    if (whiteboard != null) {
+      json[r'whiteboard'] = whiteboard;
+    }
     return json;
   }
 
   ContentChildTypeExpandable copyWith(
-      {Map<String, dynamic>? all,
-      Map<String, dynamic>? attachment,
-      Map<String, dynamic>? comment,
-      Map<String, dynamic>? page}) {
+      {String? all,
+      String? attachment,
+      String? comment,
+      String? page,
+      String? whiteboard}) {
     return ContentChildTypeExpandable(
       all: all ?? this.all,
       attachment: attachment ?? this.attachment,
       comment: comment ?? this.comment,
       page: page ?? this.page,
+      whiteboard: whiteboard ?? this.whiteboard,
     );
   }
 }
@@ -9814,6 +9922,7 @@ class ContentHistory {
   final bool latest;
   final User? createdBy;
   final User? ownedBy;
+  final User? lastOwnedBy;
   final DateTime? createdDate;
   final Version? lastUpdated;
   final Version? previousVersion;
@@ -9826,6 +9935,7 @@ class ContentHistory {
       {required this.latest,
       this.createdBy,
       this.ownedBy,
+      this.lastOwnedBy,
       this.createdDate,
       this.lastUpdated,
       this.previousVersion,
@@ -9842,6 +9952,9 @@ class ContentHistory {
           : null,
       ownedBy: json[r'ownedBy'] != null
           ? User.fromJson(json[r'ownedBy']! as Map<String, Object?>)
+          : null,
+      lastOwnedBy: json[r'lastOwnedBy'] != null
+          ? User.fromJson(json[r'lastOwnedBy']! as Map<String, Object?>)
           : null,
       createdDate: DateTime.tryParse(json[r'createdDate'] as String? ?? ''),
       lastUpdated: json[r'lastUpdated'] != null
@@ -9871,6 +9984,7 @@ class ContentHistory {
     var latest = this.latest;
     var createdBy = this.createdBy;
     var ownedBy = this.ownedBy;
+    var lastOwnedBy = this.lastOwnedBy;
     var createdDate = this.createdDate;
     var lastUpdated = this.lastUpdated;
     var previousVersion = this.previousVersion;
@@ -9886,6 +10000,9 @@ class ContentHistory {
     }
     if (ownedBy != null) {
       json[r'ownedBy'] = ownedBy.toJson();
+    }
+    if (lastOwnedBy != null) {
+      json[r'lastOwnedBy'] = lastOwnedBy.toJson();
     }
     if (createdDate != null) {
       json[r'createdDate'] = createdDate.toIso8601String();
@@ -9915,6 +10032,7 @@ class ContentHistory {
       {bool? latest,
       User? createdBy,
       User? ownedBy,
+      User? lastOwnedBy,
       DateTime? createdDate,
       Version? lastUpdated,
       Version? previousVersion,
@@ -9926,6 +10044,7 @@ class ContentHistory {
       latest: latest ?? this.latest,
       createdBy: createdBy ?? this.createdBy,
       ownedBy: ownedBy ?? this.ownedBy,
+      lastOwnedBy: lastOwnedBy ?? this.lastOwnedBy,
       createdDate: createdDate ?? this.createdDate,
       lastUpdated: lastUpdated ?? this.lastUpdated,
       previousVersion: previousVersion ?? this.previousVersion,
@@ -9973,13 +10092,15 @@ class ContentHistoryExpandable {
   final String? contributors;
   final String? nextVersion;
   final String? ownedBy;
+  final String? lastOwnedBy;
 
   ContentHistoryExpandable(
       {this.lastUpdated,
       this.previousVersion,
       this.contributors,
       this.nextVersion,
-      this.ownedBy});
+      this.ownedBy,
+      this.lastOwnedBy});
 
   factory ContentHistoryExpandable.fromJson(Map<String, Object?> json) {
     return ContentHistoryExpandable(
@@ -9988,6 +10109,7 @@ class ContentHistoryExpandable {
       contributors: json[r'contributors'] as String?,
       nextVersion: json[r'nextVersion'] as String?,
       ownedBy: json[r'ownedBy'] as String?,
+      lastOwnedBy: json[r'lastOwnedBy'] as String?,
     );
   }
 
@@ -9997,6 +10119,7 @@ class ContentHistoryExpandable {
     var contributors = this.contributors;
     var nextVersion = this.nextVersion;
     var ownedBy = this.ownedBy;
+    var lastOwnedBy = this.lastOwnedBy;
 
     final json = <String, Object?>{};
     if (lastUpdated != null) {
@@ -10014,6 +10137,9 @@ class ContentHistoryExpandable {
     if (ownedBy != null) {
       json[r'ownedBy'] = ownedBy;
     }
+    if (lastOwnedBy != null) {
+      json[r'lastOwnedBy'] = lastOwnedBy;
+    }
     return json;
   }
 
@@ -10022,13 +10148,15 @@ class ContentHistoryExpandable {
       String? previousVersion,
       String? contributors,
       String? nextVersion,
-      String? ownedBy}) {
+      String? ownedBy,
+      String? lastOwnedBy}) {
     return ContentHistoryExpandable(
       lastUpdated: lastUpdated ?? this.lastUpdated,
       previousVersion: previousVersion ?? this.previousVersion,
       contributors: contributors ?? this.contributors,
       nextVersion: nextVersion ?? this.nextVersion,
       ownedBy: ownedBy ?? this.ownedBy,
+      lastOwnedBy: lastOwnedBy ?? this.lastOwnedBy,
     );
   }
 }
@@ -15356,109 +15484,6 @@ class Message {
   }
 }
 
-class MigratedUser {
-  final String? username;
-  final String? key;
-  final String? accountId;
-
-  MigratedUser({this.username, this.key, this.accountId});
-
-  factory MigratedUser.fromJson(Map<String, Object?> json) {
-    return MigratedUser(
-      username: json[r'username'] as String?,
-      key: json[r'key'] as String?,
-      accountId: json[r'accountId'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var username = this.username;
-    var key = this.key;
-    var accountId = this.accountId;
-
-    final json = <String, Object?>{};
-    if (username != null) {
-      json[r'username'] = username;
-    }
-    if (key != null) {
-      json[r'key'] = key;
-    }
-    if (accountId != null) {
-      json[r'accountId'] = accountId;
-    }
-    return json;
-  }
-
-  MigratedUser copyWith({String? username, String? key, String? accountId}) {
-    return MigratedUser(
-      username: username ?? this.username,
-      key: key ?? this.key,
-      accountId: accountId ?? this.accountId,
-    );
-  }
-}
-
-class MigratedUserArray {
-  final List<MigratedUser> results;
-  final int start;
-  final int limit;
-  final int size;
-  final GenericLinks links;
-
-  MigratedUserArray(
-      {required this.results,
-      required this.start,
-      required this.limit,
-      required this.size,
-      required this.links});
-
-  factory MigratedUserArray.fromJson(Map<String, Object?> json) {
-    return MigratedUserArray(
-      results: (json[r'results'] as List<Object?>?)
-              ?.map((i) =>
-                  MigratedUser.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      start: (json[r'start'] as num?)?.toInt() ?? 0,
-      limit: (json[r'limit'] as num?)?.toInt() ?? 0,
-      size: (json[r'size'] as num?)?.toInt() ?? 0,
-      links: GenericLinks.fromJson(
-          json[r'_links'] as Map<String, Object?>? ?? const {}),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var results = this.results;
-    var start = this.start;
-    var limit = this.limit;
-    var size = this.size;
-    var links = this.links;
-
-    final json = <String, Object?>{};
-    json[r'results'] = results.map((i) => i.toJson()).toList();
-    json[r'start'] = start;
-    json[r'limit'] = limit;
-    json[r'size'] = size;
-    json[r'_links'] = links.toJson();
-    return json;
-  }
-
-  MigratedUserArray copyWith(
-      {List<MigratedUser>? results,
-      int? start,
-      int? limit,
-      int? size,
-      GenericLinks? links}) {
-    return MigratedUserArray(
-      results: results ?? this.results,
-      start: start ?? this.start,
-      limit: limit ?? this.limit,
-      size: size ?? this.size,
-      links: links ?? this.links,
-    );
-  }
-}
-
 class NavigationLookAndFeel {
   final String color;
   final String? highlightColor;
@@ -17743,7 +17768,7 @@ class SpacePermissionCustomContentOperationsItemKey {
 
 /// This object represents the request for the single space permission.
 /// Permissions consist of
-/// at least one operation object with an accompanying subjects object.
+/// one operation object with an accompanying subjects object.
 ///
 /// The following combinations of `operation.key` and `operation.target` values
 /// are

@@ -20,6 +20,16 @@
         "title": "Version and URI",
         "anchor": "uri",
         "body": "\nThis documentation is for version 1 of the user management REST API. The URIs for resources\nhave the following structure:\n\n```\nhttps://api.atlassian.com/users/<resource-name>\n```"
+      },
+      {
+        "title": "Experimental features",
+        "anchor": "Experimental features",
+        "body": "\nMethods marked as experimental may change without an earlier notice. We are looking for your feedback for these methods."
+      },
+      {
+        "title": "Vocabulary",
+        "anchor": "Vocabulary",
+        "body": "\nThere are several concepts that are common ideas with a unique meaning in Atlassian Administration. Learn more about [terminology](https://developer.atlassian.com/cloud/admin/cloud-admin-vocabulary/) related to the cloud admin experience."
       }
     ]
   },
@@ -88,6 +98,7 @@
                   "profile.read",
                   "email.set",
                   "lifecycle.enablement",
+                  "lifecycle.delete",
                   "apiToken.read",
                   "apiToken.delete"
                 ]
@@ -97,7 +108,7 @@
         ],
         "responses": {
           "200": {
-            "description": "You have permission to manage at least some aspect of the specified user account. Restrictions around the privileges specified are returned.\n- _profile_: DEPRECATED, replace by profile.write\n- _profile.read_: have permission to read the profile data of the user account (at GET ./profile)\n- _profile.write_: refers to the object mutability of the user's profile (at PATCH ./profile)\n- _email.set_: have permission to set the user's email address (at PUT ./email)\n- _lifecycle.enablement_: have permission to activate and deactivate the user's account (at POST ./lifecycle/enable AND ./lifecycle/disable)\n- _apiToken.read_: have permission to list the user's API tokens (at GET ./api-tokens)\n- _apiToken.delete_: have permission to delete API tokens from the account (at DELETE ./api-tokens/{tokenId})\n",
+            "description": "You have permission to manage at least some aspect of the specified user account. Restrictions around the privileges specified are returned.\n- _profile_: DEPRECATED, replace by profile.write\n- _profile.read_: have permission to read the profile data of the user account (at GET ./profile)\n- _profile.write_: refers to the object mutability of the user's profile (at PATCH ./profile)\n- _email.set_: have permission to set the user's email address (at PUT ./email)\n- _lifecycle.enablement_: have permission to activate and deactivate the user's account (at POST ./lifecycle/enable AND ./lifecycle/disable)\n- _lifecycle.delete_: have permission to delete and cancel the deletion of the user's account (at POST ./lifecycle/delete AND ./lifecycle/cancel-delete)\n- _apiToken.read_: have permission to list the user's API tokens (at GET ./api-tokens)\n- _apiToken.delete_: have permission to delete API tokens from the account (at DELETE ./api-tokens/{tokenId})\n",
             "content": {
               "application/json": {
                 "schema": {
@@ -116,6 +127,9 @@
                       "$ref": "#/components/schemas/Manageability.Rule.Simple"
                     },
                     "lifecycle.enablement": {
+                      "$ref": "#/components/schemas/Manageability.Rule.Simple"
+                    },
+                    "lifecycle.delete": {
                       "$ref": "#/components/schemas/Manageability.Rule.Simple"
                     },
                     "apiToken.read": {
@@ -407,7 +421,7 @@
     "/users/{account_id}/manage/lifecycle/disable": {
       "post": {
         "summary": "Deactivate a user",
-        "description": "\nDeactivate the specified user account. The permission to make use of this resource is exposed by the `lifecycle.enablement` privilege.\nYou can optionally set a message associated with the block that will be shown to the user on attempted authentication. If none is supplied, a default message will be used.\n",
+        "description": "\nDeactivate the specified user account. The permission to make use of this resource is exposed by the `lifecycle.enablement` privilege.\nYou can optionally set a message associated with the block. If none is supplied, a default message will be used.\n",
         "tags": [
           "Lifecycle"
         ],
@@ -458,7 +472,7 @@
     "/users/{account_id}/manage/lifecycle/enable": {
       "post": {
         "summary": "Activate a user",
-        "description": "\nActivates the specified user account. The permission to make use of this resource is exposed by the `lifecycle.enablement` privilege.\nYou can optionally set a message associated with the block that will be shown to the user on attempted authentication. If none is supplied, a default message will be used.\n",
+        "description": "\nActivates the specified user account. The permission to make use of this resource is exposed by the `lifecycle.enablement` privilege.\n",
         "tags": [
           "Lifecycle"
         ],
@@ -492,11 +506,10 @@
     "/users/{account_id}/manage/lifecycle/delete": {
       "post": {
         "summary": "Delete account",
-        "description": "This API will:\n- Delete a managed account from Atlassian Administration.\n- Withdraw complete access to all products and services listed in Atlassian Administration.\n- Remove reference to the account from all lists under Directory in Atlassian Administration.\n\nDeleting an account is permanent. If you think you’ll need the account again, we recommend you [deactivate](https://support.atlassian.com/user-management/docs/deactivate-a-managed-account/)it instead.\n\nBefore you permanently delete the account, you’ll have a 14-day grace period, during which the account will appear as temporarily deactivated.\n\nLearn more about [scheduled account deletion](https://support.atlassian.com/user-management/docs/delete-a-managed-account/).\n\nLearn the fastest way to get the paramaters and delete account with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/user-management/delete-managed-account/#delete-account). \n",
+        "description": "This API will:\n- Delete a managed account from Atlassian Administration.\n- Withdraw complete access to all products and services listed in Atlassian Administration.\n- Remove reference to the account from all lists under Directory in Atlassian Administration.\n\nSpecifications:\n- Deleting an account is permanent. If you think you’ll need the account again, we recommend you [deactivate](https://support.atlassian.com/user-management/docs/deactivate-a-managed-account/)it instead.\n- Before you permanently delete the account, you’ll have a 14-day grace period, during which the account will appear as temporarily deactivated.\n\nLearn more about [deleting a managed account](https://support.atlassian.com/user-management/docs/delete-a-managed-account/).\n\nLearn the fastest way to get the paramaters and delete account with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/user-management/delete-managed-account/#delete-account). \n\nThe permission to make use of this resource is exposed by the `lifecycle.delete` privilege. Learn more about [Get user management permissions API](https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-manage/#api-users-account-id-manage-get) to manage the specified user.\n",
         "tags": [
           "Lifecycle"
         ],
-        "x-experimental": true,
         "parameters": [
           {
             "in": "path",
@@ -520,6 +533,9 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound.Account"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict.LifecycleError"
           }
         }
       }
@@ -527,11 +543,10 @@
     "/users/{account_id}/manage/lifecycle/cancel-delete": {
       "post": {
         "summary": "Cancel delete account",
-        "description": "This API will:\n - Cancel the scheduled deletion of the specified managed account.\n - Restore and activate the user’s account.\n \n You can cancel the deletion within the 14-day grace period of scheduling delete managed account. After that the account is permanently deleted.\n",
+        "description": "This API will:\n - Cancel the scheduled deletion of the specified managed account.\n - Restore and activate the user’s account.\n \n Specifications:\n - You can cancel the deletion within the 14-day grace period of deleting a managed account. After that the account is permanently deleted.\n \n The permission to make use of this resource is exposed by the `lifecycle.delete` privilege. Learn more about [Get user management permissions API](https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-manage/#api-users-account-id-manage-get) to manage the specified user.\n",
         "tags": [
           "Lifecycle"
         ],
-        "x-experimental": true,
         "parameters": [
           {
             "in": "path",
@@ -1055,6 +1070,28 @@
             "example": "forbidden.targetUnverified"
           }
         }
+      },
+      "LifecycleErrors": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "title": "LifecycleError",
+          "type": "object",
+          "required": [
+            "code"
+          ],
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "link": {
+              "type": "string"
+            }
+          }
+        }
       }
     },
     "responses": {
@@ -1282,6 +1319,49 @@
               ],
               "example": {
                 "key": "accountNotFound"
+              }
+            }
+          }
+        }
+      },
+      "Conflict.LifecycleError": {
+        "description": "This account isn't eligible for deletion/deactivation\n\nSee: https://confluence.atlassian.com/x/pTgoPQ for details\n",
+        "content": {
+          "application/json": {
+            "schema": {
+              "title": "Conflict.LifecycleErrors",
+              "type": "object",
+              "required": [
+                "key",
+                "context"
+              ],
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "enum": [
+                    "conflict.lifecycleErrors"
+                  ]
+                },
+                "context": {
+                  "title": "LifecycleErrors.Context",
+                  "type": "object",
+                  "required": [
+                    "message",
+                    "accountId",
+                    "errorCodes"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "accountId": {
+                      "$ref": "#/components/schemas/AccountId"
+                    },
+                    "errorCodes": {
+                      "$ref": "#/components/schemas/LifecycleErrors"
+                    }
+                  }
+                }
               }
             }
           }

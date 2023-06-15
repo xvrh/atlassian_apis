@@ -17,6 +17,8 @@ class ConfluenceV2Api {
 
   late final comment = CommentApi(_client);
 
+  late final content = ContentApi(_client);
+
   late final contentProperties = ContentPropertiesApi(_client);
 
   late final customContent = CustomContentApi(_client);
@@ -30,6 +32,8 @@ class ConfluenceV2Api {
   late final spaceProperties = SpacePropertiesApi(_client);
 
   late final task = TaskApi(_client);
+
+  late final user = UserApi(_client);
 
   late final version = VersionApi(_client);
 
@@ -47,15 +51,18 @@ class AttachmentApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the attachment's container.
-  Future<Attachment> getAttachmentById({required int id, int? version}) async {
+  Future<Attachment> getAttachmentById(
+      {required String id, int? version, bool? serializeIdsAsStrings}) async {
     return Attachment.fromJson(await _client.send(
       'get',
       'attachments/{id}',
       pathParameters: {
-        'id': '$id',
+        'id': id,
       },
       queryParameters: {
         if (version != null) 'version': '$version',
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
       },
     ));
   }
@@ -74,7 +81,8 @@ class AttachmentApi {
       String? cursor,
       String? mediaType,
       String? filename,
-      int? limit}) async {
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -88,6 +96,8 @@ class AttachmentApi {
           if (mediaType != null) 'mediaType': mediaType,
           if (filename != null) 'filename': filename,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => Attachment.fromJson(v as Map<String, Object?>),
@@ -108,7 +118,8 @@ class AttachmentApi {
       String? cursor,
       String? mediaType,
       String? filename,
-      int? limit}) async {
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -122,6 +133,40 @@ class AttachmentApi {
           if (mediaType != null) 'mediaType': mediaType,
           if (filename != null) 'filename': filename,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
+        },
+      ),
+      reviver: (v) => Attachment.fromJson(v as Map<String, Object?>),
+    );
+  }
+
+  /// Returns the attachments of specified label. The number of results is
+  /// limited by the `limit` parameter and additional results (if available)
+  /// will be available through the `next` URL present in the `Link` response
+  /// header.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the attachment and its corresponding space.
+  Future<MultiEntityResult<Attachment>> getLabelAttachments(
+      {required int id,
+      String? sort,
+      String? cursor,
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'labels/{id}/attachments',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => Attachment.fromJson(v as Map<String, Object?>),
@@ -141,7 +186,8 @@ class AttachmentApi {
       String? cursor,
       String? mediaType,
       String? filename,
-      int? limit}) async {
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -155,6 +201,8 @@ class AttachmentApi {
           if (mediaType != null) 'mediaType': mediaType,
           if (filename != null) 'filename': filename,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => Attachment.fromJson(v as Map<String, Object?>),
@@ -178,14 +226,24 @@ class BlogPostApi {
   /// Permission to access the Confluence site ('Can use' global permission).
   /// Only blog posts that the user has permission to view will be returned.
   Future<MultiEntityResult<BlogPost>> getBlogPosts(
-      {String? cursor, int? limit}) async {
+      {List<int>? id,
+      String? status,
+      String? bodyFormat,
+      String? cursor,
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
         'blogposts',
         queryParameters: {
+          if (id != null) 'id': id.map((e) => '$e').join(','),
+          if (status != null) 'status': status,
+          if (bodyFormat != null) 'body-format': bodyFormat,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => BlogPost.fromJson(v as Map<String, Object?>),
@@ -200,10 +258,14 @@ class BlogPostApi {
   ///
   /// Currently only supports the storage representation specified in the
   /// body.representation enums below
-  Future<BlogPost> createBlogPost() async {
+  Future<BlogPost> createBlogPost({bool? serializeIdsAsStrings}) async {
     return BlogPost.fromJson(await _client.send(
       'post',
       'blogposts',
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
     ));
   }
 
@@ -215,7 +277,8 @@ class BlogPostApi {
       {required int id,
       String? bodyFormat,
       bool? getDraft,
-      int? version}) async {
+      int? version,
+      bool? serializeIdsAsStrings}) async {
     return BlogPost.fromJson(await _client.send(
       'get',
       'blogposts/{id}',
@@ -226,6 +289,8 @@ class BlogPostApi {
         if (bodyFormat != null) 'body-format': bodyFormat,
         if (getDraft != null) 'get-draft': '$getDraft',
         if (version != null) 'version': '$version',
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
       },
     ));
   }
@@ -235,12 +300,17 @@ class BlogPostApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the blog post and its corresponding space. Permission
   /// to update blog posts in the space.
-  Future<BlogPost> updateBlogPost(int id) async {
+  Future<BlogPost> updateBlogPost(
+      {required int id, bool? serializeIdsAsStrings}) async {
     return BlogPost.fromJson(await _client.send(
       'put',
       'blogposts/{id}',
       pathParameters: {
         'id': '$id',
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
       },
     ));
   }
@@ -268,7 +338,12 @@ class BlogPostApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page and its corresponding space.
   Future<MultiEntityResult<BlogPost>> getLabelBlogPosts(
-      {required int id, String? sort, String? cursor, int? limit}) async {
+      {required int id,
+      String? bodyFormat,
+      String? sort,
+      String? cursor,
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -277,9 +352,12 @@ class BlogPostApi {
           'id': '$id',
         },
         queryParameters: {
+          if (bodyFormat != null) 'body-format': bodyFormat,
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => BlogPost.fromJson(v as Map<String, Object?>),
@@ -296,7 +374,12 @@ class BlogPostApi {
   /// view the space.
   /// Only blog posts that the user has permission to view will be returned.
   Future<MultiEntityResult<BlogPost>> getBlogPostsInSpace(
-      {required int id, String? cursor, int? limit}) async {
+      {required int id,
+      String? status,
+      String? bodyFormat,
+      String? cursor,
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -305,8 +388,12 @@ class BlogPostApi {
           'id': '$id',
         },
         queryParameters: {
+          if (status != null) 'status': status,
+          if (bodyFormat != null) 'body-format': bodyFormat,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => BlogPost.fromJson(v as Map<String, Object?>),
@@ -329,8 +416,12 @@ class ChildrenApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
   /// Only pages that the user has permission to view will be returned.
-  Future<MultiEntityResult<Page>> getChildPages(
-      {required int id, String? cursor, int? limit, String? sort}) async {
+  Future<MultiEntityResult<ChildPage>> getChildPages(
+      {required int id,
+      String? cursor,
+      int? limit,
+      String? sort,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -342,9 +433,11 @@ class ChildrenApi {
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
           if (sort != null) 'sort': sort,
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
-      reviver: (v) => Page.fromJson(v as Map<String, Object?>),
+      reviver: (v) => ChildPage.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -357,8 +450,12 @@ class ChildrenApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
   /// Only custom content that the user has permission to view will be returned.
-  Future<MultiEntityResult<Page>> getChildCustomContent(
-      {required int id, String? cursor, int? limit, String? sort}) async {
+  Future<MultiEntityResult<ChildCustomContent>> getChildCustomContent(
+      {required int id,
+      String? cursor,
+      int? limit,
+      String? sort,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -370,9 +467,11 @@ class ChildrenApi {
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
           if (sort != null) 'sort': sort,
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
-      reviver: (v) => Page.fromJson(v as Map<String, Object?>),
+      reviver: (v) => ChildCustomContent.fromJson(v as Map<String, Object?>),
     );
   }
 }
@@ -396,7 +495,8 @@ class CommentApi {
       String? bodyFormat,
       String? sort,
       String? cursor,
-      int? limit}) async {
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -409,6 +509,8 @@ class CommentApi {
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => PageCommentModel.fromJson(v as Map<String, Object?>),
@@ -427,7 +529,8 @@ class CommentApi {
       String? bodyFormat,
       String? sort,
       String? cursor,
-      int? limit}) async {
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -440,6 +543,8 @@ class CommentApi {
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) =>
@@ -461,7 +566,8 @@ class CommentApi {
       String? bodyFormat,
       String? sort,
       String? cursor,
-      int? limit}) async {
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -474,6 +580,8 @@ class CommentApi {
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => BlogPostCommentModel.fromJson(v as Map<String, Object?>),
@@ -495,7 +603,8 @@ class CommentApi {
           String? bodyFormat,
           String? sort,
           String? cursor,
-          int? limit}) async {
+          int? limit,
+          bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -508,6 +617,8 @@ class CommentApi {
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) =>
@@ -523,10 +634,15 @@ class CommentApi {
   /// Permission to view the content of the page or blogpost and its
   /// corresponding space. Permission to create comments in the space.
   Future<FooterCommentModel> createFooterComment(
-      {required CreateFooterCommentModel body}) async {
+      {bool? serializeIdsAsStrings,
+      required CreateFooterCommentModel body}) async {
     return FooterCommentModel.fromJson(await _client.send(
       'post',
       'footer-comments',
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
       body: body.toJson(),
     ));
   }
@@ -537,7 +653,10 @@ class CommentApi {
   /// Permission to view the content of the page or blogpost and its
   /// corresponding space.
   Future<FooterCommentModel> getFooterCommentById(
-      {required int commentId, String? bodyFormat, int? version}) async {
+      {required int commentId,
+      String? bodyFormat,
+      int? version,
+      bool? serializeIdsAsStrings}) async {
     return FooterCommentModel.fromJson(await _client.send(
       'get',
       'footer-comments/{comment-id}',
@@ -547,6 +666,8 @@ class CommentApi {
       queryParameters: {
         if (bodyFormat != null) 'body-format': bodyFormat,
         if (version != null) 'version': '$version',
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
       },
     ));
   }
@@ -558,12 +679,18 @@ class CommentApi {
   /// Permission to view the content of the page or blogpost and its
   /// corresponding space. Permission to create comments in the space.
   Future<FooterCommentModel> updateFooterComment(
-      {required int commentId, required UpdateFooterCommentModel body}) async {
+      {required int commentId,
+      bool? serializeIdsAsStrings,
+      required UpdateFooterCommentModel body}) async {
     return FooterCommentModel.fromJson(await _client.send(
       'put',
       'footer-comments/{comment-id}',
       pathParameters: {
         'comment-id': '$commentId',
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
       },
       body: body.toJson(),
     ));
@@ -598,7 +725,8 @@ class CommentApi {
       String? bodyFormat,
       String? sort,
       String? cursor,
-      int? limit}) async {
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -611,6 +739,8 @@ class CommentApi {
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => ChildrenCommentModel.fromJson(v as Map<String, Object?>),
@@ -629,10 +759,15 @@ class CommentApi {
   /// Permission to view the content of the page or blogpost and its
   /// corresponding space. Permission to create comments in the space.
   Future<InlineCommentModel> createInlineComment(
-      {required CreateInlineCommentModel body}) async {
+      {bool? serializeIdsAsStrings,
+      required CreateInlineCommentModel body}) async {
     return InlineCommentModel.fromJson(await _client.send(
       'post',
       'inline-comments',
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
       body: body.toJson(),
     ));
   }
@@ -643,7 +778,10 @@ class CommentApi {
   /// Permission to view the content of the page or blogpost and its
   /// corresponding space.
   Future<InlineCommentModel> getInlineCommentById(
-      {required int commentId, String? bodyFormat, int? version}) async {
+      {required int commentId,
+      String? bodyFormat,
+      int? version,
+      bool? serializeIdsAsStrings}) async {
     return InlineCommentModel.fromJson(await _client.send(
       'get',
       'inline-comments/{comment-id}',
@@ -653,6 +791,8 @@ class CommentApi {
       queryParameters: {
         if (bodyFormat != null) 'body-format': bodyFormat,
         if (version != null) 'version': '$version',
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
       },
     ));
   }
@@ -664,12 +804,18 @@ class CommentApi {
   /// Permission to view the content of the page or blogpost and its
   /// corresponding space. Permission to create comments in the space.
   Future<InlineCommentModel> updateInlineComment(
-      {required int commentId, required UpdateInlineCommentModel body}) async {
+      {required int commentId,
+      bool? serializeIdsAsStrings,
+      required UpdateInlineCommentModel body}) async {
     return InlineCommentModel.fromJson(await _client.send(
       'put',
       'inline-comments/{comment-id}',
       pathParameters: {
         'comment-id': '$commentId',
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
       },
       body: body.toJson(),
     ));
@@ -702,6 +848,7 @@ class CommentApi {
   Future<MultiEntityResult<InlineCommentChildrenModel>>
       getInlineCommentChildren(
           {required int id,
+          bool? serializeIdsAsStrings,
           String? bodyFormat,
           String? sort,
           String? cursor,
@@ -714,6 +861,8 @@ class CommentApi {
           'id': '$id',
         },
         queryParameters: {
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
           if (bodyFormat != null) 'body-format': bodyFormat,
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
@@ -723,6 +872,34 @@ class CommentApi {
       reviver: (v) =>
           InlineCommentChildrenModel.fromJson(v as Map<String, Object?>),
     );
+  }
+}
+
+/// This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
+
+class ContentApi {
+  final ApiClient _client;
+
+  ContentApi(this._client);
+
+  /// Converts a list of content ids into their associated content types. This
+  /// is useful for users migrating from v1 to v2
+  /// who may have stored just content ids without their associated type. This
+  /// will return types as they should be used in v2.
+  /// Notably, this will return `inline-comment` for inline comments and
+  /// `footer-comment` for footer comments, which is distinct from them
+  /// both being represented by `comment` in v1.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the requested content. Any content that the user does
+  /// not have permission to view or does not exist will map to `null` in the
+  /// response.
+  Future<ContentIdToContentTypeResponse>
+      convertContentIdsToContentTypes() async {
+    return ContentIdToContentTypeResponse.fromJson(await _client.send(
+      'post',
+      'content/convert-ids-to-types',
+    ));
   }
 }
 
@@ -742,7 +919,8 @@ class ContentPropertiesApi {
       String? key,
       String? sort,
       String? cursor,
-      int? limit}) async {
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -755,10 +933,34 @@ class ContentPropertiesApi {
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>),
     );
+  }
+
+  /// Creates a new attachment property.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to update the attachment.
+  Future<ContentProperty> createAttachmentProperty(
+      {required String attachmentId,
+      bool? serializeIdsAsStrings,
+      required ContentPropertyCreateRequest body}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'post',
+      'attachments/{attachment-id}/properties',
+      pathParameters: {
+        'attachment-id': attachmentId,
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
+      body: body.toJson(),
+    ));
   }
 
   /// Retrieves a specific Content Property by ID that is attached to a
@@ -767,7 +969,9 @@ class ContentPropertiesApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the attachment.
   Future<ContentProperty> getAttachmentContentPropertiesById(
-      {required String attachmentId, required int propertyId}) async {
+      {required String attachmentId,
+      required int propertyId,
+      bool? serializeIdsAsStrings}) async {
     return ContentProperty.fromJson(await _client.send(
       'get',
       'attachments/{attachment-id}/properties/{property-id}',
@@ -775,7 +979,51 @@ class ContentPropertiesApi {
         'attachment-id': attachmentId,
         'property-id': '$propertyId',
       },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
     ));
+  }
+
+  /// Update an attachment property by its id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the attachment.
+  Future<ContentProperty> updateAttachmentPropertyById(
+      {required String attachmentId,
+      required int propertyId,
+      bool? serializeIdsAsStrings,
+      required ContentPropertyUpdateRequest body}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'put',
+      'attachments/{attachment-id}/properties/{property-id}',
+      pathParameters: {
+        'attachment-id': attachmentId,
+        'property-id': '$propertyId',
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Deletes a attachment property by its id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to attachment the page.
+  Future<void> deleteAttachmentPropertyById(
+      {required String attachmentId, required int propertyId}) async {
+    await _client.send(
+      'delete',
+      'attachments/{attachment-id}/properties/{property-id}',
+      pathParameters: {
+        'attachment-id': attachmentId,
+        'property-id': '$propertyId',
+      },
+    );
   }
 
   /// Retrieves all Content Properties tied to a specified blog post.
@@ -787,7 +1035,8 @@ class ContentPropertiesApi {
       String? key,
       String? sort,
       String? cursor,
-      int? limit}) async {
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -800,10 +1049,34 @@ class ContentPropertiesApi {
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>),
     );
+  }
+
+  /// Creates a new blog post property.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to update the blog post.
+  Future<ContentProperty> createBlogpostProperty(
+      {required int blogpostId,
+      bool? serializeIdsAsStrings,
+      required ContentPropertyCreateRequest body}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'post',
+      'blogposts/{blogpost-id}/properties',
+      pathParameters: {
+        'blogpost-id': '$blogpostId',
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
+      body: body.toJson(),
+    ));
   }
 
   /// Retrieves a specific Content Property by ID that is attached to a
@@ -812,7 +1085,9 @@ class ContentPropertiesApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the blog post.
   Future<ContentProperty> getBlogpostContentPropertiesById(
-      {required int blogpostId, required int propertyId}) async {
+      {required int blogpostId,
+      required int propertyId,
+      bool? serializeIdsAsStrings}) async {
     return ContentProperty.fromJson(await _client.send(
       'get',
       'blogposts/{blogpost-id}/properties/{property-id}',
@@ -820,7 +1095,51 @@ class ContentPropertiesApi {
         'blogpost-id': '$blogpostId',
         'property-id': '$propertyId',
       },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
     ));
+  }
+
+  /// Update a blog post property by its id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the blog post.
+  Future<ContentProperty> updateBlogpostPropertyById(
+      {required int blogpostId,
+      required int propertyId,
+      bool? serializeIdsAsStrings,
+      required ContentPropertyUpdateRequest body}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'put',
+      'blogposts/{blogpost-id}/properties/{property-id}',
+      pathParameters: {
+        'blogpost-id': '$blogpostId',
+        'property-id': '$propertyId',
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Deletes a blog post property by its id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the blog post.
+  Future<void> deleteBlogpostPropertyById(
+      {required int blogpostId, required int propertyId}) async {
+    await _client.send(
+      'delete',
+      'blogposts/{blogpost-id}/properties/{property-id}',
+      pathParameters: {
+        'blogpost-id': '$blogpostId',
+        'property-id': '$propertyId',
+      },
+    );
   }
 
   /// Retrieves Content Properties tied to a specified custom content.
@@ -832,7 +1151,8 @@ class ContentPropertiesApi {
       String? key,
       String? sort,
       String? cursor,
-      int? limit}) async {
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -845,10 +1165,34 @@ class ContentPropertiesApi {
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>),
     );
+  }
+
+  /// Creates a new custom content property.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to update the custom content.
+  Future<ContentProperty> createCustomContentProperty(
+      {required int customContentId,
+      bool? serializeIdsAsStrings,
+      required ContentPropertyCreateRequest body}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'post',
+      'custom-content/{custom-content-id}/properties',
+      pathParameters: {
+        'custom-content-id': '$customContentId',
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
+      body: body.toJson(),
+    ));
   }
 
   /// Retrieves a specific Content Property by ID that is attached to a
@@ -857,7 +1201,9 @@ class ContentPropertiesApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the page.
   Future<ContentProperty> getCustomContentContentPropertiesById(
-      {required int customContentId, required int propertyId}) async {
+      {required int customContentId,
+      required int propertyId,
+      bool? serializeIdsAsStrings}) async {
     return ContentProperty.fromJson(await _client.send(
       'get',
       'custom-content/{custom-content-id}/properties/{property-id}',
@@ -865,7 +1211,51 @@ class ContentPropertiesApi {
         'custom-content-id': '$customContentId',
         'property-id': '$propertyId',
       },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
     ));
+  }
+
+  /// Update a custom content property by its id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the custom content.
+  Future<ContentProperty> updateCustomContentPropertyById(
+      {required int customContentId,
+      required int propertyId,
+      bool? serializeIdsAsStrings,
+      required ContentPropertyUpdateRequest body}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'put',
+      'custom-content/{custom-content-id}/properties/{property-id}',
+      pathParameters: {
+        'custom-content-id': '$customContentId',
+        'property-id': '$propertyId',
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Deletes a custom content property by its id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the custom content.
+  Future<void> deleteCustomContentPropertyById(
+      {required int customContentId, required int propertyId}) async {
+    await _client.send(
+      'delete',
+      'custom-content/{custom-content-id}/properties/{property-id}',
+      pathParameters: {
+        'custom-content-id': '$customContentId',
+        'property-id': '$propertyId',
+      },
+    );
   }
 
   /// Retrieves Content Properties tied to a specified page.
@@ -877,7 +1267,8 @@ class ContentPropertiesApi {
       String? key,
       String? sort,
       String? cursor,
-      int? limit}) async {
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -890,10 +1281,34 @@ class ContentPropertiesApi {
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>),
     );
+  }
+
+  /// Creates a new page property.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to update the page.
+  Future<ContentProperty> createPageProperty(
+      {required int pageId,
+      bool? serializeIdsAsStrings,
+      required ContentPropertyCreateRequest body}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'post',
+      'pages/{page-id}/properties',
+      pathParameters: {
+        'page-id': '$pageId',
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
+      body: body.toJson(),
+    ));
   }
 
   /// Retrieves a specific Content Property by ID that is attached to a
@@ -902,7 +1317,9 @@ class ContentPropertiesApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the page.
   Future<ContentProperty> getPageContentPropertiesById(
-      {required int pageId, required int propertyId}) async {
+      {required int pageId,
+      required int propertyId,
+      bool? serializeIdsAsStrings}) async {
     return ContentProperty.fromJson(await _client.send(
       'get',
       'pages/{page-id}/properties/{property-id}',
@@ -910,7 +1327,51 @@ class ContentPropertiesApi {
         'page-id': '$pageId',
         'property-id': '$propertyId',
       },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
     ));
+  }
+
+  /// Update a page property by its id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the page.
+  Future<ContentProperty> updatePagePropertyById(
+      {required int pageId,
+      required int propertyId,
+      bool? serializeIdsAsStrings,
+      required ContentPropertyUpdateRequest body}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'put',
+      'pages/{page-id}/properties/{property-id}',
+      pathParameters: {
+        'page-id': '$pageId',
+        'property-id': '$propertyId',
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Deletes a page property by its id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the page.
+  Future<void> deletePagePropertyById(
+      {required int pageId, required int propertyId}) async {
+    await _client.send(
+      'delete',
+      'pages/{page-id}/properties/{property-id}',
+      pathParameters: {
+        'page-id': '$pageId',
+        'property-id': '$propertyId',
+      },
+    );
   }
 
   /// Retrieves Content Properties attached to a specified comment.
@@ -922,7 +1383,8 @@ class ContentPropertiesApi {
       String? key,
       String? sort,
       String? cursor,
-      int? limit}) async {
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -935,10 +1397,34 @@ class ContentPropertiesApi {
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>),
     );
+  }
+
+  /// Creates a new comment property.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to update the comment.
+  Future<ContentProperty> createCommentProperty(
+      {required int commentId,
+      bool? serializeIdsAsStrings,
+      required ContentPropertyCreateRequest body}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'post',
+      'comments/{comment-id}/properties',
+      pathParameters: {
+        'comment-id': '$commentId',
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
+      body: body.toJson(),
+    ));
   }
 
   /// Retrieves a specific Content Property by ID that is attached to a
@@ -947,7 +1433,9 @@ class ContentPropertiesApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the comment.
   Future<ContentProperty> getCommentContentPropertiesById(
-      {required int commentId, required int propertyId}) async {
+      {required int commentId,
+      required int propertyId,
+      bool? serializeIdsAsStrings}) async {
     return ContentProperty.fromJson(await _client.send(
       'get',
       'comments/{comment-id}/properties/{property-id}',
@@ -955,7 +1443,51 @@ class ContentPropertiesApi {
         'comment-id': '$commentId',
         'property-id': '$propertyId',
       },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
     ));
+  }
+
+  /// Update a comment property by its id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the comment.
+  Future<ContentProperty> updateCommentPropertyById(
+      {required int commentId,
+      required int propertyId,
+      bool? serializeIdsAsStrings,
+      required ContentPropertyUpdateRequest body}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'put',
+      'comments/{comment-id}/properties/{property-id}',
+      pathParameters: {
+        'comment-id': '$commentId',
+        'property-id': '$propertyId',
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Deletes a comment property by its id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the comment.
+  Future<void> deleteCommentPropertyById(
+      {required int commentId, required int propertyId}) async {
+    await _client.send(
+      'delete',
+      'comments/{comment-id}/properties/{property-id}',
+      pathParameters: {
+        'comment-id': '$commentId',
+        'property-id': '$propertyId',
+      },
+    );
   }
 }
 
@@ -980,7 +1512,8 @@ class CustomContentApi {
       required String type,
       String? cursor,
       int? limit,
-      String? bodyFormat}) async {
+      String? bodyFormat,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -993,6 +1526,8 @@ class CustomContentApi {
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
           if (bodyFormat != null) 'body-format': bodyFormat,
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => CustomContent.fromJson(v as Map<String, Object?>),
@@ -1009,18 +1544,23 @@ class CustomContentApi {
   /// content, and the corresponding space (if different from the container).
   Future<MultiEntityResult<CustomContent>> getCustomContentByType(
       {required String type,
+      List<int>? id,
       String? cursor,
       int? limit,
-      String? bodyFormat}) async {
+      String? bodyFormat,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
         'custom-content',
         queryParameters: {
           'type': type,
+          if (id != null) 'id': id.map((e) => '$e').join(','),
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
           if (bodyFormat != null) 'body-format': bodyFormat,
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => CustomContent.fromJson(v as Map<String, Object?>),
@@ -1028,17 +1568,22 @@ class CustomContentApi {
   }
 
   /// Creates a new custom content in the given space, page, blogpost or other
-  /// custom conent.
+  /// custom content.
   ///
   /// Only one of `spaceId`, `pageId`, `blogPostId`, or `customContentId` is
   /// required in the request body.
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page or blogpost and its
   /// corresponding space. Permission to create custom content in the space.
-  Future<CustomContent> createCustomContent() async {
+  Future<CustomContent> createCustomContent(
+      {bool? serializeIdsAsStrings}) async {
     return CustomContent.fromJson(await _client.send(
       'post',
       'custom-content',
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
     ));
   }
 
@@ -1048,7 +1593,10 @@ class CustomContentApi {
   /// Permission to view the custom content, the container of the custom
   /// content, and the corresponding space (if different from the container).
   Future<CustomContent> getCustomContentById(
-      {required int id, String? bodyFormat, int? version}) async {
+      {required int id,
+      String? bodyFormat,
+      int? version,
+      bool? serializeIdsAsStrings}) async {
     return CustomContent.fromJson(await _client.send(
       'get',
       'custom-content/{id}',
@@ -1058,6 +1606,8 @@ class CustomContentApi {
       queryParameters: {
         if (bodyFormat != null) 'body-format': bodyFormat,
         if (version != null) 'version': '$version',
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
       },
     ));
   }
@@ -1069,12 +1619,17 @@ class CustomContentApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page or blogpost and its
   /// corresponding space. Permission to update custom content in the space.
-  Future<CustomContent> updateCustomContent(int id) async {
+  Future<CustomContent> updateCustomContent(
+      {required int id, bool? serializeIdsAsStrings}) async {
     return CustomContent.fromJson(await _client.send(
       'put',
       'custom-content/{id}',
       pathParameters: {
         'id': '$id',
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
       },
     ));
   }
@@ -1108,7 +1663,8 @@ class CustomContentApi {
       required String type,
       String? cursor,
       int? limit,
-      String? bodyFormat}) async {
+      String? bodyFormat,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -1121,6 +1677,8 @@ class CustomContentApi {
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
           if (bodyFormat != null) 'body-format': bodyFormat,
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => CustomContent.fromJson(v as Map<String, Object?>),
@@ -1140,7 +1698,8 @@ class CustomContentApi {
       required String type,
       String? cursor,
       int? limit,
-      String? bodyFormat}) async {
+      String? bodyFormat,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -1153,6 +1712,8 @@ class CustomContentApi {
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
           if (bodyFormat != null) 'body-format': bodyFormat,
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => CustomContent.fromJson(v as Map<String, Object?>),
@@ -1180,7 +1741,8 @@ class LabelApi {
       String? prefix,
       String? sort,
       String? cursor,
-      int? limit}) async {
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -1193,6 +1755,8 @@ class LabelApi {
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => Label.fromJson(v as Map<String, Object?>),
@@ -1212,7 +1776,8 @@ class LabelApi {
       String? prefix,
       String? sort,
       String? cursor,
-      int? limit}) async {
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -1225,6 +1790,8 @@ class LabelApi {
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => Label.fromJson(v as Map<String, Object?>),
@@ -1244,7 +1811,8 @@ class LabelApi {
       String? prefix,
       String? sort,
       String? cursor,
-      int? limit}) async {
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -1257,6 +1825,8 @@ class LabelApi {
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => Label.fromJson(v as Map<String, Object?>),
@@ -1275,7 +1845,8 @@ class LabelApi {
       String? prefix,
       String? sort,
       String? cursor,
-      int? limit}) async {
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -1288,6 +1859,8 @@ class LabelApi {
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => Label.fromJson(v as Map<String, Object?>),
@@ -1310,7 +1883,12 @@ class PageApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page and its corresponding space.
   Future<MultiEntityResult<Page>> getLabelPages(
-      {required int id, String? sort, String? cursor, int? limit}) async {
+      {required int id,
+      String? bodyFormat,
+      String? sort,
+      String? cursor,
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -1319,9 +1897,12 @@ class PageApi {
           'id': '$id',
         },
         queryParameters: {
+          if (bodyFormat != null) 'body-format': bodyFormat,
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => Page.fromJson(v as Map<String, Object?>),
@@ -1336,14 +1917,25 @@ class PageApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
   /// Only pages that the user has permission to view will be returned.
-  Future<MultiEntityResult<Page>> getPages({String? cursor, int? limit}) async {
+  Future<MultiEntityResult<Page>> getPages(
+      {List<int>? id,
+      String? status,
+      String? bodyFormat,
+      String? cursor,
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
         'pages',
         queryParameters: {
+          if (id != null) 'id': id.map((e) => '$e').join(','),
+          if (status != null) 'status': status,
+          if (bodyFormat != null) 'body-format': bodyFormat,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => Page.fromJson(v as Map<String, Object?>),
@@ -1359,10 +1951,14 @@ class PageApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the corresponding space. Permission to create a page in
   /// the space.
-  Future<Page> createPage() async {
+  Future<Page> createPage({bool? serializeIdsAsStrings}) async {
     return Page.fromJson(await _client.send(
       'post',
       'pages',
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
     ));
   }
 
@@ -1374,7 +1970,8 @@ class PageApi {
       {required int id,
       String? bodyFormat,
       bool? getDraft,
-      int? version}) async {
+      int? version,
+      bool? serializeIdsAsStrings}) async {
     return Page.fromJson(await _client.send(
       'get',
       'pages/{id}',
@@ -1385,6 +1982,8 @@ class PageApi {
         if (bodyFormat != null) 'body-format': bodyFormat,
         if (getDraft != null) 'get-draft': '$getDraft',
         if (version != null) 'version': '$version',
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
       },
     ));
   }
@@ -1394,12 +1993,17 @@ class PageApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the page and its corresponding space. Permission to
   /// update pages in the space.
-  Future<Page> updatePage(int id) async {
+  Future<Page> updatePage(
+      {required int id, bool? serializeIdsAsStrings}) async {
     return Page.fromJson(await _client.send(
       'put',
       'pages/{id}',
       pathParameters: {
         'id': '$id',
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
       },
     ));
   }
@@ -1429,7 +2033,12 @@ class PageApi {
   /// 'View' permission for the space.
   /// Only pages that the user has permission to view will be returned.
   Future<MultiEntityResult<Page>> getPagesInSpace(
-      {required int id, String? cursor, int? limit}) async {
+      {required int id,
+      String? status,
+      String? bodyFormat,
+      String? cursor,
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -1438,8 +2047,12 @@ class PageApi {
           'id': '$id',
         },
         queryParameters: {
+          if (status != null) 'status': status,
+          if (bodyFormat != null) 'body-format': bodyFormat,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => Page.fromJson(v as Map<String, Object?>),
@@ -1471,7 +2084,8 @@ class SpaceApi {
       String? sort,
       String? descriptionFormat,
       String? cursor,
-      int? limit}) async {
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -1487,6 +2101,8 @@ class SpaceApi {
             'description-format': descriptionFormat,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => Space.fromJson(v as Map<String, Object?>),
@@ -1528,20 +2144,29 @@ class SpacePropertiesApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission) and
   /// 'View' permission for the space.
-  Future<Map<String, dynamic>> getSpaceProperties(
-      {required int spaceId, String? key, String? cursor, int? limit}) async {
-    return await _client.send(
-      'get',
-      'spaces/{space-id}/properties',
-      pathParameters: {
-        'space-id': '$spaceId',
-      },
-      queryParameters: {
-        if (key != null) 'key': key,
-        if (cursor != null) 'cursor': cursor,
-        if (limit != null) 'limit': '$limit',
-      },
-    ) as Map<String, Object?>;
+  Future<MultiEntityResult<SpaceProperty>> getSpaceProperties(
+      {required int spaceId,
+      String? key,
+      String? cursor,
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'spaces/{space-id}/properties',
+        pathParameters: {
+          'space-id': '$spaceId',
+        },
+        queryParameters: {
+          if (key != null) 'key': key,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
+        },
+      ),
+      reviver: (v) => SpaceProperty.fromJson(v as Map<String, Object?>),
+    );
   }
 
   /// Creates a new space property.
@@ -1550,12 +2175,18 @@ class SpacePropertiesApi {
   /// Permission to access the Confluence site ('Can use' global permission) and
   /// 'Admin' permission for the space.
   Future<SpaceProperty> createSpaceProperty(
-      {required int spaceId, required SpacePropertyCreateRequest body}) async {
+      {required int spaceId,
+      bool? serializeIdsAsStrings,
+      required SpacePropertyCreateRequest body}) async {
     return SpaceProperty.fromJson(await _client.send(
       'post',
       'spaces/{space-id}/properties',
       pathParameters: {
         'space-id': '$spaceId',
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
       },
       body: body.toJson(),
     ));
@@ -1567,13 +2198,19 @@ class SpacePropertiesApi {
   /// Permission to access the Confluence site ('Can use' global permission) and
   /// 'View' permission for the space.
   Future<SpaceProperty> getSpacePropertyById(
-      {required int spaceId, required int propertyId}) async {
+      {required int spaceId,
+      required int propertyId,
+      bool? serializeIdsAsStrings}) async {
     return SpaceProperty.fromJson(await _client.send(
       'get',
       'spaces/{space-id}/properties/{property-id}',
       pathParameters: {
         'space-id': '$spaceId',
         'property-id': '$propertyId',
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
       },
     ));
   }
@@ -1586,6 +2223,7 @@ class SpacePropertiesApi {
   Future<SpaceProperty> updateSpacePropertyById(
       {required int spaceId,
       required int propertyId,
+      bool? serializeIdsAsStrings,
       required SpacePropertyUpdateRequest body}) async {
     return SpaceProperty.fromJson(await _client.send(
       'put',
@@ -1593,6 +2231,10 @@ class SpacePropertiesApi {
       pathParameters: {
         'space-id': '$spaceId',
         'property-id': '$propertyId',
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
       },
       body: body.toJson(),
     ));
@@ -1635,6 +2277,7 @@ class TaskApi {
       {String? bodyFormat,
       bool? includeBlankTasks,
       String? status,
+      List<int>? taskId,
       List<int>? spaceId,
       List<int>? pageId,
       List<int>? blogpostId,
@@ -1648,7 +2291,8 @@ class TaskApi {
       int? completedAtFrom,
       int? completedAtTo,
       String? cursor,
-      int? limit}) async {
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -1658,6 +2302,7 @@ class TaskApi {
           if (includeBlankTasks != null)
             'include-blank-tasks': '$includeBlankTasks',
           if (status != null) 'status': status,
+          if (taskId != null) 'task-id': taskId.map((e) => '$e').join(','),
           if (spaceId != null) 'space-id': spaceId.map((e) => '$e').join(','),
           if (pageId != null) 'page-id': pageId.map((e) => '$e').join(','),
           if (blogpostId != null)
@@ -1676,6 +2321,8 @@ class TaskApi {
           if (completedAtTo != null) 'completed-at-to': '$completedAtTo',
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
       reviver: (v) => Task.fromJson(v as Map<String, Object?>),
@@ -1687,7 +2334,10 @@ class TaskApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the containing page or blog post and its corresponding
   /// space.
-  Future<Task> getTaskById({required int id, String? bodyFormat}) async {
+  Future<Task> getTaskById(
+      {required int id,
+      String? bodyFormat,
+      bool? serializeIdsAsStrings}) async {
     return Task.fromJson(await _client.send(
       'get',
       'tasks/{id}',
@@ -1696,8 +2346,61 @@ class TaskApi {
       },
       queryParameters: {
         if (bodyFormat != null) 'body-format': bodyFormat,
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
       },
     ));
+  }
+
+  /// Update a task by id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the containing page or blog post and view its
+  /// corresponding space.
+  Future<Task> updateTask(
+      {required int id, bool? serializeIdsAsStrings}) async {
+    return Task.fromJson(await _client.send(
+      'put',
+      'tasks/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+      queryParameters: {
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
+      },
+    ));
+  }
+}
+
+/// This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
+
+class UserApi {
+  final ApiClient _client;
+
+  UserApi(this._client);
+
+  /// Returns the list of emails from the input list that do not have access to
+  /// site.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  Future<Map<String, dynamic>> checkAccessByEmail() async {
+    return await _client.send(
+      'post',
+      'user/access/check-access-by-email',
+    ) as Map<String, Object?>;
+  }
+
+  /// Invite a list of emails to the site.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  Future<Map<String, dynamic>> inviteByEmail() async {
+    return await _client.send(
+      'post',
+      'user/access/invite-by-email',
+    ) as Map<String, Object?>;
   }
 }
 
@@ -1713,13 +2416,13 @@ class VersionApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the attachment and its corresponding space.
   Future<MultiEntityResult<Version>> getAttachmentVersions(
-      {required int id, String? cursor, int? limit, String? sort}) async {
+      {required String id, String? cursor, int? limit, String? sort}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
         'attachments/{id}/versions',
         pathParameters: {
-          'id': '$id',
+          'id': id,
         },
         queryParameters: {
           if (cursor != null) 'cursor': cursor,
@@ -1752,7 +2455,11 @@ class VersionApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the blog post and its corresponding space.
   Future<MultiEntityResult<Version>> getBlogPostVersions(
-      {required int id, String? cursor, int? limit, String? sort}) async {
+      {required int id,
+      String? bodyFormat,
+      String? cursor,
+      int? limit,
+      String? sort}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -1761,6 +2468,7 @@ class VersionApi {
           'id': '$id',
         },
         queryParameters: {
+          if (bodyFormat != null) 'body-format': bodyFormat,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
           if (sort != null) 'sort': sort,
@@ -1791,7 +2499,11 @@ class VersionApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the page and its corresponding space.
   Future<MultiEntityResult<Version>> getPageVersions(
-      {required int id, String? cursor, int? limit, String? sort}) async {
+      {required int id,
+      String? bodyFormat,
+      String? cursor,
+      int? limit,
+      String? sort}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
         'get',
@@ -1800,6 +2512,7 @@ class VersionApi {
           'id': '$id',
         },
         queryParameters: {
+          if (bodyFormat != null) 'body-format': bodyFormat,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
           if (sort != null) 'sort': sort,
@@ -1832,6 +2545,7 @@ class VersionApi {
   /// space.
   Future<MultiEntityResult<Version>> getCustomContentVersions(
       {required int customContentId,
+      String? bodyFormat,
       String? cursor,
       int? limit,
       String? sort}) async {
@@ -1843,6 +2557,7 @@ class VersionApi {
           'custom-content-id': '$customContentId',
         },
         queryParameters: {
+          if (bodyFormat != null) 'body-format': bodyFormat,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
           if (sort != null) 'sort': sort,
@@ -1869,6 +2584,35 @@ class VersionApi {
     ));
   }
 
+  /// Retrieves the versions of the specified footer comment.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the content of the page or blog post and its
+  /// corresponding space.
+  Future<MultiEntityResult<Version>> getFooterCommentVersions(
+      {required int id,
+      String? bodyFormat,
+      String? cursor,
+      int? limit,
+      String? sort}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'footer-comments/{id}/versions',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (bodyFormat != null) 'body-format': bodyFormat,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+          if (sort != null) 'sort': sort,
+        },
+      ),
+      reviver: (v) => Version.fromJson(v as Map<String, Object?>),
+    );
+  }
+
   /// Retrieves version details for the specified footer comment version.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -1879,6 +2623,52 @@ class VersionApi {
     return DetailedVersion.fromJson(await _client.send(
       'get',
       'footer-comments/{id}/versions/{version-number}',
+      pathParameters: {
+        'id': '$id',
+        'version-number': '$versionNumber',
+      },
+    ));
+  }
+
+  /// Retrieves the versions of the specified inline comment.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the content of the page or blog post and its
+  /// corresponding space.
+  Future<MultiEntityResult<Version>> getInlineCommentVersions(
+      {required int id,
+      String? bodyFormat,
+      String? cursor,
+      int? limit,
+      String? sort}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'inline-comments/{id}/versions',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (bodyFormat != null) 'body-format': bodyFormat,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+          if (sort != null) 'sort': sort,
+        },
+      ),
+      reviver: (v) => Version.fromJson(v as Map<String, Object?>),
+    );
+  }
+
+  /// Retrieves version details for the specified inline comment version.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the content of the page or blog post and its
+  /// corresponding space.
+  Future<DetailedVersion> getInlineCommentVersionDetails(
+      {required int id, required int versionNumber}) async {
+    return DetailedVersion.fromJson(await _client.send(
+      'get',
+      'inline-comments/{id}/versions/{version-number}',
       pathParameters: {
         'id': '$id',
         'version-number': '$versionNumber',
@@ -1915,20 +2705,20 @@ class AttachmentSortOrder {
 }
 
 class BlogPostSortOrder {
+  static const id = BlogPostSortOrder._('id');
+  static const idDesc = BlogPostSortOrder._('-id');
   static const createdDate = BlogPostSortOrder._('created-date');
   static const createdDateDesc = BlogPostSortOrder._('-created-date');
   static const modifiedDate = BlogPostSortOrder._('modified-date');
   static const modifiedDateDesc = BlogPostSortOrder._('-modified-date');
-  static const title = BlogPostSortOrder._('title');
-  static const titleDesc = BlogPostSortOrder._('-title');
 
   static const values = [
+    id,
+    idDesc,
     createdDate,
     createdDateDesc,
     modifiedDate,
     modifiedDateDesc,
-    title,
-    titleDesc,
   ];
   final String value;
 
@@ -2245,20 +3035,20 @@ class OnlyArchivedAndCurrentContentStatus {
 }
 
 class PageSortOrder {
+  static const id = PageSortOrder._('id');
+  static const idDesc = PageSortOrder._('-id');
   static const createdDate = PageSortOrder._('created-date');
   static const createdDateDesc = PageSortOrder._('-created-date');
   static const modifiedDate = PageSortOrder._('modified-date');
   static const modifiedDateDesc = PageSortOrder._('-modified-date');
-  static const title = PageSortOrder._('title');
-  static const titleDesc = PageSortOrder._('-title');
 
   static const values = [
+    id,
+    idDesc,
     createdDate,
     createdDateDesc,
     modifiedDate,
     modifiedDateDesc,
-    title,
-    titleDesc,
   ];
   final String value;
 
@@ -2427,6 +3217,48 @@ class Attachment {
   /// Title of the comment.
   final String? title;
 
+  /// ID of the containing page.
+  ///
+  /// Note: This is only returned if the attachment has a container that is a
+  /// page.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic pageId;
+
+  /// ID of the containing blog post.
+  ///
+  /// Note: This is only returned if the attachment has a container that is a
+  /// blog post.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic blogPostId;
+
+  /// ID of the containing custom content.
+  ///
+  /// Note: This is only returned if the attachment has a container that is
+  /// custom content.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic customContentId;
+
   /// Media Type for the attachment.
   final String? mediaType;
 
@@ -2450,6 +3282,9 @@ class Attachment {
       {this.id,
       this.status,
       this.title,
+      this.pageId,
+      this.blogPostId,
+      this.customContentId,
       this.mediaType,
       this.mediaTypeDescription,
       this.comment,
@@ -2463,6 +3298,9 @@ class Attachment {
       id: json[r'id'] as String?,
       status: json[r'status'] as String?,
       title: json[r'title'] as String?,
+      pageId: json[r'pageId'],
+      blogPostId: json[r'blogPostId'],
+      customContentId: json[r'customContentId'],
       mediaType: json[r'mediaType'] as String?,
       mediaTypeDescription: json[r'mediaTypeDescription'] as String?,
       comment: json[r'comment'] as String?,
@@ -2479,6 +3317,9 @@ class Attachment {
     var id = this.id;
     var status = this.status;
     var title = this.title;
+    var pageId = this.pageId;
+    var blogPostId = this.blogPostId;
+    var customContentId = this.customContentId;
     var mediaType = this.mediaType;
     var mediaTypeDescription = this.mediaTypeDescription;
     var comment = this.comment;
@@ -2496,6 +3337,15 @@ class Attachment {
     }
     if (title != null) {
       json[r'title'] = title;
+    }
+    if (pageId != null) {
+      json[r'pageId'] = pageId;
+    }
+    if (blogPostId != null) {
+      json[r'blogPostId'] = blogPostId;
+    }
+    if (customContentId != null) {
+      json[r'customContentId'] = customContentId;
     }
     if (mediaType != null) {
       json[r'mediaType'] = mediaType;
@@ -2525,6 +3375,9 @@ class Attachment {
       {String? id,
       String? status,
       String? title,
+      dynamic pageId,
+      dynamic blogPostId,
+      dynamic customContentId,
       String? mediaType,
       String? mediaTypeDescription,
       String? comment,
@@ -2536,6 +3389,9 @@ class Attachment {
       id: id ?? this.id,
       status: status ?? this.status,
       title: title ?? this.title,
+      pageId: pageId ?? this.pageId,
+      blogPostId: blogPostId ?? this.blogPostId,
+      customContentId: customContentId ?? this.customContentId,
       mediaType: mediaType ?? this.mediaType,
       mediaTypeDescription: mediaTypeDescription ?? this.mediaTypeDescription,
       comment: comment ?? this.comment,
@@ -2547,16 +3403,120 @@ class Attachment {
   }
 }
 
+class AttachmentVersion {
+  /// Date and time when the version was created. In format
+  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
+  final DateTime? createdAt;
+
+  /// Message associated with the current version.
+  final String? message;
+
+  /// The version number.
+  final int? number;
+
+  /// Describes if this version is a minor version. Email notifications and
+  /// activity stream updates are not created for minor versions.
+  final bool minorEdit;
+
+  /// The account ID of the user who created this version.
+  final String? authorId;
+  final VersionedEntity? attachment;
+
+  AttachmentVersion(
+      {this.createdAt,
+      this.message,
+      this.number,
+      bool? minorEdit,
+      this.authorId,
+      this.attachment})
+      : minorEdit = minorEdit ?? false;
+
+  factory AttachmentVersion.fromJson(Map<String, Object?> json) {
+    return AttachmentVersion(
+      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
+      message: json[r'message'] as String?,
+      number: (json[r'number'] as num?)?.toInt(),
+      minorEdit: json[r'minorEdit'] as bool? ?? false,
+      authorId: json[r'authorId'] as String?,
+      attachment: json[r'attachment'] != null
+          ? VersionedEntity.fromJson(
+              json[r'attachment']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var createdAt = this.createdAt;
+    var message = this.message;
+    var number = this.number;
+    var minorEdit = this.minorEdit;
+    var authorId = this.authorId;
+    var attachment = this.attachment;
+
+    final json = <String, Object?>{};
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt.toIso8601String();
+    }
+    if (message != null) {
+      json[r'message'] = message;
+    }
+    if (number != null) {
+      json[r'number'] = number;
+    }
+    json[r'minorEdit'] = minorEdit;
+    if (authorId != null) {
+      json[r'authorId'] = authorId;
+    }
+    if (attachment != null) {
+      json[r'attachment'] = attachment.toJson();
+    }
+    return json;
+  }
+
+  AttachmentVersion copyWith(
+      {DateTime? createdAt,
+      String? message,
+      int? number,
+      bool? minorEdit,
+      String? authorId,
+      VersionedEntity? attachment}) {
+    return AttachmentVersion(
+      createdAt: createdAt ?? this.createdAt,
+      message: message ?? this.message,
+      number: number ?? this.number,
+      minorEdit: minorEdit ?? this.minorEdit,
+      authorId: authorId ?? this.authorId,
+      attachment: attachment ?? this.attachment,
+    );
+  }
+}
+
 class BlogPost {
   /// ID of the blog post.
-  final int? id;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
   final String? status;
 
   /// Title of the blog post.
   final String? title;
 
   /// ID of the space the blog post is in.
-  final int? spaceId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic spaceId;
 
   /// The account ID of the user who created this blog post originally.
   final String? authorId;
@@ -2579,10 +3539,10 @@ class BlogPost {
 
   factory BlogPost.fromJson(Map<String, Object?> json) {
     return BlogPost(
-      id: (json[r'id'] as num?)?.toInt(),
+      id: json[r'id'],
       status: json[r'status'] as String?,
       title: json[r'title'] as String?,
-      spaceId: (json[r'spaceId'] as num?)?.toInt(),
+      spaceId: json[r'spaceId'],
       authorId: json[r'authorId'] as String?,
       createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
       version: json[r'version'] != null
@@ -2633,10 +3593,10 @@ class BlogPost {
   }
 
   BlogPost copyWith(
-      {int? id,
+      {dynamic id,
       String? status,
       String? title,
-      int? spaceId,
+      dynamic spaceId,
       String? authorId,
       DateTime? createdAt,
       Version? version,
@@ -2654,19 +3614,101 @@ class BlogPost {
   }
 }
 
+class BlogPostBodyWrite {
+  /// Type of content representation used for the value field.
+  final BlogPostBodyWriteRepresentation? representation;
+
+  /// Body of the blog post, in the format found in the representation field.
+  final String? value;
+
+  BlogPostBodyWrite({this.representation, this.value});
+
+  factory BlogPostBodyWrite.fromJson(Map<String, Object?> json) {
+    return BlogPostBodyWrite(
+      representation: json[r'representation'] != null
+          ? BlogPostBodyWriteRepresentation.fromValue(
+              json[r'representation']! as String)
+          : null,
+      value: json[r'value'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var representation = this.representation;
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    if (representation != null) {
+      json[r'representation'] = representation.value;
+    }
+    if (value != null) {
+      json[r'value'] = value;
+    }
+    return json;
+  }
+
+  BlogPostBodyWrite copyWith(
+      {BlogPostBodyWriteRepresentation? representation, String? value}) {
+    return BlogPostBodyWrite(
+      representation: representation ?? this.representation,
+      value: value ?? this.value,
+    );
+  }
+}
+
+class BlogPostBodyWriteRepresentation {
+  static const storage = BlogPostBodyWriteRepresentation._('storage');
+  static const atlasDocFormat =
+      BlogPostBodyWriteRepresentation._('atlas_doc_format');
+  static const wiki = BlogPostBodyWriteRepresentation._('wiki');
+
+  static const values = [
+    storage,
+    atlasDocFormat,
+    wiki,
+  ];
+  final String value;
+
+  const BlogPostBodyWriteRepresentation._(this.value);
+
+  static BlogPostBodyWriteRepresentation fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => BlogPostBodyWriteRepresentation._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 class BlogPostCommentModel {
   /// ID of the comment.
-  final int? id;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
   final String? status;
 
   /// Title of the comment.
   final String? title;
 
   /// ID of the blog post the comment is in.
-  final int? blogPostId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic blogPostId;
   final Version? version;
-
-  /// Contains representations of the comment's body in different formats.
   final Body? body;
 
   BlogPostCommentModel(
@@ -2679,10 +3721,10 @@ class BlogPostCommentModel {
 
   factory BlogPostCommentModel.fromJson(Map<String, Object?> json) {
     return BlogPostCommentModel(
-      id: (json[r'id'] as num?)?.toInt(),
+      id: json[r'id'],
       status: json[r'status'] as String?,
       title: json[r'title'] as String?,
-      blogPostId: (json[r'blogPostId'] as num?)?.toInt(),
+      blogPostId: json[r'blogPostId'],
       version: json[r'version'] != null
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
           : null,
@@ -2723,10 +3765,10 @@ class BlogPostCommentModel {
   }
 
   BlogPostCommentModel copyWith(
-      {int? id,
+      {dynamic id,
       String? status,
       String? title,
-      int? blogPostId,
+      dynamic blogPostId,
       Version? version,
       Body? body}) {
     return BlogPostCommentModel(
@@ -2741,13 +3783,58 @@ class BlogPostCommentModel {
 }
 
 class BlogPostInlineCommentModel {
+  /// ID of the comment.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
+  final String? status;
+
+  /// Title of the comment.
+  final String? title;
+
+  /// ID of the blog post the comment is in.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic blogPostId;
+  final Version? version;
+  final Body? body;
   final String? resolutionStatus;
   final InlineCommentProperties? properties;
 
-  BlogPostInlineCommentModel({this.resolutionStatus, this.properties});
+  BlogPostInlineCommentModel(
+      {this.id,
+      this.status,
+      this.title,
+      this.blogPostId,
+      this.version,
+      this.body,
+      this.resolutionStatus,
+      this.properties});
 
   factory BlogPostInlineCommentModel.fromJson(Map<String, Object?> json) {
     return BlogPostInlineCommentModel(
+      id: json[r'id'],
+      status: json[r'status'] as String?,
+      title: json[r'title'] as String?,
+      blogPostId: json[r'blogPostId'],
+      version: json[r'version'] != null
+          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      body: json[r'body'] != null
+          ? Body.fromJson(json[r'body']! as Map<String, Object?>)
+          : null,
       resolutionStatus: json[r'resolutionStatus'] as String?,
       properties: json[r'properties'] != null
           ? InlineCommentProperties.fromJson(
@@ -2757,10 +3844,34 @@ class BlogPostInlineCommentModel {
   }
 
   Map<String, Object?> toJson() {
+    var id = this.id;
+    var status = this.status;
+    var title = this.title;
+    var blogPostId = this.blogPostId;
+    var version = this.version;
+    var body = this.body;
     var resolutionStatus = this.resolutionStatus;
     var properties = this.properties;
 
     final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (blogPostId != null) {
+      json[r'blogPostId'] = blogPostId;
+    }
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
+    if (body != null) {
+      json[r'body'] = body.toJson();
+    }
     if (resolutionStatus != null) {
       json[r'resolutionStatus'] = resolutionStatus;
     }
@@ -2771,10 +3882,166 @@ class BlogPostInlineCommentModel {
   }
 
   BlogPostInlineCommentModel copyWith(
-      {String? resolutionStatus, InlineCommentProperties? properties}) {
+      {dynamic id,
+      String? status,
+      String? title,
+      dynamic blogPostId,
+      Version? version,
+      Body? body,
+      String? resolutionStatus,
+      InlineCommentProperties? properties}) {
     return BlogPostInlineCommentModel(
+      id: id ?? this.id,
+      status: status ?? this.status,
+      title: title ?? this.title,
+      blogPostId: blogPostId ?? this.blogPostId,
+      version: version ?? this.version,
+      body: body ?? this.body,
       resolutionStatus: resolutionStatus ?? this.resolutionStatus,
       properties: properties ?? this.properties,
+    );
+  }
+}
+
+/// Body of the blog post. Only one body format should be specified as the
+/// property
+/// for this object, e.g. `storage`.
+class BlogPostNestedBodyWrite {
+  final BlogPostBodyWrite? storage;
+  final BlogPostBodyWrite? atlasDocFormat;
+  final BlogPostBodyWrite? wiki;
+
+  BlogPostNestedBodyWrite({this.storage, this.atlasDocFormat, this.wiki});
+
+  factory BlogPostNestedBodyWrite.fromJson(Map<String, Object?> json) {
+    return BlogPostNestedBodyWrite(
+      storage: json[r'storage'] != null
+          ? BlogPostBodyWrite.fromJson(
+              json[r'storage']! as Map<String, Object?>)
+          : null,
+      atlasDocFormat: json[r'atlas_doc_format'] != null
+          ? BlogPostBodyWrite.fromJson(
+              json[r'atlas_doc_format']! as Map<String, Object?>)
+          : null,
+      wiki: json[r'wiki'] != null
+          ? BlogPostBodyWrite.fromJson(json[r'wiki']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var storage = this.storage;
+    var atlasDocFormat = this.atlasDocFormat;
+    var wiki = this.wiki;
+
+    final json = <String, Object?>{};
+    if (storage != null) {
+      json[r'storage'] = storage.toJson();
+    }
+    if (atlasDocFormat != null) {
+      json[r'atlas_doc_format'] = atlasDocFormat.toJson();
+    }
+    if (wiki != null) {
+      json[r'wiki'] = wiki.toJson();
+    }
+    return json;
+  }
+
+  BlogPostNestedBodyWrite copyWith(
+      {BlogPostBodyWrite? storage,
+      BlogPostBodyWrite? atlasDocFormat,
+      BlogPostBodyWrite? wiki}) {
+    return BlogPostNestedBodyWrite(
+      storage: storage ?? this.storage,
+      atlasDocFormat: atlasDocFormat ?? this.atlasDocFormat,
+      wiki: wiki ?? this.wiki,
+    );
+  }
+}
+
+class BlogPostVersion {
+  /// Date and time when the version was created. In format
+  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
+  final DateTime? createdAt;
+
+  /// Message associated with the current version.
+  final String? message;
+
+  /// The version number.
+  final int? number;
+
+  /// Describes if this version is a minor version. Email notifications and
+  /// activity stream updates are not created for minor versions.
+  final bool minorEdit;
+
+  /// The account ID of the user who created this version.
+  final String? authorId;
+  final VersionedEntity? blogpost;
+
+  BlogPostVersion(
+      {this.createdAt,
+      this.message,
+      this.number,
+      bool? minorEdit,
+      this.authorId,
+      this.blogpost})
+      : minorEdit = minorEdit ?? false;
+
+  factory BlogPostVersion.fromJson(Map<String, Object?> json) {
+    return BlogPostVersion(
+      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
+      message: json[r'message'] as String?,
+      number: (json[r'number'] as num?)?.toInt(),
+      minorEdit: json[r'minorEdit'] as bool? ?? false,
+      authorId: json[r'authorId'] as String?,
+      blogpost: json[r'blogpost'] != null
+          ? VersionedEntity.fromJson(json[r'blogpost']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var createdAt = this.createdAt;
+    var message = this.message;
+    var number = this.number;
+    var minorEdit = this.minorEdit;
+    var authorId = this.authorId;
+    var blogpost = this.blogpost;
+
+    final json = <String, Object?>{};
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt.toIso8601String();
+    }
+    if (message != null) {
+      json[r'message'] = message;
+    }
+    if (number != null) {
+      json[r'number'] = number;
+    }
+    json[r'minorEdit'] = minorEdit;
+    if (authorId != null) {
+      json[r'authorId'] = authorId;
+    }
+    if (blogpost != null) {
+      json[r'blogpost'] = blogpost.toJson();
+    }
+    return json;
+  }
+
+  BlogPostVersion copyWith(
+      {DateTime? createdAt,
+      String? message,
+      int? number,
+      bool? minorEdit,
+      String? authorId,
+      VersionedEntity? blogpost}) {
+    return BlogPostVersion(
+      createdAt: createdAt ?? this.createdAt,
+      message: message ?? this.message,
+      number: number ?? this.number,
+      minorEdit: minorEdit ?? this.minorEdit,
+      authorId: authorId ?? this.authorId,
+      blogpost: blogpost ?? this.blogpost,
     );
   }
 }
@@ -2860,7 +4127,15 @@ class BodyType {
 
 class ChildCustomContent {
   /// ID of the child custom content.
-  final int? id;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
   final String? status;
 
   /// Title of the custom content.
@@ -2870,18 +4145,26 @@ class ChildCustomContent {
   final String? type;
 
   /// ID of the space the custom content is in.
-  final int? spaceId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic spaceId;
 
   ChildCustomContent(
       {this.id, this.status, this.title, this.type, this.spaceId});
 
   factory ChildCustomContent.fromJson(Map<String, Object?> json) {
     return ChildCustomContent(
-      id: (json[r'id'] as num?)?.toInt(),
+      id: json[r'id'],
       status: json[r'status'] as String?,
       title: json[r'title'] as String?,
       type: json[r'type'] as String?,
-      spaceId: (json[r'spaceId'] as num?)?.toInt(),
+      spaceId: json[r'spaceId'],
     );
   }
 
@@ -2912,7 +4195,11 @@ class ChildCustomContent {
   }
 
   ChildCustomContent copyWith(
-      {int? id, String? status, String? title, String? type, int? spaceId}) {
+      {dynamic id,
+      String? status,
+      String? title,
+      String? type,
+      dynamic spaceId}) {
     return ChildCustomContent(
       id: id ?? this.id,
       status: status ?? this.status,
@@ -2925,14 +4212,30 @@ class ChildCustomContent {
 
 class ChildPage {
   /// ID of the page.
-  final int? id;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
   final String? status;
 
   /// Title of the page.
   final String? title;
 
   /// ID of the space the page is in.
-  final int? spaceId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic spaceId;
 
   /// Position of child page within the given parent page tree.
   final int? childPosition;
@@ -2942,10 +4245,10 @@ class ChildPage {
 
   factory ChildPage.fromJson(Map<String, Object?> json) {
     return ChildPage(
-      id: (json[r'id'] as num?)?.toInt(),
+      id: json[r'id'],
       status: json[r'status'] as String?,
       title: json[r'title'] as String?,
-      spaceId: (json[r'spaceId'] as num?)?.toInt(),
+      spaceId: json[r'spaceId'],
       childPosition: (json[r'childPosition'] as num?)?.toInt(),
     );
   }
@@ -2977,10 +4280,10 @@ class ChildPage {
   }
 
   ChildPage copyWith(
-      {int? id,
+      {dynamic id,
       String? status,
       String? title,
-      int? spaceId,
+      dynamic spaceId,
       int? childPosition}) {
     return ChildPage(
       id: id ?? this.id,
@@ -2994,17 +4297,31 @@ class ChildPage {
 
 class ChildrenCommentModel {
   /// ID of the comment.
-  final int? id;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
   final String? status;
 
   /// Title of the comment.
   final String? title;
 
   /// ID of the parent comment the child comment is in.
-  final int? parentCommentId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic parentCommentId;
   final Version? version;
-
-  /// Contains representations of the comment's body in different formats.
   final Body? body;
 
   ChildrenCommentModel(
@@ -3017,10 +4334,10 @@ class ChildrenCommentModel {
 
   factory ChildrenCommentModel.fromJson(Map<String, Object?> json) {
     return ChildrenCommentModel(
-      id: (json[r'id'] as num?)?.toInt(),
+      id: json[r'id'],
       status: json[r'status'] as String?,
       title: json[r'title'] as String?,
-      parentCommentId: (json[r'parentCommentId'] as num?)?.toInt(),
+      parentCommentId: json[r'parentCommentId'],
       version: json[r'version'] != null
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
           : null,
@@ -3061,10 +4378,10 @@ class ChildrenCommentModel {
   }
 
   ChildrenCommentModel copyWith(
-      {int? id,
+      {dynamic id,
       String? status,
       String? title,
-      int? parentCommentId,
+      dynamic parentCommentId,
       Version? version,
       Body? body}) {
     return ChildrenCommentModel(
@@ -3078,9 +4395,261 @@ class ChildrenCommentModel {
   }
 }
 
+class CommentBodyWrite {
+  /// Type of content representation used for the value field.
+  final CommentBodyWriteRepresentation? representation;
+
+  /// Body of the comment, in the format found in the representation field.
+  final String? value;
+
+  CommentBodyWrite({this.representation, this.value});
+
+  factory CommentBodyWrite.fromJson(Map<String, Object?> json) {
+    return CommentBodyWrite(
+      representation: json[r'representation'] != null
+          ? CommentBodyWriteRepresentation.fromValue(
+              json[r'representation']! as String)
+          : null,
+      value: json[r'value'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var representation = this.representation;
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    if (representation != null) {
+      json[r'representation'] = representation.value;
+    }
+    if (value != null) {
+      json[r'value'] = value;
+    }
+    return json;
+  }
+
+  CommentBodyWrite copyWith(
+      {CommentBodyWriteRepresentation? representation, String? value}) {
+    return CommentBodyWrite(
+      representation: representation ?? this.representation,
+      value: value ?? this.value,
+    );
+  }
+}
+
+class CommentBodyWriteRepresentation {
+  static const storage = CommentBodyWriteRepresentation._('storage');
+  static const atlasDocFormat =
+      CommentBodyWriteRepresentation._('atlas_doc_format');
+  static const wiki = CommentBodyWriteRepresentation._('wiki');
+
+  static const values = [
+    storage,
+    atlasDocFormat,
+    wiki,
+  ];
+  final String value;
+
+  const CommentBodyWriteRepresentation._(this.value);
+
+  static CommentBodyWriteRepresentation fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => CommentBodyWriteRepresentation._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// Body of the comment. Only one body format should be specified as the
+/// property
+/// for this object, e.g. `storage`.
+class CommentNestedBodyWrite {
+  final CommentBodyWrite? storage;
+  final CommentBodyWrite? atlasDocFormat;
+  final CommentBodyWrite? wiki;
+
+  CommentNestedBodyWrite({this.storage, this.atlasDocFormat, this.wiki});
+
+  factory CommentNestedBodyWrite.fromJson(Map<String, Object?> json) {
+    return CommentNestedBodyWrite(
+      storage: json[r'storage'] != null
+          ? CommentBodyWrite.fromJson(json[r'storage']! as Map<String, Object?>)
+          : null,
+      atlasDocFormat: json[r'atlas_doc_format'] != null
+          ? CommentBodyWrite.fromJson(
+              json[r'atlas_doc_format']! as Map<String, Object?>)
+          : null,
+      wiki: json[r'wiki'] != null
+          ? CommentBodyWrite.fromJson(json[r'wiki']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var storage = this.storage;
+    var atlasDocFormat = this.atlasDocFormat;
+    var wiki = this.wiki;
+
+    final json = <String, Object?>{};
+    if (storage != null) {
+      json[r'storage'] = storage.toJson();
+    }
+    if (atlasDocFormat != null) {
+      json[r'atlas_doc_format'] = atlasDocFormat.toJson();
+    }
+    if (wiki != null) {
+      json[r'wiki'] = wiki.toJson();
+    }
+    return json;
+  }
+
+  CommentNestedBodyWrite copyWith(
+      {CommentBodyWrite? storage,
+      CommentBodyWrite? atlasDocFormat,
+      CommentBodyWrite? wiki}) {
+    return CommentNestedBodyWrite(
+      storage: storage ?? this.storage,
+      atlasDocFormat: atlasDocFormat ?? this.atlasDocFormat,
+      wiki: wiki ?? this.wiki,
+    );
+  }
+}
+
+class CommentVersion {
+  /// Date and time when the version was created. In format
+  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
+  final DateTime? createdAt;
+
+  /// Message associated with the current version.
+  final String? message;
+
+  /// The version number.
+  final int? number;
+
+  /// Describes if this version is a minor version. Email notifications and
+  /// activity stream updates are not created for minor versions.
+  final bool minorEdit;
+
+  /// The account ID of the user who created this version.
+  final String? authorId;
+  final VersionedEntity? comment;
+
+  CommentVersion(
+      {this.createdAt,
+      this.message,
+      this.number,
+      bool? minorEdit,
+      this.authorId,
+      this.comment})
+      : minorEdit = minorEdit ?? false;
+
+  factory CommentVersion.fromJson(Map<String, Object?> json) {
+    return CommentVersion(
+      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
+      message: json[r'message'] as String?,
+      number: (json[r'number'] as num?)?.toInt(),
+      minorEdit: json[r'minorEdit'] as bool? ?? false,
+      authorId: json[r'authorId'] as String?,
+      comment: json[r'comment'] != null
+          ? VersionedEntity.fromJson(json[r'comment']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var createdAt = this.createdAt;
+    var message = this.message;
+    var number = this.number;
+    var minorEdit = this.minorEdit;
+    var authorId = this.authorId;
+    var comment = this.comment;
+
+    final json = <String, Object?>{};
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt.toIso8601String();
+    }
+    if (message != null) {
+      json[r'message'] = message;
+    }
+    if (number != null) {
+      json[r'number'] = number;
+    }
+    json[r'minorEdit'] = minorEdit;
+    if (authorId != null) {
+      json[r'authorId'] = authorId;
+    }
+    if (comment != null) {
+      json[r'comment'] = comment.toJson();
+    }
+    return json;
+  }
+
+  CommentVersion copyWith(
+      {DateTime? createdAt,
+      String? message,
+      int? number,
+      bool? minorEdit,
+      String? authorId,
+      VersionedEntity? comment}) {
+    return CommentVersion(
+      createdAt: createdAt ?? this.createdAt,
+      message: message ?? this.message,
+      number: number ?? this.number,
+      minorEdit: minorEdit ?? this.minorEdit,
+      authorId: authorId ?? this.authorId,
+      comment: comment ?? this.comment,
+    );
+  }
+}
+
+class ContentIdToContentTypeResponse {
+  /// JSON object containing all requested content ids as keys and their
+  /// associated content types as the values.
+  /// Duplicate content ids in the request will be returned under a single key
+  /// in the response. For built-in content
+  /// types, the enumerations are as specified. Custom content ids will be
+  /// mapped to their associated type.
+  final Map<String, dynamic>? results;
+
+  ContentIdToContentTypeResponse({this.results});
+
+  factory ContentIdToContentTypeResponse.fromJson(Map<String, Object?> json) {
+    return ContentIdToContentTypeResponse(
+      results: json[r'results'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+
+    final json = <String, Object?>{};
+    if (results != null) {
+      json[r'results'] = results;
+    }
+    return json;
+  }
+
+  ContentIdToContentTypeResponse copyWith({Map<String, dynamic>? results}) {
+    return ContentIdToContentTypeResponse(
+      results: results ?? this.results,
+    );
+  }
+}
+
 class ContentProperty {
   /// ID of the property
-  final int? id;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
 
   /// Key of the property
   final String? key;
@@ -3093,7 +4662,7 @@ class ContentProperty {
 
   factory ContentProperty.fromJson(Map<String, Object?> json) {
     return ContentProperty(
-      id: (json[r'id'] as num?)?.toInt(),
+      id: json[r'id'],
       key: json[r'key'] as String?,
       value: json[r'value'],
       version: json[r'version'] != null
@@ -3125,7 +4694,7 @@ class ContentProperty {
   }
 
   ContentProperty copyWith(
-      {int? id, String? key, dynamic value, Version? version}) {
+      {dynamic id, String? key, dynamic value, Version? version}) {
     return ContentProperty(
       id: id ?? this.id,
       key: key ?? this.key,
@@ -3135,32 +4704,161 @@ class ContentProperty {
   }
 }
 
+class ContentPropertyCreateRequest {
+  /// Key of the content property
+  final String? key;
+
+  /// Value of the content property.
+  final dynamic value;
+
+  ContentPropertyCreateRequest({this.key, this.value});
+
+  factory ContentPropertyCreateRequest.fromJson(Map<String, Object?> json) {
+    return ContentPropertyCreateRequest(
+      key: json[r'key'] as String?,
+      value: json[r'value'],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    if (value != null) {
+      json[r'value'] = value;
+    }
+    return json;
+  }
+
+  ContentPropertyCreateRequest copyWith({String? key, dynamic value}) {
+    return ContentPropertyCreateRequest(
+      key: key ?? this.key,
+      value: value ?? this.value,
+    );
+  }
+}
+
+class ContentPropertyUpdateRequest {
+  /// Key of the content property
+  final String? key;
+
+  /// Value of the content property.
+  final dynamic value;
+
+  /// New version number and associated message
+  final ContentPropertyUpdateRequestVersion? version;
+
+  ContentPropertyUpdateRequest({this.key, this.value, this.version});
+
+  factory ContentPropertyUpdateRequest.fromJson(Map<String, Object?> json) {
+    return ContentPropertyUpdateRequest(
+      key: json[r'key'] as String?,
+      value: json[r'value'],
+      version: json[r'version'] != null
+          ? ContentPropertyUpdateRequestVersion.fromJson(
+              json[r'version']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+    var value = this.value;
+    var version = this.version;
+
+    final json = <String, Object?>{};
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    if (value != null) {
+      json[r'value'] = value;
+    }
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
+    return json;
+  }
+
+  ContentPropertyUpdateRequest copyWith(
+      {String? key,
+      dynamic value,
+      ContentPropertyUpdateRequestVersion? version}) {
+    return ContentPropertyUpdateRequest(
+      key: key ?? this.key,
+      value: value ?? this.value,
+      version: version ?? this.version,
+    );
+  }
+}
+
+/// New version number and associated message
+class ContentPropertyUpdateRequestVersion {
+  /// Version number of the new version. Should be 1 more than the current
+  /// version number.
+  final int? number;
+
+  /// Message to be associated with the new version.
+  final String? message;
+
+  ContentPropertyUpdateRequestVersion({this.number, this.message});
+
+  factory ContentPropertyUpdateRequestVersion.fromJson(
+      Map<String, Object?> json) {
+    return ContentPropertyUpdateRequestVersion(
+      number: (json[r'number'] as num?)?.toInt(),
+      message: json[r'message'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var number = this.number;
+    var message = this.message;
+
+    final json = <String, Object?>{};
+    if (number != null) {
+      json[r'number'] = number;
+    }
+    if (message != null) {
+      json[r'message'] = message;
+    }
+    return json;
+  }
+
+  ContentPropertyUpdateRequestVersion copyWith({int? number, String? message}) {
+    return ContentPropertyUpdateRequestVersion(
+      number: number ?? this.number,
+      message: message ?? this.message,
+    );
+  }
+}
+
 class CreateFooterCommentModel {
   /// ID of the containing blog post, if intending to create a top level footer
   /// comment. Do not provide if creating a reply.
-  final int? blogPostId;
+  final String? blogPostId;
 
   /// ID of the containing page, if intending to create a top level footer
   /// comment. Do not provide if creating a reply.
-  final int? pageId;
+  final String? pageId;
 
   /// ID of the parent comment, if intending to create a reply. Do not provide
   /// if creating a top level comment.
-  final int? parentCommentId;
-  final CreateFooterCommentModelBody? body;
+  final String? parentCommentId;
+  final dynamic body;
 
   CreateFooterCommentModel(
       {this.blogPostId, this.pageId, this.parentCommentId, this.body});
 
   factory CreateFooterCommentModel.fromJson(Map<String, Object?> json) {
     return CreateFooterCommentModel(
-      blogPostId: (json[r'blogPostId'] as num?)?.toInt(),
-      pageId: (json[r'pageId'] as num?)?.toInt(),
-      parentCommentId: (json[r'parentCommentId'] as num?)?.toInt(),
-      body: json[r'body'] != null
-          ? CreateFooterCommentModelBody.fromJson(
-              json[r'body']! as Map<String, Object?>)
-          : null,
+      blogPostId: json[r'blogPostId'] as String?,
+      pageId: json[r'pageId'] as String?,
+      parentCommentId: json[r'parentCommentId'] as String?,
+      body: json[r'body'],
     );
   }
 
@@ -3181,16 +4879,16 @@ class CreateFooterCommentModel {
       json[r'parentCommentId'] = parentCommentId;
     }
     if (body != null) {
-      json[r'body'] = body.toJson();
+      json[r'body'] = body;
     }
     return json;
   }
 
   CreateFooterCommentModel copyWith(
-      {int? blogPostId,
-      int? pageId,
-      int? parentCommentId,
-      CreateFooterCommentModelBody? body}) {
+      {String? blogPostId,
+      String? pageId,
+      String? parentCommentId,
+      dynamic body}) {
     return CreateFooterCommentModel(
       blogPostId: blogPostId ?? this.blogPostId,
       pageId: pageId ?? this.pageId,
@@ -3200,89 +4898,19 @@ class CreateFooterCommentModel {
   }
 }
 
-class CreateFooterCommentModelBody {
-  /// Body of the comment
-  final String? value;
-
-  /// Format of the body's value.
-  final CreateFooterCommentModelBodyRepresentation? representation;
-
-  CreateFooterCommentModelBody({this.value, this.representation});
-
-  factory CreateFooterCommentModelBody.fromJson(Map<String, Object?> json) {
-    return CreateFooterCommentModelBody(
-      value: json[r'value'] as String?,
-      representation: json[r'representation'] != null
-          ? CreateFooterCommentModelBodyRepresentation.fromValue(
-              json[r'representation']! as String)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var value = this.value;
-    var representation = this.representation;
-
-    final json = <String, Object?>{};
-    if (value != null) {
-      json[r'value'] = value;
-    }
-    if (representation != null) {
-      json[r'representation'] = representation.value;
-    }
-    return json;
-  }
-
-  CreateFooterCommentModelBody copyWith(
-      {String? value,
-      CreateFooterCommentModelBodyRepresentation? representation}) {
-    return CreateFooterCommentModelBody(
-      value: value ?? this.value,
-      representation: representation ?? this.representation,
-    );
-  }
-}
-
-class CreateFooterCommentModelBodyRepresentation {
-  static const storage =
-      CreateFooterCommentModelBodyRepresentation._('storage');
-  static const atlasDocFormat =
-      CreateFooterCommentModelBodyRepresentation._('atlas_doc_format');
-
-  static const values = [
-    storage,
-    atlasDocFormat,
-  ];
-  final String value;
-
-  const CreateFooterCommentModelBodyRepresentation._(this.value);
-
-  static CreateFooterCommentModelBodyRepresentation fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => CreateFooterCommentModelBodyRepresentation._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
 class CreateInlineCommentModel {
   /// ID of the containing blog post, if intending to create a top level footer
   /// comment. Do not provide if creating a reply.
-  final int? blogPostId;
+  final String? blogPostId;
 
   /// ID of the containing page, if intending to create a top level footer
   /// comment. Do not provide if creating a reply.
-  final int? pageId;
+  final String? pageId;
 
   /// ID of the parent comment, if intending to create a reply. Do not provide
   /// if creating a top level comment.
-  final int? parentCommentId;
-
-  /// Body of the comment
-  final CreateInlineCommentModelBody? body;
+  final String? parentCommentId;
+  final dynamic body;
 
   /// Object describing the text to highlight on the page/blog post. Only
   /// applicable for top level inline comments (not replies) and required in
@@ -3299,13 +4927,10 @@ class CreateInlineCommentModel {
 
   factory CreateInlineCommentModel.fromJson(Map<String, Object?> json) {
     return CreateInlineCommentModel(
-      blogPostId: (json[r'blogPostId'] as num?)?.toInt(),
-      pageId: (json[r'pageId'] as num?)?.toInt(),
-      parentCommentId: (json[r'parentCommentId'] as num?)?.toInt(),
-      body: json[r'body'] != null
-          ? CreateInlineCommentModelBody.fromJson(
-              json[r'body']! as Map<String, Object?>)
-          : null,
+      blogPostId: json[r'blogPostId'] as String?,
+      pageId: json[r'pageId'] as String?,
+      parentCommentId: json[r'parentCommentId'] as String?,
+      body: json[r'body'],
       inlineCommentProperties: json[r'inlineCommentProperties'] != null
           ? CreateInlineCommentModelInlineCommentProperties.fromJson(
               json[r'inlineCommentProperties']! as Map<String, Object?>)
@@ -3331,7 +4956,7 @@ class CreateInlineCommentModel {
       json[r'parentCommentId'] = parentCommentId;
     }
     if (body != null) {
-      json[r'body'] = body.toJson();
+      json[r'body'] = body;
     }
     if (inlineCommentProperties != null) {
       json[r'inlineCommentProperties'] = inlineCommentProperties.toJson();
@@ -3340,10 +4965,10 @@ class CreateInlineCommentModel {
   }
 
   CreateInlineCommentModel copyWith(
-      {int? blogPostId,
-      int? pageId,
-      int? parentCommentId,
-      CreateInlineCommentModelBody? body,
+      {String? blogPostId,
+      String? pageId,
+      String? parentCommentId,
+      dynamic body,
       CreateInlineCommentModelInlineCommentProperties?
           inlineCommentProperties}) {
     return CreateInlineCommentModel(
@@ -3355,75 +4980,6 @@ class CreateInlineCommentModel {
           inlineCommentProperties ?? this.inlineCommentProperties,
     );
   }
-}
-
-/// Body of the comment
-class CreateInlineCommentModelBody {
-  /// Body of the comment
-  final String? value;
-
-  /// Format of the body's value.
-  final CreateInlineCommentModelBodyRepresentation? representation;
-
-  CreateInlineCommentModelBody({this.value, this.representation});
-
-  factory CreateInlineCommentModelBody.fromJson(Map<String, Object?> json) {
-    return CreateInlineCommentModelBody(
-      value: json[r'value'] as String?,
-      representation: json[r'representation'] != null
-          ? CreateInlineCommentModelBodyRepresentation.fromValue(
-              json[r'representation']! as String)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var value = this.value;
-    var representation = this.representation;
-
-    final json = <String, Object?>{};
-    if (value != null) {
-      json[r'value'] = value;
-    }
-    if (representation != null) {
-      json[r'representation'] = representation.value;
-    }
-    return json;
-  }
-
-  CreateInlineCommentModelBody copyWith(
-      {String? value,
-      CreateInlineCommentModelBodyRepresentation? representation}) {
-    return CreateInlineCommentModelBody(
-      value: value ?? this.value,
-      representation: representation ?? this.representation,
-    );
-  }
-}
-
-class CreateInlineCommentModelBodyRepresentation {
-  static const storage =
-      CreateInlineCommentModelBodyRepresentation._('storage');
-  static const atlasDocFormat =
-      CreateInlineCommentModelBodyRepresentation._('atlas_doc_format');
-
-  static const values = [
-    storage,
-    atlasDocFormat,
-  ];
-  final String value;
-
-  const CreateInlineCommentModelBodyRepresentation._(this.value);
-
-  static CreateInlineCommentModelBodyRepresentation fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => CreateInlineCommentModelBodyRepresentation._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
 }
 
 /// Object describing the text to highlight on the page/blog post. Only
@@ -3493,7 +5049,15 @@ class CreateInlineCommentModelInlineCommentProperties {
 
 class CustomContent {
   /// ID of the custom content.
-  final int? id;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
 
   /// The type of custom content.
   final String? type;
@@ -3506,25 +5070,57 @@ class CustomContent {
   ///
   /// Note: This is always returned, regardless of if the custom content has a
   /// container that is a space.
-  final int? spaceId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic spaceId;
 
   /// ID of the containing page.
   ///
   /// Note: This is only returned if the custom content has a container that is
   /// a page.
-  final int? pageId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic pageId;
 
   /// ID of the containing blog post.
   ///
   /// Note: This is only returned if the custom content has a container that is
   /// a blog post.
-  final int? blogPostId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic blogPostId;
 
   /// ID of the containing custom content.
   ///
   /// Note: This is only returned if the custom content has a container that is
   /// custom content.
-  final int? customContentId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic customContentId;
 
   /// The account ID of the user who created this custom content originally.
   final String? authorId;
@@ -3551,14 +5147,14 @@ class CustomContent {
 
   factory CustomContent.fromJson(Map<String, Object?> json) {
     return CustomContent(
-      id: (json[r'id'] as num?)?.toInt(),
+      id: json[r'id'],
       type: json[r'type'] as String?,
       status: json[r'status'] as String?,
       title: json[r'title'] as String?,
-      spaceId: (json[r'spaceId'] as num?)?.toInt(),
-      pageId: (json[r'pageId'] as num?)?.toInt(),
-      blogPostId: (json[r'blogPostId'] as num?)?.toInt(),
-      customContentId: (json[r'customContentId'] as num?)?.toInt(),
+      spaceId: json[r'spaceId'],
+      pageId: json[r'pageId'],
+      blogPostId: json[r'blogPostId'],
+      customContentId: json[r'customContentId'],
       authorId: json[r'authorId'] as String?,
       createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
       body: json[r'body'] != null
@@ -3625,14 +5221,14 @@ class CustomContent {
   }
 
   CustomContent copyWith(
-      {int? id,
+      {dynamic id,
       String? type,
       String? status,
       String? title,
-      int? spaceId,
-      int? pageId,
-      int? blogPostId,
-      int? customContentId,
+      dynamic spaceId,
+      dynamic pageId,
+      dynamic blogPostId,
+      dynamic customContentId,
       String? authorId,
       DateTime? createdAt,
       CustomContentBody? body,
@@ -3701,6 +5297,219 @@ class CustomContentBody {
       raw: raw ?? this.raw,
       storage: storage ?? this.storage,
       atlasDocFormat: atlasDocFormat ?? this.atlasDocFormat,
+    );
+  }
+}
+
+class CustomContentBodyWrite {
+  /// Type of content representation used for the value field.
+  final CustomContentBodyWriteRepresentation? representation;
+
+  /// Body of the custom content, in the format found in the representation
+  /// field.
+  final String? value;
+
+  CustomContentBodyWrite({this.representation, this.value});
+
+  factory CustomContentBodyWrite.fromJson(Map<String, Object?> json) {
+    return CustomContentBodyWrite(
+      representation: json[r'representation'] != null
+          ? CustomContentBodyWriteRepresentation.fromValue(
+              json[r'representation']! as String)
+          : null,
+      value: json[r'value'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var representation = this.representation;
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    if (representation != null) {
+      json[r'representation'] = representation.value;
+    }
+    if (value != null) {
+      json[r'value'] = value;
+    }
+    return json;
+  }
+
+  CustomContentBodyWrite copyWith(
+      {CustomContentBodyWriteRepresentation? representation, String? value}) {
+    return CustomContentBodyWrite(
+      representation: representation ?? this.representation,
+      value: value ?? this.value,
+    );
+  }
+}
+
+class CustomContentBodyWriteRepresentation {
+  static const storage = CustomContentBodyWriteRepresentation._('storage');
+  static const atlasDocFormat =
+      CustomContentBodyWriteRepresentation._('atlas_doc_format');
+  static const raw = CustomContentBodyWriteRepresentation._('raw');
+
+  static const values = [
+    storage,
+    atlasDocFormat,
+    raw,
+  ];
+  final String value;
+
+  const CustomContentBodyWriteRepresentation._(this.value);
+
+  static CustomContentBodyWriteRepresentation fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => CustomContentBodyWriteRepresentation._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// Body of the custom content. Only one body format should be specified as the
+/// property
+/// for this object, e.g. `storage`.
+class CustomContentNestedBodyWrite {
+  final CustomContentBodyWrite? storage;
+  final CustomContentBodyWrite? atlasDocFormat;
+  final CustomContentBodyWrite? raw;
+
+  CustomContentNestedBodyWrite({this.storage, this.atlasDocFormat, this.raw});
+
+  factory CustomContentNestedBodyWrite.fromJson(Map<String, Object?> json) {
+    return CustomContentNestedBodyWrite(
+      storage: json[r'storage'] != null
+          ? CustomContentBodyWrite.fromJson(
+              json[r'storage']! as Map<String, Object?>)
+          : null,
+      atlasDocFormat: json[r'atlas_doc_format'] != null
+          ? CustomContentBodyWrite.fromJson(
+              json[r'atlas_doc_format']! as Map<String, Object?>)
+          : null,
+      raw: json[r'raw'] != null
+          ? CustomContentBodyWrite.fromJson(
+              json[r'raw']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var storage = this.storage;
+    var atlasDocFormat = this.atlasDocFormat;
+    var raw = this.raw;
+
+    final json = <String, Object?>{};
+    if (storage != null) {
+      json[r'storage'] = storage.toJson();
+    }
+    if (atlasDocFormat != null) {
+      json[r'atlas_doc_format'] = atlasDocFormat.toJson();
+    }
+    if (raw != null) {
+      json[r'raw'] = raw.toJson();
+    }
+    return json;
+  }
+
+  CustomContentNestedBodyWrite copyWith(
+      {CustomContentBodyWrite? storage,
+      CustomContentBodyWrite? atlasDocFormat,
+      CustomContentBodyWrite? raw}) {
+    return CustomContentNestedBodyWrite(
+      storage: storage ?? this.storage,
+      atlasDocFormat: atlasDocFormat ?? this.atlasDocFormat,
+      raw: raw ?? this.raw,
+    );
+  }
+}
+
+class CustomContentVersion {
+  /// Date and time when the version was created. In format
+  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
+  final DateTime? createdAt;
+
+  /// Message associated with the current version.
+  final String? message;
+
+  /// The version number.
+  final int? number;
+
+  /// Describes if this version is a minor version. Email notifications and
+  /// activity stream updates are not created for minor versions.
+  final bool minorEdit;
+
+  /// The account ID of the user who created this version.
+  final String? authorId;
+  final VersionedEntity? custom;
+
+  CustomContentVersion(
+      {this.createdAt,
+      this.message,
+      this.number,
+      bool? minorEdit,
+      this.authorId,
+      this.custom})
+      : minorEdit = minorEdit ?? false;
+
+  factory CustomContentVersion.fromJson(Map<String, Object?> json) {
+    return CustomContentVersion(
+      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
+      message: json[r'message'] as String?,
+      number: (json[r'number'] as num?)?.toInt(),
+      minorEdit: json[r'minorEdit'] as bool? ?? false,
+      authorId: json[r'authorId'] as String?,
+      custom: json[r'custom'] != null
+          ? VersionedEntity.fromJson(json[r'custom']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var createdAt = this.createdAt;
+    var message = this.message;
+    var number = this.number;
+    var minorEdit = this.minorEdit;
+    var authorId = this.authorId;
+    var custom = this.custom;
+
+    final json = <String, Object?>{};
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt.toIso8601String();
+    }
+    if (message != null) {
+      json[r'message'] = message;
+    }
+    if (number != null) {
+      json[r'number'] = number;
+    }
+    json[r'minorEdit'] = minorEdit;
+    if (authorId != null) {
+      json[r'authorId'] = authorId;
+    }
+    if (custom != null) {
+      json[r'custom'] = custom.toJson();
+    }
+    return json;
+  }
+
+  CustomContentVersion copyWith(
+      {DateTime? createdAt,
+      String? message,
+      int? number,
+      bool? minorEdit,
+      String? authorId,
+      VersionedEntity? custom}) {
+    return CustomContentVersion(
+      createdAt: createdAt ?? this.createdAt,
+      message: message ?? this.message,
+      number: number ?? this.number,
+      minorEdit: minorEdit ?? this.minorEdit,
+      authorId: authorId ?? this.authorId,
+      custom: custom ?? this.custom,
     );
   }
 }
@@ -3829,7 +5638,15 @@ class DetailedVersion {
 
 class FooterCommentModel {
   /// ID of the comment.
-  final int? id;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
   final String? status;
 
   /// Title of the comment.
@@ -3837,13 +5654,37 @@ class FooterCommentModel {
 
   /// ID of the blog post containing the comment if the comment is on a blog
   /// post.
-  final int? blogPostId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic blogPostId;
 
   /// ID of the page containing the comment if the comment is on a page.
-  final int? pageId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic pageId;
 
   /// ID of the parent comment if the comment is a reply.
-  final int? parentCommentId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic parentCommentId;
   final Version? version;
   final Body? body;
 
@@ -3859,12 +5700,12 @@ class FooterCommentModel {
 
   factory FooterCommentModel.fromJson(Map<String, Object?> json) {
     return FooterCommentModel(
-      id: (json[r'id'] as num?)?.toInt(),
+      id: json[r'id'],
       status: json[r'status'] as String?,
       title: json[r'title'] as String?,
-      blogPostId: (json[r'blogPostId'] as num?)?.toInt(),
-      pageId: (json[r'pageId'] as num?)?.toInt(),
-      parentCommentId: (json[r'parentCommentId'] as num?)?.toInt(),
+      blogPostId: json[r'blogPostId'],
+      pageId: json[r'pageId'],
+      parentCommentId: json[r'parentCommentId'],
       version: json[r'version'] != null
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
           : null,
@@ -3913,12 +5754,12 @@ class FooterCommentModel {
   }
 
   FooterCommentModel copyWith(
-      {int? id,
+      {dynamic id,
       String? status,
       String? title,
-      int? blogPostId,
-      int? pageId,
-      int? parentCommentId,
+      dynamic blogPostId,
+      dynamic pageId,
+      dynamic parentCommentId,
       Version? version,
       Body? body}) {
     return FooterCommentModel(
@@ -3935,13 +5776,58 @@ class FooterCommentModel {
 }
 
 class InlineCommentChildrenModel {
+  /// ID of the comment.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
+  final String? status;
+
+  /// Title of the comment.
+  final String? title;
+
+  /// ID of the parent comment the child comment is in.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic parentCommentId;
+  final Version? version;
+  final Body? body;
   final String? resolutionStatus;
   final InlineCommentProperties? properties;
 
-  InlineCommentChildrenModel({this.resolutionStatus, this.properties});
+  InlineCommentChildrenModel(
+      {this.id,
+      this.status,
+      this.title,
+      this.parentCommentId,
+      this.version,
+      this.body,
+      this.resolutionStatus,
+      this.properties});
 
   factory InlineCommentChildrenModel.fromJson(Map<String, Object?> json) {
     return InlineCommentChildrenModel(
+      id: json[r'id'],
+      status: json[r'status'] as String?,
+      title: json[r'title'] as String?,
+      parentCommentId: json[r'parentCommentId'],
+      version: json[r'version'] != null
+          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      body: json[r'body'] != null
+          ? Body.fromJson(json[r'body']! as Map<String, Object?>)
+          : null,
       resolutionStatus: json[r'resolutionStatus'] as String?,
       properties: json[r'properties'] != null
           ? InlineCommentProperties.fromJson(
@@ -3951,10 +5837,34 @@ class InlineCommentChildrenModel {
   }
 
   Map<String, Object?> toJson() {
+    var id = this.id;
+    var status = this.status;
+    var title = this.title;
+    var parentCommentId = this.parentCommentId;
+    var version = this.version;
+    var body = this.body;
     var resolutionStatus = this.resolutionStatus;
     var properties = this.properties;
 
     final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (parentCommentId != null) {
+      json[r'parentCommentId'] = parentCommentId;
+    }
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
+    if (body != null) {
+      json[r'body'] = body.toJson();
+    }
     if (resolutionStatus != null) {
       json[r'resolutionStatus'] = resolutionStatus;
     }
@@ -3965,8 +5875,21 @@ class InlineCommentChildrenModel {
   }
 
   InlineCommentChildrenModel copyWith(
-      {String? resolutionStatus, InlineCommentProperties? properties}) {
+      {dynamic id,
+      String? status,
+      String? title,
+      dynamic parentCommentId,
+      Version? version,
+      Body? body,
+      String? resolutionStatus,
+      InlineCommentProperties? properties}) {
     return InlineCommentChildrenModel(
+      id: id ?? this.id,
+      status: status ?? this.status,
+      title: title ?? this.title,
+      parentCommentId: parentCommentId ?? this.parentCommentId,
+      version: version ?? this.version,
+      body: body ?? this.body,
       resolutionStatus: resolutionStatus ?? this.resolutionStatus,
       properties: properties ?? this.properties,
     );
@@ -3975,7 +5898,15 @@ class InlineCommentChildrenModel {
 
 class InlineCommentModel {
   /// ID of the comment.
-  final int? id;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
   final String? status;
 
   /// Title of the comment.
@@ -3983,13 +5914,37 @@ class InlineCommentModel {
 
   /// ID of the blog post containing the comment if the comment is on a blog
   /// post.
-  final int? blogPostId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic blogPostId;
 
   /// ID of the page containing the comment if the comment is on a page.
-  final int? pageId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic pageId;
 
   /// ID of the parent comment if the comment is a reply.
-  final int? parentCommentId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic parentCommentId;
   final Version? version;
   final Body? body;
 
@@ -4019,12 +5974,12 @@ class InlineCommentModel {
 
   factory InlineCommentModel.fromJson(Map<String, Object?> json) {
     return InlineCommentModel(
-      id: (json[r'id'] as num?)?.toInt(),
+      id: json[r'id'],
       status: json[r'status'] as String?,
       title: json[r'title'] as String?,
-      blogPostId: (json[r'blogPostId'] as num?)?.toInt(),
-      pageId: (json[r'pageId'] as num?)?.toInt(),
-      parentCommentId: (json[r'parentCommentId'] as num?)?.toInt(),
+      blogPostId: json[r'blogPostId'],
+      pageId: json[r'pageId'],
+      parentCommentId: json[r'parentCommentId'],
       version: json[r'version'] != null
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
           : null,
@@ -4098,12 +6053,12 @@ class InlineCommentModel {
   }
 
   InlineCommentModel copyWith(
-      {int? id,
+      {dynamic id,
       String? status,
       String? title,
-      int? blogPostId,
-      int? pageId,
-      int? parentCommentId,
+      dynamic blogPostId,
+      dynamic pageId,
+      dynamic parentCommentId,
       Version? version,
       Body? body,
       String? resolutionLastModifierId,
@@ -4130,21 +6085,56 @@ class InlineCommentModel {
 }
 
 class InlineCommentProperties {
-  InlineCommentProperties();
+  /// Property value used to reference the highlighted element in DOM.
+  final String? inlineMarkerRef;
+
+  /// Text that is highlighted
+  final String? inlineOriginalSelection;
+
+  InlineCommentProperties({this.inlineMarkerRef, this.inlineOriginalSelection});
 
   factory InlineCommentProperties.fromJson(Map<String, Object?> json) {
-    return InlineCommentProperties();
+    return InlineCommentProperties(
+      inlineMarkerRef: json[r'inline-marker-ref'] as String?,
+      inlineOriginalSelection: json[r'inline-original-selection'] as String?,
+    );
   }
 
   Map<String, Object?> toJson() {
+    var inlineMarkerRef = this.inlineMarkerRef;
+    var inlineOriginalSelection = this.inlineOriginalSelection;
+
     final json = <String, Object?>{};
+    if (inlineMarkerRef != null) {
+      json[r'inline-marker-ref'] = inlineMarkerRef;
+    }
+    if (inlineOriginalSelection != null) {
+      json[r'inline-original-selection'] = inlineOriginalSelection;
+    }
     return json;
+  }
+
+  InlineCommentProperties copyWith(
+      {String? inlineMarkerRef, String? inlineOriginalSelection}) {
+    return InlineCommentProperties(
+      inlineMarkerRef: inlineMarkerRef ?? this.inlineMarkerRef,
+      inlineOriginalSelection:
+          inlineOriginalSelection ?? this.inlineOriginalSelection,
+    );
   }
 }
 
 class Label {
   /// ID of the label.
-  final int? id;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
 
   /// Name of the label.
   final String? name;
@@ -4156,7 +6146,7 @@ class Label {
 
   factory Label.fromJson(Map<String, Object?> json) {
     return Label(
-      id: (json[r'id'] as num?)?.toInt(),
+      id: json[r'id'],
       name: json[r'name'] as String?,
       prefix: json[r'prefix'] as String?,
     );
@@ -4180,7 +6170,7 @@ class Label {
     return json;
   }
 
-  Label copyWith({int? id, String? name, String? prefix}) {
+  Label copyWith({dynamic id, String? name, String? prefix}) {
     return Label(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -4191,17 +6181,41 @@ class Label {
 
 class Page {
   /// ID of the page.
-  final int? id;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
   final String? status;
 
   /// Title of the page.
   final String? title;
 
   /// ID of the space the page is in.
-  final int? spaceId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic spaceId;
 
   /// ID of the parent page, or null if there is no parent page.
-  final int? parentId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic parentId;
 
   /// The account ID of the user who created this page originally.
   final String? authorId;
@@ -4225,11 +6239,11 @@ class Page {
 
   factory Page.fromJson(Map<String, Object?> json) {
     return Page(
-      id: (json[r'id'] as num?)?.toInt(),
+      id: json[r'id'],
       status: json[r'status'] as String?,
       title: json[r'title'] as String?,
-      spaceId: (json[r'spaceId'] as num?)?.toInt(),
-      parentId: (json[r'parentId'] as num?)?.toInt(),
+      spaceId: json[r'spaceId'],
+      parentId: json[r'parentId'],
       authorId: json[r'authorId'] as String?,
       createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
       version: json[r'version'] != null
@@ -4284,11 +6298,11 @@ class Page {
   }
 
   Page copyWith(
-      {int? id,
+      {dynamic id,
       String? status,
       String? title,
-      int? spaceId,
-      int? parentId,
+      dynamic spaceId,
+      dynamic parentId,
       String? authorId,
       DateTime? createdAt,
       Version? version,
@@ -4307,19 +6321,101 @@ class Page {
   }
 }
 
+class PageBodyWrite {
+  /// Type of content representation used for the value field.
+  final PageBodyWriteRepresentation? representation;
+
+  /// Body of the page, in the format found in the representation field.
+  final String? value;
+
+  PageBodyWrite({this.representation, this.value});
+
+  factory PageBodyWrite.fromJson(Map<String, Object?> json) {
+    return PageBodyWrite(
+      representation: json[r'representation'] != null
+          ? PageBodyWriteRepresentation.fromValue(
+              json[r'representation']! as String)
+          : null,
+      value: json[r'value'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var representation = this.representation;
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    if (representation != null) {
+      json[r'representation'] = representation.value;
+    }
+    if (value != null) {
+      json[r'value'] = value;
+    }
+    return json;
+  }
+
+  PageBodyWrite copyWith(
+      {PageBodyWriteRepresentation? representation, String? value}) {
+    return PageBodyWrite(
+      representation: representation ?? this.representation,
+      value: value ?? this.value,
+    );
+  }
+}
+
+class PageBodyWriteRepresentation {
+  static const storage = PageBodyWriteRepresentation._('storage');
+  static const atlasDocFormat =
+      PageBodyWriteRepresentation._('atlas_doc_format');
+  static const wiki = PageBodyWriteRepresentation._('wiki');
+
+  static const values = [
+    storage,
+    atlasDocFormat,
+    wiki,
+  ];
+  final String value;
+
+  const PageBodyWriteRepresentation._(this.value);
+
+  static PageBodyWriteRepresentation fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => PageBodyWriteRepresentation._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 class PageCommentModel {
   /// ID of the comment.
-  final int? id;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
   final String? status;
 
   /// Title of the comment.
   final String? title;
 
   /// ID of the page the comment is in.
-  final int? pageId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic pageId;
   final Version? version;
-
-  /// Contains representations of the comment's body in different formats.
   final Body? body;
 
   PageCommentModel(
@@ -4327,10 +6423,10 @@ class PageCommentModel {
 
   factory PageCommentModel.fromJson(Map<String, Object?> json) {
     return PageCommentModel(
-      id: (json[r'id'] as num?)?.toInt(),
+      id: json[r'id'],
       status: json[r'status'] as String?,
       title: json[r'title'] as String?,
-      pageId: (json[r'pageId'] as num?)?.toInt(),
+      pageId: json[r'pageId'],
       version: json[r'version'] != null
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
           : null,
@@ -4371,10 +6467,10 @@ class PageCommentModel {
   }
 
   PageCommentModel copyWith(
-      {int? id,
+      {dynamic id,
       String? status,
       String? title,
-      int? pageId,
+      dynamic pageId,
       Version? version,
       Body? body}) {
     return PageCommentModel(
@@ -4389,13 +6485,58 @@ class PageCommentModel {
 }
 
 class PageInlineCommentModel {
+  /// ID of the comment.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
+  final String? status;
+
+  /// Title of the comment.
+  final String? title;
+
+  /// ID of the page the comment is in.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic pageId;
+  final Version? version;
+  final Body? body;
   final String? resolutionStatus;
   final InlineCommentProperties? properties;
 
-  PageInlineCommentModel({this.resolutionStatus, this.properties});
+  PageInlineCommentModel(
+      {this.id,
+      this.status,
+      this.title,
+      this.pageId,
+      this.version,
+      this.body,
+      this.resolutionStatus,
+      this.properties});
 
   factory PageInlineCommentModel.fromJson(Map<String, Object?> json) {
     return PageInlineCommentModel(
+      id: json[r'id'],
+      status: json[r'status'] as String?,
+      title: json[r'title'] as String?,
+      pageId: json[r'pageId'],
+      version: json[r'version'] != null
+          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      body: json[r'body'] != null
+          ? Body.fromJson(json[r'body']! as Map<String, Object?>)
+          : null,
       resolutionStatus: json[r'resolutionStatus'] as String?,
       properties: json[r'properties'] != null
           ? InlineCommentProperties.fromJson(
@@ -4405,10 +6546,34 @@ class PageInlineCommentModel {
   }
 
   Map<String, Object?> toJson() {
+    var id = this.id;
+    var status = this.status;
+    var title = this.title;
+    var pageId = this.pageId;
+    var version = this.version;
+    var body = this.body;
     var resolutionStatus = this.resolutionStatus;
     var properties = this.properties;
 
     final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (pageId != null) {
+      json[r'pageId'] = pageId;
+    }
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
+    if (body != null) {
+      json[r'body'] = body.toJson();
+    }
     if (resolutionStatus != null) {
       json[r'resolutionStatus'] = resolutionStatus;
     }
@@ -4419,17 +6584,179 @@ class PageInlineCommentModel {
   }
 
   PageInlineCommentModel copyWith(
-      {String? resolutionStatus, InlineCommentProperties? properties}) {
+      {dynamic id,
+      String? status,
+      String? title,
+      dynamic pageId,
+      Version? version,
+      Body? body,
+      String? resolutionStatus,
+      InlineCommentProperties? properties}) {
     return PageInlineCommentModel(
+      id: id ?? this.id,
+      status: status ?? this.status,
+      title: title ?? this.title,
+      pageId: pageId ?? this.pageId,
+      version: version ?? this.version,
+      body: body ?? this.body,
       resolutionStatus: resolutionStatus ?? this.resolutionStatus,
       properties: properties ?? this.properties,
     );
   }
 }
 
+/// Body of the page. Only one body format should be specified as the property
+/// for this object, e.g. `storage`.
+class PageNestedBodyWrite {
+  final PageBodyWrite? storage;
+  final PageBodyWrite? atlasDocFormat;
+  final PageBodyWrite? wiki;
+
+  PageNestedBodyWrite({this.storage, this.atlasDocFormat, this.wiki});
+
+  factory PageNestedBodyWrite.fromJson(Map<String, Object?> json) {
+    return PageNestedBodyWrite(
+      storage: json[r'storage'] != null
+          ? PageBodyWrite.fromJson(json[r'storage']! as Map<String, Object?>)
+          : null,
+      atlasDocFormat: json[r'atlas_doc_format'] != null
+          ? PageBodyWrite.fromJson(
+              json[r'atlas_doc_format']! as Map<String, Object?>)
+          : null,
+      wiki: json[r'wiki'] != null
+          ? PageBodyWrite.fromJson(json[r'wiki']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var storage = this.storage;
+    var atlasDocFormat = this.atlasDocFormat;
+    var wiki = this.wiki;
+
+    final json = <String, Object?>{};
+    if (storage != null) {
+      json[r'storage'] = storage.toJson();
+    }
+    if (atlasDocFormat != null) {
+      json[r'atlas_doc_format'] = atlasDocFormat.toJson();
+    }
+    if (wiki != null) {
+      json[r'wiki'] = wiki.toJson();
+    }
+    return json;
+  }
+
+  PageNestedBodyWrite copyWith(
+      {PageBodyWrite? storage,
+      PageBodyWrite? atlasDocFormat,
+      PageBodyWrite? wiki}) {
+    return PageNestedBodyWrite(
+      storage: storage ?? this.storage,
+      atlasDocFormat: atlasDocFormat ?? this.atlasDocFormat,
+      wiki: wiki ?? this.wiki,
+    );
+  }
+}
+
+class PageVersion {
+  /// Date and time when the version was created. In format
+  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
+  final DateTime? createdAt;
+
+  /// Message associated with the current version.
+  final String? message;
+
+  /// The version number.
+  final int? number;
+
+  /// Describes if this version is a minor version. Email notifications and
+  /// activity stream updates are not created for minor versions.
+  final bool minorEdit;
+
+  /// The account ID of the user who created this version.
+  final String? authorId;
+  final VersionedEntity? page;
+
+  PageVersion(
+      {this.createdAt,
+      this.message,
+      this.number,
+      bool? minorEdit,
+      this.authorId,
+      this.page})
+      : minorEdit = minorEdit ?? false;
+
+  factory PageVersion.fromJson(Map<String, Object?> json) {
+    return PageVersion(
+      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
+      message: json[r'message'] as String?,
+      number: (json[r'number'] as num?)?.toInt(),
+      minorEdit: json[r'minorEdit'] as bool? ?? false,
+      authorId: json[r'authorId'] as String?,
+      page: json[r'page'] != null
+          ? VersionedEntity.fromJson(json[r'page']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var createdAt = this.createdAt;
+    var message = this.message;
+    var number = this.number;
+    var minorEdit = this.minorEdit;
+    var authorId = this.authorId;
+    var page = this.page;
+
+    final json = <String, Object?>{};
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt.toIso8601String();
+    }
+    if (message != null) {
+      json[r'message'] = message;
+    }
+    if (number != null) {
+      json[r'number'] = number;
+    }
+    json[r'minorEdit'] = minorEdit;
+    if (authorId != null) {
+      json[r'authorId'] = authorId;
+    }
+    if (page != null) {
+      json[r'page'] = page.toJson();
+    }
+    return json;
+  }
+
+  PageVersion copyWith(
+      {DateTime? createdAt,
+      String? message,
+      int? number,
+      bool? minorEdit,
+      String? authorId,
+      VersionedEntity? page}) {
+    return PageVersion(
+      createdAt: createdAt ?? this.createdAt,
+      message: message ?? this.message,
+      number: number ?? this.number,
+      minorEdit: minorEdit ?? this.minorEdit,
+      authorId: authorId ?? this.authorId,
+      page: page ?? this.page,
+    );
+  }
+}
+
 class Space {
   /// ID of the space.
-  final int? id;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
 
   /// Key of the space.
   final String? key;
@@ -4440,7 +6767,15 @@ class Space {
   final String? status;
 
   /// ID of the space's homepage.
-  final int? homepageId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic homepageId;
   final SpaceDescription? description;
 
   Space(
@@ -4454,12 +6789,12 @@ class Space {
 
   factory Space.fromJson(Map<String, Object?> json) {
     return Space(
-      id: (json[r'id'] as num?)?.toInt(),
+      id: json[r'id'],
       key: json[r'key'] as String?,
       name: json[r'name'] as String?,
       type: json[r'type'] as String?,
       status: json[r'status'] as String?,
-      homepageId: (json[r'homepageId'] as num?)?.toInt(),
+      homepageId: json[r'homepageId'],
       description: json[r'description'] != null
           ? SpaceDescription.fromJson(
               json[r'description']! as Map<String, Object?>)
@@ -4502,12 +6837,12 @@ class Space {
   }
 
   Space copyWith(
-      {int? id,
+      {dynamic id,
       String? key,
       String? name,
       String? type,
       String? status,
-      int? homepageId,
+      dynamic homepageId,
       SpaceDescription? description}) {
     return Space(
       id: id ?? this.id,
@@ -4563,7 +6898,15 @@ class SpaceDescription {
 
 class SpaceProperty {
   /// ID of the space property.
-  final int? id;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
 
   /// Key of the space property.
   final String? key;
@@ -4588,7 +6931,7 @@ class SpaceProperty {
 
   factory SpaceProperty.fromJson(Map<String, Object?> json) {
     return SpaceProperty(
-      id: (json[r'id'] as num?)?.toInt(),
+      id: json[r'id'],
       key: json[r'key'] as String?,
       value: json[r'value'],
       createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
@@ -4631,7 +6974,7 @@ class SpaceProperty {
   }
 
   SpaceProperty copyWith(
-      {int? id,
+      {dynamic id,
       String? key,
       dynamic value,
       DateTime? createdAt,
@@ -4842,20 +7185,60 @@ class SpacePropertyVersion {
 
 class Task {
   /// ID of the task.
-  final int? id;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
 
   /// Local ID of the task. This ID is local to the corresponding page or blog
   /// post.
-  final int? localId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic localId;
 
   /// ID of the space the task is in.
-  final int? spaceId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic spaceId;
 
   /// ID of the page the task is in.
-  final int? pageId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic pageId;
 
   /// ID of the blog post the task is in.
-  final int? blogPostId;
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic blogPostId;
 
   /// Status of the task.
   final TaskStatus? status;
@@ -4903,11 +7286,11 @@ class Task {
 
   factory Task.fromJson(Map<String, Object?> json) {
     return Task(
-      id: (json[r'id'] as num?)?.toInt(),
-      localId: (json[r'localId'] as num?)?.toInt(),
-      spaceId: (json[r'spaceId'] as num?)?.toInt(),
-      pageId: (json[r'pageId'] as num?)?.toInt(),
-      blogPostId: (json[r'blogPostId'] as num?)?.toInt(),
+      id: json[r'id'],
+      localId: json[r'localId'],
+      spaceId: json[r'spaceId'],
+      pageId: json[r'pageId'],
+      blogPostId: json[r'blogPostId'],
       status: json[r'status'] != null
           ? TaskStatus.fromValue(json[r'status']! as String)
           : null,
@@ -4987,11 +7370,11 @@ class Task {
   }
 
   Task copyWith(
-      {int? id,
-      int? localId,
-      int? spaceId,
-      int? pageId,
-      int? blogPostId,
+      {dynamic id,
+      dynamic localId,
+      dynamic spaceId,
+      dynamic pageId,
+      dynamic blogPostId,
       TaskStatus? status,
       Body? body,
       String? createdBy,
@@ -5044,9 +7427,7 @@ class TaskStatus {
 
 class UpdateFooterCommentModel {
   final UpdateFooterCommentModelVersion? version;
-
-  /// Body of the comment
-  final UpdateFooterCommentModelBody? body;
+  final dynamic body;
 
   UpdateFooterCommentModel({this.version, this.body});
 
@@ -5056,10 +7437,7 @@ class UpdateFooterCommentModel {
           ? UpdateFooterCommentModelVersion.fromJson(
               json[r'version']! as Map<String, Object?>)
           : null,
-      body: json[r'body'] != null
-          ? UpdateFooterCommentModelBody.fromJson(
-              json[r'body']! as Map<String, Object?>)
-          : null,
+      body: json[r'body'],
     );
   }
 
@@ -5072,88 +7450,18 @@ class UpdateFooterCommentModel {
       json[r'version'] = version.toJson();
     }
     if (body != null) {
-      json[r'body'] = body.toJson();
+      json[r'body'] = body;
     }
     return json;
   }
 
   UpdateFooterCommentModel copyWith(
-      {UpdateFooterCommentModelVersion? version,
-      UpdateFooterCommentModelBody? body}) {
+      {UpdateFooterCommentModelVersion? version, dynamic body}) {
     return UpdateFooterCommentModel(
       version: version ?? this.version,
       body: body ?? this.body,
     );
   }
-}
-
-/// Body of the comment
-class UpdateFooterCommentModelBody {
-  /// Body of the comment
-  final String? value;
-
-  /// Format of the body's value.
-  final UpdateFooterCommentModelBodyRepresentation? representation;
-
-  UpdateFooterCommentModelBody({this.value, this.representation});
-
-  factory UpdateFooterCommentModelBody.fromJson(Map<String, Object?> json) {
-    return UpdateFooterCommentModelBody(
-      value: json[r'value'] as String?,
-      representation: json[r'representation'] != null
-          ? UpdateFooterCommentModelBodyRepresentation.fromValue(
-              json[r'representation']! as String)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var value = this.value;
-    var representation = this.representation;
-
-    final json = <String, Object?>{};
-    if (value != null) {
-      json[r'value'] = value;
-    }
-    if (representation != null) {
-      json[r'representation'] = representation.value;
-    }
-    return json;
-  }
-
-  UpdateFooterCommentModelBody copyWith(
-      {String? value,
-      UpdateFooterCommentModelBodyRepresentation? representation}) {
-    return UpdateFooterCommentModelBody(
-      value: value ?? this.value,
-      representation: representation ?? this.representation,
-    );
-  }
-}
-
-class UpdateFooterCommentModelBodyRepresentation {
-  static const storage =
-      UpdateFooterCommentModelBodyRepresentation._('storage');
-  static const atlasDocFormat =
-      UpdateFooterCommentModelBodyRepresentation._('atlas_doc_format');
-
-  static const values = [
-    storage,
-    atlasDocFormat,
-  ];
-  final String value;
-
-  const UpdateFooterCommentModelBodyRepresentation._(this.value);
-
-  static UpdateFooterCommentModelBodyRepresentation fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => UpdateFooterCommentModelBodyRepresentation._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
 }
 
 class UpdateFooterCommentModelVersion {
@@ -5197,13 +7505,12 @@ class UpdateFooterCommentModelVersion {
 
 class UpdateInlineCommentModel {
   final UpdateInlineCommentModelVersion? version;
+  final dynamic body;
 
-  /// Body of the comment
-  final UpdateInlineCommentModelBody? body;
-
-  /// -| Resolved state of the comment. Set to true to resolve the comment, set
-  /// to false to reopen it. If matching the existing state (i.e. true ->
-  /// resolved or false -> open/reopened) , no change will occur. A dangling
+  /// Resolved state of the comment. Set to true to resolve the comment, set to
+  /// false to reopen it. If
+  /// matching the existing state (i.e. true -> resolved or false ->
+  /// open/reopened) , no change will occur. A dangling
   /// comment cannot be updated.
   final bool resolved;
 
@@ -5216,10 +7523,7 @@ class UpdateInlineCommentModel {
           ? UpdateInlineCommentModelVersion.fromJson(
               json[r'version']! as Map<String, Object?>)
           : null,
-      body: json[r'body'] != null
-          ? UpdateInlineCommentModelBody.fromJson(
-              json[r'body']! as Map<String, Object?>)
-          : null,
+      body: json[r'body'],
       resolved: json[r'resolved'] as bool? ?? false,
     );
   }
@@ -5234,7 +7538,7 @@ class UpdateInlineCommentModel {
       json[r'version'] = version.toJson();
     }
     if (body != null) {
-      json[r'body'] = body.toJson();
+      json[r'body'] = body;
     }
     json[r'resolved'] = resolved;
     return json;
@@ -5242,7 +7546,7 @@ class UpdateInlineCommentModel {
 
   UpdateInlineCommentModel copyWith(
       {UpdateInlineCommentModelVersion? version,
-      UpdateInlineCommentModelBody? body,
+      dynamic body,
       bool? resolved}) {
     return UpdateInlineCommentModel(
       version: version ?? this.version,
@@ -5250,75 +7554,6 @@ class UpdateInlineCommentModel {
       resolved: resolved ?? this.resolved,
     );
   }
-}
-
-/// Body of the comment
-class UpdateInlineCommentModelBody {
-  /// Body of the comment
-  final String? value;
-
-  /// Format of the body's value.
-  final UpdateInlineCommentModelBodyRepresentation? representation;
-
-  UpdateInlineCommentModelBody({this.value, this.representation});
-
-  factory UpdateInlineCommentModelBody.fromJson(Map<String, Object?> json) {
-    return UpdateInlineCommentModelBody(
-      value: json[r'value'] as String?,
-      representation: json[r'representation'] != null
-          ? UpdateInlineCommentModelBodyRepresentation.fromValue(
-              json[r'representation']! as String)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var value = this.value;
-    var representation = this.representation;
-
-    final json = <String, Object?>{};
-    if (value != null) {
-      json[r'value'] = value;
-    }
-    if (representation != null) {
-      json[r'representation'] = representation.value;
-    }
-    return json;
-  }
-
-  UpdateInlineCommentModelBody copyWith(
-      {String? value,
-      UpdateInlineCommentModelBodyRepresentation? representation}) {
-    return UpdateInlineCommentModelBody(
-      value: value ?? this.value,
-      representation: representation ?? this.representation,
-    );
-  }
-}
-
-class UpdateInlineCommentModelBodyRepresentation {
-  static const storage =
-      UpdateInlineCommentModelBodyRepresentation._('storage');
-  static const atlasDocFormat =
-      UpdateInlineCommentModelBodyRepresentation._('atlas_doc_format');
-
-  static const values = [
-    storage,
-    atlasDocFormat,
-  ];
-  final String value;
-
-  const UpdateInlineCommentModelBodyRepresentation._(this.value);
-
-  static UpdateInlineCommentModelBodyRepresentation fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => UpdateInlineCommentModelBodyRepresentation._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
 }
 
 class UpdateInlineCommentModelVersion {
@@ -5432,6 +7667,53 @@ class Version {
       number: number ?? this.number,
       minorEdit: minorEdit ?? this.minorEdit,
       authorId: authorId ?? this.authorId,
+    );
+  }
+}
+
+class VersionedEntity {
+  /// Title of the entity.
+  final String? title;
+
+  /// ID of the entity.
+  final String? id;
+  final Body? body;
+
+  VersionedEntity({this.title, this.id, this.body});
+
+  factory VersionedEntity.fromJson(Map<String, Object?> json) {
+    return VersionedEntity(
+      title: json[r'title'] as String?,
+      id: json[r'id'] as String?,
+      body: json[r'body'] != null
+          ? Body.fromJson(json[r'body']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var title = this.title;
+    var id = this.id;
+    var body = this.body;
+
+    final json = <String, Object?>{};
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (body != null) {
+      json[r'body'] = body.toJson();
+    }
+    return json;
+  }
+
+  VersionedEntity copyWith({String? title, String? id, Body? body}) {
+    return VersionedEntity(
+      title: title ?? this.title,
+      id: id ?? this.id,
+      body: body ?? this.body,
     );
   }
 }

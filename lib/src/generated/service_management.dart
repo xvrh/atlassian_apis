@@ -1419,14 +1419,14 @@ class ServicedeskApi {
   /// desk.
   Future<RequestTypeDTO> getRequestTypeById(
       {required String serviceDeskId,
-      required int requestTypeId,
+      required String requestTypeId,
       List<String>? expand}) async {
     return RequestTypeDTO.fromJson(await _client.send(
       'get',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}',
       pathParameters: {
         'serviceDeskId': serviceDeskId,
-        'requestTypeId': '$requestTypeId',
+        'requestTypeId': requestTypeId,
       },
       queryParameters: {
         if (expand != null) 'expand': expand.map((e) => e).join(','),
@@ -2453,7 +2453,8 @@ class ChangeDetails {
   }
 }
 
-/// A changelog.
+/// A log of changes made to issue fields. Changelogs related to workflow
+/// associations are currently being deprecated.
 class Changelog {
   /// The user who made the change.
   final UserDetails? author;

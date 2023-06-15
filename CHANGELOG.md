@@ -1,3 +1,6 @@
+## 0.13.0
+- Update to the latest API schemas
+
 ## 0.12.0
 - Initial support of Confluence v2 API
 - Support `ConfluenceApi.downloadAttachment` to return the Uri
