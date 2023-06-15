@@ -92,9 +92,8 @@ class LifecycleApi {
   ///
   /// Deactivate the specified user account. The permission to make use of this
   /// resource is exposed by the `lifecycle.enablement` privilege.
-  /// You can optionally set a message associated with the block that will be
-  /// shown to the user on attempted authentication. If none is supplied, a
-  /// default message will be used.
+  /// You can optionally set a message associated with the block. If none is
+  /// supplied, a default message will be used.
   Future<void> deactivateAUser(
       {required String accountId, required Map<String, dynamic> body}) async {
     await _client.send(
@@ -110,9 +109,6 @@ class LifecycleApi {
   ///
   /// Activates the specified user account. The permission to make use of this
   /// resource is exposed by the `lifecycle.enablement` privilege.
-  /// You can optionally set a message associated with the block that will be
-  /// shown to the user on attempted authentication. If none is supplied, a
-  /// default message will be used.
   Future<void> activateAUser(String accountId) async {
     await _client.send(
       'post',
@@ -130,21 +126,26 @@ class LifecycleApi {
   /// - Remove reference to the account from all lists under Directory in
   /// Atlassian Administration.
   ///
-  /// Deleting an account is permanent. If you think you’ll need the account
+  /// Specifications:
+  /// - Deleting an account is permanent. If you think you’ll need the account
   /// again, we recommend you
   /// [deactivate](https://support.atlassian.com/user-management/docs/deactivate-a-managed-account/)it
   /// instead.
-  ///
-  /// Before you permanently delete the account, you’ll have a 14-day grace
+  /// - Before you permanently delete the account, you’ll have a 14-day grace
   /// period, during which the account will appear as temporarily deactivated.
   ///
   /// Learn more about
-  /// [scheduled account deletion](https://support.atlassian.com/user-management/docs/delete-a-managed-account/).
+  /// [deleting a managed account](https://support.atlassian.com/user-management/docs/delete-a-managed-account/).
   ///
   /// Learn the fastest way to get the paramaters and delete account with a
   /// detailed
   /// [tutorial](https://developer.atlassian.com/cloud/admin/user-management/delete-managed-account/#delete-account).
   ///
+  ///
+  /// The permission to make use of this resource is exposed by the
+  /// `lifecycle.delete` privilege. Learn more about
+  /// [Get user management permissions API](https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-manage/#api-users-account-id-manage-get)
+  /// to manage the specified user.
   Future<void> deleteAccount(String accountId) async {
     await _client.send(
       'post',
@@ -159,8 +160,14 @@ class LifecycleApi {
   ///  - Cancel the scheduled deletion of the specified managed account.
   ///  - Restore and activate the user’s account.
   ///
-  ///  You can cancel the deletion within the 14-day grace period of scheduling
-  /// delete managed account. After that the account is permanently deleted.
+  ///  Specifications:
+  ///  - You can cancel the deletion within the 14-day grace period of deleting
+  /// a managed account. After that the account is permanently deleted.
+  ///
+  ///  The permission to make use of this resource is exposed by the
+  /// `lifecycle.delete` privilege. Learn more about
+  /// [Get user management permissions API](https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-manage/#api-users-account-id-manage-get)
+  /// to manage the specified user.
   Future<void> cancelDeleteAccount(String accountId) async {
     await _client.send(
       'post',
@@ -410,6 +417,19 @@ class ExtendedProfile {
       department: department ?? this.department,
       location: location ?? this.location,
     );
+  }
+}
+
+class LifecycleErrors {
+  LifecycleErrors();
+
+  factory LifecycleErrors.fromJson(Map<String, Object?> json) {
+    return LifecycleErrors();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
   }
 }
 

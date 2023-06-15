@@ -6915,8 +6915,7 @@
             "description": "The ID of the customer request type to be returned.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           },
           {
@@ -7008,7 +7007,7 @@
             ]
           }
         ],
-        "x-atlassian-connect-scope": "READ"
+        "x-atlassian-connect-scope": "INACCESSIBLE"
       },
       "delete": {
         "tags": [
@@ -8225,7 +8224,7 @@
           }
         },
         "additionalProperties": false,
-        "description": "A changelog."
+        "description": "A log of changes made to issue fields. Changelogs related to workflow associations are currently being deprecated."
       },
       "CommentCreateDTO": {
         "type": "object",

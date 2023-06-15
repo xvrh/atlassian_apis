@@ -255,7 +255,7 @@ class JiraPlatformApi {
   late final issueSecurityLevel = IssueSecurityLevelApi(_client);
 
   /// This resource represents issue security schemes. Use it to get an issue
-  /// security scheme or list of issues security schemes.
+  /// security scheme or a list of issue security schemes.
   ///
   /// Issue security schemes control which users or groups of users can view an
   /// issue. When an issue security scheme is associated with a project, its
@@ -350,6 +350,11 @@ class JiraPlatformApi {
   /// user doesn't have permission to view the entity whose details are
   /// readable.
   late final jql = JQLApi(_client);
+
+  /// This resource represents JQL function's precomputations. Precomputation is
+  /// a mapping between custom function call and JQL fragment returned by this
+  /// function. Use it to get and update precomputations.
+  late final jqlFunctionsApps = JQLFunctionsAppsApi(_client);
 
   /// This resource is a collection of operations for
   /// [Jira expressions](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/).
@@ -603,7 +608,7 @@ class JiraPlatformApi {
       WorkflowTransitionPropertiesApi(_client);
 
   /// This resource represents workflow transition rules. Workflow transition
-  /// rules define a Connect app routine, such as a
+  /// rules define a Connect or a Forge app routine, such as a
   /// [workflow post functions](https://developer.atlassian.com/cloud/jira/platform/modules/workflow-post-function/)
   /// that is executed in association with the workflow. Use it to read and
   /// modify configuration of workflow transition rules.
@@ -791,6 +796,47 @@ class AppPropertiesApi {
       'rest/atlassian-connect/1/addons/{addonKey}/properties/{propertyKey}',
       pathParameters: {
         'addonKey': addonKey,
+        'propertyKey': propertyKey,
+      },
+    );
+  }
+
+  /// Sets the value of a Forge app's property.
+  /// These values can be retrieved in
+  /// [Jira expressions](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/)
+  /// through the `app`
+  /// [context variable](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/#context-variables).
+  ///
+  /// For other use cases, use the
+  /// [Storage API](https://developer.atlassian.com/platform/forge/runtime-reference/storage-api/).
+  ///
+  /// The value of the request body must be a
+  /// [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The
+  /// maximum length is 32768 characters.
+  ///
+  /// **[Permissions](#permissions) required:** Only Forge apps can make this
+  /// request.
+  Future<OperationMessage> putAppProperty(
+      {required String propertyKey, required dynamic body}) async {
+    return OperationMessage.fromJson(await _client.send(
+      'put',
+      'rest/forge/1/app/properties/{propertyKey}',
+      pathParameters: {
+        'propertyKey': propertyKey,
+      },
+      body: body,
+    ));
+  }
+
+  /// Deletes a Forge app's property.
+  ///
+  /// **[Permissions](#permissions) required:** Only Forge apps can make this
+  /// request.
+  Future<void> deleteAppProperty(String propertyKey) async {
+    await _client.send(
+      'delete',
+      'rest/forge/1/app/properties/{propertyKey}',
+      pathParameters: {
         'propertyKey': propertyKey,
       },
     );
@@ -1674,34 +1720,6 @@ class FiltersApi {
   final ApiClient _client;
 
   FiltersApi(this._client);
-
-  /// Returns all filters. Deprecated, use
-  /// [ Search for filters](#api-rest-api-3-filter-search-get) that supports
-  /// search and pagination.
-  ///
-  /// This operation can be accessed anonymously.
-  ///
-  /// **[Permissions](#permissions) required:** None, however, only the
-  /// following filters are returned:
-  ///
-  ///  *  filters owned by the user.
-  ///  *  filters shared with a group that the user is a member of.
-  ///  *  filters shared with a private project that the user has *Browse
-  /// projects* [project permission](https://confluence.atlassian.com/x/yodKLg)
-  /// for.
-  ///  *  filters shared with a public project.
-  ///  *  filters shared with the public.
-  Future<List<Filter>> getFilters({String? expand}) async {
-    return (await _client.send(
-      'get',
-      'rest/api/3/filter',
-      queryParameters: {
-        if (expand != null) 'expand': expand,
-      },
-    ) as List<Object?>)
-        .map((i) => Filter.fromJson(i as Map<String, Object?>? ?? const {}))
-        .toList();
-  }
 
   /// Creates a filter. The filter is shared according to the
   /// [default share scope](#api-rest-api-3-filter-post). The filter is not
@@ -5937,6 +5955,170 @@ class IssueSecuritySchemesApi {
     ));
   }
 
+  /// Creates a security scheme with security scheme levels and levels' members.
+  /// You can create up to 100 security scheme levels and security scheme
+  /// levels' members per request.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<SecuritySchemeId> createIssueSecurityScheme(
+      {required CreateIssueSecuritySchemeDetails body}) async {
+    return SecuritySchemeId.fromJson(await _client.send(
+      'post',
+      'rest/api/3/issuesecurityschemes',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Returns a [paginated](#pagination) list of issue security levels.
+  ///
+  /// Only issue security levels in the context of classic projects are
+  /// returned.
+  ///
+  /// Filtering using IDs is inclusive: if you specify both security scheme IDs
+  /// and level IDs, the result will include both specified issue security
+  /// levels and all issue security levels from the specified schemes.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<PageBeanSecurityLevel> getSecurityLevels(
+      {String? startAt,
+      String? maxResults,
+      List<String>? id,
+      List<String>? schemeId,
+      bool? onlyDefault}) async {
+    return PageBeanSecurityLevel.fromJson(await _client.send(
+      'get',
+      'rest/api/3/issuesecurityschemes/level',
+      queryParameters: {
+        if (startAt != null) 'startAt': startAt,
+        if (maxResults != null) 'maxResults': maxResults,
+        if (id != null) 'id': id.map((e) => e).join(','),
+        if (schemeId != null) 'schemeId': schemeId.map((e) => e).join(','),
+        if (onlyDefault != null) 'onlyDefault': '$onlyDefault',
+      },
+    ));
+  }
+
+  /// Sets default issue security levels for schemes.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> setDefaultLevels(
+      {required SetDefaultLevelsRequest body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/issuesecurityschemes/level/default',
+      body: body.toJson(),
+    );
+  }
+
+  /// Returns a [paginated](#pagination) list of issue security level members.
+  ///
+  /// Only issue security level members in the context of classic projects are
+  /// returned.
+  ///
+  /// Filtering using parameters is inclusive: if you specify both security
+  /// scheme IDs and level IDs, the result will include all issue security level
+  /// members from the specified schemes and levels.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<PageBeanSecurityLevelMember> getSecurityLevelMembers(
+      {String? startAt,
+      String? maxResults,
+      List<String>? id,
+      List<String>? schemeId,
+      List<String>? levelId,
+      String? expand}) async {
+    return PageBeanSecurityLevelMember.fromJson(await _client.send(
+      'get',
+      'rest/api/3/issuesecurityschemes/level/member',
+      queryParameters: {
+        if (startAt != null) 'startAt': startAt,
+        if (maxResults != null) 'maxResults': maxResults,
+        if (id != null) 'id': id.map((e) => e).join(','),
+        if (schemeId != null) 'schemeId': schemeId.map((e) => e).join(','),
+        if (levelId != null) 'levelId': levelId.map((e) => e).join(','),
+        if (expand != null) 'expand': expand,
+      },
+    ));
+  }
+
+  /// Returns a [paginated](#pagination) mapping of projects that are using
+  /// security schemes. You can provide either one or multiple security scheme
+  /// IDs or project IDs to filter by. If you don't provide any, this will
+  /// return a list of all mappings. Only issue security schemes in the context
+  /// of classic projects are supported. **[Permissions](#permissions)
+  /// required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<PageBeanIssueSecuritySchemeToProjectMapping>
+      searchProjectsUsingSecuritySchemes(
+          {String? startAt,
+          String? maxResults,
+          List<String>? issueSecuritySchemeId,
+          List<String>? projectId}) async {
+    return PageBeanIssueSecuritySchemeToProjectMapping.fromJson(
+        await _client.send(
+      'get',
+      'rest/api/3/issuesecurityschemes/project',
+      queryParameters: {
+        if (startAt != null) 'startAt': startAt,
+        if (maxResults != null) 'maxResults': maxResults,
+        if (issueSecuritySchemeId != null)
+          'issueSecuritySchemeId':
+              issueSecuritySchemeId.map((e) => e).join(','),
+        if (projectId != null) 'projectId': projectId.map((e) => e).join(','),
+      },
+    ));
+  }
+
+  /// Associates an issue security scheme with a project and remaps security
+  /// levels of issues to the new levels, if provided.
+  ///
+  /// This operation is [asynchronous](#async). Follow the `location` link in
+  /// the response to determine the status of the task and use
+  /// [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<TaskProgressBeanObject> associateSchemesToProjects(
+      {required AssociateSecuritySchemeWithProjectDetails body}) async {
+    return TaskProgressBeanObject.fromJson(await _client.send(
+      'put',
+      'rest/api/3/issuesecurityschemes/project',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Returns a [paginated](#pagination) list of issue security schemes.
+  /// If you specify the project ID parameter, the result will contain issue
+  /// security schemes and related project IDs you filter by. Use {@link
+  /// IssueSecuritySchemeResource#searchProjectsUsingSecuritySchemes(String,
+  /// String, Set, Set)} to obtain all projects related to scheme.
+  ///
+  /// Only issue security schemes in the context of classic projects are
+  /// returned.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<PageBeanSecuritySchemeWithProjects> searchSecuritySchemes(
+      {String? startAt,
+      String? maxResults,
+      List<String>? id,
+      List<String>? projectId}) async {
+    return PageBeanSecuritySchemeWithProjects.fromJson(await _client.send(
+      'get',
+      'rest/api/3/issuesecurityschemes/search',
+      queryParameters: {
+        if (startAt != null) 'startAt': startAt,
+        if (maxResults != null) 'maxResults': maxResults,
+        if (id != null) 'id': id.map((e) => e).join(','),
+        if (projectId != null) 'projectId': projectId.map((e) => e).join(','),
+      },
+    ));
+  }
+
   /// Returns an issue security scheme along with its security levels.
   ///
   /// **[Permissions](#permissions) required:**
@@ -5954,6 +6136,138 @@ class IssueSecuritySchemesApi {
         'id': '$id',
       },
     ));
+  }
+
+  /// Updates the issue security scheme.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> updateIssueSecurityScheme(
+      {required String id,
+      required UpdateIssueSecuritySchemeRequestBean body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/issuesecurityschemes/{id}',
+      pathParameters: {
+        'id': id,
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Deletes an issue security scheme.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> deleteSecurityScheme(String schemeId) async {
+    return await _client.send(
+      'delete',
+      'rest/api/3/issuesecurityschemes/{schemeId}',
+      pathParameters: {
+        'schemeId': schemeId,
+      },
+    );
+  }
+
+  /// Adds levels and levels' members to the issue security scheme. You can add
+  /// up to 100 levels per request.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> addSecurityLevel(
+      {required String schemeId,
+      required AddSecuritySchemeLevelsRequestBean body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/issuesecurityschemes/{schemeId}/level',
+      pathParameters: {
+        'schemeId': schemeId,
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Updates the issue security level.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> updateSecurityLevel(
+      {required String schemeId,
+      required String levelId,
+      required UpdateIssueSecurityLevelDetails body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/issuesecurityschemes/{schemeId}/level/{levelId}',
+      pathParameters: {
+        'schemeId': schemeId,
+        'levelId': levelId,
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Deletes an issue security level.
+  ///
+  /// This operation is [asynchronous](#async). Follow the `location` link in
+  /// the response to determine the status of the task and use
+  /// [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<TaskProgressBeanObject> removeLevel(
+      {required String schemeId,
+      required String levelId,
+      String? replaceWith}) async {
+    return TaskProgressBeanObject.fromJson(await _client.send(
+      'delete',
+      'rest/api/3/issuesecurityschemes/{schemeId}/level/{levelId}',
+      pathParameters: {
+        'schemeId': schemeId,
+        'levelId': levelId,
+      },
+      queryParameters: {
+        if (replaceWith != null) 'replaceWith': replaceWith,
+      },
+    ));
+  }
+
+  /// Adds members to the issue security level. You can add up to 100 members
+  /// per request.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> addSecurityLevelMembers(
+      {required String schemeId,
+      required String levelId,
+      required SecuritySchemeMembersRequest body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/issuesecurityschemes/{schemeId}/level/{levelId}/member',
+      pathParameters: {
+        'schemeId': schemeId,
+        'levelId': levelId,
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Removes an issue security level member from an issue security scheme.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> removeMemberFromSecurityLevel(
+      {required String schemeId,
+      required String levelId,
+      required String memberId}) async {
+    return await _client.send(
+      'delete',
+      'rest/api/3/issuesecurityschemes/{schemeId}/level/{levelId}/member/{memberId}',
+      pathParameters: {
+        'schemeId': schemeId,
+        'levelId': levelId,
+        'memberId': memberId,
+      },
+    );
   }
 }
 
@@ -8001,6 +8315,55 @@ class JQLApi {
       'rest/api/3/jql/sanitize',
       body: body.toJson(),
     ));
+  }
+}
+
+/// Jira Cloud platform REST API documentation
+
+class JQLFunctionsAppsApi {
+  final ApiClient _client;
+
+  JQLFunctionsAppsApi(this._client);
+
+  /// Returns the list of a function's precomputations along with information
+  /// about when they were created, updated, and last used. Each precomputation
+  /// has a `value` - the JQL fragment to replace the custom function clause
+  /// with.
+  ///
+  /// **[Permissions](#permissions) required:** This API is only accessible to
+  /// apps and apps can only inspect their own functions.
+  Future<PageBeanJqlFunctionPrecomputationBean> getPrecomputations(
+      {List<String>? functionKey,
+      int? startAt,
+      int? maxResults,
+      String? orderBy,
+      String? filter}) async {
+    return PageBeanJqlFunctionPrecomputationBean.fromJson(await _client.send(
+      'get',
+      'rest/api/3/jql/function/computation',
+      queryParameters: {
+        if (functionKey != null)
+          'functionKey': functionKey.map((e) => e).join(','),
+        if (startAt != null) 'startAt': '$startAt',
+        if (maxResults != null) 'maxResults': '$maxResults',
+        if (orderBy != null) 'orderBy': orderBy,
+        if (filter != null) 'filter': filter,
+      },
+    ));
+  }
+
+  /// Update the precomputation value of a function created by a Forge/Connect
+  /// app.
+  ///
+  /// **[Permissions](#permissions) required:** An API for apps to update their
+  /// own precomputations.
+  Future<dynamic> updatePrecomputations(
+      {required JqlFunctionPrecomputationUpdateRequestBean body}) async {
+    return await _client.send(
+      'post',
+      'rest/api/3/jql/function/computation',
+      body: body.toJson(),
+    );
   }
 }
 
@@ -10416,13 +10779,14 @@ class ProjectsApi {
   /// `com.atlassian.servicedesk:simplified-it-service-management`,
   /// `com.atlassian.servicedesk:simplified-general-service-desk-it`,
   /// `com.atlassian.servicedesk:simplified-general-service-desk-business`,
-  /// `com.atlassian.servicedesk:simplified-internal-service-desk`,
   /// `com.atlassian.servicedesk:simplified-external-service-desk`,
   /// `com.atlassian.servicedesk:simplified-hr-service-desk`,
   /// `com.atlassian.servicedesk:simplified-facilities-service-desk`,
   /// `com.atlassian.servicedesk:simplified-legal-service-desk`,
   /// `com.atlassian.servicedesk:simplified-analytics-service-desk`,
   /// `com.atlassian.servicedesk:simplified-marketing-service-desk`,
+  /// `com.atlassian.servicedesk:simplified-design-service-desk`,
+  /// `com.atlassian.servicedesk:simplified-sales-service-desk`,
   /// `com.atlassian.servicedesk:simplified-finance-service-desk` |
   /// | `software` | `com.pyxis.greenhopper.jira:gh-simplified-agility-kanban`,
   /// `com.pyxis.greenhopper.jira:gh-simplified-agility-scrum`,
@@ -10649,8 +11013,16 @@ class ProjectsApi {
   /// Restores a project that has been archived or placed in the Jira recycle
   /// bin.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg)for Company
+  /// managed projects.
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or
+  /// *Administer projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project for Team managed projects.
   Future<Project> restore(String projectIdOrKey) async {
     return Project.fromJson(await _client.send(
       'post',
@@ -10682,28 +11054,6 @@ class ProjectsApi {
         .map((i) => IssueTypeWithStatus.fromJson(
             i as Map<String, Object?>? ?? const {}))
         .toList();
-  }
-
-  /// Deprecated, this feature is no longer supported and no alternatives are
-  /// available, see
-  /// [Convert project to a different template or type](https://confluence.atlassian.com/x/yEKeOQ).
-  /// Updates a [project type](https://confluence.atlassian.com/x/GwiiLQ). The
-  /// project type can be updated for classic projects only, project type cannot
-  /// be updated for next-gen projects.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<Project> updateProjectType(
-      {required String projectIdOrKey,
-      required String newProjectTypeKey}) async {
-    return Project.fromJson(await _client.send(
-      'put',
-      'rest/api/3/project/{projectIdOrKey}/type/{newProjectTypeKey}',
-      pathParameters: {
-        'projectIdOrKey': projectIdOrKey,
-        'newProjectTypeKey': newProjectTypeKey,
-      },
-    ));
   }
 
   /// Get the issue type hierarchy for a next-gen project.
@@ -13316,14 +13666,20 @@ class WorkflowTransitionRulesApi {
   /// [workflow post functions](https://developer.atlassian.com/cloud/jira/platform/modules/workflow-post-function/).
   ///  *  matching one or more transition rule keys.
   ///
-  /// Only workflows containing transition rules created by the calling Connect
+  /// Only workflows containing transition rules created by the calling
+  /// [Connect](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps)
+  /// or
+  /// [Forge](https://developer.atlassian.com/cloud/jira/platform/index/#forge-apps)
   /// app are returned.
   ///
   /// Due to server-side optimizations, workflows with an empty list of rules
   /// may be returned; these workflows can be ignored.
   ///
-  /// **[Permissions](#permissions) required:** Only Connect apps can use this
-  /// operation.
+  /// **[Permissions](#permissions) required:** Only
+  /// [Connect](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps)
+  /// or
+  /// [Forge](https://developer.atlassian.com/cloud/jira/platform/index/#forge-apps)
+  /// apps can use this operation.
   Future<PageBeanWorkflowTransitionRules>
       getWorkflowTransitionRuleConfigurations(
           {int? startAt,
@@ -14538,6 +14894,40 @@ class AddNotificationsDetails {
   }
 }
 
+class AddSecuritySchemeLevelsRequestBean {
+  /// The list of scheme levels which should be added to the security scheme.
+  final List<SecuritySchemeLevelBean> levels;
+
+  AddSecuritySchemeLevelsRequestBean({List<SecuritySchemeLevelBean>? levels})
+      : levels = levels ?? [];
+
+  factory AddSecuritySchemeLevelsRequestBean.fromJson(
+      Map<String, Object?> json) {
+    return AddSecuritySchemeLevelsRequestBean(
+      levels: (json[r'levels'] as List<Object?>?)
+              ?.map((i) => SecuritySchemeLevelBean.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var levels = this.levels;
+
+    final json = <String, Object?>{};
+    json[r'levels'] = levels.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  AddSecuritySchemeLevelsRequestBean copyWith(
+      {List<SecuritySchemeLevelBean>? levels}) {
+    return AddSecuritySchemeLevelsRequestBean(
+      levels: levels ?? this.levels,
+    );
+  }
+}
+
 /// Announcement banner configuration.
 class AnnouncementBannerConfiguration {
   /// Hash of the banner data. The client detects updates by comparing hash IDs.
@@ -14695,6 +15085,67 @@ class AnnouncementBannerConfigurationUpdate {
       isEnabled: isEnabled ?? this.isEnabled,
       message: message ?? this.message,
       visibility: visibility ?? this.visibility,
+    );
+  }
+}
+
+/// A workflow transition rule.
+class AppWorkflowTransitionRule {
+  final RuleConfiguration configuration;
+
+  /// The ID of the transition rule.
+  final String id;
+
+  /// The key of the rule, as defined in the Connect or the Forge app
+  /// descriptor.
+  final String key;
+  final WorkflowTransition? transition;
+
+  AppWorkflowTransitionRule(
+      {required this.configuration,
+      required this.id,
+      required this.key,
+      this.transition});
+
+  factory AppWorkflowTransitionRule.fromJson(Map<String, Object?> json) {
+    return AppWorkflowTransitionRule(
+      configuration: RuleConfiguration.fromJson(
+          json[r'configuration'] as Map<String, Object?>? ?? const {}),
+      id: json[r'id'] as String? ?? '',
+      key: json[r'key'] as String? ?? '',
+      transition: json[r'transition'] != null
+          ? WorkflowTransition.fromJson(
+              json[r'transition']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var configuration = this.configuration;
+    var id = this.id;
+    var key = this.key;
+    var transition = this.transition;
+
+    final json = <String, Object?>{};
+    json[r'configuration'] = configuration.toJson();
+    json[r'id'] = id;
+    json[r'key'] = key;
+    if (transition != null) {
+      json[r'transition'] = transition.toJson();
+    }
+    return json;
+  }
+
+  AppWorkflowTransitionRule copyWith(
+      {RuleConfiguration? configuration,
+      String? id,
+      String? key,
+      WorkflowTransition? transition}) {
+    return AppWorkflowTransitionRule(
+      configuration: configuration ?? this.configuration,
+      id: id ?? this.id,
+      key: key ?? this.key,
+      transition: transition ?? this.transition,
     );
   }
 }
@@ -15079,6 +15530,65 @@ class AssociateFieldConfigurationsWithIssueTypesRequest {
       {List<FieldConfigurationToIssueTypeMapping>? mappings}) {
     return AssociateFieldConfigurationsWithIssueTypesRequest(
       mappings: mappings ?? this.mappings,
+    );
+  }
+}
+
+/// Issue security scheme, project, and remapping details.
+class AssociateSecuritySchemeWithProjectDetails {
+  /// The list of scheme levels which should be remapped to new levels of the
+  /// issue security scheme.
+  final List<OldToNewSecurityLevelMappingsBean> oldToNewSecurityLevelMappings;
+
+  /// The ID of the project.
+  final String projectId;
+
+  /// The ID of the issue security scheme. Providing null will clear the
+  /// association with the issue security scheme.
+  final String schemeId;
+
+  AssociateSecuritySchemeWithProjectDetails(
+      {List<OldToNewSecurityLevelMappingsBean>? oldToNewSecurityLevelMappings,
+      required this.projectId,
+      required this.schemeId})
+      : oldToNewSecurityLevelMappings = oldToNewSecurityLevelMappings ?? [];
+
+  factory AssociateSecuritySchemeWithProjectDetails.fromJson(
+      Map<String, Object?> json) {
+    return AssociateSecuritySchemeWithProjectDetails(
+      oldToNewSecurityLevelMappings:
+          (json[r'oldToNewSecurityLevelMappings'] as List<Object?>?)
+                  ?.map((i) => OldToNewSecurityLevelMappingsBean.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+                  .toList() ??
+              [],
+      projectId: json[r'projectId'] as String? ?? '',
+      schemeId: json[r'schemeId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var oldToNewSecurityLevelMappings = this.oldToNewSecurityLevelMappings;
+    var projectId = this.projectId;
+    var schemeId = this.schemeId;
+
+    final json = <String, Object?>{};
+    json[r'oldToNewSecurityLevelMappings'] =
+        oldToNewSecurityLevelMappings.map((i) => i.toJson()).toList();
+    json[r'projectId'] = projectId;
+    json[r'schemeId'] = schemeId;
+    return json;
+  }
+
+  AssociateSecuritySchemeWithProjectDetails copyWith(
+      {List<OldToNewSecurityLevelMappingsBean>? oldToNewSecurityLevelMappings,
+      String? projectId,
+      String? schemeId}) {
+    return AssociateSecuritySchemeWithProjectDetails(
+      oldToNewSecurityLevelMappings:
+          oldToNewSecurityLevelMappings ?? this.oldToNewSecurityLevelMappings,
+      projectId: projectId ?? this.projectId,
+      schemeId: schemeId ?? this.schemeId,
     );
   }
 }
@@ -17077,7 +17587,8 @@ class ChangedWorklogs {
   }
 }
 
-/// A changelog.
+/// A log of changes made to issue fields. Changelogs related to workflow
+/// associations are currently being deprecated.
 class Changelog {
   /// The user who made the change.
   final UserDetails? author;
@@ -18578,6 +19089,61 @@ class CreateCustomFieldContext {
   }
 }
 
+/// Issue security scheme and it's details
+class CreateIssueSecuritySchemeDetails {
+  /// The description of the issue security scheme.
+  final String? description;
+
+  /// The list of scheme levels which should be added to the security scheme.
+  final List<SecuritySchemeLevelBean> levels;
+
+  /// The name of the issue security scheme. Must be unique (case-insensitive).
+  final String name;
+
+  CreateIssueSecuritySchemeDetails(
+      {this.description,
+      List<SecuritySchemeLevelBean>? levels,
+      required this.name})
+      : levels = levels ?? [];
+
+  factory CreateIssueSecuritySchemeDetails.fromJson(Map<String, Object?> json) {
+    return CreateIssueSecuritySchemeDetails(
+      description: json[r'description'] as String?,
+      levels: (json[r'levels'] as List<Object?>?)
+              ?.map((i) => SecuritySchemeLevelBean.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      name: json[r'name'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var levels = this.levels;
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    json[r'levels'] = levels.map((i) => i.toJson()).toList();
+    json[r'name'] = name;
+    return json;
+  }
+
+  CreateIssueSecuritySchemeDetails copyWith(
+      {String? description,
+      List<SecuritySchemeLevelBean>? levels,
+      String? name}) {
+    return CreateIssueSecuritySchemeDetails(
+      description: description ?? this.description,
+      levels: levels ?? this.levels,
+      name: name ?? this.name,
+    );
+  }
+}
+
 /// Details of an notification scheme.
 class CreateNotificationSchemeDetails {
   /// The description of the notification scheme.
@@ -19051,6 +19617,9 @@ class CreateProjectDetailsProjectTemplateKey {
   static const comPyxisGreenhopperJiraGhSimplifiedScrumClassic =
       CreateProjectDetailsProjectTemplateKey._(
           'com.pyxis.greenhopper.jira:gh-simplified-scrum-classic');
+  static const comPyxisGreenhopperJiraGhCrossTeamTemplate =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.pyxis.greenhopper.jira:gh-cross-team-template');
   static const comAtlassianServicedeskSimplifiedItServiceManagement =
       CreateProjectDetailsProjectTemplateKey._(
           'com.atlassian.servicedesk:simplified-it-service-management');
@@ -19087,12 +19656,21 @@ class CreateProjectDetailsProjectTemplateKey {
   static const comAtlassianServicedeskSimplifiedAnalyticsServiceDesk =
       CreateProjectDetailsProjectTemplateKey._(
           'com.atlassian.servicedesk:simplified-analytics-service-desk');
+  static const comAtlassianServicedeskSimplifiedDesignServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:simplified-design-service-desk');
+  static const comAtlassianServicedeskSimplifiedSalesServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:simplified-sales-service-desk');
   static const comAtlassianServicedeskSimplifiedHalpServiceDesk =
       CreateProjectDetailsProjectTemplateKey._(
           'com.atlassian.servicedesk:simplified-halp-service-desk');
-  static const comAtlassianServicedeskSimplifiedCustomProjectServiceDesk =
+  static const comAtlassianServicedeskSimplifiedBlankProjectIt =
       CreateProjectDetailsProjectTemplateKey._(
-          'com.atlassian.servicedesk:simplified-custom-project-service-desk');
+          'com.atlassian.servicedesk:simplified-blank-project-it');
+  static const comAtlassianServicedeskSimplifiedBlankProjectBusiness =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:simplified-blank-project-business');
   static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedContentManagement =
       CreateProjectDetailsProjectTemplateKey._(
           'com.atlassian.jira-core-project-templates:jira-core-simplified-content-management');
@@ -19124,6 +19702,7 @@ class CreateProjectDetailsProjectTemplateKey {
     comPyxisGreenhopperJiraGhSimplifiedBasic,
     comPyxisGreenhopperJiraGhSimplifiedKanbanClassic,
     comPyxisGreenhopperJiraGhSimplifiedScrumClassic,
+    comPyxisGreenhopperJiraGhCrossTeamTemplate,
     comAtlassianServicedeskSimplifiedItServiceManagement,
     comAtlassianServicedeskSimplifiedGeneralServiceDesk,
     comAtlassianServicedeskSimplifiedGeneralServiceDeskIt,
@@ -19136,8 +19715,11 @@ class CreateProjectDetailsProjectTemplateKey {
     comAtlassianServicedeskSimplifiedMarketingServiceDesk,
     comAtlassianServicedeskSimplifiedFinanceServiceDesk,
     comAtlassianServicedeskSimplifiedAnalyticsServiceDesk,
+    comAtlassianServicedeskSimplifiedDesignServiceDesk,
+    comAtlassianServicedeskSimplifiedSalesServiceDesk,
     comAtlassianServicedeskSimplifiedHalpServiceDesk,
-    comAtlassianServicedeskSimplifiedCustomProjectServiceDesk,
+    comAtlassianServicedeskSimplifiedBlankProjectIt,
+    comAtlassianServicedeskSimplifiedBlankProjectBusiness,
     comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedContentManagement,
     comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedDocumentApproval,
     comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedLeadTracking,
@@ -22661,6 +23243,45 @@ class DashboardGadgetUpdateRequest {
       color: color ?? this.color,
       position: position ?? this.position,
       title: title ?? this.title,
+    );
+  }
+}
+
+/// Details of scheme and new default level.
+class DefaultLevelValue {
+  /// The ID of the issue security level to set as default for the specified
+  /// scheme. Providing null will reset the default level.
+  final String defaultLevelId;
+
+  /// The ID of the issue security scheme to set default level for.
+  final String issueSecuritySchemeId;
+
+  DefaultLevelValue(
+      {required this.defaultLevelId, required this.issueSecuritySchemeId});
+
+  factory DefaultLevelValue.fromJson(Map<String, Object?> json) {
+    return DefaultLevelValue(
+      defaultLevelId: json[r'defaultLevelId'] as String? ?? '',
+      issueSecuritySchemeId: json[r'issueSecuritySchemeId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var defaultLevelId = this.defaultLevelId;
+    var issueSecuritySchemeId = this.issueSecuritySchemeId;
+
+    final json = <String, Object?>{};
+    json[r'defaultLevelId'] = defaultLevelId;
+    json[r'issueSecuritySchemeId'] = issueSecuritySchemeId;
+    return json;
+  }
+
+  DefaultLevelValue copyWith(
+      {String? defaultLevelId, String? issueSecuritySchemeId}) {
+    return DefaultLevelValue(
+      defaultLevelId: defaultLevelId ?? this.defaultLevelId,
+      issueSecuritySchemeId:
+          issueSecuritySchemeId ?? this.issueSecuritySchemeId,
     );
   }
 }
@@ -28037,6 +28658,46 @@ class IssueSecurityLevelMember {
   }
 }
 
+/// Details about an project using security scheme mapping.
+class IssueSecuritySchemeToProjectMapping {
+  final String? issueSecuritySchemeId;
+  final String? projectId;
+
+  IssueSecuritySchemeToProjectMapping(
+      {this.issueSecuritySchemeId, this.projectId});
+
+  factory IssueSecuritySchemeToProjectMapping.fromJson(
+      Map<String, Object?> json) {
+    return IssueSecuritySchemeToProjectMapping(
+      issueSecuritySchemeId: json[r'issueSecuritySchemeId'] as String?,
+      projectId: json[r'projectId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueSecuritySchemeId = this.issueSecuritySchemeId;
+    var projectId = this.projectId;
+
+    final json = <String, Object?>{};
+    if (issueSecuritySchemeId != null) {
+      json[r'issueSecuritySchemeId'] = issueSecuritySchemeId;
+    }
+    if (projectId != null) {
+      json[r'projectId'] = projectId;
+    }
+    return json;
+  }
+
+  IssueSecuritySchemeToProjectMapping copyWith(
+      {String? issueSecuritySchemeId, String? projectId}) {
+    return IssueSecuritySchemeToProjectMapping(
+      issueSecuritySchemeId:
+          issueSecuritySchemeId ?? this.issueSecuritySchemeId,
+      projectId: projectId ?? this.projectId,
+    );
+  }
+}
+
 /// Details of an issue transition.
 class IssueTransition {
   /// Expand options that include additional transition details in the response.
@@ -29776,6 +30437,7 @@ class IssueUpdateDetails {
 
 /// A list of editable field details.
 class IssueUpdateMetadata {
+  /// A list of editable field details.
   final Map<String, dynamic>? fields;
 
   IssueUpdateMetadata({this.fields});
@@ -30942,14 +31604,20 @@ class JiraStatus {
   /// `usages` expand is requested.
   final List<ProjectIssueTypes> usages;
 
+  /// The workflows that use this status. Only available if the `workflowUsages`
+  /// expand is requested.
+  final List<WorkflowUsages> workflowUsages;
+
   JiraStatus(
       {this.description,
       this.id,
       this.name,
       this.scope,
       this.statusCategory,
-      List<ProjectIssueTypes>? usages})
-      : usages = usages ?? [];
+      List<ProjectIssueTypes>? usages,
+      List<WorkflowUsages>? workflowUsages})
+      : usages = usages ?? [],
+        workflowUsages = workflowUsages ?? [];
 
   factory JiraStatus.fromJson(Map<String, Object?> json) {
     return JiraStatus(
@@ -30968,6 +31636,11 @@ class JiraStatus {
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
+      workflowUsages: (json[r'workflowUsages'] as List<Object?>?)
+              ?.map((i) => WorkflowUsages.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
     );
   }
 
@@ -30978,6 +31651,7 @@ class JiraStatus {
     var scope = this.scope;
     var statusCategory = this.statusCategory;
     var usages = this.usages;
+    var workflowUsages = this.workflowUsages;
 
     final json = <String, Object?>{};
     if (description != null) {
@@ -30996,6 +31670,7 @@ class JiraStatus {
       json[r'statusCategory'] = statusCategory.value;
     }
     json[r'usages'] = usages.map((i) => i.toJson()).toList();
+    json[r'workflowUsages'] = workflowUsages.map((i) => i.toJson()).toList();
     return json;
   }
 
@@ -31005,7 +31680,8 @@ class JiraStatus {
       String? name,
       StatusScope? scope,
       JiraStatusStatusCategory? statusCategory,
-      List<ProjectIssueTypes>? usages}) {
+      List<ProjectIssueTypes>? usages,
+      List<WorkflowUsages>? workflowUsages}) {
     return JiraStatus(
       description: description ?? this.description,
       id: id ?? this.id,
@@ -31013,6 +31689,7 @@ class JiraStatus {
       scope: scope ?? this.scope,
       statusCategory: statusCategory ?? this.statusCategory,
       usages: usages ?? this.usages,
+      workflowUsages: workflowUsages ?? this.workflowUsages,
     );
   }
 }
@@ -32978,6 +33655,12 @@ class NewUserDetails {
   /// Atlassian account, they are sent an email asking them set up an account.
   final String? password;
 
+  /// Products the new user has access to. Valid products are: jira-core,
+  /// jira-servicedesk, jira-product-discovery, jira-software. If left empty,
+  /// the user will get default product access. To create a user without product
+  /// access, set this field to be an empty array.
+  final List<String> products;
+
   /// The URL of the user.
   final String? self;
 
@@ -32988,8 +33671,10 @@ class NewUserDetails {
       this.key,
       this.name,
       this.password,
+      List<String>? products,
       this.self})
-      : applicationKeys = applicationKeys ?? [];
+      : applicationKeys = applicationKeys ?? [],
+        products = products ?? [];
 
   factory NewUserDetails.fromJson(Map<String, Object?> json) {
     return NewUserDetails(
@@ -33002,6 +33687,10 @@ class NewUserDetails {
       key: json[r'key'] as String?,
       name: json[r'name'] as String?,
       password: json[r'password'] as String?,
+      products: (json[r'products'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
       self: json[r'self'] as String?,
     );
   }
@@ -33013,6 +33702,7 @@ class NewUserDetails {
     var key = this.key;
     var name = this.name;
     var password = this.password;
+    var products = this.products;
     var self = this.self;
 
     final json = <String, Object?>{};
@@ -33030,6 +33720,7 @@ class NewUserDetails {
     if (password != null) {
       json[r'password'] = password;
     }
+    json[r'products'] = products;
     if (self != null) {
       json[r'self'] = self;
     }
@@ -33043,6 +33734,7 @@ class NewUserDetails {
       String? key,
       String? name,
       String? password,
+      List<String>? products,
       String? self}) {
     return NewUserDetails(
       applicationKeys: applicationKeys ?? this.applicationKeys,
@@ -33051,6 +33743,7 @@ class NewUserDetails {
       key: key ?? this.key,
       name: name ?? this.name,
       password: password ?? this.password,
+      products: products ?? this.products,
       self: self ?? this.self,
     );
   }
@@ -33701,6 +34394,45 @@ class NotificationSchemeNotificationDetails {
     return NotificationSchemeNotificationDetails(
       notificationType: notificationType ?? this.notificationType,
       parameter: parameter ?? this.parameter,
+    );
+  }
+}
+
+class OldToNewSecurityLevelMappingsBean {
+  /// The new issue security level ID. Providing null will clear the assigned
+  /// old level from issues.
+  final String newLevelId;
+
+  /// The old issue security level ID. Providing null will remap all issues
+  /// without any assigned levels.
+  final String oldLevelId;
+
+  OldToNewSecurityLevelMappingsBean(
+      {required this.newLevelId, required this.oldLevelId});
+
+  factory OldToNewSecurityLevelMappingsBean.fromJson(
+      Map<String, Object?> json) {
+    return OldToNewSecurityLevelMappingsBean(
+      newLevelId: json[r'newLevelId'] as String? ?? '',
+      oldLevelId: json[r'oldLevelId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var newLevelId = this.newLevelId;
+    var oldLevelId = this.oldLevelId;
+
+    final json = <String, Object?>{};
+    json[r'newLevelId'] = newLevelId;
+    json[r'oldLevelId'] = oldLevelId;
+    return json;
+  }
+
+  OldToNewSecurityLevelMappingsBean copyWith(
+      {String? newLevelId, String? oldLevelId}) {
+    return OldToNewSecurityLevelMappingsBean(
+      newLevelId: newLevelId ?? this.newLevelId,
+      oldLevelId: oldLevelId ?? this.oldLevelId,
     );
   }
 }
@@ -36043,6 +36775,107 @@ class PageBeanIssueSecurityLevelMember {
 }
 
 /// A page of items.
+class PageBeanIssueSecuritySchemeToProjectMapping {
+  /// Whether this is the last page.
+  final bool isLast;
+
+  /// The maximum number of items that could be returned.
+  final int? maxResults;
+
+  /// If there is another page of results, the URL of the next page.
+  final String? nextPage;
+
+  /// The URL of the page.
+  final String? self;
+
+  /// The index of the first item returned.
+  final int? startAt;
+
+  /// The number of items returned.
+  final int? total;
+
+  /// The list of items.
+  final List<IssueSecuritySchemeToProjectMapping> values;
+
+  PageBeanIssueSecuritySchemeToProjectMapping(
+      {bool? isLast,
+      this.maxResults,
+      this.nextPage,
+      this.self,
+      this.startAt,
+      this.total,
+      List<IssueSecuritySchemeToProjectMapping>? values})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageBeanIssueSecuritySchemeToProjectMapping.fromJson(
+      Map<String, Object?> json) {
+    return PageBeanIssueSecuritySchemeToProjectMapping(
+      isLast: json[r'isLast'] as bool? ?? false,
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      nextPage: json[r'nextPage'] as String?,
+      self: json[r'self'] as String?,
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => IssueSecuritySchemeToProjectMapping.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var isLast = this.isLast;
+    var maxResults = this.maxResults;
+    var nextPage = this.nextPage;
+    var self = this.self;
+    var startAt = this.startAt;
+    var total = this.total;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    json[r'isLast'] = isLast;
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (nextPage != null) {
+      json[r'nextPage'] = nextPage;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageBeanIssueSecuritySchemeToProjectMapping copyWith(
+      {bool? isLast,
+      int? maxResults,
+      String? nextPage,
+      String? self,
+      int? startAt,
+      int? total,
+      List<IssueSecuritySchemeToProjectMapping>? values}) {
+    return PageBeanIssueSecuritySchemeToProjectMapping(
+      isLast: isLast ?? this.isLast,
+      maxResults: maxResults ?? this.maxResults,
+      nextPage: nextPage ?? this.nextPage,
+      self: self ?? this.self,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      values: values ?? this.values,
+    );
+  }
+}
+
+/// A page of items.
 class PageBeanIssueTypeScheme {
   /// Whether this is the last page.
   final bool isLast;
@@ -37736,6 +38569,307 @@ class PageBeanScreenWithTab {
       int? total,
       List<ScreenWithTab>? values}) {
     return PageBeanScreenWithTab(
+      isLast: isLast ?? this.isLast,
+      maxResults: maxResults ?? this.maxResults,
+      nextPage: nextPage ?? this.nextPage,
+      self: self ?? this.self,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      values: values ?? this.values,
+    );
+  }
+}
+
+/// A page of items.
+class PageBeanSecurityLevel {
+  /// Whether this is the last page.
+  final bool isLast;
+
+  /// The maximum number of items that could be returned.
+  final int? maxResults;
+
+  /// If there is another page of results, the URL of the next page.
+  final String? nextPage;
+
+  /// The URL of the page.
+  final String? self;
+
+  /// The index of the first item returned.
+  final int? startAt;
+
+  /// The number of items returned.
+  final int? total;
+
+  /// The list of items.
+  final List<SecurityLevel> values;
+
+  PageBeanSecurityLevel(
+      {bool? isLast,
+      this.maxResults,
+      this.nextPage,
+      this.self,
+      this.startAt,
+      this.total,
+      List<SecurityLevel>? values})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageBeanSecurityLevel.fromJson(Map<String, Object?> json) {
+    return PageBeanSecurityLevel(
+      isLast: json[r'isLast'] as bool? ?? false,
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      nextPage: json[r'nextPage'] as String?,
+      self: json[r'self'] as String?,
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => SecurityLevel.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var isLast = this.isLast;
+    var maxResults = this.maxResults;
+    var nextPage = this.nextPage;
+    var self = this.self;
+    var startAt = this.startAt;
+    var total = this.total;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    json[r'isLast'] = isLast;
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (nextPage != null) {
+      json[r'nextPage'] = nextPage;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageBeanSecurityLevel copyWith(
+      {bool? isLast,
+      int? maxResults,
+      String? nextPage,
+      String? self,
+      int? startAt,
+      int? total,
+      List<SecurityLevel>? values}) {
+    return PageBeanSecurityLevel(
+      isLast: isLast ?? this.isLast,
+      maxResults: maxResults ?? this.maxResults,
+      nextPage: nextPage ?? this.nextPage,
+      self: self ?? this.self,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      values: values ?? this.values,
+    );
+  }
+}
+
+/// A page of items.
+class PageBeanSecurityLevelMember {
+  /// Whether this is the last page.
+  final bool isLast;
+
+  /// The maximum number of items that could be returned.
+  final int? maxResults;
+
+  /// If there is another page of results, the URL of the next page.
+  final String? nextPage;
+
+  /// The URL of the page.
+  final String? self;
+
+  /// The index of the first item returned.
+  final int? startAt;
+
+  /// The number of items returned.
+  final int? total;
+
+  /// The list of items.
+  final List<SecurityLevelMember> values;
+
+  PageBeanSecurityLevelMember(
+      {bool? isLast,
+      this.maxResults,
+      this.nextPage,
+      this.self,
+      this.startAt,
+      this.total,
+      List<SecurityLevelMember>? values})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageBeanSecurityLevelMember.fromJson(Map<String, Object?> json) {
+    return PageBeanSecurityLevelMember(
+      isLast: json[r'isLast'] as bool? ?? false,
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      nextPage: json[r'nextPage'] as String?,
+      self: json[r'self'] as String?,
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => SecurityLevelMember.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var isLast = this.isLast;
+    var maxResults = this.maxResults;
+    var nextPage = this.nextPage;
+    var self = this.self;
+    var startAt = this.startAt;
+    var total = this.total;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    json[r'isLast'] = isLast;
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (nextPage != null) {
+      json[r'nextPage'] = nextPage;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageBeanSecurityLevelMember copyWith(
+      {bool? isLast,
+      int? maxResults,
+      String? nextPage,
+      String? self,
+      int? startAt,
+      int? total,
+      List<SecurityLevelMember>? values}) {
+    return PageBeanSecurityLevelMember(
+      isLast: isLast ?? this.isLast,
+      maxResults: maxResults ?? this.maxResults,
+      nextPage: nextPage ?? this.nextPage,
+      self: self ?? this.self,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      values: values ?? this.values,
+    );
+  }
+}
+
+/// A page of items.
+class PageBeanSecuritySchemeWithProjects {
+  /// Whether this is the last page.
+  final bool isLast;
+
+  /// The maximum number of items that could be returned.
+  final int? maxResults;
+
+  /// If there is another page of results, the URL of the next page.
+  final String? nextPage;
+
+  /// The URL of the page.
+  final String? self;
+
+  /// The index of the first item returned.
+  final int? startAt;
+
+  /// The number of items returned.
+  final int? total;
+
+  /// The list of items.
+  final List<SecuritySchemeWithProjects> values;
+
+  PageBeanSecuritySchemeWithProjects(
+      {bool? isLast,
+      this.maxResults,
+      this.nextPage,
+      this.self,
+      this.startAt,
+      this.total,
+      List<SecuritySchemeWithProjects>? values})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageBeanSecuritySchemeWithProjects.fromJson(
+      Map<String, Object?> json) {
+    return PageBeanSecuritySchemeWithProjects(
+      isLast: json[r'isLast'] as bool? ?? false,
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      nextPage: json[r'nextPage'] as String?,
+      self: json[r'self'] as String?,
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => SecuritySchemeWithProjects.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var isLast = this.isLast;
+    var maxResults = this.maxResults;
+    var nextPage = this.nextPage;
+    var self = this.self;
+    var startAt = this.startAt;
+    var total = this.total;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    json[r'isLast'] = isLast;
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (nextPage != null) {
+      json[r'nextPage'] = nextPage;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageBeanSecuritySchemeWithProjects copyWith(
+      {bool? isLast,
+      int? maxResults,
+      String? nextPage,
+      String? self,
+      int? startAt,
+      int? total,
+      List<SecuritySchemeWithProjects>? values}) {
+    return PageBeanSecuritySchemeWithProjects(
       isLast: isLast ?? this.isLast,
       maxResults: maxResults ?? this.maxResults,
       nextPage: nextPage ?? this.nextPage,
@@ -43398,8 +44532,8 @@ class RuleConfiguration {
   /// [Get workflow transition rule configurations](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-transition-rules/#api-rest-api-3-workflow-rule-config-get).
   final String? tag;
 
-  /// Configuration of the rule, as it is stored by the Connect app on the rule
-  /// configuration page.
+  /// Configuration of the rule, as it is stored by the Connect or the Forge app
+  /// on the rule configuration page.
   final String value;
 
   RuleConfiguration({bool? disabled, this.tag, required this.value})
@@ -44508,6 +45642,68 @@ class SecurityLevel {
   }
 }
 
+/// Issue security level member.
+class SecurityLevelMember {
+  /// The user or group being granted the permission. It consists of a `type`
+  /// and a type-dependent `parameter`. See
+  /// [Holder object](../api-group-permission-schemes/#holder-object) in *Get
+  /// all permission schemes* for more information.
+  final PermissionHolder holder;
+
+  /// The ID of the issue security level member.
+  final String id;
+
+  /// The ID of the issue security level.
+  final String issueSecurityLevelId;
+
+  /// The ID of the issue security scheme.
+  final String issueSecuritySchemeId;
+
+  SecurityLevelMember(
+      {required this.holder,
+      required this.id,
+      required this.issueSecurityLevelId,
+      required this.issueSecuritySchemeId});
+
+  factory SecurityLevelMember.fromJson(Map<String, Object?> json) {
+    return SecurityLevelMember(
+      holder: PermissionHolder.fromJson(
+          json[r'holder'] as Map<String, Object?>? ?? const {}),
+      id: json[r'id'] as String? ?? '',
+      issueSecurityLevelId: json[r'issueSecurityLevelId'] as String? ?? '',
+      issueSecuritySchemeId: json[r'issueSecuritySchemeId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var holder = this.holder;
+    var id = this.id;
+    var issueSecurityLevelId = this.issueSecurityLevelId;
+    var issueSecuritySchemeId = this.issueSecuritySchemeId;
+
+    final json = <String, Object?>{};
+    json[r'holder'] = holder.toJson();
+    json[r'id'] = id;
+    json[r'issueSecurityLevelId'] = issueSecurityLevelId;
+    json[r'issueSecuritySchemeId'] = issueSecuritySchemeId;
+    return json;
+  }
+
+  SecurityLevelMember copyWith(
+      {PermissionHolder? holder,
+      String? id,
+      String? issueSecurityLevelId,
+      String? issueSecuritySchemeId}) {
+    return SecurityLevelMember(
+      holder: holder ?? this.holder,
+      id: id ?? this.id,
+      issueSecurityLevelId: issueSecurityLevelId ?? this.issueSecurityLevelId,
+      issueSecuritySchemeId:
+          issueSecuritySchemeId ?? this.issueSecuritySchemeId,
+    );
+  }
+}
+
 /// Details about a security scheme.
 class SecurityScheme {
   /// The ID of the default security level.
@@ -44593,6 +45789,253 @@ class SecurityScheme {
       id: id ?? this.id,
       levels: levels ?? this.levels,
       name: name ?? this.name,
+      self: self ?? this.self,
+    );
+  }
+}
+
+/// The ID of the issue security scheme.
+class SecuritySchemeId {
+  /// The ID of the issue security scheme.
+  final String id;
+
+  SecuritySchemeId({required this.id});
+
+  factory SecuritySchemeId.fromJson(Map<String, Object?> json) {
+    return SecuritySchemeId(
+      id: json[r'id'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    return json;
+  }
+
+  SecuritySchemeId copyWith({String? id}) {
+    return SecuritySchemeId(
+      id: id ?? this.id,
+    );
+  }
+}
+
+class SecuritySchemeLevelBean {
+  /// The description of the issue security scheme level.
+  final String? description;
+
+  /// Specifies whether the level is the default level. False by default.
+  final bool isDefault;
+
+  /// The list of level members which should be added to the issue security
+  /// scheme level.
+  final List<SecuritySchemeLevelMemberBean> members;
+
+  /// The name of the issue security scheme level. Must be unique.
+  final String name;
+
+  SecuritySchemeLevelBean(
+      {this.description,
+      bool? isDefault,
+      List<SecuritySchemeLevelMemberBean>? members,
+      required this.name})
+      : isDefault = isDefault ?? false,
+        members = members ?? [];
+
+  factory SecuritySchemeLevelBean.fromJson(Map<String, Object?> json) {
+    return SecuritySchemeLevelBean(
+      description: json[r'description'] as String?,
+      isDefault: json[r'isDefault'] as bool? ?? false,
+      members: (json[r'members'] as List<Object?>?)
+              ?.map((i) => SecuritySchemeLevelMemberBean.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      name: json[r'name'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var isDefault = this.isDefault;
+    var members = this.members;
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    json[r'isDefault'] = isDefault;
+    json[r'members'] = members.map((i) => i.toJson()).toList();
+    json[r'name'] = name;
+    return json;
+  }
+
+  SecuritySchemeLevelBean copyWith(
+      {String? description,
+      bool? isDefault,
+      List<SecuritySchemeLevelMemberBean>? members,
+      String? name}) {
+    return SecuritySchemeLevelBean(
+      description: description ?? this.description,
+      isDefault: isDefault ?? this.isDefault,
+      members: members ?? this.members,
+      name: name ?? this.name,
+    );
+  }
+}
+
+class SecuritySchemeLevelMemberBean {
+  /// The value corresponding to the specified member type.
+  final String? parameter;
+
+  /// The issue security level member type, e.g `reporter`, `group`, `user`.
+  final String type;
+
+  SecuritySchemeLevelMemberBean({this.parameter, required this.type});
+
+  factory SecuritySchemeLevelMemberBean.fromJson(Map<String, Object?> json) {
+    return SecuritySchemeLevelMemberBean(
+      parameter: json[r'parameter'] as String?,
+      type: json[r'type'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var parameter = this.parameter;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    if (parameter != null) {
+      json[r'parameter'] = parameter;
+    }
+    json[r'type'] = type;
+    return json;
+  }
+
+  SecuritySchemeLevelMemberBean copyWith({String? parameter, String? type}) {
+    return SecuritySchemeLevelMemberBean(
+      parameter: parameter ?? this.parameter,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// Details of issue security scheme level new members.
+class SecuritySchemeMembersRequest {
+  /// The list of level members which should be added to the issue security
+  /// scheme level.
+  final List<SecuritySchemeLevelMemberBean> members;
+
+  SecuritySchemeMembersRequest({List<SecuritySchemeLevelMemberBean>? members})
+      : members = members ?? [];
+
+  factory SecuritySchemeMembersRequest.fromJson(Map<String, Object?> json) {
+    return SecuritySchemeMembersRequest(
+      members: (json[r'members'] as List<Object?>?)
+              ?.map((i) => SecuritySchemeLevelMemberBean.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var members = this.members;
+
+    final json = <String, Object?>{};
+    json[r'members'] = members.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  SecuritySchemeMembersRequest copyWith(
+      {List<SecuritySchemeLevelMemberBean>? members}) {
+    return SecuritySchemeMembersRequest(
+      members: members ?? this.members,
+    );
+  }
+}
+
+/// Details about an issue security scheme.
+class SecuritySchemeWithProjects {
+  /// The default level ID of the issue security scheme.
+  final int? defaultLevel;
+
+  /// The description of the issue security scheme.
+  final String? description;
+
+  /// The ID of the issue security scheme.
+  final int id;
+
+  /// The name of the issue security scheme.
+  final String name;
+
+  /// The list of project IDs associated with the issue security scheme.
+  final List<int> projectIds;
+
+  /// The URL of the issue security scheme.
+  final String self;
+
+  SecuritySchemeWithProjects(
+      {this.defaultLevel,
+      this.description,
+      required this.id,
+      required this.name,
+      List<int>? projectIds,
+      required this.self})
+      : projectIds = projectIds ?? [];
+
+  factory SecuritySchemeWithProjects.fromJson(Map<String, Object?> json) {
+    return SecuritySchemeWithProjects(
+      defaultLevel: (json[r'defaultLevel'] as num?)?.toInt(),
+      description: json[r'description'] as String?,
+      id: (json[r'id'] as num?)?.toInt() ?? 0,
+      name: json[r'name'] as String? ?? '',
+      projectIds: (json[r'projectIds'] as List<Object?>?)
+              ?.map((i) => (i as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
+      self: json[r'self'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var defaultLevel = this.defaultLevel;
+    var description = this.description;
+    var id = this.id;
+    var name = this.name;
+    var projectIds = this.projectIds;
+    var self = this.self;
+
+    final json = <String, Object?>{};
+    if (defaultLevel != null) {
+      json[r'defaultLevel'] = defaultLevel;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    json[r'id'] = id;
+    json[r'name'] = name;
+    json[r'projectIds'] = projectIds;
+    json[r'self'] = self;
+    return json;
+  }
+
+  SecuritySchemeWithProjects copyWith(
+      {int? defaultLevel,
+      String? description,
+      int? id,
+      String? name,
+      List<int>? projectIds,
+      String? self}) {
+    return SecuritySchemeWithProjects(
+      defaultLevel: defaultLevel ?? this.defaultLevel,
+      description: description ?? this.description,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      projectIds: projectIds ?? this.projectIds,
       self: self ?? this.self,
     );
   }
@@ -44808,6 +46251,38 @@ class ServiceManagementNavigationInfo {
       queueCategory: queueCategory ?? this.queueCategory,
       queueId: queueId ?? this.queueId,
       queueName: queueName ?? this.queueName,
+    );
+  }
+}
+
+/// Details of new default levels.
+class SetDefaultLevelsRequest {
+  /// List of objects with issue security scheme ID and new default level ID.
+  final List<DefaultLevelValue> defaultValues;
+
+  SetDefaultLevelsRequest({required this.defaultValues});
+
+  factory SetDefaultLevelsRequest.fromJson(Map<String, Object?> json) {
+    return SetDefaultLevelsRequest(
+      defaultValues: (json[r'defaultValues'] as List<Object?>?)
+              ?.map((i) => DefaultLevelValue.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var defaultValues = this.defaultValues;
+
+    final json = <String, Object?>{};
+    json[r'defaultValues'] = defaultValues.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  SetDefaultLevelsRequest copyWith({List<DefaultLevelValue>? defaultValues}) {
+    return SetDefaultLevelsRequest(
+      defaultValues: defaultValues ?? this.defaultValues,
     );
   }
 }
@@ -47644,6 +49119,86 @@ class UpdateFieldConfigurationSchemeDetails {
   UpdateFieldConfigurationSchemeDetails copyWith(
       {String? description, String? name}) {
     return UpdateFieldConfigurationSchemeDetails(
+      description: description ?? this.description,
+      name: name ?? this.name,
+    );
+  }
+}
+
+/// Details of issue security scheme level.
+class UpdateIssueSecurityLevelDetails {
+  /// The description of the issue security scheme level.
+  final String? description;
+
+  /// The name of the issue security scheme level. Must be unique.
+  final String? name;
+
+  UpdateIssueSecurityLevelDetails({this.description, this.name});
+
+  factory UpdateIssueSecurityLevelDetails.fromJson(Map<String, Object?> json) {
+    return UpdateIssueSecurityLevelDetails(
+      description: json[r'description'] as String?,
+      name: json[r'name'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    return json;
+  }
+
+  UpdateIssueSecurityLevelDetails copyWith(
+      {String? description, String? name}) {
+    return UpdateIssueSecurityLevelDetails(
+      description: description ?? this.description,
+      name: name ?? this.name,
+    );
+  }
+}
+
+class UpdateIssueSecuritySchemeRequestBean {
+  /// The description of the security scheme scheme.
+  final String? description;
+
+  /// The name of the security scheme scheme. Must be unique.
+  final String? name;
+
+  UpdateIssueSecuritySchemeRequestBean({this.description, this.name});
+
+  factory UpdateIssueSecuritySchemeRequestBean.fromJson(
+      Map<String, Object?> json) {
+    return UpdateIssueSecuritySchemeRequestBean(
+      description: json[r'description'] as String?,
+      name: json[r'name'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    return json;
+  }
+
+  UpdateIssueSecuritySchemeRequestBean copyWith(
+      {String? description, String? name}) {
+    return UpdateIssueSecuritySchemeRequestBean(
       description: description ?? this.description,
       name: name ?? this.name,
     );
@@ -51628,19 +53183,19 @@ class WorkflowTransitionRule {
 /// A workflow with transition rules.
 class WorkflowTransitionRules {
   /// The list of conditions within the workflow.
-  final List<ConnectWorkflowTransitionRule> conditions;
+  final List<AppWorkflowTransitionRule> conditions;
 
   /// The list of post functions within the workflow.
-  final List<ConnectWorkflowTransitionRule> postFunctions;
+  final List<AppWorkflowTransitionRule> postFunctions;
 
   /// The list of validators within the workflow.
-  final List<ConnectWorkflowTransitionRule> validators;
+  final List<AppWorkflowTransitionRule> validators;
   final WorkflowId workflowId;
 
   WorkflowTransitionRules(
-      {List<ConnectWorkflowTransitionRule>? conditions,
-      List<ConnectWorkflowTransitionRule>? postFunctions,
-      List<ConnectWorkflowTransitionRule>? validators,
+      {List<AppWorkflowTransitionRule>? conditions,
+      List<AppWorkflowTransitionRule>? postFunctions,
+      List<AppWorkflowTransitionRule>? validators,
       required this.workflowId})
       : conditions = conditions ?? [],
         postFunctions = postFunctions ?? [],
@@ -51649,17 +53204,17 @@ class WorkflowTransitionRules {
   factory WorkflowTransitionRules.fromJson(Map<String, Object?> json) {
     return WorkflowTransitionRules(
       conditions: (json[r'conditions'] as List<Object?>?)
-              ?.map((i) => ConnectWorkflowTransitionRule.fromJson(
+              ?.map((i) => AppWorkflowTransitionRule.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
       postFunctions: (json[r'postFunctions'] as List<Object?>?)
-              ?.map((i) => ConnectWorkflowTransitionRule.fromJson(
+              ?.map((i) => AppWorkflowTransitionRule.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
       validators: (json[r'validators'] as List<Object?>?)
-              ?.map((i) => ConnectWorkflowTransitionRule.fromJson(
+              ?.map((i) => AppWorkflowTransitionRule.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
@@ -51683,9 +53238,9 @@ class WorkflowTransitionRules {
   }
 
   WorkflowTransitionRules copyWith(
-      {List<ConnectWorkflowTransitionRule>? conditions,
-      List<ConnectWorkflowTransitionRule>? postFunctions,
-      List<ConnectWorkflowTransitionRule>? validators,
+      {List<AppWorkflowTransitionRule>? conditions,
+      List<AppWorkflowTransitionRule>? postFunctions,
+      List<AppWorkflowTransitionRule>? validators,
       WorkflowId? workflowId}) {
     return WorkflowTransitionRules(
       conditions: conditions ?? this.conditions,
@@ -51854,6 +53409,46 @@ class WorkflowTransitionRulesUpdateErrors {
       {List<WorkflowTransitionRulesUpdateErrorDetails>? updateResults}) {
     return WorkflowTransitionRulesUpdateErrors(
       updateResults: updateResults ?? this.updateResults,
+    );
+  }
+}
+
+/// The workflows that use this status. Only available if the `workflowUsages`
+/// expand is requested.
+class WorkflowUsages {
+  /// Workflow ID.
+  final String? workflowId;
+
+  /// Workflow name.
+  final String? workflowName;
+
+  WorkflowUsages({this.workflowId, this.workflowName});
+
+  factory WorkflowUsages.fromJson(Map<String, Object?> json) {
+    return WorkflowUsages(
+      workflowId: json[r'workflowId'] as String?,
+      workflowName: json[r'workflowName'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var workflowId = this.workflowId;
+    var workflowName = this.workflowName;
+
+    final json = <String, Object?>{};
+    if (workflowId != null) {
+      json[r'workflowId'] = workflowId;
+    }
+    if (workflowName != null) {
+      json[r'workflowName'] = workflowName;
+    }
+    return json;
+  }
+
+  WorkflowUsages copyWith({String? workflowId, String? workflowName}) {
+    return WorkflowUsages(
+      workflowId: workflowId ?? this.workflowId,
+      workflowName: workflowName ?? this.workflowName,
     );
   }
 }

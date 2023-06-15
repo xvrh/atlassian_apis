@@ -448,7 +448,7 @@
           "Audit"
         ],
         "summary": "Set retention period",
-        "description": "Sets the retention period for records in the audit log. The retention period\ncan be set to a maximum of 20 years.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Confluence Administrator' global permission.",
+        "description": "Sets the retention period for records in the audit log. The retention period\ncan be set to a maximum of 1 year.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Confluence Administrator' global permission.",
         "operationId": "setRetentionPeriod",
         "requestBody": {
           "description": "The updated retention period.",
@@ -1508,7 +1508,7 @@
         ],
         "summary": "Delete content",
         "deprecated": true,
-        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nMoves a piece of content to the space's trash or purges it from the trash,\ndepending on the content's type and status:\n\n- If the content's type is `page` or `blogpost` and its status is `current`,\nit will be trashed.\n- If the content's type is `page` or `blogpost` and its status is `trashed`,\nthe content will be purged from the trash and deleted permanently. Note,\nyou must also set the `status` query parameter to `trashed` in your request.\n- If the content's type is `comment` or `attachment`, it will be deleted\npermanently without being trashed.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Delete' permission for the space that the content is in.",
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nMoves a piece of content to the space's trash or purges it from the trash,\ndepending on the content's type and status:\n\n- If the content's type is `page`,`blogpost`, or `attachment` and its status is `current`,\nit will be trashed.\n- If the content's type is `page`,`blogpost`, or `attachment` and its status is `trashed`,\nthe content will be purged from the trash and deleted permanently. Note,\nyou must also set the `status` query parameter to `trashed` in your request.\n- If the content's type is `comment`, it will be deleted\npermanently without being trashed.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Delete' permission for the space that the content is in.",
         "operationId": "deleteContent",
         "parameters": [
           {
@@ -2207,7 +2207,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Content"
+                "$ref": "#/components/schemas/AttachmentPropertiesUpdateBody"
               }
             }
           },
@@ -8005,6 +8005,10 @@
           "403": {
             "description": "Returned if the calling user does not have permission to view\ngroups.",
             "content": {}
+          },
+          "404": {
+            "description": "Returned if the group does not exist.",
+            "content": {}
           }
         },
         "security": [
@@ -8068,6 +8072,10 @@
           },
           "403": {
             "description": "Returned if the calling user does not have permission to view\ngroups.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the group does not exist.",
             "content": {}
           }
         },
@@ -14938,114 +14946,6 @@
         "x-atlassian-connect-scope": "ACCESS_EMAIL_ADDRESSES"
       }
     },
-    "/wiki/rest/api/user/bulk/migration": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Get user accountIds",
-        "description": "Returns the accountIds for the users specified in the key or username parameters. Note that multiple key and username parameters can be specified.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Confluence Administrator' global permission if specifying a user, otherwise\npermission to access the Confluence site ('Can use' global permission).",
-        "operationId": "getBulkUserMigration",
-        "parameters": [
-          {
-            "name": "key",
-            "in": "query",
-            "description": "The key of a user. To specify multiple users, pass multiple key parameters separated by ampersands.\nFor example, key=mia&key=alana. Required if username isn't provided. Cannot be provided if username is present.",
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "The username of a user. To specify multiple users, pass multiple username parameters separated by ampersands.\nFor example, username=mia&username=alana. Required if key isn't provided. Cannot be provided if key is present.",
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          {
-            "name": "start",
-            "in": "query",
-            "description": "The index of the first item to return in a page of results (page offset).",
-            "schema": {
-              "minimum": 0,
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return per page.\nNote, this may be restricted by fixed system limits.",
-            "schema": {
-              "minimum": 0,
-              "type": "integer",
-              "format": "int32",
-              "default": 200
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returned if the request is successful.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MigratedUserArray"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Returned if no `username` or 'key' is specified.",
-            "content": {}
-          },
-          "403": {
-            "description": "Returned if;\n\n- The calling user does not have permission to view users.\n- A schema has not been defined for this response code.",
-            "content": {}
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "oAuthDefinitions": [
-              "read:confluence-user"
-            ]
-          }
-        ],
-        "x-atlassian-oauth2-scopes": [
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Current",
-            "scopes": [
-              "read:confluence-user"
-            ]
-          },
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Beta",
-            "scopes": [
-              "read:user:confluence"
-            ]
-          }
-        ],
-        "deprecated": true,
-        "x-atlassian-connect-scope": "READ"
-      }
-    },
     "/atlassian-connect/1/app/module/dynamic": {
       "get": {
         "tags": [
@@ -16448,6 +16348,47 @@
           }
         }
       },
+      "AttachmentPropertiesUpdateBody": {
+        "required": [
+          "id",
+          "type",
+          "version"
+        ],
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "description": "Set this to \"attachment\""
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "container": {
+            "$ref": "#/components/schemas/Container"
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "mediaType": {
+                "type": "string"
+              }
+            }
+          },
+          "extensions": {
+            "type": "object"
+          },
+          "version": {
+            "$ref": "#/components/schemas/Version"
+          }
+        }
+      },
       "Content": {
         "required": [
           "status",
@@ -17131,22 +17072,25 @@
             "type": "object",
             "properties": {
               "all": {
-                "type": "object"
+                "type": "string"
               },
               "attachment": {
-                "type": "object"
+                "type": "string"
               },
               "comment": {
-                "type": "object"
+                "type": "string"
               },
               "page": {
-                "type": "object"
+                "type": "string"
+              },
+              "whiteboard": {
+                "type": "string"
               }
             }
           }
         },
         "additionalProperties": true,
-        "description": "Shows whether a piece of content has attachments, comments, or child pages.\nNote, this doesn't actually contain the child objects."
+        "description": "Shows whether a piece of content has attachments, comments, or child pages/whiteboards.\nNote, this doesn't actually contain the child objects."
       },
       "ContentCreate": {
         "required": [
@@ -17401,6 +17345,9 @@
           "ownedBy": {
             "$ref": "#/components/schemas/User"
           },
+          "lastOwnedBy": {
+            "$ref": "#/components/schemas/User"
+          },
           "createdDate": {
             "type": "string",
             "format": "date-time"
@@ -17438,6 +17385,9 @@
                 "type": "string"
               },
               "ownedBy": {
+                "type": "string"
+              },
+              "lastOwnedBy": {
                 "type": "string"
               }
             }
@@ -19730,53 +19680,6 @@
                 }
               ]
             }
-          }
-        }
-      },
-      "MigratedUser": {
-        "type": "object",
-        "properties": {
-          "username": {
-            "$ref": "#/components/schemas/GenericUserName"
-          },
-          "key": {
-            "$ref": "#/components/schemas/GenericUserKey"
-          },
-          "accountId": {
-            "$ref": "#/components/schemas/GenericAccountId"
-          }
-        }
-      },
-      "MigratedUserArray": {
-        "required": [
-          "_links",
-          "limit",
-          "results",
-          "size",
-          "start"
-        ],
-        "type": "object",
-        "properties": {
-          "results": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MigratedUser"
-            }
-          },
-          "start": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "size": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "_links": {
-            "$ref": "#/components/schemas/GenericLinks"
           }
         }
       },
@@ -22319,7 +22222,7 @@
             "$ref": "#/components/schemas/GenericLinks"
           }
         },
-        "description": "This object represents the request for the single space permission. Permissions consist of\nat least one operation object with an accompanying subjects object.\n\nThe following combinations of `operation.key` and `operation.target` values are\nvalid for the `operation` object:\n``` bash\n'create': 'page', 'blogpost', 'comment', 'attachment'\n'read': 'space'\n'delete': 'page', 'blogpost', 'comment', 'attachment', 'space'\n'export': 'space'\n'administer': 'space'\n'archive': 'page'\n'restrict_content': 'space'\n```\n\nFor example, to enable Delete Own permission, set the `operation` object to the following:\n```\n\"operation\": {\n    \"key\": \"delete\",\n    \"target\": \"space\"\n}\n```\nTo enable Add/Delete Restrictions permissions, set the `operation` object to the following:\n```\n\"operation\": {\n    \"key\": \"restrict_content\",\n    \"target\": \"space\"\n}\n```"
+        "description": "This object represents the request for the single space permission. Permissions consist of\none operation object with an accompanying subjects object.\n\nThe following combinations of `operation.key` and `operation.target` values are\nvalid for the `operation` object:\n``` bash\n'create': 'page', 'blogpost', 'comment', 'attachment'\n'read': 'space'\n'delete': 'page', 'blogpost', 'comment', 'attachment', 'space'\n'export': 'space'\n'administer': 'space'\n'archive': 'page'\n'restrict_content': 'space'\n```\n\nFor example, to enable Delete Own permission, set the `operation` object to the following:\n```\n\"operation\": {\n    \"key\": \"delete\",\n    \"target\": \"space\"\n}\n```\nTo enable Add/Delete Restrictions permissions, set the `operation` object to the following:\n```\n\"operation\": {\n    \"key\": \"restrict_content\",\n    \"target\": \"space\"\n}\n```"
       },
       "SpacePermissionCustomContent": {
         "required": [
@@ -22412,7 +22315,7 @@
       "contentExpand": {
         "name": "expand",
         "in": "query",
-        "description": "A multi-value parameter indicating which properties of the content to expand.\n\n- `childTypes.all` returns whether the content has attachments, comments, or child pages.\nUse this if you only need to check whether the content has children of a particular type.\n- `childTypes.attachment` returns whether the content has attachments.\n- `childTypes.comment` returns whether the content has comments.\n- `childTypes.page` returns whether the content has child pages.\n- `container` returns the space that the content is in. This is the same as the information\nreturned by [Get space](#api-space-spaceKey-get).\n- `metadata.currentuser` returns information about the current user in relation to the content,\nincluding when they last viewed it, modified it, contributed to it, or added it as a favorite.\n- `metadata.properties` returns content properties that have been set via the Confluence REST API.\n- `metadata.labels` returns the labels that have been added to the content.\n- `metadata.frontend` this property is only used by Atlassian.\n- `operations` returns the operations for the content, which are used when setting permissions.\n- `children.page` returns pages that are descendants at the level immediately below the content.\n- `children.attachment` returns all attachments for the content.\n- `children.comment` returns all comments on the content.\n- `restrictions.read.restrictions.user` returns the users that have permission to read the content.\n- `restrictions.read.restrictions.group` returns the groups that have permission to read the content. Note that\nthis may return deleted groups, because deleting a group doesn't remove associated restrictions.\n- `restrictions.update.restrictions.user` returns the users that have permission to update the content.\n- `restrictions.update.restrictions.group` returns the groups that have permission to update the content. Note that\nthis may return deleted groups because deleting a group doesn't remove associated restrictions.\n- `history` returns the history of the content, including the date it was created.\n- `history.lastUpdated` returns information about the most recent update of the content, including\nwho updated it and when it was updated.\n- `history.previousVersion` returns information about the update prior to the current content update.\n- `history.contributors` returns all of the users who have contributed to the content.\n- `history.nextVersion` returns information about the update after to the current content update.\n- `ancestors` returns the parent page, if the content is a page.\n- `body` returns the body of the content in different formats, including the editor format,\nview format, and export format.\n- `body.storage` returns the body of content in storage format.\n- `body.view` returns the body of content in view format.\n- `version` returns information about the most recent update of the content, including who updated it\nand when it was updated.\n- `descendants.page` returns pages that are descendants at any level below the content.\n- `descendants.attachment` returns all attachments for the content, same as `children.attachment`.\n- `descendants.comment` returns all comments on the content, same as `children.comment`.\n- `space` returns the space that the content is in. This is the same as the information returned by\n[Get space](#api-space-spaceKey-get).\n\nIn addition, the following comment-specific expansions can be used:\n- `extensions.inlineProperties` returns inline comment-specific properties.\n- `extensions.resolution` returns the resolution status of each comment.",
+        "description": "A multi-value parameter indicating which properties of the content to expand.\n\n- `childTypes.all` returns whether the content has attachments, comments, or child pages/whiteboards.\nUse this if you only need to check whether the content has children of a particular type.\n- `childTypes.attachment` returns whether the content has attachments.\n- `childTypes.comment` returns whether the content has comments.\n- `childTypes.page` returns whether the content has child pages.\n- `container` returns the space that the content is in. This is the same as the information\nreturned by [Get space](#api-space-spaceKey-get).\n- `metadata.currentuser` returns information about the current user in relation to the content,\nincluding when they last viewed it, modified it, contributed to it, or added it as a favorite.\n- `metadata.properties` returns content properties that have been set via the Confluence REST API.\n- `metadata.labels` returns the labels that have been added to the content.\n- `metadata.frontend` this property is only used by Atlassian.\n- `operations` returns the operations for the content, which are used when setting permissions.\n- `children.page` returns pages that are descendants at the level immediately below the content.\n- `children.attachment` returns all attachments for the content.\n- `children.comment` returns all comments on the content.\n- `restrictions.read.restrictions.user` returns the users that have permission to read the content.\n- `restrictions.read.restrictions.group` returns the groups that have permission to read the content. Note that\nthis may return deleted groups, because deleting a group doesn't remove associated restrictions.\n- `restrictions.update.restrictions.user` returns the users that have permission to update the content.\n- `restrictions.update.restrictions.group` returns the groups that have permission to update the content. Note that\nthis may return deleted groups because deleting a group doesn't remove associated restrictions.\n- `history` returns the history of the content, including the date it was created.\n- `history.lastUpdated` returns information about the most recent update of the content, including\nwho updated it and when it was updated.\n- `history.previousVersion` returns information about the update prior to the current content update.\n- `history.contributors` returns all of the users who have contributed to the content.\n- `history.nextVersion` returns information about the update after to the current content update.\n- `ancestors` returns the parent content, if the content is a page or whiteboard.\n- `body` returns the body of the content in different formats, including the editor format,\nview format, and export format.\n- `body.storage` returns the body of content in storage format.\n- `body.view` returns the body of content in view format.\n- `version` returns information about the most recent update of the content, including who updated it\nand when it was updated.\n- `descendants.page` returns pages that are descendants at any level below the content.\n- `descendants.attachment` returns all attachments for the content, same as `children.attachment`.\n- `descendants.comment` returns all comments on the content, same as `children.comment`.\n- `space` returns the space that the content is in. This is the same as the information returned by\n[Get space](#api-space-spaceKey-get).\n\nIn addition, the following comment-specific expansions can be used:\n- `extensions.inlineProperties` returns inline comment-specific properties.\n- `extensions.resolution` returns the resolution status of each comment.",
         "style": "form",
         "explode": false,
         "schema": {
@@ -22438,7 +22341,7 @@
       "contentExpandWithSubExpandLimit": {
         "name": "expand",
         "in": "query",
-        "description": "A multi-value parameter indicating which properties of the content to expand.\nMaximum sub-expansions allowed is `8`.\n\n- `childTypes.all` returns whether the content has attachments, comments, or child pages.\nUse this if you only need to check whether the content has children of a particular type.\n- `childTypes.attachment` returns whether the content has attachments.\n- `childTypes.comment` returns whether the content has comments.\n- `childTypes.page` returns whether the content has child pages.\n- `container` returns the space that the content is in. This is the same as the information\nreturned by [Get space](#api-space-spaceKey-get).\n- `metadata.currentuser` returns information about the current user in relation to the content,\nincluding when they last viewed it, modified it, contributed to it, or added it as a favorite.\n- `metadata.properties` returns content properties that have been set via the Confluence REST API.\n- `metadata.labels` returns the labels that have been added to the content.\n- `metadata.frontend` this property is only used by Atlassian.\n- `operations` returns the operations for the content, which are used when setting permissions.\n- `children.page` returns pages that are descendants at the level immediately below the content.\n- `children.attachment` returns all attachments for the content.\n- `children.comment` returns all comments on the content.\n- `restrictions.read.restrictions.user` returns the users that have permission to read the content.\n- `restrictions.read.restrictions.group` returns the groups that have permission to read the content. Note that\nthis may return deleted groups, because deleting a group doesn't remove associated restrictions.\n- `restrictions.update.restrictions.user` returns the users that have permission to update the content.\n- `restrictions.update.restrictions.group` returns the groups that have permission to update the content. Note that\nthis may return deleted groups because deleting a group doesn't remove associated restrictions.\n- `history` returns the history of the content, including the date it was created.\n- `history.lastUpdated` returns information about the most recent update of the content, including\nwho updated it and when it was updated.\n- `history.previousVersion` returns information about the update prior to the current content update.\n- `history.contributors` returns all of the users who have contributed to the content.\n- `history.nextVersion` returns information about the update after to the current content update.\n- `ancestors` returns the parent page, if the content is a page.\n- `body` returns the body of the content in different formats, including the editor format,\nview format, and export format.\n- `body.storage` returns the body of content in storage format.\n- `body.view` returns the body of content in view format.\n- `version` returns information about the most recent update of the content, including who updated it\nand when it was updated.\n- `descendants.page` returns pages that are descendants at any level below the content.\n- `descendants.attachment` returns all attachments for the content, same as `children.attachment`.\n- `descendants.comment` returns all comments on the content, same as `children.comment`.\n- `space` returns the space that the content is in. This is the same as the information returned by\n[Get space](#api-space-spaceKey-get).\n\nIn addition, the following comment-specific expansions can be used:\n- `extensions.inlineProperties` returns inline comment-specific properties.\n- `extensions.resolution` returns the resolution status of each comment.",
+        "description": "A multi-value parameter indicating which properties of the content to expand.\nMaximum sub-expansions allowed is `8`.\n\n- `childTypes.all` returns whether the content has attachments, comments, or child pages/whiteboards.\nUse this if you only need to check whether the content has children of a particular type.\n- `childTypes.attachment` returns whether the content has attachments.\n- `childTypes.comment` returns whether the content has comments.\n- `childTypes.page` returns whether the content has child pages.\n- `container` returns the space that the content is in. This is the same as the information\nreturned by [Get space](#api-space-spaceKey-get).\n- `metadata.currentuser` returns information about the current user in relation to the content,\nincluding when they last viewed it, modified it, contributed to it, or added it as a favorite.\n- `metadata.properties` returns content properties that have been set via the Confluence REST API.\n- `metadata.labels` returns the labels that have been added to the content.\n- `metadata.frontend` this property is only used by Atlassian.\n- `operations` returns the operations for the content, which are used when setting permissions.\n- `children.page` returns pages that are descendants at the level immediately below the content.\n- `children.attachment` returns all attachments for the content.\n- `children.comment` returns all comments on the content.\n- `restrictions.read.restrictions.user` returns the users that have permission to read the content.\n- `restrictions.read.restrictions.group` returns the groups that have permission to read the content. Note that\nthis may return deleted groups, because deleting a group doesn't remove associated restrictions.\n- `restrictions.update.restrictions.user` returns the users that have permission to update the content.\n- `restrictions.update.restrictions.group` returns the groups that have permission to update the content. Note that\nthis may return deleted groups because deleting a group doesn't remove associated restrictions.\n- `history` returns the history of the content, including the date it was created.\n- `history.lastUpdated` returns information about the most recent update of the content, including\nwho updated it and when it was updated.\n- `history.previousVersion` returns information about the update prior to the current content update.\n- `history.contributors` returns all of the users who have contributed to the content.\n- `history.nextVersion` returns information about the update after to the current content update.\n- `ancestors` returns the parent content, if the content is a page or whiteboard.\n- `body` returns the body of the content in different formats, including the editor format,\nview format, and export format.\n- `body.storage` returns the body of content in storage format.\n- `body.view` returns the body of content in view format.\n- `version` returns information about the most recent update of the content, including who updated it\nand when it was updated.\n- `descendants.page` returns pages that are descendants at any level below the content.\n- `descendants.attachment` returns all attachments for the content, same as `children.attachment`.\n- `descendants.comment` returns all comments on the content, same as `children.comment`.\n- `space` returns the space that the content is in. This is the same as the information returned by\n[Get space](#api-space-spaceKey-get).\n\nIn addition, the following comment-specific expansions can be used:\n- `extensions.inlineProperties` returns inline comment-specific properties.\n- `extensions.resolution` returns the resolution status of each comment.",
         "style": "form",
         "explode": false,
         "schema": {

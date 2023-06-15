@@ -66,8 +66,16 @@ class GroupsApi {
     ));
   }
 
-  /// Delete a group from a directory. An attempt to delete a non-existent group
-  /// fails with a 404 (Resource Not found) error.
+  /// Delete a group from a directory. An attempt to delete a non-existent
+  /// group fails with a 404 (Resource Not found) error.
+  ///
+  /// **Note**: Deleting a synced group from your identity provider will delete
+  /// the group from your organization's directory and associated sites.
+  /// 1. If this group is used for allocating product license (granting role in
+  /// a product), then members of this group may lose access to corresponding
+  /// product after group deletion.
+  /// 2. If this group is used to grant permissions in product, then members of
+  /// this group may lose their permissions in the corresponding product.
   Future<void> deleteaGroup(
       {required String directoryId, required String id}) async {
     await _client.send(
