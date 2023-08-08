@@ -3,6 +3,7 @@
 import '../api_utils.dart';
 
 // ignore_for_file: deprecated_member_use_from_same_package
+// ignore_for_file: provide_deprecation_message
 
 class AdminOrganizationApi {
   final ApiClient _client;
@@ -48,7 +49,7 @@ class DirectoryApi {
   /// Administration.
   /// - Active is defined as viewing a product's page for a minimum of 2
   /// seconds.
-  /// - The data for the last activity may be delayed by up to 4 hours.
+  /// - The data for the last activity may be delayed by up to 24 hours.
   /// - If the user has not accessed a product, the `product_access` response
   /// field will be empty.
   ///
@@ -109,16 +110,16 @@ class DirectoryApi {
   ///
   /// Learn the fastest way to call the API with a detailed
   /// [tutorial](https://developer.atlassian.com/cloud/admin/organization/suspend-user/).
-  Future<GenericActionSuccessModel> suspendUserAccess(
+  Future<Map<String, dynamic>> suspendUserAccess(
       {required String orgId, required String accountId}) async {
-    return GenericActionSuccessModel.fromJson(await _client.send(
+    return await _client.send(
       'post',
       'v1/orgs/{orgId}/directory/users/{accountId}/suspend-access',
       pathParameters: {
         'orgId': orgId,
         'accountId': accountId,
       },
-    ));
+    ) as Map<String, Object?>;
   }
 
   /// **The API is available for customers using the new user management
@@ -132,16 +133,69 @@ class DirectoryApi {
   ///
   /// Learn the fastest way to call the API with a detailed
   /// [tutorial](https://developer.atlassian.com/cloud/admin/organization/restore-user/).
-  Future<GenericActionSuccessModel> restoreUserAccess(
+  Future<Map<String, dynamic>> restoreUserAccess(
       {required String orgId, required String accountId}) async {
-    return GenericActionSuccessModel.fromJson(await _client.send(
+    return await _client.send(
       'post',
       'v1/orgs/{orgId}/directory/users/{accountId}/restore-access',
       pathParameters: {
         'orgId': orgId,
         'accountId': accountId,
       },
-    ));
+    ) as Map<String, Object?>;
+  }
+
+  /// **The API is available for customers using the new user management
+  /// experience only. Learn more about the
+  /// [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**
+  ///
+  /// This API will:
+  /// - Create a group in the organization's directory.
+  /// - Create a collection of users that you can use to easily manage
+  /// permissions, content access, notification schemes, and roles.
+  ///
+  /// **The creation of new groups using existing group names is not
+  /// permitted.**
+  Future<Map<String, dynamic>> createGroup(
+      {required String orgId, required CreateGroupInput body}) async {
+    return await _client.send(
+      'post',
+      'v1/orgs/{orgId}/directory/groups',
+      pathParameters: {
+        'orgId': orgId,
+      },
+      body: body.toJson(),
+    ) as Map<String, Object?>;
+  }
+
+  /// **The API is available for customers using the new user management
+  /// experience only. Learn more about the
+  /// [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**
+  ///
+  /// This API will:
+  /// - Delete a group from the organization's directory.
+  /// - Delete the permissions, content access, notification schemes, and roles
+  /// granted to the users.
+  ///
+  /// This API will not:
+  /// - Delete groups that are synchronized through SCIM. To delete these
+  /// groups, you will need to delete them within your external identity
+  /// provider. Learn more about
+  /// [configuring user provisioning with an identity provider](https://support.atlassian.com/provisioning-users/docs/configure-user-provisioning-with-an-identity-provider/).
+  /// - Delete a group if it’s marked as a
+  /// [default group](https://support.atlassian.com/user-management/docs/default-groups-and-permissions).
+  /// - Delete `site-admin` group and therefore revoke org-admin role from a
+  /// user.
+  Future<Map<String, dynamic>> deleteGroup(
+      {required String orgId, required String groupId}) async {
+    return await _client.send(
+      'delete',
+      'v1/orgs/{orgId}/directory/groups/{groupId}',
+      pathParameters: {
+        'orgId': orgId,
+        'groupId': groupId,
+      },
+    ) as Map<String, Object?>;
   }
 
   /// **The API is available for customers using the new user management
@@ -159,11 +213,14 @@ class DirectoryApi {
   /// SCIM. To make changes to these memberships, you will need to modify them
   /// within your external identity provider. Learn more about
   /// [configuring user provisioning with an identity provider](https://support.atlassian.com/provisioning-users/docs/configure-user-provisioning-with-an-identity-provider/).
-  Future<GenericActionSuccessModel> addUserToGroup(
+  ///
+  /// Learn the fastest way to call the API with a detailed
+  /// [tutorial](https://developer.atlassian.com/cloud/admin/organization/add-user-to-group/).
+  Future<Map<String, dynamic>> addUserToGroup(
       {required String orgId,
       required String groupId,
       required AddGroupMembershipInput body}) async {
-    return GenericActionSuccessModel.fromJson(await _client.send(
+    return await _client.send(
       'post',
       'v1/orgs/{orgId}/directory/groups/{groupId}/memberships',
       pathParameters: {
@@ -171,7 +228,7 @@ class DirectoryApi {
         'groupId': groupId,
       },
       body: body.toJson(),
-    ));
+    ) as Map<String, Object?>;
   }
 
   /// **The API is available for customers using the new user management
@@ -191,11 +248,14 @@ class DirectoryApi {
   /// [configuring user provisioning with an identity provider](https://support.atlassian.com/provisioning-users/docs/configure-user-provisioning-with-an-identity-provider/).
   /// - Modify `site-admin` group and therefore revoke org-admin role from a
   /// user.
-  Future<GenericActionSuccessModel> removeUserFromGroup(
+  ///
+  /// Learn the fastest way to call the API with a detailed
+  /// [tutorial](https://developer.atlassian.com/cloud/admin/organization/remove-user-to-group/).
+  Future<Map<String, dynamic>> removeUserFromGroup(
       {required String orgId,
       required String groupId,
       required String accountId}) async {
-    return GenericActionSuccessModel.fromJson(await _client.send(
+    return await _client.send(
       'delete',
       'v1/orgs/{orgId}/directory/groups/{groupId}/memberships/{accountId}',
       pathParameters: {
@@ -203,7 +263,7 @@ class DirectoryApi {
         'groupId': groupId,
         'accountId': accountId,
       },
-    ));
+    ) as Map<String, Object?>;
   }
 }
 
@@ -620,6 +680,10 @@ class ApplicationError {
   ///   - `ADMIN-400-24` - Invalid request body
   ///   - `ADMIN-403-3`  - Not allowed to manage the org
   ///   - `ADMIN-403-5`  - Not allowed to manage the group
+  ///   - `ADMIN-403-6`  - Not allowed to delete group with default-role
+  /// attribute
+  ///   - `ADMIN-403-7`  - Not allowed to delete group which grants admin access
+  /// to a product or org
   ///   - `ADMIN-404-1`  - Unknown resource
   ///   - `ADMIN-404-2`  - Organization not found
   ///   - `ADMIN-404-3`  - Domain not found
@@ -689,6 +753,42 @@ class ApplicationError {
       code: code ?? this.code,
       title: title ?? this.title,
       detail: detail ?? this.detail,
+    );
+  }
+}
+
+class CreateGroupInput {
+  /// The name of the group.
+  final String name;
+
+  /// The description of the group.
+  final String? description;
+
+  CreateGroupInput({required this.name, this.description});
+
+  factory CreateGroupInput.fromJson(Map<String, Object?> json) {
+    return CreateGroupInput(
+      name: json[r'name'] as String? ?? '',
+      description: json[r'description'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+    var description = this.description;
+
+    final json = <String, Object?>{};
+    json[r'name'] = name;
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    return json;
+  }
+
+  CreateGroupInput copyWith({String? name, String? description}) {
+    return CreateGroupInput(
+      name: name ?? this.name,
+      description: description ?? this.description,
     );
   }
 }
@@ -1676,6 +1776,7 @@ class EventLocationModel {
   final String? ip;
 
   /// Geo location of the IP address
+  @deprecated
   final String? geo;
 
   /// Country location according to the IP address
@@ -2237,36 +2338,6 @@ class FieldOperandField {
     return FieldOperandField(
       name: name ?? this.name,
       values: values ?? this.values,
-    );
-  }
-}
-
-class GenericActionSuccessModel {
-  /// A description of the entities affected, and changes made as a result of
-  /// calling this API.
-  final String? message;
-
-  GenericActionSuccessModel({this.message});
-
-  factory GenericActionSuccessModel.fromJson(Map<String, Object?> json) {
-    return GenericActionSuccessModel(
-      message: json[r'message'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var message = this.message;
-
-    final json = <String, Object?>{};
-    if (message != null) {
-      json[r'message'] = message;
-    }
-    return json;
-  }
-
-  GenericActionSuccessModel copyWith({String? message}) {
-    return GenericActionSuccessModel(
-      message: message ?? this.message,
     );
   }
 }

@@ -119,8 +119,18 @@ class Api {
     } else if (type == 'array') {
       return ListDartType(this, typeFromSchema(schema.items!));
     } else if (title != null && title.startsWith('MultiEntityResult<')) {
-      var match = RegExp('<([^>]+)>').firstMatch(title)!;
-      var typeName = match.group(1)!;
+      var result = schema.properties['results'];
+      String typeName;
+      if (result != null) {
+        if (result.type != 'array') {
+          throw StateError('Type must be array. Got ${result.type}');
+        }
+        typeName = result.items!.ref!.replaceAll('#/components/schemas/', '');
+      } else {
+        var match = RegExp('<([^>]+)>').firstMatch(title)!;
+        typeName = match.group(1)!;
+      }
+
       return MultiEntityResult(this, typeName);
     } else if (type == 'object') {
       return MapDartType.withDynamic(this);
@@ -187,6 +197,7 @@ class Api {
 import '../api_utils.dart';
 
 // ignore_for_file: deprecated_member_use_from_same_package
+// ignore_for_file: provide_deprecation_message
 ''');
 
     var sortedTaggedServices = _taggedServices
@@ -410,6 +421,9 @@ class Operation {
     }
 
     buffer.writeln(documentationComment(path.description, indent: 2));
+    if (path.deprecated) {
+      buffer.writeln('@deprecated');
+    }
     buffer.writeln('Future<$returnTypeName> $methodName($parameters) async {');
 
     var parametersCode = '';
@@ -599,9 +613,9 @@ class ComplexType extends DartType {
 
     if (_description.isNotEmpty) {
       buffer.writeln(documentationComment(_description, indent: 0));
-      if (_isObsolete(_description)) {
-        buffer.writeln('@deprecated');
-      }
+    }
+    if (definition.deprecated) {
+      buffer.writeln('@deprecated');
     }
     buffer.writeln('class $className {');
     for (final property in _properties) {
@@ -610,9 +624,9 @@ class ComplexType extends DartType {
       if (property.schema.description.isNotEmpty) {
         buffer.writeln(
             documentationComment(property.schema.description, indent: 2));
-        if (_isObsolete(property.schema.description)) {
-          buffer.writeln('@deprecated');
-        }
+      }
+      if (property.schema.deprecated) {
+        buffer.writeln('@deprecated');
       }
       buffer.writeln(
           'final $typeName${_isPropertyRequired(property) ? '' : '?'} ${property.name.camelCased};');
@@ -1164,9 +1178,6 @@ String _normalizeOperationId(sw.Path path) {
   name ??= path.summary;
   return name.words.toLowerCamel();
 }
-
-bool _isObsolete(String? comment) =>
-    comment != null && comment.toLowerCase().contains('obsolete');
 
 extension<T> on Iterable<T> {
   List<T> stableSortedBy<K extends Comparable<K>>(K Function(T element) keyOf) {

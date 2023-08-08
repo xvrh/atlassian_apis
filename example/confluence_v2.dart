@@ -12,12 +12,12 @@ void main() async {
   var confluence = ConfluenceV2Api(atlassianClient);
 
   // Get a page
-  var page = await confluence.page.getPageById(id: 2198995148);
+  var page = await confluence.page.getPageById(id: 123456);
   print(page.title);
 
   // Get page attachments
   var attachments =
-      await confluence.attachment.getPageAttachments(id: 2198995148, limit: 2);
+      await confluence.attachment.getPageAttachments(id: 123456, limit: 2);
   for (var attachment in attachments) {
     print('Attachment: ${attachment.title} / ${attachment.downloadLink}');
   }

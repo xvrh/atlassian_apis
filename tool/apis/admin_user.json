@@ -9,7 +9,7 @@
       {
         "title": "About the user management REST API",
         "anchor": "about",
-        "body": "Use this REST API to administer and edit the managed accounts in your organization by account ID.\nYou can find the account ID for a user with\n[get users in an organization](/cloud/admin/organization/rest/#api-orgs-orgId-users-get)."
+        "body": "The User management REST API provides resources to administer and edit managed accounts. Use this API to:\n- Get user management permissions\n- Get and update profiles\n- Deactivate and delete accounts\n\nTo manage your organization, use the [Organizations REST API](https://developer.atlassian.com/cloud/admin/organization/rest/intro/).\n\nTo integrate your organization with an identity provider, use the [User provisioning REST API](https://developer.atlassian.com/cloud/admin/user-provisioning/rest/intro)."
       },
       {
         "title": "Authentication and authorization",

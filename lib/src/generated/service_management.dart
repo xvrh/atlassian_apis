@@ -3,6 +3,7 @@
 import '../api_utils.dart';
 
 // ignore_for_file: deprecated_member_use_from_same_package
+// ignore_for_file: provide_deprecation_message
 
 class ServiceManagementApi {
   final ApiClient _client;
@@ -3818,6 +3819,128 @@ class FieldMetadata {
   }
 }
 
+class Form {
+  /// JSON mapping of form field answers containing form field IDs and
+  /// corresponding values.
+  final Map<String, dynamic>? answers;
+
+  Form({this.answers});
+
+  factory Form.fromJson(Map<String, Object?> json) {
+    return Form(
+      answers: json[r'answers'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var answers = this.answers;
+
+    final json = <String, Object?>{};
+    if (answers != null) {
+      json[r'answers'] = answers;
+    }
+    return json;
+  }
+
+  Form copyWith({Map<String, dynamic>? answers}) {
+    return Form(
+      answers: answers ?? this.answers,
+    );
+  }
+}
+
+class FormAnswer {
+  /// Answer in Atlassian Document Format (ADF)
+  final JsonNode? adf;
+
+  /// IDs of selected choices
+  final List<String> choices;
+
+  /// Answer in date format (yyyy-MM-dd)
+  final String? date;
+
+  /// Answer in free text format
+  final String? text;
+
+  /// Answer in timestamp format (HH:mm).
+  final String? time;
+
+  /// IDs of selected users
+  final List<String> users;
+
+  FormAnswer(
+      {this.adf,
+      List<String>? choices,
+      this.date,
+      this.text,
+      this.time,
+      List<String>? users})
+      : choices = choices ?? [],
+        users = users ?? [];
+
+  factory FormAnswer.fromJson(Map<String, Object?> json) {
+    return FormAnswer(
+      adf: json[r'adf'] != null
+          ? JsonNode.fromJson(json[r'adf']! as Map<String, Object?>)
+          : null,
+      choices: (json[r'choices'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      date: json[r'date'] as String?,
+      text: json[r'text'] as String?,
+      time: json[r'time'] as String?,
+      users: (json[r'users'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var adf = this.adf;
+    var choices = this.choices;
+    var date = this.date;
+    var text = this.text;
+    var time = this.time;
+    var users = this.users;
+
+    final json = <String, Object?>{};
+    if (adf != null) {
+      json[r'adf'] = adf.toJson();
+    }
+    json[r'choices'] = choices;
+    if (date != null) {
+      json[r'date'] = date;
+    }
+    if (text != null) {
+      json[r'text'] = text;
+    }
+    if (time != null) {
+      json[r'time'] = time;
+    }
+    json[r'users'] = users;
+    return json;
+  }
+
+  FormAnswer copyWith(
+      {JsonNode? adf,
+      List<String>? choices,
+      String? date,
+      String? text,
+      String? time,
+      List<String>? users}) {
+    return FormAnswer(
+      adf: adf ?? this.adf,
+      choices: choices ?? this.choices,
+      date: date ?? this.date,
+      text: text ?? this.text,
+      time: time ?? this.time,
+      users: users ?? this.users,
+    );
+  }
+}
+
 /// Details of issue history metadata.
 class HistoryMetadata {
   /// The activity described in the history record.
@@ -4548,6 +4671,366 @@ class IssueUpdateMetadata {
   }
 }
 
+class JsonNode {
+  final bool array;
+  final bool bigDecimal;
+  final bool bigInteger;
+  final int? bigIntegerValue;
+  final bool binary;
+  final List<String> binaryValue;
+  final bool boolean;
+  final bool booleanValue;
+  final bool containerNode;
+  final num? decimalValue;
+  final bool double$;
+  final num? doubleValue;
+  final Map<String, dynamic>? elements;
+  final Map<String, dynamic>? fieldNames;
+  final Map<String, dynamic>? fields;
+  final bool floatingPointNumber;
+  final bool int$;
+  final int? intValue;
+  final bool integralNumber;
+  final bool long;
+  final int? longValue;
+  final bool missingNode;
+  final bool null$;
+  final bool number;
+  final JsonNodeNumberType? numberType;
+  final num? numberValue;
+  final bool object;
+  final bool pojo;
+  final String? textValue;
+  final bool textual;
+  final bool valueAsBoolean;
+  final num? valueAsDouble;
+  final int? valueAsInt;
+  final int? valueAsLong;
+  final String? valueAsText;
+  final bool valueNode;
+
+  JsonNode(
+      {bool? array,
+      bool? bigDecimal,
+      bool? bigInteger,
+      this.bigIntegerValue,
+      bool? binary,
+      List<String>? binaryValue,
+      bool? boolean,
+      bool? booleanValue,
+      bool? containerNode,
+      this.decimalValue,
+      bool? double$,
+      this.doubleValue,
+      this.elements,
+      this.fieldNames,
+      this.fields,
+      bool? floatingPointNumber,
+      bool? int$,
+      this.intValue,
+      bool? integralNumber,
+      bool? long,
+      this.longValue,
+      bool? missingNode,
+      bool? null$,
+      bool? number,
+      this.numberType,
+      this.numberValue,
+      bool? object,
+      bool? pojo,
+      this.textValue,
+      bool? textual,
+      bool? valueAsBoolean,
+      this.valueAsDouble,
+      this.valueAsInt,
+      this.valueAsLong,
+      this.valueAsText,
+      bool? valueNode})
+      : array = array ?? false,
+        bigDecimal = bigDecimal ?? false,
+        bigInteger = bigInteger ?? false,
+        binary = binary ?? false,
+        binaryValue = binaryValue ?? [],
+        boolean = boolean ?? false,
+        booleanValue = booleanValue ?? false,
+        containerNode = containerNode ?? false,
+        double$ = double$ ?? false,
+        floatingPointNumber = floatingPointNumber ?? false,
+        int$ = int$ ?? false,
+        integralNumber = integralNumber ?? false,
+        long = long ?? false,
+        missingNode = missingNode ?? false,
+        null$ = null$ ?? false,
+        number = number ?? false,
+        object = object ?? false,
+        pojo = pojo ?? false,
+        textual = textual ?? false,
+        valueAsBoolean = valueAsBoolean ?? false,
+        valueNode = valueNode ?? false;
+
+  factory JsonNode.fromJson(Map<String, Object?> json) {
+    return JsonNode(
+      array: json[r'array'] as bool? ?? false,
+      bigDecimal: json[r'bigDecimal'] as bool? ?? false,
+      bigInteger: json[r'bigInteger'] as bool? ?? false,
+      bigIntegerValue: (json[r'bigIntegerValue'] as num?)?.toInt(),
+      binary: json[r'binary'] as bool? ?? false,
+      binaryValue: (json[r'binaryValue'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      boolean: json[r'boolean'] as bool? ?? false,
+      booleanValue: json[r'booleanValue'] as bool? ?? false,
+      containerNode: json[r'containerNode'] as bool? ?? false,
+      decimalValue: json[r'decimalValue'] as num?,
+      double$: json[r'double'] as bool? ?? false,
+      doubleValue: json[r'doubleValue'] as num?,
+      elements: json[r'elements'] as Map<String, Object?>?,
+      fieldNames: json[r'fieldNames'] as Map<String, Object?>?,
+      fields: json[r'fields'] as Map<String, Object?>?,
+      floatingPointNumber: json[r'floatingPointNumber'] as bool? ?? false,
+      int$: json[r'int'] as bool? ?? false,
+      intValue: (json[r'intValue'] as num?)?.toInt(),
+      integralNumber: json[r'integralNumber'] as bool? ?? false,
+      long: json[r'long'] as bool? ?? false,
+      longValue: (json[r'longValue'] as num?)?.toInt(),
+      missingNode: json[r'missingNode'] as bool? ?? false,
+      null$: json[r'null'] as bool? ?? false,
+      number: json[r'number'] as bool? ?? false,
+      numberType: json[r'numberType'] != null
+          ? JsonNodeNumberType.fromValue(json[r'numberType']! as String)
+          : null,
+      numberValue: json[r'numberValue'] as num?,
+      object: json[r'object'] as bool? ?? false,
+      pojo: json[r'pojo'] as bool? ?? false,
+      textValue: json[r'textValue'] as String?,
+      textual: json[r'textual'] as bool? ?? false,
+      valueAsBoolean: json[r'valueAsBoolean'] as bool? ?? false,
+      valueAsDouble: json[r'valueAsDouble'] as num?,
+      valueAsInt: (json[r'valueAsInt'] as num?)?.toInt(),
+      valueAsLong: (json[r'valueAsLong'] as num?)?.toInt(),
+      valueAsText: json[r'valueAsText'] as String?,
+      valueNode: json[r'valueNode'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var array = this.array;
+    var bigDecimal = this.bigDecimal;
+    var bigInteger = this.bigInteger;
+    var bigIntegerValue = this.bigIntegerValue;
+    var binary = this.binary;
+    var binaryValue = this.binaryValue;
+    var boolean = this.boolean;
+    var booleanValue = this.booleanValue;
+    var containerNode = this.containerNode;
+    var decimalValue = this.decimalValue;
+    var double$ = this.double$;
+    var doubleValue = this.doubleValue;
+    var elements = this.elements;
+    var fieldNames = this.fieldNames;
+    var fields = this.fields;
+    var floatingPointNumber = this.floatingPointNumber;
+    var int$ = this.int$;
+    var intValue = this.intValue;
+    var integralNumber = this.integralNumber;
+    var long = this.long;
+    var longValue = this.longValue;
+    var missingNode = this.missingNode;
+    var null$ = this.null$;
+    var number = this.number;
+    var numberType = this.numberType;
+    var numberValue = this.numberValue;
+    var object = this.object;
+    var pojo = this.pojo;
+    var textValue = this.textValue;
+    var textual = this.textual;
+    var valueAsBoolean = this.valueAsBoolean;
+    var valueAsDouble = this.valueAsDouble;
+    var valueAsInt = this.valueAsInt;
+    var valueAsLong = this.valueAsLong;
+    var valueAsText = this.valueAsText;
+    var valueNode = this.valueNode;
+
+    final json = <String, Object?>{};
+    json[r'array'] = array;
+    json[r'bigDecimal'] = bigDecimal;
+    json[r'bigInteger'] = bigInteger;
+    if (bigIntegerValue != null) {
+      json[r'bigIntegerValue'] = bigIntegerValue;
+    }
+    json[r'binary'] = binary;
+    json[r'binaryValue'] = binaryValue;
+    json[r'boolean'] = boolean;
+    json[r'booleanValue'] = booleanValue;
+    json[r'containerNode'] = containerNode;
+    if (decimalValue != null) {
+      json[r'decimalValue'] = decimalValue;
+    }
+    json[r'double'] = double$;
+    if (doubleValue != null) {
+      json[r'doubleValue'] = doubleValue;
+    }
+    if (elements != null) {
+      json[r'elements'] = elements;
+    }
+    if (fieldNames != null) {
+      json[r'fieldNames'] = fieldNames;
+    }
+    if (fields != null) {
+      json[r'fields'] = fields;
+    }
+    json[r'floatingPointNumber'] = floatingPointNumber;
+    json[r'int'] = int$;
+    if (intValue != null) {
+      json[r'intValue'] = intValue;
+    }
+    json[r'integralNumber'] = integralNumber;
+    json[r'long'] = long;
+    if (longValue != null) {
+      json[r'longValue'] = longValue;
+    }
+    json[r'missingNode'] = missingNode;
+    json[r'null'] = null$;
+    json[r'number'] = number;
+    if (numberType != null) {
+      json[r'numberType'] = numberType.value;
+    }
+    if (numberValue != null) {
+      json[r'numberValue'] = numberValue;
+    }
+    json[r'object'] = object;
+    json[r'pojo'] = pojo;
+    if (textValue != null) {
+      json[r'textValue'] = textValue;
+    }
+    json[r'textual'] = textual;
+    json[r'valueAsBoolean'] = valueAsBoolean;
+    if (valueAsDouble != null) {
+      json[r'valueAsDouble'] = valueAsDouble;
+    }
+    if (valueAsInt != null) {
+      json[r'valueAsInt'] = valueAsInt;
+    }
+    if (valueAsLong != null) {
+      json[r'valueAsLong'] = valueAsLong;
+    }
+    if (valueAsText != null) {
+      json[r'valueAsText'] = valueAsText;
+    }
+    json[r'valueNode'] = valueNode;
+    return json;
+  }
+
+  JsonNode copyWith(
+      {bool? array,
+      bool? bigDecimal,
+      bool? bigInteger,
+      int? bigIntegerValue,
+      bool? binary,
+      List<String>? binaryValue,
+      bool? boolean,
+      bool? booleanValue,
+      bool? containerNode,
+      num? decimalValue,
+      bool? double$,
+      num? doubleValue,
+      Map<String, dynamic>? elements,
+      Map<String, dynamic>? fieldNames,
+      Map<String, dynamic>? fields,
+      bool? floatingPointNumber,
+      bool? int$,
+      int? intValue,
+      bool? integralNumber,
+      bool? long,
+      int? longValue,
+      bool? missingNode,
+      bool? null$,
+      bool? number,
+      JsonNodeNumberType? numberType,
+      num? numberValue,
+      bool? object,
+      bool? pojo,
+      String? textValue,
+      bool? textual,
+      bool? valueAsBoolean,
+      num? valueAsDouble,
+      int? valueAsInt,
+      int? valueAsLong,
+      String? valueAsText,
+      bool? valueNode}) {
+    return JsonNode(
+      array: array ?? this.array,
+      bigDecimal: bigDecimal ?? this.bigDecimal,
+      bigInteger: bigInteger ?? this.bigInteger,
+      bigIntegerValue: bigIntegerValue ?? this.bigIntegerValue,
+      binary: binary ?? this.binary,
+      binaryValue: binaryValue ?? this.binaryValue,
+      boolean: boolean ?? this.boolean,
+      booleanValue: booleanValue ?? this.booleanValue,
+      containerNode: containerNode ?? this.containerNode,
+      decimalValue: decimalValue ?? this.decimalValue,
+      double$: double$ ?? this.double$,
+      doubleValue: doubleValue ?? this.doubleValue,
+      elements: elements ?? this.elements,
+      fieldNames: fieldNames ?? this.fieldNames,
+      fields: fields ?? this.fields,
+      floatingPointNumber: floatingPointNumber ?? this.floatingPointNumber,
+      int$: int$ ?? this.int$,
+      intValue: intValue ?? this.intValue,
+      integralNumber: integralNumber ?? this.integralNumber,
+      long: long ?? this.long,
+      longValue: longValue ?? this.longValue,
+      missingNode: missingNode ?? this.missingNode,
+      null$: null$ ?? this.null$,
+      number: number ?? this.number,
+      numberType: numberType ?? this.numberType,
+      numberValue: numberValue ?? this.numberValue,
+      object: object ?? this.object,
+      pojo: pojo ?? this.pojo,
+      textValue: textValue ?? this.textValue,
+      textual: textual ?? this.textual,
+      valueAsBoolean: valueAsBoolean ?? this.valueAsBoolean,
+      valueAsDouble: valueAsDouble ?? this.valueAsDouble,
+      valueAsInt: valueAsInt ?? this.valueAsInt,
+      valueAsLong: valueAsLong ?? this.valueAsLong,
+      valueAsText: valueAsText ?? this.valueAsText,
+      valueNode: valueNode ?? this.valueNode,
+    );
+  }
+}
+
+class JsonNodeNumberType {
+  static const int$ = JsonNodeNumberType._('INT');
+  static const long = JsonNodeNumberType._('LONG');
+  static const bigInteger = JsonNodeNumberType._('BIG_INTEGER');
+  static const float = JsonNodeNumberType._('FLOAT');
+  static const double$ = JsonNodeNumberType._('DOUBLE');
+  static const bigDecimal = JsonNodeNumberType._('BIG_DECIMAL');
+
+  static const values = [
+    int$,
+    long,
+    bigInteger,
+    float,
+    double$,
+    bigDecimal,
+  ];
+  final String value;
+
+  const JsonNodeNumberType._(this.value);
+
+  static JsonNodeNumberType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => JsonNodeNumberType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 /// The schema of a field.
 class JsonTypeBean {
   /// If the field is a custom field, the configuration of the field.
@@ -4872,7 +5355,7 @@ class Operations {
 }
 
 class OrganizationCreateDTO {
-  /// Name of the organization.
+  /// Name of the organization. Must contain 1-200 characters.
   final String name;
 
   OrganizationCreateDTO({required this.name});
@@ -4902,18 +5385,25 @@ class OrganizationDTO {
   /// REST API URL to the organization.
   final SelfLinkDTO? links;
 
+  /// Date the organization was created. This field may not be present in some
+  /// older organizations.
+  final DateDTO? created;
+
   /// A unique system generated ID for the organization.
   final String? id;
 
   /// Name of the organization.
   final String? name;
 
-  OrganizationDTO({this.links, this.id, this.name});
+  OrganizationDTO({this.links, this.created, this.id, this.name});
 
   factory OrganizationDTO.fromJson(Map<String, Object?> json) {
     return OrganizationDTO(
       links: json[r'_links'] != null
           ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+      created: json[r'created'] != null
+          ? DateDTO.fromJson(json[r'created']! as Map<String, Object?>)
           : null,
       id: json[r'id'] as String?,
       name: json[r'name'] as String?,
@@ -4922,12 +5412,16 @@ class OrganizationDTO {
 
   Map<String, Object?> toJson() {
     var links = this.links;
+    var created = this.created;
     var id = this.id;
     var name = this.name;
 
     final json = <String, Object?>{};
     if (links != null) {
       json[r'_links'] = links.toJson();
+    }
+    if (created != null) {
+      json[r'created'] = created.toJson();
     }
     if (id != null) {
       json[r'id'] = id;
@@ -4938,9 +5432,11 @@ class OrganizationDTO {
     return json;
   }
 
-  OrganizationDTO copyWith({SelfLinkDTO? links, String? id, String? name}) {
+  OrganizationDTO copyWith(
+      {SelfLinkDTO? links, DateDTO? created, String? id, String? name}) {
     return OrganizationDTO(
       links: links ?? this.links,
+      created: created ?? this.created,
       id: id ?? this.id,
       name: name ?? this.name,
     );
@@ -7049,6 +7545,13 @@ class RequestCreateDTO {
   /// (Experimental) Shows extra information for the request channel.
   final String? channel;
 
+  /// (Experimental) Provides answers to the form associated with a request type
+  /// that is attached to the request on creation. Jira fields should be omitted
+  /// from `requestFieldValues` if they are linked to form answers. Form answers
+  /// in ADF format should have `isAdfRequest` set to true. Form answers are not
+  /// currently validated.
+  final Form? form;
+
   /// (Experimental) Whether to accept rich text fields in Atlassian Document
   /// Format (ADF).
   final bool isAdfRequest;
@@ -7073,6 +7576,7 @@ class RequestCreateDTO {
 
   RequestCreateDTO(
       {this.channel,
+      this.form,
       bool? isAdfRequest,
       this.raiseOnBehalfOf,
       this.requestFieldValues,
@@ -7085,6 +7589,9 @@ class RequestCreateDTO {
   factory RequestCreateDTO.fromJson(Map<String, Object?> json) {
     return RequestCreateDTO(
       channel: json[r'channel'] as String?,
+      form: json[r'form'] != null
+          ? Form.fromJson(json[r'form']! as Map<String, Object?>)
+          : null,
       isAdfRequest: json[r'isAdfRequest'] as bool? ?? false,
       raiseOnBehalfOf: json[r'raiseOnBehalfOf'] as String?,
       requestFieldValues: json[r'requestFieldValues'] as Map<String, Object?>?,
@@ -7099,6 +7606,7 @@ class RequestCreateDTO {
 
   Map<String, Object?> toJson() {
     var channel = this.channel;
+    var form = this.form;
     var isAdfRequest = this.isAdfRequest;
     var raiseOnBehalfOf = this.raiseOnBehalfOf;
     var requestFieldValues = this.requestFieldValues;
@@ -7109,6 +7617,9 @@ class RequestCreateDTO {
     final json = <String, Object?>{};
     if (channel != null) {
       json[r'channel'] = channel;
+    }
+    if (form != null) {
+      json[r'form'] = form.toJson();
     }
     json[r'isAdfRequest'] = isAdfRequest;
     if (raiseOnBehalfOf != null) {
@@ -7129,6 +7640,7 @@ class RequestCreateDTO {
 
   RequestCreateDTO copyWith(
       {String? channel,
+      Form? form,
       bool? isAdfRequest,
       String? raiseOnBehalfOf,
       Map<String, dynamic>? requestFieldValues,
@@ -7137,6 +7649,7 @@ class RequestCreateDTO {
       String? serviceDeskId}) {
     return RequestCreateDTO(
       channel: channel ?? this.channel,
+      form: form ?? this.form,
       isAdfRequest: isAdfRequest ?? this.isAdfRequest,
       raiseOnBehalfOf: raiseOnBehalfOf ?? this.raiseOnBehalfOf,
       requestFieldValues: requestFieldValues ?? this.requestFieldValues,

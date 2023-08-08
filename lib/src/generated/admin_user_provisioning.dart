@@ -3,6 +3,7 @@
 import '../api_utils.dart';
 
 // ignore_for_file: deprecated_member_use_from_same_package
+// ignore_for_file: provide_deprecation_message
 
 class AdminUserProvisioningApi {
   final ApiClient _client;

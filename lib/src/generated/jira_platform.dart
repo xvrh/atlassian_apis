@@ -3,6 +3,7 @@
 import '../api_utils.dart';
 
 // ignore_for_file: deprecated_member_use_from_same_package
+// ignore_for_file: provide_deprecation_message
 
 class JiraPlatformApi {
   final ApiClient _client;
@@ -77,10 +78,6 @@ class JiraPlatformApi {
   /// https://support.atlassian.com/user-management/docs/create-and-update-groups/
   /// for details.)
   late final groups = GroupsApi(_client);
-
-  /// This resource represents information about the Jira instance. Use it to
-  /// get license details.
-  late final instanceInformation = InstanceInformationApi(_client);
 
   /// This resource represents issue attachments and the attachment settings for
   /// Jira. Use it to get the metadata for an attachment, delete an attachment,
@@ -213,7 +210,7 @@ class JiraPlatformApi {
   ///      *  `User` (the `parameter` is the user key)
   ///      *  `Group` (the `parameter` is the group name)
   ///      *  `ProjectRole` (the `parameter` is the project role ID)
-  ///      *  `EmailAddress`
+  ///      *  `EmailAddress` *(deprecated)*
   ///      *  `AllWatchers`
   ///      *  `UserCustomField` (the `parameter` is the ID of the custom field)
   ///      *  `GroupCustomField`(the `parameter` is the ID of the custom field)
@@ -337,6 +334,9 @@ class JiraPlatformApi {
   ///  *  send notifications about an issue.
   ///  *  get details of the transitions available for an issue.
   ///  *  transition an issue.
+  ///  *  Archive issues.
+  ///  *  Unarchive issues.
+  ///  *  Export archived issues.
   late final issues = IssuesApi(_client);
 
   /// This resource represents JQL search auto-complete details. Use it to
@@ -505,10 +505,10 @@ class JiraPlatformApi {
   /// options, and disable time tracking.
   late final timeTracking = TimeTrackingApi(_client);
 
-  /// UI modifications is an experimental feature available for **Forge apps
-  /// only**. It enables Forge apps to control how selected Jira fields behave
-  /// on global create issue dialog. For example: hide specific fields, set them
-  /// as required, etc.
+  /// UI modifications is a feature available for **Forge apps only**. It
+  /// enables Forge apps to control how selected Jira fields behave on global
+  /// create issue dialog. For example: hide specific fields, set them as
+  /// required, etc.
   late final uiModificationsApps = UIModificationsAppsApi(_client);
 
   /// This resource represents [user](#api-group-Users) properties and provides
@@ -616,9 +616,11 @@ class JiraPlatformApi {
 
   /// This resource represents workflows. Use it to:
   ///
-  ///  *  get workflows.
-  ///  *  create workflows.
-  ///  *  delete inactive workflows.
+  ///  *  Get workflows
+  ///  *  Create workflows
+  ///  *  Update workflows
+  ///  *  Delete inactive workflows
+  ///  *  Get workflow capabilities
   late final workflows = WorkflowsApi(_client);
 
   void close() => _client.close();
@@ -2164,6 +2166,7 @@ class GroupsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  @deprecated
   Future<Group> getGroup(
       {String? groupname, String? groupId, String? expand}) async {
     return Group.fromJson(await _client.send(
@@ -2350,24 +2353,6 @@ class GroupsApi {
         if (caseInsensitive != null) 'caseInsensitive': '$caseInsensitive',
         if (userName != null) 'userName': userName,
       },
-    ));
-  }
-}
-
-/// Jira Cloud platform REST API documentation
-
-class InstanceInformationApi {
-  final ApiClient _client;
-
-  InstanceInformationApi(this._client);
-
-  /// Returns licensing information about the Jira instance.
-  ///
-  /// **[Permissions](#permissions) required:** None.
-  Future<License> getLicense() async {
-    return License.fromJson(await _client.send(
-      'get',
-      'rest/api/3/instance/license',
     ));
   }
 }
@@ -4532,6 +4517,7 @@ class IssueFieldsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  @deprecated
   Future<PageBeanContext> getContextsForFieldDeprecated(
       {required String fieldId, int? startAt, int? maxResults}) async {
     return PageBeanContext.fromJson(await _client.send(
@@ -4958,6 +4944,11 @@ class IssueNotificationSchemesApi {
   /// Adds notifications to a notification scheme. You can add up to 1000
   /// notifications per request.
   ///
+  /// *Deprecated: The notification type `EmailAddress` is no longer supported
+  /// in Cloud. Refer to the
+  /// [changelog](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-1031)
+  /// for more details.*
+  ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<dynamic> addNotifications(
@@ -5014,6 +5005,7 @@ class IssuePrioritiesApi {
   /// Returns the list of all issue priorities.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
+  @deprecated
   Future<List<Priority>> getPriorities() async {
     return (await _client.send(
       'get',
@@ -5066,6 +5058,8 @@ class IssuePrioritiesApi {
   /// criteria:
   ///
   ///  *  a list of priority IDs. Any invalid priority IDs are ignored.
+  ///  *  a list of project IDs. Only priorities that are available in these
+  /// projects will be returned. Any invalid project IDs are ignored.
   ///  *  whether the field configuration is a default. This returns priorities
   /// from company-managed (classic) projects only, as there is no concept of
   /// default priorities in team-managed projects.
@@ -5075,6 +5069,7 @@ class IssuePrioritiesApi {
       {String? startAt,
       String? maxResults,
       List<String>? id,
+      List<String>? projectId,
       bool? onlyDefault}) async {
     return PageBeanPriority.fromJson(await _client.send(
       'get',
@@ -5083,6 +5078,7 @@ class IssuePrioritiesApi {
         if (startAt != null) 'startAt': startAt,
         if (maxResults != null) 'maxResults': maxResults,
         if (id != null) 'id': id.map((e) => e).join(','),
+        if (projectId != null) 'projectId': projectId.map((e) => e).join(','),
         if (onlyDefault != null) 'onlyDefault': '$onlyDefault',
       },
     ));
@@ -5117,6 +5113,10 @@ class IssuePrioritiesApi {
     );
   }
 
+  /// *Deprecated: please refer to the*
+  /// [changelog](https://developer.atlassian.com/changelog/#CHANGE-1066) *for
+  /// more details.*
+  ///
   /// Deletes an issue priority.
   ///
   /// This operation is [asynchronous](#async). Follow the `location` link in
@@ -5125,6 +5125,7 @@ class IssuePrioritiesApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  @deprecated
   Future<TaskProgressBeanObject> deletePriority(
       {required String id, required String replaceWith}) async {
     return TaskProgressBeanObject.fromJson(await _client.send(
@@ -5619,6 +5620,7 @@ class IssueResolutionsApi {
   /// Returns a list of all issue resolution values.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
+  @deprecated
   Future<List<Resolution>> getResolutions() async {
     return (await _client.send(
       'get',
@@ -7702,6 +7704,68 @@ class IssuesApi {
     ));
   }
 
+  /// Enables admins to archive up to 1000 issues in a single request using
+  /// issue ID/key, returning details of the issue(s) archived in the process
+  /// and the errors encountered, if any.
+  ///
+  /// **Note that:**
+  ///
+  ///  *  you can't archive subtasks directly, only through their parent issues
+  ///  *  you can only archive issues from software, service management, and
+  /// business projects
+  ///
+  /// **[Permissions](#permissions) required:** Jira admin or site admin:
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg)
+  ///
+  /// **License required:** Premium or Enterprise
+  ///
+  /// **Signed-in users only:** This API can't be accessed anonymously.
+  ///
+  ///
+  Future<IssueArchivalSyncResponse> archiveIssues(
+      {required IssueArchivalSyncRequest body}) async {
+    return IssueArchivalSyncResponse.fromJson(await _client.send(
+      'put',
+      'rest/api/3/issue/archive',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Enables admins to archive up to 100,000 issues in a single request using
+  /// JQL, returning the URL to check the status of the submitted request.
+  ///
+  /// You can use the
+  /// [get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-tasks/#api-rest-api-3-task-taskid-get)
+  /// and
+  /// [cancel task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-tasks/#api-rest-api-3-task-taskid-cancel-post)
+  /// APIs to manage the request.
+  ///
+  /// **Note that:**
+  ///
+  ///  *  you can't archive subtasks directly, only through their parent issues
+  ///  *  you can only archive issues from software, service management, and
+  /// business projects
+  ///
+  /// **[Permissions](#permissions) required:** Jira admin or site admin:
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg)
+  ///
+  /// **License required:** Premium or Enterprise
+  ///
+  /// **Signed-in users only:** This API can't be accessed anonymously.
+  ///
+  /// **Rate limiting:** Only a single request per user can be active at any
+  /// given time.
+  ///
+  ///
+  Future<String> archiveIssuesAsync(
+      {required ArchiveIssueAsyncRequest body}) async {
+    return await _client.send(
+      'post',
+      'rest/api/3/issue/archive',
+      body: body.toJson(),
+    ) as String;
+  }
+
   /// Creates upto **50** issues and, where the option to create subtasks is
   /// enabled in Jira, subtasks. Transitions may be applied, to move the issues
   /// or subtasks to a workflow step other than the default start step, and
@@ -7772,6 +7836,34 @@ class IssuesApi {
           'issuetypeNames': issuetypeNames.map((e) => e).join(','),
         if (expand != null) 'expand': expand,
       },
+    ));
+  }
+
+  /// Enables admins to unarchive up to 1000 issues in a single request using
+  /// issue ID/key, returning details of the issue(s) unarchived in the process
+  /// and the errors encountered, if any.
+  ///
+  /// **Note that:**
+  ///
+  ///  *  you can't unarchive subtasks directly, only through their parent
+  /// issues
+  ///  *  you can only unarchive issues from software, service management, and
+  /// business projects
+  ///
+  /// **[Permissions](#permissions) required:** Jira admin or site admin:
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg)
+  ///
+  /// **License required:** Premium or Enterprise
+  ///
+  /// **Signed-in users only:** This API can't be accessed anonymously.
+  ///
+  ///
+  Future<IssueArchivalSyncResponse> unarchiveIssues(
+      {required IssueArchivalSyncRequest body}) async {
+    return IssueArchivalSyncResponse.fromJson(await _client.send(
+      'put',
+      'rest/api/3/issue/unarchive',
+      body: body.toJson(),
     ));
   }
 
@@ -8156,6 +8248,33 @@ class IssuesApi {
       },
       body: body.toJson(),
     );
+  }
+
+  /// Enables admins to retrieve details of all archived issues. Upon a
+  /// successful request, the admin who submitted it will receive an email with
+  /// a link to download a CSV file with the issue details.
+  ///
+  /// Note that this API only exports the values of system fields and
+  /// archival-specific fields (`ArchivedBy` and `ArchivedDate`). Custom fields
+  /// aren't supported.
+  ///
+  /// **[Permissions](#permissions) required:** Jira admin or site admin:
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg)
+  ///
+  /// **License required:** Premium or Enterprise
+  ///
+  /// **Signed-in users only:** This API can't be accessed anonymously.
+  ///
+  /// **Rate limiting:** Only a single request can be active at any given time.
+  ///
+  ///
+  Future<ExportArchivedIssuesTaskProgressResponse> exportArchivedIssues(
+      {required ArchivedIssuesFilterRequest body}) async {
+    return ExportArchivedIssuesTaskProgressResponse.fromJson(await _client.send(
+      'put',
+      'rest/api/3/issues/archive/export',
+      body: body.toJson(),
+    ));
   }
 }
 
@@ -8690,9 +8809,19 @@ class LicenseMetricsApi {
 
   LicenseMetricsApi(this._client);
 
-  /// Returns the total approximate user account across all jira licenced
-  /// application keys. Please note this information is cached with a 7-day
-  /// lifecycle and could be stale at the time of call.
+  /// Returns licensing information about the Jira instance.
+  ///
+  /// **[Permissions](#permissions) required:** None.
+  Future<License> getLicense() async {
+    return License.fromJson(await _client.send(
+      'get',
+      'rest/api/3/instance/license',
+    ));
+  }
+
+  /// Returns the approximate number of user accounts across all Jira licenses.
+  /// Note that this information is cached with a 7-day lifecycle and could be
+  /// stale at the time of call.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
@@ -8703,14 +8832,9 @@ class LicenseMetricsApi {
     ));
   }
 
-  /// Returns the total approximate user account for a specific `jira licence
-  /// application key`. Please note this information is cached with a 7-day
-  /// lifecycle and could be stale at the time of call.
-  ///
-  /// #### Application Key ####
-  ///
-  /// An application key represents a specific version of Jira. See {@link
-  /// ApplicationKey} for details
+  /// Returns the total approximate number of user accounts for a single Jira
+  /// license. Note that this information is cached with a 7-day lifecycle and
+  /// could be stale at the time of call.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
@@ -8851,6 +8975,7 @@ class MyselfApi {
   /// instance of Jira.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
+  @deprecated
   Future<dynamic> setLocale({required Locale body}) async {
     return await _client.send(
       'put',
@@ -8866,6 +8991,7 @@ class MyselfApi {
   /// Deletes the locale of the user, which restores the default setting.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
+  @deprecated
   Future<dynamic> deleteLocale() async {
     return await _client.send(
       'delete',
@@ -10594,6 +10720,7 @@ class ProjectVersionsApi {
   /// *Administer Projects*
   /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
   /// project that contains the version.
+  @deprecated
   Future<void> deleteVersion(
       {required String id,
       String? moveFixIssuesTo,
@@ -10744,6 +10871,7 @@ class ProjectsApi {
   /// the user has *Browse Projects* or *Administer projects*
   /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
   /// project.
+  @deprecated
   Future<List<Project>> getAllProjects(
       {String? expand, int? recent, List<String>? properties}) async {
     return (await _client.send(
@@ -11071,6 +11199,7 @@ class ProjectsApi {
   /// **[Permissions](#permissions) required:** *Browse projects*
   /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
   /// project.
+  @deprecated
   Future<ProjectIssueTypeHierarchy> getHierarchy(int projectId) async {
     return ProjectIssueTypeHierarchy.fromJson(await _client.send(
       'get',
@@ -11082,9 +11211,7 @@ class ProjectsApi {
   }
 
   /// Gets a [notification scheme](https://confluence.atlassian.com/x/8YdKLg)
-  /// associated with the project. Deprecated, use
-  /// [Get notification schemes paginated](#api-rest-api-3-notificationscheme-get)
-  /// supporting search and pagination.
+  /// associated with the project.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or
@@ -13717,7 +13844,11 @@ class WorkflowTransitionRulesApi {
   ///  *
   /// [validators](https://developer.atlassian.com/cloud/jira/platform/modules/workflow-validator/)
   ///
-  /// Only rules created by the calling Connect app can be updated.
+  /// Only rules created by the calling
+  /// [Connect](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps)
+  /// or
+  /// [Forge](https://developer.atlassian.com/cloud/jira/platform/index/#forge-apps)
+  /// app can be updated.
   ///
   /// To assist with app migration, this operation can be used to:
   ///
@@ -13727,8 +13858,11 @@ class WorkflowTransitionRulesApi {
   ///
   /// Rules are enabled if the `disabled` parameter is not provided.
   ///
-  /// **[Permissions](#permissions) required:** Only Connect apps can use this
-  /// operation.
+  /// **[Permissions](#permissions) required:** Only
+  /// [Connect](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps)
+  /// or
+  /// [Forge](https://developer.atlassian.com/cloud/jira/platform/index/#forge-apps)
+  /// apps can use this operation.
   Future<WorkflowTransitionRulesUpdateErrors>
       updateWorkflowTransitionRuleConfigurations(
           {required WorkflowTransitionRulesUpdate body}) async {
@@ -13780,6 +13914,7 @@ class WorkflowsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  @deprecated
   Future<List<DeprecatedWorkflow>> getAllWorkflows(
       {String? workflowName}) async {
     return (await _client.send(
@@ -13796,7 +13931,10 @@ class WorkflowsApi {
 
   /// Creates a workflow. You can define transition rules using the shapes
   /// detailed in the following sections. If no transitional rules are specified
-  /// the default system transition rules are used.
+  /// the default system transition rules are used. Note: This only applies to
+  /// company-managed scoped workflows. Use
+  /// [bulk create workflows](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflows-create-post)
+  /// to create both team and company-managed scoped workflows.
   ///
   /// #### Conditions ####
   ///
@@ -14681,6 +14819,750 @@ class WorkflowsApi {
       },
     );
   }
+
+  /// Returns a list of workflows and related statuses by providing workflow
+  /// names, workflow IDs, or project and issue types.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer Jira* project permission to access all, including
+  /// global-scoped, workflows
+  ///  *  At least one of the *Administer projects* and *View (read-only)
+  /// workflow* project permissions to access project-scoped workflows
+  Future<WorkflowReadResponse> readWorkflows(
+      {String? expand, required WorkflowReadRequest body}) async {
+    return WorkflowReadResponse.fromJson(await _client.send(
+      'post',
+      'rest/api/3/workflows',
+      queryParameters: {
+        if (expand != null) 'expand': expand,
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Get the list of workflow capabilities for a specific workflow using either
+  /// the workflow ID, or the project and issue type ID pair. The response
+  /// includes the scope of the workflow, defined as global/project-based, and a
+  /// list of project types that the workflow is scoped to. It also includes all
+  /// rules organised into their broad categories (conditions, validators,
+  /// actions, triggers, screens) as well as the source location
+  /// (Atlassian-provided, Connect, Forge).
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer Jira* project permission to access all, including
+  /// global-scoped, workflows
+  ///  *  *Administer projects* project permissions to access project-scoped
+  /// workflows
+  ///
+  /// The current list of Atlassian-provided rules:
+  ///
+  /// #### Validators ####
+  ///
+  /// A validator rule that checks if a user has the required permissions to
+  /// execute the transition in the workflow.
+  ///
+  /// ##### Permission validator #####
+  ///
+  /// A validator rule that checks if a user has the required permissions to
+  /// execute the transition in the workflow.
+  ///
+  ///     {
+  ///        "ruleKey": "system:check-permission-validator",
+  ///        "parameters": {
+  ///          "permissionKey": "ADMINISTER_PROJECTS"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `permissionKey` The permission required to perform the transition.
+  /// Allowed values:
+  /// [built-in Jira permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#built-in-permissions).
+  ///
+  /// ##### Parent or child blocking validator #####
+  ///
+  /// A validator to block the child issue’s transition depending on the parent
+  /// issue’s status.
+  ///
+  ///     {
+  ///        "ruleKey" : "system:parent-or-child-blocking-validator"
+  ///        "parameters" : {
+  ///          "blocker" : "PARENT"
+  ///          "statusIds" : "1,2,3"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `blocker` currently only supports `PARENT`.
+  ///  *  `statusIds` a comma-separated list of status IDs.
+  ///
+  /// ##### Previous status validator #####
+  ///
+  /// A validator that checks if an issue has transitioned through specified
+  /// previous status(es) before allowing the current transition to occur.
+  ///
+  ///     {
+  ///        "ruleKey": "system:previous-status-validator",
+  ///        "parameters": {
+  ///          "previousStatusIds": "10014",
+  ///          "mostRecentStatusOnly": "true"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `previousStatusIds` a comma-separated list of status IDs, currently
+  /// only support one ID.
+  ///  *  `mostRecentStatusOnly` when `true` only considers the most recent
+  /// status for the condition evaluation. Allowed values: `true`, `false`.
+  ///
+  /// ##### Validate a field value #####
+  ///
+  /// A validation that ensures a specific field's value meets the defined
+  /// criteria before allowing an issue to transition in the workflow.
+  ///
+  /// Depending on the rule type, the result will vary:
+  ///
+  /// ###### Field required ######
+  ///
+  ///     {
+  ///        "ruleKey": "system:validate-field-value",
+  ///        "parameters": {
+  ///          "ruleType": "fieldRequired",
+  ///          "fieldsRequired": "assignee",
+  ///          "ignoreContext": "true",
+  ///          "errorMessage": "An assignee must be set!"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `fieldsRequired` the ID of the field that is required. For a custom
+  /// field, it would look like `customfield_123`.
+  ///  *  `ignoreContext` controls the impact of context settings on field
+  /// validation. When set to `true`, the validator doesn't check a required
+  /// field if its context isn't configured for the current issue. When set to
+  /// `false`, the validator requires a field even if its context is invalid.
+  /// Allowed values: `true`, `false`.
+  ///  *  `errorMessage` is the error message to display if the user does not
+  /// provide a value during the transition. A default error message will be
+  /// shown if you don't provide one (Optional).
+  ///
+  /// ###### Field changed ######
+  ///
+  ///     {
+  ///        "ruleKey": "system:validate-field-value",
+  ///        "parameters": {
+  ///          "ruleType": "fieldChanged",
+  ///          "groupsExemptFromValidation":
+  /// "6862ac20-8672-4f68-896d-4854f5efb79e",
+  ///          "fieldKey": "versions",
+  ///          "errorMessage": "Affect versions must be modified before
+  /// transition"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `groupsExemptFromValidation` a comma-separated list of group IDs to be
+  /// exempt from the validation.
+  ///  *  `fieldKey` the ID of the field that has changed. For a custom field,
+  /// it would look like `customfield_123`.
+  ///  *  `errorMessage` the error message to display if the user does not
+  /// provide a value during the transition. A default error message will be
+  /// shown if you don't provide one (Optional).
+  ///
+  /// ###### Field has a single value ######
+  ///
+  ///     {
+  ///        "ruleKey": "system:validate-field-value",
+  ///        "parameters": {
+  ///          "ruleType": "fieldHasSingleValue",
+  ///          "fieldKey": "created",
+  ///          "excludeSubtasks": "true"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `fieldKey` the ID of the field to validate. For a custom field, it
+  /// would look like `customfield_123`.
+  ///  *  `excludeSubtasks` Option to exclude values copied from sub-tasks.
+  /// Allowed values: `true`, `false`.
+  ///
+  /// ###### Field matches regular expression ######
+  ///
+  ///     {
+  ///        "ruleKey": "system:validate-field-value",
+  ///        "parameters": {
+  ///          "ruleType": "fieldMatchesRegularExpression",
+  ///          "regexp": "[0-9]{4}",
+  ///          "fieldKey": "description"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `regexp` the regular expression used to validate the field’s content.
+  ///  *  `fieldKey` the ID of the field to validate. For a custom field, it
+  /// would look like `customfield_123`.
+  ///
+  /// ###### Date field comparison ######
+  ///
+  ///     {
+  ///        "ruleKey": "system:validate-field-value",
+  ///        "parameters": {
+  ///          "ruleType": "dateFieldComparison",
+  ///          "date1FieldKey": "duedate",
+  ///          "date2FieldKey": "customfield_10054",
+  ///          "includeTime": "true",
+  ///          "conditionSelected": ">="
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `date1FieldKey` the ID of the first field to compare. For a custom
+  /// field, it would look like `customfield_123`.
+  ///  *  `date2FieldKey` the ID of the second field to compare. For a custom
+  /// field, it would look like `customfield_123`.
+  ///  *  `includeTime` if `true`, compares both date and time. Allowed values:
+  /// `true`, `false`.
+  ///  *  `conditionSelected` the condition to compare with. Allowed values:
+  /// `>`, `>=`, `=`, `<=`, `<`, `!=`.
+  ///
+  /// ###### Date range comparison ######
+  ///
+  ///     {
+  ///        "ruleKey": "system:validate-field-value",
+  ///        "parameters": {
+  ///          "ruleType": "windowDateComparison",
+  ///          "date1FieldKey": "customfield_10009",
+  ///          "date2FieldKey": "customfield_10054",
+  ///          "numberOfDays": "3"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `date1FieldKey` the ID of the first field to compare. For a custom
+  /// field, it would look like `customfield_123`.
+  ///  *  `date2FieldKey` the ID of the second field to compare. For a custom
+  /// field, it would look like `customfield_123`.
+  ///  *  `numberOfDays` maximum number of days past the reference date
+  /// (`date2FieldKey`) to pass validation.
+  ///
+  /// This rule is composed by aggregating the following legacy rules:
+  ///
+  ///  *  FieldRequiredValidator
+  ///  *  FieldChangedValidator
+  ///  *  FieldHasSingleValueValidator
+  ///  *  RegexpFieldValidator
+  ///  *  DateFieldValidator
+  ///  *  WindowsDateValidator
+  ///
+  /// ##### Proforma: Forms attached validator #####
+  ///
+  /// Validates that one or more forms are attached to the issue.
+  ///
+  ///     {
+  ///        "ruleKey" : "system:proforma-forms-attached"
+  ///        "parameters" : {}
+  ///      }
+  ///
+  /// ##### Proforma: Forms submitted validator #####
+  ///
+  /// Validates that all forms attached to the issue have been submitted.
+  ///
+  ///     {
+  ///        "ruleKey" : "system:proforma-forms-submitted"
+  ///        "parameters" : {}
+  ///      }
+  ///
+  /// #### Conditions ####
+  ///
+  /// Conditions enable workflow rules that govern whether a transition can
+  /// execute.
+  ///
+  /// ##### Check field value #####
+  ///
+  /// A condition rule evaluates as true if a specific field's value meets the
+  /// defined criteria. This rule ensures that an issue can only transition to
+  /// the next step in the workflow if the field's value matches the desired
+  /// condition.
+  ///
+  ///     {
+  ///        "ruleKey": "system:check-field-value",
+  ///        "parameters": {
+  ///          "fieldId": "description",
+  ///          "fieldValue": "["Done"]",
+  ///          "comparator": "=",
+  ///          "comparisonType": "STRING"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `fieldId` The ID of the field to check the value of. For non-system
+  /// fields, it will look like `customfield_123`. Note: `fieldId` is used
+  /// interchangeably with the idea of `fieldKey` here, they refer to the same
+  /// field.
+  ///  *  `fieldValue` the list of values to check against the field’s value.
+  ///  *  `comparator` The comparison logic. Allowed values: `>`, `>=`, `=`,
+  /// `<=`, `<`, `!=`.
+  ///  *  `comparisonType` The type of data being compared. Allowed values:
+  /// `STRING`, `NUMBER`, `DATE`, `DATE_WITHOUT_TIME`, `OPTIONID`.
+  ///
+  /// ##### Restrict issue transition #####
+  ///
+  /// This rule ensures that issue transitions are restricted based on user
+  /// accounts, roles, group memberships, and permissions, maintaining control
+  /// over who can transition an issue. This condition evaluates as `true` if
+  /// any of the following criteria is met.
+  ///
+  ///     {
+  ///        "ruleKey": "system:restrict-issue-transition",
+  ///        "parameters": {
+  ///          "accountIds": "allow-reporter,5e68ac137d64450d01a77fa0",
+  ///          "roleIds": "10002,10004",
+  ///          "groupIds": "703ff44a-7dc8-4f4b-9aa6-a65bf3574fa4",
+  ///          "permissionKeys": "ADMINISTER_PROJECTS",
+  ///          "groupCustomFields": "customfield_10028",
+  ///          "allowUserCustomFields":
+  /// "customfield_10072,customfield_10144,customfield_10007",
+  ///          "denyUserCustomFields": "customfield_10107"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `accountIds` a comma-separated list of the user account IDs. It also
+  /// allows generic values like: `allow-assignee`, `allow-reporter`, and
+  /// `accountIds` Note: This is only supported in team-managed projects
+  ///  *  `roleIds` a comma-separated list of role IDs.
+  ///  *  `groupIds` a comma-separated list of group IDs.
+  ///  *  `permissionKeys` a comma-separated list of permission keys. Allowed
+  /// values:
+  /// [built-in Jira permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#built-in-permissions).
+  ///  *  `groupCustomFields` a comma-separated list of group custom field IDs.
+  ///  *  `allowUserCustomFields` a comma-separated list of user custom field
+  /// IDs to allow for issue transition.
+  ///  *  `denyUserCustomFields` a comma-separated list of user custom field IDs
+  /// to deny for issue transition.
+  ///
+  /// This rule is composed by aggregating the following legacy rules:
+  ///
+  ///  *  AllowOnlyAssignee
+  ///  *  AllowOnlyReporter
+  ///  *  InAnyProjectRoleCondition
+  ///  *  InProjectRoleCondition
+  ///  *  UserInAnyGroupCondition
+  ///  *  UserInGroupCondition
+  ///  *  PermissionCondtion
+  ///  *  InGroupCFCondition
+  ///  *  UserIsInCustomFieldCondition
+  ///
+  /// ##### Previous status condition #####
+  ///
+  /// A condition that evaluates based on an issue's previous status(es) and
+  /// specific criteria.
+  ///
+  ///     {
+  ///        "ruleKey" : "system:previous-status-condition"
+  ///        "parameters" : {
+  ///          "previousStatusIds" : "10004",
+  ///          "not": "true",
+  ///          "mostRecentStatusOnly" : "true",
+  ///          "includeCurrentStatus": "true",
+  ///          "ignoreLoopTransitions": "true"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `previousStatusIds` a comma-separated list of status IDs, current only
+  /// support one ID.
+  ///  *  `not` indicates if the condition should be reversed. When `true` it
+  /// checks that the issue has not been in the selected statuses. Allowed
+  /// values: `true`, `false`.
+  ///  *  `mostRecentStatusOnly` when true only considers the most recent status
+  /// for the condition evaluation. Allowed values: `true`, `false`.
+  ///  *  `includeCurrentStatus` includes the current status when evaluating if
+  /// the issue has been through the selected statuses. Allowed values: `true`,
+  /// `false`.
+  ///  *  `ignoreLoopTransitions` ignore loop transitions. Allowed values:
+  /// `true`, `false`.
+  ///
+  /// ##### Parent or child blocking condition #####
+  ///
+  /// A condition to block the parent’s issue transition depending on the
+  /// child’s issue status.
+  ///
+  ///     {
+  ///        "ruleKey" : "system:parent-or-child-blocking-condition"
+  ///        "parameters" : {
+  ///          "blocker" : "CHILD",
+  ///          "statusIds" : "1,2,3"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `blocker` currently only supports `CHILD`.
+  ///  *  `statusIds` a comma-separated list of status IDs.
+  ///
+  /// ##### Separation of duties #####
+  ///
+  /// A condition preventing the user from performing, if the user has already
+  /// performed a transition on the issue.
+  ///
+  ///     {
+  ///        "ruleKey": "system:separation-of-duties",
+  ///        "parameters": {
+  ///          "fromStatusId": "10161",
+  ///          "toStatusId": "10160"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `fromStatusId` represents the status ID from which the issue is
+  /// transitioning. It ensures that the user performing the current transition
+  /// has not performed any actions when the issue was in the specified status.
+  ///  *  `toStatusId` represents the status ID to which the issue is
+  /// transitioning. It ensures that the user performing the current transition
+  /// is not the same user who has previously transitioned the issue.
+  ///
+  /// ##### Restrict transitions #####
+  ///
+  /// A condition preventing all users from transitioning the issue can also
+  /// optionally include APIs as well.
+  ///
+  ///     {
+  ///        "ruleKey": "system:restrict-from-all-users",
+  ///        "parameters": {
+  ///          "restrictMode": "users"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `restrictMode` restricts the issue transition including/excluding
+  /// APIs. Allowed values: `"users"`, `"usersAndAPI"`.
+  ///
+  /// ##### Jira Service Management block until approved #####
+  ///
+  /// Block an issue transition until approval. Note: This is only supported in
+  /// team-managed projects.
+  ///
+  ///     {
+  ///        "ruleKey": "system:jsd-approvals-block-until-approved",
+  ///        "parameters": {
+  ///          "approvalConfigurationJson": "{"statusExternalUuid...}"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `approvalConfigurationJson` a stringified JSON holding the Jira
+  /// Service Management approval configuration.
+  ///
+  /// ##### Jira Service Management block until rejected #####
+  ///
+  /// Block an issue transition until rejected. Note: This is only supported in
+  /// team-managed projects.
+  ///
+  ///     {
+  ///        "ruleKey": "system:jsd-approvals-block-until-rejected",
+  ///        "parameters": {
+  ///          "approvalConfigurationJson": "{"statusExternalUuid...}"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `approvalConfigurationJson` a stringified JSON holding the Jira
+  /// Service Management approval configuration.
+  ///
+  /// ##### Block in progress approval #####
+  ///
+  /// Condition to block issue transition if there is pending approval. Note:
+  /// This is only supported in company-managed projects.
+  ///
+  ///     {
+  ///        "ruleKey": "system:block-in-progress-approval",
+  ///        "parameters": {}
+  ///      }
+  ///
+  /// #### Post functions ####
+  ///
+  /// Post functions carry out any additional processing required after a
+  /// workflow transition is executed.
+  ///
+  /// ##### Change assignee #####
+  ///
+  /// A post function rule that changes the assignee of an issue after a
+  /// transition.
+  ///
+  ///     {
+  ///        "ruleKey": "system:change-assignee",
+  ///        "parameters": {
+  ///          "type": "to-selected-user",
+  ///          "accountId": "example-account-id"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `type` the parameter used to determine the new assignee. Allowed
+  /// values: `to-selected-user`, `to-unassigned`, `to-current-user`,
+  /// `to-current-user`, `to-default-user`, `to-default-user`
+  ///  *  `accountId` the account ID of the user to assign the issue to. This
+  /// parameter is required only when the type is `"to-selected-user"`.
+  ///
+  /// ##### Copy field value #####
+  ///
+  /// A post function that automates the process of copying values between
+  /// fields during a specific transition, ensuring data consistency and
+  /// reducing manual effort.
+  ///
+  ///     {
+  ///        "ruleKey": "system:copy-value-from-other-field",
+  ///        "parameters": {
+  ///          "sourceFieldKey": "description",
+  ///          "targetFieldKey": "components",
+  ///          "issueSource": "SAME"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `sourceFieldKey` the field key to copy from. For a custom field, it
+  /// would look like `customfield_123`
+  ///  *  `targetFieldKey` the field key to copy to. For a custom field, it
+  /// would look like `customfield_123`
+  ///  *  `issueSource` `SAME` or `PARENT`. Defaults to `SAME` if no value is
+  /// provided.
+  ///
+  /// ##### Update field #####
+  ///
+  /// A post function that updates or appends a specific field with the given
+  /// value.
+  ///
+  ///     {
+  ///        "ruleKey": "system:update-field",
+  ///        "parameters": {
+  ///          "field": "customfield_10056",
+  ///          "value": "asdf",
+  ///          "mode": "append"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `field` the ID of the field to update. For a custom field, it would
+  /// look like `customfield_123`
+  ///  *  `value` the value to update the field with.
+  ///  *  `mode` `append` or `replace`. Determines if a value will be appended
+  /// to the current value, or if the current value will be replaced.
+  ///
+  /// ##### Trigger webhook #####
+  ///
+  /// A post function that automatically triggers a predefined webhook when a
+  /// transition occurs in the workflow.
+  ///
+  ///     {
+  ///        "ruleKey": "system:trigger-webhook",
+  ///        "parameters": {
+  ///          "webhookId": "1"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `webhookId` the ID of the webhook.
+  ///
+  /// #### Screen ####
+  ///
+  /// ##### Remind people to update fields #####
+  ///
+  /// A screen rule that prompts users to update a specific field when they
+  /// interact with an issue screen during a transition. This rule is useful for
+  /// ensuring that users provide or modify necessary information before moving
+  /// an issue to the next step in the workflow.
+  ///
+  ///     {
+  ///        "ruleKey": "system:remind-people-to-update-fields",
+  ///        "params": {
+  ///          "remindingFieldIds": "assignee,customfield_10025",
+  ///          "remindingMessage": "The message",
+  ///          "remindingAlwaysAsk": "true"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `remindingFieldIds` a comma-separated list of field IDs. Note:
+  /// `fieldId` is used interchangeably with the idea of `fieldKey` here, they
+  /// refer to the same field.
+  ///  *  `remindingMessage` the message to display when prompting the users to
+  /// update the fields.
+  ///  *  `remindingAlwaysAsk` always remind to update fields. Allowed values:
+  /// `true`, `false`.
+  ///
+  /// ##### Shared transition screen #####
+  ///
+  /// A common screen that is shared between transitions in a workflow.
+  ///
+  ///     {
+  ///        "ruleKey": "system:transition-screen",
+  ///        "params": {
+  ///          "screenId": "3"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `screenId` the ID of the screen.
+  ///
+  /// #### Connect & Forge ####
+  ///
+  /// ##### Connect rules #####
+  ///
+  /// Validator/Condition/Post function for Connect app.
+  ///
+  ///     {
+  ///        "ruleKey": "connect:expression-validator",
+  ///        "parameters": {
+  ///          "appKey": "com.atlassian.app",
+  ///          "config": "",
+  ///          "id": "90ce590f-e90c-4cd3-8281-165ce41f2ac3",
+  ///          "disabled": "false",
+  ///          "tag": ""
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `ruleKey` Validator: `connect:expression-validator`, Condition:
+  /// `connect:expression-condition`, and Post function:
+  /// `connect:remote-workflow-function`
+  ///  *  `appKey` the reference to the Connect app
+  ///  *  `config` a JSON payload string describing the configuration
+  ///  *  `id` the ID of the rule
+  ///  *  `disabled` determine if the Connect app is disabled. Allowed values:
+  /// `true`, `false`.
+  ///  *  `tag` additional tags for the Connect app
+  ///
+  /// ##### Forge rules #####
+  ///
+  /// Validator/Condition/Post function for Forge app.
+  ///
+  ///     {
+  ///        "ruleKey": "forge:expression-validator",
+  ///        "parameters": {
+  ///          "key":
+  /// "ari:cloud:ecosystem::extension/{appId}/{environmentId}/static/{moduleKey}",
+  ///          "config": "{"searchString":"workflow validator"}",
+  ///          "id": "a865ddf6-bb3f-4a7b-9540-c2f8b3f9f6c2"
+  ///        }
+  ///      }
+  ///
+  /// Parameters:
+  ///
+  ///  *  `ruleKey` Validator: `forge:expression-validator`, Condition:
+  /// `forge:expression-condition`, and Post function:
+  /// `forge:workflow-post-function`
+  ///  *  `key` the identifier for the Forge app
+  ///  *  `config` the persistent stringified JSON configuration for the Forge
+  /// rule
+  ///  *  `id` the ID of the Forge rule
+  Future<WorkflowCapabilities> workflowCapabilities(
+      {String? workflowId, String? projectId, String? issueTypeId}) async {
+    return WorkflowCapabilities.fromJson(await _client.send(
+      'get',
+      'rest/api/3/workflows/capabilities',
+      queryParameters: {
+        if (workflowId != null) 'workflowId': workflowId,
+        if (projectId != null) 'projectId': projectId,
+        if (issueTypeId != null) 'issueTypeId': issueTypeId,
+      },
+    ));
+  }
+
+  /// Create workflows and related statuses.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer Jira* project permission to create all, including
+  /// global-scoped, workflows
+  ///  *  *Administer projects* project permissions to create project-scoped
+  /// workflows
+  Future<WorkflowCreateResponse> createWorkflows(
+      {required WorkflowCreateRequest body}) async {
+    return WorkflowCreateResponse.fromJson(await _client.send(
+      'post',
+      'rest/api/3/workflows/create',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Validate the payload for bulk create workflows.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer Jira* project permission to create all, including
+  /// global-scoped, workflows
+  ///  *  *Administer projects* project permissions to create project-scoped
+  /// workflows
+  Future<WorkflowValidationErrorList> validateCreateWorkflows(
+      {required WorkflowCreateValidateRequest body}) async {
+    return WorkflowValidationErrorList.fromJson(await _client.send(
+      'post',
+      'rest/api/3/workflows/create/validation',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Update workflows and related statuses.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer Jira* project permission to create all, including
+  /// global-scoped, workflows
+  ///  *  *Administer projects* project permissions to create project-scoped
+  /// workflows
+  Future<WorkflowUpdateResponse> updateWorkflows(
+      {String? expand, required WorkflowUpdateRequest body}) async {
+    return WorkflowUpdateResponse.fromJson(await _client.send(
+      'post',
+      'rest/api/3/workflows/update',
+      queryParameters: {
+        if (expand != null) 'expand': expand,
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Validate the payload for bulk update workflows.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer Jira* project permission to create all, including
+  /// global-scoped, workflows
+  ///  *  *Administer projects* project permissions to create project-scoped
+  /// workflows
+  Future<WorkflowValidationErrorList> validateUpdateWorkflows(
+      {required WorkflowUpdateValidateRequestBean body}) async {
+    return WorkflowValidationErrorList.fromJson(await _client.send(
+      'post',
+      'rest/api/3/workflows/update/validation',
+      body: body.toJson(),
+    ));
+  }
 }
 
 class ActorInputBean {
@@ -15496,6 +16378,119 @@ class ApplicationRole {
       selectedByDefault: selectedByDefault ?? this.selectedByDefault,
       userCount: userCount ?? this.userCount,
       userCountDescription: userCountDescription ?? this.userCountDescription,
+    );
+  }
+}
+
+class ArchiveIssueAsyncRequest {
+  final String? jql;
+
+  ArchiveIssueAsyncRequest({this.jql});
+
+  factory ArchiveIssueAsyncRequest.fromJson(Map<String, Object?> json) {
+    return ArchiveIssueAsyncRequest(
+      jql: json[r'jql'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var jql = this.jql;
+
+    final json = <String, Object?>{};
+    if (jql != null) {
+      json[r'jql'] = jql;
+    }
+    return json;
+  }
+
+  ArchiveIssueAsyncRequest copyWith({String? jql}) {
+    return ArchiveIssueAsyncRequest(
+      jql: jql ?? this.jql,
+    );
+  }
+}
+
+/// Details of a filter for exporting archived issues.
+class ArchivedIssuesFilterRequest {
+  /// List archived issues archived by a specified account ID.
+  final List<String> archivedBy;
+  final DateRangeFilterRequest? archivedDateRange;
+
+  /// List archived issues with a specified issue type ID.
+  final List<String> issueTypes;
+
+  /// List archived issues with a specified project key.
+  final List<String> projects;
+
+  /// List archived issues where the reporter is a specified account ID.
+  final List<String> reporters;
+
+  ArchivedIssuesFilterRequest(
+      {List<String>? archivedBy,
+      this.archivedDateRange,
+      List<String>? issueTypes,
+      List<String>? projects,
+      List<String>? reporters})
+      : archivedBy = archivedBy ?? [],
+        issueTypes = issueTypes ?? [],
+        projects = projects ?? [],
+        reporters = reporters ?? [];
+
+  factory ArchivedIssuesFilterRequest.fromJson(Map<String, Object?> json) {
+    return ArchivedIssuesFilterRequest(
+      archivedBy: (json[r'archivedBy'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      archivedDateRange: json[r'archivedDateRange'] != null
+          ? DateRangeFilterRequest.fromJson(
+              json[r'archivedDateRange']! as Map<String, Object?>)
+          : null,
+      issueTypes: (json[r'issueTypes'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      projects: (json[r'projects'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      reporters: (json[r'reporters'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var archivedBy = this.archivedBy;
+    var archivedDateRange = this.archivedDateRange;
+    var issueTypes = this.issueTypes;
+    var projects = this.projects;
+    var reporters = this.reporters;
+
+    final json = <String, Object?>{};
+    json[r'archivedBy'] = archivedBy;
+    if (archivedDateRange != null) {
+      json[r'archivedDateRange'] = archivedDateRange.toJson();
+    }
+    json[r'issueTypes'] = issueTypes;
+    json[r'projects'] = projects;
+    json[r'reporters'] = reporters;
+    return json;
+  }
+
+  ArchivedIssuesFilterRequest copyWith(
+      {List<String>? archivedBy,
+      DateRangeFilterRequest? archivedDateRange,
+      List<String>? issueTypes,
+      List<String>? projects,
+      List<String>? reporters}) {
+    return ArchivedIssuesFilterRequest(
+      archivedBy: archivedBy ?? this.archivedBy,
+      archivedDateRange: archivedDateRange ?? this.archivedDateRange,
+      issueTypes: issueTypes ?? this.issueTypes,
+      projects: projects ?? this.projects,
+      reporters: reporters ?? this.reporters,
     );
   }
 }
@@ -16646,6 +17641,465 @@ class AvailableDashboardGadgetsResponse {
       {List<AvailableDashboardGadget>? gadgets}) {
     return AvailableDashboardGadgetsResponse(
       gadgets: gadgets ?? this.gadgets,
+    );
+  }
+}
+
+/// The Connect provided ecosystem rules available.
+class AvailableWorkflowConnectRule {
+  /// The add-on providing the rule.
+  final String? addonKey;
+
+  /// The URL creation path segment defined in the Connect module.
+  final String? createUrl;
+
+  /// The rule description.
+  final String? description;
+
+  /// The URL edit path segment defined in the Connect module.
+  final String? editUrl;
+
+  /// The module providing the rule.
+  final String? moduleKey;
+
+  /// The rule name.
+  final String? name;
+
+  /// The rule key.
+  final String? ruleKey;
+
+  /// The rule type.
+  final AvailableWorkflowConnectRuleRuleType? ruleType;
+
+  /// The URL view path segment defined in the Connect module.
+  final String? viewUrl;
+
+  AvailableWorkflowConnectRule(
+      {this.addonKey,
+      this.createUrl,
+      this.description,
+      this.editUrl,
+      this.moduleKey,
+      this.name,
+      this.ruleKey,
+      this.ruleType,
+      this.viewUrl});
+
+  factory AvailableWorkflowConnectRule.fromJson(Map<String, Object?> json) {
+    return AvailableWorkflowConnectRule(
+      addonKey: json[r'addonKey'] as String?,
+      createUrl: json[r'createUrl'] as String?,
+      description: json[r'description'] as String?,
+      editUrl: json[r'editUrl'] as String?,
+      moduleKey: json[r'moduleKey'] as String?,
+      name: json[r'name'] as String?,
+      ruleKey: json[r'ruleKey'] as String?,
+      ruleType: json[r'ruleType'] != null
+          ? AvailableWorkflowConnectRuleRuleType.fromValue(
+              json[r'ruleType']! as String)
+          : null,
+      viewUrl: json[r'viewUrl'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var addonKey = this.addonKey;
+    var createUrl = this.createUrl;
+    var description = this.description;
+    var editUrl = this.editUrl;
+    var moduleKey = this.moduleKey;
+    var name = this.name;
+    var ruleKey = this.ruleKey;
+    var ruleType = this.ruleType;
+    var viewUrl = this.viewUrl;
+
+    final json = <String, Object?>{};
+    if (addonKey != null) {
+      json[r'addonKey'] = addonKey;
+    }
+    if (createUrl != null) {
+      json[r'createUrl'] = createUrl;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (editUrl != null) {
+      json[r'editUrl'] = editUrl;
+    }
+    if (moduleKey != null) {
+      json[r'moduleKey'] = moduleKey;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (ruleKey != null) {
+      json[r'ruleKey'] = ruleKey;
+    }
+    if (ruleType != null) {
+      json[r'ruleType'] = ruleType.value;
+    }
+    if (viewUrl != null) {
+      json[r'viewUrl'] = viewUrl;
+    }
+    return json;
+  }
+
+  AvailableWorkflowConnectRule copyWith(
+      {String? addonKey,
+      String? createUrl,
+      String? description,
+      String? editUrl,
+      String? moduleKey,
+      String? name,
+      String? ruleKey,
+      AvailableWorkflowConnectRuleRuleType? ruleType,
+      String? viewUrl}) {
+    return AvailableWorkflowConnectRule(
+      addonKey: addonKey ?? this.addonKey,
+      createUrl: createUrl ?? this.createUrl,
+      description: description ?? this.description,
+      editUrl: editUrl ?? this.editUrl,
+      moduleKey: moduleKey ?? this.moduleKey,
+      name: name ?? this.name,
+      ruleKey: ruleKey ?? this.ruleKey,
+      ruleType: ruleType ?? this.ruleType,
+      viewUrl: viewUrl ?? this.viewUrl,
+    );
+  }
+}
+
+class AvailableWorkflowConnectRuleRuleType {
+  static const condition = AvailableWorkflowConnectRuleRuleType._('Condition');
+  static const validator = AvailableWorkflowConnectRuleRuleType._('Validator');
+  static const function = AvailableWorkflowConnectRuleRuleType._('Function');
+  static const screen = AvailableWorkflowConnectRuleRuleType._('Screen');
+
+  static const values = [
+    condition,
+    validator,
+    function,
+    screen,
+  ];
+  final String value;
+
+  const AvailableWorkflowConnectRuleRuleType._(this.value);
+
+  static AvailableWorkflowConnectRuleRuleType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => AvailableWorkflowConnectRuleRuleType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// The Forge provided ecosystem rules available.
+class AvailableWorkflowForgeRule {
+  /// The rule description.
+  final String? description;
+
+  /// The unique ARI of the forge rule type.
+  final String? id;
+
+  /// The rule name.
+  final String? name;
+
+  /// The rule key.
+  final String? ruleKey;
+
+  /// The rule type.
+  final AvailableWorkflowForgeRuleRuleType? ruleType;
+
+  AvailableWorkflowForgeRule(
+      {this.description, this.id, this.name, this.ruleKey, this.ruleType});
+
+  factory AvailableWorkflowForgeRule.fromJson(Map<String, Object?> json) {
+    return AvailableWorkflowForgeRule(
+      description: json[r'description'] as String?,
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      ruleKey: json[r'ruleKey'] as String?,
+      ruleType: json[r'ruleType'] != null
+          ? AvailableWorkflowForgeRuleRuleType.fromValue(
+              json[r'ruleType']! as String)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var id = this.id;
+    var name = this.name;
+    var ruleKey = this.ruleKey;
+    var ruleType = this.ruleType;
+
+    final json = <String, Object?>{};
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (ruleKey != null) {
+      json[r'ruleKey'] = ruleKey;
+    }
+    if (ruleType != null) {
+      json[r'ruleType'] = ruleType.value;
+    }
+    return json;
+  }
+
+  AvailableWorkflowForgeRule copyWith(
+      {String? description,
+      String? id,
+      String? name,
+      String? ruleKey,
+      AvailableWorkflowForgeRuleRuleType? ruleType}) {
+    return AvailableWorkflowForgeRule(
+      description: description ?? this.description,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      ruleKey: ruleKey ?? this.ruleKey,
+      ruleType: ruleType ?? this.ruleType,
+    );
+  }
+}
+
+class AvailableWorkflowForgeRuleRuleType {
+  static const condition = AvailableWorkflowForgeRuleRuleType._('Condition');
+  static const validator = AvailableWorkflowForgeRuleRuleType._('Validator');
+  static const function = AvailableWorkflowForgeRuleRuleType._('Function');
+  static const screen = AvailableWorkflowForgeRuleRuleType._('Screen');
+
+  static const values = [
+    condition,
+    validator,
+    function,
+    screen,
+  ];
+  final String value;
+
+  const AvailableWorkflowForgeRuleRuleType._(this.value);
+
+  static AvailableWorkflowForgeRuleRuleType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => AvailableWorkflowForgeRuleRuleType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// The Atlassian provided system rules available.
+class AvailableWorkflowSystemRule {
+  /// The rule description.
+  final String description;
+
+  /// List of rules that conflict with this one.
+  final List<String> incompatibleRuleKeys;
+
+  /// Whether the rule can be added added to an initial transition.
+  final bool isAvailableForInitialTransition;
+
+  /// Whether the rule is visible.
+  final bool isVisible;
+
+  /// The rule name.
+  final String name;
+
+  /// The rule key.
+  final String ruleKey;
+
+  /// The rule type.
+  final AvailableWorkflowSystemRuleRuleType ruleType;
+
+  AvailableWorkflowSystemRule(
+      {required this.description,
+      required this.incompatibleRuleKeys,
+      required this.isAvailableForInitialTransition,
+      required this.isVisible,
+      required this.name,
+      required this.ruleKey,
+      required this.ruleType});
+
+  factory AvailableWorkflowSystemRule.fromJson(Map<String, Object?> json) {
+    return AvailableWorkflowSystemRule(
+      description: json[r'description'] as String? ?? '',
+      incompatibleRuleKeys: (json[r'incompatibleRuleKeys'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      isAvailableForInitialTransition:
+          json[r'isAvailableForInitialTransition'] as bool? ?? false,
+      isVisible: json[r'isVisible'] as bool? ?? false,
+      name: json[r'name'] as String? ?? '',
+      ruleKey: json[r'ruleKey'] as String? ?? '',
+      ruleType: AvailableWorkflowSystemRuleRuleType.fromValue(
+          json[r'ruleType'] as String? ?? ''),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var incompatibleRuleKeys = this.incompatibleRuleKeys;
+    var isAvailableForInitialTransition = this.isAvailableForInitialTransition;
+    var isVisible = this.isVisible;
+    var name = this.name;
+    var ruleKey = this.ruleKey;
+    var ruleType = this.ruleType;
+
+    final json = <String, Object?>{};
+    json[r'description'] = description;
+    json[r'incompatibleRuleKeys'] = incompatibleRuleKeys;
+    json[r'isAvailableForInitialTransition'] = isAvailableForInitialTransition;
+    json[r'isVisible'] = isVisible;
+    json[r'name'] = name;
+    json[r'ruleKey'] = ruleKey;
+    json[r'ruleType'] = ruleType.value;
+    return json;
+  }
+
+  AvailableWorkflowSystemRule copyWith(
+      {String? description,
+      List<String>? incompatibleRuleKeys,
+      bool? isAvailableForInitialTransition,
+      bool? isVisible,
+      String? name,
+      String? ruleKey,
+      AvailableWorkflowSystemRuleRuleType? ruleType}) {
+    return AvailableWorkflowSystemRule(
+      description: description ?? this.description,
+      incompatibleRuleKeys: incompatibleRuleKeys ?? this.incompatibleRuleKeys,
+      isAvailableForInitialTransition: isAvailableForInitialTransition ??
+          this.isAvailableForInitialTransition,
+      isVisible: isVisible ?? this.isVisible,
+      name: name ?? this.name,
+      ruleKey: ruleKey ?? this.ruleKey,
+      ruleType: ruleType ?? this.ruleType,
+    );
+  }
+}
+
+class AvailableWorkflowSystemRuleRuleType {
+  static const condition = AvailableWorkflowSystemRuleRuleType._('Condition');
+  static const validator = AvailableWorkflowSystemRuleRuleType._('Validator');
+  static const function = AvailableWorkflowSystemRuleRuleType._('Function');
+  static const screen = AvailableWorkflowSystemRuleRuleType._('Screen');
+
+  static const values = [
+    condition,
+    validator,
+    function,
+    screen,
+  ];
+  final String value;
+
+  const AvailableWorkflowSystemRuleRuleType._(this.value);
+
+  static AvailableWorkflowSystemRuleRuleType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => AvailableWorkflowSystemRuleRuleType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// The list of available trigger types.
+class AvailableWorkflowTriggerTypes {
+  /// The description of the trigger rule.
+  final String? description;
+
+  /// The name of the trigger rule.
+  final String? name;
+
+  /// The type identifier of trigger rule.
+  final String? type;
+
+  AvailableWorkflowTriggerTypes({this.description, this.name, this.type});
+
+  factory AvailableWorkflowTriggerTypes.fromJson(Map<String, Object?> json) {
+    return AvailableWorkflowTriggerTypes(
+      description: json[r'description'] as String?,
+      name: json[r'name'] as String?,
+      type: json[r'type'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var name = this.name;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    return json;
+  }
+
+  AvailableWorkflowTriggerTypes copyWith(
+      {String? description, String? name, String? type}) {
+    return AvailableWorkflowTriggerTypes(
+      description: description ?? this.description,
+      name: name ?? this.name,
+      type: type ?? this.type,
+    );
+  }
+}
+
+/// The trigger rules available.
+class AvailableWorkflowTriggers {
+  /// The list of available trigger types.
+  final List<AvailableWorkflowTriggerTypes> availableTypes;
+
+  /// The rule key of the rule.
+  final String ruleKey;
+
+  AvailableWorkflowTriggers(
+      {required this.availableTypes, required this.ruleKey});
+
+  factory AvailableWorkflowTriggers.fromJson(Map<String, Object?> json) {
+    return AvailableWorkflowTriggers(
+      availableTypes: (json[r'availableTypes'] as List<Object?>?)
+              ?.map((i) => AvailableWorkflowTriggerTypes.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      ruleKey: json[r'ruleKey'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var availableTypes = this.availableTypes;
+    var ruleKey = this.ruleKey;
+
+    final json = <String, Object?>{};
+    json[r'availableTypes'] = availableTypes.map((i) => i.toJson()).toList();
+    json[r'ruleKey'] = ruleKey;
+    return json;
+  }
+
+  AvailableWorkflowTriggers copyWith(
+      {List<AvailableWorkflowTriggerTypes>? availableTypes, String? ruleKey}) {
+    return AvailableWorkflowTriggers(
+      availableTypes: availableTypes ?? this.availableTypes,
+      ruleKey: ruleKey ?? this.ruleKey,
     );
   }
 }
@@ -18253,6 +19707,180 @@ class CompoundClauseOperator {
   static CompoundClauseOperator fromValue(String value) =>
       values.firstWhere((e) => e.value == value,
           orElse: () => CompoundClauseOperator._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// The conditions group associated with the transition.
+class ConditionGroupConfiguration {
+  /// The nested conditions of the condition group.
+  final List<ConditionGroupConfiguration> conditionGroups;
+
+  /// The rules for this condition.
+  final List<WorkflowRuleConfiguration> conditions;
+
+  /// Determines how the conditions in the group are evaluated. Accepts either
+  /// `ANY` or `ALL`. If `ANY` is used, at least one condition in the group must
+  /// be true for the group to evaluate to true. If `ALL` is used, all
+  /// conditions in the group must be true for the group to evaluate to true.
+  final ConditionGroupConfigurationOperation? operation;
+
+  ConditionGroupConfiguration(
+      {List<ConditionGroupConfiguration>? conditionGroups,
+      List<WorkflowRuleConfiguration>? conditions,
+      this.operation})
+      : conditionGroups = conditionGroups ?? [],
+        conditions = conditions ?? [];
+
+  factory ConditionGroupConfiguration.fromJson(Map<String, Object?> json) {
+    return ConditionGroupConfiguration(
+      conditionGroups: (json[r'conditionGroups'] as List<Object?>?)
+              ?.map((i) => ConditionGroupConfiguration.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      conditions: (json[r'conditions'] as List<Object?>?)
+              ?.map((i) => WorkflowRuleConfiguration.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      operation: json[r'operation'] != null
+          ? ConditionGroupConfigurationOperation.fromValue(
+              json[r'operation']! as String)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var conditionGroups = this.conditionGroups;
+    var conditions = this.conditions;
+    var operation = this.operation;
+
+    final json = <String, Object?>{};
+    json[r'conditionGroups'] = conditionGroups.map((i) => i.toJson()).toList();
+    json[r'conditions'] = conditions.map((i) => i.toJson()).toList();
+    if (operation != null) {
+      json[r'operation'] = operation.value;
+    }
+    return json;
+  }
+
+  ConditionGroupConfiguration copyWith(
+      {List<ConditionGroupConfiguration>? conditionGroups,
+      List<WorkflowRuleConfiguration>? conditions,
+      ConditionGroupConfigurationOperation? operation}) {
+    return ConditionGroupConfiguration(
+      conditionGroups: conditionGroups ?? this.conditionGroups,
+      conditions: conditions ?? this.conditions,
+      operation: operation ?? this.operation,
+    );
+  }
+}
+
+class ConditionGroupConfigurationOperation {
+  static const any = ConditionGroupConfigurationOperation._('ANY');
+  static const all = ConditionGroupConfigurationOperation._('ALL');
+
+  static const values = [
+    any,
+    all,
+  ];
+  final String value;
+
+  const ConditionGroupConfigurationOperation._(this.value);
+
+  static ConditionGroupConfigurationOperation fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ConditionGroupConfigurationOperation._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// The conditions group associated with the transition.
+class ConditionGroupUpdate {
+  /// The nested conditions of the condition group.
+  final List<ConditionGroupUpdate> conditionGroups;
+
+  /// The rules for this condition.
+  final List<WorkflowRuleConfiguration> conditions;
+
+  /// Determines how the conditions in the group are evaluated. Accepts either
+  /// `ANY` or `ALL`. If `ANY` is used, at least one condition in the group must
+  /// be true for the group to evaluate to true. If `ALL` is used, all
+  /// conditions in the group must be true for the group to evaluate to true.
+  final ConditionGroupUpdateOperation operation;
+
+  ConditionGroupUpdate(
+      {List<ConditionGroupUpdate>? conditionGroups,
+      List<WorkflowRuleConfiguration>? conditions,
+      required this.operation})
+      : conditionGroups = conditionGroups ?? [],
+        conditions = conditions ?? [];
+
+  factory ConditionGroupUpdate.fromJson(Map<String, Object?> json) {
+    return ConditionGroupUpdate(
+      conditionGroups: (json[r'conditionGroups'] as List<Object?>?)
+              ?.map((i) => ConditionGroupUpdate.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      conditions: (json[r'conditions'] as List<Object?>?)
+              ?.map((i) => WorkflowRuleConfiguration.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      operation: ConditionGroupUpdateOperation.fromValue(
+          json[r'operation'] as String? ?? ''),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var conditionGroups = this.conditionGroups;
+    var conditions = this.conditions;
+    var operation = this.operation;
+
+    final json = <String, Object?>{};
+    json[r'conditionGroups'] = conditionGroups.map((i) => i.toJson()).toList();
+    json[r'conditions'] = conditions.map((i) => i.toJson()).toList();
+    json[r'operation'] = operation.value;
+    return json;
+  }
+
+  ConditionGroupUpdate copyWith(
+      {List<ConditionGroupUpdate>? conditionGroups,
+      List<WorkflowRuleConfiguration>? conditions,
+      ConditionGroupUpdateOperation? operation}) {
+    return ConditionGroupUpdate(
+      conditionGroups: conditionGroups ?? this.conditionGroups,
+      conditions: conditions ?? this.conditions,
+      operation: operation ?? this.operation,
+    );
+  }
+}
+
+class ConditionGroupUpdateOperation {
+  static const any = ConditionGroupUpdateOperation._('ANY');
+  static const all = ConditionGroupUpdateOperation._('ALL');
+
+  static const values = [
+    any,
+    all,
+  ];
+  final String value;
+
+  const ConditionGroupUpdateOperation._(this.value);
+
+  static ConditionGroupUpdateOperation fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ConditionGroupUpdateOperation._(value));
 
   /// An enum received from the server but this version of the client doesn't recognize it.
   bool get isUnknown => values.every((v) => v.value != value);
@@ -23247,6 +24875,43 @@ class DashboardGadgetUpdateRequest {
   }
 }
 
+/// List issues archived within a specified date range.
+class DateRangeFilterRequest {
+  /// List issues archived after a specified date, passed in the YYYY-MM-DD
+  /// format.
+  final String dateAfter;
+
+  /// List issues archived before a specified date provided in the YYYY-MM-DD
+  /// format.
+  final String dateBefore;
+
+  DateRangeFilterRequest({required this.dateAfter, required this.dateBefore});
+
+  factory DateRangeFilterRequest.fromJson(Map<String, Object?> json) {
+    return DateRangeFilterRequest(
+      dateAfter: json[r'dateAfter'] as String? ?? '',
+      dateBefore: json[r'dateBefore'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var dateAfter = this.dateAfter;
+    var dateBefore = this.dateBefore;
+
+    final json = <String, Object?>{};
+    json[r'dateAfter'] = dateAfter;
+    json[r'dateBefore'] = dateBefore;
+    return json;
+  }
+
+  DateRangeFilterRequest copyWith({String? dateAfter, String? dateBefore}) {
+    return DateRangeFilterRequest(
+      dateAfter: dateAfter ?? this.dateAfter,
+      dateBefore: dateBefore ?? this.dateBefore,
+    );
+  }
+}
+
 /// Details of scheme and new default level.
 class DefaultLevelValue {
   /// The ID of the issue security level to set as default for the specified
@@ -23557,6 +25222,45 @@ class DeprecatedWorkflow {
   }
 }
 
+/// The version details of the workflow.
+class DocumentVersion {
+  /// The version UUID.
+  final String? id;
+
+  /// The version number.
+  final int? versionNumber;
+
+  DocumentVersion({this.id, this.versionNumber});
+
+  factory DocumentVersion.fromJson(Map<String, Object?> json) {
+    return DocumentVersion(
+      id: json[r'id'] as String?,
+      versionNumber: (json[r'versionNumber'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var versionNumber = this.versionNumber;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (versionNumber != null) {
+      json[r'versionNumber'] = versionNumber;
+    }
+    return json;
+  }
+
+  DocumentVersion copyWith({String? id, int? versionNumber}) {
+    return DocumentVersion(
+      id: id ?? this.id,
+      versionNumber: versionNumber ?? this.versionNumber,
+    );
+  }
+}
+
 /// An entity property, for more information see
 /// [Entity properties](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
 class EntityProperty {
@@ -23639,6 +25343,50 @@ class EntityPropertyDetails {
   }
 }
 
+class Error {
+  final int? count;
+  final List<String> issueIdsOrKeys;
+  final String? message;
+
+  Error({this.count, List<String>? issueIdsOrKeys, this.message})
+      : issueIdsOrKeys = issueIdsOrKeys ?? [];
+
+  factory Error.fromJson(Map<String, Object?> json) {
+    return Error(
+      count: (json[r'count'] as num?)?.toInt(),
+      issueIdsOrKeys: (json[r'issueIdsOrKeys'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      message: json[r'message'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var count = this.count;
+    var issueIdsOrKeys = this.issueIdsOrKeys;
+    var message = this.message;
+
+    final json = <String, Object?>{};
+    if (count != null) {
+      json[r'count'] = count;
+    }
+    json[r'issueIdsOrKeys'] = issueIdsOrKeys;
+    if (message != null) {
+      json[r'message'] = message;
+    }
+    return json;
+  }
+
+  Error copyWith({int? count, List<String>? issueIdsOrKeys, String? message}) {
+    return Error(
+      count: count ?? this.count,
+      issueIdsOrKeys: issueIdsOrKeys ?? this.issueIdsOrKeys,
+      message: message ?? this.message,
+    );
+  }
+}
+
 /// Error messages from an operation.
 class ErrorCollection {
   /// The list of error messages produced by this operation. For example, "input
@@ -23716,6 +25464,75 @@ class ErrorMessage {
   ErrorMessage copyWith({String? message}) {
     return ErrorMessage(
       message: message ?? this.message,
+    );
+  }
+}
+
+class Errors {
+  final Error? issueIsSubtask;
+  final Error? issuesInArchivedProjects;
+  final Error? issuesInUnlicensedProjects;
+  final Error? issuesNotFound;
+
+  Errors(
+      {this.issueIsSubtask,
+      this.issuesInArchivedProjects,
+      this.issuesInUnlicensedProjects,
+      this.issuesNotFound});
+
+  factory Errors.fromJson(Map<String, Object?> json) {
+    return Errors(
+      issueIsSubtask: json[r'issueIsSubtask'] != null
+          ? Error.fromJson(json[r'issueIsSubtask']! as Map<String, Object?>)
+          : null,
+      issuesInArchivedProjects: json[r'issuesInArchivedProjects'] != null
+          ? Error.fromJson(
+              json[r'issuesInArchivedProjects']! as Map<String, Object?>)
+          : null,
+      issuesInUnlicensedProjects: json[r'issuesInUnlicensedProjects'] != null
+          ? Error.fromJson(
+              json[r'issuesInUnlicensedProjects']! as Map<String, Object?>)
+          : null,
+      issuesNotFound: json[r'issuesNotFound'] != null
+          ? Error.fromJson(json[r'issuesNotFound']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueIsSubtask = this.issueIsSubtask;
+    var issuesInArchivedProjects = this.issuesInArchivedProjects;
+    var issuesInUnlicensedProjects = this.issuesInUnlicensedProjects;
+    var issuesNotFound = this.issuesNotFound;
+
+    final json = <String, Object?>{};
+    if (issueIsSubtask != null) {
+      json[r'issueIsSubtask'] = issueIsSubtask.toJson();
+    }
+    if (issuesInArchivedProjects != null) {
+      json[r'issuesInArchivedProjects'] = issuesInArchivedProjects.toJson();
+    }
+    if (issuesInUnlicensedProjects != null) {
+      json[r'issuesInUnlicensedProjects'] = issuesInUnlicensedProjects.toJson();
+    }
+    if (issuesNotFound != null) {
+      json[r'issuesNotFound'] = issuesNotFound.toJson();
+    }
+    return json;
+  }
+
+  Errors copyWith(
+      {Error? issueIsSubtask,
+      Error? issuesInArchivedProjects,
+      Error? issuesInUnlicensedProjects,
+      Error? issuesNotFound}) {
+    return Errors(
+      issueIsSubtask: issueIsSubtask ?? this.issueIsSubtask,
+      issuesInArchivedProjects:
+          issuesInArchivedProjects ?? this.issuesInArchivedProjects,
+      issuesInUnlicensedProjects:
+          issuesInUnlicensedProjects ?? this.issuesInUnlicensedProjects,
+      issuesNotFound: issuesNotFound ?? this.issuesNotFound,
     );
   }
 }
@@ -23926,6 +25743,83 @@ class EventNotificationNotificationType {
 
   @override
   String toString() => value;
+}
+
+/// The response for status request for a running/completed export task.
+class ExportArchivedIssuesTaskProgressResponse {
+  final String? fileUrl;
+  final String? payload;
+  final int? progress;
+  final String? status;
+  final DateTime? submittedTime;
+  final String? taskId;
+
+  ExportArchivedIssuesTaskProgressResponse(
+      {this.fileUrl,
+      this.payload,
+      this.progress,
+      this.status,
+      this.submittedTime,
+      this.taskId});
+
+  factory ExportArchivedIssuesTaskProgressResponse.fromJson(
+      Map<String, Object?> json) {
+    return ExportArchivedIssuesTaskProgressResponse(
+      fileUrl: json[r'fileUrl'] as String?,
+      payload: json[r'payload'] as String?,
+      progress: (json[r'progress'] as num?)?.toInt(),
+      status: json[r'status'] as String?,
+      submittedTime: DateTime.tryParse(json[r'submittedTime'] as String? ?? ''),
+      taskId: json[r'taskId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fileUrl = this.fileUrl;
+    var payload = this.payload;
+    var progress = this.progress;
+    var status = this.status;
+    var submittedTime = this.submittedTime;
+    var taskId = this.taskId;
+
+    final json = <String, Object?>{};
+    if (fileUrl != null) {
+      json[r'fileUrl'] = fileUrl;
+    }
+    if (payload != null) {
+      json[r'payload'] = payload;
+    }
+    if (progress != null) {
+      json[r'progress'] = progress;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (submittedTime != null) {
+      json[r'submittedTime'] = submittedTime.toIso8601String();
+    }
+    if (taskId != null) {
+      json[r'taskId'] = taskId;
+    }
+    return json;
+  }
+
+  ExportArchivedIssuesTaskProgressResponse copyWith(
+      {String? fileUrl,
+      String? payload,
+      int? progress,
+      String? status,
+      DateTime? submittedTime,
+      String? taskId}) {
+    return ExportArchivedIssuesTaskProgressResponse(
+      fileUrl: fileUrl ?? this.fileUrl,
+      payload: payload ?? this.payload,
+      progress: progress ?? this.progress,
+      status: status ?? this.status,
+      submittedTime: submittedTime ?? this.submittedTime,
+      taskId: taskId ?? this.taskId,
+    );
+  }
 }
 
 /// Details about a failed webhook.
@@ -27353,6 +29247,78 @@ class IncludedFields {
   }
 }
 
+/// List of Issue Ids Or Keys that are to be archived or unarchived
+class IssueArchivalSyncRequest {
+  final List<String> issueIdsOrKeys;
+
+  IssueArchivalSyncRequest({List<String>? issueIdsOrKeys})
+      : issueIdsOrKeys = issueIdsOrKeys ?? [];
+
+  factory IssueArchivalSyncRequest.fromJson(Map<String, Object?> json) {
+    return IssueArchivalSyncRequest(
+      issueIdsOrKeys: (json[r'issueIdsOrKeys'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueIdsOrKeys = this.issueIdsOrKeys;
+
+    final json = <String, Object?>{};
+    json[r'issueIdsOrKeys'] = issueIdsOrKeys;
+    return json;
+  }
+
+  IssueArchivalSyncRequest copyWith({List<String>? issueIdsOrKeys}) {
+    return IssueArchivalSyncRequest(
+      issueIdsOrKeys: issueIdsOrKeys ?? this.issueIdsOrKeys,
+    );
+  }
+}
+
+/// Number of archived/unarchived issues and list of errors that occurred during
+/// the action, if any.
+class IssueArchivalSyncResponse {
+  final Errors? errors;
+  final int? numberOfIssuesUpdated;
+
+  IssueArchivalSyncResponse({this.errors, this.numberOfIssuesUpdated});
+
+  factory IssueArchivalSyncResponse.fromJson(Map<String, Object?> json) {
+    return IssueArchivalSyncResponse(
+      errors: json[r'errors'] != null
+          ? Errors.fromJson(json[r'errors']! as Map<String, Object?>)
+          : null,
+      numberOfIssuesUpdated: (json[r'numberOfIssuesUpdated'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var errors = this.errors;
+    var numberOfIssuesUpdated = this.numberOfIssuesUpdated;
+
+    final json = <String, Object?>{};
+    if (errors != null) {
+      json[r'errors'] = errors.toJson();
+    }
+    if (numberOfIssuesUpdated != null) {
+      json[r'numberOfIssuesUpdated'] = numberOfIssuesUpdated;
+    }
+    return json;
+  }
+
+  IssueArchivalSyncResponse copyWith(
+      {Errors? errors, int? numberOfIssuesUpdated}) {
+    return IssueArchivalSyncResponse(
+      errors: errors ?? this.errors,
+      numberOfIssuesUpdated:
+          numberOfIssuesUpdated ?? this.numberOfIssuesUpdated,
+    );
+  }
+}
+
 /// Details about an issue.
 class IssueBean {
   /// Details of changelogs associated with the issue.
@@ -30437,7 +32403,6 @@ class IssueUpdateDetails {
 
 /// A list of editable field details.
 class IssueUpdateMetadata {
-  /// A list of editable field details.
   final Map<String, dynamic>? fields;
 
   IssueUpdateMetadata({this.fields});
@@ -31719,6 +33684,293 @@ class JiraStatusStatusCategory {
   String toString() => value;
 }
 
+/// Details of a workflow.
+class JiraWorkflow {
+  /// The description of the workflow.
+  final String? description;
+
+  /// The ID of the workflow.
+  final String? id;
+
+  /// Indicates if the workflow can be edited.
+  final bool isEditable;
+
+  /// The name of the workflow.
+  final String? name;
+  final WorkflowScope? scope;
+  final WorkflowLayout? startPointLayout;
+
+  /// The statuses referenced in this workflow.
+  final List<WorkflowReferenceStatus> statuses;
+
+  /// If there is a current [asynchronous task](#async-operations) operation for
+  /// this workflow.
+  final String? taskId;
+
+  /// The transitions of the workflow.
+  final List<WorkflowTransitions> transitions;
+
+  /// The `workflows.usages` expand is an optional parameter that can be used
+  /// when reading and updating workflows in Jira. It provides additional
+  /// information about the projects and issue types associated with the
+  /// requested workflows.
+  final List<ProjectIssueTypes> usages;
+  final DocumentVersion? version;
+
+  JiraWorkflow(
+      {this.description,
+      this.id,
+      bool? isEditable,
+      this.name,
+      this.scope,
+      this.startPointLayout,
+      List<WorkflowReferenceStatus>? statuses,
+      this.taskId,
+      List<WorkflowTransitions>? transitions,
+      List<ProjectIssueTypes>? usages,
+      this.version})
+      : isEditable = isEditable ?? false,
+        statuses = statuses ?? [],
+        transitions = transitions ?? [],
+        usages = usages ?? [];
+
+  factory JiraWorkflow.fromJson(Map<String, Object?> json) {
+    return JiraWorkflow(
+      description: json[r'description'] as String?,
+      id: json[r'id'] as String?,
+      isEditable: json[r'isEditable'] as bool? ?? false,
+      name: json[r'name'] as String?,
+      scope: json[r'scope'] != null
+          ? WorkflowScope.fromJson(json[r'scope']! as Map<String, Object?>)
+          : null,
+      startPointLayout: json[r'startPointLayout'] != null
+          ? WorkflowLayout.fromJson(
+              json[r'startPointLayout']! as Map<String, Object?>)
+          : null,
+      statuses: (json[r'statuses'] as List<Object?>?)
+              ?.map((i) => WorkflowReferenceStatus.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      taskId: json[r'taskId'] as String?,
+      transitions: (json[r'transitions'] as List<Object?>?)
+              ?.map((i) => WorkflowTransitions.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      usages: (json[r'usages'] as List<Object?>?)
+              ?.map((i) => ProjectIssueTypes.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      version: json[r'version'] != null
+          ? DocumentVersion.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var id = this.id;
+    var isEditable = this.isEditable;
+    var name = this.name;
+    var scope = this.scope;
+    var startPointLayout = this.startPointLayout;
+    var statuses = this.statuses;
+    var taskId = this.taskId;
+    var transitions = this.transitions;
+    var usages = this.usages;
+    var version = this.version;
+
+    final json = <String, Object?>{};
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    json[r'isEditable'] = isEditable;
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (scope != null) {
+      json[r'scope'] = scope.toJson();
+    }
+    if (startPointLayout != null) {
+      json[r'startPointLayout'] = startPointLayout.toJson();
+    }
+    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
+    if (taskId != null) {
+      json[r'taskId'] = taskId;
+    }
+    json[r'transitions'] = transitions.map((i) => i.toJson()).toList();
+    json[r'usages'] = usages.map((i) => i.toJson()).toList();
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
+    return json;
+  }
+
+  JiraWorkflow copyWith(
+      {String? description,
+      String? id,
+      bool? isEditable,
+      String? name,
+      WorkflowScope? scope,
+      WorkflowLayout? startPointLayout,
+      List<WorkflowReferenceStatus>? statuses,
+      String? taskId,
+      List<WorkflowTransitions>? transitions,
+      List<ProjectIssueTypes>? usages,
+      DocumentVersion? version}) {
+    return JiraWorkflow(
+      description: description ?? this.description,
+      id: id ?? this.id,
+      isEditable: isEditable ?? this.isEditable,
+      name: name ?? this.name,
+      scope: scope ?? this.scope,
+      startPointLayout: startPointLayout ?? this.startPointLayout,
+      statuses: statuses ?? this.statuses,
+      taskId: taskId ?? this.taskId,
+      transitions: transitions ?? this.transitions,
+      usages: usages ?? this.usages,
+      version: version ?? this.version,
+    );
+  }
+}
+
+/// Details of a status.
+class JiraWorkflowStatus {
+  /// The description of the status.
+  final String? description;
+
+  /// The ID of the status.
+  final String? id;
+
+  /// The name of the status.
+  final String? name;
+  final WorkflowScope? scope;
+
+  /// The category of the status.
+  final JiraWorkflowStatusStatusCategory? statusCategory;
+
+  /// The reference of the status.
+  final String? statusReference;
+
+  /// The `statuses.usages` expand is an optional parameter that can be used
+  /// when reading and updating statuses in Jira. It provides additional
+  /// information about the projects and issue types associated with the
+  /// requested statuses.
+  final List<ProjectIssueTypes> usages;
+
+  JiraWorkflowStatus(
+      {this.description,
+      this.id,
+      this.name,
+      this.scope,
+      this.statusCategory,
+      this.statusReference,
+      List<ProjectIssueTypes>? usages})
+      : usages = usages ?? [];
+
+  factory JiraWorkflowStatus.fromJson(Map<String, Object?> json) {
+    return JiraWorkflowStatus(
+      description: json[r'description'] as String?,
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      scope: json[r'scope'] != null
+          ? WorkflowScope.fromJson(json[r'scope']! as Map<String, Object?>)
+          : null,
+      statusCategory: json[r'statusCategory'] != null
+          ? JiraWorkflowStatusStatusCategory.fromValue(
+              json[r'statusCategory']! as String)
+          : null,
+      statusReference: json[r'statusReference'] as String?,
+      usages: (json[r'usages'] as List<Object?>?)
+              ?.map((i) => ProjectIssueTypes.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var id = this.id;
+    var name = this.name;
+    var scope = this.scope;
+    var statusCategory = this.statusCategory;
+    var statusReference = this.statusReference;
+    var usages = this.usages;
+
+    final json = <String, Object?>{};
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (scope != null) {
+      json[r'scope'] = scope.toJson();
+    }
+    if (statusCategory != null) {
+      json[r'statusCategory'] = statusCategory.value;
+    }
+    if (statusReference != null) {
+      json[r'statusReference'] = statusReference;
+    }
+    json[r'usages'] = usages.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  JiraWorkflowStatus copyWith(
+      {String? description,
+      String? id,
+      String? name,
+      WorkflowScope? scope,
+      JiraWorkflowStatusStatusCategory? statusCategory,
+      String? statusReference,
+      List<ProjectIssueTypes>? usages}) {
+    return JiraWorkflowStatus(
+      description: description ?? this.description,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      scope: scope ?? this.scope,
+      statusCategory: statusCategory ?? this.statusCategory,
+      statusReference: statusReference ?? this.statusReference,
+      usages: usages ?? this.usages,
+    );
+  }
+}
+
+class JiraWorkflowStatusStatusCategory {
+  static const todo = JiraWorkflowStatusStatusCategory._('TODO');
+  static const inProgress = JiraWorkflowStatusStatusCategory._('IN_PROGRESS');
+  static const done = JiraWorkflowStatusStatusCategory._('DONE');
+
+  static const values = [
+    todo,
+    inProgress,
+    done,
+  ];
+  final String value;
+
+  const JiraWorkflowStatusStatusCategory._(this.value);
+
+  static JiraWorkflowStatusStatusCategory fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => JiraWorkflowStatusStatusCategory._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 /// Jql function precomputation.
 class JqlFunctionPrecomputationBean {
   final List<String> arguments;
@@ -31835,7 +34087,7 @@ class JqlFunctionPrecomputationBean {
 
 /// Precomputation id and its new value.
 class JqlFunctionPrecomputationUpdateBean {
-  final int id;
+  final String id;
   final String value;
 
   JqlFunctionPrecomputationUpdateBean({required this.id, required this.value});
@@ -31843,7 +34095,7 @@ class JqlFunctionPrecomputationUpdateBean {
   factory JqlFunctionPrecomputationUpdateBean.fromJson(
       Map<String, Object?> json) {
     return JqlFunctionPrecomputationUpdateBean(
-      id: (json[r'id'] as num?)?.toInt() ?? 0,
+      id: json[r'id'] as String? ?? '',
       value: json[r'value'] as String? ?? '',
     );
   }
@@ -31858,7 +34110,7 @@ class JqlFunctionPrecomputationUpdateBean {
     return json;
   }
 
-  JqlFunctionPrecomputationUpdateBean copyWith({int? id, String? value}) {
+  JqlFunctionPrecomputationUpdateBean copyWith({String? id, String? value}) {
     return JqlFunctionPrecomputationUpdateBean(
       id: id ?? this.id,
       value: value ?? this.value,
@@ -32969,12 +35221,13 @@ class License {
   }
 }
 
-/// A license metric
+/// A metric that provides insight into the active licence details
 class LicenseMetric {
-  /// The key of the license metric.
+  /// The key of a specific license metric.
   final String? key;
 
-  /// The value for the license metric.
+  /// The calculated value of a licence metric linked to the key. An example
+  /// licence metric is the approximate number of user accounts.
   final String? value;
 
   LicenseMetric({this.key, this.value});
@@ -41510,6 +43763,41 @@ class ProjectStyle {
   String toString() => value;
 }
 
+/// A project and issueType ID pair that identifies a status mapping.
+class ProjectAndIssueTypePair {
+  /// The ID of the issue type.
+  final String issueTypeId;
+
+  /// The ID of the project.
+  final String projectId;
+
+  ProjectAndIssueTypePair({required this.issueTypeId, required this.projectId});
+
+  factory ProjectAndIssueTypePair.fromJson(Map<String, Object?> json) {
+    return ProjectAndIssueTypePair(
+      issueTypeId: json[r'issueTypeId'] as String? ?? '',
+      projectId: json[r'projectId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueTypeId = this.issueTypeId;
+    var projectId = this.projectId;
+
+    final json = <String, Object?>{};
+    json[r'issueTypeId'] = issueTypeId;
+    json[r'projectId'] = projectId;
+    return json;
+  }
+
+  ProjectAndIssueTypePair copyWith({String? issueTypeId, String? projectId}) {
+    return ProjectAndIssueTypePair(
+      issueTypeId: issueTypeId ?? this.issueTypeId,
+      projectId: projectId ?? this.projectId,
+    );
+  }
+}
+
 /// List of project avatars.
 class ProjectAvatars {
   /// List of avatars added to Jira. These avatars may be deleted.
@@ -44525,10 +46813,10 @@ class RoleActorType {
 
 /// A rule configuration.
 class RuleConfiguration {
-  /// EXPERIMENTAL: Whether the rule is disabled.
+  /// Whether the rule is disabled.
   final bool disabled;
 
-  /// EXPERIMENTAL: A tag used to filter rules in
+  /// A tag used to filter rules in
   /// [Get workflow transition rule configurations](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-transition-rules/#api-rest-api-3-workflow-rule-config-get).
   final String? tag;
 
@@ -47469,6 +49757,56 @@ class StatusDetails {
   }
 }
 
+/// The statuses associated with this workflow.
+class StatusLayoutUpdate {
+  final WorkflowLayout? layout;
+
+  /// The properties for this status layout.
+  final Map<String, dynamic> properties;
+
+  /// A unique ID which the status will use to refer to this layout
+  /// configuration.
+  final String statusReference;
+
+  StatusLayoutUpdate(
+      {this.layout, required this.properties, required this.statusReference});
+
+  factory StatusLayoutUpdate.fromJson(Map<String, Object?> json) {
+    return StatusLayoutUpdate(
+      layout: json[r'layout'] != null
+          ? WorkflowLayout.fromJson(json[r'layout']! as Map<String, Object?>)
+          : null,
+      properties: json[r'properties'] as Map<String, Object?>? ?? {},
+      statusReference: json[r'statusReference'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var layout = this.layout;
+    var properties = this.properties;
+    var statusReference = this.statusReference;
+
+    final json = <String, Object?>{};
+    if (layout != null) {
+      json[r'layout'] = layout.toJson();
+    }
+    json[r'properties'] = properties;
+    json[r'statusReference'] = statusReference;
+    return json;
+  }
+
+  StatusLayoutUpdate copyWith(
+      {WorkflowLayout? layout,
+      Map<String, dynamic>? properties,
+      String? statusReference}) {
+    return StatusLayoutUpdate(
+      layout: layout ?? this.layout,
+      properties: properties ?? this.properties,
+      statusReference: statusReference ?? this.statusReference,
+    );
+  }
+}
+
 /// Details about the mapping from a status to a new status for an issue type.
 class StatusMapping {
   /// The ID of the issue type.
@@ -47511,6 +49849,134 @@ class StatusMapping {
       issueTypeId: issueTypeId ?? this.issueTypeId,
       newStatusId: newStatusId ?? this.newStatusId,
       statusId: statusId ?? this.statusId,
+    );
+  }
+}
+
+/// The mapping of old to new status ID for a specific project and issue type.
+class StatusMappingDTO {
+  /// The issue type for the status mapping.
+  final String issueTypeId;
+
+  /// The project for the status mapping.
+  final String projectId;
+
+  /// The list of old and new status ID mappings for the specified project and
+  /// issue type.
+  final List<StatusMigration> statusMigrations;
+
+  StatusMappingDTO(
+      {required this.issueTypeId,
+      required this.projectId,
+      required this.statusMigrations});
+
+  factory StatusMappingDTO.fromJson(Map<String, Object?> json) {
+    return StatusMappingDTO(
+      issueTypeId: json[r'issueTypeId'] as String? ?? '',
+      projectId: json[r'projectId'] as String? ?? '',
+      statusMigrations: (json[r'statusMigrations'] as List<Object?>?)
+              ?.map((i) => StatusMigration.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueTypeId = this.issueTypeId;
+    var projectId = this.projectId;
+    var statusMigrations = this.statusMigrations;
+
+    final json = <String, Object?>{};
+    json[r'issueTypeId'] = issueTypeId;
+    json[r'projectId'] = projectId;
+    json[r'statusMigrations'] =
+        statusMigrations.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  StatusMappingDTO copyWith(
+      {String? issueTypeId,
+      String? projectId,
+      List<StatusMigration>? statusMigrations}) {
+    return StatusMappingDTO(
+      issueTypeId: issueTypeId ?? this.issueTypeId,
+      projectId: projectId ?? this.projectId,
+      statusMigrations: statusMigrations ?? this.statusMigrations,
+    );
+  }
+}
+
+/// The mapping of old to new status ID.
+class StatusMigration {
+  /// The new status ID.
+  final String newStatusReference;
+
+  /// The old status ID.
+  final String oldStatusReference;
+
+  StatusMigration(
+      {required this.newStatusReference, required this.oldStatusReference});
+
+  factory StatusMigration.fromJson(Map<String, Object?> json) {
+    return StatusMigration(
+      newStatusReference: json[r'newStatusReference'] as String? ?? '',
+      oldStatusReference: json[r'oldStatusReference'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var newStatusReference = this.newStatusReference;
+    var oldStatusReference = this.oldStatusReference;
+
+    final json = <String, Object?>{};
+    json[r'newStatusReference'] = newStatusReference;
+    json[r'oldStatusReference'] = oldStatusReference;
+    return json;
+  }
+
+  StatusMigration copyWith(
+      {String? newStatusReference, String? oldStatusReference}) {
+    return StatusMigration(
+      newStatusReference: newStatusReference ?? this.newStatusReference,
+      oldStatusReference: oldStatusReference ?? this.oldStatusReference,
+    );
+  }
+}
+
+/// The status reference and port that a transition is connected to.
+class StatusReferenceAndPort {
+  /// The port this transition uses to connect to this status.
+  final int? port;
+
+  /// The reference of this status.
+  final String statusReference;
+
+  StatusReferenceAndPort({this.port, required this.statusReference});
+
+  factory StatusReferenceAndPort.fromJson(Map<String, Object?> json) {
+    return StatusReferenceAndPort(
+      port: (json[r'port'] as num?)?.toInt(),
+      statusReference: json[r'statusReference'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var port = this.port;
+    var statusReference = this.statusReference;
+
+    final json = <String, Object?>{};
+    if (port != null) {
+      json[r'port'] = port;
+    }
+    json[r'statusReference'] = statusReference;
+    return json;
+  }
+
+  StatusReferenceAndPort copyWith({int? port, String? statusReference}) {
+    return StatusReferenceAndPort(
+      port: port ?? this.port,
+      statusReference: statusReference ?? this.statusReference,
     );
   }
 }
@@ -48630,6 +51096,204 @@ class TransitionScreenDetails {
       name: name ?? this.name,
     );
   }
+}
+
+/// The transitions of this workflow.
+class TransitionUpdateDTO {
+  /// The post-functions of the transition.
+  final List<WorkflowRuleConfiguration> actions;
+  final ConditionGroupUpdate? conditions;
+
+  /// The custom event ID of the transition.
+  final String? customIssueEventId;
+
+  /// The description of the transition.
+  final String? description;
+
+  /// The statuses the transition can start from.
+  final List<StatusReferenceAndPort> from;
+
+  /// The ID of the transition.
+  final String id;
+
+  /// The name of the transition.
+  final String name;
+
+  /// The properties of the transition.
+  final Map<String, dynamic>? properties;
+  final StatusReferenceAndPort? to;
+  final WorkflowRuleConfiguration? transitionScreen;
+
+  /// The triggers of the transition.
+  final List<WorkflowTrigger> triggers;
+
+  /// The transition type.
+  final TransitionUpdateDTOType type;
+
+  /// The validators of the transition.
+  final List<WorkflowRuleConfiguration> validators;
+
+  TransitionUpdateDTO(
+      {List<WorkflowRuleConfiguration>? actions,
+      this.conditions,
+      this.customIssueEventId,
+      this.description,
+      List<StatusReferenceAndPort>? from,
+      required this.id,
+      required this.name,
+      this.properties,
+      this.to,
+      this.transitionScreen,
+      List<WorkflowTrigger>? triggers,
+      required this.type,
+      List<WorkflowRuleConfiguration>? validators})
+      : actions = actions ?? [],
+        from = from ?? [],
+        triggers = triggers ?? [],
+        validators = validators ?? [];
+
+  factory TransitionUpdateDTO.fromJson(Map<String, Object?> json) {
+    return TransitionUpdateDTO(
+      actions: (json[r'actions'] as List<Object?>?)
+              ?.map((i) => WorkflowRuleConfiguration.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      conditions: json[r'conditions'] != null
+          ? ConditionGroupUpdate.fromJson(
+              json[r'conditions']! as Map<String, Object?>)
+          : null,
+      customIssueEventId: json[r'customIssueEventId'] as String?,
+      description: json[r'description'] as String?,
+      from: (json[r'from'] as List<Object?>?)
+              ?.map((i) => StatusReferenceAndPort.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      id: json[r'id'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      properties: json[r'properties'] as Map<String, Object?>?,
+      to: json[r'to'] != null
+          ? StatusReferenceAndPort.fromJson(
+              json[r'to']! as Map<String, Object?>)
+          : null,
+      transitionScreen: json[r'transitionScreen'] != null
+          ? WorkflowRuleConfiguration.fromJson(
+              json[r'transitionScreen']! as Map<String, Object?>)
+          : null,
+      triggers: (json[r'triggers'] as List<Object?>?)
+              ?.map((i) => WorkflowTrigger.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      type: TransitionUpdateDTOType.fromValue(json[r'type'] as String? ?? ''),
+      validators: (json[r'validators'] as List<Object?>?)
+              ?.map((i) => WorkflowRuleConfiguration.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var actions = this.actions;
+    var conditions = this.conditions;
+    var customIssueEventId = this.customIssueEventId;
+    var description = this.description;
+    var from = this.from;
+    var id = this.id;
+    var name = this.name;
+    var properties = this.properties;
+    var to = this.to;
+    var transitionScreen = this.transitionScreen;
+    var triggers = this.triggers;
+    var type = this.type;
+    var validators = this.validators;
+
+    final json = <String, Object?>{};
+    json[r'actions'] = actions.map((i) => i.toJson()).toList();
+    if (conditions != null) {
+      json[r'conditions'] = conditions.toJson();
+    }
+    if (customIssueEventId != null) {
+      json[r'customIssueEventId'] = customIssueEventId;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    json[r'from'] = from.map((i) => i.toJson()).toList();
+    json[r'id'] = id;
+    json[r'name'] = name;
+    if (properties != null) {
+      json[r'properties'] = properties;
+    }
+    if (to != null) {
+      json[r'to'] = to.toJson();
+    }
+    if (transitionScreen != null) {
+      json[r'transitionScreen'] = transitionScreen.toJson();
+    }
+    json[r'triggers'] = triggers.map((i) => i.toJson()).toList();
+    json[r'type'] = type.value;
+    json[r'validators'] = validators.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  TransitionUpdateDTO copyWith(
+      {List<WorkflowRuleConfiguration>? actions,
+      ConditionGroupUpdate? conditions,
+      String? customIssueEventId,
+      String? description,
+      List<StatusReferenceAndPort>? from,
+      String? id,
+      String? name,
+      Map<String, dynamic>? properties,
+      StatusReferenceAndPort? to,
+      WorkflowRuleConfiguration? transitionScreen,
+      List<WorkflowTrigger>? triggers,
+      TransitionUpdateDTOType? type,
+      List<WorkflowRuleConfiguration>? validators}) {
+    return TransitionUpdateDTO(
+      actions: actions ?? this.actions,
+      conditions: conditions ?? this.conditions,
+      customIssueEventId: customIssueEventId ?? this.customIssueEventId,
+      description: description ?? this.description,
+      from: from ?? this.from,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      properties: properties ?? this.properties,
+      to: to ?? this.to,
+      transitionScreen: transitionScreen ?? this.transitionScreen,
+      triggers: triggers ?? this.triggers,
+      type: type ?? this.type,
+      validators: validators ?? this.validators,
+    );
+  }
+}
+
+class TransitionUpdateDTOType {
+  static const initial = TransitionUpdateDTOType._('INITIAL');
+  static const global = TransitionUpdateDTOType._('GLOBAL');
+  static const directed = TransitionUpdateDTOType._('DIRECTED');
+
+  static const values = [
+    initial,
+    global,
+    directed,
+  ];
+  final String value;
+
+  const TransitionUpdateDTOType._(this.value);
+
+  static TransitionUpdateDTOType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => TransitionUpdateDTOType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 /// List of issue transitions.
@@ -50960,6 +53624,120 @@ class UserPickerUser {
   }
 }
 
+/// The level of validation to return from the API. If no values are provided,
+/// the default would return `WARNING` and `ERROR` level validation results.
+class ValidationOptionsForCreate {
+  final List<ValidationOptionsForCreateLevels> levels;
+
+  ValidationOptionsForCreate({List<ValidationOptionsForCreateLevels>? levels})
+      : levels = levels ?? [];
+
+  factory ValidationOptionsForCreate.fromJson(Map<String, Object?> json) {
+    return ValidationOptionsForCreate(
+      levels: (json[r'levels'] as List<Object?>?)
+              ?.map((i) => ValidationOptionsForCreateLevels.fromValue(
+                  i as String? ?? ''))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var levels = this.levels;
+
+    final json = <String, Object?>{};
+    json[r'levels'] = levels.map((i) => i.value).toList();
+    return json;
+  }
+
+  ValidationOptionsForCreate copyWith(
+      {List<ValidationOptionsForCreateLevels>? levels}) {
+    return ValidationOptionsForCreate(
+      levels: levels ?? this.levels,
+    );
+  }
+}
+
+class ValidationOptionsForCreateLevels {
+  static const warning = ValidationOptionsForCreateLevels._('WARNING');
+  static const error = ValidationOptionsForCreateLevels._('ERROR');
+
+  static const values = [
+    warning,
+    error,
+  ];
+  final String value;
+
+  const ValidationOptionsForCreateLevels._(this.value);
+
+  static ValidationOptionsForCreateLevels fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ValidationOptionsForCreateLevels._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// The level of validation to return from the API. If no values are provided,
+/// the default would return `WARNING` and `ERROR` level validation results.
+class ValidationOptionsForUpdate {
+  final List<ValidationOptionsForUpdateLevels> levels;
+
+  ValidationOptionsForUpdate({List<ValidationOptionsForUpdateLevels>? levels})
+      : levels = levels ?? [];
+
+  factory ValidationOptionsForUpdate.fromJson(Map<String, Object?> json) {
+    return ValidationOptionsForUpdate(
+      levels: (json[r'levels'] as List<Object?>?)
+              ?.map((i) => ValidationOptionsForUpdateLevels.fromValue(
+                  i as String? ?? ''))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var levels = this.levels;
+
+    final json = <String, Object?>{};
+    json[r'levels'] = levels.map((i) => i.value).toList();
+    return json;
+  }
+
+  ValidationOptionsForUpdate copyWith(
+      {List<ValidationOptionsForUpdateLevels>? levels}) {
+    return ValidationOptionsForUpdate(
+      levels: levels ?? this.levels,
+    );
+  }
+}
+
+class ValidationOptionsForUpdateLevels {
+  static const warning = ValidationOptionsForUpdateLevels._('WARNING');
+  static const error = ValidationOptionsForUpdateLevels._('ERROR');
+
+  static const values = [
+    warning,
+    error,
+  ];
+  final String value;
+
+  const ValidationOptionsForUpdateLevels._(this.value);
+
+  static ValidationOptionsForUpdateLevels fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ValidationOptionsForUpdateLevels._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 /// An operand that is a user-provided value.
 class ValueOperand {
   /// Encoded value, which can be used directly in a JQL query.
@@ -52288,6 +55066,164 @@ class Workflow {
   }
 }
 
+class WorkflowCapabilities {
+  /// The Connect provided ecosystem rules available.
+  final List<AvailableWorkflowConnectRule> connectRules;
+
+  /// The scope of the workflow capabilities. `GLOBAL` for company-managed
+  /// projects and `PROJECT` for team-managed projects.
+  final WorkflowCapabilitiesEditorScope? editorScope;
+
+  /// The Forge provided ecosystem rules available.
+  final List<AvailableWorkflowForgeRule> forgeRules;
+
+  /// The types of projects that this capability set is available for.
+  final List<WorkflowCapabilitiesProjectTypes> projectTypes;
+
+  /// The Atlassian provided system rules available.
+  final List<AvailableWorkflowSystemRule> systemRules;
+
+  /// The trigger rules available.
+  final List<AvailableWorkflowTriggers> triggerRules;
+
+  WorkflowCapabilities(
+      {List<AvailableWorkflowConnectRule>? connectRules,
+      this.editorScope,
+      List<AvailableWorkflowForgeRule>? forgeRules,
+      List<WorkflowCapabilitiesProjectTypes>? projectTypes,
+      List<AvailableWorkflowSystemRule>? systemRules,
+      List<AvailableWorkflowTriggers>? triggerRules})
+      : connectRules = connectRules ?? [],
+        forgeRules = forgeRules ?? [],
+        projectTypes = projectTypes ?? [],
+        systemRules = systemRules ?? [],
+        triggerRules = triggerRules ?? [];
+
+  factory WorkflowCapabilities.fromJson(Map<String, Object?> json) {
+    return WorkflowCapabilities(
+      connectRules: (json[r'connectRules'] as List<Object?>?)
+              ?.map((i) => AvailableWorkflowConnectRule.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      editorScope: json[r'editorScope'] != null
+          ? WorkflowCapabilitiesEditorScope.fromValue(
+              json[r'editorScope']! as String)
+          : null,
+      forgeRules: (json[r'forgeRules'] as List<Object?>?)
+              ?.map((i) => AvailableWorkflowForgeRule.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      projectTypes: (json[r'projectTypes'] as List<Object?>?)
+              ?.map((i) => WorkflowCapabilitiesProjectTypes.fromValue(
+                  i as String? ?? ''))
+              .toList() ??
+          [],
+      systemRules: (json[r'systemRules'] as List<Object?>?)
+              ?.map((i) => AvailableWorkflowSystemRule.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      triggerRules: (json[r'triggerRules'] as List<Object?>?)
+              ?.map((i) => AvailableWorkflowTriggers.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var connectRules = this.connectRules;
+    var editorScope = this.editorScope;
+    var forgeRules = this.forgeRules;
+    var projectTypes = this.projectTypes;
+    var systemRules = this.systemRules;
+    var triggerRules = this.triggerRules;
+
+    final json = <String, Object?>{};
+    json[r'connectRules'] = connectRules.map((i) => i.toJson()).toList();
+    if (editorScope != null) {
+      json[r'editorScope'] = editorScope.value;
+    }
+    json[r'forgeRules'] = forgeRules.map((i) => i.toJson()).toList();
+    json[r'projectTypes'] = projectTypes.map((i) => i.value).toList();
+    json[r'systemRules'] = systemRules.map((i) => i.toJson()).toList();
+    json[r'triggerRules'] = triggerRules.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  WorkflowCapabilities copyWith(
+      {List<AvailableWorkflowConnectRule>? connectRules,
+      WorkflowCapabilitiesEditorScope? editorScope,
+      List<AvailableWorkflowForgeRule>? forgeRules,
+      List<WorkflowCapabilitiesProjectTypes>? projectTypes,
+      List<AvailableWorkflowSystemRule>? systemRules,
+      List<AvailableWorkflowTriggers>? triggerRules}) {
+    return WorkflowCapabilities(
+      connectRules: connectRules ?? this.connectRules,
+      editorScope: editorScope ?? this.editorScope,
+      forgeRules: forgeRules ?? this.forgeRules,
+      projectTypes: projectTypes ?? this.projectTypes,
+      systemRules: systemRules ?? this.systemRules,
+      triggerRules: triggerRules ?? this.triggerRules,
+    );
+  }
+}
+
+class WorkflowCapabilitiesEditorScope {
+  static const project = WorkflowCapabilitiesEditorScope._('PROJECT');
+  static const global = WorkflowCapabilitiesEditorScope._('GLOBAL');
+
+  static const values = [
+    project,
+    global,
+  ];
+  final String value;
+
+  const WorkflowCapabilitiesEditorScope._(this.value);
+
+  static WorkflowCapabilitiesEditorScope fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => WorkflowCapabilitiesEditorScope._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class WorkflowCapabilitiesProjectTypes {
+  static const software = WorkflowCapabilitiesProjectTypes._('software');
+  static const serviceDesk = WorkflowCapabilitiesProjectTypes._('service_desk');
+  static const productDiscovery =
+      WorkflowCapabilitiesProjectTypes._('product_discovery');
+  static const business = WorkflowCapabilitiesProjectTypes._('business');
+  static const unknown = WorkflowCapabilitiesProjectTypes._('unknown');
+
+  static const values = [
+    software,
+    serviceDesk,
+    productDiscovery,
+    business,
+    unknown,
+  ];
+  final String value;
+
+  const WorkflowCapabilitiesProjectTypes._(this.value);
+
+  static WorkflowCapabilitiesProjectTypes fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => WorkflowCapabilitiesProjectTypes._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 /// A compound workflow transition rule condition. This object returns
 /// `nodeType` as `compound`.
 class WorkflowCompoundCondition {
@@ -52377,6 +55313,305 @@ class WorkflowCondition {
   }
 }
 
+/// The details of the workflows to create.
+class WorkflowCreate {
+  /// The description of the workflow to create.
+  final String? description;
+
+  /// The name of the workflow to create.
+  final String name;
+  final WorkflowLayout? startPointLayout;
+
+  /// The statuses associated with this workflow.
+  final List<StatusLayoutUpdate> statuses;
+
+  /// The transitions of this workflow.
+  final List<TransitionUpdateDTO> transitions;
+
+  WorkflowCreate(
+      {this.description,
+      required this.name,
+      this.startPointLayout,
+      required this.statuses,
+      required this.transitions});
+
+  factory WorkflowCreate.fromJson(Map<String, Object?> json) {
+    return WorkflowCreate(
+      description: json[r'description'] as String?,
+      name: json[r'name'] as String? ?? '',
+      startPointLayout: json[r'startPointLayout'] != null
+          ? WorkflowLayout.fromJson(
+              json[r'startPointLayout']! as Map<String, Object?>)
+          : null,
+      statuses: (json[r'statuses'] as List<Object?>?)
+              ?.map((i) => StatusLayoutUpdate.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      transitions: (json[r'transitions'] as List<Object?>?)
+              ?.map((i) => TransitionUpdateDTO.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var name = this.name;
+    var startPointLayout = this.startPointLayout;
+    var statuses = this.statuses;
+    var transitions = this.transitions;
+
+    final json = <String, Object?>{};
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    json[r'name'] = name;
+    if (startPointLayout != null) {
+      json[r'startPointLayout'] = startPointLayout.toJson();
+    }
+    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
+    json[r'transitions'] = transitions.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  WorkflowCreate copyWith(
+      {String? description,
+      String? name,
+      WorkflowLayout? startPointLayout,
+      List<StatusLayoutUpdate>? statuses,
+      List<TransitionUpdateDTO>? transitions}) {
+    return WorkflowCreate(
+      description: description ?? this.description,
+      name: name ?? this.name,
+      startPointLayout: startPointLayout ?? this.startPointLayout,
+      statuses: statuses ?? this.statuses,
+      transitions: transitions ?? this.transitions,
+    );
+  }
+}
+
+/// The create workflows payload.
+class WorkflowCreateRequest {
+  final WorkflowScope scope;
+
+  /// The statuses to associate with the workflows.
+  final List<WorkflowStatusUpdate> statuses;
+
+  /// The details of the workflows to create.
+  final List<WorkflowCreate> workflows;
+
+  WorkflowCreateRequest(
+      {required this.scope, required this.statuses, required this.workflows});
+
+  factory WorkflowCreateRequest.fromJson(Map<String, Object?> json) {
+    return WorkflowCreateRequest(
+      scope: WorkflowScope.fromJson(
+          json[r'scope'] as Map<String, Object?>? ?? const {}),
+      statuses: (json[r'statuses'] as List<Object?>?)
+              ?.map((i) => WorkflowStatusUpdate.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      workflows: (json[r'workflows'] as List<Object?>?)
+              ?.map((i) => WorkflowCreate.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var scope = this.scope;
+    var statuses = this.statuses;
+    var workflows = this.workflows;
+
+    final json = <String, Object?>{};
+    json[r'scope'] = scope.toJson();
+    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
+    json[r'workflows'] = workflows.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  WorkflowCreateRequest copyWith(
+      {WorkflowScope? scope,
+      List<WorkflowStatusUpdate>? statuses,
+      List<WorkflowCreate>? workflows}) {
+    return WorkflowCreateRequest(
+      scope: scope ?? this.scope,
+      statuses: statuses ?? this.statuses,
+      workflows: workflows ?? this.workflows,
+    );
+  }
+}
+
+/// Details of the created workflows and statuses.
+class WorkflowCreateResponse {
+  /// List of created statuses.
+  final List<JiraWorkflowStatus> statuses;
+
+  /// List of created workflows.
+  final List<JiraWorkflow> workflows;
+
+  WorkflowCreateResponse(
+      {List<JiraWorkflowStatus>? statuses, List<JiraWorkflow>? workflows})
+      : statuses = statuses ?? [],
+        workflows = workflows ?? [];
+
+  factory WorkflowCreateResponse.fromJson(Map<String, Object?> json) {
+    return WorkflowCreateResponse(
+      statuses: (json[r'statuses'] as List<Object?>?)
+              ?.map((i) => JiraWorkflowStatus.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      workflows: (json[r'workflows'] as List<Object?>?)
+              ?.map((i) =>
+                  JiraWorkflow.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var statuses = this.statuses;
+    var workflows = this.workflows;
+
+    final json = <String, Object?>{};
+    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
+    json[r'workflows'] = workflows.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  WorkflowCreateResponse copyWith(
+      {List<JiraWorkflowStatus>? statuses, List<JiraWorkflow>? workflows}) {
+    return WorkflowCreateResponse(
+      statuses: statuses ?? this.statuses,
+      workflows: workflows ?? this.workflows,
+    );
+  }
+}
+
+class WorkflowCreateValidateRequest {
+  final WorkflowCreateRequest payload;
+  final ValidationOptionsForCreate? validationOptions;
+
+  WorkflowCreateValidateRequest(
+      {required this.payload, this.validationOptions});
+
+  factory WorkflowCreateValidateRequest.fromJson(Map<String, Object?> json) {
+    return WorkflowCreateValidateRequest(
+      payload: WorkflowCreateRequest.fromJson(
+          json[r'payload'] as Map<String, Object?>? ?? const {}),
+      validationOptions: json[r'validationOptions'] != null
+          ? ValidationOptionsForCreate.fromJson(
+              json[r'validationOptions']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var payload = this.payload;
+    var validationOptions = this.validationOptions;
+
+    final json = <String, Object?>{};
+    json[r'payload'] = payload.toJson();
+    if (validationOptions != null) {
+      json[r'validationOptions'] = validationOptions.toJson();
+    }
+    return json;
+  }
+
+  WorkflowCreateValidateRequest copyWith(
+      {WorkflowCreateRequest? payload,
+      ValidationOptionsForCreate? validationOptions}) {
+    return WorkflowCreateValidateRequest(
+      payload: payload ?? this.payload,
+      validationOptions: validationOptions ?? this.validationOptions,
+    );
+  }
+}
+
+/// A reference to the location of the error. This will be null if the error
+/// does not refer to a specific element.
+class WorkflowElementReference {
+  /// A property key.
+  final String? propertyKey;
+
+  /// A rule ID.
+  final String? ruleId;
+  final ProjectAndIssueTypePair? statusMappingReference;
+
+  /// A status reference.
+  final String? statusReference;
+
+  /// A transition ID.
+  final String? transitionId;
+
+  WorkflowElementReference(
+      {this.propertyKey,
+      this.ruleId,
+      this.statusMappingReference,
+      this.statusReference,
+      this.transitionId});
+
+  factory WorkflowElementReference.fromJson(Map<String, Object?> json) {
+    return WorkflowElementReference(
+      propertyKey: json[r'propertyKey'] as String?,
+      ruleId: json[r'ruleId'] as String?,
+      statusMappingReference: json[r'statusMappingReference'] != null
+          ? ProjectAndIssueTypePair.fromJson(
+              json[r'statusMappingReference']! as Map<String, Object?>)
+          : null,
+      statusReference: json[r'statusReference'] as String?,
+      transitionId: json[r'transitionId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var propertyKey = this.propertyKey;
+    var ruleId = this.ruleId;
+    var statusMappingReference = this.statusMappingReference;
+    var statusReference = this.statusReference;
+    var transitionId = this.transitionId;
+
+    final json = <String, Object?>{};
+    if (propertyKey != null) {
+      json[r'propertyKey'] = propertyKey;
+    }
+    if (ruleId != null) {
+      json[r'ruleId'] = ruleId;
+    }
+    if (statusMappingReference != null) {
+      json[r'statusMappingReference'] = statusMappingReference.toJson();
+    }
+    if (statusReference != null) {
+      json[r'statusReference'] = statusReference;
+    }
+    if (transitionId != null) {
+      json[r'transitionId'] = transitionId;
+    }
+    return json;
+  }
+
+  WorkflowElementReference copyWith(
+      {String? propertyKey,
+      String? ruleId,
+      ProjectAndIssueTypePair? statusMappingReference,
+      String? statusReference,
+      String? transitionId}) {
+    return WorkflowElementReference(
+      propertyKey: propertyKey ?? this.propertyKey,
+      ruleId: ruleId ?? this.ruleId,
+      statusMappingReference:
+          statusMappingReference ?? this.statusMappingReference,
+      statusReference: statusReference ?? this.statusReference,
+      transitionId: transitionId ?? this.transitionId,
+    );
+  }
+}
+
 /// The classic workflow identifiers.
 class WorkflowIDs {
   /// The entity ID of the workflow.
@@ -52449,6 +55684,45 @@ class WorkflowId {
   }
 }
 
+/// The starting point for the statuses in the workflow.
+class WorkflowLayout {
+  /// The x axis location.
+  final num? x;
+
+  /// The y axis location.
+  final num? y;
+
+  WorkflowLayout({this.x, this.y});
+
+  factory WorkflowLayout.fromJson(Map<String, Object?> json) {
+    return WorkflowLayout(
+      x: json[r'x'] as num?,
+      y: json[r'y'] as num?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var x = this.x;
+    var y = this.y;
+
+    final json = <String, Object?>{};
+    if (x != null) {
+      json[r'x'] = x;
+    }
+    if (y != null) {
+      json[r'y'] = y;
+    }
+    return json;
+  }
+
+  WorkflowLayout copyWith({num? x, num? y}) {
+    return WorkflowLayout(
+      x: x ?? this.x,
+      y: y ?? this.y,
+    );
+  }
+}
+
 /// Operations allowed on a workflow
 class WorkflowOperations {
   /// Whether the workflow can be deleted.
@@ -52480,6 +55754,223 @@ class WorkflowOperations {
     return WorkflowOperations(
       canDelete: canDelete ?? this.canDelete,
       canEdit: canEdit ?? this.canEdit,
+    );
+  }
+}
+
+class WorkflowReadRequest {
+  /// The list of projects and issue types to query.
+  final List<ProjectAndIssueTypePair> projectAndIssueTypes;
+
+  /// The list of workflow IDs to query.
+  final List<String> workflowIds;
+
+  /// The list of workflow names to query.
+  final List<String> workflowNames;
+
+  WorkflowReadRequest(
+      {List<ProjectAndIssueTypePair>? projectAndIssueTypes,
+      List<String>? workflowIds,
+      List<String>? workflowNames})
+      : projectAndIssueTypes = projectAndIssueTypes ?? [],
+        workflowIds = workflowIds ?? [],
+        workflowNames = workflowNames ?? [];
+
+  factory WorkflowReadRequest.fromJson(Map<String, Object?> json) {
+    return WorkflowReadRequest(
+      projectAndIssueTypes: (json[r'projectAndIssueTypes'] as List<Object?>?)
+              ?.map((i) => ProjectAndIssueTypePair.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      workflowIds: (json[r'workflowIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      workflowNames: (json[r'workflowNames'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var projectAndIssueTypes = this.projectAndIssueTypes;
+    var workflowIds = this.workflowIds;
+    var workflowNames = this.workflowNames;
+
+    final json = <String, Object?>{};
+    json[r'projectAndIssueTypes'] =
+        projectAndIssueTypes.map((i) => i.toJson()).toList();
+    json[r'workflowIds'] = workflowIds;
+    json[r'workflowNames'] = workflowNames;
+    return json;
+  }
+
+  WorkflowReadRequest copyWith(
+      {List<ProjectAndIssueTypePair>? projectAndIssueTypes,
+      List<String>? workflowIds,
+      List<String>? workflowNames}) {
+    return WorkflowReadRequest(
+      projectAndIssueTypes: projectAndIssueTypes ?? this.projectAndIssueTypes,
+      workflowIds: workflowIds ?? this.workflowIds,
+      workflowNames: workflowNames ?? this.workflowNames,
+    );
+  }
+}
+
+/// Details of workflows and related statuses.
+class WorkflowReadResponse {
+  /// List of statuses.
+  final List<JiraWorkflowStatus> statuses;
+
+  /// List of workflows.
+  final List<JiraWorkflow> workflows;
+
+  WorkflowReadResponse(
+      {List<JiraWorkflowStatus>? statuses, List<JiraWorkflow>? workflows})
+      : statuses = statuses ?? [],
+        workflows = workflows ?? [];
+
+  factory WorkflowReadResponse.fromJson(Map<String, Object?> json) {
+    return WorkflowReadResponse(
+      statuses: (json[r'statuses'] as List<Object?>?)
+              ?.map((i) => JiraWorkflowStatus.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      workflows: (json[r'workflows'] as List<Object?>?)
+              ?.map((i) =>
+                  JiraWorkflow.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var statuses = this.statuses;
+    var workflows = this.workflows;
+
+    final json = <String, Object?>{};
+    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
+    json[r'workflows'] = workflows.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  WorkflowReadResponse copyWith(
+      {List<JiraWorkflowStatus>? statuses, List<JiraWorkflow>? workflows}) {
+    return WorkflowReadResponse(
+      statuses: statuses ?? this.statuses,
+      workflows: workflows ?? this.workflows,
+    );
+  }
+}
+
+/// The statuses referenced in the workflow.
+class WorkflowReferenceStatus {
+  /// Indicates if the status is deprecated.
+  final bool deprecated;
+  final WorkflowStatusLayout? layout;
+
+  /// The properties associated with the status.
+  final Map<String, dynamic>? properties;
+
+  /// The reference of the status.
+  final String? statusReference;
+
+  WorkflowReferenceStatus(
+      {bool? deprecated, this.layout, this.properties, this.statusReference})
+      : deprecated = deprecated ?? false;
+
+  factory WorkflowReferenceStatus.fromJson(Map<String, Object?> json) {
+    return WorkflowReferenceStatus(
+      deprecated: json[r'deprecated'] as bool? ?? false,
+      layout: json[r'layout'] != null
+          ? WorkflowStatusLayout.fromJson(
+              json[r'layout']! as Map<String, Object?>)
+          : null,
+      properties: json[r'properties'] as Map<String, Object?>?,
+      statusReference: json[r'statusReference'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var deprecated = this.deprecated;
+    var layout = this.layout;
+    var properties = this.properties;
+    var statusReference = this.statusReference;
+
+    final json = <String, Object?>{};
+    json[r'deprecated'] = deprecated;
+    if (layout != null) {
+      json[r'layout'] = layout.toJson();
+    }
+    if (properties != null) {
+      json[r'properties'] = properties;
+    }
+    if (statusReference != null) {
+      json[r'statusReference'] = statusReference;
+    }
+    return json;
+  }
+
+  WorkflowReferenceStatus copyWith(
+      {bool? deprecated,
+      WorkflowStatusLayout? layout,
+      Map<String, dynamic>? properties,
+      String? statusReference}) {
+    return WorkflowReferenceStatus(
+      deprecated: deprecated ?? this.deprecated,
+      layout: layout ?? this.layout,
+      properties: properties ?? this.properties,
+      statusReference: statusReference ?? this.statusReference,
+    );
+  }
+}
+
+/// The configuration of the rule.
+class WorkflowRuleConfiguration {
+  /// The ID of the rule.
+  final String? id;
+
+  /// The parameters related to the rule.
+  final Map<String, dynamic>? parameters;
+
+  /// The rule key of the rule.
+  final String ruleKey;
+
+  WorkflowRuleConfiguration({this.id, this.parameters, required this.ruleKey});
+
+  factory WorkflowRuleConfiguration.fromJson(Map<String, Object?> json) {
+    return WorkflowRuleConfiguration(
+      id: json[r'id'] as String?,
+      parameters: json[r'parameters'] as Map<String, Object?>?,
+      ruleKey: json[r'ruleKey'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var parameters = this.parameters;
+    var ruleKey = this.ruleKey;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (parameters != null) {
+      json[r'parameters'] = parameters;
+    }
+    json[r'ruleKey'] = ruleKey;
+    return json;
+  }
+
+  WorkflowRuleConfiguration copyWith(
+      {String? id, Map<String, dynamic>? parameters, String? ruleKey}) {
+    return WorkflowRuleConfiguration(
+      id: id ?? this.id,
+      parameters: parameters ?? this.parameters,
+      ruleKey: ruleKey ?? this.ruleKey,
     );
   }
 }
@@ -52968,6 +56459,68 @@ class WorkflowSchemeProjectAssociation {
   }
 }
 
+/// The scope of the workflow.
+class WorkflowScope {
+  final ProjectId? project;
+
+  /// The scope of the workflow. `GLOBAL` for company-managed projects and
+  /// `PROJECT` for team-managed projects.
+  final WorkflowScopeType type;
+
+  WorkflowScope({this.project, required this.type});
+
+  factory WorkflowScope.fromJson(Map<String, Object?> json) {
+    return WorkflowScope(
+      project: json[r'project'] != null
+          ? ProjectId.fromJson(json[r'project']! as Map<String, Object?>)
+          : null,
+      type: WorkflowScopeType.fromValue(json[r'type'] as String? ?? ''),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var project = this.project;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    if (project != null) {
+      json[r'project'] = project.toJson();
+    }
+    json[r'type'] = type.value;
+    return json;
+  }
+
+  WorkflowScope copyWith({ProjectId? project, WorkflowScopeType? type}) {
+    return WorkflowScope(
+      project: project ?? this.project,
+      type: type ?? this.type,
+    );
+  }
+}
+
+class WorkflowScopeType {
+  static const project = WorkflowScopeType._('PROJECT');
+  static const global = WorkflowScopeType._('GLOBAL');
+
+  static const values = [
+    project,
+    global,
+  ];
+  final String value;
+
+  const WorkflowScopeType._(this.value);
+
+  static WorkflowScopeType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => WorkflowScopeType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 /// A workflow transition rule condition. This object returns `nodeType` as
 /// `simple`.
 class WorkflowSimpleCondition {
@@ -53058,6 +56611,180 @@ class WorkflowStatus {
       properties: properties ?? this.properties,
     );
   }
+}
+
+/// The status reference and port that a transition is connected to.
+class WorkflowStatusAndPort {
+  /// The port the transition is connected to this status.
+  final int? port;
+
+  /// The reference of this status.
+  final String? statusReference;
+
+  WorkflowStatusAndPort({this.port, this.statusReference});
+
+  factory WorkflowStatusAndPort.fromJson(Map<String, Object?> json) {
+    return WorkflowStatusAndPort(
+      port: (json[r'port'] as num?)?.toInt(),
+      statusReference: json[r'statusReference'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var port = this.port;
+    var statusReference = this.statusReference;
+
+    final json = <String, Object?>{};
+    if (port != null) {
+      json[r'port'] = port;
+    }
+    if (statusReference != null) {
+      json[r'statusReference'] = statusReference;
+    }
+    return json;
+  }
+
+  WorkflowStatusAndPort copyWith({int? port, String? statusReference}) {
+    return WorkflowStatusAndPort(
+      port: port ?? this.port,
+      statusReference: statusReference ?? this.statusReference,
+    );
+  }
+}
+
+/// The x and y location of the status in the workflow.
+class WorkflowStatusLayout {
+  /// The x axis location.
+  final num? x;
+
+  /// The y axis location.
+  final num? y;
+
+  WorkflowStatusLayout({this.x, this.y});
+
+  factory WorkflowStatusLayout.fromJson(Map<String, Object?> json) {
+    return WorkflowStatusLayout(
+      x: json[r'x'] as num?,
+      y: json[r'y'] as num?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var x = this.x;
+    var y = this.y;
+
+    final json = <String, Object?>{};
+    if (x != null) {
+      json[r'x'] = x;
+    }
+    if (y != null) {
+      json[r'y'] = y;
+    }
+    return json;
+  }
+
+  WorkflowStatusLayout copyWith({num? x, num? y}) {
+    return WorkflowStatusLayout(
+      x: x ?? this.x,
+      y: y ?? this.y,
+    );
+  }
+}
+
+/// Details of the status being updated.
+class WorkflowStatusUpdate {
+  /// The description of the status.
+  final String? description;
+
+  /// The ID of the status.
+  final String? id;
+
+  /// The name of the status.
+  final String name;
+
+  /// The category of the status.
+  final WorkflowStatusUpdateStatusCategory statusCategory;
+
+  /// The reference of the status.
+  final String statusReference;
+
+  WorkflowStatusUpdate(
+      {this.description,
+      this.id,
+      required this.name,
+      required this.statusCategory,
+      required this.statusReference});
+
+  factory WorkflowStatusUpdate.fromJson(Map<String, Object?> json) {
+    return WorkflowStatusUpdate(
+      description: json[r'description'] as String?,
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String? ?? '',
+      statusCategory: WorkflowStatusUpdateStatusCategory.fromValue(
+          json[r'statusCategory'] as String? ?? ''),
+      statusReference: json[r'statusReference'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var id = this.id;
+    var name = this.name;
+    var statusCategory = this.statusCategory;
+    var statusReference = this.statusReference;
+
+    final json = <String, Object?>{};
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    json[r'name'] = name;
+    json[r'statusCategory'] = statusCategory.value;
+    json[r'statusReference'] = statusReference;
+    return json;
+  }
+
+  WorkflowStatusUpdate copyWith(
+      {String? description,
+      String? id,
+      String? name,
+      WorkflowStatusUpdateStatusCategory? statusCategory,
+      String? statusReference}) {
+    return WorkflowStatusUpdate(
+      description: description ?? this.description,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      statusCategory: statusCategory ?? this.statusCategory,
+      statusReference: statusReference ?? this.statusReference,
+    );
+  }
+}
+
+class WorkflowStatusUpdateStatusCategory {
+  static const todo = WorkflowStatusUpdateStatusCategory._('TODO');
+  static const inProgress = WorkflowStatusUpdateStatusCategory._('IN_PROGRESS');
+  static const done = WorkflowStatusUpdateStatusCategory._('DONE');
+
+  static const values = [
+    todo,
+    inProgress,
+    done,
+  ];
+  final String value;
+
+  const WorkflowStatusUpdateStatusCategory._(this.value);
+
+  static WorkflowStatusUpdateStatusCategory fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => WorkflowStatusUpdateStatusCategory._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 /// A workflow transition.
@@ -53413,6 +57140,518 @@ class WorkflowTransitionRulesUpdateErrors {
   }
 }
 
+/// The transitions of the workflow.
+class WorkflowTransitions {
+  /// The post-functions of the transition.
+  final List<WorkflowRuleConfiguration> actions;
+  final ConditionGroupConfiguration? conditions;
+
+  /// The custom event ID of the transition.
+  final String? customIssueEventId;
+
+  /// The description of the transition.
+  final String? description;
+
+  /// The statuses the transition can start from.
+  final List<WorkflowStatusAndPort> from;
+
+  /// The ID of the transition.
+  final String? id;
+
+  /// The name of the transition.
+  final String? name;
+
+  /// The properties of the transition.
+  final Map<String, dynamic>? properties;
+  final WorkflowStatusAndPort? to;
+  final WorkflowRuleConfiguration? transitionScreen;
+
+  /// The triggers of the transition.
+  final List<WorkflowTrigger> triggers;
+
+  /// The transition type.
+  final WorkflowTransitionsType? type;
+
+  /// The validators of the transition.
+  final List<WorkflowRuleConfiguration> validators;
+
+  WorkflowTransitions(
+      {List<WorkflowRuleConfiguration>? actions,
+      this.conditions,
+      this.customIssueEventId,
+      this.description,
+      List<WorkflowStatusAndPort>? from,
+      this.id,
+      this.name,
+      this.properties,
+      this.to,
+      this.transitionScreen,
+      List<WorkflowTrigger>? triggers,
+      this.type,
+      List<WorkflowRuleConfiguration>? validators})
+      : actions = actions ?? [],
+        from = from ?? [],
+        triggers = triggers ?? [],
+        validators = validators ?? [];
+
+  factory WorkflowTransitions.fromJson(Map<String, Object?> json) {
+    return WorkflowTransitions(
+      actions: (json[r'actions'] as List<Object?>?)
+              ?.map((i) => WorkflowRuleConfiguration.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      conditions: json[r'conditions'] != null
+          ? ConditionGroupConfiguration.fromJson(
+              json[r'conditions']! as Map<String, Object?>)
+          : null,
+      customIssueEventId: json[r'customIssueEventId'] as String?,
+      description: json[r'description'] as String?,
+      from: (json[r'from'] as List<Object?>?)
+              ?.map((i) => WorkflowStatusAndPort.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      properties: json[r'properties'] as Map<String, Object?>?,
+      to: json[r'to'] != null
+          ? WorkflowStatusAndPort.fromJson(json[r'to']! as Map<String, Object?>)
+          : null,
+      transitionScreen: json[r'transitionScreen'] != null
+          ? WorkflowRuleConfiguration.fromJson(
+              json[r'transitionScreen']! as Map<String, Object?>)
+          : null,
+      triggers: (json[r'triggers'] as List<Object?>?)
+              ?.map((i) => WorkflowTrigger.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      type: json[r'type'] != null
+          ? WorkflowTransitionsType.fromValue(json[r'type']! as String)
+          : null,
+      validators: (json[r'validators'] as List<Object?>?)
+              ?.map((i) => WorkflowRuleConfiguration.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var actions = this.actions;
+    var conditions = this.conditions;
+    var customIssueEventId = this.customIssueEventId;
+    var description = this.description;
+    var from = this.from;
+    var id = this.id;
+    var name = this.name;
+    var properties = this.properties;
+    var to = this.to;
+    var transitionScreen = this.transitionScreen;
+    var triggers = this.triggers;
+    var type = this.type;
+    var validators = this.validators;
+
+    final json = <String, Object?>{};
+    json[r'actions'] = actions.map((i) => i.toJson()).toList();
+    if (conditions != null) {
+      json[r'conditions'] = conditions.toJson();
+    }
+    if (customIssueEventId != null) {
+      json[r'customIssueEventId'] = customIssueEventId;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    json[r'from'] = from.map((i) => i.toJson()).toList();
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (properties != null) {
+      json[r'properties'] = properties;
+    }
+    if (to != null) {
+      json[r'to'] = to.toJson();
+    }
+    if (transitionScreen != null) {
+      json[r'transitionScreen'] = transitionScreen.toJson();
+    }
+    json[r'triggers'] = triggers.map((i) => i.toJson()).toList();
+    if (type != null) {
+      json[r'type'] = type.value;
+    }
+    json[r'validators'] = validators.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  WorkflowTransitions copyWith(
+      {List<WorkflowRuleConfiguration>? actions,
+      ConditionGroupConfiguration? conditions,
+      String? customIssueEventId,
+      String? description,
+      List<WorkflowStatusAndPort>? from,
+      String? id,
+      String? name,
+      Map<String, dynamic>? properties,
+      WorkflowStatusAndPort? to,
+      WorkflowRuleConfiguration? transitionScreen,
+      List<WorkflowTrigger>? triggers,
+      WorkflowTransitionsType? type,
+      List<WorkflowRuleConfiguration>? validators}) {
+    return WorkflowTransitions(
+      actions: actions ?? this.actions,
+      conditions: conditions ?? this.conditions,
+      customIssueEventId: customIssueEventId ?? this.customIssueEventId,
+      description: description ?? this.description,
+      from: from ?? this.from,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      properties: properties ?? this.properties,
+      to: to ?? this.to,
+      transitionScreen: transitionScreen ?? this.transitionScreen,
+      triggers: triggers ?? this.triggers,
+      type: type ?? this.type,
+      validators: validators ?? this.validators,
+    );
+  }
+}
+
+class WorkflowTransitionsType {
+  static const initial = WorkflowTransitionsType._('INITIAL');
+  static const global = WorkflowTransitionsType._('GLOBAL');
+  static const directed = WorkflowTransitionsType._('DIRECTED');
+
+  static const values = [
+    initial,
+    global,
+    directed,
+  ];
+  final String value;
+
+  const WorkflowTransitionsType._(this.value);
+
+  static WorkflowTransitionsType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => WorkflowTransitionsType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// The trigger configuration associated with a workflow.
+class WorkflowTrigger {
+  /// The ID of the trigger.
+  final String? id;
+
+  /// The parameters of the trigger.
+  final Map<String, dynamic> parameters;
+
+  /// The rule key of the trigger.
+  final String ruleKey;
+
+  WorkflowTrigger({this.id, required this.parameters, required this.ruleKey});
+
+  factory WorkflowTrigger.fromJson(Map<String, Object?> json) {
+    return WorkflowTrigger(
+      id: json[r'id'] as String?,
+      parameters: json[r'parameters'] as Map<String, Object?>? ?? {},
+      ruleKey: json[r'ruleKey'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var parameters = this.parameters;
+    var ruleKey = this.ruleKey;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    json[r'parameters'] = parameters;
+    json[r'ruleKey'] = ruleKey;
+    return json;
+  }
+
+  WorkflowTrigger copyWith(
+      {String? id, Map<String, dynamic>? parameters, String? ruleKey}) {
+    return WorkflowTrigger(
+      id: id ?? this.id,
+      parameters: parameters ?? this.parameters,
+      ruleKey: ruleKey ?? this.ruleKey,
+    );
+  }
+}
+
+/// The details of the workflows to update.
+class WorkflowUpdate {
+  /// The mapping of old to new status ID.
+  final List<StatusMigration> defaultStatusMappings;
+
+  /// The new description for this workflow.
+  final String? description;
+
+  /// The ID of this workflow.
+  final String id;
+  final WorkflowLayout? startPointLayout;
+
+  /// The mapping of old to new status ID for a specific project and issue type.
+  final List<StatusMappingDTO> statusMappings;
+
+  /// The statuses associated with this workflow.
+  final List<StatusLayoutUpdate> statuses;
+
+  /// The transitions of this workflow.
+  final List<TransitionUpdateDTO> transitions;
+  final DocumentVersion version;
+
+  WorkflowUpdate(
+      {List<StatusMigration>? defaultStatusMappings,
+      this.description,
+      required this.id,
+      this.startPointLayout,
+      List<StatusMappingDTO>? statusMappings,
+      required this.statuses,
+      required this.transitions,
+      required this.version})
+      : defaultStatusMappings = defaultStatusMappings ?? [],
+        statusMappings = statusMappings ?? [];
+
+  factory WorkflowUpdate.fromJson(Map<String, Object?> json) {
+    return WorkflowUpdate(
+      defaultStatusMappings: (json[r'defaultStatusMappings'] as List<Object?>?)
+              ?.map((i) => StatusMigration.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      description: json[r'description'] as String?,
+      id: json[r'id'] as String? ?? '',
+      startPointLayout: json[r'startPointLayout'] != null
+          ? WorkflowLayout.fromJson(
+              json[r'startPointLayout']! as Map<String, Object?>)
+          : null,
+      statusMappings: (json[r'statusMappings'] as List<Object?>?)
+              ?.map((i) => StatusMappingDTO.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      statuses: (json[r'statuses'] as List<Object?>?)
+              ?.map((i) => StatusLayoutUpdate.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      transitions: (json[r'transitions'] as List<Object?>?)
+              ?.map((i) => TransitionUpdateDTO.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      version: DocumentVersion.fromJson(
+          json[r'version'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var defaultStatusMappings = this.defaultStatusMappings;
+    var description = this.description;
+    var id = this.id;
+    var startPointLayout = this.startPointLayout;
+    var statusMappings = this.statusMappings;
+    var statuses = this.statuses;
+    var transitions = this.transitions;
+    var version = this.version;
+
+    final json = <String, Object?>{};
+    json[r'defaultStatusMappings'] =
+        defaultStatusMappings.map((i) => i.toJson()).toList();
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    json[r'id'] = id;
+    if (startPointLayout != null) {
+      json[r'startPointLayout'] = startPointLayout.toJson();
+    }
+    json[r'statusMappings'] = statusMappings.map((i) => i.toJson()).toList();
+    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
+    json[r'transitions'] = transitions.map((i) => i.toJson()).toList();
+    json[r'version'] = version.toJson();
+    return json;
+  }
+
+  WorkflowUpdate copyWith(
+      {List<StatusMigration>? defaultStatusMappings,
+      String? description,
+      String? id,
+      WorkflowLayout? startPointLayout,
+      List<StatusMappingDTO>? statusMappings,
+      List<StatusLayoutUpdate>? statuses,
+      List<TransitionUpdateDTO>? transitions,
+      DocumentVersion? version}) {
+    return WorkflowUpdate(
+      defaultStatusMappings:
+          defaultStatusMappings ?? this.defaultStatusMappings,
+      description: description ?? this.description,
+      id: id ?? this.id,
+      startPointLayout: startPointLayout ?? this.startPointLayout,
+      statusMappings: statusMappings ?? this.statusMappings,
+      statuses: statuses ?? this.statuses,
+      transitions: transitions ?? this.transitions,
+      version: version ?? this.version,
+    );
+  }
+}
+
+/// The update workflows payload.
+class WorkflowUpdateRequest {
+  /// The statuses to associate with the workflows.
+  final List<WorkflowStatusUpdate> statuses;
+
+  /// The details of the workflows to update.
+  final List<WorkflowUpdate> workflows;
+
+  WorkflowUpdateRequest({required this.statuses, required this.workflows});
+
+  factory WorkflowUpdateRequest.fromJson(Map<String, Object?> json) {
+    return WorkflowUpdateRequest(
+      statuses: (json[r'statuses'] as List<Object?>?)
+              ?.map((i) => WorkflowStatusUpdate.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      workflows: (json[r'workflows'] as List<Object?>?)
+              ?.map((i) => WorkflowUpdate.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var statuses = this.statuses;
+    var workflows = this.workflows;
+
+    final json = <String, Object?>{};
+    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
+    json[r'workflows'] = workflows.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  WorkflowUpdateRequest copyWith(
+      {List<WorkflowStatusUpdate>? statuses, List<WorkflowUpdate>? workflows}) {
+    return WorkflowUpdateRequest(
+      statuses: statuses ?? this.statuses,
+      workflows: workflows ?? this.workflows,
+    );
+  }
+}
+
+class WorkflowUpdateResponse {
+  /// List of updated statuses.
+  final List<JiraWorkflowStatus> statuses;
+
+  /// If there is a [asynchronous task](#async-operations) operation, as a
+  /// result of this update.
+  final String? taskId;
+
+  /// List of updated workflows.
+  final List<JiraWorkflow> workflows;
+
+  WorkflowUpdateResponse(
+      {List<JiraWorkflowStatus>? statuses,
+      this.taskId,
+      List<JiraWorkflow>? workflows})
+      : statuses = statuses ?? [],
+        workflows = workflows ?? [];
+
+  factory WorkflowUpdateResponse.fromJson(Map<String, Object?> json) {
+    return WorkflowUpdateResponse(
+      statuses: (json[r'statuses'] as List<Object?>?)
+              ?.map((i) => JiraWorkflowStatus.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      taskId: json[r'taskId'] as String?,
+      workflows: (json[r'workflows'] as List<Object?>?)
+              ?.map((i) =>
+                  JiraWorkflow.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var statuses = this.statuses;
+    var taskId = this.taskId;
+    var workflows = this.workflows;
+
+    final json = <String, Object?>{};
+    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
+    if (taskId != null) {
+      json[r'taskId'] = taskId;
+    }
+    json[r'workflows'] = workflows.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  WorkflowUpdateResponse copyWith(
+      {List<JiraWorkflowStatus>? statuses,
+      String? taskId,
+      List<JiraWorkflow>? workflows}) {
+    return WorkflowUpdateResponse(
+      statuses: statuses ?? this.statuses,
+      taskId: taskId ?? this.taskId,
+      workflows: workflows ?? this.workflows,
+    );
+  }
+}
+
+class WorkflowUpdateValidateRequestBean {
+  final WorkflowUpdateRequest payload;
+  final ValidationOptionsForUpdate? validationOptions;
+
+  WorkflowUpdateValidateRequestBean(
+      {required this.payload, this.validationOptions});
+
+  factory WorkflowUpdateValidateRequestBean.fromJson(
+      Map<String, Object?> json) {
+    return WorkflowUpdateValidateRequestBean(
+      payload: WorkflowUpdateRequest.fromJson(
+          json[r'payload'] as Map<String, Object?>? ?? const {}),
+      validationOptions: json[r'validationOptions'] != null
+          ? ValidationOptionsForUpdate.fromJson(
+              json[r'validationOptions']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var payload = this.payload;
+    var validationOptions = this.validationOptions;
+
+    final json = <String, Object?>{};
+    json[r'payload'] = payload.toJson();
+    if (validationOptions != null) {
+      json[r'validationOptions'] = validationOptions.toJson();
+    }
+    return json;
+  }
+
+  WorkflowUpdateValidateRequestBean copyWith(
+      {WorkflowUpdateRequest? payload,
+      ValidationOptionsForUpdate? validationOptions}) {
+    return WorkflowUpdateValidateRequestBean(
+      payload: payload ?? this.payload,
+      validationOptions: validationOptions ?? this.validationOptions,
+    );
+  }
+}
+
 /// The workflows that use this status. Only available if the `workflowUsages`
 /// expand is requested.
 class WorkflowUsages {
@@ -53449,6 +57688,180 @@ class WorkflowUsages {
     return WorkflowUsages(
       workflowId: workflowId ?? this.workflowId,
       workflowName: workflowName ?? this.workflowName,
+    );
+  }
+}
+
+/// The details about a workflow validation error.
+class WorkflowValidationError {
+  /// An error code.
+  final String? code;
+  final WorkflowElementReference? elementReference;
+
+  /// The validation error level.
+  final WorkflowValidationErrorLevel? level;
+
+  /// An error message.
+  final String? message;
+
+  /// The type of element the error or warning references.
+  final WorkflowValidationErrorType? type;
+
+  WorkflowValidationError(
+      {this.code, this.elementReference, this.level, this.message, this.type});
+
+  factory WorkflowValidationError.fromJson(Map<String, Object?> json) {
+    return WorkflowValidationError(
+      code: json[r'code'] as String?,
+      elementReference: json[r'elementReference'] != null
+          ? WorkflowElementReference.fromJson(
+              json[r'elementReference']! as Map<String, Object?>)
+          : null,
+      level: json[r'level'] != null
+          ? WorkflowValidationErrorLevel.fromValue(json[r'level']! as String)
+          : null,
+      message: json[r'message'] as String?,
+      type: json[r'type'] != null
+          ? WorkflowValidationErrorType.fromValue(json[r'type']! as String)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var code = this.code;
+    var elementReference = this.elementReference;
+    var level = this.level;
+    var message = this.message;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    if (code != null) {
+      json[r'code'] = code;
+    }
+    if (elementReference != null) {
+      json[r'elementReference'] = elementReference.toJson();
+    }
+    if (level != null) {
+      json[r'level'] = level.value;
+    }
+    if (message != null) {
+      json[r'message'] = message;
+    }
+    if (type != null) {
+      json[r'type'] = type.value;
+    }
+    return json;
+  }
+
+  WorkflowValidationError copyWith(
+      {String? code,
+      WorkflowElementReference? elementReference,
+      WorkflowValidationErrorLevel? level,
+      String? message,
+      WorkflowValidationErrorType? type}) {
+    return WorkflowValidationError(
+      code: code ?? this.code,
+      elementReference: elementReference ?? this.elementReference,
+      level: level ?? this.level,
+      message: message ?? this.message,
+      type: type ?? this.type,
+    );
+  }
+}
+
+class WorkflowValidationErrorLevel {
+  static const warning = WorkflowValidationErrorLevel._('WARNING');
+  static const error = WorkflowValidationErrorLevel._('ERROR');
+
+  static const values = [
+    warning,
+    error,
+  ];
+  final String value;
+
+  const WorkflowValidationErrorLevel._(this.value);
+
+  static WorkflowValidationErrorLevel fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => WorkflowValidationErrorLevel._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class WorkflowValidationErrorType {
+  static const rule = WorkflowValidationErrorType._('RULE');
+  static const status = WorkflowValidationErrorType._('STATUS');
+  static const statusLayout = WorkflowValidationErrorType._('STATUS_LAYOUT');
+  static const statusProperty =
+      WorkflowValidationErrorType._('STATUS_PROPERTY');
+  static const workflow = WorkflowValidationErrorType._('WORKFLOW');
+  static const transition = WorkflowValidationErrorType._('TRANSITION');
+  static const transitionProperty =
+      WorkflowValidationErrorType._('TRANSITION_PROPERTY');
+  static const scope = WorkflowValidationErrorType._('SCOPE');
+  static const statusMapping = WorkflowValidationErrorType._('STATUS_MAPPING');
+  static const trigger = WorkflowValidationErrorType._('TRIGGER');
+
+  static const values = [
+    rule,
+    status,
+    statusLayout,
+    statusProperty,
+    workflow,
+    transition,
+    transitionProperty,
+    scope,
+    statusMapping,
+    trigger,
+  ];
+  final String value;
+
+  const WorkflowValidationErrorType._(this.value);
+
+  static WorkflowValidationErrorType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => WorkflowValidationErrorType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class WorkflowValidationErrorList {
+  /// The list of validation errors.
+  final List<WorkflowValidationError> errors;
+
+  WorkflowValidationErrorList({List<WorkflowValidationError>? errors})
+      : errors = errors ?? [];
+
+  factory WorkflowValidationErrorList.fromJson(Map<String, Object?> json) {
+    return WorkflowValidationErrorList(
+      errors: (json[r'errors'] as List<Object?>?)
+              ?.map((i) => WorkflowValidationError.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var errors = this.errors;
+
+    final json = <String, Object?>{};
+    json[r'errors'] = errors.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  WorkflowValidationErrorList copyWith(
+      {List<WorkflowValidationError>? errors}) {
+    return WorkflowValidationErrorList(
+      errors: errors ?? this.errors,
     );
   }
 }
