@@ -27,6 +27,10 @@
       "description": ""
     },
     {
+      "name": "Ancestors",
+      "description": ""
+    },
+    {
       "name": "Blog Post",
       "description": ""
     },
@@ -55,11 +59,23 @@
       "description": ""
     },
     {
+      "name": "Like",
+      "description": ""
+    },
+    {
+      "name": "Operation",
+      "description": ""
+    },
+    {
       "name": "Page",
       "description": ""
     },
     {
       "name": "Space",
+      "description": ""
+    },
+    {
+      "name": "Space Permissions",
       "description": ""
     },
     {
@@ -80,6 +96,158 @@
     }
   ],
   "paths": {
+    "/attachments": {
+      "get": {
+        "tags": [
+          "Attachment"
+        ],
+        "operationId": "getAttachments",
+        "summary": "Get attachments",
+        "description": "Returns all attachments. The number of results is limited by the `limit` parameter and additional results (if available)\nwill be available through the `next` URL present in the `Link` response header.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the container of the attachment.",
+        "parameters": [
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Used to sort the result by a particular field.",
+            "schema": {
+              "$ref": "#/components/schemas/AttachmentSortOrder"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "description": "Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "description": "Filter the results to attachments based on their status. By default, `current` and `archived` are used.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "current",
+                  "archived",
+                  "trashed"
+                ]
+              }
+            }
+          },
+          {
+            "name": "mediaType",
+            "in": "query",
+            "required": false,
+            "description": "Filters on the mediaType of attachments. Only one may be specified.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "required": false,
+            "description": "Filters on the file-name of attachments. Only one may be specified.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of attachments per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.",
+            "schema": {
+              "format": "int32",
+              "default": 50,
+              "minimum": 1,
+              "maximum": 250,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "serialize-ids-as-strings",
+            "in": "query",
+            "description": "Due to JavaScript's max integer representation of 2^53-1, the type of any IDs returned in the response body for this endpoint will be changed from a numeric type to a string type at the end of the deprecation period. In the meantime, this query param can be passed to this endpoint to opt-in to this change now. See this [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905) for more detail.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested attachments are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "MultiEntityResult<Attachment>",
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Attachment"
+                      }
+                    },
+                    "_links": {
+                      "type": "object",
+                      "properties": {
+                        "next": {
+                          "type": "string",
+                          "description": "Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.\nThis property will not be present if there is no additional data available."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Link": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Used for pagination. This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request's URL. For example, rel=\"next\" would be the URL necessary to get the next page of information. If there are no additional results, this header will not be returned. Example response header format: `Link: </wiki/api/v2/attachments?cursor=<opaque cursor token>>; rel=\"next\"`\n"
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:attachment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:attachment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
     "/attachments/{id}": {
       "get": {
         "tags": [
@@ -161,6 +329,63 @@
           }
         ],
         "x-atlassian-connect-scope": "READ"
+      },
+      "delete": {
+        "tags": [
+          "Attachment"
+        ],
+        "operationId": "deleteAttachment",
+        "summary": "Delete attachment",
+        "description": "Delete an attachment by id.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the container of the attachment. Permission to delete attachments in the space.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the attachment to be deleted.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Returned if the attachment was successfully deleted.",
+            "content": {}
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if:\n- The provided attachment does not exist\n- The user does not have permissions to view the container of the attachment\n- The user does not have the needed permissions to delete an attachment in the space"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "delete:attachment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "delete:attachment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "DELETE"
       }
     },
     "/attachments/{id}/labels": {
@@ -274,6 +499,72 @@
                   "type": "string"
                 },
                 "description": "Used for pagination. This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request's URL. For example, rel=\"next\" would be the URL necessary to get the next page of information. If there are no additional results, this header will not be returned. Example response header format: `Link: </wiki/api/v2/attachments/<id>/labels?cursor=<opaque cursor token>>; rel=\"next\"`\n"
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the calling user does not have permission to view the\nparent content of the requested attachment or the attachment was not found.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:attachment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:attachment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/attachments/{id}/operations": {
+      "get": {
+        "tags": [
+          "Operation"
+        ],
+        "operationId": "getAttachmentOperations",
+        "summary": "Get permitted operations for attachment",
+        "description": "Returns the permitted operations on specific attachment.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the parent content of the attachment and its corresponding space.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the attachment for which operations should be returned.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested operations are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PermittedOperationsResponse"
+                }
               }
             }
           },
@@ -456,8 +747,8 @@
           "Content Properties"
         ],
         "operationId": "createAttachmentProperty",
-        "summary": "Create attachment property",
-        "description": "Creates a new attachment property.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the attachment.",
+        "summary": "Create content property for attachment",
+        "description": "Creates a new content property for an attachment.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the attachment.",
         "parameters": [
           {
             "name": "attachment-id",
@@ -480,7 +771,7 @@
           }
         ],
         "requestBody": {
-          "description": "The attachment property to be created",
+          "description": "The content property to be created",
           "content": {
             "application/json": {
               "schema": {
@@ -492,7 +783,7 @@
         },
         "responses": {
           "200": {
-            "description": "Returned if the attachment property was created successfully.",
+            "description": "Returned if the content property was created successfully.",
             "content": {
               "application/json": {
                 "schema": {
@@ -627,8 +918,8 @@
           "Content Properties"
         ],
         "operationId": "updateAttachmentPropertyById",
-        "summary": "Update attachment property by id",
-        "description": "Update an attachment property by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the attachment.",
+        "summary": "Update content property for attachment by id",
+        "description": "Update a content property for attachment by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the attachment.",
         "parameters": [
           {
             "name": "attachment-id",
@@ -661,7 +952,7 @@
           }
         ],
         "requestBody": {
-          "description": "The attachment property to be updated.",
+          "description": "The content property to be updated.",
           "content": {
             "application/json": {
               "schema": {
@@ -673,7 +964,7 @@
         },
         "responses": {
           "200": {
-            "description": "Returned if the attachment property was updated successfully.",
+            "description": "Returned if the content property was updated successfully.",
             "content": {
               "application/json": {
                 "schema": {
@@ -723,8 +1014,8 @@
           "Content Properties"
         ],
         "operationId": "deleteAttachmentPropertyById",
-        "summary": "Delete attachment property by id",
-        "description": "Deletes a attachment property by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to attachment the page.",
+        "summary": "Delete content property for attachment by id",
+        "description": "Deletes a content property for an attachment by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to attachment the page.",
         "parameters": [
           {
             "name": "attachment-id",
@@ -749,7 +1040,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Returned if the attachment property was deleted successfully."
+            "description": "Returned if the content property was deleted successfully."
           },
           "400": {
             "description": "Returned if an invalid request is provided.",
@@ -1002,6 +1293,7 @@
             "description": "Filter the results based on blog post ids. Multiple blog post ids can be specified as a comma-separated list.",
             "schema": {
               "type": "array",
+              "maxItems": 250,
               "items": {
                 "type": "integer",
                 "format": "int64"
@@ -1009,17 +1301,52 @@
             }
           },
           {
+            "name": "space-id",
+            "in": "query",
+            "required": false,
+            "description": "Filter the results based on space ids. Multiple space ids can be specified as a comma-separated list.",
+            "schema": {
+              "type": "array",
+              "maxItems": 100,
+              "items": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Used to sort the result by a particular field.",
+            "schema": {
+              "$ref": "#/components/schemas/BlogPostSortOrder"
+            }
+          },
+          {
             "name": "status",
             "in": "query",
             "required": false,
-            "description": "Filter the results to blog posts based on their status.",
+            "description": "Filter the results to blog posts based on their status. By default, `current` is used.",
             "schema": {
-              "type": "string",
-              "enum": [
-                "current",
-                "deleted",
-                "trashed"
-              ]
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "current",
+                  "deleted",
+                  "trashed"
+                ]
+              }
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": false,
+            "description": "Filter the results to blog posts based on their title.",
+            "schema": {
+              "type": "string"
             }
           },
           {
@@ -1073,7 +1400,7 @@
                     "results": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/BlogPost"
+                        "$ref": "#/components/schemas/BlogPostBulk"
                       }
                     },
                     "_links": {
@@ -1144,6 +1471,15 @@
               "type": "boolean",
               "default": false
             }
+          },
+          {
+            "name": "private",
+            "in": "query",
+            "description": "The blog post will be private. Only the user who creates this blog post will have permission to view and edit one.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
         "requestBody": {
@@ -1155,7 +1491,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BlogPost"
+                  "$ref": "#/components/schemas/BlogPostSingle"
                 }
               }
             }
@@ -1223,7 +1559,7 @@
             "in": "query",
             "description": "The content format types to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.",
             "schema": {
-              "$ref": "#/components/schemas/PrimaryBodyRepresentation"
+              "$ref": "#/components/schemas/PrimaryBodyRepresentationSingle"
             }
           },
           {
@@ -1259,7 +1595,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BlogPost"
+                  "$ref": "#/components/schemas/BlogPostSingle"
                 }
               }
             }
@@ -1335,7 +1671,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BlogPost"
+                  "$ref": "#/components/schemas/BlogPostSingle"
                 }
               }
             }
@@ -1349,7 +1685,7 @@
             "content": {}
           },
           "404": {
-            "description": "Returned if:\n- The provided blog post does not exist\n- The user does not have permissions to view the blog post\n- The user does not have the needed permissions to update a blog post in the provided space"
+            "description": "Returned if:\n- The provided blog post does not exist\n- The user does not have permissions to view the blog post\n- The user does not have the needed permissions to update a blog post in the space"
           }
         },
         "security": [
@@ -1406,7 +1742,7 @@
             "content": {}
           },
           "404": {
-            "description": "Returned if:\n- The provided blog post does not exist\n- The user does not have permissions to view the blog post\n- The user does not have the needed permissions to delete a blog post in the provided space"
+            "description": "Returned if:\n- The provided blog post does not exist\n- The user does not have permissions to view the blog post\n- The user does not have the needed permissions to delete a blog post in the space"
           }
         },
         "security": [
@@ -1466,6 +1802,23 @@
             "description": "Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "description": "Filter the results to attachments based on their status. By default, `current` and `archived` are used.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "current",
+                  "archived",
+                  "trashed"
+                ]
+              }
             }
           },
           {
@@ -1609,6 +1962,15 @@
             }
           },
           {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Used to sort the result by a particular field.",
+            "schema": {
+              "$ref": "#/components/schemas/CustomContentSortOrder"
+            }
+          },
+          {
             "name": "cursor",
             "in": "query",
             "required": false,
@@ -1659,7 +2021,7 @@
                     "results": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/CustomContent"
+                        "$ref": "#/components/schemas/CustomContentBulk"
                       }
                     },
                     "_links": {
@@ -1867,6 +2229,193 @@
         "x-atlassian-connect-scope": "READ"
       }
     },
+    "/blogposts/{id}/likes/count": {
+      "get": {
+        "tags": [
+          "Like"
+        ],
+        "operationId": "getBlogPostLikeCount",
+        "summary": "Get like count for blog post",
+        "description": "Returns the count of likes of specific blog post.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content of the blog post and its corresponding space.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the blog post for which like count should be returned.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested count is returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Integer",
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "format": "int64",
+                      "description": "The count number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the calling user does not have permission to view the\nrequested blog post or the blog post was not found.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:page:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:page:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/blogposts/{id}/likes/users": {
+      "get": {
+        "tags": [
+          "Like"
+        ],
+        "operationId": "getBlogPostLikeUsers",
+        "summary": "Get account IDs of likes for blog post",
+        "description": "Returns the account IDs of likes of specific blog post.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content of the blog post and its corresponding space.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the blog post for which account IDs should be returned.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "description": "Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of account IDs per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.",
+            "schema": {
+              "format": "int32",
+              "default": 25,
+              "minimum": 0,
+              "maximum": 250,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested account IDs are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "MultiEntityResult<String>",
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Like"
+                      }
+                    },
+                    "_links": {
+                      "type": "object",
+                      "properties": {
+                        "next": {
+                          "type": "string",
+                          "description": "Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.\nThis property will not be present if there is no additional data available."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Link": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Used for pagination. This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request's URL. For example, rel=\"next\" would be the URL necessary to get the next page of information. If there are no additional results, this header will not be returned. Example response header format: `Link: </wiki/api/v2/blogposts/<id>/likes/users?cursor=<opaque cursor token>>; rel=\"next\"`\n"
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the calling user does not have permission to view the\nrequested blog post or the blog post was not found.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:page:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:page:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
     "/blogposts/{blogpost-id}/properties": {
       "get": {
         "tags": [
@@ -2011,8 +2560,8 @@
           "Content Properties"
         ],
         "operationId": "createBlogpostProperty",
-        "summary": "Create blog post property",
-        "description": "Creates a new blog post property.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the blog post.",
+        "summary": "Create content property for blog post",
+        "description": "Creates a new property for a blogpost.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the blog post.",
         "parameters": [
           {
             "name": "blogpost-id",
@@ -2035,7 +2584,7 @@
           }
         ],
         "requestBody": {
-          "description": "The blog post property to be created",
+          "description": "The content property to be created",
           "content": {
             "application/json": {
               "schema": {
@@ -2047,7 +2596,7 @@
         },
         "responses": {
           "200": {
-            "description": "Returned if the blog post property was created successfully.",
+            "description": "Returned if the content property was created successfully.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2190,8 +2739,8 @@
           "Content Properties"
         ],
         "operationId": "updateBlogpostPropertyById",
-        "summary": "Update blog post property by id",
-        "description": "Update a blog post property by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the blog post.",
+        "summary": "Update content property for blog post by id",
+        "description": "Update a content property for blog post by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the blog post.",
         "parameters": [
           {
             "name": "blogpost-id",
@@ -2224,7 +2773,7 @@
           }
         ],
         "requestBody": {
-          "description": "The blog post property to be updated.",
+          "description": "The content property to be updated.",
           "content": {
             "application/json": {
               "schema": {
@@ -2236,7 +2785,7 @@
         },
         "responses": {
           "200": {
-            "description": "Returned if the blog post property was updated successfully.",
+            "description": "Returned if the content property was updated successfully.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2286,8 +2835,8 @@
           "Content Properties"
         ],
         "operationId": "deleteBlogpostPropertyById",
-        "summary": "Delete blog post property by id",
-        "description": "Deletes a blog post property by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the blog post.",
+        "summary": "Delete content property for blogpost by id",
+        "description": "Deletes a content property for a blogpost by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the blog post.",
         "parameters": [
           {
             "name": "blogpost-id",
@@ -2312,7 +2861,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Returned if the blog post property was deleted successfully."
+            "description": "Returned if the content property was deleted successfully."
           },
           "400": {
             "description": "Returned if an invalid request is provided.",
@@ -2349,6 +2898,72 @@
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
+      }
+    },
+    "/blogposts/{id}/operations": {
+      "get": {
+        "tags": [
+          "Operation"
+        ],
+        "operationId": "getBlogPostOperations",
+        "summary": "Get permitted operations for blog post",
+        "description": "Returns the permitted operations on specific blog post.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the parent content of the blog post and its corresponding space.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the blog post for which operations should be returned.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested operations are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PermittedOperationsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the calling user does not have permission to view the\nparent content of the requested blog post or the it was not found.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:page:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:page:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
       }
     },
     "/blogposts/{id}/versions": {
@@ -2593,17 +3208,21 @@
             "basicAuth": []
           },
           {
-            "oAuthDefinitions": []
+            "oAuthDefinitions": [
+              "read:content.metadata:confluence"
+            ]
           }
         ],
         "x-atlassian-oauth2-scopes": [
           {
             "scheme": "oAuthDefinitions",
             "state": "Current",
-            "scopes": []
+            "scopes": [
+              "read:content.metadata:confluence"
+            ]
           }
         ],
-        "x-atlassian-connect-scope": "READ"
+        "x-atlassian-connect-scope": "NONE"
       }
     },
     "/custom-content": {
@@ -2631,10 +3250,34 @@
             "description": "Filter the results based on custom content ids. Multiple custom content ids can be specified as a comma-separated list.",
             "schema": {
               "type": "array",
+              "maxItems": 250,
               "items": {
                 "type": "integer",
                 "format": "int64"
               }
+            }
+          },
+          {
+            "name": "space-id",
+            "in": "query",
+            "required": false,
+            "description": "Filter the results based on space ids. Multiple space ids can be specified as a comma-separated list.",
+            "schema": {
+              "type": "array",
+              "maxItems": 100,
+              "items": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Used to sort the result by a particular field.",
+            "schema": {
+              "$ref": "#/components/schemas/CustomContentSortOrder"
             }
           },
           {
@@ -2688,7 +3331,7 @@
                     "results": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/CustomContent"
+                        "$ref": "#/components/schemas/CustomContentBulk"
                       }
                     },
                     "_links": {
@@ -2773,7 +3416,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomContent"
+                  "$ref": "#/components/schemas/CustomContentSingle"
                 }
               }
             },
@@ -2844,7 +3487,7 @@
             "in": "query",
             "description": "The content format types to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.\n\nNote: If the custom content body type is `storage`, the `storage` and `atlas_doc_format` body formats are able to be returned. If the custom content body type is `raw`, only the `raw` body format is able to be returned.",
             "schema": {
-              "$ref": "#/components/schemas/CustomContentBodyRepresentation"
+              "$ref": "#/components/schemas/CustomContentBodyRepresentationSingle"
             }
           },
           {
@@ -2871,7 +3514,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomContent"
+                  "$ref": "#/components/schemas/CustomContentSingle"
                 }
               }
             }
@@ -2947,7 +3590,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomContent"
+                  "$ref": "#/components/schemas/CustomContentSingle"
                 }
               }
             },
@@ -3086,6 +3729,23 @@
             "description": "Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "description": "Filter the results to attachments based on their status. By default, `current` and `archived` are used.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "current",
+                  "archived",
+                  "trashed"
+                ]
+              }
             }
           },
           {
@@ -3349,6 +4009,72 @@
         "x-atlassian-connect-scope": "READ"
       }
     },
+    "/custom-content/{id}/operations": {
+      "get": {
+        "tags": [
+          "Operation"
+        ],
+        "operationId": "getCustomContentOperations",
+        "summary": "Get permitted operations for custom content",
+        "description": "Returns the permitted operations on specific custom content.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the parent content of the custom content and its corresponding space.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the custom content for which operations should be returned.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested operations are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PermittedOperationsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the calling user does not have permission to view the\nparent content of the requested custom content or the it was not found.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:custom-content:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:custom-content:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
     "/custom-content/{custom-content-id}/properties": {
       "get": {
         "tags": [
@@ -3493,8 +4219,8 @@
           "Content Properties"
         ],
         "operationId": "createCustomContentProperty",
-        "summary": "Create custom content property",
-        "description": "Creates a new custom content property.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the custom content.",
+        "summary": "Create content property for custom content",
+        "description": "Creates a new content property for a piece of custom content.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the custom content.",
         "parameters": [
           {
             "name": "custom-content-id",
@@ -3517,7 +4243,7 @@
           }
         ],
         "requestBody": {
-          "description": "The custom content property to be created",
+          "description": "The content property to be created",
           "content": {
             "application/json": {
               "schema": {
@@ -3529,7 +4255,7 @@
         },
         "responses": {
           "200": {
-            "description": "Returned if the custom content property was created successfully.",
+            "description": "Returned if the content property was created successfully.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3664,8 +4390,8 @@
           "Content Properties"
         ],
         "operationId": "updateCustomContentPropertyById",
-        "summary": "Update custom content property by id",
-        "description": "Update a custom content property by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the custom content.",
+        "summary": "Update content property for custom content by id",
+        "description": "Update a content property for a piece of custom content by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the custom content.",
         "parameters": [
           {
             "name": "custom-content-id",
@@ -3698,7 +4424,7 @@
           }
         ],
         "requestBody": {
-          "description": "The custom content property to be updated.",
+          "description": "The content property to be updated.",
           "content": {
             "application/json": {
               "schema": {
@@ -3710,7 +4436,7 @@
         },
         "responses": {
           "200": {
-            "description": "Returned if the custom content property was updated successfully.",
+            "description": "Returned if the content property was updated successfully.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3760,8 +4486,8 @@
           "Content Properties"
         ],
         "operationId": "deleteCustomContentPropertyById",
-        "summary": "Delete custom content property by id",
-        "description": "Deletes a custom content property by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the custom content.",
+        "summary": "Delete content property for custom content by id",
+        "description": "Deletes a content property for a piece of custom content by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the custom content.",
         "parameters": [
           {
             "name": "custom-content-id",
@@ -3786,7 +4512,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Returned if the custom content property was deleted successfully."
+            "description": "Returned if the content property was deleted successfully."
           },
           "400": {
             "description": "Returned if an invalid request is provided.",
@@ -3967,6 +4693,20 @@
             }
           },
           {
+            "name": "space-id",
+            "in": "query",
+            "required": false,
+            "description": "Filter the results based on space ids. Multiple space ids can be specified as a comma-separated list.",
+            "schema": {
+              "type": "array",
+              "maxItems": 100,
+              "items": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          {
             "name": "body-format",
             "in": "query",
             "description": "The content format types to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.",
@@ -4026,7 +4766,7 @@
                     "results": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/BlogPost"
+                        "$ref": "#/components/schemas/BlogPostBulk"
                       }
                     },
                     "_links": {
@@ -4106,6 +4846,20 @@
             }
           },
           {
+            "name": "space-id",
+            "in": "query",
+            "required": false,
+            "description": "Filter the results based on space ids. Multiple space ids can be specified as a comma-separated list.",
+            "schema": {
+              "type": "array",
+              "maxItems": 100,
+              "items": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          {
             "name": "body-format",
             "in": "query",
             "description": "The content format types to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.",
@@ -4165,7 +4919,7 @@
                     "results": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/Page"
+                        "$ref": "#/components/schemas/PageBulk"
                       }
                     },
                     "_links": {
@@ -4241,6 +4995,7 @@
             "description": "Filter the results based on page ids. Multiple page ids can be specified as a comma-separated list.",
             "schema": {
               "type": "array",
+              "maxItems": 250,
               "items": {
                 "type": "integer",
                 "format": "int64"
@@ -4248,18 +5003,53 @@
             }
           },
           {
+            "name": "space-id",
+            "in": "query",
+            "required": false,
+            "description": "Filter the results based on space ids. Multiple space ids can be specified as a comma-separated list.",
+            "schema": {
+              "type": "array",
+              "maxItems": 100,
+              "items": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Used to sort the result by a particular field.",
+            "schema": {
+              "$ref": "#/components/schemas/PageSortOrder"
+            }
+          },
+          {
             "name": "status",
             "in": "query",
             "required": false,
-            "description": "Filter the results to pages based on their status.",
+            "description": "Filter the results to pages based on their status. By default, `current` and `archived` are used.",
             "schema": {
-              "type": "string",
-              "enum": [
-                "current",
-                "archived",
-                "deleted",
-                "trashed"
-              ]
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "current",
+                  "archived",
+                  "deleted",
+                  "trashed"
+                ]
+              }
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": false,
+            "description": "Filter the results to pages based on their title.",
+            "schema": {
+              "type": "string"
             }
           },
           {
@@ -4313,7 +5103,7 @@
                     "results": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/Page"
+                        "$ref": "#/components/schemas/PageBulk"
                       }
                     },
                     "_links": {
@@ -4384,6 +5174,24 @@
               "type": "boolean",
               "default": false
             }
+          },
+          {
+            "name": "embedded",
+            "in": "query",
+            "description": "Tag the content as embedded and content will be created in NCS.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "private",
+            "in": "query",
+            "description": "The page will be private. Only the user who creates this page will have permission to view and edit one.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
         "requestBody": {
@@ -4395,7 +5203,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Page"
+                  "$ref": "#/components/schemas/PageSingle"
                 }
               }
             }
@@ -4409,7 +5217,7 @@
             "content": {}
           },
           "404": {
-            "description": "Returned if:\n- The space does not exist\n- The user does not have permissions to view the space\n- The user does not have the needed permissions to create a page in the space"
+            "description": "Returned if:\n- The space does not exist\n- The user does not have permissions to view the space\n- The user does not have the needed permissions to create a page in the provided space"
           },
           "413": {
             "description": "Returned if the request is too large in size (over 5 MB).",
@@ -4462,7 +5270,7 @@
             "in": "query",
             "description": "The content format types to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.",
             "schema": {
-              "$ref": "#/components/schemas/PrimaryBodyRepresentation"
+              "$ref": "#/components/schemas/PrimaryBodyRepresentationSingle"
             }
           },
           {
@@ -4498,7 +5306,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Page"
+                  "$ref": "#/components/schemas/PageSingle"
                 }
               }
             }
@@ -4574,7 +5382,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Page"
+                  "$ref": "#/components/schemas/PageSingle"
                 }
               }
             }
@@ -4588,7 +5396,7 @@
             "content": {}
           },
           "404": {
-            "description": "Returned if:\n- The provided page does not exist\n- The user does not have permissions to view the page\n- The user does not have the needed permissions to update a page in the provided space"
+            "description": "Returned if:\n- The provided page does not exist\n- The user does not have permissions to view the page\n- The user does not have the needed permissions to update a page in the space\n- The user provides a parentId for a page that does not exist or they do not have permission to view\n- There are no spaces associated with the given spaceId"
           }
         },
         "security": [
@@ -4645,7 +5453,7 @@
             "content": {}
           },
           "404": {
-            "description": "Returned if:\n- The provided page does not exist\n- The user does not have permissions to view the page\n- The user does not have the needed permissions to delete a page in the provided space"
+            "description": "Returned if:\n- The provided page does not exist\n- The user does not have permissions to view the page\n- The user does not have the needed permissions to delete a page in the space"
           }
         },
         "security": [
@@ -4705,6 +5513,23 @@
             "description": "Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "description": "Filter the results to attachments based on their status. By default, `current` and `archived` are used.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "current",
+                  "archived",
+                  "trashed"
+                ]
+              }
             }
           },
           {
@@ -4848,6 +5673,15 @@
             }
           },
           {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Used to sort the result by a particular field.",
+            "schema": {
+              "$ref": "#/components/schemas/CustomContentSortOrder"
+            }
+          },
+          {
             "name": "cursor",
             "in": "query",
             "required": false,
@@ -4898,7 +5732,7 @@
                     "results": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/CustomContent"
+                        "$ref": "#/components/schemas/CustomContentBulk"
                       }
                     },
                     "_links": {
@@ -5106,6 +5940,259 @@
         "x-atlassian-connect-scope": "READ"
       }
     },
+    "/pages/{id}/likes/count": {
+      "get": {
+        "tags": [
+          "Like"
+        ],
+        "operationId": "getPageLikeCount",
+        "summary": "Get like count for page",
+        "description": "Returns the count of likes of specific page.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content of the page and its corresponding space.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the page for which like count should be returned.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested count is returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Integer",
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "format": "int64",
+                      "description": "The count number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the calling user does not have permission to view the\nrequested page or the page was not found.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:page:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:page:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/pages/{id}/likes/users": {
+      "get": {
+        "tags": [
+          "Like"
+        ],
+        "operationId": "getPageLikeUsers",
+        "summary": "Get account IDs of likes for page",
+        "description": "Returns the account IDs of likes of specific page.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content of the page and its corresponding space.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the page for which like count should be returned.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "description": "Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of account IDs per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.",
+            "schema": {
+              "format": "int32",
+              "default": 25,
+              "minimum": 0,
+              "maximum": 250,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested account IDs are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "MultiEntityResult<String>",
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Like"
+                      }
+                    },
+                    "_links": {
+                      "type": "object",
+                      "properties": {
+                        "next": {
+                          "type": "string",
+                          "description": "Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.\nThis property will not be present if there is no additional data available."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Link": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Used for pagination. This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request's URL. For example, rel=\"next\" would be the URL necessary to get the next page of information. If there are no additional results, this header will not be returned. Example response header format: `Link: </wiki/api/v2/pages/<id>/likes/users?cursor=<opaque cursor token>>; rel=\"next\"`\n"
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the calling user does not have permission to view the\nrequested page or the page was not found.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:page:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:page:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/pages/{id}/operations": {
+      "get": {
+        "tags": [
+          "Operation"
+        ],
+        "operationId": "getPageOperations",
+        "summary": "Get permitted operations for page",
+        "description": "Returns the permitted operations on specific page.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the parent content of the page and its corresponding space.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the page for which operations should be returned.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested operations are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PermittedOperationsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the calling user does not have permission to view the\nparent content of the requested page or the it was not found.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:page:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:page:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
     "/pages/{page-id}/properties": {
       "get": {
         "tags": [
@@ -5250,8 +6337,8 @@
           "Content Properties"
         ],
         "operationId": "createPageProperty",
-        "summary": "Create page property",
-        "description": "Creates a new page property.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the page.",
+        "summary": "Create content property for page",
+        "description": "Creates a new content property for a page.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the page.",
         "parameters": [
           {
             "name": "page-id",
@@ -5274,7 +6361,7 @@
           }
         ],
         "requestBody": {
-          "description": "The page property to be created",
+          "description": "The content property to be created",
           "content": {
             "application/json": {
               "schema": {
@@ -5286,7 +6373,7 @@
         },
         "responses": {
           "200": {
-            "description": "Returned if the page property was created successfully.",
+            "description": "Returned if the content property was created successfully.",
             "content": {
               "application/json": {
                 "schema": {
@@ -5421,8 +6508,8 @@
           "Content Properties"
         ],
         "operationId": "updatePagePropertyById",
-        "summary": "Update page property by id",
-        "description": "Update a page property by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the page.",
+        "summary": "Update content property for page by id",
+        "description": "Update a content property for a page by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the page.",
         "parameters": [
           {
             "name": "page-id",
@@ -5455,7 +6542,7 @@
           }
         ],
         "requestBody": {
-          "description": "The page property to be updated.",
+          "description": "The content property to be updated.",
           "content": {
             "application/json": {
               "schema": {
@@ -5467,7 +6554,7 @@
         },
         "responses": {
           "200": {
-            "description": "Returned if the page property was updated successfully.",
+            "description": "Returned if the content property was updated successfully.",
             "content": {
               "application/json": {
                 "schema": {
@@ -5517,8 +6604,8 @@
           "Content Properties"
         ],
         "operationId": "deletePagePropertyById",
-        "summary": "Delete page property by id",
-        "description": "Deletes a page property by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the page.",
+        "summary": "Delete content property for page by id",
+        "description": "Deletes a content property for a page by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the page.",
         "parameters": [
           {
             "name": "page-id",
@@ -5543,7 +6630,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Returned if the page property was deleted successfully."
+            "description": "Returned if the content property was deleted successfully."
           },
           "400": {
             "description": "Returned if an invalid request is provided.",
@@ -5810,9 +6897,9 @@
           {
             "name": "body-format",
             "in": "query",
-            "description": "The content format types to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.",
+            "description": "The content format types to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.\n\nNote: If the custom content body type is `storage`, the `storage` and `atlas_doc_format` body formats are able to be returned. If the custom content body type is `raw`, only the `raw` body format is able to be returned.",
             "schema": {
-              "$ref": "#/components/schemas/PrimaryBodyRepresentation"
+              "$ref": "#/components/schemas/CustomContentBodyRepresentation"
             }
           },
           {
@@ -6010,6 +7097,7 @@
             "description": "Filter the results to spaces based on their IDs. Multiple IDs can be specified as a comma-separated list.",
             "schema": {
               "type": "array",
+              "maxItems": 250,
               "items": {
                 "type": "integer",
                 "format": "int64"
@@ -6023,6 +7111,7 @@
             "description": "Filter the results to spaces based on their keys. Multiple keys can be specified as a comma-separated list.",
             "schema": {
               "type": "array",
+              "maxItems": 250,
               "items": {
                 "type": "string"
               }
@@ -6082,6 +7171,16 @@
             "description": "The content format type to be returned in the `description` field of the response. If available, the representation will be available under a response field of the same name under the `description` field.",
             "schema": {
               "$ref": "#/components/schemas/SpaceDescriptionBodyRepresentation"
+            }
+          },
+          {
+            "name": "include-icon",
+            "in": "query",
+            "required": false,
+            "description": "If the icon for the space should be fetched or not.",
+            "schema": {
+              "type": "boolean",
+              "default": false
             }
           },
           {
@@ -6210,6 +7309,25 @@
             "schema": {
               "$ref": "#/components/schemas/SpaceDescriptionBodyRepresentation"
             }
+          },
+          {
+            "name": "include-icon",
+            "in": "query",
+            "required": false,
+            "description": "If the icon for the space should be fetched or not.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "serialize-ids-as-strings",
+            "in": "query",
+            "description": "Due to JavaScript's max integer representation of 2^53-1, the type of any IDs returned in the response body for this endpoint will be changed from a numeric type to a string type at the end of the deprecation period. In the meantime, this query param can be passed to this endpoint to opt-in to this change now. See this [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905) for more detail.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
         "responses": {
@@ -6278,17 +7396,38 @@
             }
           },
           {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Used to sort the result by a particular field.",
+            "schema": {
+              "$ref": "#/components/schemas/BlogPostSortOrder"
+            }
+          },
+          {
             "name": "status",
             "in": "query",
             "required": false,
-            "description": "Filter the results to blog posts based on their status.",
+            "description": "Filter the results to blog posts based on their status. By default, `current` is used.",
             "schema": {
-              "type": "string",
-              "enum": [
-                "current",
-                "deleted",
-                "trashed"
-              ]
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "current",
+                  "deleted",
+                  "trashed"
+                ]
+              }
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": false,
+            "description": "Filter the results to blog posts based on their title.",
+            "schema": {
+              "type": "string"
             }
           },
           {
@@ -6342,7 +7481,7 @@
                     "results": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/BlogPost"
+                        "$ref": "#/components/schemas/BlogPostBulk"
                       }
                     },
                     "_links": {
@@ -6480,7 +7619,7 @@
                     "results": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/CustomContent"
+                        "$ref": "#/components/schemas/CustomContentBulk"
                       }
                     },
                     "_links": {
@@ -6539,6 +7678,72 @@
         "x-atlassian-connect-scope": "READ"
       }
     },
+    "/spaces/{id}/operations": {
+      "get": {
+        "tags": [
+          "Operation"
+        ],
+        "operationId": "getSpaceOperations",
+        "summary": "Get permitted operations for space",
+        "description": "Returns the permitted operations on specific space.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the corresponding space.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the space for which operations should be returned.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested operations are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PermittedOperationsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the calling user does not have permission to view the\nspace or the it was not found.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:space:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:space:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
     "/spaces/{id}/pages": {
       "get": {
         "tags": [
@@ -6559,18 +7764,53 @@
             }
           },
           {
+            "name": "depth",
+            "in": "query",
+            "required": false,
+            "description": "Filter the results to pages at the root level of the space or to all pages in the space.",
+            "schema": {
+              "type": "string",
+              "default": "all",
+              "enum": [
+                "all",
+                "root"
+              ]
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Used to sort the result by a particular field.",
+            "schema": {
+              "$ref": "#/components/schemas/PageSortOrder"
+            }
+          },
+          {
             "name": "status",
             "in": "query",
             "required": false,
-            "description": "Filter the results to pages based on their status.",
+            "description": "Filter the results to pages based on their status. By default, `current` and `archived` are used.",
             "schema": {
-              "type": "string",
-              "enum": [
-                "current",
-                "archived",
-                "deleted",
-                "trashed"
-              ]
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "current",
+                  "archived",
+                  "deleted",
+                  "trashed"
+                ]
+              }
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": false,
+            "description": "Filter the results to pages based on their title.",
+            "schema": {
+              "type": "string"
             }
           },
           {
@@ -6624,7 +7864,7 @@
                     "results": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/Page"
+                        "$ref": "#/components/schemas/PageBulk"
                       }
                     },
                     "_links": {
@@ -7156,6 +8396,111 @@
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
+      }
+    },
+    "/spaces/{id}/permissions": {
+      "get": {
+        "tags": [
+          "Space Permissions"
+        ],
+        "operationId": "getSpacePermissions",
+        "summary": "Get space permissions",
+        "description": "Returns space permissions for a specific space.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the space.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the space to be returned.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "description": "Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of spaces per result to return. If more results exist, use the `Link` response header to retrieve a relative URL that will return the next set of results.",
+            "schema": {
+              "format": "int32",
+              "default": 25,
+              "minimum": 1,
+              "maximum": 250,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested space permissions are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "MultiEntityResult<SpacePermission>",
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SpacePermission"
+                      }
+                    },
+                    "_links": {
+                      "type": "object",
+                      "properties": {
+                        "next": {
+                          "type": "string",
+                          "description": "Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.\nThis property will not be present if there is no additional data available."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the calling user does not have permission to view the\nrequested space permissions or the space was not found.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:permission:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:permission:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
       }
     },
     "/pages/{id}/footer-comments": {
@@ -7719,6 +9064,130 @@
       }
     },
     "/footer-comments": {
+      "get": {
+        "tags": [
+          "Comment"
+        ],
+        "operationId": "getFooterComments",
+        "summary": "Get footer comments",
+        "description": "Returns all footer comments. The number of results is limited by the `limit` parameter and additional results (if available)\nwill be available through the `next` URL present in the `Link` response header.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content of the page and its corresponding space.",
+        "parameters": [
+          {
+            "name": "body-format",
+            "in": "query",
+            "required": false,
+            "description": "The content format type to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.",
+            "schema": {
+              "$ref": "#/components/schemas/PrimaryBodyRepresentation"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Used to sort the result by a particular field.",
+            "schema": {
+              "$ref": "#/components/schemas/CommentSortOrder"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "description": "Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of footer comments per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.",
+            "schema": {
+              "format": "int32",
+              "default": 25,
+              "minimum": 1,
+              "maximum": 250,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "serialize-ids-as-strings",
+            "in": "query",
+            "description": "Due to JavaScript's max integer representation of 2^53-1, the type of any IDs returned in the response body for this endpoint will be changed from a numeric type to a string type at the end of the deprecation period. In the meantime, this query param can be passed to this endpoint to opt-in to this change now. See this [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905) for more detail.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested footer comments are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "MultiEntityResult<FooterCommentModel>",
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/InlineCommentModel"
+                      }
+                    },
+                    "_links": {
+                      "type": "object",
+                      "properties": {
+                        "next": {
+                          "type": "string",
+                          "description": "Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.\nThis property will not be present if there is no additional data available."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Link": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Used for pagination. This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request's URL. For example, rel=\"next\" would be the URL necessary to get the next page of information. If there are no additional results, this header will not be returned. Example response header format: `Link: </wiki/api/v2/footer-comments/<id>/children?cursor=<opaque cursor token>>; rel=\"next\"`\n"
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:comment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:comment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      },
       "post": {
         "tags": [
           "Comment"
@@ -7827,7 +9296,7 @@
             "required": false,
             "description": "The content format type to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.",
             "schema": {
-              "$ref": "#/components/schemas/PrimaryBodyRepresentation"
+              "$ref": "#/components/schemas/PrimaryBodyRepresentationSingle"
             }
           },
           {
@@ -8173,6 +9642,259 @@
         "x-atlassian-connect-scope": "READ"
       }
     },
+    "/footer-comments/{id}/likes/count": {
+      "get": {
+        "tags": [
+          "Like"
+        ],
+        "operationId": "getFooterLikeCount",
+        "summary": "Get like count for footer comment",
+        "description": "Returns the count of likes of specific footer comment.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content of the page/blogpost and its corresponding space.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the footer comment for which like count should be returned.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested count is returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Integer",
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "format": "int64",
+                      "description": "The count number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the calling user does not have permission to view the comment or the comment was not found.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:comment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:comment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/footer-comments/{id}/likes/users": {
+      "get": {
+        "tags": [
+          "Like"
+        ],
+        "operationId": "getFooterLikeUsers",
+        "summary": "Get account IDs of likes for footer comment",
+        "description": "Returns the account IDs of likes of specific footer comment.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content of the page/blogpost and its corresponding space.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the footer comment for which like count should be returned.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "description": "Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of account IDs per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.",
+            "schema": {
+              "format": "int32",
+              "default": 25,
+              "minimum": 0,
+              "maximum": 250,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested account IDs are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "MultiEntityResult<String>",
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Like"
+                      }
+                    },
+                    "_links": {
+                      "type": "object",
+                      "properties": {
+                        "next": {
+                          "type": "string",
+                          "description": "Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.\nThis property will not be present if there is no additional data available."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Link": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Used for pagination. This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request's URL. For example, rel=\"next\" would be the URL necessary to get the next page of information. If there are no additional results, this header will not be returned. Example response header format: `Link: </wiki/api/v2/footer-comments/<id>/likes/users?cursor=<opaque cursor token>>; rel=\"next\"`\n"
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the calling user does not have permission to view the comment or the comment was not found.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:comment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:comment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/footer-comments/{id}/operations": {
+      "get": {
+        "tags": [
+          "Operation"
+        ],
+        "operationId": "getFooterCommentOperations",
+        "summary": "Get permitted operations for footer comment",
+        "description": "Returns the permitted operations on specific footer comment.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the parent content of the footer comment and its corresponding space.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the footer comment for which operations should be returned.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested operations are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PermittedOperationsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the calling user does not have permission to view the\nparent content of the requested footer comment or the it was not found.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:comment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:comment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
     "/footer-comments/{id}/versions": {
       "get": {
         "tags": [
@@ -8380,6 +10102,130 @@
       }
     },
     "/inline-comments": {
+      "get": {
+        "tags": [
+          "Comment"
+        ],
+        "operationId": "getInlineComments",
+        "summary": "Get inline comments",
+        "description": "Returns all inline comments. The number of results is limited by the `limit` parameter and additional results (if available)\nwill be available through the `next` URL present in the `Link` response header.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content of the page and its corresponding space.",
+        "parameters": [
+          {
+            "name": "serialize-ids-as-strings",
+            "in": "query",
+            "description": "Due to JavaScript's max integer representation of 2^53-1, the type of any IDs returned in the response body for this endpoint will be changed from a numeric type to a string type at the end of the deprecation period. In the meantime, this query param can be passed to this endpoint to opt-in to this change now. See this [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905) for more detail.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "body-format",
+            "in": "query",
+            "required": false,
+            "description": "The content format type to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.",
+            "schema": {
+              "$ref": "#/components/schemas/PrimaryBodyRepresentation"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Used to sort the result by a particular field.",
+            "schema": {
+              "$ref": "#/components/schemas/CommentSortOrder"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "description": "Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of footer comments per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.",
+            "schema": {
+              "format": "int32",
+              "default": 25,
+              "minimum": 1,
+              "maximum": 250,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested inline comments are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "MultiEntityResult<InlineCommentModel>",
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/InlineCommentModel"
+                      }
+                    },
+                    "_links": {
+                      "type": "object",
+                      "properties": {
+                        "next": {
+                          "type": "string",
+                          "description": "Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.\nThis property will not be present if there is no additional data available."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Link": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Used for pagination. This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request's URL. For example, rel=\"next\" would be the URL necessary to get the next page of information. If there are no additional results, this header will not be returned. Example response header format: `Link: </wiki/api/v2/inline-comments/<id>/children?cursor=<opaque cursor token>>; rel=\"next\"`\n"
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:comment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:comment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      },
       "post": {
         "tags": [
           "Comment"
@@ -8488,7 +10334,7 @@
             "required": false,
             "description": "The content format type to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.",
             "schema": {
-              "$ref": "#/components/schemas/PrimaryBodyRepresentation"
+              "$ref": "#/components/schemas/PrimaryBodyRepresentationSingle"
             }
           },
           {
@@ -8811,6 +10657,259 @@
           },
           "404": {
             "description": "Returned if the calling user does not have permission to view the\nparent page/blog post or the page/blog post was not found.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:comment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:comment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/inline-comments/{id}/likes/count": {
+      "get": {
+        "tags": [
+          "Like"
+        ],
+        "operationId": "getInlineLikeCount",
+        "summary": "Get like count for inline comment",
+        "description": "Returns the count of likes of specific inline comment.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content of the page/blogpost and its corresponding space.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the inline comment for which like count should be returned.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested count is returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Integer",
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "format": "int64",
+                      "description": "The count number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the calling user does not have permission to view the comment or the comment was not found.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:comment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:comment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/inline-comments/{id}/likes/users": {
+      "get": {
+        "tags": [
+          "Like"
+        ],
+        "operationId": "getInlineLikeUsers",
+        "summary": "Get account IDs of likes for inline comment",
+        "description": "Returns the account IDs of likes of specific inline comment.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content of the page/blogpost and its corresponding space.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the inline comment for which like count should be returned.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "description": "Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of account IDs per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.",
+            "schema": {
+              "format": "int32",
+              "default": 25,
+              "minimum": 0,
+              "maximum": 250,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested account IDs are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "MultiEntityResult<String>",
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Like"
+                      }
+                    },
+                    "_links": {
+                      "type": "object",
+                      "properties": {
+                        "next": {
+                          "type": "string",
+                          "description": "Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.\nThis property will not be present if there is no additional data available."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Link": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Used for pagination. This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request's URL. For example, rel=\"next\" would be the URL necessary to get the next page of information. If there are no additional results, this header will not be returned. Example response header format: `Link: </wiki/api/v2/inline-comments/<id>/likes/users?cursor=<opaque cursor token>>; rel=\"next\"`\n"
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the calling user does not have permission to view the comment or the comment was not found.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:comment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:comment:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/inline-comments/{id}/operations": {
+      "get": {
+        "tags": [
+          "Operation"
+        ],
+        "operationId": "getInlineCommentOperations",
+        "summary": "Get permitted operations for inline comment",
+        "description": "Returns the permitted operations on specific inline comment.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the parent content of the inline comment and its corresponding space.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the inline comment for which operations should be returned.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested operations are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PermittedOperationsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the calling user does not have permission to view the\nparent content of the requested inline comment or the it was not found.",
             "content": {}
           }
         },
@@ -9186,8 +11285,8 @@
           "Content Properties"
         ],
         "operationId": "createCommentProperty",
-        "summary": "Create comment property",
-        "description": "Creates a new comment property.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the comment.",
+        "summary": "Create content property for comment",
+        "description": "Creates a new content property for a comment.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the comment.",
         "parameters": [
           {
             "name": "comment-id",
@@ -9210,7 +11309,7 @@
           }
         ],
         "requestBody": {
-          "description": "The comment property to be created",
+          "description": "The content property to be created",
           "content": {
             "application/json": {
               "schema": {
@@ -9222,7 +11321,7 @@
         },
         "responses": {
           "200": {
-            "description": "Returned if the comment property was created successfully.",
+            "description": "Returned if the content property was created successfully.",
             "content": {
               "application/json": {
                 "schema": {
@@ -9357,8 +11456,8 @@
           "Content Properties"
         ],
         "operationId": "updateCommentPropertyById",
-        "summary": "Update comment property by id",
-        "description": "Update a comment property by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the comment.",
+        "summary": "Update content property for comment by id",
+        "description": "Update a content property for a comment by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the comment.",
         "parameters": [
           {
             "name": "comment-id",
@@ -9391,7 +11490,7 @@
           }
         ],
         "requestBody": {
-          "description": "The comment property to be updated.",
+          "description": "The content property to be updated.",
           "content": {
             "application/json": {
               "schema": {
@@ -9403,7 +11502,7 @@
         },
         "responses": {
           "200": {
-            "description": "Returned if the comment property was updated successfully.",
+            "description": "Returned if the content property was updated successfully.",
             "content": {
               "application/json": {
                 "schema": {
@@ -9453,8 +11552,8 @@
           "Content Properties"
         ],
         "operationId": "deleteCommentPropertyById",
-        "summary": "Delete comment property by id",
-        "description": "Deletes a comment property by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the comment.",
+        "summary": "Delete content property for comment by id",
+        "description": "Deletes a content property for a comment by its id. \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the comment.",
         "parameters": [
           {
             "name": "comment-id",
@@ -9479,7 +11578,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Returned if the comment property was deleted successfully."
+            "description": "Returned if the content property was deleted successfully."
           },
           "400": {
             "description": "Returned if an invalid request is provided.",
@@ -9562,6 +11661,7 @@
             "description": "Filters on task ID. Multiple IDs can be specified.",
             "schema": {
               "type": "array",
+              "maxItems": 250,
               "items": {
                 "type": "integer",
                 "format": "int64"
@@ -9574,6 +11674,7 @@
             "description": "Filters on the space ID of the task. Multiple IDs can be specified.",
             "schema": {
               "type": "array",
+              "maxItems": 250,
               "items": {
                 "type": "integer",
                 "format": "int64"
@@ -9586,6 +11687,7 @@
             "description": "Filters on the page ID of the task. Multiple IDs can be specified. Note - page and blog post filters can be used in conjunction.",
             "schema": {
               "type": "array",
+              "maxItems": 250,
               "items": {
                 "type": "integer",
                 "format": "int64"
@@ -9598,6 +11700,7 @@
             "description": "Filters on the blog post ID of the task. Multiple IDs can be specified. Note - page and blog post filters can be used in conjunction.",
             "schema": {
               "type": "array",
+              "maxItems": 250,
               "items": {
                 "type": "integer",
                 "format": "int64"
@@ -9610,6 +11713,7 @@
             "description": "Filters on the Account ID of the user who created this task. Multiple IDs can be specified.",
             "schema": {
               "type": "array",
+              "maxItems": 250,
               "items": {
                 "type": "string"
               }
@@ -9621,6 +11725,7 @@
             "description": "Filters on the Account ID of the user to whom this task is assigned. Multiple IDs can be specified.",
             "schema": {
               "type": "array",
+              "maxItems": 250,
               "items": {
                 "type": "string"
               }
@@ -9632,6 +11737,7 @@
             "description": "Filters on the Account ID of the user who completed this task. Multiple IDs can be specified.",
             "schema": {
               "type": "array",
+              "maxItems": 250,
               "items": {
                 "type": "string"
               }
@@ -10208,6 +12314,92 @@
         "x-atlassian-connect-scope": "READ"
       }
     },
+    "/pages/{id}/ancestors": {
+      "get": {
+        "tags": [
+          "Ancestors"
+        ],
+        "operationId": "getPageAncestors",
+        "summary": "Get all ancestors of page",
+        "description": "Returns all ancestors for a given page by ID in top-to-bottom order (that is, the highest ancestor is the first\nitem in the response payload). The number of results is limited by the `limit` parameter and additional results (if available)\nwill be available by calling this endpoint with the ID of first ancestor in the response payload.\n\nThis endpoint returns minimal information about each ancestor. To fetch more details, use a related endpoint, such\nas [Get page by id](https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-page/#api-pages-id-get).\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the page.",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of pages per result to return. If more results exist, call this endpoint with the highest ancestor's ID to fetch the next set of results.",
+            "schema": {
+              "format": "int32",
+              "default": 25,
+              "minimum": 1,
+              "maximum": 250,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested ancestors are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "MultiEntityResult<Ancestor>",
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Ancestor"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if an invalid request is provided.",
+            "content": {}
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing\nfrom the request.",
+            "content": {}
+          },
+          "404": {
+            "description": "Returned if the calling user does not have permission to view the\nspecified page or the page was not found."
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:content.metadata:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:content.metadata:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
     "/user/access/check-access-by-email": {
       "post": {
         "tags": [
@@ -10291,42 +12483,14 @@
         ],
         "operationId": "inviteByEmail",
         "summary": "Invite a list of emails to the site",
-        "description": "Invite a list of emails to the site.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
+        "description": "Invite a list of emails to the site.\n\nIgnores all invalid emails and no action is taken for the emails that already have access to the site.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
         "requestBody": {
           "$ref": "#/components/requestBodies/CheckAccessOrInviteByEmailRequest"
         },
         "responses": {
           "200": {
             "description": "Returns object with list of emails without access to site.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "emailsInvited": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "description": "List of emails invited to site."
-                    },
-                    "emailsNotInvited": {
-                      "properties": {
-                        "key": {
-                          "type": "string",
-                          "description": "Email that was not invited."
-                        },
-                        "value": {
-                          "type": "string",
-                          "description": "Reason why the email was not invited."
-                        }
-                      },
-                      "description": "List of invalid emails provided in the request."
-                    }
-                  }
-                }
-              }
-            }
+            "content": {}
           },
           "400": {
             "description": "Returned if an invalid request is provided.",
@@ -10420,7 +12584,6 @@
                 "id",
                 "status",
                 "title",
-                "spaceId",
                 "body",
                 "version"
               ],
@@ -10433,7 +12596,6 @@
                   "enum": [
                     "current",
                     "draft",
-                    "archived",
                     "deleted"
                   ],
                   "type": "string",
@@ -10445,7 +12607,7 @@
                 },
                 "spaceId": {
                   "type": "string",
-                  "description": "ID of the containing space."
+                  "description": "ID of the containing space.\n\nThis currently **does not support moving the blog post to a different space**."
                 },
                 "body": {
                   "oneOf": [
@@ -10698,7 +12860,6 @@
                 "id",
                 "status",
                 "title",
-                "spaceId",
                 "body",
                 "version"
               ],
@@ -10722,8 +12883,12 @@
                   "description": "Title of the page."
                 },
                 "spaceId": {
-                  "type": "string",
-                  "description": "ID of the containing space."
+                  "format": "string",
+                  "description": "ID of the containing space.\n\nThis currently **does not support moving the page to a different space**."
+                },
+                "parentId": {
+                  "format": "string",
+                  "description": "ID of the parent page.\n\nThis allows the page to be moved under a different parent within the same space."
                 },
                 "body": {
                   "oneOf": [
@@ -10870,6 +13035,11 @@
             "type": "string",
             "description": "Title of the comment."
           },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date and time when the attachment was created. In format \"YYYY-MM-DDTHH:mm:ss.sssZ\"."
+          },
           "pageId": {
             "oneOf": [
               {
@@ -10918,6 +13088,10 @@
             "type": "string",
             "description": "Comment for the attachment."
           },
+          "fileId": {
+            "type": "string",
+            "description": "File ID of the attachment. This is the ID referenced in `atlas_doc_format` bodies and is distinct from the attachment ID."
+          },
           "fileSize": {
             "format": "int64",
             "type": "integer",
@@ -10933,10 +13107,13 @@
           },
           "version": {
             "$ref": "#/components/schemas/Version"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/AttachmentLinks"
           }
         }
       },
-      "BlogPost": {
+      "BlogPostSingle": {
         "type": "object",
         "properties": {
           "id": {
@@ -10983,11 +13160,83 @@
             "$ref": "#/components/schemas/Version"
           },
           "body": {
-            "$ref": "#/components/schemas/Body"
+            "$ref": "#/components/schemas/BodySingle"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/AbstractPageLinks"
           }
         }
       },
-      "Body": {
+      "BlogPostBulk": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer",
+                "format": "int64"
+              }
+            ],
+            "description": "ID of the blog post.\n\nDue to JavaScript's max integer representation of 2^53-1, the type of this field will be changed from a numeric type to a string type at the end of the deprecation period. In the meantime, `serialize-ids-as-strings=true` can be passed as a query param to any v2 endpoint to opt-in to this change now. See this [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905) for more detail."
+          },
+          "status": {
+            "$ref": "#/components/schemas/ContentStatus"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the blog post."
+          },
+          "spaceId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer",
+                "format": "int64"
+              }
+            ],
+            "description": "ID of the space the blog post is in.\n\nDue to JavaScript's max integer representation of 2^53-1, the type of this field will be changed from a numeric type to a string type at the end of the deprecation period. In the meantime, `serialize-ids-as-strings=true` can be passed as a query param to any v2 endpoint to opt-in to this change now. See this [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905) for more detail."
+          },
+          "authorId": {
+            "type": "string",
+            "description": "The account ID of the user who created this blog post originally."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date and time when the blog post was created. In format \"YYYY-MM-DDTHH:mm:ss.sssZ\"."
+          },
+          "version": {
+            "$ref": "#/components/schemas/Version"
+          },
+          "body": {
+            "$ref": "#/components/schemas/BodyBulk"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/AbstractPageLinks"
+          }
+        }
+      },
+      "BodySingle": {
+        "type": "object",
+        "description": "Contains fields for each representation type requested.",
+        "properties": {
+          "storage": {
+            "$ref": "#/components/schemas/BodyType"
+          },
+          "atlas_doc_format": {
+            "$ref": "#/components/schemas/BodyType"
+          },
+          "view": {
+            "$ref": "#/components/schemas/BodyType"
+          }
+        }
+      },
+      "BodyBulk": {
         "type": "object",
         "description": "Contains fields for each representation type requested.",
         "properties": {
@@ -11012,27 +13261,21 @@
           }
         }
       },
-      "BodyRepresentation": {
-        "enum": [
-          "anonymous_export_view",
-          "atlas_doc_format",
-          "dynamic",
-          "editor",
-          "editor2",
-          "export_view",
-          "plain",
-          "raw",
-          "storage",
-          "styled_view",
-          "view"
-        ],
-        "type": "string",
-        "description": "The formats a body can be represented as."
-      },
       "PrimaryBodyRepresentation": {
         "enum": [
           "storage",
           "atlas_doc_format"
+        ],
+        "type": "string",
+        "description": "The primary formats a body can be represented as. A subset of BodyRepresentation. These formats are the only allowed formats in certain use cases."
+      },
+      "PrimaryBodyRepresentationSingle": {
+        "enum": [
+          "storage",
+          "atlas_doc_format",
+          "view",
+          "export_view",
+          "anonymous_export_view"
         ],
         "type": "string",
         "description": "The primary formats a body can be represented as. A subset of BodyRepresentation. These formats are the only allowed formats in certain use cases."
@@ -11042,6 +13285,18 @@
           "raw",
           "storage",
           "atlas_doc_format"
+        ],
+        "type": "string",
+        "description": "The formats a custom content body can be represented as. A subset of BodyRepresentation."
+      },
+      "CustomContentBodyRepresentationSingle": {
+        "enum": [
+          "raw",
+          "storage",
+          "atlas_doc_format",
+          "view",
+          "export_view",
+          "anonymous_export_view"
         ],
         "type": "string",
         "description": "The formats a custom content body can be represented as. A subset of BodyRepresentation."
@@ -11169,7 +13424,7 @@
           }
         }
       },
-      "CustomContent": {
+      "CustomContentSingle": {
         "type": "object",
         "properties": {
           "id": {
@@ -11252,15 +13507,130 @@
             "format": "date-time",
             "description": "Date and time when the custom content was created. In format \"YYYY-MM-DDTHH:mm:ss.sssZ\"."
           },
-          "body": {
-            "$ref": "#/components/schemas/CustomContentBody"
-          },
           "version": {
             "$ref": "#/components/schemas/Version"
+          },
+          "body": {
+            "$ref": "#/components/schemas/CustomContentBodySingle"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/CustomContentLinks"
           }
         }
       },
-      "CustomContentBody": {
+      "CustomContentBulk": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer",
+                "format": "int64"
+              }
+            ],
+            "description": "ID of the custom content.\n\nDue to JavaScript's max integer representation of 2^53-1, the type of this field will be changed from a numeric type to a string type at the end of the deprecation period. In the meantime, `serialize-ids-as-strings=true` can be passed as a query param to any v2 endpoint to opt-in to this change now. See this [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905) for more detail."
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of custom content."
+          },
+          "status": {
+            "$ref": "#/components/schemas/ContentStatus"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the custom content."
+          },
+          "spaceId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer",
+                "format": "int64"
+              }
+            ],
+            "description": "ID of the space the custom content is in.\n\nNote: This is always returned, regardless of if the custom content has a container that is a space.\n\nDue to JavaScript's max integer representation of 2^53-1, the type of this field will be changed from a numeric type to a string type at the end of the deprecation period. In the meantime, `serialize-ids-as-strings=true` can be passed as a query param to any v2 endpoint to opt-in to this change now. See this [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905) for more detail."
+          },
+          "pageId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer",
+                "format": "int64"
+              }
+            ],
+            "description": "ID of the containing page.\n\nNote: This is only returned if the custom content has a container that is a page.\n\nDue to JavaScript's max integer representation of 2^53-1, the type of this field will be changed from a numeric type to a string type at the end of the deprecation period. In the meantime, `serialize-ids-as-strings=true` can be passed as a query param to any v2 endpoint to opt-in to this change now. See this [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905) for more detail."
+          },
+          "blogPostId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer",
+                "format": "int64"
+              }
+            ],
+            "description": "ID of the containing blog post.\n\nNote: This is only returned if the custom content has a container that is a blog post.\n\nDue to JavaScript's max integer representation of 2^53-1, the type of this field will be changed from a numeric type to a string type at the end of the deprecation period. In the meantime, `serialize-ids-as-strings=true` can be passed as a query param to any v2 endpoint to opt-in to this change now. See this [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905) for more detail."
+          },
+          "customContentId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer",
+                "format": "int64"
+              }
+            ],
+            "description": "ID of the containing custom content.\n\nNote: This is only returned if the custom content has a container that is custom content.\n\nDue to JavaScript's max integer representation of 2^53-1, the type of this field will be changed from a numeric type to a string type at the end of the deprecation period. In the meantime, `serialize-ids-as-strings=true` can be passed as a query param to any v2 endpoint to opt-in to this change now. See this [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905) for more detail."
+          },
+          "authorId": {
+            "type": "string",
+            "description": "The account ID of the user who created this custom content originally."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date and time when the custom content was created. In format \"YYYY-MM-DDTHH:mm:ss.sssZ\"."
+          },
+          "version": {
+            "$ref": "#/components/schemas/Version"
+          },
+          "body": {
+            "$ref": "#/components/schemas/CustomContentBodyBulk"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/CustomContentLinks"
+          }
+        }
+      },
+      "CustomContentBodySingle": {
+        "type": "object",
+        "description": "Contains fields for each representation type requested.",
+        "properties": {
+          "raw": {
+            "$ref": "#/components/schemas/BodyType"
+          },
+          "storage": {
+            "$ref": "#/components/schemas/BodyType"
+          },
+          "atlas_doc_format": {
+            "$ref": "#/components/schemas/BodyType"
+          },
+          "view": {
+            "$ref": "#/components/schemas/BodyType"
+          }
+        }
+      },
+      "CustomContentBodyBulk": {
         "type": "object",
         "description": "Contains fields for each representation type requested.",
         "properties": {
@@ -11348,7 +13718,38 @@
           }
         }
       },
-      "Page": {
+      "Like": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "type": "string",
+            "description": "Account ID."
+          }
+        }
+      },
+      "PermittedOperationsResponse": {
+        "description": "The list of operations permitted on entity.",
+        "type": "object",
+        "properties": {
+          "operations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "operation": {
+                  "description": "The type of operation.",
+                  "type": "string"
+                },
+                "targetType": {
+                  "description": "The type of entity the operation type targets.",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PageSingle": {
         "type": "object",
         "properties": {
           "id": {
@@ -11394,6 +13795,15 @@
             ],
             "description": "ID of the parent page, or null if there is no parent page.\n\nDue to JavaScript's max integer representation of 2^53-1, the type of this field will be changed from a numeric type to a string type at the end of the deprecation period. In the meantime, `serialize-ids-as-strings=true` can be passed as a query param to any v2 endpoint to opt-in to this change now. See this [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905) for more detail."
           },
+          "parentType": {
+            "$ref": "#/components/schemas/ContentType"
+          },
+          "position": {
+            "format": "int32",
+            "type": "integer",
+            "nullable": true,
+            "description": "Position of child page within the given parent page tree."
+          },
           "authorId": {
             "type": "string",
             "description": "The account ID of the user who created this page originally."
@@ -11407,9 +13817,94 @@
             "$ref": "#/components/schemas/Version"
           },
           "body": {
-            "$ref": "#/components/schemas/Body"
+            "$ref": "#/components/schemas/BodySingle"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/AbstractPageLinks"
           }
         }
+      },
+      "PageBulk": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer",
+                "format": "int64"
+              }
+            ],
+            "description": "ID of the page.\n\nDue to JavaScript's max integer representation of 2^53-1, the type of this field will be changed from a numeric type to a string type at the end of the deprecation period. In the meantime, `serialize-ids-as-strings=true` can be passed as a query param to any v2 endpoint to opt-in to this change now. See this [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905) for more detail."
+          },
+          "status": {
+            "$ref": "#/components/schemas/ContentStatus"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the page."
+          },
+          "spaceId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer",
+                "format": "int64"
+              }
+            ],
+            "description": "ID of the space the page is in.\n\nDue to JavaScript's max integer representation of 2^53-1, the type of this field will be changed from a numeric type to a string type at the end of the deprecation period. In the meantime, `serialize-ids-as-strings=true` can be passed as a query param to any v2 endpoint to opt-in to this change now. See this [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905) for more detail."
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer",
+                "format": "int64"
+              }
+            ],
+            "description": "ID of the parent page, or null if there is no parent page.\n\nDue to JavaScript's max integer representation of 2^53-1, the type of this field will be changed from a numeric type to a string type at the end of the deprecation period. In the meantime, `serialize-ids-as-strings=true` can be passed as a query param to any v2 endpoint to opt-in to this change now. See this [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905) for more detail."
+          },
+          "parentType": {
+            "$ref": "#/components/schemas/ContentType"
+          },
+          "position": {
+            "format": "int32",
+            "type": "integer",
+            "nullable": true,
+            "description": "Position of child page within the given parent page tree."
+          },
+          "authorId": {
+            "type": "string",
+            "description": "The account ID of the user who created this page originally."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date and time when the page was created. In format \"YYYY-MM-DDTHH:mm:ss.sssZ\"."
+          },
+          "version": {
+            "$ref": "#/components/schemas/Version"
+          },
+          "body": {
+            "$ref": "#/components/schemas/BodyBulk"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/AbstractPageLinks"
+          }
+        }
+      },
+      "ContentType": {
+        "enum": [
+          "page"
+        ],
+        "type": "string",
+        "description": "Content type of the parent, or null if there is no parent."
       },
       "PageBodyWrite": {
         "type": "object",
@@ -11580,6 +14075,7 @@
           "childPosition": {
             "format": "int32",
             "type": "integer",
+            "nullable": true,
             "description": "Position of child page within the given parent page tree."
           }
         }
@@ -11624,6 +14120,25 @@
           }
         }
       },
+      "Ancestor": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the ancestor"
+          },
+          "type": {
+            "$ref": "#/components/schemas/AncestorType"
+          }
+        }
+      },
+      "AncestorType": {
+        "enum": [
+          "page"
+        ],
+        "type": "string",
+        "description": "The type of ancestor."
+      },
       "Space": {
         "type": "object",
         "properties": {
@@ -11653,6 +14168,11 @@
           "status": {
             "$ref": "#/components/schemas/SpaceStatus"
           },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date and time when the space was created. In format \"YYYY-MM-DDTHH:mm:ss.sssZ\"."
+          },
           "homepageId": {
             "oneOf": [
               {
@@ -11667,6 +14187,9 @@
           },
           "description": {
             "$ref": "#/components/schemas/SpaceDescription"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/SpaceIcon"
           }
         }
       },
@@ -11679,6 +14202,84 @@
           },
           "view": {
             "$ref": "#/components/schemas/BodyType"
+          }
+        }
+      },
+      "SpaceIcon": {
+        "type": "object",
+        "description": "The icon of the space",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "The path (relative to base URL) at which the space's icon can be retrieved. The format should be like `/wiki/download/...` or `/wiki/aa-avatar/...`"
+          }
+        }
+      },
+      "SpacePermission": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the space permission."
+          },
+          "principal": {
+            "type": "object",
+            "description": "The entity the space permissions corresponds to.",
+            "properties": {
+              "type": {
+                "enum": [
+                  "user",
+                  "group",
+                  "role"
+                ],
+                "type": "string"
+              },
+              "id": {
+                "type": "string",
+                "description": "ID of the entity."
+              }
+            }
+          },
+          "operation": {
+            "type": "object",
+            "description": "The operation the space permission corresponds to.",
+            "properties": {
+              "key": {
+                "enum": [
+                  "use",
+                  "create",
+                  "read",
+                  "update",
+                  "delete",
+                  "copy",
+                  "move",
+                  "export",
+                  "purge",
+                  "purge_version",
+                  "administer",
+                  "restore",
+                  "create_space",
+                  "restrict_content",
+                  "archive"
+                ],
+                "type": "string",
+                "description": "The type of operation."
+              },
+              "targetType": {
+                "enum": [
+                  "page",
+                  "blogpost",
+                  "comment",
+                  "attachment",
+                  "whiteboard",
+                  "space",
+                  "application",
+                  "userProfile"
+                ],
+                "type": "string",
+                "description": "The type of entity the operation type targets."
+              }
+            }
           }
         }
       },
@@ -11865,7 +14466,7 @@
             "description": "Status of the task."
           },
           "body": {
-            "$ref": "#/components/schemas/Body"
+            "$ref": "#/components/schemas/BodySingle"
           },
           "createdBy": {
             "type": "string",
@@ -12090,7 +14691,7 @@
             "description": "ID of the entity."
           },
           "body": {
-            "$ref": "#/components/schemas/Body"
+            "$ref": "#/components/schemas/BodyBulk"
           }
         }
       },
@@ -12172,6 +14773,20 @@
         "type": "string",
         "description": "The sort fields for child custom content. The default sort direction is ascending by id. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`."
       },
+      "CustomContentSortOrder": {
+        "enum": [
+          "id",
+          "-id",
+          "created-date",
+          "-created-date",
+          "modified-date",
+          "-modified-date",
+          "title",
+          "-title"
+        ],
+        "type": "string",
+        "description": "The sort fields for custom content. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`."
+      },
       "PageSortOrder": {
         "enum": [
           "id",
@@ -12179,7 +14794,9 @@
           "created-date",
           "-created-date",
           "modified-date",
-          "-modified-date"
+          "-modified-date",
+          "title",
+          "-title"
         ],
         "type": "string",
         "description": "The sort fields for pages. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`."
@@ -12265,7 +14882,10 @@
             "$ref": "#/components/schemas/Version"
           },
           "body": {
-            "$ref": "#/components/schemas/Body"
+            "$ref": "#/components/schemas/BodyBulk"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/CommentLinks"
           }
         }
       },
@@ -12307,13 +14927,16 @@
             "$ref": "#/components/schemas/Version"
           },
           "body": {
-            "$ref": "#/components/schemas/Body"
+            "$ref": "#/components/schemas/BodyBulk"
           },
           "resolutionStatus": {
             "$ref": "#/components/schemas/InlineCommentResolutionStatus"
           },
           "properties": {
             "$ref": "#/components/schemas/InlineCommentProperties"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/CommentLinks"
           }
         }
       },
@@ -12355,7 +14978,10 @@
             "$ref": "#/components/schemas/Version"
           },
           "body": {
-            "$ref": "#/components/schemas/Body"
+            "$ref": "#/components/schemas/BodyBulk"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/CommentLinks"
           }
         }
       },
@@ -12397,13 +15023,16 @@
             "$ref": "#/components/schemas/Version"
           },
           "body": {
-            "$ref": "#/components/schemas/Body"
+            "$ref": "#/components/schemas/BodyBulk"
           },
           "resolutionStatus": {
             "$ref": "#/components/schemas/InlineCommentResolutionStatus"
           },
           "properties": {
             "$ref": "#/components/schemas/InlineCommentProperties"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/CommentLinks"
           }
         }
       },
@@ -12445,7 +15074,10 @@
             "$ref": "#/components/schemas/Version"
           },
           "body": {
-            "$ref": "#/components/schemas/Body"
+            "$ref": "#/components/schemas/BodyBulk"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/CommentLinks"
           }
         }
       },
@@ -12487,13 +15119,16 @@
             "$ref": "#/components/schemas/Version"
           },
           "body": {
-            "$ref": "#/components/schemas/Body"
+            "$ref": "#/components/schemas/BodyBulk"
           },
           "resolutionStatus": {
             "$ref": "#/components/schemas/InlineCommentResolutionStatus"
           },
           "properties": {
             "$ref": "#/components/schemas/InlineCommentProperties"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/CommentLinks"
           }
         }
       },
@@ -12559,7 +15194,10 @@
             "$ref": "#/components/schemas/Version"
           },
           "body": {
-            "$ref": "#/components/schemas/Body"
+            "$ref": "#/components/schemas/BodySingle"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/CommentLinks"
           }
         }
       },
@@ -12625,7 +15263,7 @@
             "$ref": "#/components/schemas/Version"
           },
           "body": {
-            "$ref": "#/components/schemas/Body"
+            "$ref": "#/components/schemas/BodySingle"
           },
           "resolutionLastModifierId": {
             "type": "string",
@@ -12641,6 +15279,9 @@
           },
           "properties": {
             "$ref": "#/components/schemas/InlineCommentProperties"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/CommentLinks"
           }
         }
       },
@@ -12773,6 +15414,54 @@
           "resolved": {
             "type": "boolean",
             "description": "Resolved state of the comment. Set to true to resolve the comment, set to false to reopen it. If\nmatching the existing state (i.e. true -> resolved or false -> open/reopened) , no change will occur. A dangling\ncomment cannot be updated."
+          }
+        }
+      },
+      "AbstractPageLinks": {
+        "type": "object",
+        "properties": {
+          "webui": {
+            "type": "string",
+            "description": "Web UI link of the content."
+          },
+          "editui": {
+            "type": "string",
+            "description": "Edit UI link of the content."
+          },
+          "tinyui": {
+            "type": "string",
+            "description": "Web UI link of the content."
+          }
+        }
+      },
+      "CustomContentLinks": {
+        "type": "object",
+        "properties": {
+          "webui": {
+            "type": "string",
+            "description": "Web UI link of the content."
+          }
+        }
+      },
+      "CommentLinks": {
+        "type": "object",
+        "properties": {
+          "webui": {
+            "type": "string",
+            "description": "Web UI link of the content."
+          }
+        }
+      },
+      "AttachmentLinks": {
+        "type": "object",
+        "properties": {
+          "webui": {
+            "type": "string",
+            "description": "Web UI link of the content."
+          },
+          "download": {
+            "type": "string",
+            "description": "Download link of the content."
           }
         }
       }

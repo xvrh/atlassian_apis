@@ -1146,7 +1146,7 @@
           "Directory"
         ],
         "summary": "User’s last active dates",
-        "description": "**Additional response parameters of the API (for e.g., `added_to_org`) are available only to customers using the new user management experience.** Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).\n\nSpecifications:\n- Return a user’s last active date for each product listed in Atlassian Administration.\n- Active is defined as viewing a product's page for a minimum of 2 seconds. \n- The data for the last activity may be delayed by up to 4 hours.\n- If the user has not accessed a product, the `product_access` response field will be empty. \n\nLearn the fastest way to call the API with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/organization/user-last-active-dates/).\n",
+        "description": "**Additional response parameters of the API (for e.g., `added_to_org`) are available only to customers using the new user management experience.** Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).\n\nSpecifications:\n- Return a user’s last active date for each product listed in Atlassian Administration.\n- Active is defined as viewing a product's page for a minimum of 2 seconds. \n- The data for the last activity may be delayed by up to 24 hours.\n- If the user has not accessed a product, the `product_access` response field will be empty. \n\nLearn the fastest way to call the API with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/organization/user-last-active-dates/).\n",
         "parameters": [
           {
             "name": "orgId",
@@ -1367,7 +1367,14 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GenericActionSuccessModel"
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Access to organization 6665kc2j-4644-14k8-j32c-68cc0b1d15b8 was suspended for user 637194fa77acd224b33bfae3",
+                      "description": "A description of the entities affected, and changes made as a result of calling this API."
+                    }
+                  }
                 }
               }
             }
@@ -1469,7 +1476,14 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GenericActionSuccessModel"
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Access to organization 6665kc2j-4644-14k8-j32c-68cc0b1d15b8 was restored for user 637194fa77acd224b33bfae3",
+                      "description": "A description of the entities affected, and changes made as a result of calling this API."
+                    }
+                  }
                 }
               }
             }
@@ -1537,6 +1551,229 @@
         }
       }
     },
+    "/v1/orgs/{orgId}/directory/groups": {
+      "post": {
+        "tags": [
+          "Directory"
+        ],
+        "x-experimental": true,
+        "summary": "Create group",
+        "description": "**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n\nThis API will:\n- Create a group in the organization's directory.\n- Create a collection of users that you can use to easily manage permissions, content access, notification schemes, and roles.\n\n**The creation of new groups using existing group names is not permitted.**\n",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "description": "Your organization is identified by a Unique ID. You get your organization ID and Organization API key simultaneously.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGroupInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request to create group was successfully accepted and will be eventually created in the organization directory.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Group test-group was created",
+                      "description": "A description of the entities affected, and changes made as a result of calling this API."
+                    },
+                    "groupId": {
+                      "type": "string",
+                      "example": "f29c72a8-7681-4ed0-8a2c-83372bf67437",
+                      "description": "The unique identifier of the group."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-400-4`\n- `ADMIN-400-24`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized\n\nExpected values for `ApplicationError.code`: (see type description for details)\n  - `ADMIN-401-2`\n\nExpected values for `ProxyError.code`: (see type description for details)\n  - `401`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ProxyError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-403-3`\n- `ADMIN-403-5`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-404-8`\n- `ADMIN-404-10`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many API requests\n\nExpected values for `ProxyError.code`: (see type description for details)\n- `429`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProxyError"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    },
+    "/v1/orgs/{orgId}/directory/groups/{groupId}": {
+      "delete": {
+        "tags": [
+          "Directory"
+        ],
+        "x-experimental": true,
+        "summary": "Delete group",
+        "description": "**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n\nThis API will:\n- Delete a group from the organization's directory.\n- Delete the permissions, content access, notification schemes, and roles granted to the users.\n\nThis API will not:\n- Delete groups that are synchronized through SCIM. To delete these groups, you will need to delete them within your external identity provider. Learn more about [configuring user provisioning with an identity provider](https://support.atlassian.com/provisioning-users/docs/configure-user-provisioning-with-an-identity-provider/).\n- Delete a group if it’s marked as a [default group](https://support.atlassian.com/user-management/docs/default-groups-and-permissions).\n- Delete `site-admin` group and therefore revoke org-admin role from a user.\n",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "description": "Your organization is identified by a Unique ID. You get your organization ID and Organization API key simultaneously.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "description": "Unique ID that serves as reference to the group.\nUse the [Jira Group Search API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-groups-picker-get) to get the groupId (if Jira is available for your Organization). **Jira APIs use a different [authentication method ](https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/).**\nIf you don’t have Jira, export a .csv of the user list. Make sure to select **pivot to column** when prompted. Learn how to [export users from a site](https://support.atlassian.com/organization-administration/docs/export-users-from-a-site/).",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Group was successfully deleted from organization's directory.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Group 0980d761-fce5-4ea1-83e4-9cc8f5db92ae was removed",
+                      "description": "A description of the entities affected, and changes made as a result of calling this API."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-400-4`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized\n\nExpected values for `ApplicationError.code`: (see type description for details)\n  - `ADMIN-401-2`\n\nExpected values for `ProxyError.code`: (see type description for details)\n  - `401`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ProxyError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-403-3`\n- `ADMIN-403-5`\n- `ADMIN-403-6`\n- `ADMIN-403-7`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-404-8`\n- `ADMIN-404-10`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many API requests\n\nExpected values for `ProxyError.code`: (see type description for details)\n- `429`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProxyError"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    },
     "/v1/orgs/{orgId}/directory/groups/{groupId}/memberships": {
       "post": {
         "tags": [
@@ -1544,7 +1781,7 @@
         ],
         "x-experimental": true,
         "summary": "Add user to group",
-        "description": "**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n\nThis API will:\n- Add user to a group.\n- Assign multiple permissions to user at once.\n- Easily manage permissions, content access, notification schemes, and roles.\n\nThis API will not:\n- Make modifications to group memberships that are synchronized through SCIM. To make changes to these memberships, you will need to modify them within your external identity provider. Learn more about [configuring user provisioning with an identity provider](https://support.atlassian.com/provisioning-users/docs/configure-user-provisioning-with-an-identity-provider/).\n",
+        "description": "**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n\nThis API will:\n- Add user to a group.\n- Assign multiple permissions to user at once.\n- Easily manage permissions, content access, notification schemes, and roles.\n\nThis API will not:\n- Make modifications to group memberships that are synchronized through SCIM. To make changes to these memberships, you will need to modify them within your external identity provider. Learn more about [configuring user provisioning with an identity provider](https://support.atlassian.com/provisioning-users/docs/configure-user-provisioning-with-an-identity-provider/).\n\nLearn the fastest way to call the API with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/organization/add-user-to-group/).\n",
         "parameters": [
           {
             "name": "orgId",
@@ -1580,7 +1817,14 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GenericActionSuccessModel"
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User 637194fa77acd224b33bfae3 was added to group 9233fb03-53cc-4463-9698-047aedbffb5c",
+                      "description": "A description of the entities affected, and changes made as a result of calling this API."
+                    }
+                  }
                 }
               }
             }
@@ -1655,7 +1899,7 @@
         ],
         "x-experimental": true,
         "summary": "Remove user from group",
-        "description": "**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n\nThis API will:\n- Remove user from a group.\n- Remove multiple permissions for user at once.\n- Easily manage permissions, content access, notification schemes, and roles.\n\nThis API will not:\n- Make modifications to group memberships that are synchronized through SCIM. To make changes to these memberships, you will need to modify them within your external identity provider. Learn more about [configuring user provisioning with an identity provider](https://support.atlassian.com/provisioning-users/docs/configure-user-provisioning-with-an-identity-provider/).\n- Modify `site-admin` group and therefore revoke org-admin role from a user.\n",
+        "description": "**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n\nThis API will:\n- Remove user from a group.\n- Remove multiple permissions for user at once.\n- Easily manage permissions, content access, notification schemes, and roles.\n\nThis API will not:\n- Make modifications to group memberships that are synchronized through SCIM. To make changes to these memberships, you will need to modify them within your external identity provider. Learn more about [configuring user provisioning with an identity provider](https://support.atlassian.com/provisioning-users/docs/configure-user-provisioning-with-an-identity-provider/).\n- Modify `site-admin` group and therefore revoke org-admin role from a user.\n\nLearn the fastest way to call the API with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/organization/remove-user-to-group/).\n",
         "parameters": [
           {
             "name": "orgId",
@@ -1691,7 +1935,14 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GenericActionSuccessModel"
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User 63ec0aa0c5061c632c0cddde was removed from group fca77b90-a2a9-4385-961b-1377b3dbeb0b",
+                      "description": "A description of the entities affected, and changes made as a result of calling this API."
+                    }
+                  }
                 }
               }
             }
@@ -1907,12 +2158,17 @@
       {
         "title": "About",
         "anchor": "About",
-        "body": "The Organizations REST API enables you to retrieve and make changes to the information in your organization. Use this API to update user access, create and update organization policies, get domains, and get event information. "
+        "body": "The Organizations REST API provides resources for managing an Atlassian organization. Use this API to:\n- Get a list of users in an organization and update their access to products\n- Create and update organization policies\n- Get lists of domains and events\n\nTo manage accounts, use the [User management REST API](https://developer.atlassian.com/cloud/admin/user-management/rest/intro/).\n\nTo integrate your organization with an identity provider, use the [User provisioning REST API](https://developer.atlassian.com/cloud/admin/user-provisioning/rest/intro)."
       },
       {
         "title": "Authentication",
         "anchor": "auth",
         "body": "Authentication is implemented via an API key. Use the API Key as a Bearer access token to authenticate the script and manage your organization. The Organization ID is used as a unique identifier in the path parameter for the organization. Copy the Organization ID and API key and keep them in a safe place. We won’t show them to you again.\n\nTo make requests to the API with the client/tool of your choice, [Create an API key and get the organization ID](https://support.atlassian.com/organization-administration/docs/manage-an-organization-with-the-admin-apis/)."
+      },
+      {
+        "title": "Rate limits",
+        "anchor": "rate limits",
+        "body": "A rate limit defines the maximum number of API calls an application or user can perform during a specific time frame. When this threshold is surpassed, or if CPU or total time constraints are exceeded, the application or user might encounter delays. Consequently, API requests initiated by the user or application will not succeed.\n\nIt is essential to note that all API requests are subjected to rate limits.\n\nWhen a client breach the rate limit thresholds, they get [HTTP 429 Too Many Requests](https://datatracker.ietf.org/doc/html/rfc6585#section-4) responses. The client has to wait for the rate limit counter to reset on the server before being able to make successful requests.\n\n**Rate limit response headers**\n\nThe following HTTP response headers are returned indicating the rate and threshold allowed for a client for each endpoint.\n- **X-RateLimit-Limit:** The number of allowed requests in the current period\n- **X-RateLimit-Remaining:** The number of remaining requests in the current period\n- **X-RateLimit-Reset:** Next period reset time (ISO 8601 - Date and time in UTC)"
       },
       {
         "title": "Version and URI",
@@ -2384,6 +2640,22 @@
           },
           "links": {
             "$ref": "#/components/schemas/CursorNextPageModel"
+          }
+        }
+      },
+      "CreateGroupInput": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the group."
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the group."
           }
         }
       },
@@ -3540,16 +3812,6 @@
           }
         }
       },
-      "GenericActionSuccessModel": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "example": "User 389439742983287 has been successfully removed from the organization.",
-            "description": "A description of the entities affected, and changes made as a result of calling this API."
-          }
-        }
-      },
       "ApplicationError": {
         "type": "object",
         "properties": {
@@ -3564,7 +3826,7 @@
           "code": {
             "type": "string",
             "example": "ADMIN-XXX-X",
-            "description": "An application-specific error code:\n  - `ADMIN-400-1`  - Invalid page cursor\n  - `ADMIN-400-2`  - Invalid domain identifier\n  - `ADMIN-400-3`  - Invalid time date\n  - `ADMIN-400-4`  - Invalid resource\n  - `ADMIN-400-24` - Invalid request body\n  - `ADMIN-403-3`  - Not allowed to manage the org\n  - `ADMIN-403-5`  - Not allowed to manage the group\n  - `ADMIN-404-1`  - Unknown resource\n  - `ADMIN-404-2`  - Organization not found\n  - `ADMIN-404-3`  - Domain not found\n  - `ADMIN-404-4`  - Event not found\n  - `ADMIN-404-5`  - Policy not found\n  - `ADMIN-404-8`  - User not found\n  - `ADMIN-404-10` - Group not found\n  - `ADMIN-405-1`  - Method not supported\n  - `ADMIN-429-1`  - Limit exceeded\n  - `ADMIN-500-1`  - Internal error\n"
+            "description": "An application-specific error code:\n  - `ADMIN-400-1`  - Invalid page cursor\n  - `ADMIN-400-2`  - Invalid domain identifier\n  - `ADMIN-400-3`  - Invalid time date\n  - `ADMIN-400-4`  - Invalid resource\n  - `ADMIN-400-24` - Invalid request body\n  - `ADMIN-403-3`  - Not allowed to manage the org\n  - `ADMIN-403-5`  - Not allowed to manage the group\n  - `ADMIN-403-6`  - Not allowed to delete group with default-role attribute\n  - `ADMIN-403-7`  - Not allowed to delete group which grants admin access to a product or org\n  - `ADMIN-404-1`  - Unknown resource\n  - `ADMIN-404-2`  - Organization not found\n  - `ADMIN-404-3`  - Domain not found\n  - `ADMIN-404-4`  - Event not found\n  - `ADMIN-404-5`  - Policy not found\n  - `ADMIN-404-8`  - User not found\n  - `ADMIN-404-10` - Group not found\n  - `ADMIN-405-1`  - Method not supported\n  - `ADMIN-429-1`  - Limit exceeded\n  - `ADMIN-500-1`  - Internal error\n"
           },
           "title": {
             "type": "string",

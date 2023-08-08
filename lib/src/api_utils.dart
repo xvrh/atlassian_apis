@@ -170,9 +170,9 @@ class BasicAuthenticationClient extends BaseClient {
 }
 
 class MultiEntityResult<T> with IterableMixin<T> {
-  final List<T> result;
+  final List<T> results;
 
-  MultiEntityResult(this.result);
+  MultiEntityResult(this.results);
 
   factory MultiEntityResult.fromJson(
     Map<String, dynamic> json, {
@@ -187,7 +187,7 @@ class MultiEntityResult<T> with IterableMixin<T> {
   }
 
   @override
-  Iterator<T> get iterator => result.iterator;
+  Iterator<T> get iterator => results.iterator;
 
   //TODO: handle cursor and a way to loop through all the pages easily
 }

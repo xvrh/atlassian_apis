@@ -4119,6 +4119,7 @@
           "Content properties"
         ],
         "summary": "Get content properties",
+        "deprecated": true,
         "description": "Returns the properties for a piece of content. For more information\nabout content properties, see [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space, and permission to view the content if it is a page.",
         "operationId": "getContentProperties",
         "parameters": [
@@ -4232,6 +4233,7 @@
           "Content properties"
         ],
         "summary": "Create content property",
+        "deprecated": true,
         "description": "Creates a property for an existing piece of content. For more information\nabout content properties, see [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).\n\nThis is the same as [Create content property for key](#api-content-id-property-key-post)\nexcept that the key is specified in the request body instead of as a\npath parameter.\n\nContent properties can also be added when creating a new piece of content\nby including them in the `metadata.properties` of the request.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the content.",
         "operationId": "createContentProperty",
         "parameters": [
@@ -4317,6 +4319,7 @@
           "Content properties"
         ],
         "summary": "Get content property",
+        "deprecated": true,
         "description": "Returns a content property for a piece of content. For more information, see\n[Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space, and permission to view the content if it is a page.",
         "operationId": "getContentProperty",
         "parameters": [
@@ -4430,6 +4433,7 @@
           "Content properties"
         ],
         "summary": "Update content property",
+        "deprecated": true,
         "description": "Updates an existing content property. This method will also create a new\nproperty for a piece of content, if the property key does not exist and\nthe property version is 1. For more information about content properties, see\n[Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the content.",
         "operationId": "updateContentProperty",
         "parameters": [
@@ -4530,6 +4534,7 @@
           "Content properties"
         ],
         "summary": "Create content property for key",
+        "deprecated": true,
         "description": "Creates a property for an existing piece of content. For more information\nabout content properties, see [Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).\n\nThis is the same as [Create content property](#api-content-id-property-post)\nexcept that the key is specified as a path parameter instead of in the\nrequest body.\n\nContent properties can also be added when creating a new piece of content\nby including them in the `metadata.properties` of the request.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the content.",
         "operationId": "createContentPropertyForKey",
         "parameters": [
@@ -4622,6 +4627,7 @@
           "Content properties"
         ],
         "summary": "Delete content property",
+        "deprecated": true,
         "description": "Deletes a content property. For more information about content properties, see\n[Confluence entity properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the content.",
         "operationId": "deleteContentProperty",
         "parameters": [
@@ -5289,7 +5295,8 @@
           "Content restrictions"
         ],
         "summary": "Get content restriction status for group",
-        "description": "Returns whether the specified content restriction applies to a group.\nFor example, if a page with `id=123` has a `read` restriction for the `admins` group,\nthe following request will return `true`:\n\n`/wiki/rest/api/content/123/restriction/byOperation/read/group/admins`\n\nNote that a response of `true` does not guarantee that the group can view the page, as it does not account for\naccount-inherited restrictions, space permissions, or even product access. For more\ninformation, see [Confluence permissions](https://confluence.atlassian.com/x/_AozKw).\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content.",
+        "deprecated": true,
+        "description": "Deprecated, use [Get content restriction status for group via groupId](https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-restrictions/#api-wiki-rest-api-content-id-restriction-byoperation-operationkey-bygroupid-groupid-get).\nReturns whether the specified content restriction applies to a group.\nFor example, if a page with `id=123` has a `read` restriction for the `admins` group,\nthe following request will return `true`:\n\n`/wiki/rest/api/content/123/restriction/byOperation/read/group/admins`\n\nNote that a response of `true` does not guarantee that the group can view the page, as it does not account for\naccount-inherited restrictions, space permissions, or even product access. For more\ninformation, see [Confluence permissions](https://confluence.atlassian.com/x/_AozKw).\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content.",
         "operationId": "getContentRestrictionStatusForGroup",
         "parameters": [
           {
@@ -5371,7 +5378,8 @@
           "Content restrictions"
         ],
         "summary": "Add group to content restriction",
-        "description": "Adds a group to a content restriction. That is, grant read or update\npermission to the group for a piece of content.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the content.",
+        "deprecated": true,
+        "description": "Deprecated, use [Add group to content restriction via groupId](https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-restrictions/#api-wiki-rest-api-content-id-restriction-byoperation-operationkey-bygroupid-groupid-put).\nAdds a group to a content restriction. That is, grant read or update\npermission to the group for a piece of content.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the content.",
         "operationId": "addGroupToContentRestriction",
         "parameters": [
           {
@@ -5449,7 +5457,8 @@
           "Content restrictions"
         ],
         "summary": "Remove group from content restriction",
-        "description": "Removes a group from a content restriction. That is, remove read or update\npermission for the group for a piece of content.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the content.",
+        "deprecated": true,
+        "description": "Deprecated, use [Remove group from content restriction by groupId](https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-restrictions/#api-wiki-rest-api-content-id-restriction-byoperation-operationkey-user-delete).\nRemoves a group from a content restriction. That is, remove read or update\npermission for the group for a piece of content.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the content.",
         "operationId": "removeGroupFromContentRestrictionById",
         "parameters": [
           {
@@ -7559,6 +7568,7 @@
           "Inline tasks"
         ],
         "summary": "Update inline task given global ID",
+        "deprecated": true,
         "description": "Updates an inline tasks status given its global ID\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to update the content associated with the task.",
         "operationId": "updateTaskById",
         "parameters": [
@@ -7943,6 +7953,7 @@
             "content": {}
           }
         },
+        "deprecated": true,
         "security": [
           {
             "basicAuth": []
@@ -8011,6 +8022,7 @@
             "content": {}
           }
         },
+        "deprecated": true,
         "security": [
           {
             "basicAuth": []
@@ -8267,6 +8279,24 @@
               "type": "boolean",
               "default": false
             }
+          },
+          {
+            "name": "expand",
+            "in": "query",
+            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - `personalSpace` returns the user's personal space, if it exists.\n  - `isExternalCollaborator` returns whether the user is an external collaborator user.",
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "operations",
+                  "personalSpace",
+                  "isExternalCollaborator"
+                ]
+              }
+            }
           }
         ],
         "responses": {
@@ -8285,6 +8315,7 @@
             "content": {}
           }
         },
+        "deprecated": true,
         "security": [
           {
             "basicAuth": []
@@ -8682,6 +8713,24 @@
               "type": "boolean",
               "default": false
             }
+          },
+          {
+            "name": "expand",
+            "in": "query",
+            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - `personalSpace` returns the user's personal space, if it exists.\n  - `isExternalCollaborator` returns whether the user is an external collaborator user.",
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "operations",
+                  "personalSpace",
+                  "isExternalCollaborator"
+                ]
+              }
+            }
           }
         ],
         "responses": {
@@ -8786,6 +8835,7 @@
             "content": {}
           }
         },
+        "deprecated": true,
         "security": [
           {
             "basicAuth": []
@@ -8864,6 +8914,7 @@
             "content": {}
           }
         },
+        "deprecated": true,
         "security": [
           {
             "basicAuth": []
@@ -9989,7 +10040,7 @@
           {
             "name": "sitePermissionTypeFilter",
             "in": "query",
-            "description": "Filters users by permission type.  Use NONE to default to licensed users, EXTERNALCOLLABORATOR\nfor external/guest users, and ALL to include all permission types.",
+            "description": "Filters users by permission type. Use `none` to default to licensed users, `externalCollaborator`\nfor external/guest users, and `all` to include all permission types.",
             "schema": {
               "type": "string",
               "default": "none",
@@ -10121,6 +10172,20 @@
               "items": {
                 "type": "string"
               }
+            }
+          },
+          {
+            "name": "sitePermissionTypeFilter",
+            "in": "query",
+            "description": "Filters users by permission type. Use `none` to default to licensed users, `externalCollaborator`\nfor external/guest users, and `all` to include all permission types.",
+            "schema": {
+              "type": "string",
+              "default": "none",
+              "enum": [
+                "all",
+                "externalCollaborator",
+                "none"
+              ]
             }
           }
         ],
@@ -10611,7 +10676,7 @@
           "Themes"
         ],
         "summary": "Get themes",
-        "description": "Returns all themes, not including the default theme.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: None",
+        "description": "Returns all [admin-driven themes](https://developer.atlassian.com/cloud/confluence/create-a-confluence-theme/), not including the default theme. Note that this API only applies to themes set for an entire space or site by the admin. User-driven theming controls (Light, Dark, and match browser) are an unrelated feature. Admin-driven themes will override user-driven themes.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: None",
         "operationId": "getThemes",
         "parameters": [
           {
@@ -13778,7 +13843,7 @@
           {
             "name": "expand",
             "in": "query",
-            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - personalSpace returns the user's personal space, if it exists.\n  - `isExternalCollaborator` returns whether the user is an external collaborator user",
+            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - `personalSpace` returns the user's personal space, if it exists.\n  - `isExternalCollaborator` returns whether the user is an external collaborator user.",
             "style": "form",
             "explode": false,
             "schema": {
@@ -13930,7 +13995,7 @@
           {
             "name": "expand",
             "in": "query",
-            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - personalSpace returns the user's personal space, if it exists.\n  - `isExternalCollaborator` returns whether the user is an external collaborator user",
+            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - `personalSpace` returns the user's personal space, if it exists.\n  - `isExternalCollaborator` returns whether the user is an external collaborator user.",
             "style": "form",
             "explode": false,
             "schema": {
@@ -14099,7 +14164,7 @@
           {
             "name": "expand",
             "in": "query",
-            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - personalSpace returns the user's personal space, if it exists.",
+            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - `personalSpace` returns the user's personal space, if it exists.\n  - `isExternalCollaborator` returns whether the user is an external collaborator user.",
             "style": "form",
             "explode": false,
             "schema": {
@@ -14108,7 +14173,8 @@
                 "type": "string",
                 "enum": [
                   "operations",
-                  "personalSpace"
+                  "personalSpace",
+                  "isExternalCollaborator"
                 ]
               }
             }
@@ -17898,10 +17964,9 @@
             "properties": {
               "group": {
                 "type": "array",
-                "description": "The groups that the restrictions will be applied to. This array must\nhave at least one item, otherwise it should be omitted.",
+                "description": "The groups that the restrictions will be applied to. This array must\nhave at least one item, otherwise it should be omitted. At least one of `name` or `id` is required,\nand `id` should be used where possible in advance of the `name` deprecation.",
                 "items": {
                   "required": [
-                    "name",
                     "type"
                   ],
                   "type": "object",
@@ -17915,7 +17980,12 @@
                     },
                     "name": {
                       "type": "string",
-                      "description": "The name of the group."
+                      "description": "The name of the group.",
+                      "deprecated": true
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "The id of the group."
                     }
                   },
                   "description": "A group that the restriction will be applied to."
@@ -18903,7 +18973,8 @@
       "Group": {
         "required": [
           "name",
-          "type"
+          "type",
+          "id"
         ],
         "type": "object",
         "properties": {
@@ -18918,7 +18989,6 @@
             "type": "string"
           },
           "id": {
-            "nullable": true,
             "type": "string"
           },
           "_links": {
@@ -18928,10 +18998,10 @@
       },
       "GroupCreate": {
         "required": [
-          "name",
           "type"
         ],
         "type": "object",
+        "description": "The name property will soon be deprecated in favor of using id.",
         "additionalProperties": true,
         "properties": {
           "type": {
@@ -18942,6 +19012,10 @@
             ]
           },
           "name": {
+            "type": "string",
+            "deprecated": true
+          },
+          "id": {
             "type": "string"
           }
         }
@@ -22082,7 +22156,7 @@
           },
           "identifier": {
             "type": "string",
-            "description": "for `type=user`, identifier should be user's accountId or `anonymous` for anonymous users\n\nfor `type=group`, identifier should be name of the group or groupId"
+            "description": "for `type=user`, identifier should be user's accountId or `anonymous` for anonymous users\n\nfor `type=group`, identifier should be the groupId. We are deprecating groupName support in mid-2024 \nfor this field but still accept it in the interim."
           }
         },
         "description": "The user or group that the permission applies to."

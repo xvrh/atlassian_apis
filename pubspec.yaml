@@ -1,10 +1,10 @@
 name: atlassian_apis
 description: A client to access the Atlassian REST APIs (Jira Cloud platform, Service Desk, Confluence)
-version: 0.13.0
+version: 0.14.0
 homepage: https://github.com/xvrh/atlassian_apis
 
 environment:
-  sdk: '>=2.18.0 <3.0.0'
+  sdk: '^3.0.0'
 
 dependencies:
   http: '>=0.13.0 <2.0.0'

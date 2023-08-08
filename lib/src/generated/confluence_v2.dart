@@ -3,11 +3,14 @@
 import '../api_utils.dart';
 
 // ignore_for_file: deprecated_member_use_from_same_package
+// ignore_for_file: provide_deprecation_message
 
 class ConfluenceV2Api {
   final ApiClient _client;
 
   ConfluenceV2Api(this._client);
+
+  late final ancestors = AncestorsApi(_client);
 
   late final attachment = AttachmentApi(_client);
 
@@ -25,9 +28,15 @@ class ConfluenceV2Api {
 
   late final label = LabelApi(_client);
 
+  late final like = LikeApi(_client);
+
+  late final operation = OperationApi(_client);
+
   late final page = PageApi(_client);
 
   late final space = SpaceApi(_client);
+
+  late final spacePermissions = SpacePermissionsApi(_client);
 
   late final spaceProperties = SpacePropertiesApi(_client);
 
@@ -42,10 +51,83 @@ class ConfluenceV2Api {
 
 /// This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
 
+class AncestorsApi {
+  final ApiClient _client;
+
+  AncestorsApi(this._client);
+
+  /// Returns all ancestors for a given page by ID in top-to-bottom order (that
+  /// is, the highest ancestor is the first
+  /// item in the response payload). The number of results is limited by the
+  /// `limit` parameter and additional results (if available)
+  /// will be available by calling this endpoint with the ID of first ancestor
+  /// in the response payload.
+  ///
+  /// This endpoint returns minimal information about each ancestor. To fetch
+  /// more details, use a related endpoint, such
+  /// as
+  /// [Get page by id](https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-page/#api-pages-id-get).
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  Future<MultiEntityResult<Ancestor>> getPageAncestors(
+      {required int id, int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'pages/{id}/ancestors',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Ancestor.fromJson(v as Map<String, Object?>),
+    );
+  }
+}
+
+/// This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
+
 class AttachmentApi {
   final ApiClient _client;
 
   AttachmentApi(this._client);
+
+  /// Returns all attachments. The number of results is limited by the `limit`
+  /// parameter and additional results (if available)
+  /// will be available through the `next` URL present in the `Link` response
+  /// header.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the container of the attachment.
+  Future<MultiEntityResult<Attachment>> getAttachments(
+      {String? sort,
+      String? cursor,
+      List<String>? status,
+      String? mediaType,
+      String? filename,
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'attachments',
+        queryParameters: {
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (status != null) 'status': status.map((e) => e).join(','),
+          if (mediaType != null) 'mediaType': mediaType,
+          if (filename != null) 'filename': filename,
+          if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
+        },
+      ),
+      reviver: (v) => Attachment.fromJson(v as Map<String, Object?>),
+    );
+  }
 
   /// Returns a specific attachment.
   ///
@@ -67,6 +149,21 @@ class AttachmentApi {
     ));
   }
 
+  /// Delete an attachment by id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the container of the attachment. Permission to delete
+  /// attachments in the space.
+  Future<void> deleteAttachment(int id) async {
+    await _client.send(
+      'delete',
+      'attachments/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+    );
+  }
+
   /// Returns the attachments of specific blog post. The number of results is
   /// limited by the `limit` parameter and additional results (if available)
   /// will be available through the `next` URL present in the `Link` response
@@ -79,6 +176,7 @@ class AttachmentApi {
       {required int id,
       String? sort,
       String? cursor,
+      List<String>? status,
       String? mediaType,
       String? filename,
       int? limit,
@@ -93,6 +191,7 @@ class AttachmentApi {
         queryParameters: {
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
+          if (status != null) 'status': status.map((e) => e).join(','),
           if (mediaType != null) 'mediaType': mediaType,
           if (filename != null) 'filename': filename,
           if (limit != null) 'limit': '$limit',
@@ -116,6 +215,7 @@ class AttachmentApi {
       {required int id,
       String? sort,
       String? cursor,
+      List<String>? status,
       String? mediaType,
       String? filename,
       int? limit,
@@ -130,6 +230,7 @@ class AttachmentApi {
         queryParameters: {
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
+          if (status != null) 'status': status.map((e) => e).join(','),
           if (mediaType != null) 'mediaType': mediaType,
           if (filename != null) 'filename': filename,
           if (limit != null) 'limit': '$limit',
@@ -184,6 +285,7 @@ class AttachmentApi {
       {required int id,
       String? sort,
       String? cursor,
+      List<String>? status,
       String? mediaType,
       String? filename,
       int? limit,
@@ -198,6 +300,7 @@ class AttachmentApi {
         queryParameters: {
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
+          if (status != null) 'status': status.map((e) => e).join(','),
           if (mediaType != null) 'mediaType': mediaType,
           if (filename != null) 'filename': filename,
           if (limit != null) 'limit': '$limit',
@@ -225,9 +328,12 @@ class BlogPostApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
   /// Only blog posts that the user has permission to view will be returned.
-  Future<MultiEntityResult<BlogPost>> getBlogPosts(
+  Future<MultiEntityResult<BlogPostBulk>> getBlogPosts(
       {List<int>? id,
-      String? status,
+      List<int>? spaceId,
+      String? sort,
+      List<String>? status,
+      String? title,
       String? bodyFormat,
       String? cursor,
       int? limit,
@@ -238,7 +344,10 @@ class BlogPostApi {
         'blogposts',
         queryParameters: {
           if (id != null) 'id': id.map((e) => '$e').join(','),
-          if (status != null) 'status': status,
+          if (spaceId != null) 'space-id': spaceId.map((e) => '$e').join(','),
+          if (sort != null) 'sort': sort,
+          if (status != null) 'status': status.map((e) => e).join(','),
+          if (title != null) 'title': title,
           if (bodyFormat != null) 'body-format': bodyFormat,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
@@ -246,7 +355,7 @@ class BlogPostApi {
             'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
-      reviver: (v) => BlogPost.fromJson(v as Map<String, Object?>),
+      reviver: (v) => BlogPostBulk.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -258,13 +367,15 @@ class BlogPostApi {
   ///
   /// Currently only supports the storage representation specified in the
   /// body.representation enums below
-  Future<BlogPost> createBlogPost({bool? serializeIdsAsStrings}) async {
-    return BlogPost.fromJson(await _client.send(
+  Future<BlogPostSingle> createBlogPost(
+      {bool? serializeIdsAsStrings, bool? private}) async {
+    return BlogPostSingle.fromJson(await _client.send(
       'post',
       'blogposts',
       queryParameters: {
         if (serializeIdsAsStrings != null)
           'serialize-ids-as-strings': '$serializeIdsAsStrings',
+        if (private != null) 'private': '$private',
       },
     ));
   }
@@ -273,13 +384,13 @@ class BlogPostApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the blog post and its corresponding space.
-  Future<BlogPost> getBlogPostById(
+  Future<BlogPostSingle> getBlogPostById(
       {required int id,
       String? bodyFormat,
       bool? getDraft,
       int? version,
       bool? serializeIdsAsStrings}) async {
-    return BlogPost.fromJson(await _client.send(
+    return BlogPostSingle.fromJson(await _client.send(
       'get',
       'blogposts/{id}',
       pathParameters: {
@@ -300,9 +411,9 @@ class BlogPostApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the blog post and its corresponding space. Permission
   /// to update blog posts in the space.
-  Future<BlogPost> updateBlogPost(
+  Future<BlogPostSingle> updateBlogPost(
       {required int id, bool? serializeIdsAsStrings}) async {
-    return BlogPost.fromJson(await _client.send(
+    return BlogPostSingle.fromJson(await _client.send(
       'put',
       'blogposts/{id}',
       pathParameters: {
@@ -337,8 +448,9 @@ class BlogPostApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page and its corresponding space.
-  Future<MultiEntityResult<BlogPost>> getLabelBlogPosts(
+  Future<MultiEntityResult<BlogPostBulk>> getLabelBlogPosts(
       {required int id,
+      List<int>? spaceId,
       String? bodyFormat,
       String? sort,
       String? cursor,
@@ -352,6 +464,7 @@ class BlogPostApi {
           'id': '$id',
         },
         queryParameters: {
+          if (spaceId != null) 'space-id': spaceId.map((e) => '$e').join(','),
           if (bodyFormat != null) 'body-format': bodyFormat,
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
@@ -360,7 +473,7 @@ class BlogPostApi {
             'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
-      reviver: (v) => BlogPost.fromJson(v as Map<String, Object?>),
+      reviver: (v) => BlogPostBulk.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -373,9 +486,11 @@ class BlogPostApi {
   /// Permission to access the Confluence site ('Can use' global permission) and
   /// view the space.
   /// Only blog posts that the user has permission to view will be returned.
-  Future<MultiEntityResult<BlogPost>> getBlogPostsInSpace(
+  Future<MultiEntityResult<BlogPostBulk>> getBlogPostsInSpace(
       {required int id,
-      String? status,
+      String? sort,
+      List<String>? status,
+      String? title,
       String? bodyFormat,
       String? cursor,
       int? limit,
@@ -388,7 +503,9 @@ class BlogPostApi {
           'id': '$id',
         },
         queryParameters: {
-          if (status != null) 'status': status,
+          if (sort != null) 'sort': sort,
+          if (status != null) 'status': status.map((e) => e).join(','),
+          if (title != null) 'title': title,
           if (bodyFormat != null) 'body-format': bodyFormat,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
@@ -396,7 +513,7 @@ class BlogPostApi {
             'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
-      reviver: (v) => BlogPost.fromJson(v as Map<String, Object?>),
+      reviver: (v) => BlogPostBulk.fromJson(v as Map<String, Object?>),
     );
   }
 }
@@ -626,6 +743,36 @@ class CommentApi {
     );
   }
 
+  /// Returns all footer comments. The number of results is limited by the
+  /// `limit` parameter and additional results (if available)
+  /// will be available through the `next` URL present in the `Link` response
+  /// header.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the content of the page and its corresponding space.
+  Future<MultiEntityResult<InlineCommentModel>> getFooterComments(
+      {String? bodyFormat,
+      String? sort,
+      String? cursor,
+      int? limit,
+      bool? serializeIdsAsStrings}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'footer-comments',
+        queryParameters: {
+          if (bodyFormat != null) 'body-format': bodyFormat,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
+        },
+      ),
+      reviver: (v) => InlineCommentModel.fromJson(v as Map<String, Object?>),
+    );
+  }
+
   /// Create a footer comment. This can be at the top level (specifying pageId
   /// or blogPostId in the request body)
   /// or as a reply (specifying parentCommentId in the request body).
@@ -744,6 +891,36 @@ class CommentApi {
         },
       ),
       reviver: (v) => ChildrenCommentModel.fromJson(v as Map<String, Object?>),
+    );
+  }
+
+  /// Returns all inline comments. The number of results is limited by the
+  /// `limit` parameter and additional results (if available)
+  /// will be available through the `next` URL present in the `Link` response
+  /// header.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the content of the page and its corresponding space.
+  Future<MultiEntityResult<InlineCommentModel>> getInlineComments(
+      {bool? serializeIdsAsStrings,
+      String? bodyFormat,
+      String? sort,
+      String? cursor,
+      int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'inline-comments',
+        queryParameters: {
+          if (serializeIdsAsStrings != null)
+            'serialize-ids-as-strings': '$serializeIdsAsStrings',
+          if (bodyFormat != null) 'body-format': bodyFormat,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => InlineCommentModel.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -941,7 +1118,7 @@ class ContentPropertiesApi {
     );
   }
 
-  /// Creates a new attachment property.
+  /// Creates a new content property for an attachment.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to update the attachment.
@@ -986,7 +1163,7 @@ class ContentPropertiesApi {
     ));
   }
 
-  /// Update an attachment property by its id.
+  /// Update a content property for attachment by its id.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to edit the attachment.
@@ -1010,7 +1187,7 @@ class ContentPropertiesApi {
     ));
   }
 
-  /// Deletes a attachment property by its id.
+  /// Deletes a content property for an attachment by its id.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to attachment the page.
@@ -1057,7 +1234,7 @@ class ContentPropertiesApi {
     );
   }
 
-  /// Creates a new blog post property.
+  /// Creates a new property for a blogpost.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to update the blog post.
@@ -1102,7 +1279,7 @@ class ContentPropertiesApi {
     ));
   }
 
-  /// Update a blog post property by its id.
+  /// Update a content property for blog post by its id.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to edit the blog post.
@@ -1126,7 +1303,7 @@ class ContentPropertiesApi {
     ));
   }
 
-  /// Deletes a blog post property by its id.
+  /// Deletes a content property for a blogpost by its id.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to edit the blog post.
@@ -1173,7 +1350,7 @@ class ContentPropertiesApi {
     );
   }
 
-  /// Creates a new custom content property.
+  /// Creates a new content property for a piece of custom content.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to update the custom content.
@@ -1218,7 +1395,7 @@ class ContentPropertiesApi {
     ));
   }
 
-  /// Update a custom content property by its id.
+  /// Update a content property for a piece of custom content by its id.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to edit the custom content.
@@ -1242,7 +1419,7 @@ class ContentPropertiesApi {
     ));
   }
 
-  /// Deletes a custom content property by its id.
+  /// Deletes a content property for a piece of custom content by its id.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to edit the custom content.
@@ -1289,7 +1466,7 @@ class ContentPropertiesApi {
     );
   }
 
-  /// Creates a new page property.
+  /// Creates a new content property for a page.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to update the page.
@@ -1334,7 +1511,7 @@ class ContentPropertiesApi {
     ));
   }
 
-  /// Update a page property by its id.
+  /// Update a content property for a page by its id.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to edit the page.
@@ -1358,7 +1535,7 @@ class ContentPropertiesApi {
     ));
   }
 
-  /// Deletes a page property by its id.
+  /// Deletes a content property for a page by its id.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to edit the page.
@@ -1405,7 +1582,7 @@ class ContentPropertiesApi {
     );
   }
 
-  /// Creates a new comment property.
+  /// Creates a new content property for a comment.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to update the comment.
@@ -1450,7 +1627,7 @@ class ContentPropertiesApi {
     ));
   }
 
-  /// Update a comment property by its id.
+  /// Update a content property for a comment by its id.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to edit the comment.
@@ -1474,7 +1651,7 @@ class ContentPropertiesApi {
     ));
   }
 
-  /// Deletes a comment property by its id.
+  /// Deletes a content property for a comment by its id.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to edit the comment.
@@ -1507,9 +1684,10 @@ class CustomContentApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the custom content, the container of the custom content
   /// (blog post), and the corresponding space.
-  Future<MultiEntityResult<CustomContent>> getCustomContentByTypeInBlogPost(
+  Future<MultiEntityResult<CustomContentBulk>> getCustomContentByTypeInBlogPost(
       {required int id,
       required String type,
+      String? sort,
       String? cursor,
       int? limit,
       String? bodyFormat,
@@ -1523,6 +1701,7 @@ class CustomContentApi {
         },
         queryParameters: {
           'type': type,
+          if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
           if (bodyFormat != null) 'body-format': bodyFormat,
@@ -1530,7 +1709,7 @@ class CustomContentApi {
             'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
-      reviver: (v) => CustomContent.fromJson(v as Map<String, Object?>),
+      reviver: (v) => CustomContentBulk.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -1542,9 +1721,11 @@ class CustomContentApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the custom content, the container of the custom
   /// content, and the corresponding space (if different from the container).
-  Future<MultiEntityResult<CustomContent>> getCustomContentByType(
+  Future<MultiEntityResult<CustomContentBulk>> getCustomContentByType(
       {required String type,
       List<int>? id,
+      List<int>? spaceId,
+      String? sort,
       String? cursor,
       int? limit,
       String? bodyFormat,
@@ -1556,6 +1737,8 @@ class CustomContentApi {
         queryParameters: {
           'type': type,
           if (id != null) 'id': id.map((e) => '$e').join(','),
+          if (spaceId != null) 'space-id': spaceId.map((e) => '$e').join(','),
+          if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
           if (bodyFormat != null) 'body-format': bodyFormat,
@@ -1563,7 +1746,7 @@ class CustomContentApi {
             'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
-      reviver: (v) => CustomContent.fromJson(v as Map<String, Object?>),
+      reviver: (v) => CustomContentBulk.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -1575,9 +1758,9 @@ class CustomContentApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page or blogpost and its
   /// corresponding space. Permission to create custom content in the space.
-  Future<CustomContent> createCustomContent(
+  Future<CustomContentSingle> createCustomContent(
       {bool? serializeIdsAsStrings}) async {
-    return CustomContent.fromJson(await _client.send(
+    return CustomContentSingle.fromJson(await _client.send(
       'post',
       'custom-content',
       queryParameters: {
@@ -1592,12 +1775,12 @@ class CustomContentApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the custom content, the container of the custom
   /// content, and the corresponding space (if different from the container).
-  Future<CustomContent> getCustomContentById(
+  Future<CustomContentSingle> getCustomContentById(
       {required int id,
       String? bodyFormat,
       int? version,
       bool? serializeIdsAsStrings}) async {
-    return CustomContent.fromJson(await _client.send(
+    return CustomContentSingle.fromJson(await _client.send(
       'get',
       'custom-content/{id}',
       pathParameters: {
@@ -1619,9 +1802,9 @@ class CustomContentApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page or blogpost and its
   /// corresponding space. Permission to update custom content in the space.
-  Future<CustomContent> updateCustomContent(
+  Future<CustomContentSingle> updateCustomContent(
       {required int id, bool? serializeIdsAsStrings}) async {
-    return CustomContent.fromJson(await _client.send(
+    return CustomContentSingle.fromJson(await _client.send(
       'put',
       'custom-content/{id}',
       pathParameters: {
@@ -1658,9 +1841,10 @@ class CustomContentApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the custom content, the container of the custom content
   /// (page), and the corresponding space.
-  Future<MultiEntityResult<CustomContent>> getCustomContentByTypeInPage(
+  Future<MultiEntityResult<CustomContentBulk>> getCustomContentByTypeInPage(
       {required int id,
       required String type,
+      String? sort,
       String? cursor,
       int? limit,
       String? bodyFormat,
@@ -1674,6 +1858,7 @@ class CustomContentApi {
         },
         queryParameters: {
           'type': type,
+          if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
           if (bodyFormat != null) 'body-format': bodyFormat,
@@ -1681,7 +1866,7 @@ class CustomContentApi {
             'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
-      reviver: (v) => CustomContent.fromJson(v as Map<String, Object?>),
+      reviver: (v) => CustomContentBulk.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -1693,7 +1878,7 @@ class CustomContentApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the custom content and the corresponding space.
-  Future<MultiEntityResult<CustomContent>> getCustomContentByTypeInSpace(
+  Future<MultiEntityResult<CustomContentBulk>> getCustomContentByTypeInSpace(
       {required int id,
       required String type,
       String? cursor,
@@ -1716,7 +1901,7 @@ class CustomContentApi {
             'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
-      reviver: (v) => CustomContent.fromJson(v as Map<String, Object?>),
+      reviver: (v) => CustomContentBulk.fromJson(v as Map<String, Object?>),
     );
   }
 }
@@ -1870,6 +2055,276 @@ class LabelApi {
 
 /// This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
 
+class LikeApi {
+  final ApiClient _client;
+
+  LikeApi(this._client);
+
+  /// Returns the count of likes of specific blog post.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the content of the blog post and its corresponding
+  /// space.
+  Future<Map<String, dynamic>> getBlogPostLikeCount(int id) async {
+    return await _client.send(
+      'get',
+      'blogposts/{id}/likes/count',
+      pathParameters: {
+        'id': '$id',
+      },
+    ) as Map<String, Object?>;
+  }
+
+  /// Returns the account IDs of likes of specific blog post.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the content of the blog post and its corresponding
+  /// space.
+  Future<MultiEntityResult<Like>> getBlogPostLikeUsers(
+      {required int id, String? cursor, int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'blogposts/{id}/likes/users',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Like.fromJson(v as Map<String, Object?>),
+    );
+  }
+
+  /// Returns the count of likes of specific page.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the content of the page and its corresponding space.
+  Future<Map<String, dynamic>> getPageLikeCount(int id) async {
+    return await _client.send(
+      'get',
+      'pages/{id}/likes/count',
+      pathParameters: {
+        'id': '$id',
+      },
+    ) as Map<String, Object?>;
+  }
+
+  /// Returns the account IDs of likes of specific page.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the content of the page and its corresponding space.
+  Future<MultiEntityResult<Like>> getPageLikeUsers(
+      {required int id, String? cursor, int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'pages/{id}/likes/users',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Like.fromJson(v as Map<String, Object?>),
+    );
+  }
+
+  /// Returns the count of likes of specific footer comment.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the content of the page/blogpost and its corresponding
+  /// space.
+  Future<Map<String, dynamic>> getFooterLikeCount(int id) async {
+    return await _client.send(
+      'get',
+      'footer-comments/{id}/likes/count',
+      pathParameters: {
+        'id': '$id',
+      },
+    ) as Map<String, Object?>;
+  }
+
+  /// Returns the account IDs of likes of specific footer comment.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the content of the page/blogpost and its corresponding
+  /// space.
+  Future<MultiEntityResult<Like>> getFooterLikeUsers(
+      {required int id, String? cursor, int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'footer-comments/{id}/likes/users',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Like.fromJson(v as Map<String, Object?>),
+    );
+  }
+
+  /// Returns the count of likes of specific inline comment.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the content of the page/blogpost and its corresponding
+  /// space.
+  Future<Map<String, dynamic>> getInlineLikeCount(int id) async {
+    return await _client.send(
+      'get',
+      'inline-comments/{id}/likes/count',
+      pathParameters: {
+        'id': '$id',
+      },
+    ) as Map<String, Object?>;
+  }
+
+  /// Returns the account IDs of likes of specific inline comment.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the content of the page/blogpost and its corresponding
+  /// space.
+  Future<MultiEntityResult<Like>> getInlineLikeUsers(
+      {required int id, String? cursor, int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'inline-comments/{id}/likes/users',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Like.fromJson(v as Map<String, Object?>),
+    );
+  }
+}
+
+/// This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
+
+class OperationApi {
+  final ApiClient _client;
+
+  OperationApi(this._client);
+
+  /// Returns the permitted operations on specific attachment.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the parent content of the attachment and its
+  /// corresponding space.
+  Future<PermittedOperationsResponse> getAttachmentOperations(int id) async {
+    return PermittedOperationsResponse.fromJson(await _client.send(
+      'get',
+      'attachments/{id}/operations',
+      pathParameters: {
+        'id': '$id',
+      },
+    ));
+  }
+
+  /// Returns the permitted operations on specific blog post.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the parent content of the blog post and its
+  /// corresponding space.
+  Future<PermittedOperationsResponse> getBlogPostOperations(int id) async {
+    return PermittedOperationsResponse.fromJson(await _client.send(
+      'get',
+      'blogposts/{id}/operations',
+      pathParameters: {
+        'id': '$id',
+      },
+    ));
+  }
+
+  /// Returns the permitted operations on specific custom content.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the parent content of the custom content and its
+  /// corresponding space.
+  Future<PermittedOperationsResponse> getCustomContentOperations(int id) async {
+    return PermittedOperationsResponse.fromJson(await _client.send(
+      'get',
+      'custom-content/{id}/operations',
+      pathParameters: {
+        'id': '$id',
+      },
+    ));
+  }
+
+  /// Returns the permitted operations on specific page.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the parent content of the page and its corresponding
+  /// space.
+  Future<PermittedOperationsResponse> getPageOperations(int id) async {
+    return PermittedOperationsResponse.fromJson(await _client.send(
+      'get',
+      'pages/{id}/operations',
+      pathParameters: {
+        'id': '$id',
+      },
+    ));
+  }
+
+  /// Returns the permitted operations on specific space.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the corresponding space.
+  Future<PermittedOperationsResponse> getSpaceOperations(int id) async {
+    return PermittedOperationsResponse.fromJson(await _client.send(
+      'get',
+      'spaces/{id}/operations',
+      pathParameters: {
+        'id': '$id',
+      },
+    ));
+  }
+
+  /// Returns the permitted operations on specific footer comment.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the parent content of the footer comment and its
+  /// corresponding space.
+  Future<PermittedOperationsResponse> getFooterCommentOperations(int id) async {
+    return PermittedOperationsResponse.fromJson(await _client.send(
+      'get',
+      'footer-comments/{id}/operations',
+      pathParameters: {
+        'id': '$id',
+      },
+    ));
+  }
+
+  /// Returns the permitted operations on specific inline comment.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the parent content of the inline comment and its
+  /// corresponding space.
+  Future<PermittedOperationsResponse> getInlineCommentOperations(int id) async {
+    return PermittedOperationsResponse.fromJson(await _client.send(
+      'get',
+      'inline-comments/{id}/operations',
+      pathParameters: {
+        'id': '$id',
+      },
+    ));
+  }
+}
+
+/// This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
+
 class PageApi {
   final ApiClient _client;
 
@@ -1882,8 +2337,9 @@ class PageApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page and its corresponding space.
-  Future<MultiEntityResult<Page>> getLabelPages(
+  Future<MultiEntityResult<PageBulk>> getLabelPages(
       {required int id,
+      List<int>? spaceId,
       String? bodyFormat,
       String? sort,
       String? cursor,
@@ -1897,6 +2353,7 @@ class PageApi {
           'id': '$id',
         },
         queryParameters: {
+          if (spaceId != null) 'space-id': spaceId.map((e) => '$e').join(','),
           if (bodyFormat != null) 'body-format': bodyFormat,
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
@@ -1905,7 +2362,7 @@ class PageApi {
             'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
-      reviver: (v) => Page.fromJson(v as Map<String, Object?>),
+      reviver: (v) => PageBulk.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -1917,9 +2374,12 @@ class PageApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
   /// Only pages that the user has permission to view will be returned.
-  Future<MultiEntityResult<Page>> getPages(
+  Future<MultiEntityResult<PageBulk>> getPages(
       {List<int>? id,
-      String? status,
+      List<int>? spaceId,
+      String? sort,
+      List<String>? status,
+      String? title,
       String? bodyFormat,
       String? cursor,
       int? limit,
@@ -1930,7 +2390,10 @@ class PageApi {
         'pages',
         queryParameters: {
           if (id != null) 'id': id.map((e) => '$e').join(','),
-          if (status != null) 'status': status,
+          if (spaceId != null) 'space-id': spaceId.map((e) => '$e').join(','),
+          if (sort != null) 'sort': sort,
+          if (status != null) 'status': status.map((e) => e).join(','),
+          if (title != null) 'title': title,
           if (bodyFormat != null) 'body-format': bodyFormat,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
@@ -1938,7 +2401,7 @@ class PageApi {
             'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
-      reviver: (v) => Page.fromJson(v as Map<String, Object?>),
+      reviver: (v) => PageBulk.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -1951,13 +2414,16 @@ class PageApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the corresponding space. Permission to create a page in
   /// the space.
-  Future<Page> createPage({bool? serializeIdsAsStrings}) async {
-    return Page.fromJson(await _client.send(
+  Future<PageSingle> createPage(
+      {bool? serializeIdsAsStrings, bool? embedded, bool? private}) async {
+    return PageSingle.fromJson(await _client.send(
       'post',
       'pages',
       queryParameters: {
         if (serializeIdsAsStrings != null)
           'serialize-ids-as-strings': '$serializeIdsAsStrings',
+        if (embedded != null) 'embedded': '$embedded',
+        if (private != null) 'private': '$private',
       },
     ));
   }
@@ -1966,13 +2432,13 @@ class PageApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the page and its corresponding space.
-  Future<Page> getPageById(
+  Future<PageSingle> getPageById(
       {required int id,
       String? bodyFormat,
       bool? getDraft,
       int? version,
       bool? serializeIdsAsStrings}) async {
-    return Page.fromJson(await _client.send(
+    return PageSingle.fromJson(await _client.send(
       'get',
       'pages/{id}',
       pathParameters: {
@@ -1993,9 +2459,9 @@ class PageApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the page and its corresponding space. Permission to
   /// update pages in the space.
-  Future<Page> updatePage(
+  Future<PageSingle> updatePage(
       {required int id, bool? serializeIdsAsStrings}) async {
-    return Page.fromJson(await _client.send(
+    return PageSingle.fromJson(await _client.send(
       'put',
       'pages/{id}',
       pathParameters: {
@@ -2032,9 +2498,12 @@ class PageApi {
   /// Permission to access the Confluence site ('Can use' global permission) and
   /// 'View' permission for the space.
   /// Only pages that the user has permission to view will be returned.
-  Future<MultiEntityResult<Page>> getPagesInSpace(
+  Future<MultiEntityResult<PageBulk>> getPagesInSpace(
       {required int id,
-      String? status,
+      String? depth,
+      String? sort,
+      List<String>? status,
+      String? title,
       String? bodyFormat,
       String? cursor,
       int? limit,
@@ -2047,7 +2516,10 @@ class PageApi {
           'id': '$id',
         },
         queryParameters: {
-          if (status != null) 'status': status,
+          if (depth != null) 'depth': depth,
+          if (sort != null) 'sort': sort,
+          if (status != null) 'status': status.map((e) => e).join(','),
+          if (title != null) 'title': title,
           if (bodyFormat != null) 'body-format': bodyFormat,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
@@ -2055,7 +2527,7 @@ class PageApi {
             'serialize-ids-as-strings': '$serializeIdsAsStrings',
         },
       ),
-      reviver: (v) => Page.fromJson(v as Map<String, Object?>),
+      reviver: (v) => PageBulk.fromJson(v as Map<String, Object?>),
     );
   }
 }
@@ -2083,6 +2555,7 @@ class SpaceApi {
       List<String>? labels,
       String? sort,
       String? descriptionFormat,
+      bool? includeIcon,
       String? cursor,
       int? limit,
       bool? serializeIdsAsStrings}) async {
@@ -2099,6 +2572,7 @@ class SpaceApi {
           if (sort != null) 'sort': sort,
           if (descriptionFormat != null)
             'description-format': descriptionFormat,
+          if (includeIcon != null) 'include-icon': '$includeIcon',
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
           if (serializeIdsAsStrings != null)
@@ -2114,7 +2588,10 @@ class SpaceApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the space.
   Future<Space> getSpaceById(
-      {required int id, String? descriptionFormat}) async {
+      {required int id,
+      String? descriptionFormat,
+      bool? includeIcon,
+      bool? serializeIdsAsStrings}) async {
     return Space.fromJson(await _client.send(
       'get',
       'spaces/{id}',
@@ -2123,8 +2600,41 @@ class SpaceApi {
       },
       queryParameters: {
         if (descriptionFormat != null) 'description-format': descriptionFormat,
+        if (includeIcon != null) 'include-icon': '$includeIcon',
+        if (serializeIdsAsStrings != null)
+          'serialize-ids-as-strings': '$serializeIdsAsStrings',
       },
     ));
+  }
+}
+
+/// This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
+
+class SpacePermissionsApi {
+  final ApiClient _client;
+
+  SpacePermissionsApi(this._client);
+
+  /// Returns space permissions for a specific space.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the space.
+  Future<MultiEntityResult<SpacePermission>> getSpacePermissions(
+      {required int id, String? cursor, int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'spaces/{id}/permissions',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => SpacePermission.fromJson(v as Map<String, Object?>),
+    );
   }
 }
 
@@ -2394,13 +2904,16 @@ class UserApi {
 
   /// Invite a list of emails to the site.
   ///
+  /// Ignores all invalid emails and no action is taken for the emails that
+  /// already have access to the site.
+  ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
-  Future<Map<String, dynamic>> inviteByEmail() async {
-    return await _client.send(
+  Future<void> inviteByEmail() async {
+    await _client.send(
       'post',
       'user/access/invite-by-email',
-    ) as Map<String, Object?>;
+    );
   }
 }
 
@@ -2415,7 +2928,7 @@ class VersionApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the attachment and its corresponding space.
-  Future<MultiEntityResult<Version>> getAttachmentVersions(
+  Future<MultiEntityResult<AttachmentVersion>> getAttachmentVersions(
       {required String id, String? cursor, int? limit, String? sort}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
@@ -2430,7 +2943,7 @@ class VersionApi {
           if (sort != null) 'sort': sort,
         },
       ),
-      reviver: (v) => Version.fromJson(v as Map<String, Object?>),
+      reviver: (v) => AttachmentVersion.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -2454,7 +2967,7 @@ class VersionApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the blog post and its corresponding space.
-  Future<MultiEntityResult<Version>> getBlogPostVersions(
+  Future<MultiEntityResult<BlogPostVersion>> getBlogPostVersions(
       {required int id,
       String? bodyFormat,
       String? cursor,
@@ -2474,7 +2987,7 @@ class VersionApi {
           if (sort != null) 'sort': sort,
         },
       ),
-      reviver: (v) => Version.fromJson(v as Map<String, Object?>),
+      reviver: (v) => BlogPostVersion.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -2498,7 +3011,7 @@ class VersionApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the page and its corresponding space.
-  Future<MultiEntityResult<Version>> getPageVersions(
+  Future<MultiEntityResult<PageVersion>> getPageVersions(
       {required int id,
       String? bodyFormat,
       String? cursor,
@@ -2518,7 +3031,7 @@ class VersionApi {
           if (sort != null) 'sort': sort,
         },
       ),
-      reviver: (v) => Version.fromJson(v as Map<String, Object?>),
+      reviver: (v) => PageVersion.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -2543,7 +3056,7 @@ class VersionApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the custom content and its corresponding page and
   /// space.
-  Future<MultiEntityResult<Version>> getCustomContentVersions(
+  Future<MultiEntityResult<CustomContentVersion>> getCustomContentVersions(
       {required int customContentId,
       String? bodyFormat,
       String? cursor,
@@ -2563,7 +3076,7 @@ class VersionApi {
           if (sort != null) 'sort': sort,
         },
       ),
-      reviver: (v) => Version.fromJson(v as Map<String, Object?>),
+      reviver: (v) => CustomContentVersion.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -2589,7 +3102,7 @@ class VersionApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page or blog post and its
   /// corresponding space.
-  Future<MultiEntityResult<Version>> getFooterCommentVersions(
+  Future<MultiEntityResult<CommentVersion>> getFooterCommentVersions(
       {required int id,
       String? bodyFormat,
       String? cursor,
@@ -2609,7 +3122,7 @@ class VersionApi {
           if (sort != null) 'sort': sort,
         },
       ),
-      reviver: (v) => Version.fromJson(v as Map<String, Object?>),
+      reviver: (v) => CommentVersion.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -2635,7 +3148,7 @@ class VersionApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page or blog post and its
   /// corresponding space.
-  Future<MultiEntityResult<Version>> getInlineCommentVersions(
+  Future<MultiEntityResult<CommentVersion>> getInlineCommentVersions(
       {required int id,
       String? bodyFormat,
       String? cursor,
@@ -2655,7 +3168,7 @@ class VersionApi {
           if (sort != null) 'sort': sort,
         },
       ),
-      reviver: (v) => Version.fromJson(v as Map<String, Object?>),
+      reviver: (v) => CommentVersion.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -2675,6 +3188,26 @@ class VersionApi {
       },
     ));
   }
+}
+
+class AncestorType {
+  static const page = AncestorType._('page');
+
+  static const values = [
+    page,
+  ];
+  final String value;
+
+  const AncestorType._(this.value);
+
+  static AncestorType fromValue(String value) => values
+      .firstWhere((e) => e.value == value, orElse: () => AncestorType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 class AttachmentSortOrder {
@@ -2727,48 +3260,6 @@ class BlogPostSortOrder {
   static BlogPostSortOrder fromValue(String value) =>
       values.firstWhere((e) => e.value == value,
           orElse: () => BlogPostSortOrder._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class BodyRepresentation {
-  static const anonymousExportView =
-      BodyRepresentation._('anonymous_export_view');
-  static const atlasDocFormat = BodyRepresentation._('atlas_doc_format');
-  static const dynamic$ = BodyRepresentation._('dynamic');
-  static const editor = BodyRepresentation._('editor');
-  static const editor2 = BodyRepresentation._('editor2');
-  static const exportView = BodyRepresentation._('export_view');
-  static const plain = BodyRepresentation._('plain');
-  static const raw = BodyRepresentation._('raw');
-  static const storage = BodyRepresentation._('storage');
-  static const styledView = BodyRepresentation._('styled_view');
-  static const view = BodyRepresentation._('view');
-
-  static const values = [
-    anonymousExportView,
-    atlasDocFormat,
-    dynamic$,
-    editor,
-    editor2,
-    exportView,
-    plain,
-    raw,
-    storage,
-    styledView,
-    view,
-  ];
-  final String value;
-
-  const BodyRepresentation._(this.value);
-
-  static BodyRepresentation fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => BodyRepresentation._(value));
 
   /// An enum received from the server but this version of the client doesn't recognize it.
   bool get isUnknown => values.every((v) => v.value != value);
@@ -2927,6 +3418,26 @@ class ContentStatus {
   String toString() => value;
 }
 
+class ContentType {
+  static const page = ContentType._('page');
+
+  static const values = [
+    page,
+  ];
+  final String value;
+
+  const ContentType._(this.value);
+
+  static ContentType fromValue(String value) => values
+      .firstWhere((e) => e.value == value, orElse: () => ContentType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 class CustomContentBodyRepresentation {
   static const raw = CustomContentBodyRepresentation._('raw');
   static const storage = CustomContentBodyRepresentation._('storage');
@@ -2945,6 +3456,75 @@ class CustomContentBodyRepresentation {
   static CustomContentBodyRepresentation fromValue(String value) =>
       values.firstWhere((e) => e.value == value,
           orElse: () => CustomContentBodyRepresentation._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class CustomContentBodyRepresentationSingle {
+  static const raw = CustomContentBodyRepresentationSingle._('raw');
+  static const storage = CustomContentBodyRepresentationSingle._('storage');
+  static const atlasDocFormat =
+      CustomContentBodyRepresentationSingle._('atlas_doc_format');
+  static const view = CustomContentBodyRepresentationSingle._('view');
+  static const exportView =
+      CustomContentBodyRepresentationSingle._('export_view');
+  static const anonymousExportView =
+      CustomContentBodyRepresentationSingle._('anonymous_export_view');
+
+  static const values = [
+    raw,
+    storage,
+    atlasDocFormat,
+    view,
+    exportView,
+    anonymousExportView,
+  ];
+  final String value;
+
+  const CustomContentBodyRepresentationSingle._(this.value);
+
+  static CustomContentBodyRepresentationSingle fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => CustomContentBodyRepresentationSingle._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class CustomContentSortOrder {
+  static const id = CustomContentSortOrder._('id');
+  static const idDesc = CustomContentSortOrder._('-id');
+  static const createdDate = CustomContentSortOrder._('created-date');
+  static const createdDateDesc = CustomContentSortOrder._('-created-date');
+  static const modifiedDate = CustomContentSortOrder._('modified-date');
+  static const modifiedDateDesc = CustomContentSortOrder._('-modified-date');
+  static const title = CustomContentSortOrder._('title');
+  static const titleDesc = CustomContentSortOrder._('-title');
+
+  static const values = [
+    id,
+    idDesc,
+    createdDate,
+    createdDateDesc,
+    modifiedDate,
+    modifiedDateDesc,
+    title,
+    titleDesc,
+  ];
+  final String value;
+
+  const CustomContentSortOrder._(this.value);
+
+  static CustomContentSortOrder fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => CustomContentSortOrder._(value));
 
   /// An enum received from the server but this version of the client doesn't recognize it.
   bool get isUnknown => values.every((v) => v.value != value);
@@ -3041,6 +3621,8 @@ class PageSortOrder {
   static const createdDateDesc = PageSortOrder._('-created-date');
   static const modifiedDate = PageSortOrder._('modified-date');
   static const modifiedDateDesc = PageSortOrder._('-modified-date');
+  static const title = PageSortOrder._('title');
+  static const titleDesc = PageSortOrder._('-title');
 
   static const values = [
     id,
@@ -3049,6 +3631,8 @@ class PageSortOrder {
     createdDateDesc,
     modifiedDate,
     modifiedDateDesc,
+    title,
+    titleDesc,
   ];
   final String value;
 
@@ -3080,6 +3664,37 @@ class PrimaryBodyRepresentation {
   static PrimaryBodyRepresentation fromValue(String value) =>
       values.firstWhere((e) => e.value == value,
           orElse: () => PrimaryBodyRepresentation._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class PrimaryBodyRepresentationSingle {
+  static const storage = PrimaryBodyRepresentationSingle._('storage');
+  static const atlasDocFormat =
+      PrimaryBodyRepresentationSingle._('atlas_doc_format');
+  static const view = PrimaryBodyRepresentationSingle._('view');
+  static const exportView = PrimaryBodyRepresentationSingle._('export_view');
+  static const anonymousExportView =
+      PrimaryBodyRepresentationSingle._('anonymous_export_view');
+
+  static const values = [
+    storage,
+    atlasDocFormat,
+    view,
+    exportView,
+    anonymousExportView,
+  ];
+  final String value;
+
+  const PrimaryBodyRepresentationSingle._(this.value);
+
+  static PrimaryBodyRepresentationSingle fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => PrimaryBodyRepresentationSingle._(value));
 
   /// An enum received from the server but this version of the client doesn't recognize it.
   bool get isUnknown => values.every((v) => v.value != value);
@@ -3209,6 +3824,89 @@ class VersionSortOrder {
   String toString() => value;
 }
 
+class AbstractPageLinks {
+  /// Web UI link of the content.
+  final String? webui;
+
+  /// Edit UI link of the content.
+  final String? editui;
+
+  /// Web UI link of the content.
+  final String? tinyui;
+
+  AbstractPageLinks({this.webui, this.editui, this.tinyui});
+
+  factory AbstractPageLinks.fromJson(Map<String, Object?> json) {
+    return AbstractPageLinks(
+      webui: json[r'webui'] as String?,
+      editui: json[r'editui'] as String?,
+      tinyui: json[r'tinyui'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var webui = this.webui;
+    var editui = this.editui;
+    var tinyui = this.tinyui;
+
+    final json = <String, Object?>{};
+    if (webui != null) {
+      json[r'webui'] = webui;
+    }
+    if (editui != null) {
+      json[r'editui'] = editui;
+    }
+    if (tinyui != null) {
+      json[r'tinyui'] = tinyui;
+    }
+    return json;
+  }
+
+  AbstractPageLinks copyWith({String? webui, String? editui, String? tinyui}) {
+    return AbstractPageLinks(
+      webui: webui ?? this.webui,
+      editui: editui ?? this.editui,
+      tinyui: tinyui ?? this.tinyui,
+    );
+  }
+}
+
+class Ancestor {
+  /// ID of the ancestor
+  final String? id;
+  final String? type;
+
+  Ancestor({this.id, this.type});
+
+  factory Ancestor.fromJson(Map<String, Object?> json) {
+    return Ancestor(
+      id: json[r'id'] as String?,
+      type: json[r'type'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    return json;
+  }
+
+  Ancestor copyWith({String? id, String? type}) {
+    return Ancestor(
+      id: id ?? this.id,
+      type: type ?? this.type,
+    );
+  }
+}
+
 class Attachment {
   /// ID of the attachment.
   final String? id;
@@ -3216,6 +3914,10 @@ class Attachment {
 
   /// Title of the comment.
   final String? title;
+
+  /// Date and time when the attachment was created. In format
+  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
+  final DateTime? createdAt;
 
   /// ID of the containing page.
   ///
@@ -3268,6 +3970,10 @@ class Attachment {
   /// Comment for the attachment.
   final String? comment;
 
+  /// File ID of the attachment. This is the ID referenced in `atlas_doc_format`
+  /// bodies and is distinct from the attachment ID.
+  final String? fileId;
+
   /// File size of the attachment.
   final int? fileSize;
 
@@ -3277,38 +3983,47 @@ class Attachment {
   /// Download link of the attachment.
   final String? downloadLink;
   final Version? version;
+  final AttachmentLinks? links;
 
   Attachment(
       {this.id,
       this.status,
       this.title,
+      this.createdAt,
       this.pageId,
       this.blogPostId,
       this.customContentId,
       this.mediaType,
       this.mediaTypeDescription,
       this.comment,
+      this.fileId,
       this.fileSize,
       this.webuiLink,
       this.downloadLink,
-      this.version});
+      this.version,
+      this.links});
 
   factory Attachment.fromJson(Map<String, Object?> json) {
     return Attachment(
       id: json[r'id'] as String?,
       status: json[r'status'] as String?,
       title: json[r'title'] as String?,
+      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
       pageId: json[r'pageId'],
       blogPostId: json[r'blogPostId'],
       customContentId: json[r'customContentId'],
       mediaType: json[r'mediaType'] as String?,
       mediaTypeDescription: json[r'mediaTypeDescription'] as String?,
       comment: json[r'comment'] as String?,
+      fileId: json[r'fileId'] as String?,
       fileSize: (json[r'fileSize'] as num?)?.toInt(),
       webuiLink: json[r'webuiLink'] as String?,
       downloadLink: json[r'downloadLink'] as String?,
       version: json[r'version'] != null
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? AttachmentLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -3317,16 +4032,19 @@ class Attachment {
     var id = this.id;
     var status = this.status;
     var title = this.title;
+    var createdAt = this.createdAt;
     var pageId = this.pageId;
     var blogPostId = this.blogPostId;
     var customContentId = this.customContentId;
     var mediaType = this.mediaType;
     var mediaTypeDescription = this.mediaTypeDescription;
     var comment = this.comment;
+    var fileId = this.fileId;
     var fileSize = this.fileSize;
     var webuiLink = this.webuiLink;
     var downloadLink = this.downloadLink;
     var version = this.version;
+    var links = this.links;
 
     final json = <String, Object?>{};
     if (id != null) {
@@ -3337,6 +4055,9 @@ class Attachment {
     }
     if (title != null) {
       json[r'title'] = title;
+    }
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt.toIso8601String();
     }
     if (pageId != null) {
       json[r'pageId'] = pageId;
@@ -3356,6 +4077,9 @@ class Attachment {
     if (comment != null) {
       json[r'comment'] = comment;
     }
+    if (fileId != null) {
+      json[r'fileId'] = fileId;
+    }
     if (fileSize != null) {
       json[r'fileSize'] = fileSize;
     }
@@ -3368,6 +4092,9 @@ class Attachment {
     if (version != null) {
       json[r'version'] = version.toJson();
     }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
     return json;
   }
 
@@ -3375,30 +4102,74 @@ class Attachment {
       {String? id,
       String? status,
       String? title,
+      DateTime? createdAt,
       dynamic pageId,
       dynamic blogPostId,
       dynamic customContentId,
       String? mediaType,
       String? mediaTypeDescription,
       String? comment,
+      String? fileId,
       int? fileSize,
       String? webuiLink,
       String? downloadLink,
-      Version? version}) {
+      Version? version,
+      AttachmentLinks? links}) {
     return Attachment(
       id: id ?? this.id,
       status: status ?? this.status,
       title: title ?? this.title,
+      createdAt: createdAt ?? this.createdAt,
       pageId: pageId ?? this.pageId,
       blogPostId: blogPostId ?? this.blogPostId,
       customContentId: customContentId ?? this.customContentId,
       mediaType: mediaType ?? this.mediaType,
       mediaTypeDescription: mediaTypeDescription ?? this.mediaTypeDescription,
       comment: comment ?? this.comment,
+      fileId: fileId ?? this.fileId,
       fileSize: fileSize ?? this.fileSize,
       webuiLink: webuiLink ?? this.webuiLink,
       downloadLink: downloadLink ?? this.downloadLink,
       version: version ?? this.version,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class AttachmentLinks {
+  /// Web UI link of the content.
+  final String? webui;
+
+  /// Download link of the content.
+  final String? download;
+
+  AttachmentLinks({this.webui, this.download});
+
+  factory AttachmentLinks.fromJson(Map<String, Object?> json) {
+    return AttachmentLinks(
+      webui: json[r'webui'] as String?,
+      download: json[r'download'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var webui = this.webui;
+    var download = this.download;
+
+    final json = <String, Object?>{};
+    if (webui != null) {
+      json[r'webui'] = webui;
+    }
+    if (download != null) {
+      json[r'download'] = download;
+    }
+    return json;
+  }
+
+  AttachmentLinks copyWith({String? webui, String? download}) {
+    return AttachmentLinks(
+      webui: webui ?? this.webui,
+      download: download ?? this.download,
     );
   }
 }
@@ -3491,129 +4262,6 @@ class AttachmentVersion {
   }
 }
 
-class BlogPost {
-  /// ID of the blog post.
-  ///
-  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
-  /// field will be changed from a numeric type to a string type at the end of
-  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
-  /// can be passed as a query param to any v2 endpoint to opt-in to this change
-  /// now. See this
-  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
-  /// for more detail.
-  final dynamic id;
-  final String? status;
-
-  /// Title of the blog post.
-  final String? title;
-
-  /// ID of the space the blog post is in.
-  ///
-  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
-  /// field will be changed from a numeric type to a string type at the end of
-  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
-  /// can be passed as a query param to any v2 endpoint to opt-in to this change
-  /// now. See this
-  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
-  /// for more detail.
-  final dynamic spaceId;
-
-  /// The account ID of the user who created this blog post originally.
-  final String? authorId;
-
-  /// Date and time when the blog post was created. In format
-  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
-  final DateTime? createdAt;
-  final Version? version;
-  final Body? body;
-
-  BlogPost(
-      {this.id,
-      this.status,
-      this.title,
-      this.spaceId,
-      this.authorId,
-      this.createdAt,
-      this.version,
-      this.body});
-
-  factory BlogPost.fromJson(Map<String, Object?> json) {
-    return BlogPost(
-      id: json[r'id'],
-      status: json[r'status'] as String?,
-      title: json[r'title'] as String?,
-      spaceId: json[r'spaceId'],
-      authorId: json[r'authorId'] as String?,
-      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
-      version: json[r'version'] != null
-          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
-          : null,
-      body: json[r'body'] != null
-          ? Body.fromJson(json[r'body']! as Map<String, Object?>)
-          : null,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var id = this.id;
-    var status = this.status;
-    var title = this.title;
-    var spaceId = this.spaceId;
-    var authorId = this.authorId;
-    var createdAt = this.createdAt;
-    var version = this.version;
-    var body = this.body;
-
-    final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (status != null) {
-      json[r'status'] = status;
-    }
-    if (title != null) {
-      json[r'title'] = title;
-    }
-    if (spaceId != null) {
-      json[r'spaceId'] = spaceId;
-    }
-    if (authorId != null) {
-      json[r'authorId'] = authorId;
-    }
-    if (createdAt != null) {
-      json[r'createdAt'] = createdAt.toIso8601String();
-    }
-    if (version != null) {
-      json[r'version'] = version.toJson();
-    }
-    if (body != null) {
-      json[r'body'] = body.toJson();
-    }
-    return json;
-  }
-
-  BlogPost copyWith(
-      {dynamic id,
-      String? status,
-      String? title,
-      dynamic spaceId,
-      String? authorId,
-      DateTime? createdAt,
-      Version? version,
-      Body? body}) {
-    return BlogPost(
-      id: id ?? this.id,
-      status: status ?? this.status,
-      title: title ?? this.title,
-      spaceId: spaceId ?? this.spaceId,
-      authorId: authorId ?? this.authorId,
-      createdAt: createdAt ?? this.createdAt,
-      version: version ?? this.version,
-      body: body ?? this.body,
-    );
-  }
-}
-
 class BlogPostBodyWrite {
   /// Type of content representation used for the value field.
   final BlogPostBodyWriteRepresentation? representation;
@@ -3682,6 +4330,140 @@ class BlogPostBodyWriteRepresentation {
   String toString() => value;
 }
 
+class BlogPostBulk {
+  /// ID of the blog post.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
+  final String? status;
+
+  /// Title of the blog post.
+  final String? title;
+
+  /// ID of the space the blog post is in.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic spaceId;
+
+  /// The account ID of the user who created this blog post originally.
+  final String? authorId;
+
+  /// Date and time when the blog post was created. In format
+  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
+  final DateTime? createdAt;
+  final Version? version;
+  final BodyBulk? body;
+  final AbstractPageLinks? links;
+
+  BlogPostBulk(
+      {this.id,
+      this.status,
+      this.title,
+      this.spaceId,
+      this.authorId,
+      this.createdAt,
+      this.version,
+      this.body,
+      this.links});
+
+  factory BlogPostBulk.fromJson(Map<String, Object?> json) {
+    return BlogPostBulk(
+      id: json[r'id'],
+      status: json[r'status'] as String?,
+      title: json[r'title'] as String?,
+      spaceId: json[r'spaceId'],
+      authorId: json[r'authorId'] as String?,
+      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
+      version: json[r'version'] != null
+          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      body: json[r'body'] != null
+          ? BodyBulk.fromJson(json[r'body']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? AbstractPageLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var status = this.status;
+    var title = this.title;
+    var spaceId = this.spaceId;
+    var authorId = this.authorId;
+    var createdAt = this.createdAt;
+    var version = this.version;
+    var body = this.body;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (spaceId != null) {
+      json[r'spaceId'] = spaceId;
+    }
+    if (authorId != null) {
+      json[r'authorId'] = authorId;
+    }
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt.toIso8601String();
+    }
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
+    if (body != null) {
+      json[r'body'] = body.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  BlogPostBulk copyWith(
+      {dynamic id,
+      String? status,
+      String? title,
+      dynamic spaceId,
+      String? authorId,
+      DateTime? createdAt,
+      Version? version,
+      BodyBulk? body,
+      AbstractPageLinks? links}) {
+    return BlogPostBulk(
+      id: id ?? this.id,
+      status: status ?? this.status,
+      title: title ?? this.title,
+      spaceId: spaceId ?? this.spaceId,
+      authorId: authorId ?? this.authorId,
+      createdAt: createdAt ?? this.createdAt,
+      version: version ?? this.version,
+      body: body ?? this.body,
+      links: links ?? this.links,
+    );
+  }
+}
+
 class BlogPostCommentModel {
   /// ID of the comment.
   ///
@@ -3709,7 +4491,8 @@ class BlogPostCommentModel {
   /// for more detail.
   final dynamic blogPostId;
   final Version? version;
-  final Body? body;
+  final BodyBulk? body;
+  final CommentLinks? links;
 
   BlogPostCommentModel(
       {this.id,
@@ -3717,7 +4500,8 @@ class BlogPostCommentModel {
       this.title,
       this.blogPostId,
       this.version,
-      this.body});
+      this.body,
+      this.links});
 
   factory BlogPostCommentModel.fromJson(Map<String, Object?> json) {
     return BlogPostCommentModel(
@@ -3729,7 +4513,10 @@ class BlogPostCommentModel {
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
           : null,
       body: json[r'body'] != null
-          ? Body.fromJson(json[r'body']! as Map<String, Object?>)
+          ? BodyBulk.fromJson(json[r'body']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? CommentLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -3741,6 +4528,7 @@ class BlogPostCommentModel {
     var blogPostId = this.blogPostId;
     var version = this.version;
     var body = this.body;
+    var links = this.links;
 
     final json = <String, Object?>{};
     if (id != null) {
@@ -3761,6 +4549,9 @@ class BlogPostCommentModel {
     if (body != null) {
       json[r'body'] = body.toJson();
     }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
     return json;
   }
 
@@ -3770,7 +4561,8 @@ class BlogPostCommentModel {
       String? title,
       dynamic blogPostId,
       Version? version,
-      Body? body}) {
+      BodyBulk? body,
+      CommentLinks? links}) {
     return BlogPostCommentModel(
       id: id ?? this.id,
       status: status ?? this.status,
@@ -3778,6 +4570,7 @@ class BlogPostCommentModel {
       blogPostId: blogPostId ?? this.blogPostId,
       version: version ?? this.version,
       body: body ?? this.body,
+      links: links ?? this.links,
     );
   }
 }
@@ -3809,9 +4602,10 @@ class BlogPostInlineCommentModel {
   /// for more detail.
   final dynamic blogPostId;
   final Version? version;
-  final Body? body;
+  final BodyBulk? body;
   final String? resolutionStatus;
   final InlineCommentProperties? properties;
+  final CommentLinks? links;
 
   BlogPostInlineCommentModel(
       {this.id,
@@ -3821,7 +4615,8 @@ class BlogPostInlineCommentModel {
       this.version,
       this.body,
       this.resolutionStatus,
-      this.properties});
+      this.properties,
+      this.links});
 
   factory BlogPostInlineCommentModel.fromJson(Map<String, Object?> json) {
     return BlogPostInlineCommentModel(
@@ -3833,12 +4628,15 @@ class BlogPostInlineCommentModel {
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
           : null,
       body: json[r'body'] != null
-          ? Body.fromJson(json[r'body']! as Map<String, Object?>)
+          ? BodyBulk.fromJson(json[r'body']! as Map<String, Object?>)
           : null,
       resolutionStatus: json[r'resolutionStatus'] as String?,
       properties: json[r'properties'] != null
           ? InlineCommentProperties.fromJson(
               json[r'properties']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? CommentLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -3852,6 +4650,7 @@ class BlogPostInlineCommentModel {
     var body = this.body;
     var resolutionStatus = this.resolutionStatus;
     var properties = this.properties;
+    var links = this.links;
 
     final json = <String, Object?>{};
     if (id != null) {
@@ -3878,6 +4677,9 @@ class BlogPostInlineCommentModel {
     if (properties != null) {
       json[r'properties'] = properties.toJson();
     }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
     return json;
   }
 
@@ -3887,9 +4689,10 @@ class BlogPostInlineCommentModel {
       String? title,
       dynamic blogPostId,
       Version? version,
-      Body? body,
+      BodyBulk? body,
       String? resolutionStatus,
-      InlineCommentProperties? properties}) {
+      InlineCommentProperties? properties,
+      CommentLinks? links}) {
     return BlogPostInlineCommentModel(
       id: id ?? this.id,
       status: status ?? this.status,
@@ -3899,6 +4702,7 @@ class BlogPostInlineCommentModel {
       body: body ?? this.body,
       resolutionStatus: resolutionStatus ?? this.resolutionStatus,
       properties: properties ?? this.properties,
+      links: links ?? this.links,
     );
   }
 }
@@ -3955,6 +4759,140 @@ class BlogPostNestedBodyWrite {
       storage: storage ?? this.storage,
       atlasDocFormat: atlasDocFormat ?? this.atlasDocFormat,
       wiki: wiki ?? this.wiki,
+    );
+  }
+}
+
+class BlogPostSingle {
+  /// ID of the blog post.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
+  final String? status;
+
+  /// Title of the blog post.
+  final String? title;
+
+  /// ID of the space the blog post is in.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic spaceId;
+
+  /// The account ID of the user who created this blog post originally.
+  final String? authorId;
+
+  /// Date and time when the blog post was created. In format
+  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
+  final DateTime? createdAt;
+  final Version? version;
+  final BodySingle? body;
+  final AbstractPageLinks? links;
+
+  BlogPostSingle(
+      {this.id,
+      this.status,
+      this.title,
+      this.spaceId,
+      this.authorId,
+      this.createdAt,
+      this.version,
+      this.body,
+      this.links});
+
+  factory BlogPostSingle.fromJson(Map<String, Object?> json) {
+    return BlogPostSingle(
+      id: json[r'id'],
+      status: json[r'status'] as String?,
+      title: json[r'title'] as String?,
+      spaceId: json[r'spaceId'],
+      authorId: json[r'authorId'] as String?,
+      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
+      version: json[r'version'] != null
+          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      body: json[r'body'] != null
+          ? BodySingle.fromJson(json[r'body']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? AbstractPageLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var status = this.status;
+    var title = this.title;
+    var spaceId = this.spaceId;
+    var authorId = this.authorId;
+    var createdAt = this.createdAt;
+    var version = this.version;
+    var body = this.body;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (spaceId != null) {
+      json[r'spaceId'] = spaceId;
+    }
+    if (authorId != null) {
+      json[r'authorId'] = authorId;
+    }
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt.toIso8601String();
+    }
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
+    if (body != null) {
+      json[r'body'] = body.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  BlogPostSingle copyWith(
+      {dynamic id,
+      String? status,
+      String? title,
+      dynamic spaceId,
+      String? authorId,
+      DateTime? createdAt,
+      Version? version,
+      BodySingle? body,
+      AbstractPageLinks? links}) {
+    return BlogPostSingle(
+      id: id ?? this.id,
+      status: status ?? this.status,
+      title: title ?? this.title,
+      spaceId: spaceId ?? this.spaceId,
+      authorId: authorId ?? this.authorId,
+      createdAt: createdAt ?? this.createdAt,
+      version: version ?? this.version,
+      body: body ?? this.body,
+      links: links ?? this.links,
     );
   }
 }
@@ -4047,14 +4985,14 @@ class BlogPostVersion {
 }
 
 /// Contains fields for each representation type requested.
-class Body {
+class BodyBulk {
   final BodyType? storage;
   final BodyType? atlasDocFormat;
 
-  Body({this.storage, this.atlasDocFormat});
+  BodyBulk({this.storage, this.atlasDocFormat});
 
-  factory Body.fromJson(Map<String, Object?> json) {
-    return Body(
+  factory BodyBulk.fromJson(Map<String, Object?> json) {
+    return BodyBulk(
       storage: json[r'storage'] != null
           ? BodyType.fromJson(json[r'storage']! as Map<String, Object?>)
           : null,
@@ -4079,10 +5017,61 @@ class Body {
     return json;
   }
 
-  Body copyWith({BodyType? storage, BodyType? atlasDocFormat}) {
-    return Body(
+  BodyBulk copyWith({BodyType? storage, BodyType? atlasDocFormat}) {
+    return BodyBulk(
       storage: storage ?? this.storage,
       atlasDocFormat: atlasDocFormat ?? this.atlasDocFormat,
+    );
+  }
+}
+
+/// Contains fields for each representation type requested.
+class BodySingle {
+  final BodyType? storage;
+  final BodyType? atlasDocFormat;
+  final BodyType? view;
+
+  BodySingle({this.storage, this.atlasDocFormat, this.view});
+
+  factory BodySingle.fromJson(Map<String, Object?> json) {
+    return BodySingle(
+      storage: json[r'storage'] != null
+          ? BodyType.fromJson(json[r'storage']! as Map<String, Object?>)
+          : null,
+      atlasDocFormat: json[r'atlas_doc_format'] != null
+          ? BodyType.fromJson(
+              json[r'atlas_doc_format']! as Map<String, Object?>)
+          : null,
+      view: json[r'view'] != null
+          ? BodyType.fromJson(json[r'view']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var storage = this.storage;
+    var atlasDocFormat = this.atlasDocFormat;
+    var view = this.view;
+
+    final json = <String, Object?>{};
+    if (storage != null) {
+      json[r'storage'] = storage.toJson();
+    }
+    if (atlasDocFormat != null) {
+      json[r'atlas_doc_format'] = atlasDocFormat.toJson();
+    }
+    if (view != null) {
+      json[r'view'] = view.toJson();
+    }
+    return json;
+  }
+
+  BodySingle copyWith(
+      {BodyType? storage, BodyType? atlasDocFormat, BodyType? view}) {
+    return BodySingle(
+      storage: storage ?? this.storage,
+      atlasDocFormat: atlasDocFormat ?? this.atlasDocFormat,
+      view: view ?? this.view,
     );
   }
 }
@@ -4322,7 +5311,8 @@ class ChildrenCommentModel {
   /// for more detail.
   final dynamic parentCommentId;
   final Version? version;
-  final Body? body;
+  final BodyBulk? body;
+  final CommentLinks? links;
 
   ChildrenCommentModel(
       {this.id,
@@ -4330,7 +5320,8 @@ class ChildrenCommentModel {
       this.title,
       this.parentCommentId,
       this.version,
-      this.body});
+      this.body,
+      this.links});
 
   factory ChildrenCommentModel.fromJson(Map<String, Object?> json) {
     return ChildrenCommentModel(
@@ -4342,7 +5333,10 @@ class ChildrenCommentModel {
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
           : null,
       body: json[r'body'] != null
-          ? Body.fromJson(json[r'body']! as Map<String, Object?>)
+          ? BodyBulk.fromJson(json[r'body']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? CommentLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -4354,6 +5348,7 @@ class ChildrenCommentModel {
     var parentCommentId = this.parentCommentId;
     var version = this.version;
     var body = this.body;
+    var links = this.links;
 
     final json = <String, Object?>{};
     if (id != null) {
@@ -4374,6 +5369,9 @@ class ChildrenCommentModel {
     if (body != null) {
       json[r'body'] = body.toJson();
     }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
     return json;
   }
 
@@ -4383,7 +5381,8 @@ class ChildrenCommentModel {
       String? title,
       dynamic parentCommentId,
       Version? version,
-      Body? body}) {
+      BodyBulk? body,
+      CommentLinks? links}) {
     return ChildrenCommentModel(
       id: id ?? this.id,
       status: status ?? this.status,
@@ -4391,6 +5390,7 @@ class ChildrenCommentModel {
       parentCommentId: parentCommentId ?? this.parentCommentId,
       version: version ?? this.version,
       body: body ?? this.body,
+      links: links ?? this.links,
     );
   }
 }
@@ -4461,6 +5461,35 @@ class CommentBodyWriteRepresentation {
 
   @override
   String toString() => value;
+}
+
+class CommentLinks {
+  /// Web UI link of the content.
+  final String? webui;
+
+  CommentLinks({this.webui});
+
+  factory CommentLinks.fromJson(Map<String, Object?> json) {
+    return CommentLinks(
+      webui: json[r'webui'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var webui = this.webui;
+
+    final json = <String, Object?>{};
+    if (webui != null) {
+      json[r'webui'] = webui;
+    }
+    return json;
+  }
+
+  CommentLinks copyWith({String? webui}) {
+    return CommentLinks(
+      webui: webui ?? this.webui,
+    );
+  }
 }
 
 /// Body of the comment. Only one body format should be specified as the
@@ -5047,7 +6076,191 @@ class CreateInlineCommentModelInlineCommentProperties {
   }
 }
 
-class CustomContent {
+/// Contains fields for each representation type requested.
+class CustomContentBodyBulk {
+  final BodyType? raw;
+  final BodyType? storage;
+  final BodyType? atlasDocFormat;
+
+  CustomContentBodyBulk({this.raw, this.storage, this.atlasDocFormat});
+
+  factory CustomContentBodyBulk.fromJson(Map<String, Object?> json) {
+    return CustomContentBodyBulk(
+      raw: json[r'raw'] != null
+          ? BodyType.fromJson(json[r'raw']! as Map<String, Object?>)
+          : null,
+      storage: json[r'storage'] != null
+          ? BodyType.fromJson(json[r'storage']! as Map<String, Object?>)
+          : null,
+      atlasDocFormat: json[r'atlas_doc_format'] != null
+          ? BodyType.fromJson(
+              json[r'atlas_doc_format']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var raw = this.raw;
+    var storage = this.storage;
+    var atlasDocFormat = this.atlasDocFormat;
+
+    final json = <String, Object?>{};
+    if (raw != null) {
+      json[r'raw'] = raw.toJson();
+    }
+    if (storage != null) {
+      json[r'storage'] = storage.toJson();
+    }
+    if (atlasDocFormat != null) {
+      json[r'atlas_doc_format'] = atlasDocFormat.toJson();
+    }
+    return json;
+  }
+
+  CustomContentBodyBulk copyWith(
+      {BodyType? raw, BodyType? storage, BodyType? atlasDocFormat}) {
+    return CustomContentBodyBulk(
+      raw: raw ?? this.raw,
+      storage: storage ?? this.storage,
+      atlasDocFormat: atlasDocFormat ?? this.atlasDocFormat,
+    );
+  }
+}
+
+/// Contains fields for each representation type requested.
+class CustomContentBodySingle {
+  final BodyType? raw;
+  final BodyType? storage;
+  final BodyType? atlasDocFormat;
+  final BodyType? view;
+
+  CustomContentBodySingle(
+      {this.raw, this.storage, this.atlasDocFormat, this.view});
+
+  factory CustomContentBodySingle.fromJson(Map<String, Object?> json) {
+    return CustomContentBodySingle(
+      raw: json[r'raw'] != null
+          ? BodyType.fromJson(json[r'raw']! as Map<String, Object?>)
+          : null,
+      storage: json[r'storage'] != null
+          ? BodyType.fromJson(json[r'storage']! as Map<String, Object?>)
+          : null,
+      atlasDocFormat: json[r'atlas_doc_format'] != null
+          ? BodyType.fromJson(
+              json[r'atlas_doc_format']! as Map<String, Object?>)
+          : null,
+      view: json[r'view'] != null
+          ? BodyType.fromJson(json[r'view']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var raw = this.raw;
+    var storage = this.storage;
+    var atlasDocFormat = this.atlasDocFormat;
+    var view = this.view;
+
+    final json = <String, Object?>{};
+    if (raw != null) {
+      json[r'raw'] = raw.toJson();
+    }
+    if (storage != null) {
+      json[r'storage'] = storage.toJson();
+    }
+    if (atlasDocFormat != null) {
+      json[r'atlas_doc_format'] = atlasDocFormat.toJson();
+    }
+    if (view != null) {
+      json[r'view'] = view.toJson();
+    }
+    return json;
+  }
+
+  CustomContentBodySingle copyWith(
+      {BodyType? raw,
+      BodyType? storage,
+      BodyType? atlasDocFormat,
+      BodyType? view}) {
+    return CustomContentBodySingle(
+      raw: raw ?? this.raw,
+      storage: storage ?? this.storage,
+      atlasDocFormat: atlasDocFormat ?? this.atlasDocFormat,
+      view: view ?? this.view,
+    );
+  }
+}
+
+class CustomContentBodyWrite {
+  /// Type of content representation used for the value field.
+  final CustomContentBodyWriteRepresentation? representation;
+
+  /// Body of the custom content, in the format found in the representation
+  /// field.
+  final String? value;
+
+  CustomContentBodyWrite({this.representation, this.value});
+
+  factory CustomContentBodyWrite.fromJson(Map<String, Object?> json) {
+    return CustomContentBodyWrite(
+      representation: json[r'representation'] != null
+          ? CustomContentBodyWriteRepresentation.fromValue(
+              json[r'representation']! as String)
+          : null,
+      value: json[r'value'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var representation = this.representation;
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    if (representation != null) {
+      json[r'representation'] = representation.value;
+    }
+    if (value != null) {
+      json[r'value'] = value;
+    }
+    return json;
+  }
+
+  CustomContentBodyWrite copyWith(
+      {CustomContentBodyWriteRepresentation? representation, String? value}) {
+    return CustomContentBodyWrite(
+      representation: representation ?? this.representation,
+      value: value ?? this.value,
+    );
+  }
+}
+
+class CustomContentBodyWriteRepresentation {
+  static const storage = CustomContentBodyWriteRepresentation._('storage');
+  static const atlasDocFormat =
+      CustomContentBodyWriteRepresentation._('atlas_doc_format');
+  static const raw = CustomContentBodyWriteRepresentation._('raw');
+
+  static const values = [
+    storage,
+    atlasDocFormat,
+    raw,
+  ];
+  final String value;
+
+  const CustomContentBodyWriteRepresentation._(this.value);
+
+  static CustomContentBodyWriteRepresentation fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => CustomContentBodyWriteRepresentation._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class CustomContentBulk {
   /// ID of the custom content.
   ///
   /// Due to JavaScript's max integer representation of 2^53-1, the type of this
@@ -5128,10 +6341,11 @@ class CustomContent {
   /// Date and time when the custom content was created. In format
   /// "YYYY-MM-DDTHH:mm:ss.sssZ".
   final DateTime? createdAt;
-  final CustomContentBody? body;
   final Version? version;
+  final CustomContentBodyBulk? body;
+  final CustomContentLinks? links;
 
-  CustomContent(
+  CustomContentBulk(
       {this.id,
       this.type,
       this.status,
@@ -5142,11 +6356,12 @@ class CustomContent {
       this.customContentId,
       this.authorId,
       this.createdAt,
+      this.version,
       this.body,
-      this.version});
+      this.links});
 
-  factory CustomContent.fromJson(Map<String, Object?> json) {
-    return CustomContent(
+  factory CustomContentBulk.fromJson(Map<String, Object?> json) {
+    return CustomContentBulk(
       id: json[r'id'],
       type: json[r'type'] as String?,
       status: json[r'status'] as String?,
@@ -5157,11 +6372,16 @@ class CustomContent {
       customContentId: json[r'customContentId'],
       authorId: json[r'authorId'] as String?,
       createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
-      body: json[r'body'] != null
-          ? CustomContentBody.fromJson(json[r'body']! as Map<String, Object?>)
-          : null,
       version: json[r'version'] != null
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      body: json[r'body'] != null
+          ? CustomContentBodyBulk.fromJson(
+              json[r'body']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? CustomContentLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -5177,8 +6397,9 @@ class CustomContent {
     var customContentId = this.customContentId;
     var authorId = this.authorId;
     var createdAt = this.createdAt;
-    var body = this.body;
     var version = this.version;
+    var body = this.body;
+    var links = this.links;
 
     final json = <String, Object?>{};
     if (id != null) {
@@ -5211,16 +6432,19 @@ class CustomContent {
     if (createdAt != null) {
       json[r'createdAt'] = createdAt.toIso8601String();
     }
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
     if (body != null) {
       json[r'body'] = body.toJson();
     }
-    if (version != null) {
-      json[r'version'] = version.toJson();
+    if (links != null) {
+      json[r'_links'] = links.toJson();
     }
     return json;
   }
 
-  CustomContent copyWith(
+  CustomContentBulk copyWith(
       {dynamic id,
       String? type,
       String? status,
@@ -5231,9 +6455,10 @@ class CustomContent {
       dynamic customContentId,
       String? authorId,
       DateTime? createdAt,
-      CustomContentBody? body,
-      Version? version}) {
-    return CustomContent(
+      Version? version,
+      CustomContentBodyBulk? body,
+      CustomContentLinks? links}) {
+    return CustomContentBulk(
       id: id ?? this.id,
       type: type ?? this.type,
       status: status ?? this.status,
@@ -5244,130 +6469,40 @@ class CustomContent {
       customContentId: customContentId ?? this.customContentId,
       authorId: authorId ?? this.authorId,
       createdAt: createdAt ?? this.createdAt,
-      body: body ?? this.body,
       version: version ?? this.version,
+      body: body ?? this.body,
+      links: links ?? this.links,
     );
   }
 }
 
-/// Contains fields for each representation type requested.
-class CustomContentBody {
-  final BodyType? raw;
-  final BodyType? storage;
-  final BodyType? atlasDocFormat;
+class CustomContentLinks {
+  /// Web UI link of the content.
+  final String? webui;
 
-  CustomContentBody({this.raw, this.storage, this.atlasDocFormat});
+  CustomContentLinks({this.webui});
 
-  factory CustomContentBody.fromJson(Map<String, Object?> json) {
-    return CustomContentBody(
-      raw: json[r'raw'] != null
-          ? BodyType.fromJson(json[r'raw']! as Map<String, Object?>)
-          : null,
-      storage: json[r'storage'] != null
-          ? BodyType.fromJson(json[r'storage']! as Map<String, Object?>)
-          : null,
-      atlasDocFormat: json[r'atlas_doc_format'] != null
-          ? BodyType.fromJson(
-              json[r'atlas_doc_format']! as Map<String, Object?>)
-          : null,
+  factory CustomContentLinks.fromJson(Map<String, Object?> json) {
+    return CustomContentLinks(
+      webui: json[r'webui'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var raw = this.raw;
-    var storage = this.storage;
-    var atlasDocFormat = this.atlasDocFormat;
+    var webui = this.webui;
 
     final json = <String, Object?>{};
-    if (raw != null) {
-      json[r'raw'] = raw.toJson();
-    }
-    if (storage != null) {
-      json[r'storage'] = storage.toJson();
-    }
-    if (atlasDocFormat != null) {
-      json[r'atlas_doc_format'] = atlasDocFormat.toJson();
+    if (webui != null) {
+      json[r'webui'] = webui;
     }
     return json;
   }
 
-  CustomContentBody copyWith(
-      {BodyType? raw, BodyType? storage, BodyType? atlasDocFormat}) {
-    return CustomContentBody(
-      raw: raw ?? this.raw,
-      storage: storage ?? this.storage,
-      atlasDocFormat: atlasDocFormat ?? this.atlasDocFormat,
+  CustomContentLinks copyWith({String? webui}) {
+    return CustomContentLinks(
+      webui: webui ?? this.webui,
     );
   }
-}
-
-class CustomContentBodyWrite {
-  /// Type of content representation used for the value field.
-  final CustomContentBodyWriteRepresentation? representation;
-
-  /// Body of the custom content, in the format found in the representation
-  /// field.
-  final String? value;
-
-  CustomContentBodyWrite({this.representation, this.value});
-
-  factory CustomContentBodyWrite.fromJson(Map<String, Object?> json) {
-    return CustomContentBodyWrite(
-      representation: json[r'representation'] != null
-          ? CustomContentBodyWriteRepresentation.fromValue(
-              json[r'representation']! as String)
-          : null,
-      value: json[r'value'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var representation = this.representation;
-    var value = this.value;
-
-    final json = <String, Object?>{};
-    if (representation != null) {
-      json[r'representation'] = representation.value;
-    }
-    if (value != null) {
-      json[r'value'] = value;
-    }
-    return json;
-  }
-
-  CustomContentBodyWrite copyWith(
-      {CustomContentBodyWriteRepresentation? representation, String? value}) {
-    return CustomContentBodyWrite(
-      representation: representation ?? this.representation,
-      value: value ?? this.value,
-    );
-  }
-}
-
-class CustomContentBodyWriteRepresentation {
-  static const storage = CustomContentBodyWriteRepresentation._('storage');
-  static const atlasDocFormat =
-      CustomContentBodyWriteRepresentation._('atlas_doc_format');
-  static const raw = CustomContentBodyWriteRepresentation._('raw');
-
-  static const values = [
-    storage,
-    atlasDocFormat,
-    raw,
-  ];
-  final String value;
-
-  const CustomContentBodyWriteRepresentation._(this.value);
-
-  static CustomContentBodyWriteRepresentation fromValue(String value) =>
-      values.firstWhere((e) => e.value == value,
-          orElse: () => CustomContentBodyWriteRepresentation._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
 }
 
 /// Body of the custom content. Only one body format should be specified as the
@@ -5423,6 +6558,222 @@ class CustomContentNestedBodyWrite {
       storage: storage ?? this.storage,
       atlasDocFormat: atlasDocFormat ?? this.atlasDocFormat,
       raw: raw ?? this.raw,
+    );
+  }
+}
+
+class CustomContentSingle {
+  /// ID of the custom content.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
+
+  /// The type of custom content.
+  final String? type;
+  final String? status;
+
+  /// Title of the custom content.
+  final String? title;
+
+  /// ID of the space the custom content is in.
+  ///
+  /// Note: This is always returned, regardless of if the custom content has a
+  /// container that is a space.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic spaceId;
+
+  /// ID of the containing page.
+  ///
+  /// Note: This is only returned if the custom content has a container that is
+  /// a page.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic pageId;
+
+  /// ID of the containing blog post.
+  ///
+  /// Note: This is only returned if the custom content has a container that is
+  /// a blog post.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic blogPostId;
+
+  /// ID of the containing custom content.
+  ///
+  /// Note: This is only returned if the custom content has a container that is
+  /// custom content.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic customContentId;
+
+  /// The account ID of the user who created this custom content originally.
+  final String? authorId;
+
+  /// Date and time when the custom content was created. In format
+  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
+  final DateTime? createdAt;
+  final Version? version;
+  final CustomContentBodySingle? body;
+  final CustomContentLinks? links;
+
+  CustomContentSingle(
+      {this.id,
+      this.type,
+      this.status,
+      this.title,
+      this.spaceId,
+      this.pageId,
+      this.blogPostId,
+      this.customContentId,
+      this.authorId,
+      this.createdAt,
+      this.version,
+      this.body,
+      this.links});
+
+  factory CustomContentSingle.fromJson(Map<String, Object?> json) {
+    return CustomContentSingle(
+      id: json[r'id'],
+      type: json[r'type'] as String?,
+      status: json[r'status'] as String?,
+      title: json[r'title'] as String?,
+      spaceId: json[r'spaceId'],
+      pageId: json[r'pageId'],
+      blogPostId: json[r'blogPostId'],
+      customContentId: json[r'customContentId'],
+      authorId: json[r'authorId'] as String?,
+      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
+      version: json[r'version'] != null
+          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      body: json[r'body'] != null
+          ? CustomContentBodySingle.fromJson(
+              json[r'body']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? CustomContentLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var type = this.type;
+    var status = this.status;
+    var title = this.title;
+    var spaceId = this.spaceId;
+    var pageId = this.pageId;
+    var blogPostId = this.blogPostId;
+    var customContentId = this.customContentId;
+    var authorId = this.authorId;
+    var createdAt = this.createdAt;
+    var version = this.version;
+    var body = this.body;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (spaceId != null) {
+      json[r'spaceId'] = spaceId;
+    }
+    if (pageId != null) {
+      json[r'pageId'] = pageId;
+    }
+    if (blogPostId != null) {
+      json[r'blogPostId'] = blogPostId;
+    }
+    if (customContentId != null) {
+      json[r'customContentId'] = customContentId;
+    }
+    if (authorId != null) {
+      json[r'authorId'] = authorId;
+    }
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt.toIso8601String();
+    }
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
+    if (body != null) {
+      json[r'body'] = body.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  CustomContentSingle copyWith(
+      {dynamic id,
+      String? type,
+      String? status,
+      String? title,
+      dynamic spaceId,
+      dynamic pageId,
+      dynamic blogPostId,
+      dynamic customContentId,
+      String? authorId,
+      DateTime? createdAt,
+      Version? version,
+      CustomContentBodySingle? body,
+      CustomContentLinks? links}) {
+    return CustomContentSingle(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      status: status ?? this.status,
+      title: title ?? this.title,
+      spaceId: spaceId ?? this.spaceId,
+      pageId: pageId ?? this.pageId,
+      blogPostId: blogPostId ?? this.blogPostId,
+      customContentId: customContentId ?? this.customContentId,
+      authorId: authorId ?? this.authorId,
+      createdAt: createdAt ?? this.createdAt,
+      version: version ?? this.version,
+      body: body ?? this.body,
+      links: links ?? this.links,
     );
   }
 }
@@ -5686,7 +7037,8 @@ class FooterCommentModel {
   /// for more detail.
   final dynamic parentCommentId;
   final Version? version;
-  final Body? body;
+  final BodySingle? body;
+  final CommentLinks? links;
 
   FooterCommentModel(
       {this.id,
@@ -5696,7 +7048,8 @@ class FooterCommentModel {
       this.pageId,
       this.parentCommentId,
       this.version,
-      this.body});
+      this.body,
+      this.links});
 
   factory FooterCommentModel.fromJson(Map<String, Object?> json) {
     return FooterCommentModel(
@@ -5710,7 +7063,10 @@ class FooterCommentModel {
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
           : null,
       body: json[r'body'] != null
-          ? Body.fromJson(json[r'body']! as Map<String, Object?>)
+          ? BodySingle.fromJson(json[r'body']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? CommentLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -5724,6 +7080,7 @@ class FooterCommentModel {
     var parentCommentId = this.parentCommentId;
     var version = this.version;
     var body = this.body;
+    var links = this.links;
 
     final json = <String, Object?>{};
     if (id != null) {
@@ -5750,6 +7107,9 @@ class FooterCommentModel {
     if (body != null) {
       json[r'body'] = body.toJson();
     }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
     return json;
   }
 
@@ -5761,7 +7121,8 @@ class FooterCommentModel {
       dynamic pageId,
       dynamic parentCommentId,
       Version? version,
-      Body? body}) {
+      BodySingle? body,
+      CommentLinks? links}) {
     return FooterCommentModel(
       id: id ?? this.id,
       status: status ?? this.status,
@@ -5771,6 +7132,7 @@ class FooterCommentModel {
       parentCommentId: parentCommentId ?? this.parentCommentId,
       version: version ?? this.version,
       body: body ?? this.body,
+      links: links ?? this.links,
     );
   }
 }
@@ -5802,9 +7164,10 @@ class InlineCommentChildrenModel {
   /// for more detail.
   final dynamic parentCommentId;
   final Version? version;
-  final Body? body;
+  final BodyBulk? body;
   final String? resolutionStatus;
   final InlineCommentProperties? properties;
+  final CommentLinks? links;
 
   InlineCommentChildrenModel(
       {this.id,
@@ -5814,7 +7177,8 @@ class InlineCommentChildrenModel {
       this.version,
       this.body,
       this.resolutionStatus,
-      this.properties});
+      this.properties,
+      this.links});
 
   factory InlineCommentChildrenModel.fromJson(Map<String, Object?> json) {
     return InlineCommentChildrenModel(
@@ -5826,12 +7190,15 @@ class InlineCommentChildrenModel {
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
           : null,
       body: json[r'body'] != null
-          ? Body.fromJson(json[r'body']! as Map<String, Object?>)
+          ? BodyBulk.fromJson(json[r'body']! as Map<String, Object?>)
           : null,
       resolutionStatus: json[r'resolutionStatus'] as String?,
       properties: json[r'properties'] != null
           ? InlineCommentProperties.fromJson(
               json[r'properties']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? CommentLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -5845,6 +7212,7 @@ class InlineCommentChildrenModel {
     var body = this.body;
     var resolutionStatus = this.resolutionStatus;
     var properties = this.properties;
+    var links = this.links;
 
     final json = <String, Object?>{};
     if (id != null) {
@@ -5871,6 +7239,9 @@ class InlineCommentChildrenModel {
     if (properties != null) {
       json[r'properties'] = properties.toJson();
     }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
     return json;
   }
 
@@ -5880,9 +7251,10 @@ class InlineCommentChildrenModel {
       String? title,
       dynamic parentCommentId,
       Version? version,
-      Body? body,
+      BodyBulk? body,
       String? resolutionStatus,
-      InlineCommentProperties? properties}) {
+      InlineCommentProperties? properties,
+      CommentLinks? links}) {
     return InlineCommentChildrenModel(
       id: id ?? this.id,
       status: status ?? this.status,
@@ -5892,6 +7264,7 @@ class InlineCommentChildrenModel {
       body: body ?? this.body,
       resolutionStatus: resolutionStatus ?? this.resolutionStatus,
       properties: properties ?? this.properties,
+      links: links ?? this.links,
     );
   }
 }
@@ -5946,7 +7319,7 @@ class InlineCommentModel {
   /// for more detail.
   final dynamic parentCommentId;
   final Version? version;
-  final Body? body;
+  final BodySingle? body;
 
   /// Atlassian Account ID of last person who modified the resolve state of the
   /// comment. Null until comment is resolved or reopened.
@@ -5957,6 +7330,7 @@ class InlineCommentModel {
   final DateTime? resolutionLastModifiedAt;
   final String? resolutionStatus;
   final InlineCommentProperties? properties;
+  final CommentLinks? links;
 
   InlineCommentModel(
       {this.id,
@@ -5970,7 +7344,8 @@ class InlineCommentModel {
       this.resolutionLastModifierId,
       this.resolutionLastModifiedAt,
       this.resolutionStatus,
-      this.properties});
+      this.properties,
+      this.links});
 
   factory InlineCommentModel.fromJson(Map<String, Object?> json) {
     return InlineCommentModel(
@@ -5984,7 +7359,7 @@ class InlineCommentModel {
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
           : null,
       body: json[r'body'] != null
-          ? Body.fromJson(json[r'body']! as Map<String, Object?>)
+          ? BodySingle.fromJson(json[r'body']! as Map<String, Object?>)
           : null,
       resolutionLastModifierId: json[r'resolutionLastModifierId'] as String?,
       resolutionLastModifiedAt:
@@ -5993,6 +7368,9 @@ class InlineCommentModel {
       properties: json[r'properties'] != null
           ? InlineCommentProperties.fromJson(
               json[r'properties']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? CommentLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -6010,6 +7388,7 @@ class InlineCommentModel {
     var resolutionLastModifiedAt = this.resolutionLastModifiedAt;
     var resolutionStatus = this.resolutionStatus;
     var properties = this.properties;
+    var links = this.links;
 
     final json = <String, Object?>{};
     if (id != null) {
@@ -6049,6 +7428,9 @@ class InlineCommentModel {
     if (properties != null) {
       json[r'properties'] = properties.toJson();
     }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
     return json;
   }
 
@@ -6060,11 +7442,12 @@ class InlineCommentModel {
       dynamic pageId,
       dynamic parentCommentId,
       Version? version,
-      Body? body,
+      BodySingle? body,
       String? resolutionLastModifierId,
       DateTime? resolutionLastModifiedAt,
       String? resolutionStatus,
-      InlineCommentProperties? properties}) {
+      InlineCommentProperties? properties,
+      CommentLinks? links}) {
     return InlineCommentModel(
       id: id ?? this.id,
       status: status ?? this.status,
@@ -6080,6 +7463,7 @@ class InlineCommentModel {
           resolutionLastModifiedAt ?? this.resolutionLastModifiedAt,
       resolutionStatus: resolutionStatus ?? this.resolutionStatus,
       properties: properties ?? this.properties,
+      links: links ?? this.links,
     );
   }
 }
@@ -6179,144 +7563,31 @@ class Label {
   }
 }
 
-class Page {
-  /// ID of the page.
-  ///
-  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
-  /// field will be changed from a numeric type to a string type at the end of
-  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
-  /// can be passed as a query param to any v2 endpoint to opt-in to this change
-  /// now. See this
-  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
-  /// for more detail.
-  final dynamic id;
-  final String? status;
+class Like {
+  /// Account ID.
+  final String? accountId;
 
-  /// Title of the page.
-  final String? title;
+  Like({this.accountId});
 
-  /// ID of the space the page is in.
-  ///
-  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
-  /// field will be changed from a numeric type to a string type at the end of
-  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
-  /// can be passed as a query param to any v2 endpoint to opt-in to this change
-  /// now. See this
-  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
-  /// for more detail.
-  final dynamic spaceId;
-
-  /// ID of the parent page, or null if there is no parent page.
-  ///
-  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
-  /// field will be changed from a numeric type to a string type at the end of
-  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
-  /// can be passed as a query param to any v2 endpoint to opt-in to this change
-  /// now. See this
-  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
-  /// for more detail.
-  final dynamic parentId;
-
-  /// The account ID of the user who created this page originally.
-  final String? authorId;
-
-  /// Date and time when the page was created. In format
-  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
-  final DateTime? createdAt;
-  final Version? version;
-  final Body? body;
-
-  Page(
-      {this.id,
-      this.status,
-      this.title,
-      this.spaceId,
-      this.parentId,
-      this.authorId,
-      this.createdAt,
-      this.version,
-      this.body});
-
-  factory Page.fromJson(Map<String, Object?> json) {
-    return Page(
-      id: json[r'id'],
-      status: json[r'status'] as String?,
-      title: json[r'title'] as String?,
-      spaceId: json[r'spaceId'],
-      parentId: json[r'parentId'],
-      authorId: json[r'authorId'] as String?,
-      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
-      version: json[r'version'] != null
-          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
-          : null,
-      body: json[r'body'] != null
-          ? Body.fromJson(json[r'body']! as Map<String, Object?>)
-          : null,
+  factory Like.fromJson(Map<String, Object?> json) {
+    return Like(
+      accountId: json[r'accountId'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var id = this.id;
-    var status = this.status;
-    var title = this.title;
-    var spaceId = this.spaceId;
-    var parentId = this.parentId;
-    var authorId = this.authorId;
-    var createdAt = this.createdAt;
-    var version = this.version;
-    var body = this.body;
+    var accountId = this.accountId;
 
     final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (status != null) {
-      json[r'status'] = status;
-    }
-    if (title != null) {
-      json[r'title'] = title;
-    }
-    if (spaceId != null) {
-      json[r'spaceId'] = spaceId;
-    }
-    if (parentId != null) {
-      json[r'parentId'] = parentId;
-    }
-    if (authorId != null) {
-      json[r'authorId'] = authorId;
-    }
-    if (createdAt != null) {
-      json[r'createdAt'] = createdAt.toIso8601String();
-    }
-    if (version != null) {
-      json[r'version'] = version.toJson();
-    }
-    if (body != null) {
-      json[r'body'] = body.toJson();
+    if (accountId != null) {
+      json[r'accountId'] = accountId;
     }
     return json;
   }
 
-  Page copyWith(
-      {dynamic id,
-      String? status,
-      String? title,
-      dynamic spaceId,
-      dynamic parentId,
-      String? authorId,
-      DateTime? createdAt,
-      Version? version,
-      Body? body}) {
-    return Page(
-      id: id ?? this.id,
-      status: status ?? this.status,
-      title: title ?? this.title,
-      spaceId: spaceId ?? this.spaceId,
-      parentId: parentId ?? this.parentId,
-      authorId: authorId ?? this.authorId,
-      createdAt: createdAt ?? this.createdAt,
-      version: version ?? this.version,
-      body: body ?? this.body,
+  Like copyWith({String? accountId}) {
+    return Like(
+      accountId: accountId ?? this.accountId,
     );
   }
 }
@@ -6389,6 +7660,179 @@ class PageBodyWriteRepresentation {
   String toString() => value;
 }
 
+class PageBulk {
+  /// ID of the page.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
+  final String? status;
+
+  /// Title of the page.
+  final String? title;
+
+  /// ID of the space the page is in.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic spaceId;
+
+  /// ID of the parent page, or null if there is no parent page.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic parentId;
+  final String? parentType;
+
+  /// Position of child page within the given parent page tree.
+  final int? position;
+
+  /// The account ID of the user who created this page originally.
+  final String? authorId;
+
+  /// Date and time when the page was created. In format
+  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
+  final DateTime? createdAt;
+  final Version? version;
+  final BodyBulk? body;
+  final AbstractPageLinks? links;
+
+  PageBulk(
+      {this.id,
+      this.status,
+      this.title,
+      this.spaceId,
+      this.parentId,
+      this.parentType,
+      this.position,
+      this.authorId,
+      this.createdAt,
+      this.version,
+      this.body,
+      this.links});
+
+  factory PageBulk.fromJson(Map<String, Object?> json) {
+    return PageBulk(
+      id: json[r'id'],
+      status: json[r'status'] as String?,
+      title: json[r'title'] as String?,
+      spaceId: json[r'spaceId'],
+      parentId: json[r'parentId'],
+      parentType: json[r'parentType'] as String?,
+      position: (json[r'position'] as num?)?.toInt(),
+      authorId: json[r'authorId'] as String?,
+      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
+      version: json[r'version'] != null
+          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      body: json[r'body'] != null
+          ? BodyBulk.fromJson(json[r'body']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? AbstractPageLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var status = this.status;
+    var title = this.title;
+    var spaceId = this.spaceId;
+    var parentId = this.parentId;
+    var parentType = this.parentType;
+    var position = this.position;
+    var authorId = this.authorId;
+    var createdAt = this.createdAt;
+    var version = this.version;
+    var body = this.body;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (spaceId != null) {
+      json[r'spaceId'] = spaceId;
+    }
+    if (parentId != null) {
+      json[r'parentId'] = parentId;
+    }
+    if (parentType != null) {
+      json[r'parentType'] = parentType;
+    }
+    if (position != null) {
+      json[r'position'] = position;
+    }
+    if (authorId != null) {
+      json[r'authorId'] = authorId;
+    }
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt.toIso8601String();
+    }
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
+    if (body != null) {
+      json[r'body'] = body.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PageBulk copyWith(
+      {dynamic id,
+      String? status,
+      String? title,
+      dynamic spaceId,
+      dynamic parentId,
+      String? parentType,
+      int? position,
+      String? authorId,
+      DateTime? createdAt,
+      Version? version,
+      BodyBulk? body,
+      AbstractPageLinks? links}) {
+    return PageBulk(
+      id: id ?? this.id,
+      status: status ?? this.status,
+      title: title ?? this.title,
+      spaceId: spaceId ?? this.spaceId,
+      parentId: parentId ?? this.parentId,
+      parentType: parentType ?? this.parentType,
+      position: position ?? this.position,
+      authorId: authorId ?? this.authorId,
+      createdAt: createdAt ?? this.createdAt,
+      version: version ?? this.version,
+      body: body ?? this.body,
+      links: links ?? this.links,
+    );
+  }
+}
+
 class PageCommentModel {
   /// ID of the comment.
   ///
@@ -6416,10 +7860,17 @@ class PageCommentModel {
   /// for more detail.
   final dynamic pageId;
   final Version? version;
-  final Body? body;
+  final BodyBulk? body;
+  final CommentLinks? links;
 
   PageCommentModel(
-      {this.id, this.status, this.title, this.pageId, this.version, this.body});
+      {this.id,
+      this.status,
+      this.title,
+      this.pageId,
+      this.version,
+      this.body,
+      this.links});
 
   factory PageCommentModel.fromJson(Map<String, Object?> json) {
     return PageCommentModel(
@@ -6431,7 +7882,10 @@ class PageCommentModel {
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
           : null,
       body: json[r'body'] != null
-          ? Body.fromJson(json[r'body']! as Map<String, Object?>)
+          ? BodyBulk.fromJson(json[r'body']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? CommentLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -6443,6 +7897,7 @@ class PageCommentModel {
     var pageId = this.pageId;
     var version = this.version;
     var body = this.body;
+    var links = this.links;
 
     final json = <String, Object?>{};
     if (id != null) {
@@ -6463,6 +7918,9 @@ class PageCommentModel {
     if (body != null) {
       json[r'body'] = body.toJson();
     }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
     return json;
   }
 
@@ -6472,7 +7930,8 @@ class PageCommentModel {
       String? title,
       dynamic pageId,
       Version? version,
-      Body? body}) {
+      BodyBulk? body,
+      CommentLinks? links}) {
     return PageCommentModel(
       id: id ?? this.id,
       status: status ?? this.status,
@@ -6480,6 +7939,7 @@ class PageCommentModel {
       pageId: pageId ?? this.pageId,
       version: version ?? this.version,
       body: body ?? this.body,
+      links: links ?? this.links,
     );
   }
 }
@@ -6511,9 +7971,10 @@ class PageInlineCommentModel {
   /// for more detail.
   final dynamic pageId;
   final Version? version;
-  final Body? body;
+  final BodyBulk? body;
   final String? resolutionStatus;
   final InlineCommentProperties? properties;
+  final CommentLinks? links;
 
   PageInlineCommentModel(
       {this.id,
@@ -6523,7 +7984,8 @@ class PageInlineCommentModel {
       this.version,
       this.body,
       this.resolutionStatus,
-      this.properties});
+      this.properties,
+      this.links});
 
   factory PageInlineCommentModel.fromJson(Map<String, Object?> json) {
     return PageInlineCommentModel(
@@ -6535,12 +7997,15 @@ class PageInlineCommentModel {
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
           : null,
       body: json[r'body'] != null
-          ? Body.fromJson(json[r'body']! as Map<String, Object?>)
+          ? BodyBulk.fromJson(json[r'body']! as Map<String, Object?>)
           : null,
       resolutionStatus: json[r'resolutionStatus'] as String?,
       properties: json[r'properties'] != null
           ? InlineCommentProperties.fromJson(
               json[r'properties']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? CommentLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
     );
   }
@@ -6554,6 +8019,7 @@ class PageInlineCommentModel {
     var body = this.body;
     var resolutionStatus = this.resolutionStatus;
     var properties = this.properties;
+    var links = this.links;
 
     final json = <String, Object?>{};
     if (id != null) {
@@ -6580,6 +8046,9 @@ class PageInlineCommentModel {
     if (properties != null) {
       json[r'properties'] = properties.toJson();
     }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
     return json;
   }
 
@@ -6589,9 +8058,10 @@ class PageInlineCommentModel {
       String? title,
       dynamic pageId,
       Version? version,
-      Body? body,
+      BodyBulk? body,
       String? resolutionStatus,
-      InlineCommentProperties? properties}) {
+      InlineCommentProperties? properties,
+      CommentLinks? links}) {
     return PageInlineCommentModel(
       id: id ?? this.id,
       status: status ?? this.status,
@@ -6601,6 +8071,7 @@ class PageInlineCommentModel {
       body: body ?? this.body,
       resolutionStatus: resolutionStatus ?? this.resolutionStatus,
       properties: properties ?? this.properties,
+      links: links ?? this.links,
     );
   }
 }
@@ -6655,6 +8126,179 @@ class PageNestedBodyWrite {
       storage: storage ?? this.storage,
       atlasDocFormat: atlasDocFormat ?? this.atlasDocFormat,
       wiki: wiki ?? this.wiki,
+    );
+  }
+}
+
+class PageSingle {
+  /// ID of the page.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic id;
+  final String? status;
+
+  /// Title of the page.
+  final String? title;
+
+  /// ID of the space the page is in.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic spaceId;
+
+  /// ID of the parent page, or null if there is no parent page.
+  ///
+  /// Due to JavaScript's max integer representation of 2^53-1, the type of this
+  /// field will be changed from a numeric type to a string type at the end of
+  /// the deprecation period. In the meantime, `serialize-ids-as-strings=true`
+  /// can be passed as a query param to any v2 endpoint to opt-in to this change
+  /// now. See this
+  /// [changelog](https://developer.atlassian.com/cloud/confluence/changelog/#CHANGE-905)
+  /// for more detail.
+  final dynamic parentId;
+  final String? parentType;
+
+  /// Position of child page within the given parent page tree.
+  final int? position;
+
+  /// The account ID of the user who created this page originally.
+  final String? authorId;
+
+  /// Date and time when the page was created. In format
+  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
+  final DateTime? createdAt;
+  final Version? version;
+  final BodySingle? body;
+  final AbstractPageLinks? links;
+
+  PageSingle(
+      {this.id,
+      this.status,
+      this.title,
+      this.spaceId,
+      this.parentId,
+      this.parentType,
+      this.position,
+      this.authorId,
+      this.createdAt,
+      this.version,
+      this.body,
+      this.links});
+
+  factory PageSingle.fromJson(Map<String, Object?> json) {
+    return PageSingle(
+      id: json[r'id'],
+      status: json[r'status'] as String?,
+      title: json[r'title'] as String?,
+      spaceId: json[r'spaceId'],
+      parentId: json[r'parentId'],
+      parentType: json[r'parentType'] as String?,
+      position: (json[r'position'] as num?)?.toInt(),
+      authorId: json[r'authorId'] as String?,
+      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
+      version: json[r'version'] != null
+          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      body: json[r'body'] != null
+          ? BodySingle.fromJson(json[r'body']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? AbstractPageLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var status = this.status;
+    var title = this.title;
+    var spaceId = this.spaceId;
+    var parentId = this.parentId;
+    var parentType = this.parentType;
+    var position = this.position;
+    var authorId = this.authorId;
+    var createdAt = this.createdAt;
+    var version = this.version;
+    var body = this.body;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (spaceId != null) {
+      json[r'spaceId'] = spaceId;
+    }
+    if (parentId != null) {
+      json[r'parentId'] = parentId;
+    }
+    if (parentType != null) {
+      json[r'parentType'] = parentType;
+    }
+    if (position != null) {
+      json[r'position'] = position;
+    }
+    if (authorId != null) {
+      json[r'authorId'] = authorId;
+    }
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt.toIso8601String();
+    }
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
+    if (body != null) {
+      json[r'body'] = body.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PageSingle copyWith(
+      {dynamic id,
+      String? status,
+      String? title,
+      dynamic spaceId,
+      dynamic parentId,
+      String? parentType,
+      int? position,
+      String? authorId,
+      DateTime? createdAt,
+      Version? version,
+      BodySingle? body,
+      AbstractPageLinks? links}) {
+    return PageSingle(
+      id: id ?? this.id,
+      status: status ?? this.status,
+      title: title ?? this.title,
+      spaceId: spaceId ?? this.spaceId,
+      parentId: parentId ?? this.parentId,
+      parentType: parentType ?? this.parentType,
+      position: position ?? this.position,
+      authorId: authorId ?? this.authorId,
+      createdAt: createdAt ?? this.createdAt,
+      version: version ?? this.version,
+      body: body ?? this.body,
+      links: links ?? this.links,
     );
   }
 }
@@ -6746,6 +8390,80 @@ class PageVersion {
   }
 }
 
+/// The list of operations permitted on entity.
+class PermittedOperationsResponse {
+  final List<PermittedOperationsResponseOperationsItem> operations;
+
+  PermittedOperationsResponse(
+      {List<PermittedOperationsResponseOperationsItem>? operations})
+      : operations = operations ?? [];
+
+  factory PermittedOperationsResponse.fromJson(Map<String, Object?> json) {
+    return PermittedOperationsResponse(
+      operations: (json[r'operations'] as List<Object?>?)
+              ?.map((i) => PermittedOperationsResponseOperationsItem.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var operations = this.operations;
+
+    final json = <String, Object?>{};
+    json[r'operations'] = operations.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PermittedOperationsResponse copyWith(
+      {List<PermittedOperationsResponseOperationsItem>? operations}) {
+    return PermittedOperationsResponse(
+      operations: operations ?? this.operations,
+    );
+  }
+}
+
+class PermittedOperationsResponseOperationsItem {
+  /// The type of operation.
+  final String? operation;
+
+  /// The type of entity the operation type targets.
+  final String? targetType;
+
+  PermittedOperationsResponseOperationsItem({this.operation, this.targetType});
+
+  factory PermittedOperationsResponseOperationsItem.fromJson(
+      Map<String, Object?> json) {
+    return PermittedOperationsResponseOperationsItem(
+      operation: json[r'operation'] as String?,
+      targetType: json[r'targetType'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var operation = this.operation;
+    var targetType = this.targetType;
+
+    final json = <String, Object?>{};
+    if (operation != null) {
+      json[r'operation'] = operation;
+    }
+    if (targetType != null) {
+      json[r'targetType'] = targetType;
+    }
+    return json;
+  }
+
+  PermittedOperationsResponseOperationsItem copyWith(
+      {String? operation, String? targetType}) {
+    return PermittedOperationsResponseOperationsItem(
+      operation: operation ?? this.operation,
+      targetType: targetType ?? this.targetType,
+    );
+  }
+}
+
 class Space {
   /// ID of the space.
   ///
@@ -6766,6 +8484,10 @@ class Space {
   final String? type;
   final String? status;
 
+  /// Date and time when the space was created. In format
+  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
+  final DateTime? createdAt;
+
   /// ID of the space's homepage.
   ///
   /// Due to JavaScript's max integer representation of 2^53-1, the type of this
@@ -6777,6 +8499,7 @@ class Space {
   /// for more detail.
   final dynamic homepageId;
   final SpaceDescription? description;
+  final SpaceIcon? icon;
 
   Space(
       {this.id,
@@ -6784,8 +8507,10 @@ class Space {
       this.name,
       this.type,
       this.status,
+      this.createdAt,
       this.homepageId,
-      this.description});
+      this.description,
+      this.icon});
 
   factory Space.fromJson(Map<String, Object?> json) {
     return Space(
@@ -6794,10 +8519,14 @@ class Space {
       name: json[r'name'] as String?,
       type: json[r'type'] as String?,
       status: json[r'status'] as String?,
+      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
       homepageId: json[r'homepageId'],
       description: json[r'description'] != null
           ? SpaceDescription.fromJson(
               json[r'description']! as Map<String, Object?>)
+          : null,
+      icon: json[r'icon'] != null
+          ? SpaceIcon.fromJson(json[r'icon']! as Map<String, Object?>)
           : null,
     );
   }
@@ -6808,8 +8537,10 @@ class Space {
     var name = this.name;
     var type = this.type;
     var status = this.status;
+    var createdAt = this.createdAt;
     var homepageId = this.homepageId;
     var description = this.description;
+    var icon = this.icon;
 
     final json = <String, Object?>{};
     if (id != null) {
@@ -6827,11 +8558,17 @@ class Space {
     if (status != null) {
       json[r'status'] = status;
     }
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt.toIso8601String();
+    }
     if (homepageId != null) {
       json[r'homepageId'] = homepageId;
     }
     if (description != null) {
       json[r'description'] = description.toJson();
+    }
+    if (icon != null) {
+      json[r'icon'] = icon.toJson();
     }
     return json;
   }
@@ -6842,16 +8579,20 @@ class Space {
       String? name,
       String? type,
       String? status,
+      DateTime? createdAt,
       dynamic homepageId,
-      SpaceDescription? description}) {
+      SpaceDescription? description,
+      SpaceIcon? icon}) {
     return Space(
       id: id ?? this.id,
       key: key ?? this.key,
       name: name ?? this.name,
       type: type ?? this.type,
       status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
       homepageId: homepageId ?? this.homepageId,
       description: description ?? this.description,
+      icon: icon ?? this.icon,
     );
   }
 }
@@ -6894,6 +8635,293 @@ class SpaceDescription {
       view: view ?? this.view,
     );
   }
+}
+
+/// The icon of the space
+class SpaceIcon {
+  /// The path (relative to base URL) at which the space's icon can be
+  /// retrieved. The format should be like `/wiki/download/...` or
+  /// `/wiki/aa-avatar/...`
+  final String? path;
+
+  SpaceIcon({this.path});
+
+  factory SpaceIcon.fromJson(Map<String, Object?> json) {
+    return SpaceIcon(
+      path: json[r'path'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var path = this.path;
+
+    final json = <String, Object?>{};
+    if (path != null) {
+      json[r'path'] = path;
+    }
+    return json;
+  }
+
+  SpaceIcon copyWith({String? path}) {
+    return SpaceIcon(
+      path: path ?? this.path,
+    );
+  }
+}
+
+class SpacePermission {
+  /// ID of the space permission.
+  final String? id;
+
+  /// The entity the space permissions corresponds to.
+  final SpacePermissionPrincipal? principal;
+
+  /// The operation the space permission corresponds to.
+  final SpacePermissionOperation? operation;
+
+  SpacePermission({this.id, this.principal, this.operation});
+
+  factory SpacePermission.fromJson(Map<String, Object?> json) {
+    return SpacePermission(
+      id: json[r'id'] as String?,
+      principal: json[r'principal'] != null
+          ? SpacePermissionPrincipal.fromJson(
+              json[r'principal']! as Map<String, Object?>)
+          : null,
+      operation: json[r'operation'] != null
+          ? SpacePermissionOperation.fromJson(
+              json[r'operation']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var principal = this.principal;
+    var operation = this.operation;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (principal != null) {
+      json[r'principal'] = principal.toJson();
+    }
+    if (operation != null) {
+      json[r'operation'] = operation.toJson();
+    }
+    return json;
+  }
+
+  SpacePermission copyWith(
+      {String? id,
+      SpacePermissionPrincipal? principal,
+      SpacePermissionOperation? operation}) {
+    return SpacePermission(
+      id: id ?? this.id,
+      principal: principal ?? this.principal,
+      operation: operation ?? this.operation,
+    );
+  }
+}
+
+/// The operation the space permission corresponds to.
+class SpacePermissionOperation {
+  /// The type of operation.
+  final SpacePermissionOperationKey? key;
+
+  /// The type of entity the operation type targets.
+  final SpacePermissionOperationTargetType? targetType;
+
+  SpacePermissionOperation({this.key, this.targetType});
+
+  factory SpacePermissionOperation.fromJson(Map<String, Object?> json) {
+    return SpacePermissionOperation(
+      key: json[r'key'] != null
+          ? SpacePermissionOperationKey.fromValue(json[r'key']! as String)
+          : null,
+      targetType: json[r'targetType'] != null
+          ? SpacePermissionOperationTargetType.fromValue(
+              json[r'targetType']! as String)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var key = this.key;
+    var targetType = this.targetType;
+
+    final json = <String, Object?>{};
+    if (key != null) {
+      json[r'key'] = key.value;
+    }
+    if (targetType != null) {
+      json[r'targetType'] = targetType.value;
+    }
+    return json;
+  }
+
+  SpacePermissionOperation copyWith(
+      {SpacePermissionOperationKey? key,
+      SpacePermissionOperationTargetType? targetType}) {
+    return SpacePermissionOperation(
+      key: key ?? this.key,
+      targetType: targetType ?? this.targetType,
+    );
+  }
+}
+
+class SpacePermissionOperationKey {
+  static const use = SpacePermissionOperationKey._('use');
+  static const create = SpacePermissionOperationKey._('create');
+  static const read = SpacePermissionOperationKey._('read');
+  static const update = SpacePermissionOperationKey._('update');
+  static const delete = SpacePermissionOperationKey._('delete');
+  static const copy = SpacePermissionOperationKey._('copy');
+  static const move = SpacePermissionOperationKey._('move');
+  static const export$ = SpacePermissionOperationKey._('export');
+  static const purge = SpacePermissionOperationKey._('purge');
+  static const purgeVersion = SpacePermissionOperationKey._('purge_version');
+  static const administer = SpacePermissionOperationKey._('administer');
+  static const restore = SpacePermissionOperationKey._('restore');
+  static const createSpace = SpacePermissionOperationKey._('create_space');
+  static const restrictContent =
+      SpacePermissionOperationKey._('restrict_content');
+  static const archive = SpacePermissionOperationKey._('archive');
+
+  static const values = [
+    use,
+    create,
+    read,
+    update,
+    delete,
+    copy,
+    move,
+    export$,
+    purge,
+    purgeVersion,
+    administer,
+    restore,
+    createSpace,
+    restrictContent,
+    archive,
+  ];
+  final String value;
+
+  const SpacePermissionOperationKey._(this.value);
+
+  static SpacePermissionOperationKey fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => SpacePermissionOperationKey._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class SpacePermissionOperationTargetType {
+  static const page = SpacePermissionOperationTargetType._('page');
+  static const blogpost = SpacePermissionOperationTargetType._('blogpost');
+  static const comment = SpacePermissionOperationTargetType._('comment');
+  static const attachment = SpacePermissionOperationTargetType._('attachment');
+  static const whiteboard = SpacePermissionOperationTargetType._('whiteboard');
+  static const space = SpacePermissionOperationTargetType._('space');
+  static const application =
+      SpacePermissionOperationTargetType._('application');
+  static const userProfile =
+      SpacePermissionOperationTargetType._('userProfile');
+
+  static const values = [
+    page,
+    blogpost,
+    comment,
+    attachment,
+    whiteboard,
+    space,
+    application,
+    userProfile,
+  ];
+  final String value;
+
+  const SpacePermissionOperationTargetType._(this.value);
+
+  static SpacePermissionOperationTargetType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => SpacePermissionOperationTargetType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// The entity the space permissions corresponds to.
+class SpacePermissionPrincipal {
+  final SpacePermissionPrincipalType? type;
+
+  /// ID of the entity.
+  final String? id;
+
+  SpacePermissionPrincipal({this.type, this.id});
+
+  factory SpacePermissionPrincipal.fromJson(Map<String, Object?> json) {
+    return SpacePermissionPrincipal(
+      type: json[r'type'] != null
+          ? SpacePermissionPrincipalType.fromValue(json[r'type']! as String)
+          : null,
+      id: json[r'id'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var type = this.type;
+    var id = this.id;
+
+    final json = <String, Object?>{};
+    if (type != null) {
+      json[r'type'] = type.value;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    return json;
+  }
+
+  SpacePermissionPrincipal copyWith(
+      {SpacePermissionPrincipalType? type, String? id}) {
+    return SpacePermissionPrincipal(
+      type: type ?? this.type,
+      id: id ?? this.id,
+    );
+  }
+}
+
+class SpacePermissionPrincipalType {
+  static const user = SpacePermissionPrincipalType._('user');
+  static const group = SpacePermissionPrincipalType._('group');
+  static const role = SpacePermissionPrincipalType._('role');
+
+  static const values = [
+    user,
+    group,
+    role,
+  ];
+  final String value;
+
+  const SpacePermissionPrincipalType._(this.value);
+
+  static SpacePermissionPrincipalType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => SpacePermissionPrincipalType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 class SpaceProperty {
@@ -7242,7 +9270,7 @@ class Task {
 
   /// Status of the task.
   final TaskStatus? status;
-  final Body? body;
+  final BodySingle? body;
 
   /// Account ID of the user who created this task.
   final String? createdBy;
@@ -7295,7 +9323,7 @@ class Task {
           ? TaskStatus.fromValue(json[r'status']! as String)
           : null,
       body: json[r'body'] != null
-          ? Body.fromJson(json[r'body']! as Map<String, Object?>)
+          ? BodySingle.fromJson(json[r'body']! as Map<String, Object?>)
           : null,
       createdBy: json[r'createdBy'] as String?,
       assignedTo: json[r'assignedTo'] as String?,
@@ -7376,7 +9404,7 @@ class Task {
       dynamic pageId,
       dynamic blogPostId,
       TaskStatus? status,
-      Body? body,
+      BodySingle? body,
       String? createdBy,
       String? assignedTo,
       String? completedBy,
@@ -7677,7 +9705,7 @@ class VersionedEntity {
 
   /// ID of the entity.
   final String? id;
-  final Body? body;
+  final BodyBulk? body;
 
   VersionedEntity({this.title, this.id, this.body});
 
@@ -7686,7 +9714,7 @@ class VersionedEntity {
       title: json[r'title'] as String?,
       id: json[r'id'] as String?,
       body: json[r'body'] != null
-          ? Body.fromJson(json[r'body']! as Map<String, Object?>)
+          ? BodyBulk.fromJson(json[r'body']! as Map<String, Object?>)
           : null,
     );
   }
@@ -7709,7 +9737,7 @@ class VersionedEntity {
     return json;
   }
 
-  VersionedEntity copyWith({String? title, String? id, Body? body}) {
+  VersionedEntity copyWith({String? title, String? id, BodyBulk? body}) {
     return VersionedEntity(
       title: title ?? this.title,
       id: id ?? this.id,

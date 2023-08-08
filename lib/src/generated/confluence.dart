@@ -3,6 +3,7 @@
 import '../api_utils.dart';
 
 // ignore_for_file: deprecated_member_use_from_same_package
+// ignore_for_file: provide_deprecation_message
 
 class ConfluenceApi {
   final ApiClient _client;
@@ -269,6 +270,7 @@ class ContentApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
   /// Only content that the user has permission to view will be returned.
+  @deprecated
   Future<ContentArray> getContent(
       {String? type,
       String? spaceKey,
@@ -318,6 +320,7 @@ class ContentApi {
   /// 'Add' permission for the
   /// space that the content will be created in, and permission to view the
   /// draft if publishing a draft.
+  @deprecated
   Future<Content> createContent(
       {String? status,
       List<String>? expand,
@@ -487,6 +490,7 @@ class ContentApi {
   /// Permission to view the content. If the content is a blog post, 'View'
   /// permission
   /// for the space is required.
+  @deprecated
   Future<Content> getContentById(
       {required String id,
       List<String>? status,
@@ -522,6 +526,7 @@ class ContentApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to update the content.
+  @deprecated
   Future<Content> updateContent(
       {required String id,
       String? status,
@@ -560,6 +565,7 @@ class ContentApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'Delete' permission for the space that the content is in.
+  @deprecated
   Future<void> deleteContent({required String id, String? status}) async {
     await _client.send(
       'delete',
@@ -580,6 +586,7 @@ class ContentApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content.
+  @deprecated
   Future<ContentHistory> getHistoryForContent(
       {required String id, List<String>? expand}) async {
     return ContentHistory.fromJson(await _client.send(
@@ -613,6 +620,7 @@ class ContentAttachmentsApi {
   /// Permission to view the content. If the content is a blog post, 'View'
   /// permission
   /// for the space is required.
+  @deprecated
   Future<ContentArray> getAttachments(
       {required String id,
       List<String>? expand,
@@ -878,6 +886,7 @@ class ContentChildrenAndDescendantsApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'View' permission for the space,
   /// and permission to view the content if it is a page.
+  @deprecated
   Future<ContentChildren> getContentChildren(
       {required String id, List<String>? expand, int? parentVersion}) async {
     return ContentChildren.fromJson(await _client.send(
@@ -942,6 +951,7 @@ class ContentChildrenAndDescendantsApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'View' permission for the space,
   /// and permission to view the content if it is a page.
+  @deprecated
   Future<ContentArray> getContentChildrenByType(
       {required String id,
       required String type,
@@ -1368,6 +1378,7 @@ class ContentCommentsApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'View' permission for the space,
   /// and permission to view the content if it is a page.
+  @deprecated
   Future<ContentArray> getContentComments(
       {required String id,
       List<String>? expand,
@@ -1409,6 +1420,7 @@ class ContentLabelsApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'View' permission for the space and permission to view the content if it
   /// is a page.
+  @deprecated
   Future<LabelArray> getLabelsForContent(
       {required String id, String? prefix, int? start, int? limit}) async {
     return LabelArray.fromJson(await _client.send(
@@ -1553,6 +1565,7 @@ class ContentPropertiesApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'View' permission for the space, and permission to view the content if it
   /// is a page.
+  @deprecated
   Future<ContentPropertyArray> getContentProperties(
       {required String id,
       List<String>? key,
@@ -1588,6 +1601,7 @@ class ContentPropertiesApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to update the content.
+  @deprecated
   Future<ContentProperty> createContentProperty(
       {required String id, required ContentPropertyCreate body}) async {
     return ContentProperty.fromJson(await _client.send(
@@ -1607,6 +1621,7 @@ class ContentPropertiesApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'View' permission for the space, and permission to view the content if it
   /// is a page.
+  @deprecated
   Future<ContentProperty> getContentProperty(
       {required String id,
       required String key,
@@ -1634,6 +1649,7 @@ class ContentPropertiesApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to update the content.
+  @deprecated
   Future<ContentProperty> updateContentProperty(
       {required String id,
       required String key,
@@ -1663,6 +1679,7 @@ class ContentPropertiesApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to update the content.
+  @deprecated
   Future<ContentProperty> createContentPropertyForKey(
       {required String id,
       required String key,
@@ -1684,6 +1701,7 @@ class ContentPropertiesApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to update the content.
+  @deprecated
   Future<void> deleteContentProperty(
       {required String id, required String key}) async {
     await _client.send(
@@ -1836,6 +1854,8 @@ class ContentRestrictionsApi {
     ));
   }
 
+  /// Deprecated, use
+  /// [Get content restriction status for group via groupId](https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-restrictions/#api-wiki-rest-api-content-id-restriction-byoperation-operationkey-bygroupid-groupid-get).
   /// Returns whether the specified content restriction applies to a group.
   /// For example, if a page with `id=123` has a `read` restriction for the
   /// `admins` group,
@@ -1852,6 +1872,7 @@ class ContentRestrictionsApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content.
+  @deprecated
   Future<void> getContentRestrictionStatusForGroup(
       {required String id,
       required String operationKey,
@@ -1867,11 +1888,14 @@ class ContentRestrictionsApi {
     );
   }
 
+  /// Deprecated, use
+  /// [Add group to content restriction via groupId](https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-restrictions/#api-wiki-rest-api-content-id-restriction-byoperation-operationkey-bygroupid-groupid-put).
   /// Adds a group to a content restriction. That is, grant read or update
   /// permission to the group for a piece of content.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to edit the content.
+  @deprecated
   Future<void> addGroupToContentRestriction(
       {required String id,
       required String operationKey,
@@ -1887,11 +1911,14 @@ class ContentRestrictionsApi {
     );
   }
 
+  /// Deprecated, use
+  /// [Remove group from content restriction by groupId](https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-restrictions/#api-wiki-rest-api-content-id-restriction-byoperation-operationkey-user-delete).
   /// Removes a group from a content restriction. That is, remove read or update
   /// permission for the group for a piece of content.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to edit the content.
+  @deprecated
   Future<void> removeGroupFromContentRestrictionById(
       {required String id,
       required String operationKey,
@@ -2314,6 +2341,7 @@ class ContentVersionsApi {
   /// Permission to view the content. If the content is a blog post, 'View'
   /// permission
   /// for the space is required.
+  @deprecated
   Future<VersionArray> getContentVersions(
       {required String id,
       int? start,
@@ -2365,6 +2393,7 @@ class ContentVersionsApi {
   /// Permission to view the content. If the content is a blog post, 'View'
   /// permission
   /// for the space is required.
+  @deprecated
   Future<Version> getContentVersion(
       {required String id,
       required int versionNumber,
@@ -2966,6 +2995,7 @@ class GroupApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// User must be a site admin.
+  @deprecated
   Future<void> removeGroup(String name) async {
     await _client.send(
       'delete',
@@ -2980,6 +3010,7 @@ class GroupApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
+  @deprecated
   Future<Group> getGroupByQueryParam(String name) async {
     return Group.fromJson(await _client.send(
       'get',
@@ -3024,6 +3055,7 @@ class GroupApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
+  @deprecated
   Future<Group> getGroupByName(String groupName) async {
     return Group.fromJson(await _client.send(
       'get',
@@ -3038,11 +3070,13 @@ class GroupApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
+  @deprecated
   Future<UserArray> getMembersByQueryParam(
       {required String name,
       int? start,
       int? limit,
-      bool? shouldReturnTotalSize}) async {
+      bool? shouldReturnTotalSize,
+      List<String>? expand}) async {
     return UserArray.fromJson(await _client.send(
       'get',
       'wiki/rest/api/group/member',
@@ -3052,6 +3086,7 @@ class GroupApi {
         if (limit != null) 'limit': '$limit',
         if (shouldReturnTotalSize != null)
           'shouldReturnTotalSize': '$shouldReturnTotalSize',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -3062,6 +3097,7 @@ class GroupApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
+  @deprecated
   Future<UserArray> getGroupMembers(
       {required String groupName, int? start, int? limit}) async {
     return UserArray.fromJson(await _client.send(
@@ -3143,7 +3179,8 @@ class GroupApi {
       {required String groupId,
       int? start,
       int? limit,
-      bool? shouldReturnTotalSize}) async {
+      bool? shouldReturnTotalSize,
+      List<String>? expand}) async {
     return UserArray.fromJson(await _client.send(
       'get',
       'wiki/rest/api/group/{groupId}/membersByGroupId',
@@ -3155,6 +3192,7 @@ class GroupApi {
         if (limit != null) 'limit': '$limit',
         if (shouldReturnTotalSize != null)
           'shouldReturnTotalSize': '$shouldReturnTotalSize',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -3163,6 +3201,7 @@ class GroupApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// User must be a site admin.
+  @deprecated
   Future<void> addUserToGroup(
       {required String name, required AccountId body}) async {
     await _client.send(
@@ -3179,6 +3218,7 @@ class GroupApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// User must be a site admin.
+  @deprecated
   Future<void> removeMemberFromGroup(
       {required String name,
       String? key,
@@ -3213,6 +3253,7 @@ class InlineTasksApi {
   /// Permission to access the Confluence site ('Can use' global permission).
   /// Only tasks
   /// in contents that the user has permission to view are returned.
+  @deprecated
   Future<TaskPageResponse> searchTasks(
       {int? start,
       int? limit,
@@ -3257,6 +3298,7 @@ class InlineTasksApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content associated with the task.
+  @deprecated
   Future<Task> getTaskById(String inlineTaskId) async {
     return Task.fromJson(await _client.send(
       'get',
@@ -3271,6 +3313,7 @@ class InlineTasksApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to update the content associated with the task.
+  @deprecated
   Future<Task> updateTaskById(
       {required String inlineTaskId, required TaskStatusUpdate body}) async {
     return Task.fromJson(await _client.send(
@@ -3677,7 +3720,8 @@ class SearchApi {
       {required String cql,
       int? start,
       int? limit,
-      List<String>? expand}) async {
+      List<String>? expand,
+      String? sitePermissionTypeFilter}) async {
     return SearchPageResponseSearchResult.fromJson(await _client.send(
       'get',
       'wiki/rest/api/search/user',
@@ -3686,6 +3730,8 @@ class SearchApi {
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
         if (expand != null) 'expand': expand.map((e) => e).join(','),
+        if (sitePermissionTypeFilter != null)
+          'sitePermissionTypeFilter': sitePermissionTypeFilter,
       },
     ));
   }
@@ -3778,6 +3824,7 @@ class SettingsApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'Admin' permission for the space.
+  @deprecated
   Future<String> setLookAndFeelSettings(
       {String? spaceKey, required String body}) async {
     return await _client.send(
@@ -3820,6 +3867,7 @@ class SpaceApi {
   /// Permission to access the Confluence site ('Can use' global permission).
   /// Note, the returned list will only contain spaces that the current user
   /// has permission to view.
+  @deprecated
   Future<SpaceArray> getSpaces(
       {List<String>? spaceKey,
       List<int>? spaceId,
@@ -3885,6 +3933,7 @@ class SpaceApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'View' permission for the space.
+  @deprecated
   Future<Space> getSpace(
       {required String spaceKey, List<String>? expand}) async {
     return Space.fromJson(await _client.send(
@@ -3945,6 +3994,7 @@ class SpaceApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'View' permission for the space. Note, the returned list will only
   /// contain content that the current user has permission to view.
+  @deprecated
   Future<Map<String, dynamic>> getContentForSpace(
       {required String spaceKey,
       String? depth,
@@ -3975,6 +4025,7 @@ class SpaceApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'View' permission for the space. Note, the returned list will only
   /// contain content that the current user has permission to view.
+  @deprecated
   Future<ContentArray> getContentByTypeForSpace(
       {required String spaceKey,
       required String type,
@@ -4090,6 +4141,7 @@ class SpacePropertiesApi {
   ///
   /// **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:
   /// ‘View’ permission for the space.
+  @deprecated
   Future<SpacePropertyArray> getSpaceProperties(
       {required String spaceKey,
       List<String>? expand,
@@ -4116,6 +4168,7 @@ class SpacePropertiesApi {
   ///
   /// **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:
   /// ‘Admin’ permission for the space.
+  @deprecated
   Future<SpaceProperty> createSpaceProperty(
       {required String spaceKey, required SpacePropertyCreate body}) async {
     return SpaceProperty.fromJson(await _client.send(
@@ -4135,6 +4188,7 @@ class SpacePropertiesApi {
   ///
   /// **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:
   /// ‘View’ permission for the space.
+  @deprecated
   Future<SpaceProperty> getSpaceProperty(
       {required String spaceKey,
       required String key,
@@ -4160,6 +4214,7 @@ class SpacePropertiesApi {
   ///
   /// **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:
   /// ‘Admin’ permission for the space.
+  @deprecated
   Future<SpaceProperty> updateSpaceProperty(
       {required String spaceKey,
       required String key,
@@ -4185,6 +4240,7 @@ class SpacePropertiesApi {
   ///
   /// **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:
   /// ‘Admin’ permission for the space.
+  @deprecated
   Future<SpaceProperty> createSpacePropertyForKey(
       {required String spaceKey,
       required String key,
@@ -4207,6 +4263,7 @@ class SpacePropertiesApi {
   ///
   /// **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:
   /// ‘Admin’ permission for the space.
+  @deprecated
   Future<void> deleteSpaceProperty(
       {required String spaceKey, required String key}) async {
     await _client.send(
@@ -4397,7 +4454,12 @@ class ThemesApi {
 
   ThemesApi(this._client);
 
-  /// Returns all themes, not including the default theme.
+  /// Returns all
+  /// [admin-driven themes](https://developer.atlassian.com/cloud/confluence/create-a-confluence-theme/),
+  /// not including the default theme. Note that this API only applies to themes
+  /// set for an entire space or site by the admin. User-driven theming controls
+  /// (Light, Dark, and match browser) are an unrelated feature. Admin-driven
+  /// themes will override user-driven themes.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// None
@@ -11494,7 +11556,10 @@ class ContentRestrictionUpdateOperation {
 /// `user` or `group` must be specified for this object.
 class ContentRestrictionUpdateRestrictions {
   /// The groups that the restrictions will be applied to. This array must
-  /// have at least one item, otherwise it should be omitted.
+  /// have at least one item, otherwise it should be omitted. At least one of
+  /// `name` or `id` is required,
+  /// and `id` should be used where possible in advance of the `name`
+  /// deprecation.
   final List<ContentRestrictionUpdateRestrictionsGroupItem> group;
   final dynamic user;
 
@@ -11543,35 +11608,49 @@ class ContentRestrictionUpdateRestrictionsGroupItem {
   final ContentRestrictionUpdateRestrictionsGroupItemType type;
 
   /// The name of the group.
-  final String name;
+  @deprecated
+  final String? name;
+
+  /// The id of the group.
+  final String? id;
 
   ContentRestrictionUpdateRestrictionsGroupItem(
-      {required this.type, required this.name});
+      {required this.type, this.name, this.id});
 
   factory ContentRestrictionUpdateRestrictionsGroupItem.fromJson(
       Map<String, Object?> json) {
     return ContentRestrictionUpdateRestrictionsGroupItem(
       type: ContentRestrictionUpdateRestrictionsGroupItemType.fromValue(
           json[r'type'] as String? ?? ''),
-      name: json[r'name'] as String? ?? '',
+      name: json[r'name'] as String?,
+      id: json[r'id'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var type = this.type;
     var name = this.name;
+    var id = this.id;
 
     final json = <String, Object?>{};
     json[r'type'] = type.value;
-    json[r'name'] = name;
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
     return json;
   }
 
   ContentRestrictionUpdateRestrictionsGroupItem copyWith(
-      {ContentRestrictionUpdateRestrictionsGroupItemType? type, String? name}) {
+      {ContentRestrictionUpdateRestrictionsGroupItemType? type,
+      String? name,
+      String? id}) {
     return ContentRestrictionUpdateRestrictionsGroupItem(
       type: type ?? this.type,
       name: name ?? this.name,
+      id: id ?? this.id,
     );
   }
 }
@@ -13671,16 +13750,16 @@ class GlobalSpaceIdentifier {
 class Group {
   final GroupType type;
   final String name;
-  final String? id;
+  final String id;
   final GenericLinks? links;
 
-  Group({required this.type, required this.name, this.id, this.links});
+  Group({required this.type, required this.name, required this.id, this.links});
 
   factory Group.fromJson(Map<String, Object?> json) {
     return Group(
       type: GroupType.fromValue(json[r'type'] as String? ?? ''),
       name: json[r'name'] as String? ?? '',
-      id: json[r'id'] as String?,
+      id: json[r'id'] as String? ?? '',
       links: json[r'_links'] != null
           ? GenericLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
@@ -13696,9 +13775,7 @@ class Group {
     final json = <String, Object?>{};
     json[r'type'] = type.value;
     json[r'name'] = name;
-    if (id != null) {
-      json[r'id'] = id;
-    }
+    json[r'id'] = id;
     if (links != null) {
       json[r'_links'] = links.toJson();
     }
@@ -13861,33 +13938,44 @@ class GroupArrayWithLinks {
   }
 }
 
+/// The name property will soon be deprecated in favor of using id.
 class GroupCreate {
   final GroupCreateType type;
-  final String name;
+  @deprecated
+  final String? name;
+  final String? id;
 
-  GroupCreate({required this.type, required this.name});
+  GroupCreate({required this.type, this.name, this.id});
 
   factory GroupCreate.fromJson(Map<String, Object?> json) {
     return GroupCreate(
       type: GroupCreateType.fromValue(json[r'type'] as String? ?? ''),
-      name: json[r'name'] as String? ?? '',
+      name: json[r'name'] as String?,
+      id: json[r'id'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var type = this.type;
     var name = this.name;
+    var id = this.id;
 
     final json = <String, Object?>{};
     json[r'type'] = type.value;
-    json[r'name'] = name;
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
     return json;
   }
 
-  GroupCreate copyWith({GroupCreateType? type, String? name}) {
+  GroupCreate copyWith({GroupCreateType? type, String? name, String? id}) {
     return GroupCreate(
       type: type ?? this.type,
       name: name ?? this.name,
+      id: id ?? this.id,
     );
   }
 }
@@ -15718,7 +15806,9 @@ class PermissionSubject {
   /// for `type=user`, identifier should be user's accountId or `anonymous` for
   /// anonymous users
   ///
-  /// for `type=group`, identifier should be name of the group or groupId
+  /// for `type=group`, identifier should be the groupId. We are deprecating
+  /// groupName support in mid-2024
+  /// for this field but still accept it in the interim.
   final String identifier;
 
   PermissionSubject({required this.type, required this.identifier});

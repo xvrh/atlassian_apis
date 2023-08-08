@@ -1899,6 +1899,29 @@
                 "$ref": "#/components/schemas/RequestCreateDTO"
               },
               "example": {
+                "form": {
+                  "answers": {
+                    "1": {
+                      "text": "Answer to a text form field"
+                    },
+                    "2": {
+                      "date": "2023-07-06"
+                    },
+                    "3": {
+                      "time": "14:35"
+                    },
+                    "4": {
+                      "choices": [
+                        "5"
+                      ]
+                    },
+                    "5": {
+                      "users": [
+                        "qm:a713c8ea-1075-4e30-9d96-891a7d181739:5ad6d69abfa3980ce712caae"
+                      ]
+                    }
+                  }
+                },
                 "isAdfRequest": false,
                 "requestFieldValues": {
                   "description": "I need a new *mouse* for my Mac",
@@ -5401,6 +5424,16 @@
               }
             }
           },
+          "413": {
+            "description": "Returned if more than 60 files are requested to be uploaded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal Server Error.",
             "content": {
@@ -8796,6 +8829,59 @@
           "name": "availableField"
         }
       },
+      "Form": {
+        "type": "object",
+        "properties": {
+          "answers": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/FormAnswer"
+            },
+            "description": "JSON mapping of form field answers containing form field IDs and corresponding values."
+          }
+        },
+        "additionalProperties": false
+      },
+      "FormAnswer": {
+        "type": "object",
+        "properties": {
+          "adf": {
+            "description": "Answer in Atlassian Document Format (ADF)",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/JsonNode"
+              }
+            ]
+          },
+          "choices": {
+            "type": "array",
+            "description": "IDs of selected choices",
+            "items": {
+              "type": "string"
+            }
+          },
+          "date": {
+            "type": "string",
+            "description": "Answer in date format (yyyy-MM-dd)"
+          },
+          "text": {
+            "type": "string",
+            "description": "Answer in free text format"
+          },
+          "time": {
+            "type": "string",
+            "description": "Answer in timestamp format (HH:mm)."
+          },
+          "users": {
+            "type": "array",
+            "description": "IDs of selected users",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
       "HistoryMetadata": {
         "type": "object",
         "properties": {
@@ -9146,6 +9232,138 @@
         },
         "description": "A list of editable field details."
       },
+      "JsonNode": {
+        "type": "object",
+        "properties": {
+          "array": {
+            "type": "boolean"
+          },
+          "bigDecimal": {
+            "type": "boolean"
+          },
+          "bigInteger": {
+            "type": "boolean"
+          },
+          "bigIntegerValue": {
+            "type": "integer"
+          },
+          "binary": {
+            "type": "boolean"
+          },
+          "binaryValue": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            }
+          },
+          "boolean": {
+            "type": "boolean"
+          },
+          "booleanValue": {
+            "type": "boolean"
+          },
+          "containerNode": {
+            "type": "boolean"
+          },
+          "decimalValue": {
+            "type": "number"
+          },
+          "double": {
+            "type": "boolean"
+          },
+          "doubleValue": {
+            "type": "number",
+            "format": "double"
+          },
+          "elements": {
+            "type": "object"
+          },
+          "fieldNames": {
+            "type": "object"
+          },
+          "fields": {
+            "type": "object"
+          },
+          "floatingPointNumber": {
+            "type": "boolean"
+          },
+          "int": {
+            "type": "boolean"
+          },
+          "intValue": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "integralNumber": {
+            "type": "boolean"
+          },
+          "long": {
+            "type": "boolean"
+          },
+          "longValue": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "missingNode": {
+            "type": "boolean"
+          },
+          "null": {
+            "type": "boolean"
+          },
+          "number": {
+            "type": "boolean"
+          },
+          "numberType": {
+            "type": "string",
+            "enum": [
+              "INT",
+              "LONG",
+              "BIG_INTEGER",
+              "FLOAT",
+              "DOUBLE",
+              "BIG_DECIMAL"
+            ]
+          },
+          "numberValue": {
+            "type": "number"
+          },
+          "object": {
+            "type": "boolean"
+          },
+          "pojo": {
+            "type": "boolean"
+          },
+          "textValue": {
+            "type": "string"
+          },
+          "textual": {
+            "type": "boolean"
+          },
+          "valueAsBoolean": {
+            "type": "boolean"
+          },
+          "valueAsDouble": {
+            "type": "number",
+            "format": "double"
+          },
+          "valueAsInt": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "valueAsLong": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "valueAsText": {
+            "type": "string"
+          },
+          "valueNode": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
       "JsonTypeBean": {
         "required": [
           "type"
@@ -9281,7 +9499,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Name of the organization."
+            "description": "Name of the organization. Must contain 1-200 characters."
           }
         },
         "additionalProperties": false
@@ -9294,6 +9512,14 @@
             "allOf": [
               {
                 "$ref": "#/components/schemas/SelfLinkDTO"
+              }
+            ]
+          },
+          "created": {
+            "description": "Date the organization was created. This field may not be present in some older organizations.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DateDTO"
               }
             ]
           },
@@ -10251,6 +10477,14 @@
           "channel": {
             "type": "string",
             "description": "(Experimental) Shows extra information for the request channel."
+          },
+          "form": {
+            "description": "(Experimental) Provides answers to the form associated with a request type that is attached to the request on creation. Jira fields should be omitted from `requestFieldValues` if they are linked to form answers. Form answers in ADF format should have `isAdfRequest` set to true. Form answers are not currently validated.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Form"
+              }
+            ]
           },
           "isAdfRequest": {
             "type": "boolean",

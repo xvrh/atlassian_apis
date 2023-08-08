@@ -1,3 +1,8 @@
+## 0.14.0
+- Update to the latest API schemas
+- Mark deprecated endpoints with a `@deprecated` annotation.
+- Require Dart 3.0
+
 ## 0.13.0
 - Update to the latest API schemas
 
