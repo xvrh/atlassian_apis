@@ -1190,6 +1190,22 @@ class DashboardsApi {
     ));
   }
 
+  /// Bulk edit dashboards. Maximum number of dashboards to be edited at the
+  /// same time is 100.
+  ///
+  /// **[Permissions](#permissions) required:** None
+  ///
+  /// The dashboards to be updated must be owned by the user, or the user must
+  /// be an administrator.
+  Future<BulkEditShareableEntityResponse> bulkEditDashboards(
+      {required BulkEditShareableEntityRequest body}) async {
+    return BulkEditShareableEntityResponse.fromJson(await _client.send(
+      'put',
+      'rest/api/3/dashboard/bulk/edit',
+      body: body.toJson(),
+    ));
+  }
+
   /// Gets a list of all available gadgets that can be added to all dashboards.
   ///
   /// **[Permissions](#permissions) required:** None.
@@ -10915,7 +10931,19 @@ class ProjectsApi {
   /// `com.atlassian.servicedesk:simplified-marketing-service-desk`,
   /// `com.atlassian.servicedesk:simplified-design-service-desk`,
   /// `com.atlassian.servicedesk:simplified-sales-service-desk`,
-  /// `com.atlassian.servicedesk:simplified-finance-service-desk` |
+  /// `com.atlassian.servicedesk:simplified-finance-service-desk`,
+  /// `com.atlassian.servicedesk:next-gen-it-service-desk`,
+  /// `com.atlassian.servicedesk:next-gen-hr-service-desk`,
+  /// `com.atlassian.servicedesk:next-gen-legal-service-desk`,
+  /// `com.atlassian.servicedesk:next-gen-marketing-service-desk`,
+  /// `com.atlassian.servicedesk:next-gen-facilities-service-desk`,
+  /// `com.atlassian.servicedesk:next-gen-general-service-desk`,
+  /// `com.atlassian.servicedesk:next-gen-general-it-service-desk`,
+  /// `com.atlassian.servicedesk:next-gen-general-business-service-desk`,
+  /// `com.atlassian.servicedesk:next-gen-analytics-service-desk`,
+  /// `com.atlassian.servicedesk:next-gen-finance-service-desk`,
+  /// `com.atlassian.servicedesk:next-gen-design-service-desk`,
+  /// `com.atlassian.servicedesk:next-gen-sales-service-desk` |
   /// | `software` | `com.pyxis.greenhopper.jira:gh-simplified-agility-kanban`,
   /// `com.pyxis.greenhopper.jira:gh-simplified-agility-scrum`,
   /// `com.pyxis.greenhopper.jira:gh-simplified-basic`,
@@ -11056,10 +11084,15 @@ class ProjectsApi {
   /// Updates the [project details](https://confluence.atlassian.com/x/ahLpNw)
   /// of a project.
   ///
-  /// All parameters are optional in the body of the request.
+  /// All parameters are optional in the body of the request. Schemes will only
+  /// be updated if they are included in the request, any omitted schemes will
+  /// be left unchanged.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg). is only
+  /// needed when changing the schemes or project key. Otherwise you will only
+  /// need *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg)
   Future<Project> updateProject(
       {required String projectIdOrKey,
       String? expand,
@@ -13323,11 +13356,11 @@ class WorkflowSchemesApi {
     ));
   }
 
-  /// Updates a workflow scheme, including the name, default workflow, issue
-  /// type to project mappings, and more. If the workflow scheme is active (that
-  /// is, being used by at least one project), then a draft workflow scheme is
-  /// created or updated instead, provided that `updateDraftIfNeeded` is set to
-  /// `true`.
+  /// Updates a company-manged project workflow scheme, including the name,
+  /// default workflow, issue type to project mappings, and more. If the
+  /// workflow scheme is active (that is, being used by at least one project),
+  /// then a draft workflow scheme is created or updated instead, provided that
+  /// `updateDraftIfNeeded` is set to `true`.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
@@ -14758,6 +14791,7 @@ class WorkflowsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  @deprecated
   Future<WorkflowIDs> createWorkflow(
       {required CreateWorkflowDetails body}) async {
     return WorkflowIDs.fromJson(await _client.send(
@@ -14825,8 +14859,8 @@ class WorkflowsApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Administer Jira* project permission to access all, including
-  /// global-scoped, workflows
+  ///  *  *Administer Jira* global permission to access all, including
+  /// project-scoped, workflows
   ///  *  At least one of the *Administer projects* and *View (read-only)
   /// workflow* project permissions to access project-scoped workflows
   Future<WorkflowReadResponse> readWorkflows(
@@ -18302,6 +18336,42 @@ class Avatars {
   }
 }
 
+/// Details for changing owners of shareable entities
+class BulkChangeOwnerDetails {
+  /// Whether the name is fixed automatically if it's duplicated after changing
+  /// owner.
+  final bool autofixName;
+
+  /// The account id of the new owner.
+  final String newOwner;
+
+  BulkChangeOwnerDetails({required this.autofixName, required this.newOwner});
+
+  factory BulkChangeOwnerDetails.fromJson(Map<String, Object?> json) {
+    return BulkChangeOwnerDetails(
+      autofixName: json[r'autofixName'] as bool? ?? false,
+      newOwner: json[r'newOwner'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var autofixName = this.autofixName;
+    var newOwner = this.newOwner;
+
+    final json = <String, Object?>{};
+    json[r'autofixName'] = autofixName;
+    json[r'newOwner'] = newOwner;
+    return json;
+  }
+
+  BulkChangeOwnerDetails copyWith({bool? autofixName, String? newOwner}) {
+    return BulkChangeOwnerDetails(
+      autofixName: autofixName ?? this.autofixName,
+      newOwner: newOwner ?? this.newOwner,
+    );
+  }
+}
+
 /// Details of the options to create for a custom field.
 class BulkCustomFieldOptionCreateRequest {
   /// Details of options to create.
@@ -18370,6 +18440,230 @@ class BulkCustomFieldOptionUpdateRequest {
       options: options ?? this.options,
     );
   }
+}
+
+/// Errors of bulk edit action.
+class BulkEditActionError {
+  /// The error messages.
+  final List<String> errorMessages;
+
+  /// The errors.
+  final Map<String, dynamic> errors;
+
+  BulkEditActionError({required this.errorMessages, required this.errors});
+
+  factory BulkEditActionError.fromJson(Map<String, Object?> json) {
+    return BulkEditActionError(
+      errorMessages: (json[r'errorMessages'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      errors: json[r'errors'] as Map<String, Object?>? ?? {},
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var errorMessages = this.errorMessages;
+    var errors = this.errors;
+
+    final json = <String, Object?>{};
+    json[r'errorMessages'] = errorMessages;
+    json[r'errors'] = errors;
+    return json;
+  }
+
+  BulkEditActionError copyWith(
+      {List<String>? errorMessages, Map<String, dynamic>? errors}) {
+    return BulkEditActionError(
+      errorMessages: errorMessages ?? this.errorMessages,
+      errors: errors ?? this.errors,
+    );
+  }
+}
+
+/// Details of a request to bulk edit shareable entity.
+class BulkEditShareableEntityRequest {
+  /// Allowed action for bulk edit shareable entity
+  final BulkEditShareableEntityRequestAction action;
+
+  /// The details of change owner action.
+  final BulkChangeOwnerDetails? changeOwnerDetails;
+
+  /// The id list of shareable entities to be changed.
+  final List<int> entityIds;
+
+  /// Whether the actions are executed by users with Administer Jira global
+  /// permission.
+  final bool extendAdminPermissions;
+
+  /// The permission details to be changed.
+  final PermissionDetails? permissionDetails;
+
+  BulkEditShareableEntityRequest(
+      {required this.action,
+      this.changeOwnerDetails,
+      required this.entityIds,
+      bool? extendAdminPermissions,
+      this.permissionDetails})
+      : extendAdminPermissions = extendAdminPermissions ?? false;
+
+  factory BulkEditShareableEntityRequest.fromJson(Map<String, Object?> json) {
+    return BulkEditShareableEntityRequest(
+      action: BulkEditShareableEntityRequestAction.fromValue(
+          json[r'action'] as String? ?? ''),
+      changeOwnerDetails: json[r'changeOwnerDetails'] != null
+          ? BulkChangeOwnerDetails.fromJson(
+              json[r'changeOwnerDetails']! as Map<String, Object?>)
+          : null,
+      entityIds: (json[r'entityIds'] as List<Object?>?)
+              ?.map((i) => (i as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
+      extendAdminPermissions: json[r'extendAdminPermissions'] as bool? ?? false,
+      permissionDetails: json[r'permissionDetails'] != null
+          ? PermissionDetails.fromJson(
+              json[r'permissionDetails']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var action = this.action;
+    var changeOwnerDetails = this.changeOwnerDetails;
+    var entityIds = this.entityIds;
+    var extendAdminPermissions = this.extendAdminPermissions;
+    var permissionDetails = this.permissionDetails;
+
+    final json = <String, Object?>{};
+    json[r'action'] = action.value;
+    if (changeOwnerDetails != null) {
+      json[r'changeOwnerDetails'] = changeOwnerDetails.toJson();
+    }
+    json[r'entityIds'] = entityIds;
+    json[r'extendAdminPermissions'] = extendAdminPermissions;
+    if (permissionDetails != null) {
+      json[r'permissionDetails'] = permissionDetails.toJson();
+    }
+    return json;
+  }
+
+  BulkEditShareableEntityRequest copyWith(
+      {BulkEditShareableEntityRequestAction? action,
+      BulkChangeOwnerDetails? changeOwnerDetails,
+      List<int>? entityIds,
+      bool? extendAdminPermissions,
+      PermissionDetails? permissionDetails}) {
+    return BulkEditShareableEntityRequest(
+      action: action ?? this.action,
+      changeOwnerDetails: changeOwnerDetails ?? this.changeOwnerDetails,
+      entityIds: entityIds ?? this.entityIds,
+      extendAdminPermissions:
+          extendAdminPermissions ?? this.extendAdminPermissions,
+      permissionDetails: permissionDetails ?? this.permissionDetails,
+    );
+  }
+}
+
+class BulkEditShareableEntityRequestAction {
+  static const changeOwner =
+      BulkEditShareableEntityRequestAction._('changeOwner');
+  static const changePermission =
+      BulkEditShareableEntityRequestAction._('changePermission');
+  static const addPermission =
+      BulkEditShareableEntityRequestAction._('addPermission');
+  static const removePermission =
+      BulkEditShareableEntityRequestAction._('removePermission');
+
+  static const values = [
+    changeOwner,
+    changePermission,
+    addPermission,
+    removePermission,
+  ];
+  final String value;
+
+  const BulkEditShareableEntityRequestAction._(this.value);
+
+  static BulkEditShareableEntityRequestAction fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => BulkEditShareableEntityRequestAction._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// Details of a request to bulk edit shareable entity.
+class BulkEditShareableEntityResponse {
+  /// Allowed action for bulk edit shareable entity
+  final BulkEditShareableEntityResponseAction action;
+
+  /// The mapping dashboard id to errors if any.
+  final Map<String, dynamic>? entityErrors;
+
+  BulkEditShareableEntityResponse({required this.action, this.entityErrors});
+
+  factory BulkEditShareableEntityResponse.fromJson(Map<String, Object?> json) {
+    return BulkEditShareableEntityResponse(
+      action: BulkEditShareableEntityResponseAction.fromValue(
+          json[r'action'] as String? ?? ''),
+      entityErrors: json[r'entityErrors'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var action = this.action;
+    var entityErrors = this.entityErrors;
+
+    final json = <String, Object?>{};
+    json[r'action'] = action.value;
+    if (entityErrors != null) {
+      json[r'entityErrors'] = entityErrors;
+    }
+    return json;
+  }
+
+  BulkEditShareableEntityResponse copyWith(
+      {BulkEditShareableEntityResponseAction? action,
+      Map<String, dynamic>? entityErrors}) {
+    return BulkEditShareableEntityResponse(
+      action: action ?? this.action,
+      entityErrors: entityErrors ?? this.entityErrors,
+    );
+  }
+}
+
+class BulkEditShareableEntityResponseAction {
+  static const changeOwner =
+      BulkEditShareableEntityResponseAction._('changeOwner');
+  static const changePermission =
+      BulkEditShareableEntityResponseAction._('changePermission');
+  static const addPermission =
+      BulkEditShareableEntityResponseAction._('addPermission');
+  static const removePermission =
+      BulkEditShareableEntityResponseAction._('removePermission');
+
+  static const values = [
+    changeOwner,
+    changePermission,
+    addPermission,
+    removePermission,
+  ];
+  final String value;
+
+  const BulkEditShareableEntityResponseAction._(this.value);
+
+  static BulkEditShareableEntityResponseAction fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => BulkEditShareableEntityResponseAction._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 /// A container for the watch status of a list of issues.
@@ -21299,6 +21593,42 @@ class CreateProjectDetailsProjectTemplateKey {
   static const comAtlassianServicedeskSimplifiedBlankProjectBusiness =
       CreateProjectDetailsProjectTemplateKey._(
           'com.atlassian.servicedesk:simplified-blank-project-business');
+  static const comAtlassianServicedeskNextGenItServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:next-gen-it-service-desk');
+  static const comAtlassianServicedeskNextGenHrServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:next-gen-hr-service-desk');
+  static const comAtlassianServicedeskNextGenLegalServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:next-gen-legal-service-desk');
+  static const comAtlassianServicedeskNextGenMarketingServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:next-gen-marketing-service-desk');
+  static const comAtlassianServicedeskNextGenFacilitiesServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:next-gen-facilities-service-desk');
+  static const comAtlassianServicedeskNextGenGeneralServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:next-gen-general-service-desk');
+  static const comAtlassianServicedeskNextGenGeneralItServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:next-gen-general-it-service-desk');
+  static const comAtlassianServicedeskNextGenGeneralBusinessServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:next-gen-general-business-service-desk');
+  static const comAtlassianServicedeskNextGenAnalyticsServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:next-gen-analytics-service-desk');
+  static const comAtlassianServicedeskNextGenFinanceServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:next-gen-finance-service-desk');
+  static const comAtlassianServicedeskNextGenDesignServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:next-gen-design-service-desk');
+  static const comAtlassianServicedeskNextGenSalesServiceDesk =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:next-gen-sales-service-desk');
   static const comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedContentManagement =
       CreateProjectDetailsProjectTemplateKey._(
           'com.atlassian.jira-core-project-templates:jira-core-simplified-content-management');
@@ -21348,6 +21678,18 @@ class CreateProjectDetailsProjectTemplateKey {
     comAtlassianServicedeskSimplifiedHalpServiceDesk,
     comAtlassianServicedeskSimplifiedBlankProjectIt,
     comAtlassianServicedeskSimplifiedBlankProjectBusiness,
+    comAtlassianServicedeskNextGenItServiceDesk,
+    comAtlassianServicedeskNextGenHrServiceDesk,
+    comAtlassianServicedeskNextGenLegalServiceDesk,
+    comAtlassianServicedeskNextGenMarketingServiceDesk,
+    comAtlassianServicedeskNextGenFacilitiesServiceDesk,
+    comAtlassianServicedeskNextGenGeneralServiceDesk,
+    comAtlassianServicedeskNextGenGeneralItServiceDesk,
+    comAtlassianServicedeskNextGenGeneralBusinessServiceDesk,
+    comAtlassianServicedeskNextGenAnalyticsServiceDesk,
+    comAtlassianServicedeskNextGenFinanceServiceDesk,
+    comAtlassianServicedeskNextGenDesignServiceDesk,
+    comAtlassianServicedeskNextGenSalesServiceDesk,
     comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedContentManagement,
     comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedDocumentApproval,
     comAtlassianJiraCoreProjectTemplatesJiraCoreSimplifiedLeadTracking,
@@ -33710,10 +34052,9 @@ class JiraWorkflow {
   /// The transitions of the workflow.
   final List<WorkflowTransitions> transitions;
 
-  /// The `workflows.usages` expand is an optional parameter that can be used
-  /// when reading and updating workflows in Jira. It provides additional
-  /// information about the projects and issue types associated with the
-  /// requested workflows.
+  /// Use the optional `workflows.usages` expand to get additional information
+  /// about the projects and issue types associated with the requested
+  /// workflows.
   final List<ProjectIssueTypes> usages;
   final DocumentVersion? version;
 
@@ -42727,6 +43068,53 @@ class ParsedJqlQuery {
   }
 }
 
+/// Details for permissions of shareable entities
+class PermissionDetails {
+  /// The edit permissions for the shareable entities.
+  final List<SharePermission> editPermissions;
+
+  /// The share permissions for the shareable entities.
+  final List<SharePermission> sharePermissions;
+
+  PermissionDetails(
+      {required this.editPermissions, required this.sharePermissions});
+
+  factory PermissionDetails.fromJson(Map<String, Object?> json) {
+    return PermissionDetails(
+      editPermissions: (json[r'editPermissions'] as List<Object?>?)
+              ?.map((i) => SharePermission.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      sharePermissions: (json[r'sharePermissions'] as List<Object?>?)
+              ?.map((i) => SharePermission.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var editPermissions = this.editPermissions;
+    var sharePermissions = this.sharePermissions;
+
+    final json = <String, Object?>{};
+    json[r'editPermissions'] = editPermissions.map((i) => i.toJson()).toList();
+    json[r'sharePermissions'] =
+        sharePermissions.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PermissionDetails copyWith(
+      {List<SharePermission>? editPermissions,
+      List<SharePermission>? sharePermissions}) {
+    return PermissionDetails(
+      editPermissions: editPermissions ?? this.editPermissions,
+      sharePermissions: sharePermissions ?? this.sharePermissions,
+    );
+  }
+}
+
 /// Details about a permission granted to a user or group.
 class PermissionGrant {
   /// The user or group being granted the permission. It consists of a `type`, a
@@ -44998,8 +45386,8 @@ class ProjectIssueTypeMappings {
   }
 }
 
-/// Projects and issue types where the status is used. Only available if the
-/// `usages` expand is requested.
+/// Use the optional `workflows.usages` expand to get additional information
+/// about the projects and issue types associated with the requested workflows.
 class ProjectIssueTypes {
   /// IDs of the issue types
   final List<String> issueTypes;

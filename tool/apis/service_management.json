@@ -8840,7 +8840,7 @@
             "description": "JSON mapping of form field answers containing form field IDs and corresponding values."
           }
         },
-        "additionalProperties": false
+        "additionalProperties": true
       },
       "FormAnswer": {
         "type": "object",

@@ -88,6 +88,16 @@ class Api {
             ComplexType(this, _typeNameToDartType(definitionName), definition));
       }
     }
+    for (var definitionEntry in _spec.components.requestBodies.entries) {
+      var definitionName = definitionEntry.key;
+      var definition = definitionEntry.value;
+
+      var jsonContent = definition.content?['application/json'];
+      if (jsonContent != null && jsonContent.schema!.ref == null) {
+        _complexTypes.add(ComplexType(
+            this, _typeNameToDartType(definitionName), jsonContent.schema!));
+      }
+    }
   }
 
   DartType parseDartType(String raw) {
@@ -334,7 +344,11 @@ class Operation {
     if (body != null) {
       var contents = body.content;
       if (contents != null) {
-        return RequestBody(_api, body, contents);
+        return RequestBody.fromContents(_api, body, contents);
+      } else if (body.ref case var ref?) {
+        ref = ref.replaceAll('#/components/requestBodies/', '');
+        var complexType = _api._complexTypes.firstWhere((c) => c.name == ref);
+        return RequestBody.fromDartType(_api, body, complexType);
       }
     }
     return null;
@@ -525,19 +539,20 @@ class RequestBody {
   final Api _api;
   final sw.Request request;
   bool _isFileUpload = false;
-  late sw.Content _content;
   DartType? _jsonDartType;
 
-  RequestBody(this._api, this.request, Map<String, sw.Content> contents) {
+  RequestBody.fromContents(
+      this._api, this.request, Map<String, sw.Content> contents) {
     var content = contents.entries.first;
-    _content = content.value;
     if (content.key == 'multipart/form-data' &&
         content.value.schema?.format == 'binary') {
       _isFileUpload = true;
     } else {
-      _jsonDartType = _api.typeFromSchema(_content.schema!);
+      _jsonDartType = _api.typeFromSchema(content.value.schema!);
     }
   }
+
+  RequestBody.fromDartType(this._api, this.request, this._jsonDartType);
 
   bool get isRequired => request.required;
 
@@ -595,7 +610,7 @@ class ComplexType extends DartType {
   String get className => name;
 
   static String _toClassName(String name) {
-    return name.replaceAll(RegExp(r'[^a-z0-9_\$]', caseSensitive: false), '');
+    return name.replaceAll(RegExp(r'[^a-z0-9_$]', caseSensitive: false), '');
   }
 
   bool _isPropertyRequired(Property property) {

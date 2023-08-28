@@ -350,7 +350,7 @@
           {
             "name": "from",
             "in": "query",
-            "description": "The earliest date and time of the event represented as a UNIX epoch time.",
+            "description": "The earliest date and time of the event represented as a UNIX epoch time in milliseconds.",
             "required": false,
             "schema": {
               "type": "string"
@@ -359,7 +359,7 @@
           {
             "name": "to",
             "in": "query",
-            "description": "The latest date and time of the event represented as a UNIX epoch time.",
+            "description": "The latest date and time of the event represented as a UNIX epoch time in milliseconds.",
             "required": false,
             "schema": {
               "type": "string"
@@ -1558,7 +1558,7 @@
         ],
         "x-experimental": true,
         "summary": "Create group",
-        "description": "**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n\nThis API will:\n- Create a group in the organization's directory.\n- Create a collection of users that you can use to easily manage permissions, content access, notification schemes, and roles.\n\n**The creation of new groups using existing group names is not permitted.**\n",
+        "description": "**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n\nThis API will:\n- Create a group in the organization's directory.\n- Create a collection of users that you can use to easily manage permissions, content access, notification schemes, and roles.\n\n**The creation of new groups using existing group names is not permitted.**\n\nLearn the fastest way to call the API with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/organization/create-group/#create-group).\n",
         "parameters": [
           {
             "name": "orgId",
@@ -1672,7 +1672,7 @@
         ],
         "x-experimental": true,
         "summary": "Delete group",
-        "description": "**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n\nThis API will:\n- Delete a group from the organization's directory.\n- Delete the permissions, content access, notification schemes, and roles granted to the users.\n\nThis API will not:\n- Delete groups that are synchronized through SCIM. To delete these groups, you will need to delete them within your external identity provider. Learn more about [configuring user provisioning with an identity provider](https://support.atlassian.com/provisioning-users/docs/configure-user-provisioning-with-an-identity-provider/).\n- Delete a group if it’s marked as a [default group](https://support.atlassian.com/user-management/docs/default-groups-and-permissions).\n- Delete `site-admin` group and therefore revoke org-admin role from a user.\n",
+        "description": "**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n\nThis API will:\n- Delete a group from the organization's directory.\n- Delete the permissions, content access, notification schemes, and roles granted to the users.\n\nThis API will not:\n- Delete groups that are synchronized through SCIM. To delete these groups, you will need to delete them within your external identity provider. Learn more about [configuring user provisioning with an identity provider](https://support.atlassian.com/provisioning-users/docs/configure-user-provisioning-with-an-identity-provider/).\n- Delete a group if it’s marked as a [default group](https://support.atlassian.com/user-management/docs/default-groups-and-permissions).\n- Delete `site-admin` group and therefore revoke org-admin role from a user.\n\nLearn the fastest way to call the API with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/organization/delete-group/#delete-group).\n",
         "parameters": [
           {
             "name": "orgId",
