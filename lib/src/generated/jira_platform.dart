@@ -32745,7 +32745,6 @@ class IssueUpdateDetails {
 
 /// A list of editable field details.
 class IssueUpdateMetadata {
-  /// A list of editable field details.
   final Map<String, dynamic>? fields;
 
   IssueUpdateMetadata({this.fields});
