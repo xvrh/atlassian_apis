@@ -4,7 +4,6 @@ import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:dart_style/dart_style.dart';
 import 'dart_project.dart';
-import 'fix_absolute_import.dart' show featureSet;
 
 void main() {
   for (var project in getSubOrContainingProjects(Directory.current.path)) {
@@ -36,8 +35,7 @@ final DartFormatter _dartFormatter = DartFormatter(fixes: StyleFix.all);
 final String newLineChar = Platform.isWindows ? '\r\n' : '\n';
 
 String reorderImports(String source) {
-  return _reorderImports(
-      source, parseString(content: source, featureSet: featureSet).unit);
+  return _reorderImports(source, parseString(content: source).unit);
 }
 
 String _reorderImports(String content, CompilationUnit unit) {

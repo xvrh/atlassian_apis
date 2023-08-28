@@ -56,7 +56,9 @@ class GroupsApi {
 
   /// Update a group in a directory by group ID.
   Future<ScimGroup> put(
-      {required String directoryId, required String id}) async {
+      {required String directoryId,
+      required String id,
+      required ScimGroup body}) async {
     return ScimGroup.fromJson(await _client.send(
       'put',
       'scim/directory/{directoryId}/Groups/{id}',
@@ -64,6 +66,7 @@ class GroupsApi {
         'directoryId': directoryId,
         'id': id,
       },
+      body: body.toJson(),
     ));
   }
 
@@ -113,13 +116,15 @@ class GroupsApi {
 
   /// Create a group in a directory. An attempt to create a group with an
   /// existing  name fails with a 409 (Conflict) error.
-  Future<ScimGroup> createaGroupInActiveDirectory(String directoryId) async {
+  Future<ScimGroup> createaGroupInActiveDirectory(
+      {required String directoryId, required ScimGroup body}) async {
     return ScimGroup.fromJson(await _client.send(
       'post',
       'scim/directory/{directoryId}/Groups',
       pathParameters: {
         'directoryId': directoryId,
       },
+      body: body.toJson(),
     ));
   }
 }

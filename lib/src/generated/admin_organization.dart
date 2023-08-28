@@ -156,6 +156,9 @@ class DirectoryApi {
   ///
   /// **The creation of new groups using existing group names is not
   /// permitted.**
+  ///
+  /// Learn the fastest way to call the API with a detailed
+  /// [tutorial](https://developer.atlassian.com/cloud/admin/organization/create-group/#create-group).
   Future<Map<String, dynamic>> createGroup(
       {required String orgId, required CreateGroupInput body}) async {
     return await _client.send(
@@ -186,6 +189,9 @@ class DirectoryApi {
   /// [default group](https://support.atlassian.com/user-management/docs/default-groups-and-permissions).
   /// - Delete `site-admin` group and therefore revoke org-admin role from a
   /// user.
+  ///
+  /// Learn the fastest way to call the API with a detailed
+  /// [tutorial](https://developer.atlassian.com/cloud/admin/organization/delete-group/#delete-group).
   Future<Map<String, dynamic>> deleteGroup(
       {required String orgId, required String groupId}) async {
     return await _client.send(
