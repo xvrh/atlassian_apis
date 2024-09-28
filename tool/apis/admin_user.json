@@ -9,7 +9,7 @@
       {
         "title": "About the user management REST API",
         "anchor": "about",
-        "body": "The User management REST API provides resources to administer and edit managed accounts. Use this API to:\n- Get user management permissions\n- Get and update profiles\n- Deactivate and delete accounts\n\nTo manage your organization, use the [Organizations REST API](https://developer.atlassian.com/cloud/admin/organization/rest/intro/).\n\nTo integrate your organization with an identity provider, use the [User provisioning REST API](https://developer.atlassian.com/cloud/admin/user-provisioning/rest/intro)."
+        "body": "The User management REST API provides resources to administer and edit managed accounts. Use this API to:\n- Get user management permissions\n- Get and update profiles\n- Deactivate and delete accounts\n\nPermission: Organization admin\n\n[Discover additional admin features](https://developer.atlassian.com/cloud/admin/rest-apis/)"
       },
       {
         "title": "Authentication and authorization",
@@ -472,7 +472,7 @@
     "/users/{account_id}/manage/lifecycle/enable": {
       "post": {
         "summary": "Activate a user",
-        "description": "\nActivates the specified user account. The permission to make use of this resource is exposed by the `lifecycle.enablement` privilege.\n",
+        "description": "Activates the specified user account. The permission to make use of this resource is exposed by the\n`lifecycle.enablement` privilege.\n\nUser accounts that were deactivated due to US export controls cannot be reactivated using this API. If you believe\nthe account was incorrectly blocked, please contact [Atlassian Support](https://support.atlassian.com/contact).\n\nUser accounts that have been deleted need the deletion to be canceled before reactivating.\n",
         "tags": [
           "Lifecycle"
         ],
@@ -499,6 +499,9 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound.Account"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict.LifecycleError"
           }
         }
       }
@@ -506,7 +509,7 @@
     "/users/{account_id}/manage/lifecycle/delete": {
       "post": {
         "summary": "Delete account",
-        "description": "This API will:\n- Delete a managed account from Atlassian Administration.\n- Withdraw complete access to all products and services listed in Atlassian Administration.\n- Remove reference to the account from all lists under Directory in Atlassian Administration.\n\nSpecifications:\n- Deleting an account is permanent. If you think you’ll need the account again, we recommend you [deactivate](https://support.atlassian.com/user-management/docs/deactivate-a-managed-account/)it instead.\n- Before you permanently delete the account, you’ll have a 14-day grace period, during which the account will appear as temporarily deactivated.\n\nLearn more about [deleting a managed account](https://support.atlassian.com/user-management/docs/delete-a-managed-account/).\n\nLearn the fastest way to get the paramaters and delete account with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/user-management/delete-managed-account/#delete-account). \n\nThe permission to make use of this resource is exposed by the `lifecycle.delete` privilege. Learn more about [Get user management permissions API](https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-manage/#api-users-account-id-manage-get) to manage the specified user.\n",
+        "description": "This API will:\n- Delete a managed account from Atlassian Administration.\n- Withdraw complete access to all products and services listed in Atlassian Administration.\n- Remove reference to the account from all lists under Directory in Atlassian Administration.\n\nSpecifications:\n- Deleting an account is permanent. If you think you’ll need the account again, we recommend you [deactivate](https://support.atlassian.com/user-management/docs/deactivate-a-managed-account/) it instead.\n- Before you permanently delete the account, you’ll have a 14-day grace period, during which the account will appear as temporarily deactivated.\n\nLearn more about [deleting a managed account](https://support.atlassian.com/user-management/docs/delete-a-managed-account/).\n\nLearn the fastest way to get the paramaters and delete account with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/user-management/delete-managed-account/#delete-account). \n\nThe permission to make use of this resource is exposed by the `lifecycle.delete` privilege. Learn more about [Get user management permissions API](https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-manage/#api-users-account-id-manage-get) to manage the specified user.\n",
         "tags": [
           "Lifecycle"
         ],
@@ -768,15 +771,16 @@
         ],
         "properties": {
           "key": {
-            "description": "The property or action is restricted because:\n\n- _administrative_: The property or action is restricted\n  because it is intended exclusively for administrative use\n- _administrative.notMyself_: The property or action\n  is restricted because it is intended for administrative use and\n  is forbidden for self-use.\n- _myselfOnly_: The property or action is restricted because it is\n  available only to the user which the account belongs too\n- _managedAccount_: The property or action is restricted because it is\n  available only to the user's organisation administrator\n- _externalDirectory.scim_: The property/action is restricted because\n  the user is managed by an external SCIM directory\n- _externalDirectory.google_: The property/action is restricted because\n  the user is managed by an external Google directory\n- _blocked.exportControl_: The property/action is restricted because\n  the user is blocked by US export control\n",
+            "description": "The property or action is restricted because:\n\n- _administrative_: The property or action is restricted\n  because it is intended exclusively for administrative use\n- _administrative.notMyself_: The property or action\n  is restricted because it is intended for administrative use and\n  is forbidden for self-use.\n- _authPolicy.saml_: The property is restricted as it is set on login by SAML\n- _blocked.exportControl_: The property/action is restricted because\n  the user is blocked by US export control\n- _externalDirectory.scim_: The property/action is restricted because\n  the user is managed by an external SCIM directory\n- _externalDirectory.google_: The property/action is restricted because\n  the user is managed by an external Google directory\n- _myselfOnly_: The property or action is restricted because it is\n  available only to the user which the account belongs to\n- _managedAccount_: The property or action is restricted because it is\n  available only to the user's organisation administrator\n",
             "enum": [
               "administrative",
               "administrative.notMyself",
-              "myselfOnly",
-              "managedAccount",
+              "authPolicy.saml",
+              "blocked.exportControl",
               "externalDirectory.scim",
               "externalDirectory.google",
-              "blocked.exportControl"
+              "myselfOnly",
+              "managedAccount"
             ],
             "example": "managedAccount"
           }
@@ -1231,7 +1235,7 @@
         }
       },
       "Forbidden.UnclaimedDomain": {
-        "description": "You asre authenticated but one of the following is true:\n\n- You do not have the authority to manage the user\n- You do not have the authority to take the action\n- You do not have authority over a specified domain\n",
+        "description": "You are authenticated but one of the following is true:\n\n- You do not have the authority to manage the user\n- You do not have the authority to take the action\n- You do not have authority over a specified domain\n",
         "content": {
           "application/json": {
             "schema": {
@@ -1325,7 +1329,7 @@
         }
       },
       "Conflict.LifecycleError": {
-        "description": "This account isn't eligible for deletion/deactivation\n\nSee: https://confluence.atlassian.com/x/pTgoPQ for details\n",
+        "description": "This account isn't eligible for the requested action\n\nSee: https://confluence.atlassian.com/x/pTgoPQ for details\n",
         "content": {
           "application/json": {
             "schema": {

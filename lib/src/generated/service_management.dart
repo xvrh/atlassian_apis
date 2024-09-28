@@ -128,13 +128,16 @@ class KnowledgebaseApi {
   /// **[Permissions](#permissions) required**: Permission to access the
   /// [customer portal](https://confluence.atlassian.com/servicedeskcloud/configuring-the-customer-portal-732528918.html).
   Future<PagedDTOArticleDTO> getArticles(
-      {String? query, bool? highlight, int? start, int? limit}) async {
+      {required String query,
+      required bool highlight,
+      int? start,
+      int? limit}) async {
     return PagedDTOArticleDTO.fromJson(await _client.send(
       'get',
       'rest/servicedeskapi/knowledgebase/article',
       queryParameters: {
-        if (query != null) 'query': query,
-        if (highlight != null) 'highlight': '$highlight',
+        'query': query,
+        'highlight': '$highlight',
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
       },
@@ -189,24 +192,6 @@ class OrganizationApi {
     ));
   }
 
-  /// This method returns details of an organization. Use this method to get
-  /// organization details whenever your application component is passed an
-  /// organization ID but needs to display other organization details.
-  ///
-  /// **[Permissions](#permissions) required**: Any
-  ///
-  /// **Response limitations**: Customers can only retrieve organization of
-  /// which they are members.
-  Future<OrganizationDTO> getOrganization(int organizationId) async {
-    return OrganizationDTO.fromJson(await _client.send(
-      'get',
-      'rest/servicedeskapi/organization/{organizationId}',
-      pathParameters: {
-        'organizationId': '$organizationId',
-      },
-    ));
-  }
-
   /// This method deletes an organization. Note that the organization is deleted
   /// regardless of other associations it may have. For example, associations
   /// with service desks.
@@ -222,9 +207,36 @@ class OrganizationApi {
     );
   }
 
-  /// Returns the keys of all properties for an organization. Use this resource
-  /// when you need to find out what additional properties items have been added
-  /// to an organization.
+  /// This method returns details of an organization. Use this method to get
+  /// organization details whenever your application component is passed an
+  /// organization ID but needs to display other organization details.
+  ///
+  /// To get organization detail field values which are visible in Jira Service
+  /// Management, see the
+  /// [Customer Service Management REST API](https://developer.atlassian.com/cloud/customer-service-management/rest/v1/api-group-organization/#api-group-organization).
+  ///
+  /// **[Permissions](#permissions) required**: Any
+  ///
+  /// **Response limitations**: Customers can only retrieve organization of
+  /// which they are members.
+  Future<OrganizationDTO> getOrganization(int organizationId) async {
+    return OrganizationDTO.fromJson(await _client.send(
+      'get',
+      'rest/servicedeskapi/organization/{organizationId}',
+      pathParameters: {
+        'organizationId': '$organizationId',
+      },
+    ));
+  }
+
+  /// Returns the keys of all organization properties. Organization properties
+  /// are a type of entity property which are available to the API only, and not
+  /// shown in Jira Service Management.
+  /// [Learn more](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
+  ///
+  /// To get organization detail field values which are visible in Jira Service
+  /// Management, see the
+  /// [Customer Service Management REST API](https://developer.atlassian.com/cloud/customer-service-management/rest/v1/api-group-organization/#api-group-organization).
   ///
   /// **[Permissions](#permissions) required**: Any
   ///
@@ -240,48 +252,14 @@ class OrganizationApi {
     ));
   }
 
-  /// Returns the value of a property from an organization. Use this method to
-  /// obtain the JSON content for an organization's property.
+  /// Removes an organization property. Organization properties are a type of
+  /// entity property which are available to the API only, and not shown in Jira
+  /// Service Management.
+  /// [Learn more](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
   ///
-  /// **[Permissions](#permissions) required**: Any
-  ///
-  /// **Response limitations**: Customers can only access properties of
-  /// organizations of which they are members.
-  Future<EntityProperty> getProperty(
-      {required String organizationId, required String propertyKey}) async {
-    return EntityProperty.fromJson(await _client.send(
-      'get',
-      'rest/servicedeskapi/organization/{organizationId}/property/{propertyKey}',
-      pathParameters: {
-        'organizationId': organizationId,
-        'propertyKey': propertyKey,
-      },
-    ));
-  }
-
-  /// Sets the value of a property for an organization. Use this resource to
-  /// store custom data against an organization.
-  ///
-  /// **[Permissions](#permissions) required**: Service Desk Administrator or
-  /// Agent.
-  ///
-  /// Note: Permission to manage organizations can be switched to users with the
-  /// Jira administrator permission, using the
-  /// **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)**
-  /// feature.
-  Future<dynamic> setProperty(
-      {required String organizationId, required String propertyKey}) async {
-    return await _client.send(
-      'put',
-      'rest/servicedeskapi/organization/{organizationId}/property/{propertyKey}',
-      pathParameters: {
-        'organizationId': organizationId,
-        'propertyKey': propertyKey,
-      },
-    );
-  }
-
-  /// Removes a property from an organization.
+  /// For operations relating to organization detail field values which are
+  /// visible in Jira Service Management, see the
+  /// [Customer Service Management REST API](https://developer.atlassian.com/cloud/customer-service-management/rest/v1/api-group-organization/#api-group-organization).
   ///
   /// **[Permissions](#permissions) required**: Service Desk Administrator or
   /// Agent.
@@ -299,6 +277,84 @@ class OrganizationApi {
         'organizationId': organizationId,
         'propertyKey': propertyKey,
       },
+    );
+  }
+
+  /// Returns the value of an organization property. Use this method to obtain
+  /// the JSON content for an organization's property. Organization properties
+  /// are a type of entity property which are available to the API only, and not
+  /// shown in Jira Service Management.
+  /// [Learn more](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
+  ///
+  /// To get organization detail field values which are visible in Jira Service
+  /// Management, see the
+  /// [Customer Service Management REST API](https://developer.atlassian.com/cloud/customer-service-management/rest/v1/api-group-organization/#api-group-organization).
+  ///
+  /// **[Permissions](#permissions) required**: Any
+  ///
+  /// **Response limitations**: Customers can only access properties of
+  /// organizations of which they are members.
+  Future<EntityProperty> getProperty(
+      {required String organizationId, required String propertyKey}) async {
+    return EntityProperty.fromJson(await _client.send(
+      'get',
+      'rest/servicedeskapi/organization/{organizationId}/property/{propertyKey}',
+      pathParameters: {
+        'organizationId': organizationId,
+        'propertyKey': propertyKey,
+      },
+    ));
+  }
+
+  /// Sets the value of an organization property. Use this resource to store
+  /// custom data against an organization. Organization properties are a type of
+  /// entity property which are available to the API only, and not shown in Jira
+  /// Service Management.
+  /// [Learn more](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/).
+  ///
+  /// To store organization detail field values which are visible in Jira
+  /// Service Management, see the
+  /// [Customer Service Management REST API](https://developer.atlassian.com/cloud/customer-service-management/rest/v1/api-group-organization/#api-group-organization).
+  ///
+  /// **[Permissions](#permissions) required**: Service Desk Administrator or
+  /// Agent.
+  ///
+  /// Note: Permission to manage organizations can be switched to users with the
+  /// Jira administrator permission, using the
+  /// **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)**
+  /// feature.
+  Future<dynamic> setProperty(
+      {required String organizationId,
+      required String propertyKey,
+      required dynamic body}) async {
+    return await _client.send(
+      'put',
+      'rest/servicedeskapi/organization/{organizationId}/property/{propertyKey}',
+      pathParameters: {
+        'organizationId': organizationId,
+        'propertyKey': propertyKey,
+      },
+      body: body,
+    );
+  }
+
+  /// This method removes users from an organization.
+  ///
+  /// **[Permissions](#permissions) required**: Service desk administrator or
+  /// agent. Note: Permission to delete users from an organization can be
+  /// switched to users with the Jira administrator permission, using the
+  /// **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)**
+  /// feature.
+  Future<void> removeUsersFromOrganization(
+      {required int organizationId,
+      required UsersOrganizationUpdateDTO body}) async {
+    await _client.send(
+      'delete',
+      'rest/servicedeskapi/organization/{organizationId}/user',
+      pathParameters: {
+        'organizationId': '$organizationId',
+      },
+      body: body.toJson(),
     );
   }
 
@@ -343,21 +399,19 @@ class OrganizationApi {
     );
   }
 
-  /// This method removes users from an organization.
+  /// This method removes an organization from a service desk. If the
+  /// organization ID does not match an organization associated with the service
+  /// desk, no change is made and the resource returns a 204 success code.
   ///
-  /// **[Permissions](#permissions) required**: Service desk administrator or
-  /// agent. Note: Permission to delete users from an organization can be
-  /// switched to users with the Jira administrator permission, using the
-  /// **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)**
-  /// feature.
-  Future<void> removeUsersFromOrganization(
-      {required int organizationId,
-      required UsersOrganizationUpdateDTO body}) async {
+  /// **[Permissions](#permissions) required**: Service desk's agent.
+  Future<void> removeOrganization(
+      {required String serviceDeskId,
+      required OrganizationServiceDeskUpdateDTO body}) async {
     await _client.send(
       'delete',
-      'rest/servicedeskapi/organization/{organizationId}/user',
+      'rest/servicedeskapi/servicedesk/{serviceDeskId}/organization',
       pathParameters: {
-        'organizationId': '$organizationId',
+        'serviceDeskId': serviceDeskId,
       },
       body: body.toJson(),
     );
@@ -396,24 +450,6 @@ class OrganizationApi {
       required OrganizationServiceDeskUpdateDTO body}) async {
     await _client.send(
       'post',
-      'rest/servicedeskapi/servicedesk/{serviceDeskId}/organization',
-      pathParameters: {
-        'serviceDeskId': serviceDeskId,
-      },
-      body: body.toJson(),
-    );
-  }
-
-  /// This method removes an organization from a service desk. If the
-  /// organization ID does not match an organization associated with the service
-  /// desk, no change is made and the resource returns a 204 success code.
-  ///
-  /// **[Permissions](#permissions) required**: Service desk's agent.
-  Future<void> removeOrganization(
-      {required String serviceDeskId,
-      required OrganizationServiceDeskUpdateDTO body}) async {
-    await _client.send(
-      'delete',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/organization',
       pathParameters: {
         'serviceDeskId': serviceDeskId,
@@ -593,7 +629,9 @@ class RequestApi {
   /// **Response limitations**: Customers will only get a list of public
   /// attachments.
   Future<PagedDTOAttachmentDTO> getAttachmentsForRequest(
-      {required String issueIdOrKey, int? start, int? limit}) async {
+      {required String issueIdOrKey,
+      required int start,
+      required int limit}) async {
     return PagedDTOAttachmentDTO.fromJson(await _client.send(
       'get',
       'rest/servicedeskapi/request/{issueIdOrKey}/attachment',
@@ -601,27 +639,26 @@ class RequestApi {
         'issueIdOrKey': issueIdOrKey,
       },
       queryParameters: {
-        if (start != null) 'start': '$start',
-        if (limit != null) 'limit': '$limit',
+        'start': '$start',
+        'limit': '$limit',
       },
     ));
   }
 
-  /// This method adds one or more temporary files (attached to the request's
-  /// service desk using
-  /// [servicedesk/{serviceDeskId}/attachTemporaryFile](#api-servicedesk-serviceDeskId-attachTemporaryFile-post))
-  /// as attachments to a customer request and set the attachment visibility
-  /// using the `public` flag. Also, it is possible to include a comment with
-  /// the attachments.
+  /// This method creates a comment on a customer request using one or more
+  /// attachment files (uploaded using
+  /// [servicedeskapi/servicedesk/{serviceDeskId}/attachTemporaryFile](https://developer.atlassian.com/cloud/jira/service-desk/rest/api-group-servicedesk/#api-rest-servicedeskapi-servicedesk-servicedeskid-attachtemporaryfile-post)),
+  /// with the visibility set by `public`. See
   ///
-  /// To get a list of attachments for a comment on the request use
-  /// [servicedeskapi/request/{issueIdOrKey}/comment/{commentId}/attachment](#api-request-issueIdOrKey-comment-commentId-attachment-get).
+  ///  *  GET
+  /// [servicedeskapi/request/{issueIdOrKey}/attachment](./#api-rest-servicedeskapi-request-issueidorkey-attachment-get)
+  ///  *  GET
+  /// [servicedeskapi/request/{issueIdOrKey}/comment/{commentId}/attachment](./#api-rest-servicedeskapi-request-issueidorkey-comment-commentid-attachment-get)
   ///
   /// **[Permissions](#permissions) required**: Permission to add an attachment.
   ///
-  /// **Request limitations**: Customers can set attachments to public
-  /// visibility only.
-  Future<AttachmentCreateResultDTO> createAttachment(
+  /// **Request limitations**: Customers can set public visibility only.
+  Future<AttachmentCreateResultDTO> createCommentWithAttachment(
       {required String issueIdOrKey, required AttachmentCreateDTO body}) async {
     return AttachmentCreateResultDTO.fromJson(await _client.send(
       'post',
@@ -636,7 +673,7 @@ class RequestApi {
   /// Returns the contents of an attachment.
   ///
   /// To return a thumbnail of the attachment, use
-  /// [servicedeskapi/request/{issueIdOrKey}/attachment/{attachmentId}/thumbnail](#api-rest-servicedeskapi-request-issueidorkey-attachment-attachmentid-thumbnail-get).
+  /// [servicedeskapi/request/{issueIdOrKey}/attachment/{attachmentId}/thumbnail](./#api-rest-servicedeskapi-request-issueidorkey-attachment-attachmentid-thumbnail-get).
   ///
   /// **[Permissions](#permissions) required:** For the issue containing the
   /// attachment:
@@ -787,6 +824,21 @@ class RequestApi {
     ));
   }
 
+  /// This method unsubscribes the user from notifications from a customer
+  /// request.
+  ///
+  /// **[Permissions](#permissions) required**: Permission to view the customer
+  /// request.
+  Future<void> unsubscribe(String issueIdOrKey) async {
+    await _client.send(
+      'delete',
+      'rest/servicedeskapi/request/{issueIdOrKey}/notification',
+      pathParameters: {
+        'issueIdOrKey': issueIdOrKey,
+      },
+    );
+  }
+
   /// This method returns the notification subscription status of the user
   /// making the request. Use this method to determine if the user is subscribed
   /// to a customer request's notifications.
@@ -819,19 +871,21 @@ class RequestApi {
     );
   }
 
-  /// This method unsubscribes the user from notifications from a customer
-  /// request.
+  /// This method removes participants from a customer request.
   ///
-  /// **[Permissions](#permissions) required**: Permission to view the customer
-  /// request.
-  Future<void> unsubscribe(String issueIdOrKey) async {
-    await _client.send(
+  /// **[Permissions](#permissions) required**: Permission to manage
+  /// participants on the customer request.
+  Future<PagedDTOUserDTO> removeRequestParticipants(
+      {required String issueIdOrKey,
+      required RequestParticipantUpdateDTO body}) async {
+    return PagedDTOUserDTO.fromJson(await _client.send(
       'delete',
-      'rest/servicedeskapi/request/{issueIdOrKey}/notification',
+      'rest/servicedeskapi/request/{issueIdOrKey}/participant',
       pathParameters: {
         'issueIdOrKey': issueIdOrKey,
       },
-    );
+      body: body.toJson(),
+    ));
   }
 
   /// This method returns a list of all the participants on a customer request.
@@ -866,23 +920,6 @@ class RequestApi {
       required RequestParticipantUpdateDTO body}) async {
     return PagedDTOUserDTO.fromJson(await _client.send(
       'post',
-      'rest/servicedeskapi/request/{issueIdOrKey}/participant',
-      pathParameters: {
-        'issueIdOrKey': issueIdOrKey,
-      },
-      body: body.toJson(),
-    ));
-  }
-
-  /// This method removes participants from a customer request.
-  ///
-  /// **[Permissions](#permissions) required**: Permission to manage
-  /// participants on the customer request.
-  Future<PagedDTOUserDTO> removeRequestParticipants(
-      {required String issueIdOrKey,
-      required RequestParticipantUpdateDTO body}) async {
-    return PagedDTOUserDTO.fromJson(await _client.send(
-      'delete',
       'rest/servicedeskapi/request/{issueIdOrKey}/participant',
       pathParameters: {
         'issueIdOrKey': issueIdOrKey,
@@ -994,6 +1031,21 @@ class RequestApi {
     );
   }
 
+  /// This method deletes the feedback of request using it's `requestKey` or
+  /// `requestId`
+  ///
+  /// **[Permissions](#permissions) required**: User must be the reporter or an
+  /// Atlassian Connect app.
+  Future<dynamic> deleteFeedback(String requestIdOrKey) async {
+    return await _client.send(
+      'delete',
+      'rest/servicedeskapi/request/{requestIdOrKey}/feedback',
+      pathParameters: {
+        'requestIdOrKey': requestIdOrKey,
+      },
+    );
+  }
+
   /// This method retrieves a feedback of a request using it's `requestKey` or
   /// `requestId`
   ///
@@ -1026,21 +1078,6 @@ class RequestApi {
       body: body.toJson(),
     ));
   }
-
-  /// This method deletes the feedback of request using it's `requestKey` or
-  /// `requestId`
-  ///
-  /// **[Permissions](#permissions) required**: User must be the reporter or an
-  /// Atlassian Connect app.
-  Future<dynamic> deleteFeedback(String requestIdOrKey) async {
-    return await _client.send(
-      'delete',
-      'rest/servicedeskapi/request/{requestIdOrKey}/feedback',
-      pathParameters: {
-        'requestIdOrKey': requestIdOrKey,
-      },
-    );
-  }
 }
 
 /// Public REST API for Jira Service Management
@@ -1058,13 +1095,16 @@ class RequesttypeApi {
   /// to find the customer request types supported by a specific service desk.
   ///
   /// The returned list of customer request types can be filtered using the
-  /// `query` parameter. The parameter is matched against the customer request
-  /// types' `name` or `description`. For example, searching for "Install",
-  /// "Inst", "Equi", or "Equipment" will match a customer request type with the
-  /// *name* "Equipment Installation Request".
+  /// `searchQuery` parameter. The parameter is matched against the customer
+  /// request types' `name` or `description`. For example, searching for
+  /// "Install", "Inst", "Equi", or "Equipment" will match a customer request
+  /// type with the *name* "Equipment Installation Request".
   ///
-  /// **Note:** This API will filter out hidden request types (aka.request types
-  /// without groups) when `query` is provided.
+  /// **Note:** This API by default will filter out request types hidden in the
+  /// portal (i.e. request types without groups and request types where a user
+  /// doesn't have permission) when `searchQuery` is provided, unless
+  /// `includeHiddenRequestTypesInSearch` is set to true. Restricted request
+  /// types will not be returned for those who aren't admins.
   ///
   /// **[Permissions](#permissions) required**: Any
   Future<PagedDTORequestTypeDTO> getAllRequestTypes(
@@ -1072,7 +1112,9 @@ class RequesttypeApi {
       List<int>? serviceDeskId,
       int? start,
       int? limit,
-      List<String>? expand}) async {
+      List<String>? expand,
+      bool? includeHiddenRequestTypesInSearch,
+      String? restrictionStatus}) async {
     return PagedDTORequestTypeDTO.fromJson(await _client.send(
       'get',
       'rest/servicedeskapi/requesttype',
@@ -1083,6 +1125,10 @@ class RequesttypeApi {
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
         if (expand != null) 'expand': expand.map((e) => e).join(','),
+        if (includeHiddenRequestTypesInSearch != null)
+          'includeHiddenRequestTypesInSearch':
+              '$includeHiddenRequestTypesInSearch',
+        if (restrictionStatus != null) 'restrictionStatus': restrictionStatus,
       },
     ));
   }
@@ -1165,15 +1211,35 @@ class ServicedeskApi {
   /// **[Permissions](#permissions) required**: Permission to add attachments in
   /// this Service Desk.
   Future<TemporaryAttachments> attachTemporaryFile(
-      {required String serviceDeskId, required MultipartFile file}) async {
+      {required String serviceDeskId,
+      required List<MultipartFile> files}) async {
     return TemporaryAttachments.fromJson(await _client.send(
       'post',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/attachTemporaryFile',
       pathParameters: {
         'serviceDeskId': serviceDeskId,
       },
-      file: file,
+      files: files,
     ));
+  }
+
+  /// This method removes one or more customers from a service desk. The service
+  /// desk must have closed access. If any of the passed customers are not
+  /// associated with the service desk, no changes will be made for those
+  /// customers and the resource returns a 204 success code.
+  ///
+  /// **[Permissions](#permissions) required**: Services desk administrator
+  Future<void> removeCustomers(
+      {required String serviceDeskId,
+      required ServiceDeskCustomerDTO body}) async {
+    await _client.send(
+      'delete',
+      'rest/servicedeskapi/servicedesk/{serviceDeskId}/customer',
+      pathParameters: {
+        'serviceDeskId': serviceDeskId,
+      },
+      body: body.toJson(),
+    );
   }
 
   /// This method returns a list of the customers on a service desk.
@@ -1222,25 +1288,6 @@ class ServicedeskApi {
     );
   }
 
-  /// This method removes one or more customers from a service desk. The service
-  /// desk must have closed access. If any of the passed customers are not
-  /// associated with the service desk, no changes will be made for those
-  /// customers and the resource returns a 204 success code.
-  ///
-  /// **[Permissions](#permissions) required**: Services desk administrator
-  Future<void> removeCustomers(
-      {required String serviceDeskId,
-      required ServiceDeskCustomerDTO body}) async {
-    await _client.send(
-      'delete',
-      'rest/servicedeskapi/servicedesk/{serviceDeskId}/customer',
-      pathParameters: {
-        'serviceDeskId': serviceDeskId,
-      },
-      body: body.toJson(),
-    );
-  }
-
   /// Returns articles which match the given query and belong to the knowledge
   /// base linked to the service desk.
   ///
@@ -1248,7 +1295,7 @@ class ServicedeskApi {
   /// desk.
   Future<PagedDTOArticleDTO> getArticles(
       {required String serviceDeskId,
-      String? query,
+      required String query,
       bool? highlight,
       int? start,
       int? limit}) async {
@@ -1259,7 +1306,7 @@ class ServicedeskApi {
         'serviceDeskId': serviceDeskId,
       },
       queryParameters: {
-        if (query != null) 'query': query,
+        'query': query,
         if (highlight != null) 'highlight': '$highlight',
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
@@ -1349,8 +1396,11 @@ class ServicedeskApi {
   /// "Equipment" will match a request type with the *name* "Equipment
   /// Installation Request".
   ///
-  /// **Note:** This API will filter out hidden request types (aka.request types
-  /// without groups) when `searchQuery` is provided.
+  /// **Note:** This API by default will filter out request types hidden in the
+  /// portal (i.e. request types without groups and request types where a user
+  /// doesn't have permission) when `searchQuery` is provided, unless
+  /// `includeHiddenRequestTypesInSearch` is set to true. Restricted request
+  /// types will not be returned for those who aren't admins.
   ///
   /// **[Permissions](#permissions) required**: Permission to access the service
   /// desk.
@@ -1360,7 +1410,9 @@ class ServicedeskApi {
       List<String>? expand,
       String? searchQuery,
       int? start,
-      int? limit}) async {
+      int? limit,
+      bool? includeHiddenRequestTypesInSearch,
+      String? restrictionStatus}) async {
     return PagedDTORequestTypeDTO.fromJson(await _client.send(
       'get',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype',
@@ -1373,6 +1425,10 @@ class ServicedeskApi {
         if (searchQuery != null) 'searchQuery': searchQuery,
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
+        if (includeHiddenRequestTypesInSearch != null)
+          'includeHiddenRequestTypesInSearch':
+              '$includeHiddenRequestTypesInSearch',
+        if (restrictionStatus != null) 'restrictionStatus': restrictionStatus,
       },
     ));
   }
@@ -1412,6 +1468,23 @@ class ServicedeskApi {
     ));
   }
 
+  /// This method deletes a customer request type from a service desk, and
+  /// removes it from all customer requests.
+  /// This only supports classic projects.
+  ///
+  /// **[Permissions](#permissions) required**: Service desk administrator.
+  Future<void> deleteRequestType(
+      {required String serviceDeskId, required int requestTypeId}) async {
+    await _client.send(
+      'delete',
+      'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}',
+      pathParameters: {
+        'serviceDeskId': serviceDeskId,
+        'requestTypeId': '$requestTypeId',
+      },
+    );
+  }
+
   /// This method returns a customer request type from a service desk.
   ///
   /// This operation can be accessed anonymously.
@@ -1433,23 +1506,6 @@ class ServicedeskApi {
         if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
-  }
-
-  /// This method deletes a customer request type from a service desk, and
-  /// removes it from all customer requests.
-  /// This only supports classic projects.
-  ///
-  /// **[Permissions](#permissions) required**: Service desk administrator.
-  Future<void> deleteRequestType(
-      {required String serviceDeskId, required int requestTypeId}) async {
-    await _client.send(
-      'delete',
-      'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}',
-      pathParameters: {
-        'serviceDeskId': serviceDeskId,
-        'requestTypeId': '$requestTypeId',
-      },
-    );
   }
 
   /// This method returns the fields for a service desk's customer request type.
@@ -1505,6 +1561,31 @@ class ServicedeskApi {
     ));
   }
 
+  /// Removes a property from a request type.
+  ///
+  /// Properties for a Request Type in next-gen are stored as Issue Type
+  /// properties and therefore can also be deleted by calling the Jira Cloud
+  /// Platform
+  /// [Delete issue type property](https://developer.atlassian.com/cloud/jira/platform/rest/v3/#api-rest-api-3-issuetype-issueTypeId-properties-propertyKey-delete)
+  /// endpoint.
+  ///
+  /// **[Permissions](#permissions) required**: Jira project administrator with
+  /// a Jira Service Management agent license.
+  Future<void> deleteProperty(
+      {required String serviceDeskId,
+      required int requestTypeId,
+      required String propertyKey}) async {
+    await _client.send(
+      'delete',
+      'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/property/{propertyKey}',
+      pathParameters: {
+        'serviceDeskId': serviceDeskId,
+        'requestTypeId': '$requestTypeId',
+        'propertyKey': propertyKey,
+      },
+    );
+  }
+
   /// Returns the value of the property from a request type.
   ///
   /// Properties for a Request Type in next-gen are stored as Issue Type
@@ -1546,31 +1627,6 @@ class ServicedeskApi {
       required String propertyKey}) async {
     return await _client.send(
       'put',
-      'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/property/{propertyKey}',
-      pathParameters: {
-        'serviceDeskId': serviceDeskId,
-        'requestTypeId': '$requestTypeId',
-        'propertyKey': propertyKey,
-      },
-    );
-  }
-
-  /// Removes a property from a request type.
-  ///
-  /// Properties for a Request Type in next-gen are stored as Issue Type
-  /// properties and therefore can also be deleted by calling the Jira Cloud
-  /// Platform
-  /// [Delete issue type property](https://developer.atlassian.com/cloud/jira/platform/rest/v3/#api-rest-api-3-issuetype-issueTypeId-properties-propertyKey-delete)
-  /// endpoint.
-  ///
-  /// **[Permissions](#permissions) required**: Jira project administrator with
-  /// a Jira Service Management agent license.
-  Future<void> deleteProperty(
-      {required String serviceDeskId,
-      required int requestTypeId,
-      required String propertyKey}) async {
-    await _client.send(
-      'delete',
       'rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/property/{propertyKey}',
       pathParameters: {
         'serviceDeskId': serviceDeskId,
@@ -1996,11 +2052,10 @@ class AssetsWorkspaceDTO {
 }
 
 class AttachmentCreateDTO {
-  /// Comment about the attachments.
+  /// Additional content of the comment
   final AdditionalCommentDTO? additionalComment;
 
-  /// Indicates whether the attachments are to be public (true) or
-  /// private/internal (false).
+  /// Controls whether the comment and its attachments are visible to customers
   final bool public;
 
   /// List of IDs for the temporary attachments to be added to the customer
@@ -3859,10 +3914,14 @@ class FormAnswer {
   /// Answer in date format (yyyy-MM-dd)
   final String? date;
 
+  /// The IDs of files to be attached to the form that are obtained by calling
+  /// the ‘attach temporary file’ endpoint on the corresponding service desk.
+  final List<String> files;
+
   /// Answer in free text format
   final String? text;
 
-  /// Answer in timestamp format (HH:mm).
+  /// Answer in timestamp format (HH:mm)
   final String? time;
 
   /// IDs of selected users
@@ -3872,10 +3931,12 @@ class FormAnswer {
       {this.adf,
       List<String>? choices,
       this.date,
+      List<String>? files,
       this.text,
       this.time,
       List<String>? users})
       : choices = choices ?? [],
+        files = files ?? [],
         users = users ?? [];
 
   factory FormAnswer.fromJson(Map<String, Object?> json) {
@@ -3888,6 +3949,10 @@ class FormAnswer {
               .toList() ??
           [],
       date: json[r'date'] as String?,
+      files: (json[r'files'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
       text: json[r'text'] as String?,
       time: json[r'time'] as String?,
       users: (json[r'users'] as List<Object?>?)
@@ -3901,6 +3966,7 @@ class FormAnswer {
     var adf = this.adf;
     var choices = this.choices;
     var date = this.date;
+    var files = this.files;
     var text = this.text;
     var time = this.time;
     var users = this.users;
@@ -3913,6 +3979,7 @@ class FormAnswer {
     if (date != null) {
       json[r'date'] = date;
     }
+    json[r'files'] = files;
     if (text != null) {
       json[r'text'] = text;
     }
@@ -3927,6 +3994,7 @@ class FormAnswer {
       {JsonNode? adf,
       List<String>? choices,
       String? date,
+      List<String>? files,
       String? text,
       String? time,
       List<String>? users}) {
@@ -3934,6 +4002,7 @@ class FormAnswer {
       adf: adf ?? this.adf,
       choices: choices ?? this.choices,
       date: date ?? this.date,
+      files: files ?? this.files,
       text: text ?? this.text,
       time: time ?? this.time,
       users: users ?? this.users,
@@ -4269,6 +4338,34 @@ class IncludedFields {
       actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
       excluded: excluded ?? this.excluded,
       included: included ?? this.included,
+    );
+  }
+}
+
+class InputStreamSource {
+  final Map<String, dynamic>? inputStream;
+
+  InputStreamSource({this.inputStream});
+
+  factory InputStreamSource.fromJson(Map<String, Object?> json) {
+    return InputStreamSource(
+      inputStream: json[r'inputStream'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var inputStream = this.inputStream;
+
+    final json = <String, Object?>{};
+    if (inputStream != null) {
+      json[r'inputStream'] = inputStream;
+    }
+    return json;
+  }
+
+  InputStreamSource copyWith({Map<String, dynamic>? inputStream}) {
+    return InputStreamSource(
+      inputStream: inputStream ?? this.inputStream,
     );
   }
 }
@@ -5395,7 +5492,11 @@ class OrganizationDTO {
   /// Name of the organization.
   final String? name;
 
-  OrganizationDTO({this.links, this.created, this.id, this.name});
+  /// A unique system generated ID for the organization. This is identity from
+  /// the group directory id
+  final String? uuid;
+
+  OrganizationDTO({this.links, this.created, this.id, this.name, this.uuid});
 
   factory OrganizationDTO.fromJson(Map<String, Object?> json) {
     return OrganizationDTO(
@@ -5407,6 +5508,7 @@ class OrganizationDTO {
           : null,
       id: json[r'id'] as String?,
       name: json[r'name'] as String?,
+      uuid: json[r'uuid'] as String?,
     );
   }
 
@@ -5415,6 +5517,7 @@ class OrganizationDTO {
     var created = this.created;
     var id = this.id;
     var name = this.name;
+    var uuid = this.uuid;
 
     final json = <String, Object?>{};
     if (links != null) {
@@ -5429,16 +5532,24 @@ class OrganizationDTO {
     if (name != null) {
       json[r'name'] = name;
     }
+    if (uuid != null) {
+      json[r'uuid'] = uuid;
+    }
     return json;
   }
 
   OrganizationDTO copyWith(
-      {SelfLinkDTO? links, DateDTO? created, String? id, String? name}) {
+      {SelfLinkDTO? links,
+      DateDTO? created,
+      String? id,
+      String? name,
+      String? uuid}) {
     return OrganizationDTO(
       links: links ?? this.links,
       created: created ?? this.created,
       id: id ?? this.id,
       name: name ?? this.name,
+      uuid: uuid ?? this.uuid,
     );
   }
 }
@@ -5448,25 +5559,36 @@ class OrganizationServiceDeskUpdateDTO {
   /// from the service desk.
   final int organizationId;
 
-  OrganizationServiceDeskUpdateDTO({required this.organizationId});
+  /// Service desk Id for which, organization needs to be updated
+  final String? serviceDeskId;
+
+  OrganizationServiceDeskUpdateDTO(
+      {required this.organizationId, this.serviceDeskId});
 
   factory OrganizationServiceDeskUpdateDTO.fromJson(Map<String, Object?> json) {
     return OrganizationServiceDeskUpdateDTO(
       organizationId: (json[r'organizationId'] as num?)?.toInt() ?? 0,
+      serviceDeskId: json[r'serviceDeskId'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var organizationId = this.organizationId;
+    var serviceDeskId = this.serviceDeskId;
 
     final json = <String, Object?>{};
     json[r'organizationId'] = organizationId;
+    if (serviceDeskId != null) {
+      json[r'serviceDeskId'] = serviceDeskId;
+    }
     return json;
   }
 
-  OrganizationServiceDeskUpdateDTO copyWith({int? organizationId}) {
+  OrganizationServiceDeskUpdateDTO copyWith(
+      {int? organizationId, String? serviceDeskId}) {
     return OrganizationServiceDeskUpdateDTO(
       organizationId: organizationId ?? this.organizationId,
+      serviceDeskId: serviceDeskId ?? this.serviceDeskId,
     );
   }
 }
@@ -7352,6 +7474,150 @@ class PagedLinkDTO {
   }
 }
 
+/// Details about a project.
+class ProjectDetails {
+  /// The URLs of the project's avatars.
+  final AvatarUrlsBean? avatarUrls;
+
+  /// The ID of the project.
+  final String? id;
+
+  /// The key of the project.
+  final String? key;
+
+  /// The name of the project.
+  final String? name;
+
+  /// The category the project belongs to.
+  final UpdatedProjectCategory? projectCategory;
+
+  /// The
+  /// [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes)
+  /// of the project.
+  final ProjectDetailsProjectTypeKey? projectTypeKey;
+
+  /// The URL of the project details.
+  final String? self;
+
+  /// Whether or not the project is simplified.
+  final bool simplified;
+
+  ProjectDetails(
+      {this.avatarUrls,
+      this.id,
+      this.key,
+      this.name,
+      this.projectCategory,
+      this.projectTypeKey,
+      this.self,
+      bool? simplified})
+      : simplified = simplified ?? false;
+
+  factory ProjectDetails.fromJson(Map<String, Object?> json) {
+    return ProjectDetails(
+      avatarUrls: json[r'avatarUrls'] != null
+          ? AvatarUrlsBean.fromJson(
+              json[r'avatarUrls']! as Map<String, Object?>)
+          : null,
+      id: json[r'id'] as String?,
+      key: json[r'key'] as String?,
+      name: json[r'name'] as String?,
+      projectCategory: json[r'projectCategory'] != null
+          ? UpdatedProjectCategory.fromJson(
+              json[r'projectCategory']! as Map<String, Object?>)
+          : null,
+      projectTypeKey: json[r'projectTypeKey'] != null
+          ? ProjectDetailsProjectTypeKey.fromValue(
+              json[r'projectTypeKey']! as String)
+          : null,
+      self: json[r'self'] as String?,
+      simplified: json[r'simplified'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var avatarUrls = this.avatarUrls;
+    var id = this.id;
+    var key = this.key;
+    var name = this.name;
+    var projectCategory = this.projectCategory;
+    var projectTypeKey = this.projectTypeKey;
+    var self = this.self;
+    var simplified = this.simplified;
+
+    final json = <String, Object?>{};
+    if (avatarUrls != null) {
+      json[r'avatarUrls'] = avatarUrls.toJson();
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (projectCategory != null) {
+      json[r'projectCategory'] = projectCategory.toJson();
+    }
+    if (projectTypeKey != null) {
+      json[r'projectTypeKey'] = projectTypeKey.value;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    json[r'simplified'] = simplified;
+    return json;
+  }
+
+  ProjectDetails copyWith(
+      {AvatarUrlsBean? avatarUrls,
+      String? id,
+      String? key,
+      String? name,
+      UpdatedProjectCategory? projectCategory,
+      ProjectDetailsProjectTypeKey? projectTypeKey,
+      String? self,
+      bool? simplified}) {
+    return ProjectDetails(
+      avatarUrls: avatarUrls ?? this.avatarUrls,
+      id: id ?? this.id,
+      key: key ?? this.key,
+      name: name ?? this.name,
+      projectCategory: projectCategory ?? this.projectCategory,
+      projectTypeKey: projectTypeKey ?? this.projectTypeKey,
+      self: self ?? this.self,
+      simplified: simplified ?? this.simplified,
+    );
+  }
+}
+
+class ProjectDetailsProjectTypeKey {
+  static const software = ProjectDetailsProjectTypeKey._('software');
+  static const serviceDesk = ProjectDetailsProjectTypeKey._('service_desk');
+  static const business = ProjectDetailsProjectTypeKey._('business');
+
+  static const values = [
+    software,
+    serviceDesk,
+    business,
+  ];
+  final String value;
+
+  const ProjectDetailsProjectTypeKey._(this.value);
+
+  static ProjectDetailsProjectTypeKey fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ProjectDetailsProjectTypeKey._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 /// Property key details.
 class PropertyKey {
   /// The key of the property.
@@ -7545,10 +7811,10 @@ class RequestCreateDTO {
   /// (Experimental) Shows extra information for the request channel.
   final String? channel;
 
-  /// (Experimental) Provides answers to the form associated with a request type
-  /// that is attached to the request on creation. Jira fields should be omitted
-  /// from `requestFieldValues` if they are linked to form answers. Form answers
-  /// in ADF format should have `isAdfRequest` set to true. Form answers are not
+  /// Provides answers to the form associated with a request type that is
+  /// attached to the request on creation. Jira fields should be omitted from
+  /// `requestFieldValues` if they are linked to form answers. Form answers in
+  /// ADF format should have `isAdfRequest` set to true. Form answers are not
   /// currently validated.
   final Form? form;
 
@@ -7807,6 +8073,10 @@ class RequestTypeDTO {
   /// REST API URL for the request type.
   final SelfLinkDTO? links;
 
+  /// Whether the user has permission to create a request with this request
+  /// type.
+  final bool canCreateRequest;
+
   /// Description of the request type.
   final String? description;
 
@@ -7838,12 +8108,16 @@ class RequestTypeDTO {
   /// The request type's practice
   final String? practice;
 
+  /// Whether request type is restricted or not.
+  final RequestTypeDTORestrictionStatus? restrictionStatus;
+
   /// ID of the service desk the request type belongs to.
   final String? serviceDeskId;
 
   RequestTypeDTO(
       {List<String>? expands,
       this.links,
+      bool? canCreateRequest,
       this.description,
       this.fields,
       List<String>? groupIds,
@@ -7854,8 +8128,10 @@ class RequestTypeDTO {
       this.name,
       this.portalId,
       this.practice,
+      this.restrictionStatus,
       this.serviceDeskId})
       : expands = expands ?? [],
+        canCreateRequest = canCreateRequest ?? false,
         groupIds = groupIds ?? [];
 
   factory RequestTypeDTO.fromJson(Map<String, Object?> json) {
@@ -7867,6 +8143,7 @@ class RequestTypeDTO {
       links: json[r'_links'] != null
           ? SelfLinkDTO.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
+      canCreateRequest: json[r'canCreateRequest'] as bool? ?? false,
       description: json[r'description'] as String?,
       fields: json[r'fields'] != null
           ? CustomerRequestCreateMetaDTO.fromJson(
@@ -7885,6 +8162,10 @@ class RequestTypeDTO {
       name: json[r'name'] as String?,
       portalId: json[r'portalId'] as String?,
       practice: json[r'practice'] as String?,
+      restrictionStatus: json[r'restrictionStatus'] != null
+          ? RequestTypeDTORestrictionStatus.fromValue(
+              json[r'restrictionStatus']! as String)
+          : null,
       serviceDeskId: json[r'serviceDeskId'] as String?,
     );
   }
@@ -7892,6 +8173,7 @@ class RequestTypeDTO {
   Map<String, Object?> toJson() {
     var expands = this.expands;
     var links = this.links;
+    var canCreateRequest = this.canCreateRequest;
     var description = this.description;
     var fields = this.fields;
     var groupIds = this.groupIds;
@@ -7902,6 +8184,7 @@ class RequestTypeDTO {
     var name = this.name;
     var portalId = this.portalId;
     var practice = this.practice;
+    var restrictionStatus = this.restrictionStatus;
     var serviceDeskId = this.serviceDeskId;
 
     final json = <String, Object?>{};
@@ -7909,6 +8192,7 @@ class RequestTypeDTO {
     if (links != null) {
       json[r'_links'] = links.toJson();
     }
+    json[r'canCreateRequest'] = canCreateRequest;
     if (description != null) {
       json[r'description'] = description;
     }
@@ -7937,6 +8221,9 @@ class RequestTypeDTO {
     if (practice != null) {
       json[r'practice'] = practice;
     }
+    if (restrictionStatus != null) {
+      json[r'restrictionStatus'] = restrictionStatus.value;
+    }
     if (serviceDeskId != null) {
       json[r'serviceDeskId'] = serviceDeskId;
     }
@@ -7946,6 +8233,7 @@ class RequestTypeDTO {
   RequestTypeDTO copyWith(
       {List<String>? expands,
       SelfLinkDTO? links,
+      bool? canCreateRequest,
       String? description,
       CustomerRequestCreateMetaDTO? fields,
       List<String>? groupIds,
@@ -7956,10 +8244,12 @@ class RequestTypeDTO {
       String? name,
       String? portalId,
       String? practice,
+      RequestTypeDTORestrictionStatus? restrictionStatus,
       String? serviceDeskId}) {
     return RequestTypeDTO(
       expands: expands ?? this.expands,
       links: links ?? this.links,
+      canCreateRequest: canCreateRequest ?? this.canCreateRequest,
       description: description ?? this.description,
       fields: fields ?? this.fields,
       groupIds: groupIds ?? this.groupIds,
@@ -7970,9 +8260,33 @@ class RequestTypeDTO {
       name: name ?? this.name,
       portalId: portalId ?? this.portalId,
       practice: practice ?? this.practice,
+      restrictionStatus: restrictionStatus ?? this.restrictionStatus,
       serviceDeskId: serviceDeskId ?? this.serviceDeskId,
     );
   }
+}
+
+class RequestTypeDTORestrictionStatus {
+  static const open = RequestTypeDTORestrictionStatus._('OPEN');
+  static const restricted = RequestTypeDTORestrictionStatus._('RESTRICTED');
+
+  static const values = [
+    open,
+    restricted,
+  ];
+  final String value;
+
+  const RequestTypeDTORestrictionStatus._(this.value);
+
+  static RequestTypeDTORestrictionStatus fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => RequestTypeDTORestrictionStatus._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 class RequestTypeFieldDTO {
@@ -8260,6 +8574,163 @@ class RequestTypeIconLinkDTO {
       iconUrls: iconUrls ?? this.iconUrls,
     );
   }
+}
+
+class Resource {
+  final String? description;
+  final String? file;
+  final String? filename;
+  final Map<String, dynamic>? inputStream;
+  final bool open;
+  final bool readable;
+  final String? uri;
+  final String? url;
+
+  Resource(
+      {this.description,
+      this.file,
+      this.filename,
+      this.inputStream,
+      bool? open,
+      bool? readable,
+      this.uri,
+      this.url})
+      : open = open ?? false,
+        readable = readable ?? false;
+
+  factory Resource.fromJson(Map<String, Object?> json) {
+    return Resource(
+      description: json[r'description'] as String?,
+      file: json[r'file'] as String?,
+      filename: json[r'filename'] as String?,
+      inputStream: json[r'inputStream'] as Map<String, Object?>?,
+      open: json[r'open'] as bool? ?? false,
+      readable: json[r'readable'] as bool? ?? false,
+      uri: json[r'uri'] as String?,
+      url: json[r'url'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var file = this.file;
+    var filename = this.filename;
+    var inputStream = this.inputStream;
+    var open = this.open;
+    var readable = this.readable;
+    var uri = this.uri;
+    var url = this.url;
+
+    final json = <String, Object?>{};
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (file != null) {
+      json[r'file'] = file;
+    }
+    if (filename != null) {
+      json[r'filename'] = filename;
+    }
+    if (inputStream != null) {
+      json[r'inputStream'] = inputStream;
+    }
+    json[r'open'] = open;
+    json[r'readable'] = readable;
+    if (uri != null) {
+      json[r'uri'] = uri;
+    }
+    if (url != null) {
+      json[r'url'] = url;
+    }
+    return json;
+  }
+
+  Resource copyWith(
+      {String? description,
+      String? file,
+      String? filename,
+      Map<String, dynamic>? inputStream,
+      bool? open,
+      bool? readable,
+      String? uri,
+      String? url}) {
+    return Resource(
+      description: description ?? this.description,
+      file: file ?? this.file,
+      filename: filename ?? this.filename,
+      inputStream: inputStream ?? this.inputStream,
+      open: open ?? this.open,
+      readable: readable ?? this.readable,
+      uri: uri ?? this.uri,
+      url: url ?? this.url,
+    );
+  }
+}
+
+/// The projects the item is associated with. Indicated for items associated
+/// with [next-gen projects](https://confluence.atlassian.com/x/loMyO).
+class Scope {
+  /// The project the item has scope in.
+  final ProjectDetails? project;
+
+  /// The type of scope.
+  final ScopeType? type;
+
+  Scope({this.project, this.type});
+
+  factory Scope.fromJson(Map<String, Object?> json) {
+    return Scope(
+      project: json[r'project'] != null
+          ? ProjectDetails.fromJson(json[r'project']! as Map<String, Object?>)
+          : null,
+      type: json[r'type'] != null
+          ? ScopeType.fromValue(json[r'type']! as String)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var project = this.project;
+    var type = this.type;
+
+    final json = <String, Object?>{};
+    if (project != null) {
+      json[r'project'] = project.toJson();
+    }
+    if (type != null) {
+      json[r'type'] = type.value;
+    }
+    return json;
+  }
+
+  Scope copyWith({ProjectDetails? project, ScopeType? type}) {
+    return Scope(
+      project: project ?? this.project,
+      type: type ?? this.type,
+    );
+  }
+}
+
+class ScopeType {
+  static const project = ScopeType._('PROJECT');
+  static const template = ScopeType._('TEMPLATE');
+
+  static const values = [
+    project,
+    template,
+  ];
+  final String value;
+
+  const ScopeType._(this.value);
+
+  static ScopeType fromValue(String value) => values
+      .firstWhere((e) => e.value == value, orElse: () => ScopeType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 class SelfLinkDTO {
@@ -9039,6 +9510,9 @@ class StatusDetails {
   /// The name of the status.
   final String? name;
 
+  /// The scope of the field.
+  final Scope? scope;
+
   /// The URL of the status.
   final String? self;
 
@@ -9050,6 +9524,7 @@ class StatusDetails {
       this.iconUrl,
       this.id,
       this.name,
+      this.scope,
       this.self,
       this.statusCategory});
 
@@ -9059,6 +9534,9 @@ class StatusDetails {
       iconUrl: json[r'iconUrl'] as String?,
       id: json[r'id'] as String?,
       name: json[r'name'] as String?,
+      scope: json[r'scope'] != null
+          ? Scope.fromJson(json[r'scope']! as Map<String, Object?>)
+          : null,
       self: json[r'self'] as String?,
       statusCategory: json[r'statusCategory'] != null
           ? StatusCategory.fromJson(
@@ -9072,6 +9550,7 @@ class StatusDetails {
     var iconUrl = this.iconUrl;
     var id = this.id;
     var name = this.name;
+    var scope = this.scope;
     var self = this.self;
     var statusCategory = this.statusCategory;
 
@@ -9088,6 +9567,9 @@ class StatusDetails {
     if (name != null) {
       json[r'name'] = name;
     }
+    if (scope != null) {
+      json[r'scope'] = scope.toJson();
+    }
     if (self != null) {
       json[r'self'] = self;
     }
@@ -9102,6 +9584,7 @@ class StatusDetails {
       String? iconUrl,
       String? id,
       String? name,
+      Scope? scope,
       String? self,
       StatusCategory? statusCategory}) {
     return StatusDetails(
@@ -9109,6 +9592,7 @@ class StatusDetails {
       iconUrl: iconUrl ?? this.iconUrl,
       id: id ?? this.id,
       name: name ?? this.name,
+      scope: scope ?? this.scope,
       self: self ?? this.self,
       statusCategory: statusCategory ?? this.statusCategory,
     );
@@ -9181,6 +9665,64 @@ class TemporaryAttachments {
       {List<TemporaryAttachment>? temporaryAttachments}) {
     return TemporaryAttachments(
       temporaryAttachments: temporaryAttachments ?? this.temporaryAttachments,
+    );
+  }
+}
+
+/// A project category.
+class UpdatedProjectCategory {
+  /// The name of the project category.
+  final String? description;
+
+  /// The ID of the project category.
+  final String? id;
+
+  /// The description of the project category.
+  final String? name;
+
+  /// The URL of the project category.
+  final String? self;
+
+  UpdatedProjectCategory({this.description, this.id, this.name, this.self});
+
+  factory UpdatedProjectCategory.fromJson(Map<String, Object?> json) {
+    return UpdatedProjectCategory(
+      description: json[r'description'] as String?,
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      self: json[r'self'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var id = this.id;
+    var name = this.name;
+    var self = this.self;
+
+    final json = <String, Object?>{};
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    return json;
+  }
+
+  UpdatedProjectCategory copyWith(
+      {String? description, String? id, String? name, String? self}) {
+    return UpdatedProjectCategory(
+      description: description ?? this.description,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      self: self ?? this.self,
     );
   }
 }
@@ -9512,6 +10054,9 @@ class UsersOrganizationUpdateDTO {
   /// organization.
   final List<String> accountIds;
 
+  /// The organizationId in which users need to be added
+  final int? organizationId;
+
   /// This property is no longer available and will be removed from the
   /// documentation soon. See the
   /// [deprecation notice](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/)
@@ -9519,7 +10064,7 @@ class UsersOrganizationUpdateDTO {
   final List<String> usernames;
 
   UsersOrganizationUpdateDTO(
-      {List<String>? accountIds, List<String>? usernames})
+      {List<String>? accountIds, this.organizationId, List<String>? usernames})
       : accountIds = accountIds ?? [],
         usernames = usernames ?? [];
 
@@ -9529,6 +10074,7 @@ class UsersOrganizationUpdateDTO {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
+      organizationId: (json[r'organizationId'] as num?)?.toInt(),
       usernames: (json[r'usernames'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -9538,18 +10084,25 @@ class UsersOrganizationUpdateDTO {
 
   Map<String, Object?> toJson() {
     var accountIds = this.accountIds;
+    var organizationId = this.organizationId;
     var usernames = this.usernames;
 
     final json = <String, Object?>{};
     json[r'accountIds'] = accountIds;
+    if (organizationId != null) {
+      json[r'organizationId'] = organizationId;
+    }
     json[r'usernames'] = usernames;
     return json;
   }
 
   UsersOrganizationUpdateDTO copyWith(
-      {List<String>? accountIds, List<String>? usernames}) {
+      {List<String>? accountIds,
+      int? organizationId,
+      List<String>? usernames}) {
     return UsersOrganizationUpdateDTO(
       accountIds: accountIds ?? this.accountIds,
+      organizationId: organizationId ?? this.organizationId,
       usernames: usernames ?? this.usernames,
     );
   }

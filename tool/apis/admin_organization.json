@@ -19,6 +19,10 @@
       "description": "Orgs Users APIs"
     },
     {
+      "name": "Groups",
+      "description": "Orgs Groups APIs"
+    },
+    {
       "name": "Domains",
       "description": "Domain APIs"
     },
@@ -136,8 +140,8 @@
           "Users"
         ],
         "operationId": "getUsers",
-        "summary": "Get users in an organization",
-        "description": "Returns a list of users in an organization.",
+        "summary": "Get managed accounts in an organization",
+        "description": "Returns a list of managed accounts in an organization.",
         "parameters": [
           {
             "name": "orgId",
@@ -180,6 +184,242 @@
           },
           "429": {
             "$ref": "#/components/responses/Error.RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    },
+    "/v1/orgs/{orgId}/users/search": {
+      "post": {
+        "x-experimental": true,
+        "tags": [
+          "Users"
+        ],
+        "operationId": "searchUsers",
+        "summary": "Search for users in an organization",
+        "description": "**The API is available for customers using the new user management experience only. [How the new user management experience works](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592)**\n\nReturns a list of users within an organization, offering search functionality through multiple parameters for more precise results.\n",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "Your organization is identified by a Unique ID. You get your organization ID and Organization API key simultaneously.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsersSearchRequest"
+              },
+              "examples": {
+                "limit_only": {
+                  "value": {
+                    "limit": 20
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Organization found. Response contains user search results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsersSearchPage"
+                },
+                "examples": {
+                  "users_search_response": {
+                    "value": {
+                      "data": [
+                        {
+                          "accountId": "<string>",
+                          "accountType": "atlassian",
+                          "accountStatus": "active"
+                        }
+                      ],
+                      "links": {
+                        "next": "<string>",
+                        "self": "<string>"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-400-24`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized\n\nExpected values for `ApplicationError.code`: (see type description for details)\n  - `ADMIN-401-2`\n\nExpected values for `ProxyError.code`: (see type description for details)\n  - `401`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ProxyError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-403-3`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many API requests\n\nExpected values for `ProxyError.code`: (see type description for details)\n- `429`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProxyError"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/Error.InternalError"
+          }
+        }
+      }
+    },
+    "/v1/orgs/{orgId}/groups/search": {
+      "post": {
+        "x-experimental": true,
+        "tags": [
+          "Groups"
+        ],
+        "operationId": "searchGroups",
+        "summary": "Search for groups within an organization",
+        "description": "**The API is available for customers using the new user management experience only. [How the new user management experience works](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592)**\n\nReturns a list of groups within an organization, offering search functionality through multiple parameters for more precise results.\n",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "Your organization is identified by a Unique ID. You get your organization ID and Organization API key simultaneously.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupsSearchRequest"
+              },
+              "examples": {
+                "limit_only": {
+                  "value": {
+                    "limit": 20
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Organization found. Response contains group search results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupsSearchPage"
+                },
+                "examples": {
+                  "groups_search_response": {
+                    "value": {
+                      "data": [
+                        {
+                          "id": "<string>",
+                          "name": "<string>",
+                          "description": "<string>"
+                        }
+                      ],
+                      "links": {
+                        "next": "<string>",
+                        "self": "<string>"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-400-24`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized\n\nExpected values for `ApplicationError.code`: (see type description for details)\n  - `ADMIN-401-2`\n\nExpected values for `ProxyError.code`: (see type description for details)\n  - `401`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ProxyError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-403-3`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many API requests\n\nExpected values for `ProxyError.code`: (see type description for details)\n- `429`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProxyError"
+                }
+              }
+            }
           },
           "500": {
             "$ref": "#/components/responses/Error.InternalError"
@@ -373,6 +613,74 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "actor",
+            "in": "query",
+            "description": "A query filter that returns events by one or more specific actors.",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "name": "ip",
+            "in": "query",
+            "description": "A query filter that returns events by one or more specific ip addresses.",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "name": "product",
+            "in": "query",
+            "description": "A query filter that returns events by one or more specific products.",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "bitbucket",
+                  "confluence",
+                  "guard_detect",
+                  "jira"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "description": "A query filter that returns events by one or more specific locations. Of format: [ { \"city\": \"<CityName>\", \"countryName\": \"<CountryName>\" }, ... ]",
+            "schema": {
+              "type": "string",
+              "example": [
+                {
+                  "city": "Austin",
+                  "countryName": "United States"
+                },
+                {
+                  "city": "Sydney",
+                  "countryName": "Australia"
+                }
+              ]
+            },
+            "style": "form",
+            "explode": false
           }
         ],
         "responses": {
@@ -397,6 +705,12 @@
                     },
                     {
                       "$ref": "#/components/schemas/Error.InvalidSearchTimeDate.Model"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Error.InvalidQueryCount.Model"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Error.InvalidRequestSyntax.Model"
                     }
                   ]
                 }
@@ -1447,9 +1761,8 @@
         "tags": [
           "Directory"
         ],
-        "x-experimental": true,
         "summary": "Restore user access",
-        "description": "**The API is available for customers using the new user management experience only.** Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).\n\nSpecifications:\n- Restore access of an existing user to products listed in Atlassian Administration.\n- Retract the suspend user action.\n\nLearn the fastest way to call the API with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/organization/restore-user/).\n",
+        "description": "**The API is available for customers using the new user management experience only.** Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).\n\nThis API will:\n- Restore access of an existing user to products listed in Atlassian Administration.\n- Retract the suspend user action.\n\nThis API will not:\n- Restore access to a user when they have access to a product which is breaching it's license limit.\\\nTo make these changes, you will need to [remove users](https://developer.atlassian.com/cloud/admin/organization/rest/api-group-directory/#api-v1-orgs-orgid-directory-groups-groupid-memberships-accountid-delete) from the group or \n[suspend users](https://developer.atlassian.com/cloud/admin/organization/rest/api-group-directory/#api-v1-orgs-orgid-directory-users-accountid-suspend-access-post) that are in the group first.\\\nYou can also [manage your subscription](https://support.atlassian.com/subscriptions-and-billing/resources/) for the breaching product to increase your license limits.\n- Restore access to any user when your organisation has too many products that are breaching their license limits.\n\nLearn the fastest way to call the API with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/organization/restore-user/).\n",
         "parameters": [
           {
             "name": "orgId",
@@ -1489,7 +1802,7 @@
             }
           },
           "400": {
-            "description": "Bad request\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-400-4`\n",
+            "description": "Bad request\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-400-4`\n- `ADMIN-400-32`\n",
             "content": {
               "application/json": {
                 "schema": {
@@ -1535,6 +1848,16 @@
               }
             }
           },
+          "409": {
+            "description": "Conflict\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-409-3`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
           "429": {
             "description": "Too many API requests\n\nExpected values for `ProxyError.code`: (see type description for details)\n- `429`\n",
             "content": {
@@ -1556,7 +1879,6 @@
         "tags": [
           "Directory"
         ],
-        "x-experimental": true,
         "summary": "Create group",
         "description": "**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n\nThis API will:\n- Create a group in the organization's directory.\n- Create a collection of users that you can use to easily manage permissions, content access, notification schemes, and roles.\n\n**The creation of new groups using existing group names is not permitted.**\n\nLearn the fastest way to call the API with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/organization/create-group/#create-group).\n",
         "parameters": [
@@ -1670,9 +1992,8 @@
         "tags": [
           "Directory"
         ],
-        "x-experimental": true,
         "summary": "Delete group",
-        "description": "**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n\nThis API will:\n- Delete a group from the organization's directory.\n- Delete the permissions, content access, notification schemes, and roles granted to the users.\n\nThis API will not:\n- Delete groups that are synchronized through SCIM. To delete these groups, you will need to delete them within your external identity provider. Learn more about [configuring user provisioning with an identity provider](https://support.atlassian.com/provisioning-users/docs/configure-user-provisioning-with-an-identity-provider/).\n- Delete a group if it’s marked as a [default group](https://support.atlassian.com/user-management/docs/default-groups-and-permissions).\n- Delete `site-admin` group and therefore revoke org-admin role from a user.\n\nLearn the fastest way to call the API with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/organization/delete-group/#delete-group).\n",
+        "description": "**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n\nThis API will:\n- Delete a group from the organization's directory.\n- Delete the permissions, content access, notification schemes, and roles granted to the users.\n\nThis API will not:\n- Delete groups that are synchronized through SCIM. To delete these groups, you will need to delete them within your external identity provider. Learn more about [configuring user provisioning with an identity provider](https://support.atlassian.com/provisioning-users/docs/configure-user-provisioning-with-an-identity-provider/).\n- Delete a group if it’s marked as a [default group](https://support.atlassian.com/user-management/docs/default-groups-and-permissions).\n- Delete `site-admin` group and therefore revoke org-admin role from a user.\n- Delete a group if it contains users (unless forced).\n\nLearn the fastest way to call the API with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/organization/delete-group/#delete-group).\n",
         "parameters": [
           {
             "name": "orgId",
@@ -1690,6 +2011,14 @@
             "description": "Unique ID that serves as reference to the group.\nUse the [Jira Group Search API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-groups-picker-get) to get the groupId (if Jira is available for your Organization). **Jira APIs use a different [authentication method ](https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/).**\nIf you don’t have Jira, export a .csv of the user list. Make sure to select **pivot to column** when prompted. Learn how to [export users from a site](https://support.atlassian.com/organization-administration/docs/export-users-from-a-site/).",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "forceIfNotEmpty",
+            "in": "query",
+            "description": "Groups cannot be deleted if it contains users, unless `forceIfNotEmpty=true` is provided",
+            "schema": {
+              "type": "boolean"
             }
           }
         ],
@@ -1758,6 +2087,16 @@
               }
             }
           },
+          "409": {
+            "description": "Conflict\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-409-5`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
           "429": {
             "description": "Too many API requests\n\nExpected values for `ProxyError.code`: (see type description for details)\n- `429`\n",
             "content": {
@@ -1779,9 +2118,8 @@
         "tags": [
           "Directory"
         ],
-        "x-experimental": true,
         "summary": "Add user to group",
-        "description": "**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n\nThis API will:\n- Add user to a group.\n- Assign multiple permissions to user at once.\n- Easily manage permissions, content access, notification schemes, and roles.\n\nThis API will not:\n- Make modifications to group memberships that are synchronized through SCIM. To make changes to these memberships, you will need to modify them within your external identity provider. Learn more about [configuring user provisioning with an identity provider](https://support.atlassian.com/provisioning-users/docs/configure-user-provisioning-with-an-identity-provider/).\n\nLearn the fastest way to call the API with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/organization/add-user-to-group/).\n",
+        "description": "**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n\nThis API will:\n- Add user to a group.\n- Assign multiple permissions to user at once.\n- Easily manage permissions, content access, notification schemes, and roles.\n\nThis API will not:\n- Make modifications to group memberships that are synchronized through SCIM. To make changes to these memberships, you will need to modify them within your external identity provider. Learn more about [configuring user provisioning with an identity provider](https://support.atlassian.com/provisioning-users/docs/configure-user-provisioning-with-an-identity-provider/).\n- Add a user to a group that gives access to a product which is breaching it's license limit.\\\nTo make these changes, you will need to [remove users](https://developer.atlassian.com/cloud/admin/organization/rest/api-group-directory/#api-v1-orgs-orgid-directory-groups-groupid-memberships-accountid-delete) from the group or\n[suspend users](https://developer.atlassian.com/cloud/admin/organization/rest/api-group-directory/#api-v1-orgs-orgid-directory-users-accountid-suspend-access-post) that are in the group first.\\\nYou can also [manage your subscription](https://support.atlassian.com/subscriptions-and-billing/resources/) for the breaching product to increase your license limits.\n- Add a user to any group when your organisation has too many products that are breaching their license limits.\n\nLearn the fastest way to call the API with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/organization/add-user-to-group/).\n",
         "parameters": [
           {
             "name": "orgId",
@@ -1830,7 +2168,7 @@
             }
           },
           "400": {
-            "description": "Bad request\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-400-4`\n- `ADMIN-400-24`\n",
+            "description": "Bad request\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-400-4`\n- `ADMIN-400-24`\n- `ADMIN-400-32`\n",
             "content": {
               "application/json": {
                 "schema": {
@@ -1876,6 +2214,16 @@
               }
             }
           },
+          "409": {
+            "description": "Conflict\n\nExpected values for `ApplicationError.code`: (see type description for details)\n- `ADMIN-409-3`\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors.ApplicationErrors.Model"
+                }
+              }
+            }
+          },
           "429": {
             "description": "Too many API requests\n\nExpected values for `ProxyError.code`: (see type description for details)\n- `429`\n",
             "content": {
@@ -1897,7 +2245,6 @@
         "tags": [
           "Directory"
         ],
-        "x-experimental": true,
         "summary": "Remove user from group",
         "description": "**The API is available for customers using the new user management experience only. Learn more about the [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).**\n\nThis API will:\n- Remove user from a group.\n- Remove multiple permissions for user at once.\n- Easily manage permissions, content access, notification schemes, and roles.\n\nThis API will not:\n- Make modifications to group memberships that are synchronized through SCIM. To make changes to these memberships, you will need to modify them within your external identity provider. Learn more about [configuring user provisioning with an identity provider](https://support.atlassian.com/provisioning-users/docs/configure-user-provisioning-with-an-identity-provider/).\n- Modify `site-admin` group and therefore revoke org-admin role from a user.\n\nLearn the fastest way to call the API with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/organization/remove-user-to-group/).\n",
         "parameters": [
@@ -2158,7 +2505,7 @@
       {
         "title": "About",
         "anchor": "About",
-        "body": "The Organizations REST API provides resources for managing an Atlassian organization. Use this API to:\n- Get a list of users in an organization and update their access to products\n- Create and update organization policies\n- Get lists of domains and events\n\nTo manage accounts, use the [User management REST API](https://developer.atlassian.com/cloud/admin/user-management/rest/intro/).\n\nTo integrate your organization with an identity provider, use the [User provisioning REST API](https://developer.atlassian.com/cloud/admin/user-provisioning/rest/intro)."
+        "body": "The Organizations REST API provides resources for managing an Atlassian organization. Use this API to:\n- Get a list of users in an organization and update their access to products\n- Create and update organization policies\n- Get lists of domains and events\n\nPermission: Organization admin\n\n[Discover additional admin features](https://developer.atlassian.com/cloud/admin/rest-apis/)"
       },
       {
         "title": "Authentication",
@@ -2168,7 +2515,7 @@
       {
         "title": "Rate limits",
         "anchor": "rate limits",
-        "body": "A rate limit defines the maximum number of API calls an application or user can perform during a specific time frame. When this threshold is surpassed, or if CPU or total time constraints are exceeded, the application or user might encounter delays. Consequently, API requests initiated by the user or application will not succeed.\n\nIt is essential to note that all API requests are subjected to rate limits.\n\nWhen a client breach the rate limit thresholds, they get [HTTP 429 Too Many Requests](https://datatracker.ietf.org/doc/html/rfc6585#section-4) responses. The client has to wait for the rate limit counter to reset on the server before being able to make successful requests.\n\n**Rate limit response headers**\n\nThe following HTTP response headers are returned indicating the rate and threshold allowed for a client for each endpoint.\n- **X-RateLimit-Limit:** The number of allowed requests in the current period\n- **X-RateLimit-Remaining:** The number of remaining requests in the current period\n- **X-RateLimit-Reset:** Next period reset time (ISO 8601 - Date and time in UTC)"
+        "body": "A rate limit defines the maximum number of API calls an application or user can perform during a specific time frame. When this threshold is surpassed, or if CPU or total time constraints are exceeded, the application or user might encounter delays. Consequently, API requests initiated by the user or application will not succeed.\n\nIt is essential to note that all API requests are subjected to rate limits.\n\nWhen a client breach the rate limit thresholds, they get [HTTP 429 Too Many Requests](https://datatracker.ietf.org/doc/html/rfc6585#section-4) responses. The client has to wait for the rate limit counter to reset on the server before being able to make successful requests.\n\n**Rate limit response headers**\n\nThe following HTTP response headers are returned indicating the rate and threshold allowed for a client for each endpoint.\n- **X-RateLimit-Limit:** The number of allowed requests in the current period\n- **X-RateLimit-Remaining:** The number of remaining requests in the current period\n- **X-RateLimit-Reset:** Next period reset time (ISO 8601 - Date and time in UTC)\n\n**Rate limits of Events API**\n\nRate limits for the following endpoints is specified below: \n \n- `GET /v1/orgs/{orgId}/events`\n- `GET /v1/orgs/{orgId}/events/{eventId}`\n- `GET /v1/orgs/{orgId}/event-actions`\n\n- *Rate limit per user*: *60* requests per minute\n- *Rate limit per API path*: *50* requests per minute"
       },
       {
         "title": "Version and URI",
@@ -2529,7 +2876,7 @@
         "properties": {
           "account_id": {
             "type": "string",
-            "description": "The account ID for the user. The format is [a-zA-Z0-9_|-:]{1,128}"
+            "description": "Unique ID of the users account. The format is [a-zA-Z0-9_|-:]{1,128}"
           },
           "account_type": {
             "type": "string",
@@ -2563,7 +2910,7 @@
           },
           "access_billable": {
             "type": "boolean",
-            "description": "Billable status of User in Atlassian Access"
+            "description": "Billable status of User in Atlassian Guard Standard"
           },
           "last_active": {
             "type": "string",
@@ -2643,6 +2990,158 @@
           }
         }
       },
+      "UsersSearchRequest": {
+        "type": "object",
+        "properties": {
+          "accountIds": {
+            "maxItems": 100,
+            "minItems": 0,
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Unique ID of the users account. The format is [a-zA-Z0-9_|-:]{1,128}",
+            "items": {
+              "maxLength": 100,
+              "minLength": 0,
+              "type": "string",
+              "format": "uuid",
+              "description": "Unique ID of the users account. The format is [a-zA-Z0-9_|-:]{1,128}"
+            }
+          },
+          "accountTypes": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "The type of account",
+            "items": {
+              "type": "string",
+              "description": "The type of account",
+              "enum": [
+                "atlassian",
+                "customer",
+                "app"
+              ]
+            }
+          },
+          "accountStatuses": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "The lifecycle status of the account",
+            "items": {
+              "type": "string",
+              "description": "The lifecycle status of the account",
+              "enum": [
+                "ACTIVE",
+                "INACTIVE"
+              ]
+            }
+          },
+          "namesOrNicknames": {
+            "$ref": "#/components/schemas/NamesOrNicknames"
+          },
+          "emailUsernames": {
+            "$ref": "#/components/schemas/EmailUsernames"
+          },
+          "emailDomains": {
+            "$ref": "#/components/schemas/EmailDomains"
+          },
+          "isSuspended": {
+            "type": "boolean",
+            "description": "Suspended users with no access. This is independent of the user account status"
+          },
+          "cursor": {
+            "type": "string",
+            "description": "Starting point marker for page result retrieval"
+          },
+          "limit": {
+            "maximum": 10000,
+            "minimum": 1,
+            "type": "integer",
+            "description": "The number of items to return. Default = max = 10000",
+            "format": "int32"
+          },
+          "expand": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Indicates the user information fields to include in the response. If unspecified, the response defaults to including only the accountId, accountType, and accountStatus fields.\nThe data for the product last access may be delayed by up to 24 hours.",
+            "items": {
+              "type": "string",
+              "description": "Indicates the user information fields to include in the response. If unspecified, the response defaults to including only the accountId, accountType, and accountStatus fields.",
+              "enum": [
+                "NAME",
+                "EMAIL",
+                "EMAIL_VERIFIED",
+                "PRODUCT_LAST_ACCESS",
+                "GROUPS"
+              ]
+            }
+          }
+        }
+      },
+      "UsersSearchPage": {
+        "required": [
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicUser"
+            }
+          },
+          "links": {
+            "$ref": "#/components/schemas/LinkPageModel"
+          }
+        }
+      },
+      "PublicUser": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "type": "string",
+            "description": "Unique ID of the users account. The format is [a-zA-Z0-9_|-:]{1,128}"
+          },
+          "name": {
+            "type": "string",
+            "description": "The display name of the user. Should be used for contextual rendering of the authorship in content. If the user has restricted visibility of their name, their nickname is displayed as a substitute value"
+          },
+          "nickname": {
+            "type": "string",
+            "description": "The nickname of the user. Should be used for mentions or other in content references to the user."
+          },
+          "accountType": {
+            "type": "string",
+            "description": "The type of account",
+            "enum": [
+              "atlassian",
+              "customer",
+              "app"
+            ]
+          },
+          "accountStatus": {
+            "type": "string",
+            "description": "The lifecycle status of the account",
+            "enum": [
+              "active",
+              "partial",
+              "inactive",
+              "closed"
+            ]
+          },
+          "email": {
+            "type": "string",
+            "description": "The email address of the user. The email will be absent for any user with an account_type of `app`"
+          },
+          "emailVerified": {
+            "type": "boolean",
+            "description": "The email verification status of the user."
+          },
+          "statusInUserbase": {
+            "type": "boolean",
+            "description": "The status of the user in the userbase"
+          }
+        },
+        "description": "The current page of search results"
+      },
       "CreateGroupInput": {
         "type": "object",
         "required": [
@@ -2659,6 +3158,44 @@
           }
         }
       },
+      "PublicGroup": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "roleAssignments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoleAssignment"
+            }
+          }
+        }
+      },
+      "RoleAssignment": {
+        "type": "object",
+        "properties": {
+          "resourceId": {
+            "type": "string"
+          },
+          "principalId": {
+            "type": "string"
+          },
+          "roleId": {
+            "type": "string"
+          }
+        }
+      },
       "AddGroupMembershipInput": {
         "type": "object",
         "required": [
@@ -2668,6 +3205,159 @@
           "account_id": {
             "type": "string",
             "description": "Unique ID of the user's account that you are adding to the group.\nUse the [Jira User Search API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-users-search-get) to get the accountId (if Jira is available for your Organization). **Jira APIs use a different [authentication method ](https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/).**\nIf you don’t have Jira, export a .csv of the user list. Learn how to [export users from a site](https://support.atlassian.com/organization-administration/docs/export-users-from-a-site/)."
+          }
+        }
+      },
+      "GroupsSearchRequest": {
+        "type": "object",
+        "properties": {
+          "groupIds": {
+            "maxItems": 100,
+            "minItems": 0,
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Unique ID that serves as reference to the group.",
+            "items": {
+              "maxLength": 100,
+              "minLength": 0,
+              "type": "string",
+              "format": "uuid",
+              "description": "Unique ID that serves as reference to the group."
+            }
+          },
+          "groupNames": {
+            "$ref": "#/components/schemas/GroupNames"
+          },
+          "cursor": {
+            "type": "string",
+            "description": "Cursor specifying the starting point for page result retrieval."
+          },
+          "limit": {
+            "maximum": 1000,
+            "minimum": 1,
+            "type": "integer",
+            "description": "The number of items to return. Default = max = 1000",
+            "format": "int"
+          },
+          "expand": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Indicates the user information fields to include in the response. If unspecified, the response defaults to id, name and description.",
+            "items": {
+              "type": "string",
+              "description": "Indicates the user information fields to include in the response. If unspecified, the response defaults to id, name and description.",
+              "enum": [
+                "USERS",
+                "META",
+                "ROLE_ASSIGNMENTS",
+                "MANAGEMENT_ACCESS"
+              ]
+            }
+          }
+        }
+      },
+      "GroupsSearchPage": {
+        "required": [
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicGroup"
+            }
+          },
+          "links": {
+            "$ref": "#/components/schemas/LinkPageModel"
+          }
+        }
+      },
+      "NamesOrNicknames": {
+        "type": "object",
+        "properties": {
+          "eq": {
+            "maxItems": 100,
+            "minItems": 0,
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Names or nicknames filter",
+            "items": {
+              "maxLength": 100,
+              "minLength": 0,
+              "type": "string",
+              "description": "Names or nicknames filter"
+            }
+          },
+          "contains": {
+            "type": "string",
+            "description": "Partial name or nickname filter"
+          }
+        }
+      },
+      "EmailDomains": {
+        "type": "object",
+        "properties": {
+          "eq": {
+            "maxItems": 100,
+            "minItems": 0,
+            "uniqueItems": true,
+            "type": "array",
+            "description": "The list of email domains to filter by",
+            "items": {
+              "maxLength": 100,
+              "minLength": 0,
+              "type": "string",
+              "description": "The list of email domains to filter by"
+            }
+          },
+          "contains": {
+            "type": "string",
+            "description": "Partial email domain filter"
+          }
+        }
+      },
+      "EmailUsernames": {
+        "type": "object",
+        "properties": {
+          "eq": {
+            "maxItems": 100,
+            "minItems": 0,
+            "uniqueItems": true,
+            "type": "array",
+            "description": "The list of email usernames to filter by",
+            "items": {
+              "maxLength": 100,
+              "minLength": 0,
+              "type": "string",
+              "description": "The list of email usernames to filter by"
+            }
+          },
+          "contains": {
+            "type": "string",
+            "description": "Partial email username filter"
+          }
+        }
+      },
+      "GroupNames": {
+        "type": "object",
+        "properties": {
+          "eq": {
+            "maxItems": 100,
+            "minItems": 0,
+            "uniqueItems": true,
+            "type": "array",
+            "description": "The list of group names to filter by",
+            "items": {
+              "maxLength": 100,
+              "minLength": 0,
+              "type": "string",
+              "description": "The list of group names to filter by"
+            }
+          },
+          "contains": {
+            "type": "string",
+            "description": "Partial group name filter"
           }
         }
       },
@@ -2775,6 +3465,31 @@
           "email": {
             "type": "string",
             "description": "The email of the Actor."
+          },
+          "auth": {
+            "type": "object",
+            "description": "Authentication used by the actor",
+            "required": [
+              "authType"
+            ],
+            "properties": {
+              "authType": {
+                "type": "string",
+                "description": "The type of authentication used by the actor",
+                "enum": [
+                  "container-token",
+                  "api-token"
+                ]
+              },
+              "tokenId": {
+                "type": "string",
+                "description": "The id of the authentication token"
+              },
+              "tokenLabel": {
+                "type": "string",
+                "description": "The label/name of the authentication token"
+              }
+            }
           },
           "links": {
             "type": "object",
@@ -2912,6 +3627,9 @@
             "type": "object",
             "description": "Link to this Event",
             "$ref": "#/components/schemas/LinkSelfModel"
+          },
+          "message": {
+            "$ref": "#/components/schemas/EventMessageModel"
           }
         }
       },
@@ -3032,7 +3750,8 @@
                 "type": "string",
                 "enum": [
                   "ip-allowlist",
-                  "data-residency"
+                  "data-residency",
+                  "data-security"
                 ],
                 "description": "Type of this Policy"
               },
@@ -3734,6 +4453,19 @@
           }
         }
       },
+      "EventMessageModel": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Encrypted message of audit log activity"
+          },
+          "format": {
+            "type": "string",
+            "description": "Format of the audit log message"
+          }
+        }
+      },
       "LinkSelfModel": {
         "type": "object",
         "required": [
@@ -3826,7 +4558,7 @@
           "code": {
             "type": "string",
             "example": "ADMIN-XXX-X",
-            "description": "An application-specific error code:\n  - `ADMIN-400-1`  - Invalid page cursor\n  - `ADMIN-400-2`  - Invalid domain identifier\n  - `ADMIN-400-3`  - Invalid time date\n  - `ADMIN-400-4`  - Invalid resource\n  - `ADMIN-400-24` - Invalid request body\n  - `ADMIN-403-3`  - Not allowed to manage the org\n  - `ADMIN-403-5`  - Not allowed to manage the group\n  - `ADMIN-403-6`  - Not allowed to delete group with default-role attribute\n  - `ADMIN-403-7`  - Not allowed to delete group which grants admin access to a product or org\n  - `ADMIN-404-1`  - Unknown resource\n  - `ADMIN-404-2`  - Organization not found\n  - `ADMIN-404-3`  - Domain not found\n  - `ADMIN-404-4`  - Event not found\n  - `ADMIN-404-5`  - Policy not found\n  - `ADMIN-404-8`  - User not found\n  - `ADMIN-404-10` - Group not found\n  - `ADMIN-405-1`  - Method not supported\n  - `ADMIN-429-1`  - Limit exceeded\n  - `ADMIN-500-1`  - Internal error\n"
+            "description": "An application-specific error code:\n  - `ADMIN-400-1`  - Invalid page cursor\n  - `ADMIN-400-2`  - Invalid domain identifier\n  - `ADMIN-400-3`  - Invalid time date\n  - `ADMIN-400-4`  - Invalid resource\n  - `ADMIN-400-24` - Invalid request body\n  - `ADMIN-400-32` - Too many license breaches\n  - `ADMIN-403-3`  - Not allowed to manage the org\n  - `ADMIN-403-5`  - Not allowed to manage the group\n  - `ADMIN-403-6`  - Not allowed to delete group with default-role attribute\n  - `ADMIN-403-7`  - Not allowed to delete group which grants admin access to a product or org\n  - `ADMIN-404-1`  - Unknown resource\n  - `ADMIN-404-2`  - Organization not found\n  - `ADMIN-404-3`  - Domain not found\n  - `ADMIN-404-4`  - Event not found\n  - `ADMIN-404-5`  - Policy not found\n  - `ADMIN-404-8`  - User not found\n  - `ADMIN-404-10` - Group not found\n  - `ADMIN-405-1`  - Method not supported\n  - `ADMIN-409-3`  - License limit exceeded\n  - `ADMIN-409-5`  - Group not empty\n  - `ADMIN-429-1`  - Rate limit exceeded\n  - `ADMIN-500-1`  - Internal error\n"
           },
           "title": {
             "type": "string",
@@ -3941,6 +4673,60 @@
                       "type": "string",
                       "enum": [
                         "ADMIN-400-3"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Error.InvalidQueryCount.Model": {
+        "type": "object",
+        "description": "The number of queries exceeded the limit",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ApplicationError"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "ADMIN-400-21"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Error.InvalidRequestSyntax.Model": {
+        "type": "object",
+        "description": "Request syntax is not valid",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ApplicationError"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "ADMIN-400-19"
                       ]
                     }
                   }

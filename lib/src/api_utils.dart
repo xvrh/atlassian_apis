@@ -30,6 +30,7 @@ class ApiClient {
     Map<String, String>? headers,
     dynamic body,
     MultipartFile? file,
+    List<MultipartFile>? files,
     bool? followRedirects,
   }) async {
     followRedirects ??= true;
@@ -60,11 +61,16 @@ class ApiClient {
     }
 
     BaseRequest request;
-    if (file != null) {
-      request = MultipartRequest(method, uri)
+    if (file != null || files != null) {
+      var multipartRequest = request = MultipartRequest(method, uri)
         ..headers[_headerAtlassianToken] ??= 'no-check'
-        ..headers['content-type'] = 'multipart/form-data'
-        ..files.add(file);
+        ..headers['content-type'] = 'multipart/form-data';
+      if (file != null) {
+        multipartRequest.files.add(file);
+      }
+      if (files != null) {
+        multipartRequest.files.addAll(files);
+      }
     } else {
       var bodyRequest = Request(method, uri);
       request = bodyRequest;

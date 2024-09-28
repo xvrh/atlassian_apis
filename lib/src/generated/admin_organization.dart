@@ -19,6 +19,9 @@ class AdminOrganizationApi {
   /// Events APIs
   late final events = EventsApi(_client);
 
+  /// Orgs Groups APIs
+  late final groups = GroupsApi(_client);
+
   /// Orgs APIs
   late final orgs = OrgsApi(_client);
 
@@ -126,10 +129,24 @@ class DirectoryApi {
   /// experience only.** Learn more about the
   /// [new user management experience](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592).
   ///
-  /// Specifications:
+  /// This API will:
   /// - Restore access of an existing user to products listed in Atlassian
   /// Administration.
   /// - Retract the suspend user action.
+  ///
+  /// This API will not:
+  /// - Restore access to a user when they have access to a product which is
+  /// breaching it's license limit.
+  /// To make these changes, you will need to
+  /// [remove users](https://developer.atlassian.com/cloud/admin/organization/rest/api-group-directory/#api-v1-orgs-orgid-directory-groups-groupid-memberships-accountid-delete)
+  /// from the group or
+  /// [suspend users](https://developer.atlassian.com/cloud/admin/organization/rest/api-group-directory/#api-v1-orgs-orgid-directory-users-accountid-suspend-access-post)
+  /// that are in the group first.
+  /// You can also
+  /// [manage your subscription](https://support.atlassian.com/subscriptions-and-billing/resources/)
+  /// for the breaching product to increase your license limits.
+  /// - Restore access to any user when your organisation has too many products
+  /// that are breaching their license limits.
   ///
   /// Learn the fastest way to call the API with a detailed
   /// [tutorial](https://developer.atlassian.com/cloud/admin/organization/restore-user/).
@@ -189,17 +206,23 @@ class DirectoryApi {
   /// [default group](https://support.atlassian.com/user-management/docs/default-groups-and-permissions).
   /// - Delete `site-admin` group and therefore revoke org-admin role from a
   /// user.
+  /// - Delete a group if it contains users (unless forced).
   ///
   /// Learn the fastest way to call the API with a detailed
   /// [tutorial](https://developer.atlassian.com/cloud/admin/organization/delete-group/#delete-group).
   Future<Map<String, dynamic>> deleteGroup(
-      {required String orgId, required String groupId}) async {
+      {required String orgId,
+      required String groupId,
+      bool? forceIfNotEmpty}) async {
     return await _client.send(
       'delete',
       'v1/orgs/{orgId}/directory/groups/{groupId}',
       pathParameters: {
         'orgId': orgId,
         'groupId': groupId,
+      },
+      queryParameters: {
+        if (forceIfNotEmpty != null) 'forceIfNotEmpty': '$forceIfNotEmpty',
       },
     ) as Map<String, Object?>;
   }
@@ -219,6 +242,18 @@ class DirectoryApi {
   /// SCIM. To make changes to these memberships, you will need to modify them
   /// within your external identity provider. Learn more about
   /// [configuring user provisioning with an identity provider](https://support.atlassian.com/provisioning-users/docs/configure-user-provisioning-with-an-identity-provider/).
+  /// - Add a user to a group that gives access to a product which is breaching
+  /// it's license limit.
+  /// To make these changes, you will need to
+  /// [remove users](https://developer.atlassian.com/cloud/admin/organization/rest/api-group-directory/#api-v1-orgs-orgid-directory-groups-groupid-memberships-accountid-delete)
+  /// from the group or
+  /// [suspend users](https://developer.atlassian.com/cloud/admin/organization/rest/api-group-directory/#api-v1-orgs-orgid-directory-users-accountid-suspend-access-post)
+  /// that are in the group first.
+  /// You can also
+  /// [manage your subscription](https://support.atlassian.com/subscriptions-and-billing/resources/)
+  /// for the breaching product to increase your license limits.
+  /// - Add a user to any group when your organisation has too many products
+  /// that are breaching their license limits.
   ///
   /// Learn the fastest way to call the API with a detailed
   /// [tutorial](https://developer.atlassian.com/cloud/admin/organization/add-user-to-group/).
@@ -318,7 +353,11 @@ class EventsApi {
       String? q,
       String? from,
       String? to,
-      String? action}) async {
+      String? action,
+      List<String>? actor,
+      List<String>? ip,
+      List<String>? product,
+      String? location}) async {
     return EventPage.fromJson(await _client.send(
       'get',
       'v1/orgs/{orgId}/events',
@@ -331,6 +370,10 @@ class EventsApi {
         if (from != null) 'from': from,
         if (to != null) 'to': to,
         if (action != null) 'action': action,
+        if (actor != null) 'actor': actor.map((e) => e).join(','),
+        if (ip != null) 'ip': ip.map((e) => e).join(','),
+        if (product != null) 'product': product.map((e) => e).join(','),
+        if (location != null) 'location': location,
       },
     ));
   }
@@ -356,6 +399,30 @@ class EventsApi {
       pathParameters: {
         'orgId': orgId,
       },
+    ));
+  }
+}
+
+class GroupsApi {
+  final ApiClient _client;
+
+  GroupsApi(this._client);
+
+  /// **The API is available for customers using the new user management
+  /// experience only.
+  /// [How the new user management experience works](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592)**
+  ///
+  /// Returns a list of groups within an organization, offering search
+  /// functionality through multiple parameters for more precise results.
+  Future<GroupsSearchPage> searchGroups(
+      {required String orgId, required GroupsSearchRequest body}) async {
+    return GroupsSearchPage.fromJson(await _client.send(
+      'post',
+      'v1/orgs/{orgId}/groups/search',
+      pathParameters: {
+        'orgId': orgId,
+      },
+      body: body.toJson(),
     ));
   }
 }
@@ -534,7 +601,7 @@ class UsersApi {
 
   UsersApi(this._client);
 
-  /// Returns a list of users in an organization.
+  /// Returns a list of managed accounts in an organization.
   Future<UserPage> getUsers({required String orgId, String? cursor}) async {
     return UserPage.fromJson(await _client.send(
       'get',
@@ -545,6 +612,24 @@ class UsersApi {
       queryParameters: {
         if (cursor != null) 'cursor': cursor,
       },
+    ));
+  }
+
+  /// **The API is available for customers using the new user management
+  /// experience only.
+  /// [How the new user management experience works](https://community.atlassian.com/t5/Atlassian-Access-articles/User-management-for-cloud-admins-just-got-easier/ba-p/1576592)**
+  ///
+  /// Returns a list of users within an organization, offering search
+  /// functionality through multiple parameters for more precise results.
+  Future<UsersSearchPage> searchUsers(
+      {required String orgId, required UsersSearchRequest body}) async {
+    return UsersSearchPage.fromJson(await _client.send(
+      'post',
+      'v1/orgs/{orgId}/users/search',
+      pathParameters: {
+        'orgId': orgId,
+      },
+      body: body.toJson(),
     ));
   }
 }
@@ -684,6 +769,7 @@ class ApplicationError {
   ///   - `ADMIN-400-3`  - Invalid time date
   ///   - `ADMIN-400-4`  - Invalid resource
   ///   - `ADMIN-400-24` - Invalid request body
+  ///   - `ADMIN-400-32` - Too many license breaches
   ///   - `ADMIN-403-3`  - Not allowed to manage the org
   ///   - `ADMIN-403-5`  - Not allowed to manage the group
   ///   - `ADMIN-403-6`  - Not allowed to delete group with default-role
@@ -698,7 +784,9 @@ class ApplicationError {
   ///   - `ADMIN-404-8`  - User not found
   ///   - `ADMIN-404-10` - Group not found
   ///   - `ADMIN-405-1`  - Method not supported
-  ///   - `ADMIN-429-1`  - Limit exceeded
+  ///   - `ADMIN-409-3`  - License limit exceeded
+  ///   - `ADMIN-409-5`  - Group not empty
+  ///   - `ADMIN-429-1`  - Rate limit exceeded
   ///   - `ADMIN-500-1`  - Internal error
   final String? code;
 
@@ -1121,6 +1209,84 @@ class DomainPage {
   }
 }
 
+class EmailDomains {
+  /// The list of email domains to filter by
+  final List<String> eq;
+
+  /// Partial email domain filter
+  final String? contains;
+
+  EmailDomains({List<String>? eq, this.contains}) : eq = eq ?? [];
+
+  factory EmailDomains.fromJson(Map<String, Object?> json) {
+    return EmailDomains(
+      eq: (json[r'eq'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      contains: json[r'contains'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var eq = this.eq;
+    var contains = this.contains;
+
+    final json = <String, Object?>{};
+    json[r'eq'] = eq;
+    if (contains != null) {
+      json[r'contains'] = contains;
+    }
+    return json;
+  }
+
+  EmailDomains copyWith({List<String>? eq, String? contains}) {
+    return EmailDomains(
+      eq: eq ?? this.eq,
+      contains: contains ?? this.contains,
+    );
+  }
+}
+
+class EmailUsernames {
+  /// The list of email usernames to filter by
+  final List<String> eq;
+
+  /// Partial email username filter
+  final String? contains;
+
+  EmailUsernames({List<String>? eq, this.contains}) : eq = eq ?? [];
+
+  factory EmailUsernames.fromJson(Map<String, Object?> json) {
+    return EmailUsernames(
+      eq: (json[r'eq'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      contains: json[r'contains'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var eq = this.eq;
+    var contains = this.contains;
+
+    final json = <String, Object?>{};
+    json[r'eq'] = eq;
+    if (contains != null) {
+      json[r'contains'] = contains;
+    }
+    return json;
+  }
+
+  EmailUsernames copyWith({List<String>? eq, String? contains}) {
+    return EmailUsernames(
+      eq: eq ?? this.eq,
+      contains: contains ?? this.contains,
+    );
+  }
+}
+
 class EntitlementModelV2 {
   final String? id;
   final String? type;
@@ -1367,6 +1533,70 @@ class ErrorInvalidPageCursorModel {
 
   ErrorInvalidPageCursorModel copyWith({List<ApplicationError>? errors}) {
     return ErrorInvalidPageCursorModel(
+      errors: errors ?? this.errors,
+    );
+  }
+}
+
+/// The number of queries exceeded the limit
+class ErrorInvalidQueryCountModel {
+  final List<ApplicationError> errors;
+
+  ErrorInvalidQueryCountModel({List<ApplicationError>? errors})
+      : errors = errors ?? [];
+
+  factory ErrorInvalidQueryCountModel.fromJson(Map<String, Object?> json) {
+    return ErrorInvalidQueryCountModel(
+      errors: (json[r'errors'] as List<Object?>?)
+              ?.map((i) => ApplicationError.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var errors = this.errors;
+
+    final json = <String, Object?>{};
+    json[r'errors'] = errors.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  ErrorInvalidQueryCountModel copyWith({List<ApplicationError>? errors}) {
+    return ErrorInvalidQueryCountModel(
+      errors: errors ?? this.errors,
+    );
+  }
+}
+
+/// Request syntax is not valid
+class ErrorInvalidRequestSyntaxModel {
+  final List<ApplicationError> errors;
+
+  ErrorInvalidRequestSyntaxModel({List<ApplicationError>? errors})
+      : errors = errors ?? [];
+
+  factory ErrorInvalidRequestSyntaxModel.fromJson(Map<String, Object?> json) {
+    return ErrorInvalidRequestSyntaxModel(
+      errors: (json[r'errors'] as List<Object?>?)
+              ?.map((i) => ApplicationError.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var errors = this.errors;
+
+    final json = <String, Object?>{};
+    json[r'errors'] = errors.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  ErrorInvalidRequestSyntaxModel copyWith({List<ApplicationError>? errors}) {
+    return ErrorInvalidRequestSyntaxModel(
       errors: errors ?? this.errors,
     );
   }
@@ -1730,16 +1960,23 @@ class EventActorModel {
   /// The email of the Actor.
   final String? email;
 
+  /// Authentication used by the actor
+  final EventActorModelAuth? auth;
+
   /// Link to this Actor
   final LinkSelfModel? links;
 
-  EventActorModel({required this.id, this.name, this.email, this.links});
+  EventActorModel(
+      {required this.id, this.name, this.email, this.auth, this.links});
 
   factory EventActorModel.fromJson(Map<String, Object?> json) {
     return EventActorModel(
       id: json[r'id'] as String? ?? '',
       name: json[r'name'] as String?,
       email: json[r'email'] as String?,
+      auth: json[r'auth'] != null
+          ? EventActorModelAuth.fromJson(json[r'auth']! as Map<String, Object?>)
+          : null,
       links: json[r'links'] != null
           ? LinkSelfModel.fromJson(json[r'links']! as Map<String, Object?>)
           : null,
@@ -1750,6 +1987,7 @@ class EventActorModel {
     var id = this.id;
     var name = this.name;
     var email = this.email;
+    var auth = this.auth;
     var links = this.links;
 
     final json = <String, Object?>{};
@@ -1760,6 +1998,9 @@ class EventActorModel {
     if (email != null) {
       json[r'email'] = email;
     }
+    if (auth != null) {
+      json[r'auth'] = auth.toJson();
+    }
     if (links != null) {
       json[r'links'] = links.toJson();
     }
@@ -1767,14 +2008,93 @@ class EventActorModel {
   }
 
   EventActorModel copyWith(
-      {String? id, String? name, String? email, LinkSelfModel? links}) {
+      {String? id,
+      String? name,
+      String? email,
+      EventActorModelAuth? auth,
+      LinkSelfModel? links}) {
     return EventActorModel(
       id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
+      auth: auth ?? this.auth,
       links: links ?? this.links,
     );
   }
+}
+
+/// Authentication used by the actor
+class EventActorModelAuth {
+  /// The type of authentication used by the actor
+  final EventActorModelAuthAuthType authType;
+
+  /// The id of the authentication token
+  final String? tokenId;
+
+  /// The label/name of the authentication token
+  final String? tokenLabel;
+
+  EventActorModelAuth({required this.authType, this.tokenId, this.tokenLabel});
+
+  factory EventActorModelAuth.fromJson(Map<String, Object?> json) {
+    return EventActorModelAuth(
+      authType: EventActorModelAuthAuthType.fromValue(
+          json[r'authType'] as String? ?? ''),
+      tokenId: json[r'tokenId'] as String?,
+      tokenLabel: json[r'tokenLabel'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var authType = this.authType;
+    var tokenId = this.tokenId;
+    var tokenLabel = this.tokenLabel;
+
+    final json = <String, Object?>{};
+    json[r'authType'] = authType.value;
+    if (tokenId != null) {
+      json[r'tokenId'] = tokenId;
+    }
+    if (tokenLabel != null) {
+      json[r'tokenLabel'] = tokenLabel;
+    }
+    return json;
+  }
+
+  EventActorModelAuth copyWith(
+      {EventActorModelAuthAuthType? authType,
+      String? tokenId,
+      String? tokenLabel}) {
+    return EventActorModelAuth(
+      authType: authType ?? this.authType,
+      tokenId: tokenId ?? this.tokenId,
+      tokenLabel: tokenLabel ?? this.tokenLabel,
+    );
+  }
+}
+
+class EventActorModelAuthAuthType {
+  static const containerToken =
+      EventActorModelAuthAuthType._('container-token');
+  static const apiToken = EventActorModelAuthAuthType._('api-token');
+
+  static const values = [
+    containerToken,
+    apiToken,
+  ];
+  final String value;
+
+  const EventActorModelAuthAuthType._(this.value);
+
+  static EventActorModelAuthAuthType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => EventActorModelAuthAuthType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 class EventLocationModel {
@@ -1849,6 +2169,44 @@ class EventLocationModel {
   }
 }
 
+class EventMessageModel {
+  /// Encrypted message of audit log activity
+  final String? content;
+
+  /// Format of the audit log message
+  final String? format;
+
+  EventMessageModel({this.content, this.format});
+
+  factory EventMessageModel.fromJson(Map<String, Object?> json) {
+    return EventMessageModel(
+      content: json[r'content'] as String?,
+      format: json[r'format'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var content = this.content;
+    var format = this.format;
+
+    final json = <String, Object?>{};
+    if (content != null) {
+      json[r'content'] = content;
+    }
+    if (format != null) {
+      json[r'format'] = format;
+    }
+    return json;
+  }
+
+  EventMessageModel copyWith({String? content, String? format}) {
+    return EventMessageModel(
+      content: content ?? this.content,
+      format: format ?? this.format,
+    );
+  }
+}
+
 class EventModel {
   /// Unique identifier of the Event
   final String id;
@@ -1861,12 +2219,14 @@ class EventModel {
 
   /// Link to this Event
   final LinkSelfModel links;
+  final EventMessageModel? message;
 
   EventModel(
       {required this.id,
       required this.type,
       required this.attributes,
-      required this.links});
+      required this.links,
+      this.message});
 
   factory EventModel.fromJson(Map<String, Object?> json) {
     return EventModel(
@@ -1876,6 +2236,10 @@ class EventModel {
           json[r'attributes'] as Map<String, Object?>? ?? const {}),
       links: LinkSelfModel.fromJson(
           json[r'links'] as Map<String, Object?>? ?? const {}),
+      message: json[r'message'] != null
+          ? EventMessageModel.fromJson(
+              json[r'message']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -1884,12 +2248,16 @@ class EventModel {
     var type = this.type;
     var attributes = this.attributes;
     var links = this.links;
+    var message = this.message;
 
     final json = <String, Object?>{};
     json[r'id'] = id;
     json[r'type'] = type.value;
     json[r'attributes'] = attributes.toJson();
     json[r'links'] = links.toJson();
+    if (message != null) {
+      json[r'message'] = message.toJson();
+    }
     return json;
   }
 
@@ -1897,12 +2265,14 @@ class EventModel {
       {String? id,
       EventModelType? type,
       EventModelAttributes? attributes,
-      LinkSelfModel? links}) {
+      LinkSelfModel? links,
+      EventMessageModel? message}) {
     return EventModel(
       id: id ?? this.id,
       type: type ?? this.type,
       attributes: attributes ?? this.attributes,
       links: links ?? this.links,
+      message: message ?? this.message,
     );
   }
 }
@@ -2348,6 +2718,194 @@ class FieldOperandField {
   }
 }
 
+class GroupNames {
+  /// The list of group names to filter by
+  final List<String> eq;
+
+  /// Partial group name filter
+  final String? contains;
+
+  GroupNames({List<String>? eq, this.contains}) : eq = eq ?? [];
+
+  factory GroupNames.fromJson(Map<String, Object?> json) {
+    return GroupNames(
+      eq: (json[r'eq'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      contains: json[r'contains'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var eq = this.eq;
+    var contains = this.contains;
+
+    final json = <String, Object?>{};
+    json[r'eq'] = eq;
+    if (contains != null) {
+      json[r'contains'] = contains;
+    }
+    return json;
+  }
+
+  GroupNames copyWith({List<String>? eq, String? contains}) {
+    return GroupNames(
+      eq: eq ?? this.eq,
+      contains: contains ?? this.contains,
+    );
+  }
+}
+
+class GroupsSearchPage {
+  final List<PublicGroup> data;
+  final LinkPageModel? links;
+
+  GroupsSearchPage({required this.data, this.links});
+
+  factory GroupsSearchPage.fromJson(Map<String, Object?> json) {
+    return GroupsSearchPage(
+      data: (json[r'data'] as List<Object?>?)
+              ?.map((i) =>
+                  PublicGroup.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      links: json[r'links'] != null
+          ? LinkPageModel.fromJson(json[r'links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var data = this.data;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'data'] = data.map((i) => i.toJson()).toList();
+    if (links != null) {
+      json[r'links'] = links.toJson();
+    }
+    return json;
+  }
+
+  GroupsSearchPage copyWith({List<PublicGroup>? data, LinkPageModel? links}) {
+    return GroupsSearchPage(
+      data: data ?? this.data,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class GroupsSearchRequest {
+  /// Unique ID that serves as reference to the group.
+  final List<String> groupIds;
+  final GroupNames? groupNames;
+
+  /// Cursor specifying the starting point for page result retrieval.
+  final String? cursor;
+
+  /// The number of items to return. Default = max = 1000
+  final int? limit;
+
+  /// Indicates the user information fields to include in the response. If
+  /// unspecified, the response defaults to id, name and description.
+  final List<GroupsSearchRequestExpand> expand;
+
+  GroupsSearchRequest(
+      {List<String>? groupIds,
+      this.groupNames,
+      this.cursor,
+      this.limit,
+      List<GroupsSearchRequestExpand>? expand})
+      : groupIds = groupIds ?? [],
+        expand = expand ?? [];
+
+  factory GroupsSearchRequest.fromJson(Map<String, Object?> json) {
+    return GroupsSearchRequest(
+      groupIds: (json[r'groupIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      groupNames: json[r'groupNames'] != null
+          ? GroupNames.fromJson(json[r'groupNames']! as Map<String, Object?>)
+          : null,
+      cursor: json[r'cursor'] as String?,
+      limit: (json[r'limit'] as num?)?.toInt(),
+      expand: (json[r'expand'] as List<Object?>?)
+              ?.map((i) =>
+                  GroupsSearchRequestExpand.fromValue(i as String? ?? ''))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var groupIds = this.groupIds;
+    var groupNames = this.groupNames;
+    var cursor = this.cursor;
+    var limit = this.limit;
+    var expand = this.expand;
+
+    final json = <String, Object?>{};
+    json[r'groupIds'] = groupIds;
+    if (groupNames != null) {
+      json[r'groupNames'] = groupNames.toJson();
+    }
+    if (cursor != null) {
+      json[r'cursor'] = cursor;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
+    json[r'expand'] = expand.map((i) => i.value).toList();
+    return json;
+  }
+
+  GroupsSearchRequest copyWith(
+      {List<String>? groupIds,
+      GroupNames? groupNames,
+      String? cursor,
+      int? limit,
+      List<GroupsSearchRequestExpand>? expand}) {
+    return GroupsSearchRequest(
+      groupIds: groupIds ?? this.groupIds,
+      groupNames: groupNames ?? this.groupNames,
+      cursor: cursor ?? this.cursor,
+      limit: limit ?? this.limit,
+      expand: expand ?? this.expand,
+    );
+  }
+}
+
+class GroupsSearchRequestExpand {
+  static const users = GroupsSearchRequestExpand._('USERS');
+  static const meta = GroupsSearchRequestExpand._('META');
+  static const roleAssignments =
+      GroupsSearchRequestExpand._('ROLE_ASSIGNMENTS');
+  static const managementAccess =
+      GroupsSearchRequestExpand._('MANAGEMENT_ACCESS');
+
+  static const values = [
+    users,
+    meta,
+    roleAssignments,
+    managementAccess,
+  ];
+  final String value;
+
+  const GroupsSearchRequestExpand._(this.value);
+
+  static GroupsSearchRequestExpand fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => GroupsSearchRequestExpand._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 class LinkAltModel {
   /// Alternate URL to fetch this resource
   final String alt;
@@ -2647,6 +3205,45 @@ class MetaV2 {
       startIndex: startIndex ?? this.startIndex,
       endIndex: endIndex ?? this.endIndex,
       total: total ?? this.total,
+    );
+  }
+}
+
+class NamesOrNicknames {
+  /// Names or nicknames filter
+  final List<String> eq;
+
+  /// Partial name or nickname filter
+  final String? contains;
+
+  NamesOrNicknames({List<String>? eq, this.contains}) : eq = eq ?? [];
+
+  factory NamesOrNicknames.fromJson(Map<String, Object?> json) {
+    return NamesOrNicknames(
+      eq: (json[r'eq'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      contains: json[r'contains'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var eq = this.eq;
+    var contains = this.contains;
+
+    final json = <String, Object?>{};
+    json[r'eq'] = eq;
+    if (contains != null) {
+      json[r'contains'] = contains;
+    }
+    return json;
+  }
+
+  NamesOrNicknames copyWith({List<String>? eq, String? contains}) {
+    return NamesOrNicknames(
+      eq: eq ?? this.eq,
+      contains: contains ?? this.contains,
     );
   }
 }
@@ -3530,10 +4127,12 @@ class PolicyModelAttributes {
 class PolicyModelAttributesType {
   static const ipAllowlist = PolicyModelAttributesType._('ip-allowlist');
   static const dataResidency = PolicyModelAttributesType._('data-residency');
+  static const dataSecurity = PolicyModelAttributesType._('data-security');
 
   static const values = [
     ipAllowlist,
     dataResidency,
+    dataSecurity,
   ];
   final String value;
 
@@ -4095,6 +4694,231 @@ class ProxyError {
   }
 }
 
+class PublicGroup {
+  final String id;
+  final String? name;
+  final String? description;
+  final List<RoleAssignment> roleAssignments;
+
+  PublicGroup(
+      {required this.id,
+      this.name,
+      this.description,
+      List<RoleAssignment>? roleAssignments})
+      : roleAssignments = roleAssignments ?? [];
+
+  factory PublicGroup.fromJson(Map<String, Object?> json) {
+    return PublicGroup(
+      id: json[r'id'] as String? ?? '',
+      name: json[r'name'] as String?,
+      description: json[r'description'] as String?,
+      roleAssignments: (json[r'roleAssignments'] as List<Object?>?)
+              ?.map((i) => RoleAssignment.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+    var description = this.description;
+    var roleAssignments = this.roleAssignments;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    json[r'roleAssignments'] = roleAssignments.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PublicGroup copyWith(
+      {String? id,
+      String? name,
+      String? description,
+      List<RoleAssignment>? roleAssignments}) {
+    return PublicGroup(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      roleAssignments: roleAssignments ?? this.roleAssignments,
+    );
+  }
+}
+
+/// The current page of search results
+class PublicUser {
+  /// Unique ID of the users account. The format is [a-zA-Z0-9_|-:]{1,128}
+  final String? accountId;
+
+  /// The display name of the user. Should be used for contextual rendering of
+  /// the authorship in content. If the user has restricted visibility of their
+  /// name, their nickname is displayed as a substitute value
+  final String? name;
+
+  /// The nickname of the user. Should be used for mentions or other in content
+  /// references to the user.
+  final String? nickname;
+
+  /// The type of account
+  final PublicUserAccountType? accountType;
+
+  /// The lifecycle status of the account
+  final PublicUserAccountStatus? accountStatus;
+
+  /// The email address of the user. The email will be absent for any user with
+  /// an account_type of `app`
+  final String? email;
+
+  /// The email verification status of the user.
+  final bool emailVerified;
+
+  /// The status of the user in the userbase
+  final bool statusInUserbase;
+
+  PublicUser(
+      {this.accountId,
+      this.name,
+      this.nickname,
+      this.accountType,
+      this.accountStatus,
+      this.email,
+      bool? emailVerified,
+      bool? statusInUserbase})
+      : emailVerified = emailVerified ?? false,
+        statusInUserbase = statusInUserbase ?? false;
+
+  factory PublicUser.fromJson(Map<String, Object?> json) {
+    return PublicUser(
+      accountId: json[r'accountId'] as String?,
+      name: json[r'name'] as String?,
+      nickname: json[r'nickname'] as String?,
+      accountType: json[r'accountType'] != null
+          ? PublicUserAccountType.fromValue(json[r'accountType']! as String)
+          : null,
+      accountStatus: json[r'accountStatus'] != null
+          ? PublicUserAccountStatus.fromValue(json[r'accountStatus']! as String)
+          : null,
+      email: json[r'email'] as String?,
+      emailVerified: json[r'emailVerified'] as bool? ?? false,
+      statusInUserbase: json[r'statusInUserbase'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var accountId = this.accountId;
+    var name = this.name;
+    var nickname = this.nickname;
+    var accountType = this.accountType;
+    var accountStatus = this.accountStatus;
+    var email = this.email;
+    var emailVerified = this.emailVerified;
+    var statusInUserbase = this.statusInUserbase;
+
+    final json = <String, Object?>{};
+    if (accountId != null) {
+      json[r'accountId'] = accountId;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (nickname != null) {
+      json[r'nickname'] = nickname;
+    }
+    if (accountType != null) {
+      json[r'accountType'] = accountType.value;
+    }
+    if (accountStatus != null) {
+      json[r'accountStatus'] = accountStatus.value;
+    }
+    if (email != null) {
+      json[r'email'] = email;
+    }
+    json[r'emailVerified'] = emailVerified;
+    json[r'statusInUserbase'] = statusInUserbase;
+    return json;
+  }
+
+  PublicUser copyWith(
+      {String? accountId,
+      String? name,
+      String? nickname,
+      PublicUserAccountType? accountType,
+      PublicUserAccountStatus? accountStatus,
+      String? email,
+      bool? emailVerified,
+      bool? statusInUserbase}) {
+    return PublicUser(
+      accountId: accountId ?? this.accountId,
+      name: name ?? this.name,
+      nickname: nickname ?? this.nickname,
+      accountType: accountType ?? this.accountType,
+      accountStatus: accountStatus ?? this.accountStatus,
+      email: email ?? this.email,
+      emailVerified: emailVerified ?? this.emailVerified,
+      statusInUserbase: statusInUserbase ?? this.statusInUserbase,
+    );
+  }
+}
+
+class PublicUserAccountType {
+  static const atlassian = PublicUserAccountType._('atlassian');
+  static const customer = PublicUserAccountType._('customer');
+  static const app = PublicUserAccountType._('app');
+
+  static const values = [
+    atlassian,
+    customer,
+    app,
+  ];
+  final String value;
+
+  const PublicUserAccountType._(this.value);
+
+  static PublicUserAccountType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => PublicUserAccountType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class PublicUserAccountStatus {
+  static const active = PublicUserAccountStatus._('active');
+  static const partial = PublicUserAccountStatus._('partial');
+  static const inactive = PublicUserAccountStatus._('inactive');
+  static const closed = PublicUserAccountStatus._('closed');
+
+  static const values = [
+    active,
+    partial,
+    inactive,
+    closed,
+  ];
+  final String value;
+
+  const PublicUserAccountStatus._(this.value);
+
+  static PublicUserAccountStatus fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => PublicUserAccountStatus._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 /// Possible operators/operand in the event query.
 class QueryVariants {
   QueryVariants();
@@ -4277,6 +5101,49 @@ class ResourceUpdateInput {
     return ResourceUpdateInput(
       meta: meta ?? this.meta,
       links: links ?? this.links,
+    );
+  }
+}
+
+class RoleAssignment {
+  final String? resourceId;
+  final String? principalId;
+  final String? roleId;
+
+  RoleAssignment({this.resourceId, this.principalId, this.roleId});
+
+  factory RoleAssignment.fromJson(Map<String, Object?> json) {
+    return RoleAssignment(
+      resourceId: json[r'resourceId'] as String?,
+      principalId: json[r'principalId'] as String?,
+      roleId: json[r'roleId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var resourceId = this.resourceId;
+    var principalId = this.principalId;
+    var roleId = this.roleId;
+
+    final json = <String, Object?>{};
+    if (resourceId != null) {
+      json[r'resourceId'] = resourceId;
+    }
+    if (principalId != null) {
+      json[r'principalId'] = principalId;
+    }
+    if (roleId != null) {
+      json[r'roleId'] = roleId;
+    }
+    return json;
+  }
+
+  RoleAssignment copyWith(
+      {String? resourceId, String? principalId, String? roleId}) {
+    return RoleAssignment(
+      resourceId: resourceId ?? this.resourceId,
+      principalId: principalId ?? this.principalId,
+      roleId: roleId ?? this.roleId,
     );
   }
 }
@@ -4489,7 +5356,7 @@ class SortFieldOrder {
 }
 
 class User {
-  /// The account ID for the user. The format is [a-zA-Z0-9_|-:]{1,128}
+  /// Unique ID of the users account. The format is [a-zA-Z0-9_|-:]{1,128}
   final String accountId;
 
   /// The type of account
@@ -4513,7 +5380,7 @@ class User {
   /// the email address, the property will be absent
   final String? email;
 
-  /// Billable status of User in Atlassian Access
+  /// Billable status of User in Atlassian Guard Standard
   final bool accessBillable;
 
   /// Last active date for a user
@@ -4912,6 +5779,270 @@ class UserProductLastActiveKey {
   static UserProductLastActiveKey fromValue(String value) =>
       values.firstWhere((e) => e.value == value,
           orElse: () => UserProductLastActiveKey._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class UsersSearchPage {
+  final List<PublicUser> data;
+  final LinkPageModel? links;
+
+  UsersSearchPage({required this.data, this.links});
+
+  factory UsersSearchPage.fromJson(Map<String, Object?> json) {
+    return UsersSearchPage(
+      data: (json[r'data'] as List<Object?>?)
+              ?.map((i) =>
+                  PublicUser.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      links: json[r'links'] != null
+          ? LinkPageModel.fromJson(json[r'links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var data = this.data;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'data'] = data.map((i) => i.toJson()).toList();
+    if (links != null) {
+      json[r'links'] = links.toJson();
+    }
+    return json;
+  }
+
+  UsersSearchPage copyWith({List<PublicUser>? data, LinkPageModel? links}) {
+    return UsersSearchPage(
+      data: data ?? this.data,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class UsersSearchRequest {
+  /// Unique ID of the users account. The format is [a-zA-Z0-9_|-:]{1,128}
+  final List<String> accountIds;
+
+  /// The type of account
+  final List<UsersSearchRequestAccountTypes> accountTypes;
+
+  /// The lifecycle status of the account
+  final List<UsersSearchRequestAccountStatuses> accountStatuses;
+  final NamesOrNicknames? namesOrNicknames;
+  final EmailUsernames? emailUsernames;
+  final EmailDomains? emailDomains;
+
+  /// Suspended users with no access. This is independent of the user account
+  /// status
+  final bool isSuspended;
+
+  /// Starting point marker for page result retrieval
+  final String? cursor;
+
+  /// The number of items to return. Default = max = 10000
+  final int? limit;
+
+  /// Indicates the user information fields to include in the response. If
+  /// unspecified, the response defaults to including only the accountId,
+  /// accountType, and accountStatus fields.
+  /// The data for the product last access may be delayed by up to 24 hours.
+  final List<UsersSearchRequestExpand> expand;
+
+  UsersSearchRequest(
+      {List<String>? accountIds,
+      List<UsersSearchRequestAccountTypes>? accountTypes,
+      List<UsersSearchRequestAccountStatuses>? accountStatuses,
+      this.namesOrNicknames,
+      this.emailUsernames,
+      this.emailDomains,
+      bool? isSuspended,
+      this.cursor,
+      this.limit,
+      List<UsersSearchRequestExpand>? expand})
+      : accountIds = accountIds ?? [],
+        accountTypes = accountTypes ?? [],
+        accountStatuses = accountStatuses ?? [],
+        isSuspended = isSuspended ?? false,
+        expand = expand ?? [];
+
+  factory UsersSearchRequest.fromJson(Map<String, Object?> json) {
+    return UsersSearchRequest(
+      accountIds: (json[r'accountIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      accountTypes: (json[r'accountTypes'] as List<Object?>?)
+              ?.map((i) =>
+                  UsersSearchRequestAccountTypes.fromValue(i as String? ?? ''))
+              .toList() ??
+          [],
+      accountStatuses: (json[r'accountStatuses'] as List<Object?>?)
+              ?.map((i) => UsersSearchRequestAccountStatuses.fromValue(
+                  i as String? ?? ''))
+              .toList() ??
+          [],
+      namesOrNicknames: json[r'namesOrNicknames'] != null
+          ? NamesOrNicknames.fromJson(
+              json[r'namesOrNicknames']! as Map<String, Object?>)
+          : null,
+      emailUsernames: json[r'emailUsernames'] != null
+          ? EmailUsernames.fromJson(
+              json[r'emailUsernames']! as Map<String, Object?>)
+          : null,
+      emailDomains: json[r'emailDomains'] != null
+          ? EmailDomains.fromJson(
+              json[r'emailDomains']! as Map<String, Object?>)
+          : null,
+      isSuspended: json[r'isSuspended'] as bool? ?? false,
+      cursor: json[r'cursor'] as String?,
+      limit: (json[r'limit'] as num?)?.toInt(),
+      expand: (json[r'expand'] as List<Object?>?)
+              ?.map(
+                  (i) => UsersSearchRequestExpand.fromValue(i as String? ?? ''))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var accountIds = this.accountIds;
+    var accountTypes = this.accountTypes;
+    var accountStatuses = this.accountStatuses;
+    var namesOrNicknames = this.namesOrNicknames;
+    var emailUsernames = this.emailUsernames;
+    var emailDomains = this.emailDomains;
+    var isSuspended = this.isSuspended;
+    var cursor = this.cursor;
+    var limit = this.limit;
+    var expand = this.expand;
+
+    final json = <String, Object?>{};
+    json[r'accountIds'] = accountIds;
+    json[r'accountTypes'] = accountTypes.map((i) => i.value).toList();
+    json[r'accountStatuses'] = accountStatuses.map((i) => i.value).toList();
+    if (namesOrNicknames != null) {
+      json[r'namesOrNicknames'] = namesOrNicknames.toJson();
+    }
+    if (emailUsernames != null) {
+      json[r'emailUsernames'] = emailUsernames.toJson();
+    }
+    if (emailDomains != null) {
+      json[r'emailDomains'] = emailDomains.toJson();
+    }
+    json[r'isSuspended'] = isSuspended;
+    if (cursor != null) {
+      json[r'cursor'] = cursor;
+    }
+    if (limit != null) {
+      json[r'limit'] = limit;
+    }
+    json[r'expand'] = expand.map((i) => i.value).toList();
+    return json;
+  }
+
+  UsersSearchRequest copyWith(
+      {List<String>? accountIds,
+      List<UsersSearchRequestAccountTypes>? accountTypes,
+      List<UsersSearchRequestAccountStatuses>? accountStatuses,
+      NamesOrNicknames? namesOrNicknames,
+      EmailUsernames? emailUsernames,
+      EmailDomains? emailDomains,
+      bool? isSuspended,
+      String? cursor,
+      int? limit,
+      List<UsersSearchRequestExpand>? expand}) {
+    return UsersSearchRequest(
+      accountIds: accountIds ?? this.accountIds,
+      accountTypes: accountTypes ?? this.accountTypes,
+      accountStatuses: accountStatuses ?? this.accountStatuses,
+      namesOrNicknames: namesOrNicknames ?? this.namesOrNicknames,
+      emailUsernames: emailUsernames ?? this.emailUsernames,
+      emailDomains: emailDomains ?? this.emailDomains,
+      isSuspended: isSuspended ?? this.isSuspended,
+      cursor: cursor ?? this.cursor,
+      limit: limit ?? this.limit,
+      expand: expand ?? this.expand,
+    );
+  }
+}
+
+class UsersSearchRequestAccountTypes {
+  static const atlassian = UsersSearchRequestAccountTypes._('atlassian');
+  static const customer = UsersSearchRequestAccountTypes._('customer');
+  static const app = UsersSearchRequestAccountTypes._('app');
+
+  static const values = [
+    atlassian,
+    customer,
+    app,
+  ];
+  final String value;
+
+  const UsersSearchRequestAccountTypes._(this.value);
+
+  static UsersSearchRequestAccountTypes fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => UsersSearchRequestAccountTypes._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class UsersSearchRequestAccountStatuses {
+  static const active = UsersSearchRequestAccountStatuses._('ACTIVE');
+  static const inactive = UsersSearchRequestAccountStatuses._('INACTIVE');
+
+  static const values = [
+    active,
+    inactive,
+  ];
+  final String value;
+
+  const UsersSearchRequestAccountStatuses._(this.value);
+
+  static UsersSearchRequestAccountStatuses fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => UsersSearchRequestAccountStatuses._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class UsersSearchRequestExpand {
+  static const name = UsersSearchRequestExpand._('NAME');
+  static const email = UsersSearchRequestExpand._('EMAIL');
+  static const emailVerified = UsersSearchRequestExpand._('EMAIL_VERIFIED');
+  static const productLastAccess =
+      UsersSearchRequestExpand._('PRODUCT_LAST_ACCESS');
+  static const groups = UsersSearchRequestExpand._('GROUPS');
+
+  static const values = [
+    name,
+    email,
+    emailVerified,
+    productLastAccess,
+    groups,
+  ];
+  final String value;
+
+  const UsersSearchRequestExpand._(this.value);
+
+  static UsersSearchRequestExpand fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => UsersSearchRequestExpand._(value));
 
   /// An enum received from the server but this version of the client doesn't recognize it.
   bool get isUnknown => values.every((v) => v.value != value);

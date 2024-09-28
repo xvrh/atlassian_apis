@@ -107,9 +107,17 @@ class LifecycleApi {
     );
   }
 
-  ///
   /// Activates the specified user account. The permission to make use of this
-  /// resource is exposed by the `lifecycle.enablement` privilege.
+  /// resource is exposed by the
+  /// `lifecycle.enablement` privilege.
+  ///
+  /// User accounts that were deactivated due to US export controls cannot be
+  /// reactivated using this API. If you believe
+  /// the account was incorrectly blocked, please contact
+  /// [Atlassian Support](https://support.atlassian.com/contact).
+  ///
+  /// User accounts that have been deleted need the deletion to be canceled
+  /// before reactivating.
   Future<void> activateAUser(String accountId) async {
     await _client.send(
       'post',
@@ -130,8 +138,8 @@ class LifecycleApi {
   /// Specifications:
   /// - Deleting an account is permanent. If you think you’ll need the account
   /// again, we recommend you
-  /// [deactivate](https://support.atlassian.com/user-management/docs/deactivate-a-managed-account/)it
-  /// instead.
+  /// [deactivate](https://support.atlassian.com/user-management/docs/deactivate-a-managed-account/)
+  /// it instead.
   /// - Before you permanently delete the account, you’ll have a 14-day grace
   /// period, during which the account will appear as temporarily deactivated.
   ///
@@ -491,16 +499,18 @@ class ManageabilityRestrictionReason {
   /// - _administrative.notMyself_: The property or action
   ///   is restricted because it is intended for administrative use and
   ///   is forbidden for self-use.
-  /// - _myselfOnly_: The property or action is restricted because it is
-  ///   available only to the user which the account belongs too
-  /// - _managedAccount_: The property or action is restricted because it is
-  ///   available only to the user's organisation administrator
+  /// - _authPolicy.saml_: The property is restricted as it is set on login by
+  /// SAML
+  /// - _blocked.exportControl_: The property/action is restricted because
+  ///   the user is blocked by US export control
   /// - _externalDirectory.scim_: The property/action is restricted because
   ///   the user is managed by an external SCIM directory
   /// - _externalDirectory.google_: The property/action is restricted because
   ///   the user is managed by an external Google directory
-  /// - _blocked.exportControl_: The property/action is restricted because
-  ///   the user is blocked by US export control
+  /// - _myselfOnly_: The property or action is restricted because it is
+  ///   available only to the user which the account belongs to
+  /// - _managedAccount_: The property or action is restricted because it is
+  ///   available only to the user's organisation administrator
   final ManageabilityRestrictionReasonKey key;
 
   ManageabilityRestrictionReason({required this.key});
@@ -533,24 +543,27 @@ class ManageabilityRestrictionReasonKey {
       ManageabilityRestrictionReasonKey._('administrative');
   static const administrativeNotMyself =
       ManageabilityRestrictionReasonKey._('administrative.notMyself');
-  static const myselfOnly = ManageabilityRestrictionReasonKey._('myselfOnly');
-  static const managedAccount =
-      ManageabilityRestrictionReasonKey._('managedAccount');
+  static const authPolicySaml =
+      ManageabilityRestrictionReasonKey._('authPolicy.saml');
+  static const blockedExportControl =
+      ManageabilityRestrictionReasonKey._('blocked.exportControl');
   static const externalDirectoryScim =
       ManageabilityRestrictionReasonKey._('externalDirectory.scim');
   static const externalDirectoryGoogle =
       ManageabilityRestrictionReasonKey._('externalDirectory.google');
-  static const blockedExportControl =
-      ManageabilityRestrictionReasonKey._('blocked.exportControl');
+  static const myselfOnly = ManageabilityRestrictionReasonKey._('myselfOnly');
+  static const managedAccount =
+      ManageabilityRestrictionReasonKey._('managedAccount');
 
   static const values = [
     administrative,
     administrativeNotMyself,
-    myselfOnly,
-    managedAccount,
+    authPolicySaml,
+    blockedExportControl,
     externalDirectoryScim,
     externalDirectoryGoogle,
-    blockedExportControl,
+    myselfOnly,
+    managedAccount,
   ];
   final String value;
 

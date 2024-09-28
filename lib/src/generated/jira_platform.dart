@@ -14,6 +14,9 @@ class JiraPlatformApi {
   /// update banner configuration.
   late final announcementBanner = AnnouncementBannerApi(_client);
 
+  /// This resource represents app access rule data policies.
+  late final appDataPolicies = AppDataPoliciesApi(_client);
+
   /// This resource supports
   /// [app migrations](https://developer.atlassian.com/platform/app-migration/).
   /// Use it to:
@@ -39,9 +42,12 @@ class JiraPlatformApi {
   late final auditRecords = AuditRecordsApi(_client);
 
   /// This resource represents system and custom avatars. Use it to obtain the
-  /// details of system or custom avatars, add and remove avatars from a project
-  /// or issue type, and obtain avatar images.
+  /// details of system or custom avatars, add and remove avatars from a
+  /// project, issue type or priority and obtain avatar images.
   late final avatars = AvatarsApi(_client);
+
+  /// This resource represents classification levels.
+  late final classificationLevels = ClassificationLevelsApi(_client);
 
   /// This resource represents dashboards. Use it to obtain the details of
   /// dashboards as well as get, create, update, or remove item properties and
@@ -84,6 +90,31 @@ class JiraPlatformApi {
   /// and view the metadata for the contents of an attachment. Also, use it to
   /// get the attachment settings for Jira.
   late final issueAttachments = IssueAttachmentsApi(_client);
+
+  /// This resource represents the issue bulk operations. Use it to move
+  /// multiple issues from one project to another project or edit fields of
+  /// multiple issues in one go.
+  ///
+  ///
+  /// For additional clarity, we have created a page with further examples and
+  /// answers to frequently asked questions related to these APIs. You can
+  /// access it here:
+  /// [Bulk operation APIs: additional examples and FAQ](https://developer.atlassian.com/cloud/jira/platform/bulk-operation-additional-examples-and-faqs/).
+  ///
+  /// ### Authentication ###
+  ///
+  /// Access to the issue bulk operations requires authentication. For
+  /// information on how to authenticate API requests, refer to the
+  /// [Basic auth for REST APIs documentation](https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/).
+  ///
+  /// ### Rate limiting ###
+  ///
+  /// The bulk edit and move APIs are subject to the usual rate limiting
+  /// infrastructure in Jira. For more information, refer to
+  /// [Rate limiting](https://developer.atlassian.com/cloud/jira/platform/rate-limiting/).
+  /// Additionally, at any given time, only 5 concurrent requests can be sent
+  /// across all users.
+  late final issueBulkOperations = IssueBulkOperationsApi(_client);
 
   /// This resource represents [issue comment](#api-group-Issue-comments)
   /// properties, which provides for storing custom data against an issue
@@ -387,6 +418,11 @@ class JiraPlatformApi {
   /// permissions and determine whether the user has certain permissions.
   late final permissions = PermissionsApi(_client);
 
+  /// This resource represents issue priority schemes. Use it to get priority
+  /// schemes and related information, and to create, update and delete priority
+  /// schemes.
+  late final prioritySchemes = PrioritySchemesApi(_client);
+
   /// This resource represents avatars associated with a project. Use it to get,
   /// load, set, and remove project avatars.
   late final projectAvatars = ProjectAvatarsApi(_client);
@@ -397,6 +433,11 @@ class JiraPlatformApi {
   /// managing project categories, see
   /// [Adding, assigning, and deleting project categories](https://confluence.atlassian.com/x/-A5WMg).
   late final projectCategories = ProjectCategoriesApi(_client);
+
+  /// This resource represents classification levels used in a project. Use it
+  /// to view and manage classification levels in your projects.
+  late final projectClassificationLevels =
+      ProjectClassificationLevelsApi(_client);
 
   /// This resource represents project components. Use it to get, create,
   /// update, and delete project components. Also get components for project and
@@ -490,6 +531,12 @@ class JiraPlatformApi {
   /// This resource provides information about the Jira instance.
   late final serverInfo = ServerInfoApi(_client);
 
+  /// This resource represents a service registry. Use it to retrieve attributes
+  /// related to a
+  /// [service registry](https://support.atlassian.com/jira-service-management-cloud/docs/what-is-services/)
+  /// in JSM.
+  late final serviceRegistry = ServiceRegistryApi(_client);
+
   /// This resource represents statuses. Use it to search, get, create, delete,
   /// and change statuses.
   late final status = StatusApi(_client);
@@ -506,9 +553,9 @@ class JiraPlatformApi {
   late final timeTracking = TimeTrackingApi(_client);
 
   /// UI modifications is a feature available for **Forge apps only**. It
-  /// enables Forge apps to control how selected Jira fields behave on global
-  /// create issue dialog. For example: hide specific fields, set them as
-  /// required, etc.
+  /// enables Forge apps to control how selected Jira fields behave on the
+  /// following views: global issue create, issue view. For example: hide
+  /// specific fields, set them as required, etc.
   late final uiModificationsApps = UIModificationsAppsApi(_client);
 
   /// This resource represents [user](#api-group-Users) properties and provides
@@ -660,6 +707,33 @@ class AnnouncementBannerApi {
 
 /// Jira Cloud platform REST API documentation
 
+class AppDataPoliciesApi {
+  final ApiClient _client;
+
+  AppDataPoliciesApi(this._client);
+
+  /// Returns data policy for the workspace.
+  Future<WorkspaceDataPolicy> getPolicy() async {
+    return WorkspaceDataPolicy.fromJson(await _client.send(
+      'get',
+      'rest/api/3/data-policy',
+    ));
+  }
+
+  /// Returns data policies for the projects specified in the request.
+  Future<ProjectDataPolicies> getPolicies({String? ids}) async {
+    return ProjectDataPolicies.fromJson(await _client.send(
+      'get',
+      'rest/api/3/data-policy/project',
+      queryParameters: {
+        if (ids != null) 'ids': ids,
+      },
+    ));
+  }
+}
+
+/// Jira Cloud platform REST API documentation
+
 class AppMigrationApi {
   final ApiClient _client;
 
@@ -670,7 +744,7 @@ class AppMigrationApi {
   /// The values of up to 200 custom fields can be updated.
   ///
   /// **[Permissions](#permissions) required:** Only Connect apps can make this
-  /// request.
+  /// request
   Future<dynamic> updateIssueFields(
       {required String atlassianTransferId,
       required ConnectCustomFieldValues body}) async {
@@ -731,9 +805,8 @@ class AppPropertiesApi {
   ///
   /// **[Permissions](#permissions) required:** Only a Connect app whose key
   /// matches `addonKey` can make this request.
-  /// Additionally, Forge apps published on the Marketplace can access
-  /// properties of Connect apps they were
-  /// [migrated from](https://developer.atlassian.com/platform/forge/build-a-connect-on-forge-app/).
+  /// Additionally, Forge apps can access Connect app properties (stored against
+  /// the same `app.connect.key`).
   Future<PropertyKeys> getAddonProperties(String addonKey) async {
     return PropertyKeys.fromJson(await _client.send(
       'get',
@@ -744,13 +817,30 @@ class AppPropertiesApi {
     ));
   }
 
+  /// Deletes an app's property.
+  ///
+  /// **[Permissions](#permissions) required:** Only a Connect app whose key
+  /// matches `addonKey` can make this request.
+  /// Additionally, Forge apps can access Connect app properties (stored against
+  /// the same `app.connect.key`).
+  Future<void> deleteAddonProperty(
+      {required String addonKey, required String propertyKey}) async {
+    await _client.send(
+      'delete',
+      'rest/atlassian-connect/1/addons/{addonKey}/properties/{propertyKey}',
+      pathParameters: {
+        'addonKey': addonKey,
+        'propertyKey': propertyKey,
+      },
+    );
+  }
+
   /// Returns the key and value of an app's property.
   ///
   /// **[Permissions](#permissions) required:** Only a Connect app whose key
   /// matches `addonKey` can make this request.
-  /// Additionally, Forge apps published on the Marketplace can access
-  /// properties of Connect apps they were
-  /// [migrated from](https://developer.atlassian.com/platform/forge/build-a-connect-on-forge-app/).
+  /// Additionally, Forge apps can access Connect app properties (stored against
+  /// the same `app.connect.key`).
   Future<EntityProperty> getAddonProperty(
       {required String addonKey, required String propertyKey}) async {
     return EntityProperty.fromJson(await _client.send(
@@ -772,6 +862,8 @@ class AppPropertiesApi {
   ///
   /// **[Permissions](#permissions) required:** Only a Connect app whose key
   /// matches `addonKey` can make this request.
+  /// Additionally, Forge apps can access Connect app properties (stored against
+  /// the same `app.connect.key`).
   Future<OperationMessage> putAddonProperty(
       {required String addonKey,
       required String propertyKey,
@@ -787,17 +879,19 @@ class AppPropertiesApi {
     ));
   }
 
-  /// Deletes an app's property.
+  /// Deletes a Forge app's property.
   ///
-  /// **[Permissions](#permissions) required:** Only a Connect app whose key
-  /// matches `addonKey` can make this request.
-  Future<void> deleteAddonProperty(
-      {required String addonKey, required String propertyKey}) async {
+  /// **[Permissions](#permissions) required:** Only Forge apps can make this
+  /// request.
+  ///
+  /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not
+  /// using it won't break your app. However, we recommend adding it to your
+  /// app's scope list because we will eventually make it mandatory.
+  Future<void> deleteForgeAppProperty(String propertyKey) async {
     await _client.send(
       'delete',
-      'rest/atlassian-connect/1/addons/{addonKey}/properties/{propertyKey}',
+      'rest/forge/1/app/properties/{propertyKey}',
       pathParameters: {
-        'addonKey': addonKey,
         'propertyKey': propertyKey,
       },
     );
@@ -818,7 +912,11 @@ class AppPropertiesApi {
   ///
   /// **[Permissions](#permissions) required:** Only Forge apps can make this
   /// request.
-  Future<OperationMessage> putAppProperty(
+  ///
+  /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not
+  /// using it won't break your app. However, we recommend adding it to your
+  /// app's scope list because we will eventually make it mandatory.
+  Future<OperationMessage> putForgeAppProperty(
       {required String propertyKey, required dynamic body}) async {
     return OperationMessage.fromJson(await _client.send(
       'put',
@@ -828,20 +926,6 @@ class AppPropertiesApi {
       },
       body: body,
     ));
-  }
-
-  /// Deletes a Forge app's property.
-  ///
-  /// **[Permissions](#permissions) required:** Only Forge apps can make this
-  /// request.
-  Future<void> deleteAppProperty(String propertyKey) async {
-    await _client.send(
-      'delete',
-      'rest/forge/1/app/properties/{propertyKey}',
-      pathParameters: {
-        'propertyKey': propertyKey,
-      },
-    );
   }
 }
 
@@ -920,8 +1004,8 @@ class AuditRecordsApi {
       {int? offset,
       int? limit,
       String? filter,
-      DateTime? from,
-      DateTime? to}) async {
+      String? from,
+      String? to}) async {
     return AuditRecords.fromJson(await _client.send(
       'get',
       'rest/api/3/auditing/record',
@@ -929,8 +1013,8 @@ class AuditRecordsApi {
         if (offset != null) 'offset': '$offset',
         if (limit != null) 'limit': '$limit',
         if (filter != null) 'filter': filter,
-        if (from != null) 'from': '$from',
-        if (to != null) 'to': '$to',
+        if (from != null) 'from': from,
+        if (to != null) 'to': to,
       },
     ));
   }
@@ -944,7 +1028,7 @@ class AvatarsApi {
   AvatarsApi(this._client);
 
   /// Returns a list of system avatar details by owner type, where the owner
-  /// types are issue type, project, or user.
+  /// types are issue type, project, user or priority.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -959,7 +1043,8 @@ class AvatarsApi {
     ));
   }
 
-  /// Returns the system and custom avatars for a project or issue type.
+  /// Returns the system and custom avatars for a project, issue type or
+  /// priority.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -972,6 +1057,7 @@ class AvatarsApi {
   /// [project permission](https://confluence.atlassian.com/x/yodKLg) for at
   /// least one project the issue type is used in.
   ///  *  for system avatars, none.
+  ///  *  for priority avatars, none.
   Future<Avatars> getAvatars(
       {required String type, required String entityId}) async {
     return Avatars.fromJson(await _client.send(
@@ -984,7 +1070,7 @@ class AvatarsApi {
     ));
   }
 
-  /// Loads a custom avatar for a project or issue type.
+  /// Loads a custom avatar for a project, issue type or priority.
   ///
   /// Specify the avatar's local file location in the body of the request. Also,
   /// include the following headers:
@@ -1023,6 +1109,8 @@ class AvatarsApi {
   ///  *
   /// [Set project avatar](#api-rest-api-3-project-projectIdOrKey-avatar-put) to
   /// set it as the project's displayed avatar.
+  ///  *  [Update priority](#api-rest-api-3-priority-id-put) to set it as the
+  /// priority's displayed avatar.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
@@ -1049,7 +1137,7 @@ class AvatarsApi {
     ));
   }
 
-  /// Deletes an avatar from a project or issue type.
+  /// Deletes an avatar from a project, issue type or priority.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
@@ -1068,7 +1156,7 @@ class AvatarsApi {
     );
   }
 
-  /// Returns the default project or issue type avatar image.
+  /// Returns the default project, issue type or priority avatar image.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -1088,7 +1176,7 @@ class AvatarsApi {
     );
   }
 
-  /// Returns a project or issue type avatar image by ID.
+  /// Returns a project, issue type or priority avatar image by ID.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -1101,6 +1189,7 @@ class AvatarsApi {
   ///  *  For custom issue type avatars, *Browse projects*
   /// [project permission](https://confluence.atlassian.com/x/yodKLg) for at
   /// least one project the issue type is used in.
+  ///  *  For priority avatars, none.
   Future<void> getAvatarImageByID(
       {required String type,
       required int id,
@@ -1120,7 +1209,7 @@ class AvatarsApi {
     );
   }
 
-  /// Returns the avatar image for a project or issue type.
+  /// Returns the avatar image for a project, issue type or priority.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -1133,6 +1222,7 @@ class AvatarsApi {
   ///  *  For custom issue type avatars, *Browse projects*
   /// [project permission](https://confluence.atlassian.com/x/yodKLg) for at
   /// least one project the issue type is used in.
+  ///  *  For priority avatars, none.
   Future<void> getAvatarImageByOwner(
       {required String type,
       required String entityId,
@@ -1150,6 +1240,29 @@ class AvatarsApi {
         if (format != null) 'format': format,
       },
     );
+  }
+}
+
+/// Jira Cloud platform REST API documentation
+
+class ClassificationLevelsApi {
+  final ApiClient _client;
+
+  ClassificationLevelsApi(this._client);
+
+  /// Returns all classification levels.
+  ///
+  /// **[Permissions](#permissions) required:** None.
+  Future<DataClassificationLevelsBean> getAllUserDataClassificationLevels(
+      {List<String>? status, String? orderBy}) async {
+    return DataClassificationLevelsBean.fromJson(await _client.send(
+      'get',
+      'rest/api/3/classification-levels',
+      queryParameters: {
+        if (status != null) 'status': status.map((e) => e).join(','),
+        if (orderBy != null) 'orderBy': orderBy,
+      },
+    ));
   }
 }
 
@@ -1182,10 +1295,15 @@ class DashboardsApi {
   /// Creates a dashboard.
   ///
   /// **[Permissions](#permissions) required:** None.
-  Future<Dashboard> createDashboard({required DashboardDetails body}) async {
+  Future<Dashboard> createDashboard(
+      {bool? extendAdminPermissions, required DashboardDetails body}) async {
     return Dashboard.fromJson(await _client.send(
       'post',
       'rest/api/3/dashboard',
+      queryParameters: {
+        if (extendAdminPermissions != null)
+          'extendAdminPermissions': '$extendAdminPermissions',
+      },
       body: body.toJson(),
     ));
   }
@@ -1313,24 +1431,6 @@ class DashboardsApi {
     ));
   }
 
-  /// Changes the title, position, and color of the gadget on a dashboard.
-  ///
-  /// **[Permissions](#permissions) required:** None.
-  Future<dynamic> updateGadget(
-      {required int dashboardId,
-      required int gadgetId,
-      required DashboardGadgetUpdateRequest body}) async {
-    return await _client.send(
-      'put',
-      'rest/api/3/dashboard/{dashboardId}/gadget/{gadgetId}',
-      pathParameters: {
-        'dashboardId': '$dashboardId',
-        'gadgetId': '$gadgetId',
-      },
-      body: body.toJson(),
-    );
-  }
-
   /// Removes a dashboard gadget from a dashboard.
   ///
   /// When a gadget is removed from a dashboard, other gadgets in the same
@@ -1349,6 +1449,24 @@ class DashboardsApi {
     );
   }
 
+  /// Changes the title, position, and color of the gadget on a dashboard.
+  ///
+  /// **[Permissions](#permissions) required:** None.
+  Future<dynamic> updateGadget(
+      {required int dashboardId,
+      required int gadgetId,
+      required DashboardGadgetUpdateRequest body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/dashboard/{dashboardId}/gadget/{gadgetId}',
+      pathParameters: {
+        'dashboardId': '$dashboardId',
+        'gadgetId': '$gadgetId',
+      },
+      body: body.toJson(),
+    );
+  }
+
   /// Returns the keys of all properties for a dashboard item.
   ///
   /// This operation can be accessed anonymously.
@@ -1359,7 +1477,7 @@ class DashboardsApi {
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg) are
   /// considered owners of the System dashboard. The System dashboard is
   /// considered to be shared with all other users, and is accessible to
-  /// anonymous users when Jira’s anonymous access is permitted.
+  /// anonymous users when Jirau2019s anonymous access is permitted.
   Future<PropertyKeys> getDashboardItemPropertyKeys(
       {required String dashboardId, required String itemId}) async {
     return PropertyKeys.fromJson(await _client.send(
@@ -1370,6 +1488,29 @@ class DashboardsApi {
         'itemId': itemId,
       },
     ));
+  }
+
+  /// Deletes a dashboard item property.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** The user must be the owner of
+  /// the dashboard. Note, users with the *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) are
+  /// considered owners of the System dashboard.
+  Future<dynamic> deleteDashboardItemProperty(
+      {required String dashboardId,
+      required String itemId,
+      required String propertyKey}) async {
+    return await _client.send(
+      'delete',
+      'rest/api/3/dashboard/{dashboardId}/items/{itemId}/properties/{propertyKey}',
+      pathParameters: {
+        'dashboardId': dashboardId,
+        'itemId': itemId,
+        'propertyKey': propertyKey,
+      },
+    );
   }
 
   /// Returns the key and value of a dashboard item property.
@@ -1399,7 +1540,7 @@ class DashboardsApi {
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg) are
   /// considered owners of the System dashboard. The System dashboard is
   /// considered to be shared with all other users, and is accessible to
-  /// anonymous users when Jira’s anonymous access is permitted.
+  /// anonymous users when Jirau2019s anonymous access is permitted.
   Future<EntityProperty> getDashboardItemProperty(
       {required String dashboardId,
       required String itemId,
@@ -1462,25 +1603,17 @@ class DashboardsApi {
     );
   }
 
-  /// Deletes a dashboard item property.
+  /// Deletes a dashboard.
   ///
-  /// This operation can be accessed anonymously.
+  /// **[Permissions](#permissions) required:** None
   ///
-  /// **[Permissions](#permissions) required:** The user must be the owner of
-  /// the dashboard. Note, users with the *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) are
-  /// considered owners of the System dashboard.
-  Future<void> deleteDashboardItemProperty(
-      {required String dashboardId,
-      required String itemId,
-      required String propertyKey}) async {
+  /// The dashboard to be deleted must be owned by the user.
+  Future<void> deleteDashboard(String id) async {
     await _client.send(
       'delete',
-      'rest/api/3/dashboard/{dashboardId}/items/{itemId}/properties/{propertyKey}',
+      'rest/api/3/dashboard/{id}',
       pathParameters: {
-        'dashboardId': dashboardId,
-        'itemId': itemId,
-        'propertyKey': propertyKey,
+        'id': id,
       },
     );
   }
@@ -1513,30 +1646,21 @@ class DashboardsApi {
   ///
   /// The dashboard to be updated must be owned by the user.
   Future<Dashboard> updateDashboard(
-      {required String id, required DashboardDetails body}) async {
+      {required String id,
+      bool? extendAdminPermissions,
+      required DashboardDetails body}) async {
     return Dashboard.fromJson(await _client.send(
       'put',
       'rest/api/3/dashboard/{id}',
       pathParameters: {
         'id': id,
       },
+      queryParameters: {
+        if (extendAdminPermissions != null)
+          'extendAdminPermissions': '$extendAdminPermissions',
+      },
       body: body.toJson(),
     ));
-  }
-
-  /// Deletes a dashboard.
-  ///
-  /// **[Permissions](#permissions) required:** None
-  ///
-  /// The dashboard to be deleted must be owned by the user.
-  Future<void> deleteDashboard(String id) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/dashboard/{id}',
-      pathParameters: {
-        'id': id,
-      },
-    );
   }
 
   /// Copies a dashboard. Any values provided in the `dashboard` parameter
@@ -1546,12 +1670,18 @@ class DashboardsApi {
   ///
   /// The dashboard to be copied must be owned by or shared with the user.
   Future<Dashboard> copyDashboard(
-      {required String id, required DashboardDetails body}) async {
+      {required String id,
+      bool? extendAdminPermissions,
+      required DashboardDetails body}) async {
     return Dashboard.fromJson(await _client.send(
       'post',
       'rest/api/3/dashboard/{id}/copy',
       pathParameters: {
         'id': id,
+      },
+      queryParameters: {
+        if (extendAdminPermissions != null)
+          'extendAdminPermissions': '$extendAdminPermissions',
       },
       body: body.toJson(),
     ));
@@ -1564,6 +1694,20 @@ class DynamicModulesApi {
   final ApiClient _client;
 
   DynamicModulesApi(this._client);
+
+  /// Remove all or a list of modules registered by the calling app.
+  ///
+  /// **[Permissions](#permissions) required:** Only Connect apps can make this
+  /// request.
+  Future<void> removeModules({List<String>? moduleKey}) async {
+    await _client.send(
+      'delete',
+      'rest/atlassian-connect/1/app/module/dynamic',
+      queryParameters: {
+        if (moduleKey != null) 'moduleKey': moduleKey.map((e) => e).join(','),
+      },
+    );
+  }
 
   /// Returns all modules registered dynamically by the calling app.
   ///
@@ -1585,20 +1729,6 @@ class DynamicModulesApi {
       'post',
       'rest/atlassian-connect/1/app/module/dynamic',
       body: body.toJson(),
-    );
-  }
-
-  /// Remove all or a list of modules registered by the calling app.
-  ///
-  /// **[Permissions](#permissions) required:** Only Connect apps can make this
-  /// request.
-  Future<void> removeModules({List<String>? moduleKey}) async {
-    await _client.send(
-      'delete',
-      'rest/atlassian-connect/1/app/module/dynamic',
-      queryParameters: {
-        if (moduleKey != null) 'moduleKey': moduleKey.map((e) => e).join(','),
-      },
     );
   }
 }
@@ -1687,6 +1817,22 @@ class FilterSharingApi {
         .toList();
   }
 
+  /// Deletes a share permission from a filter.
+  ///
+  /// **[Permissions](#permissions) required:** Permission to access Jira and
+  /// the user must own the filter.
+  Future<void> deleteSharePermission(
+      {required int id, required int permissionId}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/filter/{id}/permission/{permissionId}',
+      pathParameters: {
+        'id': '$id',
+        'permissionId': '$permissionId',
+      },
+    );
+  }
+
   /// Returns a share permission for a filter. A filter can be shared with
   /// groups, projects, all logged-in users, or the public. Sharing with all
   /// logged-in users or the public is known as a global share permission.
@@ -1713,22 +1859,6 @@ class FilterSharingApi {
         'permissionId': '$permissionId',
       },
     ));
-  }
-
-  /// Deletes a share permission from a filter.
-  ///
-  /// **[Permissions](#permissions) required:** Permission to access Jira and
-  /// the user must own the filter.
-  Future<void> deleteSharePermission(
-      {required int id, required int permissionId}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/filter/{id}/permission/{permissionId}',
-      pathParameters: {
-        'id': '$id',
-        'permissionId': '$permissionId',
-      },
-    );
   }
 }
 
@@ -1874,6 +2004,22 @@ class FiltersApi {
     ));
   }
 
+  /// Delete a filter.
+  ///
+  /// **[Permissions](#permissions) required:** Permission to access Jira,
+  /// however filters can only be deleted by the creator of the filter or a user
+  /// with *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> deleteFilter(int id) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/filter/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+    );
+  }
+
   /// Returns a filter.
   ///
   /// This operation can be accessed anonymously.
@@ -1928,16 +2074,22 @@ class FiltersApi {
     ));
   }
 
-  /// Delete a filter.
+  /// Reset the user's column configuration for the filter to the default.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira,
-  /// however filters can only be deleted by the creator of the filter or a user
-  /// with *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteFilter(int id) async {
+  /// however, columns are only reset for:
+  ///
+  ///  *  filters owned by the user.
+  ///  *  filters shared with a group that the user is a member of.
+  ///  *  filters shared with a private project that the user has *Browse
+  /// projects* [project permission](https://confluence.atlassian.com/x/yodKLg)
+  /// for.
+  ///  *  filters shared with a public project.
+  ///  *  filters shared with the public.
+  Future<void> resetColumns(int id) async {
     await _client.send(
       'delete',
-      'rest/api/3/filter/{id}',
+      'rest/api/3/filter/{id}/columns',
       pathParameters: {
         'id': '$id',
       },
@@ -1993,37 +2145,36 @@ class FiltersApi {
   ///  *  filters shared with a public project.
   ///  *  filters shared with the public.
   Future<dynamic> setColumns(
-      {required int id, required List<String> body}) async {
+      {required int id, required ColumnRequestBody body}) async {
     return await _client.send(
       'put',
       'rest/api/3/filter/{id}/columns',
       pathParameters: {
         'id': '$id',
       },
-      body: body,
+      body: body.toJson(),
     );
   }
 
-  /// Reset the user's column configuration for the filter to the default.
+  /// Removes a filter as a favorite for the user. Note that this operation only
+  /// removes filters visible to the user from the user's favorites list. For
+  /// example, if the user favorites a public filter that is subsequently made
+  /// private (and is therefore no longer visible on their favorites list) they
+  /// cannot remove it from their favorites list.
   ///
-  /// **[Permissions](#permissions) required:** Permission to access Jira,
-  /// however, columns are only reset for:
-  ///
-  ///  *  filters owned by the user.
-  ///  *  filters shared with a group that the user is a member of.
-  ///  *  filters shared with a private project that the user has *Browse
-  /// projects* [project permission](https://confluence.atlassian.com/x/yodKLg)
-  /// for.
-  ///  *  filters shared with a public project.
-  ///  *  filters shared with the public.
-  Future<void> resetColumns(int id) async {
-    await _client.send(
+  /// **[Permissions](#permissions) required:** Permission to access Jira.
+  Future<Filter> deleteFavouriteForFilter(
+      {required int id, String? expand}) async {
+    return Filter.fromJson(await _client.send(
       'delete',
-      'rest/api/3/filter/{id}/columns',
+      'rest/api/3/filter/{id}/favourite',
       pathParameters: {
         'id': '$id',
       },
-    );
+      queryParameters: {
+        if (expand != null) 'expand': expand,
+      },
+    ));
   }
 
   /// Add a filter as a favorite for the user.
@@ -2042,27 +2193,6 @@ class FiltersApi {
       {required int id, String? expand}) async {
     return Filter.fromJson(await _client.send(
       'put',
-      'rest/api/3/filter/{id}/favourite',
-      pathParameters: {
-        'id': '$id',
-      },
-      queryParameters: {
-        if (expand != null) 'expand': expand,
-      },
-    ));
-  }
-
-  /// Removes a filter as a favorite for the user. Note that this operation only
-  /// removes filters visible to the user from the user's favorites list. For
-  /// example, if the user favorites a public filter that is subsequently made
-  /// private (and is therefore no longer visible on their favorites list) they
-  /// cannot remove it from their favorites list.
-  ///
-  /// **[Permissions](#permissions) required:** Permission to access Jira.
-  Future<Filter> deleteFavouriteForFilter(
-      {required int id, String? expand}) async {
-    return Filter.fromJson(await _client.send(
-      'delete',
       'rest/api/3/filter/{id}/favourite',
       pathParameters: {
         'id': '$id',
@@ -2175,12 +2305,38 @@ class GroupsApi {
 
   GroupsApi(this._client);
 
+  /// Deletes a group.
+  ///
+  /// **[Permissions](#permissions) required:** Site administration (that is,
+  /// member of the *site-admin* strategic
+  /// [group](https://confluence.atlassian.com/x/24xjL)).
+  Future<void> removeGroup(
+      {String? groupname,
+      String? groupId,
+      String? swapGroup,
+      String? swapGroupId}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/group',
+      queryParameters: {
+        if (groupname != null) 'groupname': groupname,
+        if (groupId != null) 'groupId': groupId,
+        if (swapGroup != null) 'swapGroup': swapGroup,
+        if (swapGroupId != null) 'swapGroupId': swapGroupId,
+      },
+    );
+  }
+
   /// This operation is deprecated, use
   /// [`group/member`](#api-rest-api-3-group-member-get).
   ///
   /// Returns all users in a group.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// **[Permissions](#permissions) required:** either of:
+  ///
+  ///  *  *Browse users and groups*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  ///  *  *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   @deprecated
   Future<Group> getGroup(
@@ -2207,28 +2363,6 @@ class GroupsApi {
       'rest/api/3/group',
       body: body.toJson(),
     ));
-  }
-
-  /// Deletes a group.
-  ///
-  /// **[Permissions](#permissions) required:** Site administration (that is,
-  /// member of the *site-admin* strategic
-  /// [group](https://confluence.atlassian.com/x/24xjL)).
-  Future<void> removeGroup(
-      {String? groupname,
-      String? groupId,
-      String? swapGroup,
-      String? swapGroupId}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/group',
-      queryParameters: {
-        if (groupname != null) 'groupname': groupname,
-        if (groupId != null) 'groupId': groupId,
-        if (swapGroup != null) 'swapGroup': swapGroup,
-        if (swapGroupId != null) 'swapGroupId': swapGroupId,
-      },
-    );
   }
 
   /// Returns a [paginated](#pagination) list of groups.
@@ -2261,7 +2395,11 @@ class GroupsApi {
   /// Note that users are ordered by username, however the username is not
   /// returned in the results due to privacy reasons.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// **[Permissions](#permissions) required:** either of:
+  ///
+  ///  *  *Browse users and groups*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  ///  *  *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
   Future<PageBeanUserDetails> getUsersFromGroup(
       {String? groupname,
@@ -2280,26 +2418,6 @@ class GroupsApi {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
       },
-    ));
-  }
-
-  /// Adds a user to a group.
-  ///
-  /// **[Permissions](#permissions) required:** Site administration (that is,
-  /// member of the *site-admin*
-  /// [group](https://confluence.atlassian.com/x/24xjL)).
-  Future<Group> addUserToGroup(
-      {String? groupname,
-      String? groupId,
-      required UpdateUserToGroupBean body}) async {
-    return Group.fromJson(await _client.send(
-      'post',
-      'rest/api/3/group/user',
-      queryParameters: {
-        if (groupname != null) 'groupname': groupname,
-        if (groupId != null) 'groupId': groupId,
-      },
-      body: body.toJson(),
     ));
   }
 
@@ -2323,6 +2441,26 @@ class GroupsApi {
         'accountId': accountId,
       },
     );
+  }
+
+  /// Adds a user to a group.
+  ///
+  /// **[Permissions](#permissions) required:** Site administration (that is,
+  /// member of the *site-admin*
+  /// [group](https://confluence.atlassian.com/x/24xjL)).
+  Future<Group> addUserToGroup(
+      {String? groupname,
+      String? groupId,
+      required UpdateUserToGroupBean body}) async {
+    return Group.fromJson(await _client.send(
+      'post',
+      'rest/api/3/group/user',
+      queryParameters: {
+        if (groupname != null) 'groupname': groupname,
+        if (groupId != null) 'groupId': groupId,
+      },
+      body: body.toJson(),
+    ));
   }
 
   /// Returns a list of groups whose names contain a query string. A list of
@@ -2398,9 +2536,9 @@ class IssueAttachmentsApi {
   /// project that the issue is in.
   ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
   /// is configured, issue-level security permission to view the issue.
-  Future<Map<String, dynamic>> getAttachmentContent(
+  Future<List<dynamic>> getAttachmentContent(
       {required String id, bool? redirect}) async {
-    return await _client.send(
+    return (await _client.send(
       'get',
       'rest/api/3/attachment/content/{id}',
       pathParameters: {
@@ -2409,7 +2547,9 @@ class IssueAttachmentsApi {
       queryParameters: {
         if (redirect != null) 'redirect': '$redirect',
       },
-    ) as Map<String, Object?>;
+    ) as List<Object?>)
+        .map((i) => i)
+        .toList();
   }
 
   /// Returns the attachment settings, that is, whether attachments are enabled
@@ -2444,13 +2584,13 @@ class IssueAttachmentsApi {
   /// project that the issue is in.
   ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
   /// is configured, issue-level security permission to view the issue.
-  Future<Map<String, dynamic>> getAttachmentThumbnail(
+  Future<List<dynamic>> getAttachmentThumbnail(
       {required String id,
       bool? redirect,
       bool? fallbackToDefault,
       int? width,
       int? height}) async {
-    return await _client.send(
+    return (await _client.send(
       'get',
       'rest/api/3/attachment/thumbnail/{id}',
       pathParameters: {
@@ -2463,29 +2603,9 @@ class IssueAttachmentsApi {
         if (width != null) 'width': '$width',
         if (height != null) 'height': '$height',
       },
-    ) as Map<String, Object?>;
-  }
-
-  /// Returns the metadata for an attachment. Note that the attachment itself is
-  /// not returned.
-  ///
-  /// This operation can be accessed anonymously.
-  ///
-  /// **[Permissions](#permissions) required:**
-  ///
-  ///  *  *Browse projects*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
-  /// project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
-  /// is configured, issue-level security permission to view the issue.
-  Future<AttachmentMetadata> getAttachment(String id) async {
-    return AttachmentMetadata.fromJson(await _client.send(
-      'get',
-      'rest/api/3/attachment/{id}',
-      pathParameters: {
-        'id': id,
-      },
-    ));
+    ) as List<Object?>)
+        .map((i) => i)
+        .toList();
   }
 
   /// Deletes an attachment from an issue.
@@ -2509,6 +2629,28 @@ class IssueAttachmentsApi {
         'id': id,
       },
     );
+  }
+
+  /// Returns the metadata for an attachment. Note that the attachment itself is
+  /// not returned.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  Future<AttachmentMetadata> getAttachment(String id) async {
+    return AttachmentMetadata.fromJson(await _client.send(
+      'get',
+      'rest/api/3/attachment/{id}',
+      pathParameters: {
+        'id': id,
+      },
+    ));
   }
 
   /// Returns the metadata for the contents of an attachment, if it is an
@@ -2747,17 +2889,177 @@ class IssueAttachmentsApi {
   ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
   /// is configured, issue-level security permission to view the issue.
   Future<List<Attachment>> addAttachment(
-      {required String issueIdOrKey, required MultipartFile file}) async {
+      {required String issueIdOrKey,
+      required List<MultipartFile> files}) async {
     return (await _client.send(
       'post',
       'rest/api/3/issue/{issueIdOrKey}/attachments',
       pathParameters: {
         'issueIdOrKey': issueIdOrKey,
       },
-      file: file,
+      files: files,
     ) as List<Object?>)
         .map((i) => Attachment.fromJson(i as Map<String, Object?>? ?? const {}))
         .toList();
+  }
+}
+
+/// Jira Cloud platform REST API documentation
+
+class IssueBulkOperationsApi {
+  final ApiClient _client;
+
+  IssueBulkOperationsApi(this._client);
+
+  /// Use this API to get a list of fields visible to the user to perform bulk
+  /// edit operations. You can pass single or multiple issues in the query to
+  /// get eligible editable fields. This API uses pagination to return
+  /// responses, delivering 50 fields at a time.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  Global bulk change
+  /// [permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-global-permissions/).
+  ///  *  Browse
+  /// [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/)
+  /// in all projects that contain the selected issues.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  Depending on the field, any field-specific permissions required to
+  /// edit it.
+  Future<BulkEditGetFields> getBulkEditableFields(
+      {required String issueIdsOrKeys,
+      String? searchText,
+      String? endingBefore,
+      String? startingAfter}) async {
+    return BulkEditGetFields.fromJson(await _client.send(
+      'get',
+      'rest/api/3/bulk/issues/fields',
+      queryParameters: {
+        'issueIdsOrKeys': issueIdsOrKeys,
+        if (searchText != null) 'searchText': searchText,
+        if (endingBefore != null) 'endingBefore': endingBefore,
+        if (startingAfter != null) 'startingAfter': startingAfter,
+      },
+    ));
+  }
+
+  /// Use this API to submit a bulk edit request and simultaneously edit
+  /// multiple issues. There are limits applied to the number of issues and
+  /// fields that can be edited. A single request can accommodate a maximum of
+  /// 1000 issues (including subtasks) and 200 fields.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  Global bulk change
+  /// [permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-global-permissions/).
+  ///  *  Browse
+  /// [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/)
+  /// in all projects that contain the selected issues.
+  ///  *  Edit
+  /// [issues permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/)
+  /// in all projects that contain the selected issues.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  Future<SubmittedBulkOperation> submitBulkEdit(
+      {required IssueBulkEditPayload body}) async {
+    return SubmittedBulkOperation.fromJson(await _client.send(
+      'post',
+      'rest/api/3/bulk/issues/fields',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Use this API to submit a bulk issue move request. You can move multiple
+  /// issues, but they must all be moved to and from a single project, issue
+  /// type, and parent. You can't move more than 1000 issues (including
+  /// subtasks) at once.
+  ///
+  /// #### Scenarios: ####
+  ///
+  /// This is an early version of the API and it doesn't have full feature
+  /// parity with the Bulk Move UI experience.
+  ///
+  ///  *  Moving issue of type A to issue of type B in the same project or a
+  /// different project: `SUPPORTED`
+  ///  *  Moving multiple issues of type A in one project to multiple issues of
+  /// type B in the same project or a different project: **`SUPPORTED`**
+  ///  *  Moving a standard parent issue of type A with its multiple subtask
+  /// issue types in one project to standard issue of type B and multiple
+  /// subtask issue types in the same project or a different project:
+  /// `SUPPORTED`
+  ///  *  Moving an epic issue with its child issues to a different project
+  /// without losing their relation: `NOT SUPPORTED`
+  ///     (Workaround: Move them individually and stitch the relationship back
+  /// with the Bulk Edit API)
+  ///
+  /// #### Limits applied to bulk issue moves: ####
+  ///
+  /// When using the bulk move, keep in mind that there are limits on the number
+  /// of issues and fields you can include.
+  ///
+  ///  *  You can move up to 1,000 issues in a single operation, including any
+  /// subtasks.
+  ///  *  All issues must originate from the same project and share the same
+  /// issue type and parent.
+  ///  *  The total combined number of fields across all issues must not exceed
+  /// 1,500,000. For example, if each issue includes 15,000 fields, then the
+  /// maximum number of issues that can be moved is 100.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  Global bulk change
+  /// [permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-global-permissions/).
+  ///  *  Move
+  /// [issues permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/)
+  /// in source projects.
+  ///  *  Create
+  /// [issues permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/)
+  /// in destination projects.
+  ///  *  Browse
+  /// [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/)
+  /// in destination projects, if moving subtasks only.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  Future<SubmittedBulkOperation> submitBulkMove(
+      {required IssueBulkMovePayload body}) async {
+    return SubmittedBulkOperation.fromJson(await _client.send(
+      'post',
+      'rest/api/3/bulk/issues/move',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Use this to get the progress state for the specified bulk operation
+  /// `taskId`.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  Global bulk change
+  /// [permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-global-permissions/).
+  ///  *  Administer Jira
+  /// [global permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-global-permissions/),
+  /// or be the creator of the task.
+  ///
+  /// If the task is running, this resource will return:
+  ///
+  ///
+  /// {"taskId":"10779","status":"RUNNING","progressPercent":65,"submittedBy":{"accountId":"5b10a2844c20165700ede21g"},"created":1690180055963,"started":1690180056206,"updated":169018005829}
+  ///
+  /// If the task has completed, then this resource will return:
+  ///
+  ///
+  /// {"processedAccessibleIssues":[10001,10002],"created":1709189449954,"progressPercent":100,"started":1709189450154,"status":"COMPLETE","submittedBy":{"accountId":"5b10a2844c20165700ede21g"},"invalidOrInaccessibleIssueCount":0,"taskId":"10000","totalIssueCount":2,"updated":1709189450354}
+  ///
+  /// **Note:** You can view task progress for up to 14 days from creation.
+  Future<BulkOperationProgress> getBulkOperationProgress(String taskId) async {
+    return BulkOperationProgress.fromJson(await _client.send(
+      'get',
+      'rest/api/3/bulk/queue/{taskId}',
+      pathParameters: {
+        'taskId': taskId,
+      },
+    ));
   }
 }
 
@@ -2789,6 +3091,31 @@ class IssueCommentPropertiesApi {
         'commentId': commentId,
       },
     ));
+  }
+
+  /// Deletes a comment property.
+  ///
+  /// **[Permissions](#permissions) required:** either of:
+  ///
+  ///  *  *Edit All Comments*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) to delete
+  /// a property from any comment.
+  ///  *  *Edit Own Comments*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) to delete
+  /// a property from a comment created by the user.
+  ///
+  /// Also, when the visibility of a comment is restricted to a role or group
+  /// the user must be a member of that role or group.
+  Future<void> deleteCommentProperty(
+      {required String commentId, required String propertyKey}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/comment/{commentId}/properties/{propertyKey}',
+      pathParameters: {
+        'commentId': commentId,
+        'propertyKey': propertyKey,
+      },
+    );
   }
 
   /// Returns the value of a comment property.
@@ -2846,31 +3173,6 @@ class IssueCommentPropertiesApi {
         'propertyKey': propertyKey,
       },
       body: body,
-    );
-  }
-
-  /// Deletes a comment property.
-  ///
-  /// **[Permissions](#permissions) required:** either of:
-  ///
-  ///  *  *Edit All Comments*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) to delete
-  /// a property from any comment.
-  ///  *  *Edit Own Comments*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) to delete
-  /// a property from a comment created by the user.
-  ///
-  /// Also, when the visibility of a comment is restricted to a role or group
-  /// the user must be a member of that role or group.
-  Future<void> deleteCommentProperty(
-      {required String commentId, required String propertyKey}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/comment/{commentId}/properties/{propertyKey}',
-      pathParameters: {
-        'commentId': commentId,
-        'propertyKey': propertyKey,
-      },
     );
   }
 }
@@ -2972,6 +3274,38 @@ class IssueCommentsApi {
     ));
   }
 
+  /// Deletes a comment.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue containing the comment is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  *Delete all
+  /// comments*[ project permission](https://confluence.atlassian.com/x/yodKLg)
+  /// to delete any comment or *Delete own comments* to delete comment created
+  /// by the user,
+  ///  *  If the comment has visibility restrictions, the user belongs to the
+  /// group or has the role visibility is restricted to.
+  Future<void> deleteComment(
+      {required String issueIdOrKey,
+      required String id,
+      String? parentId}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/issue/{issueIdOrKey}/comment/{id}',
+      pathParameters: {
+        'issueIdOrKey': issueIdOrKey,
+        'id': id,
+      },
+      queryParameters: {
+        if (parentId != null) 'parentId': parentId,
+      },
+    );
+  }
+
   /// Returns a comment.
   ///
   /// This operation can be accessed anonymously.
@@ -3042,33 +3376,6 @@ class IssueCommentsApi {
       body: body.toJson(),
     ));
   }
-
-  /// Deletes a comment.
-  ///
-  /// **[Permissions](#permissions) required:**
-  ///
-  ///  *  *Browse projects*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
-  /// project that the issue containing the comment is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
-  /// is configured, issue-level security permission to view the issue.
-  ///  *  *Delete all
-  /// comments*[ project permission](https://confluence.atlassian.com/x/yodKLg)
-  /// to delete any comment or *Delete own comments* to delete comment created
-  /// by the user,
-  ///  *  If the comment has visibility restrictions, the user belongs to the
-  /// group or has the role visibility is restricted to.
-  Future<void> deleteComment(
-      {required String issueIdOrKey, required String id}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/issue/{issueIdOrKey}/comment/{id}',
-      pathParameters: {
-        'issueIdOrKey': issueIdOrKey,
-        'id': id,
-      },
-    );
-  }
 }
 
 /// Jira Cloud platform REST API documentation
@@ -3078,9 +3385,55 @@ class IssueCustomFieldConfigurationAppsApi {
 
   IssueCustomFieldConfigurationAppsApi(this._client);
 
+  /// Returns a [paginated](#pagination) list of configurations for list of
+  /// custom fields of a
+  /// [type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/)
+  /// created by a [Forge app](https://developer.atlassian.com/platform/forge/).
+  ///
+  /// The result can be filtered by one of these criteria:
+  ///
+  ///  *  `id`.
+  ///  *  `fieldContextId`.
+  ///  *  `issueId`.
+  ///  *  `projectKeyOrId` and `issueTypeId`.
+  ///
+  /// Otherwise, all configurations for the provided list of custom fields are
+  /// returned.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira
+  /// permissions are not required for the Forge app that provided the custom
+  /// field type.
+  Future<PageBeanBulkContextualConfiguration> getCustomFieldsConfigurations(
+      {List<int>? id,
+      List<int>? fieldContextId,
+      int? issueId,
+      String? projectKeyOrId,
+      String? issueTypeId,
+      int? startAt,
+      int? maxResults,
+      required ConfigurationsListParameters body}) async {
+    return PageBeanBulkContextualConfiguration.fromJson(await _client.send(
+      'post',
+      'rest/api/3/app/field/context/configuration/list',
+      queryParameters: {
+        if (id != null) 'id': id.map((e) => '$e').join(','),
+        if (fieldContextId != null)
+          'fieldContextId': fieldContextId.map((e) => '$e').join(','),
+        if (issueId != null) 'issueId': '$issueId',
+        if (projectKeyOrId != null) 'projectKeyOrId': projectKeyOrId,
+        if (issueTypeId != null) 'issueTypeId': issueTypeId,
+        if (startAt != null) 'startAt': '$startAt',
+        if (maxResults != null) 'maxResults': '$maxResults',
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Returns a [paginated](#pagination) list of configurations for a custom
-  /// field created by a
-  /// [Forge app](https://developer.atlassian.com/platform/forge/).
+  /// field of a
+  /// [type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/)
+  /// created by a [Forge app](https://developer.atlassian.com/platform/forge/).
   ///
   /// The result can be filtered by one of these criteria:
   ///
@@ -3093,8 +3446,8 @@ class IssueCustomFieldConfigurationAppsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira
-  /// permissions are not required for the Forge app that created the custom
-  /// field.
+  /// permissions are not required for the Forge app that provided the custom
+  /// field type.
   Future<PageBeanContextualConfiguration> getCustomFieldConfiguration(
       {required String fieldIdOrKey,
       List<int>? id,
@@ -3123,13 +3476,14 @@ class IssueCustomFieldConfigurationAppsApi {
     ));
   }
 
-  /// Update the configuration for contexts of a custom field created by a
-  /// [Forge app](https://developer.atlassian.com/platform/forge/).
+  /// Update the configuration for contexts of a custom field of a
+  /// [type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/)
+  /// created by a [Forge app](https://developer.atlassian.com/platform/forge/).
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira
   /// permissions are not required for the Forge app that created the custom
-  /// field.
+  /// field type.
   Future<dynamic> updateCustomFieldConfiguration(
       {required String fieldIdOrKey,
       required CustomFieldConfigurations body}) async {
@@ -3464,6 +3818,23 @@ class IssueCustomFieldContextsApi {
     ));
   }
 
+  /// Deletes a
+  /// [ custom field context](https://confluence.atlassian.com/adminjiracloud/what-are-custom-field-contexts-991923859.html).
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> deleteCustomFieldContext(
+      {required String fieldId, required int contextId}) async {
+    return await _client.send(
+      'delete',
+      'rest/api/3/field/{fieldId}/context/{contextId}',
+      pathParameters: {
+        'fieldId': fieldId,
+        'contextId': '$contextId',
+      },
+    );
+  }
+
   /// Updates a
   /// [ custom field context](https://confluence.atlassian.com/adminjiracloud/what-are-custom-field-contexts-991923859.html).
   ///
@@ -3481,23 +3852,6 @@ class IssueCustomFieldContextsApi {
         'contextId': '$contextId',
       },
       body: body.toJson(),
-    );
-  }
-
-  /// Deletes a
-  /// [ custom field context](https://confluence.atlassian.com/adminjiracloud/what-are-custom-field-contexts-991923859.html).
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<dynamic> deleteCustomFieldContext(
-      {required String fieldId, required int contextId}) async {
-    return await _client.send(
-      'delete',
-      'rest/api/3/field/{fieldId}/context/{contextId}',
-      pathParameters: {
-        'fieldId': fieldId,
-        'contextId': '$contextId',
-      },
     );
   }
 
@@ -3670,35 +4024,6 @@ class IssueCustomFieldOptionsApi {
     ));
   }
 
-  /// Updates the options of a custom field.
-  ///
-  /// If any of the options are not found, no options are updated. Options where
-  /// the values in the request match the current values aren't updated and
-  /// aren't reported in the response.
-  ///
-  /// Note that this operation **only works for issue field select list options
-  /// created in Jira or using operations from the
-  /// [Issue custom field options](#api-group-Issue-custom-field-options)
-  /// resource**, it cannot be used with issue field select list options created
-  /// by Connect apps.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<CustomFieldUpdatedContextOptionsList> updateCustomFieldOption(
-      {required String fieldId,
-      required int contextId,
-      required BulkCustomFieldOptionUpdateRequest body}) async {
-    return CustomFieldUpdatedContextOptionsList.fromJson(await _client.send(
-      'put',
-      'rest/api/3/field/{fieldId}/context/{contextId}/option',
-      pathParameters: {
-        'fieldId': fieldId,
-        'contextId': '$contextId',
-      },
-      body: body.toJson(),
-    ));
-  }
-
   /// Creates options and, where the custom select field is of the type Select
   /// List (cascading), cascading options for a custom select field. The options
   /// are added to a context of the field.
@@ -3720,6 +4045,35 @@ class IssueCustomFieldOptionsApi {
       required BulkCustomFieldOptionCreateRequest body}) async {
     return CustomFieldCreatedContextOptionsList.fromJson(await _client.send(
       'post',
+      'rest/api/3/field/{fieldId}/context/{contextId}/option',
+      pathParameters: {
+        'fieldId': fieldId,
+        'contextId': '$contextId',
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Updates the options of a custom field.
+  ///
+  /// If any of the options are not found, no options are updated. Options where
+  /// the values in the request match the current values aren't updated and
+  /// aren't reported in the response.
+  ///
+  /// Note that this operation **only works for issue field select list options
+  /// created in Jira or using operations from the
+  /// [Issue custom field options](#api-group-Issue-custom-field-options)
+  /// resource**, it cannot be used with issue field select list options created
+  /// by Connect apps.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<CustomFieldUpdatedContextOptionsList> updateCustomFieldOption(
+      {required String fieldId,
+      required int contextId,
+      required BulkCustomFieldOptionUpdateRequest body}) async {
+    return CustomFieldUpdatedContextOptionsList.fromJson(await _client.send(
+      'put',
       'rest/api/3/field/{fieldId}/context/{contextId}/option',
       pathParameters: {
         'fieldId': fieldId,
@@ -3782,6 +4136,38 @@ class IssueCustomFieldOptionsApi {
       },
     );
   }
+
+  /// Replaces the options of a custom field.
+  ///
+  /// Note that this operation **only works for issue field select list options
+  /// created in Jira or using operations from the
+  /// [Issue custom field options](#api-group-Issue-custom-field-options)
+  /// resource**, it cannot be used with issue field select list options created
+  /// by Connect or Forge apps.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<TaskProgressBeanRemoveOptionFromIssuesResult> replaceCustomFieldOption(
+      {int? replaceWith,
+      String? jql,
+      required String fieldId,
+      required int optionId,
+      required int contextId}) async {
+    return TaskProgressBeanRemoveOptionFromIssuesResult.fromJson(
+        await _client.send(
+      'delete',
+      'rest/api/3/field/{fieldId}/context/{contextId}/option/{optionId}/issue',
+      pathParameters: {
+        'fieldId': fieldId,
+        'optionId': '$optionId',
+        'contextId': '$contextId',
+      },
+      queryParameters: {
+        if (replaceWith != null) 'replaceWith': '$replaceWith',
+        if (jql != null) 'jql': jql,
+      },
+    ));
+  }
 }
 
 /// Jira Cloud platform REST API documentation
@@ -3827,6 +4213,9 @@ class IssueCustomFieldOptionsAppsApi {
   /// options created in Jira or using operations from the
   /// [Issue custom field options](#api-group-Issue-custom-field-options)
   /// resource.
+  ///
+  /// Each field can have a maximum of 10000 options, and each option can have a
+  /// maximum of 10000 scopes.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira
@@ -3902,6 +4291,29 @@ class IssueCustomFieldOptionsAppsApi {
     ));
   }
 
+  /// Deletes an option from a select list issue field.
+  ///
+  /// Note that this operation **only works for issue field select list options
+  /// added by Connect apps**, it cannot be used with issue field select list
+  /// options created in Jira or using operations from the
+  /// [Issue custom field options](#api-group-Issue-custom-field-options)
+  /// resource.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira
+  /// permissions are not required for the app providing the field.
+  Future<dynamic> deleteIssueFieldOption(
+      {required String fieldKey, required int optionId}) async {
+    return await _client.send(
+      'delete',
+      'rest/api/3/field/{fieldKey}/option/{optionId}',
+      pathParameters: {
+        'fieldKey': fieldKey,
+        'optionId': '$optionId',
+      },
+    );
+  }
+
   /// Returns an option from a select list issue field.
   ///
   /// Note that this operation **only works for issue field select list options
@@ -3952,29 +4364,6 @@ class IssueCustomFieldOptionsAppsApi {
       },
       body: body.toJson(),
     ));
-  }
-
-  /// Deletes an option from a select list issue field.
-  ///
-  /// Note that this operation **only works for issue field select list options
-  /// added by Connect apps**, it cannot be used with issue field select list
-  /// options created in Jira or using operations from the
-  /// [Issue custom field options](#api-group-Issue-custom-field-options)
-  /// resource.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira
-  /// permissions are not required for the app providing the field.
-  Future<dynamic> deleteIssueFieldOption(
-      {required String fieldKey, required int optionId}) async {
-    return await _client.send(
-      'delete',
-      'rest/api/3/field/{fieldKey}/option/{optionId}',
-      pathParameters: {
-        'fieldKey': fieldKey,
-        'optionId': '$optionId',
-      },
-    );
   }
 
   /// Deselects an issue-field select-list option from all issues where it is
@@ -4035,11 +4424,21 @@ class IssueCustomFieldValuesAppsApi {
 
   /// Updates the value of one or more custom fields on one or more issues.
   /// Combinations of custom field and issue should be unique within the
-  /// request. Custom fields can only be updated by the Forge app that created
-  /// them.
+  /// request.
   ///
-  /// **[Permissions](#permissions) required:** Only the app that created the
-  /// custom field can update its values with this operation.
+  /// Apps can only perform this operation on
+  /// [custom fields](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field/)
+  /// and
+  /// [custom field types](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/)
+  /// declared in their own manifests.
+  ///
+  /// **[Permissions](#permissions) required:** Only the app that owns the
+  /// custom field or custom field type can update its values with this
+  /// operation.
+  ///
+  /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not
+  /// using it won't break your app. However, we recommend adding it to your
+  /// app's scope list because we will eventually make it mandatory.
   Future<dynamic> updateMultipleCustomFieldValues(
       {bool? generateChangelog,
       required MultipleCustomFieldValuesUpdateDetails body}) async {
@@ -4054,11 +4453,21 @@ class IssueCustomFieldValuesAppsApi {
     );
   }
 
-  /// Updates the value of a custom field on one or more issues. Custom fields
-  /// can only be updated by the Forge app that created them.
+  /// Updates the value of a custom field on one or more issues.
   ///
-  /// **[Permissions](#permissions) required:** Only the app that created the
-  /// custom field can update its values with this operation.
+  /// Apps can only perform this operation on
+  /// [custom fields](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field/)
+  /// and
+  /// [custom field types](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/)
+  /// declared in their own manifests.
+  ///
+  /// **[Permissions](#permissions) required:** Only the app that owns the
+  /// custom field or custom field type can update its values with this
+  /// operation.
+  ///
+  /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not
+  /// using it won't break your app. However, we recommend adding it to your
+  /// app's scope list because we will eventually make it mandatory.
   Future<dynamic> updateCustomFieldValue(
       {required String fieldIdOrKey,
       bool? generateChangelog,
@@ -4136,6 +4545,23 @@ class IssueFieldConfigurationsApi {
     ));
   }
 
+  /// Deletes a field configuration.
+  ///
+  /// This operation can only delete configurations used in company-managed
+  /// (classic) projects.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> deleteFieldConfiguration(int id) async {
+    return await _client.send(
+      'delete',
+      'rest/api/3/fieldconfiguration/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+    );
+  }
+
   /// Updates a field configuration. The name and the description provided in
   /// the request override the existing values.
   ///
@@ -4153,23 +4579,6 @@ class IssueFieldConfigurationsApi {
         'id': '$id',
       },
       body: body.toJson(),
-    );
-  }
-
-  /// Deletes a field configuration.
-  ///
-  /// This operation can only delete configurations used in company-managed
-  /// (classic) projects.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<dynamic> deleteFieldConfiguration(int id) async {
-    return await _client.send(
-      'delete',
-      'rest/api/3/fieldconfiguration/{id}',
-      pathParameters: {
-        'id': '$id',
-      },
     );
   }
 
@@ -4322,6 +4731,23 @@ class IssueFieldConfigurationsApi {
     );
   }
 
+  /// Deletes a field configuration scheme.
+  ///
+  /// This operation can only delete field configuration schemes used in
+  /// company-managed (classic) projects.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> deleteFieldConfigurationScheme(int id) async {
+    return await _client.send(
+      'delete',
+      'rest/api/3/fieldconfigurationscheme/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+    );
+  }
+
   /// Updates a field configuration scheme.
   ///
   /// This operation can only update field configuration schemes used in
@@ -4339,23 +4765,6 @@ class IssueFieldConfigurationsApi {
         'id': '$id',
       },
       body: body.toJson(),
-    );
-  }
-
-  /// Deletes a field configuration scheme.
-  ///
-  /// This operation can only delete field configuration schemes used in
-  /// company-managed (classic) projects.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<dynamic> deleteFieldConfigurationScheme(int id) async {
-    return await _client.send(
-      'delete',
-      'rest/api/3/fieldconfigurationscheme/{id}',
-      pathParameters: {
-        'id': '$id',
-      },
     );
   }
 
@@ -4645,6 +5054,23 @@ class IssueLinkTypesApi {
     ));
   }
 
+  /// Deletes an issue link type.
+  ///
+  /// To use this operation, the site must have
+  /// [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> deleteIssueLinkType(String issueLinkTypeId) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/issueLinkType/{issueLinkTypeId}',
+      pathParameters: {
+        'issueLinkTypeId': issueLinkTypeId,
+      },
+    );
+  }
+
   /// Returns an issue link type.
   ///
   /// To use this operation, the site must have
@@ -4682,23 +5108,6 @@ class IssueLinkTypesApi {
       },
       body: body.toJson(),
     ));
-  }
-
-  /// Deletes an issue link type.
-  ///
-  /// To use this operation, the site must have
-  /// [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteIssueLinkType(String issueLinkTypeId) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/issueLinkType/{issueLinkTypeId}',
-      pathParameters: {
-        'issueLinkTypeId': issueLinkTypeId,
-      },
-    );
   }
 }
 
@@ -4744,27 +5153,6 @@ class IssueLinksApi {
     );
   }
 
-  /// Returns an issue link.
-  ///
-  /// This operation can be accessed anonymously.
-  ///
-  /// **[Permissions](#permissions) required:**
-  ///
-  ///  *  *Browse project*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for all
-  /// the projects containing the linked issues.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
-  /// is configured, permission to view both of the issues.
-  Future<IssueLink> getIssueLink(String linkId) async {
-    return IssueLink.fromJson(await _client.send(
-      'get',
-      'rest/api/3/issueLink/{linkId}',
-      pathParameters: {
-        'linkId': linkId,
-      },
-    ));
-  }
-
   /// Deletes an issue link.
   ///
   /// This operation can be accessed anonymously.
@@ -4787,6 +5175,27 @@ class IssueLinksApi {
         'linkId': linkId,
       },
     );
+  }
+
+  /// Returns an issue link.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Browse project*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for all
+  /// the projects containing the linked issues.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, permission to view both of the issues.
+  Future<IssueLink> getIssueLink(String linkId) async {
+    return IssueLink.fromJson(await _client.send(
+      'get',
+      'rest/api/3/issueLink/{linkId}',
+      pathParameters: {
+        'linkId': linkId,
+      },
+    ));
   }
 }
 
@@ -4827,12 +5236,12 @@ class IssueNavigatorSettingsApi {
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<dynamic> setIssueNavigatorDefaultColumns(
-      {required List<String> body}) async {
-    return await _client.send(
+  Future<void> setIssueNavigatorDefaultColumns(
+      {required ColumnRequestBody body}) async {
+    await _client.send(
       'put',
       'rest/api/3/settings/columns',
-      body: body,
+      body: body.toJson(),
     );
   }
 }
@@ -5033,8 +5442,13 @@ class IssuePrioritiesApi {
 
   /// Creates an issue priority.
   ///
+  /// Deprecation applies to iconUrl param in request body which will be sunset
+  /// on 16th Mar 2025. For more details refer to
+  /// [changelog](https://developer.atlassian.com/changelog/#CHANGE-1525).
+  ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  @deprecated
   Future<PriorityId> createPriority(
       {required CreatePriorityDetails body}) async {
     return PriorityId.fromJson(await _client.send(
@@ -5081,12 +5495,15 @@ class IssuePrioritiesApi {
   /// default priorities in team-managed projects.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
+  @deprecated
   Future<PageBeanPriority> searchPriorities(
       {String? startAt,
       String? maxResults,
       List<String>? id,
       List<String>? projectId,
-      bool? onlyDefault}) async {
+      String? priorityName,
+      bool? onlyDefault,
+      String? expand}) async {
     return PageBeanPriority.fromJson(await _client.send(
       'get',
       'rest/api/3/priority/search',
@@ -5095,7 +5512,27 @@ class IssuePrioritiesApi {
         if (maxResults != null) 'maxResults': maxResults,
         if (id != null) 'id': id.map((e) => e).join(','),
         if (projectId != null) 'projectId': projectId.map((e) => e).join(','),
+        if (priorityName != null) 'priorityName': priorityName,
         if (onlyDefault != null) 'onlyDefault': '$onlyDefault',
+        if (expand != null) 'expand': expand,
+      },
+    ));
+  }
+
+  /// Deletes an issue priority.
+  ///
+  /// This operation is [asynchronous](#async). Follow the `location` link in
+  /// the response to determine the status of the task and use
+  /// [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<TaskProgressBeanObject> deletePriority(String id) async {
+    return TaskProgressBeanObject.fromJson(await _client.send(
+      'delete',
+      'rest/api/3/priority/{id}',
+      pathParameters: {
+        'id': id,
       },
     ));
   }
@@ -5115,8 +5552,15 @@ class IssuePrioritiesApi {
 
   /// Updates an issue priority.
   ///
+  /// At least one request body parameter must be defined.
+  ///
+  /// Deprecation applies to iconUrl param in request body which will be sunset
+  /// on 16th Mar 2025. For more details refer to
+  /// [changelog](https://developer.atlassian.com/changelog/#CHANGE-1525).
+  ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  @deprecated
   Future<dynamic> updatePriority(
       {required String id, required UpdatePriorityDetails body}) async {
     return await _client.send(
@@ -5127,33 +5571,6 @@ class IssuePrioritiesApi {
       },
       body: body.toJson(),
     );
-  }
-
-  /// *Deprecated: please refer to the*
-  /// [changelog](https://developer.atlassian.com/changelog/#CHANGE-1066) *for
-  /// more details.*
-  ///
-  /// Deletes an issue priority.
-  ///
-  /// This operation is [asynchronous](#async). Follow the `location` link in
-  /// the response to determine the status of the task and use
-  /// [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  @deprecated
-  Future<TaskProgressBeanObject> deletePriority(
-      {required String id, required String replaceWith}) async {
-    return TaskProgressBeanObject.fromJson(await _client.send(
-      'delete',
-      'rest/api/3/priority/{id}',
-      pathParameters: {
-        'id': id,
-      },
-      queryParameters: {
-        'replaceWith': replaceWith,
-      },
-    ));
   }
 }
 
@@ -5228,6 +5645,53 @@ class IssuePropertiesApi {
     );
   }
 
+  /// Deletes a property value from multiple issues. The issues to be updated
+  /// can be specified by filter criteria.
+  ///
+  /// The criteria the filter used to identify eligible issues are:
+  ///
+  ///  *  `entityIds` Only issues from this list are eligible.
+  ///  *  `currentValue` Only issues with the property set to this value are
+  /// eligible.
+  ///
+  /// If both criteria is specified, they are joined with the logical *AND*:
+  /// only issues that satisfy both criteria are considered eligible.
+  ///
+  /// If no filter criteria are specified, all the issues visible to the user
+  /// and where the user has the EDIT_ISSUES permission for the issue are
+  /// considered eligible.
+  ///
+  /// This operation is:
+  ///
+  ///  *  transactional, either the property is deleted from all eligible issues
+  /// or, when errors occur, no properties are deleted.
+  ///  *  [asynchronous](#async). Follow the `location` link in the response to
+  /// determine the status of the task and use
+  /// [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Browse projects*
+  /// [ project permission](https://confluence.atlassian.com/x/yodKLg) for each
+  /// project containing issues.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  *Edit issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for each
+  /// issue.
+  Future<void> bulkDeleteIssueProperty(
+      {required String propertyKey,
+      required IssueFilterForBulkPropertyDelete body}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/issue/properties/{propertyKey}',
+      pathParameters: {
+        'propertyKey': propertyKey,
+      },
+      body: body.toJson(),
+    );
+  }
+
   /// Sets a property value on multiple issues.
   ///
   /// The value set can be a constant or determined by a
@@ -5292,53 +5756,6 @@ class IssuePropertiesApi {
     );
   }
 
-  /// Deletes a property value from multiple issues. The issues to be updated
-  /// can be specified by filter criteria.
-  ///
-  /// The criteria the filter used to identify eligible issues are:
-  ///
-  ///  *  `entityIds` Only issues from this list are eligible.
-  ///  *  `currentValue` Only issues with the property set to this value are
-  /// eligible.
-  ///
-  /// If both criteria is specified, they are joined with the logical *AND*:
-  /// only issues that satisfy both criteria are considered eligible.
-  ///
-  /// If no filter criteria are specified, all the issues visible to the user
-  /// and where the user has the EDIT_ISSUES permission for the issue are
-  /// considered eligible.
-  ///
-  /// This operation is:
-  ///
-  ///  *  transactional, either the property is deleted from all eligible issues
-  /// or, when errors occur, no properties are deleted.
-  ///  *  [asynchronous](#async). Follow the `location` link in the response to
-  /// determine the status of the task and use
-  /// [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
-  ///
-  /// **[Permissions](#permissions) required:**
-  ///
-  ///  *  *Browse projects*
-  /// [ project permission](https://confluence.atlassian.com/x/yodKLg) for each
-  /// project containing issues.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
-  /// is configured, issue-level security permission to view the issue.
-  ///  *  *Edit issues*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for each
-  /// issue.
-  Future<void> bulkDeleteIssueProperty(
-      {required String propertyKey,
-      required IssueFilterForBulkPropertyDelete body}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/issue/properties/{propertyKey}',
-      pathParameters: {
-        'propertyKey': propertyKey,
-      },
-      body: body.toJson(),
-    );
-  }
-
   /// Returns the URLs and keys of an issue's properties.
   ///
   /// This operation can be accessed anonymously.
@@ -5359,6 +5776,29 @@ class IssuePropertiesApi {
         'issueIdOrKey': issueIdOrKey,
       },
     ));
+  }
+
+  /// Deletes an issue's property.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Browse projects* and *Edit issues*
+  /// [project permissions](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the issue.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  Future<void> deleteIssueProperty(
+      {required String issueIdOrKey, required String propertyKey}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/issue/{issueIdOrKey}/properties/{propertyKey}',
+      pathParameters: {
+        'issueIdOrKey': issueIdOrKey,
+        'propertyKey': propertyKey,
+      },
+    );
   }
 
   /// Returns the key and value of an issue's property.
@@ -5414,29 +5854,6 @@ class IssuePropertiesApi {
       body: body,
     );
   }
-
-  /// Deletes an issue's property.
-  ///
-  /// This operation can be accessed anonymously.
-  ///
-  /// **[Permissions](#permissions) required:**
-  ///
-  ///  *  *Browse projects* and *Edit issues*
-  /// [project permissions](https://confluence.atlassian.com/x/yodKLg) for the
-  /// project containing the issue.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
-  /// is configured, issue-level security permission to view the issue.
-  Future<void> deleteIssueProperty(
-      {required String issueIdOrKey, required String propertyKey}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/issue/{issueIdOrKey}/properties/{propertyKey}',
-      pathParameters: {
-        'issueIdOrKey': issueIdOrKey,
-        'propertyKey': propertyKey,
-      },
-    );
-  }
 }
 
 /// Jira Cloud platform REST API documentation
@@ -5445,6 +5862,38 @@ class IssueRemoteLinksApi {
   final ApiClient _client;
 
   IssueRemoteLinksApi(this._client);
+
+  /// Deletes the remote issue link from the issue using the link's global ID.
+  /// Where the global ID includes reserved URL characters these must be escaped
+  /// in the request. For example, pass
+  /// `system=http://www.mycompany.com/support&id=1` as
+  /// `system%3Dhttp%3A%2F%2Fwww.mycompany.com%2Fsupport%26id%3D1`.
+  ///
+  /// This operation requires
+  /// [issue linking to be active](https://confluence.atlassian.com/x/yoXKM).
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Browse projects* and *Link issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is implemented, issue-level security permission to view the issue.
+  Future<void> deleteRemoteIssueLinkByGlobalId(
+      {required String issueIdOrKey, required String globalId}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/issue/{issueIdOrKey}/remotelink',
+      pathParameters: {
+        'issueIdOrKey': issueIdOrKey,
+      },
+      queryParameters: {
+        'globalId': globalId,
+      },
+    );
+  }
 
   /// Returns the remote issue links for an issue. When a remote issue link
   /// global ID is provided the record with that global ID is returned,
@@ -5510,11 +5959,7 @@ class IssueRemoteLinksApi {
     ));
   }
 
-  /// Deletes the remote issue link from the issue using the link's global ID.
-  /// Where the global ID includes reserved URL characters these must be escaped
-  /// in the request. For example, pass
-  /// `system=http://www.mycompany.com/support&id=1` as
-  /// `system%3Dhttp%3A%2F%2Fwww.mycompany.com%2Fsupport%26id%3D1`.
+  /// Deletes a remote issue link from an issue.
   ///
   /// This operation requires
   /// [issue linking to be active](https://confluence.atlassian.com/x/yoXKM).
@@ -5523,21 +5968,19 @@ class IssueRemoteLinksApi {
   ///
   /// **[Permissions](#permissions) required:**
   ///
-  ///  *  *Browse projects* and *Link issues*
+  ///  *  *Browse projects*, *Edit issues*, and *Link issues*
   /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
   /// project that the issue is in.
   ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
-  /// is implemented, issue-level security permission to view the issue.
-  Future<void> deleteRemoteIssueLinkByGlobalId(
-      {required String issueIdOrKey, required String globalId}) async {
+  /// is configured, issue-level security permission to view the issue.
+  Future<void> deleteRemoteIssueLinkById(
+      {required String issueIdOrKey, required String linkId}) async {
     await _client.send(
       'delete',
-      'rest/api/3/issue/{issueIdOrKey}/remotelink',
+      'rest/api/3/issue/{issueIdOrKey}/remotelink/{linkId}',
       pathParameters: {
         'issueIdOrKey': issueIdOrKey,
-      },
-      queryParameters: {
-        'globalId': globalId,
+        'linkId': linkId,
       },
     );
   }
@@ -5596,32 +6039,6 @@ class IssueRemoteLinksApi {
         'linkId': linkId,
       },
       body: body.toJson(),
-    );
-  }
-
-  /// Deletes a remote issue link from an issue.
-  ///
-  /// This operation requires
-  /// [issue linking to be active](https://confluence.atlassian.com/x/yoXKM).
-  ///
-  /// This operation can be accessed anonymously.
-  ///
-  /// **[Permissions](#permissions) required:**
-  ///
-  ///  *  *Browse projects*, *Edit issues*, and *Link issues*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
-  /// project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
-  /// is configured, issue-level security permission to view the issue.
-  Future<void> deleteRemoteIssueLinkById(
-      {required String issueIdOrKey, required String linkId}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/issue/{issueIdOrKey}/remotelink/{linkId}',
-      pathParameters: {
-        'issueIdOrKey': issueIdOrKey,
-        'linkId': linkId,
-      },
     );
   }
 }
@@ -5712,6 +6129,28 @@ class IssueResolutionsApi {
     ));
   }
 
+  /// Deletes an issue resolution.
+  ///
+  /// This operation is [asynchronous](#async). Follow the `location` link in
+  /// the response to determine the status of the task and use
+  /// [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<TaskProgressBeanObject> deleteResolution(
+      {required String id, required String replaceWith}) async {
+    return TaskProgressBeanObject.fromJson(await _client.send(
+      'delete',
+      'rest/api/3/resolution/{id}',
+      pathParameters: {
+        'id': id,
+      },
+      queryParameters: {
+        'replaceWith': replaceWith,
+      },
+    ));
+  }
+
   /// Returns an issue resolution value.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
@@ -5739,28 +6178,6 @@ class IssueResolutionsApi {
       },
       body: body.toJson(),
     );
-  }
-
-  /// Deletes an issue resolution.
-  ///
-  /// This operation is [asynchronous](#async). Follow the `location` link in
-  /// the response to determine the status of the task and use
-  /// [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<TaskProgressBeanObject> deleteResolution(
-      {required String id, required String replaceWith}) async {
-    return TaskProgressBeanObject.fromJson(await _client.send(
-      'delete',
-      'rest/api/3/resolution/{id}',
-      pathParameters: {
-        'id': id,
-      },
-      queryParameters: {
-        'replaceWith': replaceWith,
-      },
-    ));
   }
 }
 
@@ -5852,7 +6269,8 @@ class IssueSearchApi {
       List<String>? fields,
       String? expand,
       List<String>? properties,
-      bool? fieldsByKeys}) async {
+      bool? fieldsByKeys,
+      bool? failFast}) async {
     return SearchResults.fromJson(await _client.send(
       'get',
       'rest/api/3/search',
@@ -5866,6 +6284,7 @@ class IssueSearchApi {
         if (properties != null)
           'properties': properties.map((e) => e).join(','),
         if (fieldsByKeys != null) 'fieldsByKeys': '$fieldsByKeys',
+        if (failFast != null) 'failFast': '$failFast',
       },
     ));
   }
@@ -5894,6 +6313,109 @@ class IssueSearchApi {
       body: body.toJson(),
     ));
   }
+
+  /// Provide an estimated count of the issues that match the
+  /// [JQL](https://confluence.atlassian.com/x/egORLQ). Recent updates might not
+  /// be immediately visible in the returned output. This endpoint requires JQL
+  /// to be bounded.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** Issues are included in the
+  /// response where the user has:
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the issue.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  Future<JQLCountResultsBean> countIssues(
+      {required JQLCountRequestBean body}) async {
+    return JQLCountResultsBean.fromJson(await _client.send(
+      'post',
+      'rest/api/3/search/approximate-count',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Searches for IDs of issues using
+  /// [JQL](https://confluence.atlassian.com/x/egORLQ).
+  ///
+  /// Use the [Search](#api-rest-api-3-search-post) endpoint if you need to
+  /// fetch more than just issue IDs. The Search endpoint returns more
+  /// information, but may take much longer to respond to requests. This is
+  /// because it uses a different mechanism for ordering results than this
+  /// endpoint and doesn't provide the total number of results for your query.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** Issues are included in the
+  /// response where the user has:
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the issue.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  Future<IdSearchResults> searchForIssuesIds(
+      {required IdSearchRequestBean body}) async {
+    return IdSearchResults.fromJson(await _client.send(
+      'post',
+      'rest/api/3/search/id',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Searches for issues using
+  /// [JQL](https://confluence.atlassian.com/x/egORLQ). Recent updates might not
+  /// be immediately visible in the returned search results. If you need
+  /// read-after-write consistency, you can utilize the `reconcileIssues`
+  /// parameter to ensure stronger consistency assurances. This operation can be
+  /// accessed anonymously.
+  ///
+  /// If the JQL query expression is too large to be encoded as a query
+  /// parameter, use the [POST](#api-rest-api-3-search-post) version of this
+  /// resource.
+  ///
+  /// **[Permissions](#permissions) required:** Issues are included in the
+  /// response where the user has:
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the issue.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  Future<SearchAndReconcileResults> searchAndReconsileIssuesUsingJql(
+      {required SearchAndReconcileRequestBean body}) async {
+    return SearchAndReconcileResults.fromJson(await _client.send(
+      'get',
+      'rest/api/3/search/jql',
+    ));
+  }
+
+  /// Searches for issues using
+  /// [JQL](https://confluence.atlassian.com/x/egORLQ). Recent updates might not
+  /// be immediately visible in the returned search results. If you need
+  /// read-after-write consistency, you can utilize the `reconcileIssues`
+  /// parameter to ensure stronger consistency assurances. This operation can be
+  /// accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** Issues are included in the
+  /// response where the user has:
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the issue.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  Future<SearchAndReconcileResults> searchAndReconsileIssuesUsingJqlPost(
+      {required SearchAndReconcileRequestBean body}) async {
+    return SearchAndReconcileResults.fromJson(await _client.send(
+      'post',
+      'rest/api/3/search/jql',
+      body: body.toJson(),
+    ));
+  }
 }
 
 /// Jira Cloud platform REST API documentation
@@ -5914,7 +6436,7 @@ class IssueSecurityLevelApi {
       {required int issueSecuritySchemeId,
       int? startAt,
       int? maxResults,
-      List<int>? issueSecurityLevelId,
+      List<String>? issueSecurityLevelId,
       String? expand}) async {
     return PageBeanIssueSecurityLevelMember.fromJson(await _client.send(
       'get',
@@ -5926,8 +6448,7 @@ class IssueSecurityLevelApi {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
         if (issueSecurityLevelId != null)
-          'issueSecurityLevelId':
-              issueSecurityLevelId.map((e) => '$e').join(','),
+          'issueSecurityLevelId': issueSecurityLevelId.map((e) => e).join(','),
         if (expand != null) 'expand': expand,
       },
     ));
@@ -6205,25 +6726,6 @@ class IssueSecuritySchemesApi {
     );
   }
 
-  /// Updates the issue security level.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<dynamic> updateSecurityLevel(
-      {required String schemeId,
-      required String levelId,
-      required UpdateIssueSecurityLevelDetails body}) async {
-    return await _client.send(
-      'put',
-      'rest/api/3/issuesecurityschemes/{schemeId}/level/{levelId}',
-      pathParameters: {
-        'schemeId': schemeId,
-        'levelId': levelId,
-      },
-      body: body.toJson(),
-    );
-  }
-
   /// Deletes an issue security level.
   ///
   /// This operation is [asynchronous](#async). Follow the `location` link in
@@ -6247,6 +6749,25 @@ class IssueSecuritySchemesApi {
         if (replaceWith != null) 'replaceWith': replaceWith,
       },
     ));
+  }
+
+  /// Updates the issue security level.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> updateSecurityLevel(
+      {required String schemeId,
+      required String levelId,
+      required UpdateIssueSecurityLevelDetails body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/issuesecurityschemes/{schemeId}/level/{levelId}',
+      pathParameters: {
+        'schemeId': schemeId,
+        'levelId': levelId,
+      },
+      body: body.toJson(),
+    );
   }
 
   /// Adds members to the issue security level. You can add up to 100 members
@@ -6321,6 +6842,23 @@ class IssueTypePropertiesApi {
     ));
   }
 
+  /// Deletes the
+  /// [issue type property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties).
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> deleteIssueTypeProperty(
+      {required String issueTypeId, required String propertyKey}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/issuetype/{issueTypeId}/properties/{propertyKey}',
+      pathParameters: {
+        'issueTypeId': issueTypeId,
+        'propertyKey': propertyKey,
+      },
+    );
+  }
+
   /// Returns the key and value of the
   /// [issue type property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties).
   ///
@@ -6369,23 +6907,6 @@ class IssueTypePropertiesApi {
         'propertyKey': propertyKey,
       },
       body: body,
-    );
-  }
-
-  /// Deletes the
-  /// [issue type property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties).
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteIssueTypeProperty(
-      {required String issueTypeId, required String propertyKey}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/issuetype/{issueTypeId}/properties/{propertyKey}',
-      pathParameters: {
-        'issueTypeId': issueTypeId,
-        'propertyKey': propertyKey,
-      },
     );
   }
 }
@@ -6496,23 +7017,6 @@ class IssueTypeSchemesApi {
     );
   }
 
-  /// Updates an issue type scheme.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<dynamic> updateIssueTypeScheme(
-      {required int issueTypeSchemeId,
-      required IssueTypeSchemeUpdateDetails body}) async {
-    return await _client.send(
-      'put',
-      'rest/api/3/issuetypescheme/{issueTypeSchemeId}',
-      pathParameters: {
-        'issueTypeSchemeId': '$issueTypeSchemeId',
-      },
-      body: body.toJson(),
-    );
-  }
-
   /// Deletes an issue type scheme.
   ///
   /// Only issue type schemes used in classic projects can be deleted.
@@ -6529,6 +7033,23 @@ class IssueTypeSchemesApi {
       pathParameters: {
         'issueTypeSchemeId': '$issueTypeSchemeId',
       },
+    );
+  }
+
+  /// Updates an issue type scheme.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> updateIssueTypeScheme(
+      {required int issueTypeSchemeId,
+      required IssueTypeSchemeUpdateDetails body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/issuetypescheme/{issueTypeSchemeId}',
+      pathParameters: {
+        'issueTypeSchemeId': '$issueTypeSchemeId',
+      },
+      body: body.toJson(),
     );
   }
 
@@ -6704,6 +7225,21 @@ class IssueTypeScreenSchemesApi {
     );
   }
 
+  /// Deletes an issue type screen scheme.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> deleteIssueTypeScreenScheme(
+      String issueTypeScreenSchemeId) async {
+    return await _client.send(
+      'delete',
+      'rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}',
+      pathParameters: {
+        'issueTypeScreenSchemeId': issueTypeScreenSchemeId,
+      },
+    );
+  }
+
   /// Updates an issue type screen scheme.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
@@ -6718,21 +7254,6 @@ class IssueTypeScreenSchemesApi {
         'issueTypeScreenSchemeId': issueTypeScreenSchemeId,
       },
       body: body.toJson(),
-    );
-  }
-
-  /// Deletes an issue type screen scheme.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<dynamic> deleteIssueTypeScreenScheme(
-      String issueTypeScreenSchemeId) async {
-    return await _client.send(
-      'delete',
-      'rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}',
-      pathParameters: {
-        'issueTypeScreenSchemeId': issueTypeScreenSchemeId,
-      },
     );
   }
 
@@ -6885,6 +7406,29 @@ class IssueTypesApi {
         .toList();
   }
 
+  /// Deletes the issue type. If the issue type is in use, all uses are updated
+  /// with the alternative issue type (`alternativeIssueTypeId`). A list of
+  /// alternative issue types are obtained from the
+  /// [Get alternative issue types](#api-rest-api-3-issuetype-id-alternatives-get)
+  /// resource.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> deleteIssueType(
+      {required String id, String? alternativeIssueTypeId}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/issuetype/{id}',
+      pathParameters: {
+        'id': id,
+      },
+      queryParameters: {
+        if (alternativeIssueTypeId != null)
+          'alternativeIssueTypeId': alternativeIssueTypeId,
+      },
+    );
+  }
+
   /// Returns an issue type.
   ///
   /// This operation can be accessed anonymously.
@@ -6917,29 +7461,6 @@ class IssueTypesApi {
       },
       body: body.toJson(),
     ));
-  }
-
-  /// Deletes the issue type. If the issue type is in use, all uses are updated
-  /// with the alternative issue type (`alternativeIssueTypeId`). A list of
-  /// alternative issue types are obtained from the
-  /// [Get alternative issue types](#api-rest-api-3-issuetype-id-alternatives-get)
-  /// resource.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteIssueType(
-      {required String id, String? alternativeIssueTypeId}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/issuetype/{id}',
-      pathParameters: {
-        'id': id,
-      },
-      queryParameters: {
-        if (alternativeIssueTypeId != null)
-          'alternativeIssueTypeId': alternativeIssueTypeId,
-      },
-    );
   }
 
   /// Returns a list of issue types that can be used to replace the issue type.
@@ -7021,6 +7542,31 @@ class IssueVotesApi {
 
   IssueVotesApi(this._client);
 
+  /// Deletes a user's vote from an issue. This is the equivalent of the user
+  /// clicking *Unvote* on an issue in Jira.
+  ///
+  /// This operation requires the **Allow users to vote on issues** option to be
+  /// *ON*. This option is set in General configuration for Jira. See
+  /// [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM)
+  /// for details.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  Future<void> removeVote(String issueIdOrKey) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/issue/{issueIdOrKey}/votes',
+      pathParameters: {
+        'issueIdOrKey': issueIdOrKey,
+      },
+    );
+  }
+
   /// Returns details about the votes on an issue.
   ///
   /// This operation requires the **Allow users to vote on issues** option to be
@@ -7075,31 +7621,6 @@ class IssueVotesApi {
       },
     );
   }
-
-  /// Deletes a user's vote from an issue. This is the equivalent of the user
-  /// clicking *Unvote* on an issue in Jira.
-  ///
-  /// This operation requires the **Allow users to vote on issues** option to be
-  /// *ON*. This option is set in General configuration for Jira. See
-  /// [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM)
-  /// for details.
-  ///
-  /// **[Permissions](#permissions) required:**
-  ///
-  ///  *  *Browse projects*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
-  /// project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
-  /// is configured, issue-level security permission to view the issue.
-  Future<void> removeVote(String issueIdOrKey) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/issue/{issueIdOrKey}/votes',
-      pathParameters: {
-        'issueIdOrKey': issueIdOrKey,
-      },
-    );
-  }
 }
 
 /// Jira Cloud platform REST API documentation
@@ -7131,6 +7652,41 @@ class IssueWatchersApi {
       'rest/api/3/issue/watching',
       body: body.toJson(),
     ));
+  }
+
+  /// Deletes a user as a watcher of an issue.
+  ///
+  /// This operation requires the **Allow users to watch issues** option to be
+  /// *ON*. This option is set in General configuration for Jira. See
+  /// [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM)
+  /// for details.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  To remove users other than themselves from the watchlist, *Manage
+  /// watcher list*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  Future<void> removeWatcher(
+      {required String issueIdOrKey,
+      String? username,
+      String? accountId}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/issue/{issueIdOrKey}/watchers',
+      pathParameters: {
+        'issueIdOrKey': issueIdOrKey,
+      },
+      queryParameters: {
+        if (username != null) 'username': username,
+        if (accountId != null) 'accountId': accountId,
+      },
+    );
   }
 
   /// Returns the watchers for an issue.
@@ -7193,41 +7749,6 @@ class IssueWatchersApi {
       body: body,
     );
   }
-
-  /// Deletes a user as a watcher of an issue.
-  ///
-  /// This operation requires the **Allow users to watch issues** option to be
-  /// *ON*. This option is set in General configuration for Jira. See
-  /// [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM)
-  /// for details.
-  ///
-  /// **[Permissions](#permissions) required:**
-  ///
-  ///  *  *Browse projects*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
-  /// project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
-  /// is configured, issue-level security permission to view the issue.
-  ///  *  To remove users other than themselves from the watchlist, *Manage
-  /// watcher list*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
-  /// project that the issue is in.
-  Future<void> removeWatcher(
-      {required String issueIdOrKey,
-      String? username,
-      String? accountId}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/issue/{issueIdOrKey}/watchers',
-      pathParameters: {
-        'issueIdOrKey': issueIdOrKey,
-      },
-      queryParameters: {
-        if (username != null) 'username': username,
-        if (accountId != null) 'accountId': accountId,
-      },
-    );
-  }
 }
 
 /// Jira Cloud platform REST API documentation
@@ -7260,6 +7781,34 @@ class IssueWorklogPropertiesApi {
         'worklogId': worklogId,
       },
     ));
+  }
+
+  /// Deletes a worklog property.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  If the worklog has visibility restrictions, belongs to the group or
+  /// has the role visibility is restricted to.
+  Future<void> deleteWorklogProperty(
+      {required String issueIdOrKey,
+      required String worklogId,
+      required String propertyKey}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/issue/{issueIdOrKey}/worklog/{worklogId}/properties/{propertyKey}',
+      pathParameters: {
+        'issueIdOrKey': issueIdOrKey,
+        'worklogId': worklogId,
+        'propertyKey': propertyKey,
+      },
+    );
   }
 
   /// Returns the value of a worklog property.
@@ -7328,34 +7877,6 @@ class IssueWorklogPropertiesApi {
       body: body,
     );
   }
-
-  /// Deletes a worklog property.
-  ///
-  /// This operation can be accessed anonymously.
-  ///
-  /// **[Permissions](#permissions) required:**
-  ///
-  ///  *  *Browse projects*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
-  /// project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
-  /// is configured, issue-level security permission to view the issue.
-  ///  *  If the worklog has visibility restrictions, belongs to the group or
-  /// has the role visibility is restricted to.
-  Future<void> deleteWorklogProperty(
-      {required String issueIdOrKey,
-      required String worklogId,
-      required String propertyKey}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/issue/{issueIdOrKey}/worklog/{worklogId}/properties/{propertyKey}',
-      pathParameters: {
-        'issueIdOrKey': issueIdOrKey,
-        'worklogId': worklogId,
-        'propertyKey': propertyKey,
-      },
-    );
-  }
 }
 
 /// Jira Cloud platform REST API documentation
@@ -7365,8 +7886,50 @@ class IssueWorklogsApi {
 
   IssueWorklogsApi(this._client);
 
-  /// Returns worklogs for an issue, starting from the oldest worklog or from
-  /// the worklog started on or after a date and time.
+  /// Deletes a list of worklogs from an issue. This is an experimental API with
+  /// limitations:
+  ///
+  ///  *  You can't delete more than 5000 worklogs at once.
+  ///  *  No notifications will be sent for deleted worklogs.
+  ///
+  /// Time tracking must be enabled in Jira, otherwise this operation returns an
+  /// error. For more information, see
+  /// [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the issue.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  *Delete all
+  /// worklogs*[ project permission](https://confluence.atlassian.com/x/yodKLg)
+  /// to delete any worklog.
+  ///  *  If any worklog has visibility restrictions, belongs to the group or
+  /// has the role visibility is restricted to.
+  Future<void> bulkDeleteWorklogs(
+      {required String issueIdOrKey,
+      String? adjustEstimate,
+      bool? overrideEditableFlag,
+      required WorklogIdsRequestBean body}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/issue/{issueIdOrKey}/worklog',
+      pathParameters: {
+        'issueIdOrKey': issueIdOrKey,
+      },
+      queryParameters: {
+        if (adjustEstimate != null) 'adjustEstimate': adjustEstimate,
+        if (overrideEditableFlag != null)
+          'overrideEditableFlag': '$overrideEditableFlag',
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Returns worklogs for an issue (ordered by created time), starting from the
+  /// oldest worklog or from the worklog started on or after a date and time.
   ///
   /// Time tracking must be enabled in Jira, otherwise this operation returns an
   /// error. For more information, see
@@ -7450,6 +8013,98 @@ class IssueWorklogsApi {
     ));
   }
 
+  /// Moves a list of worklogs from one issue to another. This is an
+  /// experimental API with several limitations:
+  ///
+  ///  *  You can't move more than 5000 worklogs at once.
+  ///  *  You can't move worklogs containing an attachment.
+  ///  *  You can't move worklogs restricted by project roles.
+  ///  *  No notifications will be sent for moved worklogs.
+  ///  *  No webhooks or events will be sent for moved worklogs.
+  ///  *  No issue history will be recorded for moved worklogs.
+  ///
+  /// Time tracking must be enabled in Jira, otherwise this operation returns an
+  /// error. For more information, see
+  /// [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// projects containing the source and destination issues.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  *Delete all
+  /// worklogs*[ and *Edit all worklogs*](https://confluence.atlassian.com/x/yodKLg)[project permission](https://confluence.atlassian.com/x/yodKLg)
+  ///  *  If the worklog has visibility restrictions, belongs to the group or
+  /// has the role visibility is restricted to.
+  Future<void> bulkMoveWorklogs(
+      {required String issueIdOrKey,
+      String? adjustEstimate,
+      bool? overrideEditableFlag,
+      required WorklogsMoveRequestBean body}) async {
+    await _client.send(
+      'post',
+      'rest/api/3/issue/{issueIdOrKey}/worklog/move',
+      pathParameters: {
+        'issueIdOrKey': issueIdOrKey,
+      },
+      queryParameters: {
+        if (adjustEstimate != null) 'adjustEstimate': adjustEstimate,
+        if (overrideEditableFlag != null)
+          'overrideEditableFlag': '$overrideEditableFlag',
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Deletes a worklog from an issue.
+  ///
+  /// Time tracking must be enabled in Jira, otherwise this operation returns an
+  /// error. For more information, see
+  /// [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  ///  *  *Delete all
+  /// worklogs*[ project permission](https://confluence.atlassian.com/x/yodKLg)
+  /// to delete any worklog or *Delete own worklogs* to delete worklogs created
+  /// by the user,
+  ///  *  If the worklog has visibility restrictions, belongs to the group or
+  /// has the role visibility is restricted to.
+  Future<void> deleteWorklog(
+      {required String issueIdOrKey,
+      required String id,
+      bool? notifyUsers,
+      String? adjustEstimate,
+      String? newEstimate,
+      String? increaseBy,
+      bool? overrideEditableFlag}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/issue/{issueIdOrKey}/worklog/{id}',
+      pathParameters: {
+        'issueIdOrKey': issueIdOrKey,
+        'id': id,
+      },
+      queryParameters: {
+        if (notifyUsers != null) 'notifyUsers': '$notifyUsers',
+        if (adjustEstimate != null) 'adjustEstimate': adjustEstimate,
+        if (newEstimate != null) 'newEstimate': newEstimate,
+        if (increaseBy != null) 'increaseBy': increaseBy,
+        if (overrideEditableFlag != null)
+          'overrideEditableFlag': '$overrideEditableFlag',
+      },
+    );
+  }
+
   /// Returns a worklog.
   ///
   /// Time tracking must be enabled in Jira, otherwise this operation returns an
@@ -7531,53 +8186,6 @@ class IssueWorklogsApi {
       },
       body: body.toJson(),
     ));
-  }
-
-  /// Deletes a worklog from an issue.
-  ///
-  /// Time tracking must be enabled in Jira, otherwise this operation returns an
-  /// error. For more information, see
-  /// [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
-  ///
-  /// This operation can be accessed anonymously.
-  ///
-  /// **[Permissions](#permissions) required:**
-  ///
-  ///  *  *Browse projects*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
-  /// project that the issue is in.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
-  /// is configured, issue-level security permission to view the issue.
-  ///  *  *Delete all
-  /// worklogs*[ project permission](https://confluence.atlassian.com/x/yodKLg)
-  /// to delete any worklog or *Delete own worklogs* to delete worklogs created
-  /// by the user,
-  ///  *  If the worklog has visibility restrictions, belongs to the group or
-  /// has the role visibility is restricted to.
-  Future<void> deleteWorklog(
-      {required String issueIdOrKey,
-      required String id,
-      bool? notifyUsers,
-      String? adjustEstimate,
-      String? newEstimate,
-      String? increaseBy,
-      bool? overrideEditableFlag}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/issue/{issueIdOrKey}/worklog/{id}',
-      pathParameters: {
-        'issueIdOrKey': issueIdOrKey,
-        'id': id,
-      },
-      queryParameters: {
-        if (notifyUsers != null) 'notifyUsers': '$notifyUsers',
-        if (adjustEstimate != null) 'adjustEstimate': adjustEstimate,
-        if (newEstimate != null) 'newEstimate': newEstimate,
-        if (increaseBy != null) 'increaseBy': increaseBy,
-        if (overrideEditableFlag != null)
-          'overrideEditableFlag': '$overrideEditableFlag',
-      },
-    );
   }
 
   /// Returns a list of IDs and delete timestamps for worklogs deleted after a
@@ -7720,6 +8328,41 @@ class IssuesApi {
     ));
   }
 
+  /// Enables admins to archive up to 100,000 issues in a single request using
+  /// JQL, returning the URL to check the status of the submitted request.
+  ///
+  /// You can use the
+  /// [get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-tasks/#api-rest-api-3-task-taskid-get)
+  /// and
+  /// [cancel task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-tasks/#api-rest-api-3-task-taskid-cancel-post)
+  /// APIs to manage the request.
+  ///
+  /// **Note that:**
+  ///
+  ///  *  you can't archive subtasks directly, only through their parent issues
+  ///  *  you can only archive issues from software, service management, and
+  /// business projects
+  ///
+  /// **[Permissions](#permissions) required:** Jira admin or site admin:
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg)
+  ///
+  /// **License required:** Premium or Enterprise
+  ///
+  /// **Signed-in users only:** This API can't be accessed anonymously.
+  ///
+  /// **Rate limiting:** Only a single request per jira instance can be active
+  /// at any given time.
+  ///
+  ///
+  Future<String> archiveIssuesAsync(
+      {required ArchiveIssueAsyncRequest body}) async {
+    return await _client.send(
+      'post',
+      'rest/api/3/issue/archive',
+      body: body.toJson(),
+    ) as String;
+  }
+
   /// Enables admins to archive up to 1000 issues in a single request using
   /// issue ID/key, returning details of the issue(s) archived in the process
   /// and the errors encountered, if any.
@@ -7745,41 +8388,6 @@ class IssuesApi {
       'rest/api/3/issue/archive',
       body: body.toJson(),
     ));
-  }
-
-  /// Enables admins to archive up to 100,000 issues in a single request using
-  /// JQL, returning the URL to check the status of the submitted request.
-  ///
-  /// You can use the
-  /// [get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-tasks/#api-rest-api-3-task-taskid-get)
-  /// and
-  /// [cancel task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-tasks/#api-rest-api-3-task-taskid-cancel-post)
-  /// APIs to manage the request.
-  ///
-  /// **Note that:**
-  ///
-  ///  *  you can't archive subtasks directly, only through their parent issues
-  ///  *  you can only archive issues from software, service management, and
-  /// business projects
-  ///
-  /// **[Permissions](#permissions) required:** Jira admin or site admin:
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg)
-  ///
-  /// **License required:** Premium or Enterprise
-  ///
-  /// **Signed-in users only:** This API can't be accessed anonymously.
-  ///
-  /// **Rate limiting:** Only a single request per user can be active at any
-  /// given time.
-  ///
-  ///
-  Future<String> archiveIssuesAsync(
-      {required ArchiveIssueAsyncRequest body}) async {
-    return await _client.send(
-      'post',
-      'rest/api/3/issue/archive',
-      body: body.toJson(),
-    ) as String;
   }
 
   /// Creates upto **50** issues and, where the option to create subtasks is
@@ -7815,11 +8423,45 @@ class IssuesApi {
     ));
   }
 
+  /// Returns the details for a set of requested issues. You can request up to
+  /// 100 issues.
+  ///
+  /// Each issue is identified by its ID or key, however, if the identifier
+  /// doesn't match an issue, a case-insensitive search and check for moved
+  /// issues is performed. If a matching issue is found its details are
+  /// returned, a 302 or other redirect is **not** returned.
+  ///
+  /// Issues will be returned in ascending `id` order. If there are errors, Jira
+  /// will return a list of issues which couldn't be fetched along with error
+  /// messages.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** Issues are included in the
+  /// response where the user has:
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that the issue is in.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  Future<BulkIssueResults> bulkFetchIssues(
+      {required BulkFetchIssueRequestBean body}) async {
+    return BulkIssueResults.fromJson(await _client.send(
+      'post',
+      'rest/api/3/issue/bulkfetch',
+      body: body.toJson(),
+    ));
+  }
+
   /// Returns details of projects, issue types within projects, and, when
   /// requested, the create screen fields for each issue type for the user. Use
   /// the information to populate the requests in
   /// [ Create issue](#api-rest-api-3-issue-post) and
   /// [Create issues](#api-rest-api-3-issue-bulk-post).
+  ///
+  /// Deprecated, see
+  /// [Create Issue Meta Endpoint Deprecation Notice](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-1304).
   ///
   /// The request can be restricted to specific projects or issue types using
   /// the query parameters. The response will contain information for the valid
@@ -7832,6 +8474,7 @@ class IssuesApi {
   /// **[Permissions](#permissions) required:** *Create issues*
   /// [project permission](https://confluence.atlassian.com/x/yodKLg) in the
   /// requested projects.
+  @deprecated
   Future<IssueCreateMetadata> getCreateIssueMeta(
       {List<String>? projectIds,
       List<String>? projectKeys,
@@ -7851,6 +8494,81 @@ class IssuesApi {
         if (issuetypeNames != null)
           'issuetypeNames': issuetypeNames.map((e) => e).join(','),
         if (expand != null) 'expand': expand,
+      },
+    ));
+  }
+
+  /// Returns a page of issue type metadata for a specified project. Use the
+  /// information to populate the requests in
+  /// [ Create issue](#api-rest-api-3-issue-post) and
+  /// [Create issues](#api-rest-api-3-issue-bulk-post).
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** *Create issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) in the
+  /// requested projects.
+  Future<PageOfCreateMetaIssueTypes> getCreateIssueMetaIssueTypes(
+      {required String projectIdOrKey, int? startAt, int? maxResults}) async {
+    return PageOfCreateMetaIssueTypes.fromJson(await _client.send(
+      'get',
+      'rest/api/3/issue/createmeta/{projectIdOrKey}/issuetypes',
+      pathParameters: {
+        'projectIdOrKey': projectIdOrKey,
+      },
+      queryParameters: {
+        if (startAt != null) 'startAt': '$startAt',
+        if (maxResults != null) 'maxResults': '$maxResults',
+      },
+    ));
+  }
+
+  /// Returns a page of field metadata for a specified project and issuetype id.
+  /// Use the information to populate the requests in
+  /// [ Create issue](#api-rest-api-3-issue-post) and
+  /// [Create issues](#api-rest-api-3-issue-bulk-post).
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** *Create issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) in the
+  /// requested projects.
+  Future<PageOfCreateMetaIssueTypeWithField> getCreateIssueMetaIssueTypeId(
+      {required String projectIdOrKey,
+      required String issueTypeId,
+      int? startAt,
+      int? maxResults}) async {
+    return PageOfCreateMetaIssueTypeWithField.fromJson(await _client.send(
+      'get',
+      'rest/api/3/issue/createmeta/{projectIdOrKey}/issuetypes/{issueTypeId}',
+      pathParameters: {
+        'projectIdOrKey': projectIdOrKey,
+        'issueTypeId': issueTypeId,
+      },
+      queryParameters: {
+        if (startAt != null) 'startAt': '$startAt',
+        if (maxResults != null) 'maxResults': '$maxResults',
+      },
+    ));
+  }
+
+  /// Returns all issues breaching and approaching per-issue limits.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) is
+  /// required for the project the issues are in. Results may be incomplete
+  /// otherwise
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<IssueLimitReportResponseBean> getIssueLimitReport(
+      {bool? isReturningKeys, required IssueLimitReportRequest body}) async {
+    return IssueLimitReportResponseBean.fromJson(await _client.send(
+      'get',
+      'rest/api/3/issue/limit/report',
+      queryParameters: {
+        if (isReturningKeys != null) 'isReturningKeys': '$isReturningKeys',
       },
     ));
   }
@@ -7883,6 +8601,35 @@ class IssuesApi {
     ));
   }
 
+  /// Deletes an issue.
+  ///
+  /// An issue cannot be deleted if it has one or more subtasks. To delete an
+  /// issue with subtasks, set `deleteSubtasks`. This causes the issue's
+  /// subtasks to be deleted with the issue.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Browse projects* and *Delete issues*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the issue.
+  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
+  /// is configured, issue-level security permission to view the issue.
+  Future<void> deleteIssue(
+      {required String issueIdOrKey, String? deleteSubtasks}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/issue/{issueIdOrKey}',
+      pathParameters: {
+        'issueIdOrKey': issueIdOrKey,
+      },
+      queryParameters: {
+        if (deleteSubtasks != null) 'deleteSubtasks': deleteSubtasks,
+      },
+    );
+  }
+
   /// Returns the details for an issue.
   ///
   /// The issue is identified by its ID or key, however, if the identifier
@@ -7906,7 +8653,8 @@ class IssuesApi {
       bool? fieldsByKeys,
       String? expand,
       List<String>? properties,
-      bool? updateHistory}) async {
+      bool? updateHistory,
+      bool? failFast}) async {
     return IssueBean.fromJson(await _client.send(
       'get',
       'rest/api/3/issue/{issueIdOrKey}',
@@ -7920,12 +8668,14 @@ class IssuesApi {
         if (properties != null)
           'properties': properties.map((e) => e).join(','),
         if (updateHistory != null) 'updateHistory': '$updateHistory',
+        if (failFast != null) 'failFast': '$failFast',
       },
     ));
   }
 
-  /// Edits an issue. A transition may be applied and issue properties updated
-  /// as part of the edit.
+  /// Edits an issue. Issue properties may be updated as part of the edit.
+  /// Please note that issue transition will be ignored as it is not supported
+  /// yet.
   ///
   /// The edits to the issue's fields are defined using `update` and `fields`.
   /// The fields that can be edited are determined using
@@ -7959,6 +8709,8 @@ class IssuesApi {
       bool? notifyUsers,
       bool? overrideScreenSecurity,
       bool? overrideEditableFlag,
+      bool? returnIssue,
+      String? expand,
       required IssueUpdateDetails body}) async {
     return await _client.send(
       'put',
@@ -7972,37 +8724,10 @@ class IssuesApi {
           'overrideScreenSecurity': '$overrideScreenSecurity',
         if (overrideEditableFlag != null)
           'overrideEditableFlag': '$overrideEditableFlag',
+        if (returnIssue != null) 'returnIssue': '$returnIssue',
+        if (expand != null) 'expand': expand,
       },
       body: body.toJson(),
-    );
-  }
-
-  /// Deletes an issue.
-  ///
-  /// An issue cannot be deleted if it has one or more subtasks. To delete an
-  /// issue with subtasks, set `deleteSubtasks`. This causes the issue's
-  /// subtasks to be deleted with the issue.
-  ///
-  /// This operation can be accessed anonymously.
-  ///
-  /// **[Permissions](#permissions) required:**
-  ///
-  ///  *  *Browse projects* and *Delete issues*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
-  /// project containing the issue.
-  ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg)
-  /// is configured, issue-level security permission to view the issue.
-  Future<void> deleteIssue(
-      {required String issueIdOrKey, String? deleteSubtasks}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/issue/{issueIdOrKey}',
-      pathParameters: {
-        'issueIdOrKey': issueIdOrKey,
-      },
-      queryParameters: {
-        if (deleteSubtasks != null) 'deleteSubtasks': deleteSubtasks,
-      },
     );
   }
 
@@ -8394,12 +9119,12 @@ class JQLApi {
   ///
   /// **[Permissions](#permissions) required:** None.
   Future<ParsedJqlQueries> parseJqlQueries(
-      {String? validation, required JqlQueriesToParse body}) async {
+      {required String validation, required JqlQueriesToParse body}) async {
     return ParsedJqlQueries.fromJson(await _client.send(
       'post',
       'rest/api/3/jql/parse',
       queryParameters: {
-        if (validation != null) 'validation': validation,
+        'validation': validation,
       },
       body: body.toJson(),
     ));
@@ -8467,12 +9192,15 @@ class JQLFunctionsAppsApi {
   ///
   /// **[Permissions](#permissions) required:** This API is only accessible to
   /// apps and apps can only inspect their own functions.
+  ///
+  /// The new `read:app-data:jira` OAuth scope is 100% optional now, and not
+  /// using it won't break your app. However, we recommend adding it to your
+  /// app's scope list because we will eventually make it mandatory.
   Future<PageBeanJqlFunctionPrecomputationBean> getPrecomputations(
       {List<String>? functionKey,
       int? startAt,
       int? maxResults,
-      String? orderBy,
-      String? filter}) async {
+      String? orderBy}) async {
     return PageBeanJqlFunctionPrecomputationBean.fromJson(await _client.send(
       'get',
       'rest/api/3/jql/function/computation',
@@ -8482,7 +9210,6 @@ class JQLFunctionsAppsApi {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
         if (orderBy != null) 'orderBy': orderBy,
-        if (filter != null) 'filter': filter,
       },
     ));
   }
@@ -8492,6 +9219,10 @@ class JQLFunctionsAppsApi {
   ///
   /// **[Permissions](#permissions) required:** An API for apps to update their
   /// own precomputations.
+  ///
+  /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not
+  /// using it won't break your app. However, we recommend adding it to your
+  /// app's scope list because we will eventually make it mandatory.
   Future<dynamic> updatePrecomputations(
       {required JqlFunctionPrecomputationUpdateRequestBean body}) async {
     return await _client.send(
@@ -8621,6 +9352,104 @@ class JiraExpressionsApi {
       body: body.toJson(),
     ));
   }
+
+  /// Evaluates a Jira expression and returns its value. The difference between
+  /// this and `eval` is that this endpoint uses the enhanced search API when
+  /// evaluating JQL queries. This API is eventually consistent, unlike the
+  /// strongly consistent `eval` API. This allows for better performance and
+  /// scalability. In addition, this API's response for JQL evaluation is based
+  /// on a scrolling view (backed by a `nextPageToken`) instead of a paginated
+  /// view (backed by `startAt` and `totalCount`).
+  ///
+  /// This resource can be used to test Jira expressions that you plan to use
+  /// elsewhere, or to fetch data in a flexible way. Consult the
+  /// [Jira expressions documentation](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/)
+  /// for more details.
+  ///
+  /// #### Context variables ####
+  ///
+  /// The following context variables are available to Jira expressions
+  /// evaluated by this resource. Their presence depends on various factors;
+  /// usually you need to manually request them in the context object sent in
+  /// the payload, but some of them are added automatically under certain
+  /// conditions.
+  ///
+  ///  *  `user`
+  /// ([User](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#user)):
+  /// The current user. Always available and equal to `null` if the request is
+  /// anonymous.
+  ///  *  `app`
+  /// ([App](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#app)):
+  /// The
+  /// [Connect app](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps)
+  /// that made the request. Available only for authenticated requests made by
+  /// Connect apps (read more here:
+  /// [Authentication for Connect apps](https://developer.atlassian.com/cloud/jira/platform/security-for-connect-apps/)).
+  ///  *  `issue`
+  /// ([Issue](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#issue)):
+  /// The current issue. Available only when the issue is provided in the
+  /// request context object.
+  ///  *  `issues`
+  /// ([List](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#list)
+  /// of
+  /// [Issues](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#issue)):
+  /// A collection of issues matching a JQL query. Available only when JQL is
+  /// provided in the request context object.
+  ///  *  `project`
+  /// ([Project](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#project)):
+  /// The current project. Available only when the project is provided in the
+  /// request context object.
+  ///  *  `sprint`
+  /// ([Sprint](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#sprint)):
+  /// The current sprint. Available only when the sprint is provided in the
+  /// request context object.
+  ///  *  `board`
+  /// ([Board](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#board)):
+  /// The current board. Available only when the board is provided in the
+  /// request context object.
+  ///  *  `serviceDesk`
+  /// ([ServiceDesk](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#servicedesk)):
+  /// The current service desk. Available only when the service desk is provided
+  /// in the request context object.
+  ///  *  `customerRequest`
+  /// ([CustomerRequest](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#customerrequest)):
+  /// The current customer request. Available only when the customer request is
+  /// provided in the request context object.
+  ///
+  /// In addition, you can pass custom context variables along with their types.
+  /// You can then access them from the Jira expression by key. You can use the
+  /// following variables in a custom context:
+  ///
+  ///  *  `user`: A
+  /// [user](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#user)
+  /// specified as an Atlassian account ID.
+  ///  *  `issue`: An
+  /// [issue](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#issue)
+  /// specified by ID or key. All the fields of the issue object are available
+  /// in the Jira expression.
+  ///  *  `json`: A JSON object containing custom content.
+  ///  *  `list`: A JSON list of `user`, `issue`, or `json` variable types.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required**: None. However, an expression may
+  /// return different results for different users depending on their
+  /// permissions. For example, different users may see different comments on
+  /// the same issue.
+  /// Permission to access Jira Software is required to access Jira Software
+  /// context variables (`board` and `sprint`) or fields (for example,
+  /// `issue.sprint`).
+  Future<JExpEvaluateJiraExpressionResultBean> evaluateJSISJiraExpression(
+      {String? expand, required JiraExpressionEvaluateRequestBean body}) async {
+    return JExpEvaluateJiraExpressionResultBean.fromJson(await _client.send(
+      'post',
+      'rest/api/3/expression/evaluate',
+      queryParameters: {
+        if (expand != null) 'expand': expand,
+      },
+      body: body.toJson(),
+    ));
+  }
 }
 
 /// Jira Cloud platform REST API documentation
@@ -8703,9 +9532,6 @@ class JiraSettingsApi {
   /// %p` |
   /// | `jira.issue.actions.order` | The default order of actions (such as
   /// *Comments* or *Change history*) displayed on the issue view. | `asc` |
-  /// | `jira.table.cols.subtasks` | The columns to show while viewing subtask
-  /// issues in a table. For example, a list of subtasks on an issue. |
-  /// `issuetype, status, assignee, progress` |
   /// | `jira.view.issue.links.sort.order` | The sort order of the list of issue
   /// links on the issue view. | `type, status, priority` |
   /// | `jira.comment.collapsing.minimum.hidden` | The minimum number of
@@ -8873,6 +9699,31 @@ class MyselfApi {
 
   MyselfApi(this._client);
 
+  /// Deletes a preference of the user, which restores the default value of
+  /// system defined settings.
+  ///
+  /// Note that these keys are deprecated:
+  ///
+  ///  *  *jira.user.locale* The locale of the user. By default, not set. The
+  /// user takes the instance locale.
+  ///  *  *jira.user.timezone* The time zone of the user. By default, not set.
+  /// The user takes the instance timezone.
+  ///
+  /// Use
+  /// [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch)
+  /// from the user management REST API to manage timezone and locale instead.
+  ///
+  /// **[Permissions](#permissions) required:** Permission to access Jira.
+  Future<void> removePreference(String key) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/mypreferences',
+      queryParameters: {
+        'key': key,
+      },
+    );
+  }
+
   /// Returns the value of a preference of the current user.
   ///
   /// Note that these keys are deprecated:
@@ -8881,6 +9732,19 @@ class MyselfApi {
   /// and the user takes the locale of the instance.
   ///  *  *jira.user.timezone* The time zone of the user. By default this is not
   /// set and the user takes the timezone of the instance.
+  ///
+  /// These system preferences keys will be deprecated by 15/07/2024. You can
+  /// still retrieve these keys, but it will not have any impact on Notification
+  /// behaviour.
+  ///
+  ///  *  *user.notifications.watcher* Whether the user gets notified when they
+  /// are watcher.
+  ///  *  *user.notifications.assignee* Whether the user gets notified when they
+  /// are assignee.
+  ///  *  *user.notifications.reporter* Whether the user gets notified when they
+  /// are reporter.
+  ///  *  *user.notifications.mentions* Whether the user gets notified when they
+  /// are mentions.
   ///
   /// Use
   /// [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch)
@@ -8905,8 +9769,6 @@ class MyselfApi {
   ///
   ///  *  *user.notifications.mimetype* The mime type used in notifications sent
   /// to the user. Defaults to `html`.
-  ///  *  *user.notify.own.changes* Whether the user gets notified of their own
-  /// changes. Defaults to `false`.
   ///  *  *user.default.share.private* Whether new
   /// [ filters](https://confluence.atlassian.com/x/eQiiLQ) are set to private.
   /// Defaults to `true`.
@@ -8915,6 +9777,8 @@ class MyselfApi {
   ///  *  *user.autowatch.disabled* Whether the user automatically watches
   /// issues they create or add a comment to. By default, not set: the user
   /// takes the instance autowatch setting.
+  ///  *  *user.notifiy.own.changes* Whether the user gets notified of their own
+  /// changes.
   ///
   /// Note that these keys are deprecated:
   ///
@@ -8922,6 +9786,19 @@ class MyselfApi {
   /// user takes the instance locale.
   ///  *  *jira.user.timezone* The time zone of the user. By default, not set.
   /// The user takes the instance timezone.
+  ///
+  /// These system preferences keys will be deprecated by 15/07/2024. You can
+  /// still use these keys to create arbitrary preferences, but it will not have
+  /// any impact on Notification behaviour.
+  ///
+  ///  *  *user.notifications.watcher* Whether the user gets notified when they
+  /// are watcher.
+  ///  *  *user.notifications.assignee* Whether the user gets notified when they
+  /// are assignee.
+  ///  *  *user.notifications.reporter* Whether the user gets notified when they
+  /// are reporter.
+  ///  *  *user.notifications.mentions* Whether the user gets notified when they
+  /// are mentions.
   ///
   /// Use
   /// [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch)
@@ -8940,28 +9817,18 @@ class MyselfApi {
     );
   }
 
-  /// Deletes a preference of the user, which restores the default value of
-  /// system defined settings.
-  ///
-  /// Note that these keys are deprecated:
-  ///
-  ///  *  *jira.user.locale* The locale of the user. By default, not set. The
-  /// user takes the instance locale.
-  ///  *  *jira.user.timezone* The time zone of the user. By default, not set.
-  /// The user takes the instance timezone.
-  ///
-  /// Use
+  /// Deprecated, use
   /// [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch)
-  /// from the user management REST API to manage timezone and locale instead.
+  /// from the user management REST API instead.
+  ///
+  /// Deletes the locale of the user, which restores the default setting.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
-  Future<void> removePreference(String key) async {
-    await _client.send(
+  @deprecated
+  Future<dynamic> deleteLocale() async {
+    return await _client.send(
       'delete',
-      'rest/api/3/mypreferences',
-      queryParameters: {
-        'key': key,
-      },
+      'rest/api/3/mypreferences/locale',
     );
   }
 
@@ -9000,21 +9867,6 @@ class MyselfApi {
     );
   }
 
-  /// Deprecated, use
-  /// [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch)
-  /// from the user management REST API instead.
-  ///
-  /// Deletes the locale of the user, which restores the default setting.
-  ///
-  /// **[Permissions](#permissions) required:** Permission to access Jira.
-  @deprecated
-  Future<dynamic> deleteLocale() async {
-    return await _client.send(
-      'delete',
-      'rest/api/3/mypreferences/locale',
-    );
-  }
-
   /// Returns details for the current user.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
@@ -9050,8 +9902,9 @@ class PermissionSchemesApi {
   /// is granted to a group named *Teams in space administrators*. In this case,
   /// the type is `"type": "group"`, and the parameter is the group name,
   /// `"parameter": "Teams in space administrators"` and the value is group ID,
-  /// `"value": "ca85fac0-d974-40ca-a615-7af99c48d24f"`. The `holder` object is
-  /// defined by the following properties:
+  /// `"value": "ca85fac0-d974-40ca-a615-7af99c48d24f"`.
+  ///
+  /// The `holder` object is defined by the following properties:
   ///
   ///  *  `type` Identifies the user or group (see the list of types below).
   ///  *  `parameter` As a group's name can change, use of `value` is
@@ -9180,6 +10033,20 @@ class PermissionSchemesApi {
     ));
   }
 
+  /// Deletes a permission scheme.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> deletePermissionScheme(int schemeId) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/permissionscheme/{schemeId}',
+      pathParameters: {
+        'schemeId': '$schemeId',
+      },
+    );
+  }
+
   /// Returns a permission scheme.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
@@ -9236,20 +10103,6 @@ class PermissionSchemesApi {
     ));
   }
 
-  /// Deletes a permission scheme.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deletePermissionScheme(int schemeId) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/permissionscheme/{schemeId}',
-      pathParameters: {
-        'schemeId': '$schemeId',
-      },
-    );
-  }
-
   /// Returns all permission grants for a permission scheme.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
@@ -9288,6 +10141,24 @@ class PermissionSchemesApi {
     ));
   }
 
+  /// Deletes a permission grant from a permission scheme. See
+  /// [About permission schemes and grants](../api-group-permission-schemes/#about-permission-schemes-and-grants)
+  /// for more details.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> deletePermissionSchemeEntity(
+      {required int schemeId, required int permissionId}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/permissionscheme/{schemeId}/permission/{permissionId}',
+      pathParameters: {
+        'schemeId': '$schemeId',
+        'permissionId': '$permissionId',
+      },
+    );
+  }
+
   /// Returns a permission grant.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
@@ -9306,24 +10177,6 @@ class PermissionSchemesApi {
         if (expand != null) 'expand': expand,
       },
     ));
-  }
-
-  /// Deletes a permission grant from a permission scheme. See
-  /// [About permission schemes and grants](../api-group-permission-schemes/#about-permission-schemes-and-grants)
-  /// for more details.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deletePermissionSchemeEntity(
-      {required int schemeId, required int permissionId}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/permissionscheme/{schemeId}/permission/{permissionId}',
-      pathParameters: {
-        'schemeId': '$schemeId',
-        'permissionId': '$permissionId',
-      },
-    );
   }
 }
 
@@ -9362,6 +10215,13 @@ class PermissionsApi {
   /// reporter. However, if they are not the user who reported the issue queried
   /// they would not have EDIT_ISSUES permission for that issue.
   ///
+  /// For
+  /// [Jira Service Management project permissions](https://support.atlassian.com/jira-cloud-administration/docs/customize-jira-service-management-permissions/),
+  /// this will be evaluated similarly to a user in the customer portal. For
+  /// example, if the BROWSE_PROJECTS permission is granted to Service Project
+  /// Customer - Portal Access, any users with access to the customer portal
+  /// will have the BROWSE_PROJECTS permission.
+  ///
   /// Global permissions are unaffected by context.
   ///
   /// This operation can be accessed anonymously.
@@ -9399,8 +10259,9 @@ class PermissionsApi {
   ///  *  project permissions.
   ///  *  global permissions added by plugins.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** None.
   Future<Permissions> getAllPermissions() async {
     return Permissions.fromJson(await _client.send(
       'get',
@@ -9427,6 +10288,12 @@ class PermissionsApi {
   /// `projectPermissions.projects`, and `projectPermissions.issues` are
   /// ignored.
   ///  *  Empty strings in `projectPermissions.permissions` are ignored.
+  ///
+  /// **Deprecation notice:** The required OAuth 2.0 scopes will be updated on
+  /// June 15, 2024.
+  ///
+  ///  *  **Classic**: `read:jira-work`
+  ///  *  **Granular**: `read:permission:jira`
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -9457,6 +10324,174 @@ class PermissionsApi {
       'post',
       'rest/api/3/permissions/project',
       body: body.toJson(),
+    ));
+  }
+}
+
+/// Jira Cloud platform REST API documentation
+
+class PrioritySchemesApi {
+  final ApiClient _client;
+
+  PrioritySchemesApi(this._client);
+
+  /// Returns a [paginated](#pagination) list of priority schemes.
+  ///
+  /// **[Permissions](#permissions) required:** Permission to access Jira.
+  Future<PageBeanPrioritySchemeWithPaginatedPrioritiesAndProjects>
+      getPrioritySchemes(
+          {String? startAt,
+          String? maxResults,
+          List<int>? priorityId,
+          List<int>? schemeId,
+          String? schemeName,
+          bool? onlyDefault,
+          String? orderBy,
+          String? expand}) async {
+    return PageBeanPrioritySchemeWithPaginatedPrioritiesAndProjects.fromJson(
+        await _client.send(
+      'get',
+      'rest/api/3/priorityscheme',
+      queryParameters: {
+        if (startAt != null) 'startAt': startAt,
+        if (maxResults != null) 'maxResults': maxResults,
+        if (priorityId != null)
+          'priorityId': priorityId.map((e) => '$e').join(','),
+        if (schemeId != null) 'schemeId': schemeId.map((e) => '$e').join(','),
+        if (schemeName != null) 'schemeName': schemeName,
+        if (onlyDefault != null) 'onlyDefault': '$onlyDefault',
+        if (orderBy != null) 'orderBy': orderBy,
+        if (expand != null) 'expand': expand,
+      },
+    ));
+  }
+
+  /// Creates a new priority scheme.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<PrioritySchemeId> createPriorityScheme(
+      {required CreatePrioritySchemeDetails body}) async {
+    return PrioritySchemeId.fromJson(await _client.send(
+      'post',
+      'rest/api/3/priorityscheme',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Returns a [paginated](#pagination) list of priorities that would require
+  /// mapping, given a change in priorities or projects associated with a
+  /// priority scheme.
+  ///
+  /// **[Permissions](#permissions) required:** Permission to access Jira.
+  Future<PageBeanPriorityWithSequence> suggestedPrioritiesForMappings(
+      {required SuggestedMappingsRequestBean body}) async {
+    return PageBeanPriorityWithSequence.fromJson(await _client.send(
+      'post',
+      'rest/api/3/priorityscheme/mappings',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Returns a [paginated](#pagination) list of priorities available for adding
+  /// to a priority scheme.
+  ///
+  /// **[Permissions](#permissions) required:** Permission to access Jira.
+  Future<PageBeanPriorityWithSequence> getAvailablePrioritiesByPriorityScheme(
+      {String? startAt,
+      String? maxResults,
+      String? query,
+      required String schemeId,
+      List<String>? exclude}) async {
+    return PageBeanPriorityWithSequence.fromJson(await _client.send(
+      'get',
+      'rest/api/3/priorityscheme/priorities/available',
+      queryParameters: {
+        if (startAt != null) 'startAt': startAt,
+        if (maxResults != null) 'maxResults': maxResults,
+        if (query != null) 'query': query,
+        'schemeId': schemeId,
+        if (exclude != null) 'exclude': exclude.map((e) => e).join(','),
+      },
+    ));
+  }
+
+  /// Deletes a priority scheme.
+  ///
+  /// This operation is only available for priority schemes without any
+  /// associated projects. Any associated projects must be removed from the
+  /// priority scheme before this operation can be performed.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> deletePriorityScheme(int schemeId) async {
+    return await _client.send(
+      'delete',
+      'rest/api/3/priorityscheme/{schemeId}',
+      pathParameters: {
+        'schemeId': '$schemeId',
+      },
+    );
+  }
+
+  /// Updates a priority scheme. This includes its details, the lists of
+  /// priorities and projects in it
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<UpdatePrioritySchemeResponseBean> updatePriorityScheme(
+      {required int schemeId,
+      required UpdatePrioritySchemeRequestBean body}) async {
+    return UpdatePrioritySchemeResponseBean.fromJson(await _client.send(
+      'put',
+      'rest/api/3/priorityscheme/{schemeId}',
+      pathParameters: {
+        'schemeId': '$schemeId',
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Returns a [paginated](#pagination) list of priorities by scheme.
+  ///
+  /// **[Permissions](#permissions) required:** Permission to access Jira.
+  Future<PageBeanPriorityWithSequence> getPrioritiesByPriorityScheme(
+      {String? startAt, String? maxResults, required String schemeId}) async {
+    return PageBeanPriorityWithSequence.fromJson(await _client.send(
+      'get',
+      'rest/api/3/priorityscheme/{schemeId}/priorities',
+      pathParameters: {
+        'schemeId': schemeId,
+      },
+      queryParameters: {
+        if (startAt != null) 'startAt': startAt,
+        if (maxResults != null) 'maxResults': maxResults,
+      },
+    ));
+  }
+
+  /// Returns a [paginated](#pagination) list of projects by scheme.
+  ///
+  /// **[Permissions](#permissions) required:** Permission to access Jira.
+  Future<PageBeanProject> getProjectsByPriorityScheme(
+      {String? startAt,
+      String? maxResults,
+      List<int>? projectId,
+      required String schemeId,
+      String? query}) async {
+    return PageBeanProject.fromJson(await _client.send(
+      'get',
+      'rest/api/3/priorityscheme/{schemeId}/projects',
+      pathParameters: {
+        'schemeId': schemeId,
+      },
+      queryParameters: {
+        if (startAt != null) 'startAt': startAt,
+        if (maxResults != null) 'maxResults': maxResults,
+        if (projectId != null)
+          'projectId': projectId.map((e) => '$e').join(','),
+        if (query != null) 'query': query,
+      },
     ));
   }
 }
@@ -9616,6 +10651,20 @@ class ProjectCategoriesApi {
     ));
   }
 
+  /// Deletes a project category.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> removeProjectCategory(int id) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/projectCategory/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+    );
+  }
+
   /// Returns a project category.
   ///
   /// **[Permissions](#permissions) required:** Permission to access Jira.
@@ -9644,18 +10693,76 @@ class ProjectCategoriesApi {
       body: body.toJson(),
     ));
   }
+}
 
-  /// Deletes a project category.
+/// Jira Cloud platform REST API documentation
+
+class ProjectClassificationLevelsApi {
+  final ApiClient _client;
+
+  ProjectClassificationLevelsApi(this._client);
+
+  /// Remove the default data classification level for a project.
   ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
+  ///  *  *Administer jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> removeProjectCategory(int id) async {
-    await _client.send(
+  Future<dynamic> removeDefaultProjectClassification(
+      String projectIdOrKey) async {
+    return await _client.send(
       'delete',
-      'rest/api/3/projectCategory/{id}',
+      'rest/api/3/project/{projectIdOrKey}/classification-level/default',
       pathParameters: {
-        'id': '$id',
+        'projectIdOrKey': projectIdOrKey,
       },
+    );
+  }
+
+  /// Returns the default data classification for a project.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Browse Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
+  ///  *  *Administer projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
+  ///  *  *Administer jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> getDefaultProjectClassification(String projectIdOrKey) async {
+    return await _client.send(
+      'get',
+      'rest/api/3/project/{projectIdOrKey}/classification-level/default',
+      pathParameters: {
+        'projectIdOrKey': projectIdOrKey,
+      },
+    );
+  }
+
+  /// Updates the default data classification level for a project.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
+  ///  *  *Administer jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> updateDefaultProjectClassification(
+      {required String projectIdOrKey,
+      required UpdateDefaultProjectClassificationBean body}) async {
+    return await _client.send(
+      'put',
+      'rest/api/3/project/{projectIdOrKey}/classification-level/default',
+      pathParameters: {
+        'projectIdOrKey': projectIdOrKey,
+      },
+      body: body.toJson(),
     );
   }
 }
@@ -9667,8 +10774,37 @@ class ProjectComponentsApi {
 
   ProjectComponentsApi(this._client);
 
+  /// Returns a [paginated](#pagination) list of all components in a project,
+  /// including global (Compass) components when applicable.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** *Browse Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project.
+  Future<PageBean2ComponentJsonBean> findComponentsForProjects(
+      {List<String>? projectIdsOrKeys,
+      int? startAt,
+      int? maxResults,
+      String? orderBy,
+      String? query}) async {
+    return PageBean2ComponentJsonBean.fromJson(await _client.send(
+      'get',
+      'rest/api/3/component',
+      queryParameters: {
+        if (projectIdsOrKeys != null)
+          'projectIdsOrKeys': projectIdsOrKeys.map((e) => e).join(','),
+        if (startAt != null) 'startAt': '$startAt',
+        if (maxResults != null) 'maxResults': '$maxResults',
+        if (orderBy != null) 'orderBy': orderBy,
+        if (query != null) 'query': query,
+      },
+    ));
+  }
+
   /// Creates a component. Use components to provide containers for issues
-  /// within a project.
+  /// within a project. Use components to provide containers for issues within a
+  /// project.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -9683,6 +10819,28 @@ class ProjectComponentsApi {
       'rest/api/3/component',
       body: body.toJson(),
     ));
+  }
+
+  /// Deletes a component.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the component or *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> deleteComponent(
+      {required String id, String? moveIssuesTo}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/component/{id}',
+      pathParameters: {
+        'id': id,
+      },
+      queryParameters: {
+        if (moveIssuesTo != null) 'moveIssuesTo': moveIssuesTo,
+      },
+    );
   }
 
   /// Returns a component.
@@ -9723,31 +10881,15 @@ class ProjectComponentsApi {
     ));
   }
 
-  /// Deletes a component.
-  ///
-  /// This operation can be accessed anonymously.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer projects*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
-  /// project containing the component or *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteComponent(
-      {required String id, String? moveIssuesTo}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/component/{id}',
-      pathParameters: {
-        'id': id,
-      },
-      queryParameters: {
-        if (moveIssuesTo != null) 'moveIssuesTo': moveIssuesTo,
-      },
-    );
-  }
-
   /// Returns the counts of issues assigned to the component.
   ///
   /// This operation can be accessed anonymously.
+  ///
+  /// **Deprecation notice:** The required OAuth 2.0 scopes will be updated on
+  /// June 15, 2024.
+  ///
+  ///  *  **Classic**: `read:jira-work`
+  ///  *  **Granular**: `read:field:jira`, `read:project.component:jira`
   ///
   /// **[Permissions](#permissions) required:** None.
   Future<ComponentIssuesCount> getComponentRelatedIssues(String id) async {
@@ -9765,6 +10907,9 @@ class ProjectComponentsApi {
   /// [Get project components](#api-rest-api-3-project-projectIdOrKey-components-get)
   /// resource if you want to get a full list of versions without pagination.
   ///
+  /// If your project uses Compass components, this API will return a list of
+  /// Compass components that are linked to issues in that project.
+  ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:** *Browse Projects*
@@ -9775,6 +10920,7 @@ class ProjectComponentsApi {
       int? startAt,
       int? maxResults,
       String? orderBy,
+      String? componentSource,
       String? query}) async {
     return PageBeanComponentWithIssueCount.fromJson(await _client.send(
       'get',
@@ -9786,6 +10932,7 @@ class ProjectComponentsApi {
         if (startAt != null) 'startAt': '$startAt',
         if (maxResults != null) 'maxResults': '$maxResults',
         if (orderBy != null) 'orderBy': orderBy,
+        if (componentSource != null) 'componentSource': componentSource,
         if (query != null) 'query': query,
       },
     ));
@@ -9795,18 +10942,24 @@ class ProjectComponentsApi {
   /// [Get project components paginated](#api-rest-api-3-project-projectIdOrKey-component-get)
   /// resource if you want to get a full list of components with pagination.
   ///
+  /// If your project uses Compass components, this API will return a paginated
+  /// list of Compass components that are linked to issues in that project.
+  ///
   /// This operation can be accessed anonymously.
   ///
   /// **[Permissions](#permissions) required:** *Browse Projects*
   /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
   /// project.
   Future<List<ProjectComponent>> getProjectComponents(
-      String projectIdOrKey) async {
+      {required String projectIdOrKey, String? componentSource}) async {
     return (await _client.send(
       'get',
       'rest/api/3/project/{projectIdOrKey}/components',
       pathParameters: {
         'projectIdOrKey': projectIdOrKey,
+      },
+      queryParameters: {
+        if (componentSource != null) 'componentSource': componentSource,
       },
     ) as List<Object?>)
         .map((i) =>
@@ -9844,9 +10997,10 @@ class ProjectEmailApi {
   /// If `emailAddress` is an empty string, the default email address is
   /// restored.
   ///
-  /// **[Permissions](#permissions) required:** *Browse projects*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
-  /// project.
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or
+  /// *Administer Projects*
+  /// [project permission.](https://confluence.atlassian.com/x/yodKLg)
   Future<dynamic> updateProjectEmail(
       {required int projectId, required ProjectEmailAddress body}) async {
     return await _client.send(
@@ -10068,6 +11222,29 @@ class ProjectPropertiesApi {
     ));
   }
 
+  /// Deletes the
+  /// [property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties)
+  /// from a project.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or
+  /// *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the property.
+  Future<void> deleteProjectProperty(
+      {required String projectIdOrKey, required String propertyKey}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}',
+      pathParameters: {
+        'projectIdOrKey': projectIdOrKey,
+        'propertyKey': propertyKey,
+      },
+    );
+  }
+
   /// Returns the value of a
   /// [project property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties).
   ///
@@ -10117,29 +11294,6 @@ class ProjectPropertiesApi {
       body: body,
     );
   }
-
-  /// Deletes the
-  /// [property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties)
-  /// from a project.
-  ///
-  /// This operation can be accessed anonymously.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or
-  /// *Administer Projects*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
-  /// project containing the property.
-  Future<void> deleteProjectProperty(
-      {required String projectIdOrKey, required String propertyKey}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}',
-      pathParameters: {
-        'projectIdOrKey': projectIdOrKey,
-        'propertyKey': propertyKey,
-      },
-    );
-  }
 }
 
 /// Jira Cloud platform REST API documentation
@@ -10148,57 +11302,6 @@ class ProjectRoleActorsApi {
   final ApiClient _client;
 
   ProjectRoleActorsApi(this._client);
-
-  /// Sets the actors for a project role for a project, replacing all existing
-  /// actors.
-  ///
-  /// To add actors to the project without overwriting the existing list, use
-  /// [Add actors to project role](#api-rest-api-3-project-projectIdOrKey-role-id-post).
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Projects*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
-  /// project or *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<ProjectRole> setActors(
-      {required String projectIdOrKey,
-      required int id,
-      required ProjectRoleActorsUpdateBean body}) async {
-    return ProjectRole.fromJson(await _client.send(
-      'put',
-      'rest/api/3/project/{projectIdOrKey}/role/{id}',
-      pathParameters: {
-        'projectIdOrKey': projectIdOrKey,
-        'id': '$id',
-      },
-      body: body.toJson(),
-    ));
-  }
-
-  /// Adds actors to a project role for the project.
-  ///
-  /// To replace all actors for the project, use
-  /// [Set actors for project role](#api-rest-api-3-project-projectIdOrKey-role-id-put).
-  ///
-  /// This operation can be accessed anonymously.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Projects*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
-  /// project or *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<ProjectRole> addActorUsers(
-      {required String projectIdOrKey,
-      required int id,
-      required ActorsMap body}) async {
-    return ProjectRole.fromJson(await _client.send(
-      'post',
-      'rest/api/3/project/{projectIdOrKey}/role/{id}',
-      pathParameters: {
-        'projectIdOrKey': projectIdOrKey,
-        'id': '$id',
-      },
-      body: body.toJson(),
-    ));
-  }
 
   /// Deletes actors from a project role for the project.
   ///
@@ -10230,6 +11333,82 @@ class ProjectRoleActorsApi {
         if (groupId != null) 'groupId': groupId,
       },
     );
+  }
+
+  /// Adds actors to a project role for the project.
+  ///
+  /// To replace all actors for the project, use
+  /// [Set actors for project role](#api-rest-api-3-project-projectIdOrKey-role-id-put).
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project or *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<ProjectRole> addActorUsers(
+      {required String projectIdOrKey,
+      required int id,
+      required ActorsMap body}) async {
+    return ProjectRole.fromJson(await _client.send(
+      'post',
+      'rest/api/3/project/{projectIdOrKey}/role/{id}',
+      pathParameters: {
+        'projectIdOrKey': projectIdOrKey,
+        'id': '$id',
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Sets the actors for a project role for a project, replacing all existing
+  /// actors.
+  ///
+  /// To add actors to the project without overwriting the existing list, use
+  /// [Add actors to project role](#api-rest-api-3-project-projectIdOrKey-role-id-post).
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project or *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<ProjectRole> setActors(
+      {required String projectIdOrKey,
+      required int id,
+      required ProjectRoleActorsUpdateBean body}) async {
+    return ProjectRole.fromJson(await _client.send(
+      'put',
+      'rest/api/3/project/{projectIdOrKey}/role/{id}',
+      pathParameters: {
+        'projectIdOrKey': projectIdOrKey,
+        'id': '$id',
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Deletes the [default actors](#api-rest-api-3-resolution-get) from a
+  /// project role. You may delete a group or user, but you cannot delete a
+  /// group and a user in the same request.
+  ///
+  /// Changing a project role's default actors does not affect project role
+  /// members for projects already created.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<ProjectRole> deleteProjectRoleActorsFromRole(
+      {required int id, String? user, String? groupId, String? group}) async {
+    return ProjectRole.fromJson(await _client.send(
+      'delete',
+      'rest/api/3/role/{id}/actors',
+      pathParameters: {
+        'id': '$id',
+      },
+      queryParameters: {
+        if (user != null) 'user': user,
+        if (groupId != null) 'groupId': groupId,
+        if (group != null) 'group': group,
+      },
+    ));
   }
 
   /// Returns the [default actors](#api-rest-api-3-resolution-get) for the
@@ -10267,31 +11446,6 @@ class ProjectRoleActorsApi {
       body: body.toJson(),
     ));
   }
-
-  /// Deletes the [default actors](#api-rest-api-3-resolution-get) from a
-  /// project role. You may delete a group or user, but you cannot delete a
-  /// group and a user in the same request.
-  ///
-  /// Changing a project role's default actors does not affect project role
-  /// members for projects already created.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<ProjectRole> deleteProjectRoleActorsFromRole(
-      {required int id, String? user, String? groupId, String? group}) async {
-    return ProjectRole.fromJson(await _client.send(
-      'delete',
-      'rest/api/3/role/{id}/actors',
-      pathParameters: {
-        'id': '$id',
-      },
-      queryParameters: {
-        if (user != null) 'user': user,
-        if (groupId != null) 'groupId': groupId,
-        if (group != null) 'group': group,
-      },
-    ));
-  }
 }
 
 /// Jira Cloud platform REST API documentation
@@ -10302,8 +11456,8 @@ class ProjectRolesApi {
   ProjectRolesApi(this._client);
 
   /// Returns a list of
-  /// [project roles](https://confluence.atlassian.com/x/3odKLg) for the project
-  /// returning the name and self URL for each role.
+  /// [project roles](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-roles/)
+  /// for the project returning the name and self URL for each role.
   ///
   /// Note that all project roles are shared with all projects in Jira Cloud.
   /// See [Get all project roles](#api-rest-api-3-role-get) for more
@@ -10357,9 +11511,10 @@ class ProjectRolesApi {
     ));
   }
 
-  /// Returns all [project roles](https://confluence.atlassian.com/x/3odKLg) and
-  /// the details for each role. Note that the list of project roles is common
-  /// to all projects.
+  /// Returns all
+  /// [project roles](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-roles/)
+  /// and the details for each role. Note that the list of project roles is
+  /// common to all projects.
   ///
   /// This operation can be accessed anonymously.
   ///
@@ -10394,10 +11549,10 @@ class ProjectRolesApi {
   ///
   /// ### About project roles ###
   ///
-  /// [Project roles](https://confluence.atlassian.com/x/3odKLg) are a flexible
-  /// way to to associate users and groups with projects. In Jira Cloud, the
-  /// list of project roles is shared globally with all projects, but each
-  /// project can have a different set of actors associated with it (unlike
+  /// [Project roles](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-roles/)
+  /// are a flexible way to to associate users and groups with projects. In Jira
+  /// Cloud, the list of project roles is shared globally with all projects, but
+  /// each project can have a different set of actors associated with it (unlike
   /// groups, which have the same membership throughout all Jira applications).
   ///
   /// Project roles are used in
@@ -10413,7 +11568,7 @@ class ProjectRolesApi {
   /// *actor* is a group or user associated with a project role.
   ///
   /// Actors may be set as
-  /// [default members](https://confluence.atlassian.com/x/3odKLg#Managingprojectroles-Specifying'defaultmembers'foraprojectrole)
+  /// [default members](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-roles/#Specifying-'default-members'-for-a-project-role)
   /// of the project role or set at the project level:
   ///
   ///  *  Default actors: Users and groups that are assigned to the project role
@@ -10455,6 +11610,24 @@ class ProjectRolesApi {
     ));
   }
 
+  /// Deletes a project role. You must specify a replacement project role if you
+  /// wish to delete a project role that is in use.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> deleteProjectRole({required int id, int? swap}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/role/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+      queryParameters: {
+        if (swap != null) 'swap': '$swap',
+      },
+    );
+  }
+
   /// Gets the project role details and the default actors associated with the
   /// role. The list of default actors is sorted by display name.
   ///
@@ -10467,23 +11640,6 @@ class ProjectRolesApi {
       pathParameters: {
         'id': '$id',
       },
-    ));
-  }
-
-  /// Updates the project role's name and description. You must include both a
-  /// name and a description in the request.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<ProjectRole> fullyUpdateProjectRole(
-      {required int id, required CreateUpdateRoleRequestBean body}) async {
-    return ProjectRole.fromJson(await _client.send(
-      'put',
-      'rest/api/3/role/{id}',
-      pathParameters: {
-        'id': '$id',
-      },
-      body: body.toJson(),
     ));
   }
 
@@ -10507,22 +11663,21 @@ class ProjectRolesApi {
     ));
   }
 
-  /// Deletes a project role. You must specify a replacement project role if you
-  /// wish to delete a project role that is in use.
+  /// Updates the project role's name and description. You must include both a
+  /// name and a description in the request.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteProjectRole({required int id, int? swap}) async {
-    await _client.send(
-      'delete',
+  Future<ProjectRole> fullyUpdateProjectRole(
+      {required int id, required CreateUpdateRoleRequestBean body}) async {
+    return ProjectRole.fromJson(await _client.send(
+      'put',
       'rest/api/3/role/{id}',
       pathParameters: {
         'id': '$id',
       },
-      queryParameters: {
-        if (swap != null) 'swap': '$swap',
-      },
-    );
+      body: body.toJson(),
+    ));
   }
 }
 
@@ -10676,6 +11831,44 @@ class ProjectVersionsApi {
     ));
   }
 
+  /// Deletes a project version.
+  ///
+  /// Deprecated, use
+  /// [ Delete and replace version](#api-rest-api-3-version-id-removeAndSwap-post)
+  /// that supports swapping version values in custom fields, in addition to the
+  /// swapping for `fixVersion` and `affectedVersion` provided in this resource.
+  ///
+  /// Alternative versions can be provided to update issues that use the deleted
+  /// version in `fixVersion` or `affectedVersion`. If alternatives are not
+  /// provided, occurrences of `fixVersion` and `affectedVersion` that contain
+  /// the deleted version are cleared.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or
+  /// *Administer Projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project that contains the version.
+  @deprecated
+  Future<void> deleteVersion(
+      {required String id,
+      String? moveFixIssuesTo,
+      String? moveAffectedIssuesTo}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/version/{id}',
+      pathParameters: {
+        'id': id,
+      },
+      queryParameters: {
+        if (moveFixIssuesTo != null) 'moveFixIssuesTo': moveFixIssuesTo,
+        if (moveAffectedIssuesTo != null)
+          'moveAffectedIssuesTo': moveAffectedIssuesTo,
+      },
+    );
+  }
+
   /// Returns a project version.
   ///
   /// This operation can be accessed anonymously.
@@ -10715,44 +11908,6 @@ class ProjectVersionsApi {
       },
       body: body.toJson(),
     ));
-  }
-
-  /// Deletes a project version.
-  ///
-  /// Deprecated, use
-  /// [ Delete and replace version](#api-rest-api-3-version-id-removeAndSwap-post)
-  /// that supports swapping version values in custom fields, in addition to the
-  /// swapping for `fixVersion` and `affectedVersion` provided in this resource.
-  ///
-  /// Alternative versions can be provided to update issues that use the deleted
-  /// version in `fixVersion` or `affectedVersion`. If alternatives are not
-  /// provided, occurrences of `fixVersion` and `affectedVersion` that contain
-  /// the deleted version are cleared.
-  ///
-  /// This operation can be accessed anonymously.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or
-  /// *Administer Projects*
-  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
-  /// project that contains the version.
-  @deprecated
-  Future<void> deleteVersion(
-      {required String id,
-      String? moveFixIssuesTo,
-      String? moveAffectedIssuesTo}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/version/{id}',
-      pathParameters: {
-        'id': id,
-      },
-      queryParameters: {
-        if (moveFixIssuesTo != null) 'moveFixIssuesTo': moveFixIssuesTo,
-        if (moveAffectedIssuesTo != null)
-          'moveAffectedIssuesTo': moveAffectedIssuesTo,
-      },
-    );
   }
 
   /// Merges two project versions. The merge is completed by deleting the
@@ -10822,6 +11977,69 @@ class ProjectVersionsApi {
     ));
   }
 
+  /// Returns related work items for the given version id.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** *Browse projects*
+  /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
+  /// project containing the version.
+  Future<List<VersionRelatedWork>> getRelatedWork(String id) async {
+    return (await _client.send(
+      'get',
+      'rest/api/3/version/{id}/relatedwork',
+      pathParameters: {
+        'id': id,
+      },
+    ) as List<Object?>)
+        .map((i) =>
+            VersionRelatedWork.fromJson(i as Map<String, Object?>? ?? const {}))
+        .toList();
+  }
+
+  /// Creates a related work for the given version. You can only create a
+  /// generic link type of related works via this API. relatedWorkId will be
+  /// auto-generated UUID, that does not need to be provided.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** *Resolve issues:* and *Edit
+  /// issues*
+  /// [Managing project permissions](https://confluence.atlassian.com/adminjiraserver/managing-project-permissions-938847145.html)
+  /// for the project that contains the version.
+  Future<VersionRelatedWork> createRelatedWork(
+      {required String id, required VersionRelatedWork body}) async {
+    return VersionRelatedWork.fromJson(await _client.send(
+      'post',
+      'rest/api/3/version/{id}/relatedwork',
+      pathParameters: {
+        'id': id,
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Updates the given related work. You can only update generic link related
+  /// works via Rest APIs. Any archived version related works can't be edited.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** *Resolve issues:* and *Edit
+  /// issues*
+  /// [Managing project permissions](https://confluence.atlassian.com/adminjiraserver/managing-project-permissions-938847145.html)
+  /// for the project that contains the version.
+  Future<VersionRelatedWork> updateRelatedWork(
+      {required String id, required VersionRelatedWork body}) async {
+    return VersionRelatedWork.fromJson(await _client.send(
+      'put',
+      'rest/api/3/version/{id}/relatedwork',
+      pathParameters: {
+        'id': id,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Deletes a project version.
   ///
   /// Alternative versions can be provided to update issues that use the deleted
@@ -10867,6 +12085,26 @@ class ProjectVersionsApi {
         'id': id,
       },
     ));
+  }
+
+  /// Deletes the given related work for the given version.
+  ///
+  /// This operation can be accessed anonymously.
+  ///
+  /// **[Permissions](#permissions) required:** *Resolve issues:* and *Edit
+  /// issues*
+  /// [Managing project permissions](https://confluence.atlassian.com/adminjiraserver/managing-project-permissions-938847145.html)
+  /// for the project that contains the version.
+  Future<void> deleteRelatedWork(
+      {required String versionId, required String relatedWorkId}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/version/{versionId}/relatedwork/{relatedWorkId}',
+      pathParameters: {
+        'versionId': versionId,
+        'relatedWorkId': relatedWorkId,
+      },
+    );
   }
 }
 
@@ -10931,13 +12169,14 @@ class ProjectsApi {
   /// `com.atlassian.servicedesk:simplified-marketing-service-desk`,
   /// `com.atlassian.servicedesk:simplified-design-service-desk`,
   /// `com.atlassian.servicedesk:simplified-sales-service-desk`,
+  /// `com.atlassian.servicedesk:simplified-blank-project-business`,
+  /// `com.atlassian.servicedesk:simplified-blank-project-it`,
   /// `com.atlassian.servicedesk:simplified-finance-service-desk`,
   /// `com.atlassian.servicedesk:next-gen-it-service-desk`,
   /// `com.atlassian.servicedesk:next-gen-hr-service-desk`,
   /// `com.atlassian.servicedesk:next-gen-legal-service-desk`,
   /// `com.atlassian.servicedesk:next-gen-marketing-service-desk`,
   /// `com.atlassian.servicedesk:next-gen-facilities-service-desk`,
-  /// `com.atlassian.servicedesk:next-gen-general-service-desk`,
   /// `com.atlassian.servicedesk:next-gen-general-it-service-desk`,
   /// `com.atlassian.servicedesk:next-gen-general-business-service-desk`,
   /// `com.atlassian.servicedesk:next-gen-analytics-service-desk`,
@@ -11055,6 +12294,28 @@ class ProjectsApi {
     ));
   }
 
+  /// Deletes a project.
+  ///
+  /// You can't delete a project if it's archived. To delete an archived
+  /// project, restore the project and then delete it. To restore a project, use
+  /// the Jira UI.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> deleteProject(
+      {required String projectIdOrKey, bool? enableUndo}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/project/{projectIdOrKey}',
+      pathParameters: {
+        'projectIdOrKey': projectIdOrKey,
+      },
+      queryParameters: {
+        if (enableUndo != null) 'enableUndo': '$enableUndo',
+      },
+    );
+  }
+
   /// Returns the [project details](https://confluence.atlassian.com/x/ahLpNw)
   /// for a project.
   ///
@@ -11108,28 +12369,6 @@ class ProjectsApi {
       },
       body: body.toJson(),
     ));
-  }
-
-  /// Deletes a project.
-  ///
-  /// You can't delete a project if it's archived. To delete an archived
-  /// project, restore the project and then delete it. To restore a project, use
-  /// the Jira UI.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteProject(
-      {required String projectIdOrKey, bool? enableUndo}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/project/{projectIdOrKey}',
-      pathParameters: {
-        'projectIdOrKey': projectIdOrKey,
-      },
-      queryParameters: {
-        if (enableUndo != null) 'enableUndo': '$enableUndo',
-      },
-    );
   }
 
   /// Archives a project. You can't delete a project if it's archived. To delete
@@ -11232,7 +12471,6 @@ class ProjectsApi {
   /// **[Permissions](#permissions) required:** *Browse projects*
   /// [project permission](https://confluence.atlassian.com/x/yodKLg) for the
   /// project.
-  @deprecated
   Future<ProjectIssueTypeHierarchy> getHierarchy(int projectId) async {
     return ProjectIssueTypeHierarchy.fromJson(await _client.send(
       'get',
@@ -11312,6 +12550,23 @@ class ScreenSchemesApi {
     ));
   }
 
+  /// Deletes a screen scheme. A screen scheme cannot be deleted if it is used
+  /// in an issue type screen scheme.
+  ///
+  /// Only screens schemes used in classic projects can be deleted.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> deleteScreenScheme(String screenSchemeId) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/screenscheme/{screenSchemeId}',
+      pathParameters: {
+        'screenSchemeId': screenSchemeId,
+      },
+    );
+  }
+
   /// Updates a screen scheme. Only screen schemes used in classic projects can
   /// be updated.
   ///
@@ -11327,23 +12582,6 @@ class ScreenSchemesApi {
         'screenSchemeId': screenSchemeId,
       },
       body: body.toJson(),
-    );
-  }
-
-  /// Deletes a screen scheme. A screen scheme cannot be deleted if it is used
-  /// in an issue type screen scheme.
-  ///
-  /// Only screens schemes used in classic projects can be deleted.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteScreenScheme(String screenSchemeId) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/screenscheme/{screenSchemeId}',
-      pathParameters: {
-        'screenSchemeId': screenSchemeId,
-      },
     );
   }
 }
@@ -11451,6 +12689,29 @@ class ScreenTabsApi {
 
   ScreenTabsApi(this._client);
 
+  /// Returns the list of tabs for a bulk of screens.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> getBulkScreenTabs(
+      {List<int>? screenId,
+      List<int>? tabId,
+      int? startAt,
+      int? maxResult}) async {
+    return await _client.send(
+      'get',
+      'rest/api/3/screens/tabs',
+      queryParameters: {
+        if (screenId != null) 'screenId': screenId.map((e) => '$e').join(','),
+        if (tabId != null) 'tabId': tabId.map((e) => '$e').join(','),
+        if (startAt != null) 'startAt': '$startAt',
+        if (maxResult != null) 'maxResult': '$maxResult',
+      },
+    );
+  }
+
   /// Returns the list of tabs for a screen.
   ///
   /// **[Permissions](#permissions) required:**
@@ -11494,6 +12755,22 @@ class ScreenTabsApi {
     ));
   }
 
+  /// Deletes a screen tab.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> deleteScreenTab(
+      {required int screenId, required int tabId}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/screens/{screenId}/tabs/{tabId}',
+      pathParameters: {
+        'screenId': '$screenId',
+        'tabId': '$tabId',
+      },
+    );
+  }
+
   /// Updates the name of a screen tab.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
@@ -11511,22 +12788,6 @@ class ScreenTabsApi {
       },
       body: body.toJson(),
     ));
-  }
-
-  /// Deletes a screen tab.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteScreenTab(
-      {required int screenId, required int tabId}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/screens/{screenId}/tabs/{tabId}',
-      pathParameters: {
-        'screenId': '$screenId',
-        'tabId': '$tabId',
-      },
-    );
   }
 
   /// Moves a screen tab.
@@ -11629,6 +12890,20 @@ class ScreensApi {
     );
   }
 
+  /// Deletes a screen. A screen cannot be deleted if it is used in a screen
+  /// scheme, workflow, or workflow draft.
+  ///
+  /// Only screens used in classic projects can be deleted.
+  Future<void> deleteScreen(int screenId) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/screens/{screenId}',
+      pathParameters: {
+        'screenId': '$screenId',
+      },
+    );
+  }
+
   /// Updates a screen. Only screens used in classic projects can be updated.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
@@ -11643,20 +12918,6 @@ class ScreensApi {
       },
       body: body.toJson(),
     ));
-  }
-
-  /// Deletes a screen. A screen cannot be deleted if it is used in a screen
-  /// scheme, workflow, or workflow draft.
-  ///
-  /// Only screens used in classic projects can be deleted.
-  Future<void> deleteScreen(int screenId) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/screens/{screenId}',
-      pathParameters: {
-        'screenId': '$screenId',
-      },
-    );
   }
 
   /// Returns the fields that can be added to a tab on a screen.
@@ -11699,10 +12960,53 @@ class ServerInfoApi {
 
 /// Jira Cloud platform REST API documentation
 
+class ServiceRegistryApi {
+  final ApiClient _client;
+
+  ServiceRegistryApi(this._client);
+
+  /// Retrieve the attributes of given service registries.
+  ///
+  /// **[Permissions](#permissions) required:** Only Connect apps can make this
+  /// request and the servicesIds belong to the tenant you are requesting
+  Future<List<ServiceRegistry>> services(List<String> serviceIds) async {
+    return (await _client.send(
+      'get',
+      'rest/atlassian-connect/1/service-registry',
+      queryParameters: {
+        'serviceIds': serviceIds.map((e) => e).join(','),
+      },
+    ) as List<Object?>)
+        .map((i) =>
+            ServiceRegistry.fromJson(i as Map<String, Object?>? ?? const {}))
+        .toList();
+  }
+}
+
+/// Jira Cloud platform REST API documentation
+
 class StatusApi {
   final ApiClient _client;
 
   StatusApi(this._client);
+
+  /// Deletes statuses by ID.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer projects*
+  /// [project permission.](https://confluence.atlassian.com/x/yodKLg)
+  ///  *  *Administer Jira*
+  /// [project permission.](https://confluence.atlassian.com/x/yodKLg)
+  Future<dynamic> deleteStatusesById(List<String> id) async {
+    return await _client.send(
+      'delete',
+      'rest/api/3/statuses',
+      queryParameters: {
+        'id': id.map((e) => e).join(','),
+      },
+    );
+  }
 
   /// Returns a list of the statuses specified by one or more status IDs.
   ///
@@ -11713,33 +13017,17 @@ class StatusApi {
   ///  *  *Administer Jira*
   /// [project permission.](https://confluence.atlassian.com/x/yodKLg)
   Future<List<JiraStatus>> getStatusesById(
-      {String? expand, List<String>? id}) async {
+      {String? expand, required List<String> id}) async {
     return (await _client.send(
       'get',
       'rest/api/3/statuses',
       queryParameters: {
         if (expand != null) 'expand': expand,
-        if (id != null) 'id': id.map((e) => e).join(','),
+        'id': id.map((e) => e).join(','),
       },
     ) as List<Object?>)
         .map((i) => JiraStatus.fromJson(i as Map<String, Object?>? ?? const {}))
         .toList();
-  }
-
-  /// Updates statuses by ID.
-  ///
-  /// **[Permissions](#permissions) required:**
-  ///
-  ///  *  *Administer projects*
-  /// [project permission.](https://confluence.atlassian.com/x/yodKLg)
-  ///  *  *Administer Jira*
-  /// [project permission.](https://confluence.atlassian.com/x/yodKLg)
-  Future<dynamic> updateStatuses({required StatusUpdateRequest body}) async {
-    return await _client.send(
-      'put',
-      'rest/api/3/statuses',
-      body: body.toJson(),
-    );
   }
 
   /// Creates statuses for a global or project scope.
@@ -11761,7 +13049,7 @@ class StatusApi {
         .toList();
   }
 
-  /// Deletes statuses by ID.
+  /// Updates statuses by ID.
   ///
   /// **[Permissions](#permissions) required:**
   ///
@@ -11769,13 +13057,11 @@ class StatusApi {
   /// [project permission.](https://confluence.atlassian.com/x/yodKLg)
   ///  *  *Administer Jira*
   /// [project permission.](https://confluence.atlassian.com/x/yodKLg)
-  Future<dynamic> deleteStatusesById({List<String>? id}) async {
+  Future<dynamic> updateStatuses({required StatusUpdateRequest body}) async {
     return await _client.send(
-      'delete',
+      'put',
       'rest/api/3/statuses',
-      queryParameters: {
-        if (id != null) 'id': id.map((e) => e).join(','),
-      },
+      body: body.toJson(),
     );
   }
 
@@ -11825,6 +13111,11 @@ class TasksApi {
   /// for details. Task details are not permanently retained. As of September
   /// 2019, details are retained for 14 days although this period may change
   /// without notice.
+  ///
+  /// **Deprecation notice:** The required OAuth 2.0 scopes will be updated on
+  /// June 15, 2024.
+  ///
+  ///  *  `read:jira-work`
   ///
   /// **[Permissions](#permissions) required:** either of:
   ///
@@ -11950,6 +13241,10 @@ class UIModificationsAppsApi {
   /// apps.
   ///
   /// **[Permissions](#permissions) required:** None.
+  ///
+  /// The new `read:app-data:jira` OAuth scope is 100% optional now, and not
+  /// using it won't break your app. However, we recommend adding it to your
+  /// app's scope list because we will eventually make it mandatory.
   Future<PageBeanUiModificationDetails> getUiModifications(
       {int? startAt, int? maxResults, String? expand}) async {
     return PageBeanUiModificationDetails.fromJson(await _client.send(
@@ -11966,8 +13261,9 @@ class UIModificationsAppsApi {
   /// Creates a UI modification. UI modification can only be created by Forge
   /// apps.
   ///
-  /// Each app can define up to 100 UI modifications. Each UI modification can
-  /// define up to 1000 contexts.
+  /// Each app can define up to 3000 UI modifications. Each UI modification can
+  /// define up to 1000 contexts. The same context can be assigned to maximum
+  /// 100 UI modifications.
   ///
   /// **[Permissions](#permissions) required:**
   ///
@@ -11975,6 +13271,10 @@ class UIModificationsAppsApi {
   ///  *  *Browse projects*
   /// [project permission](https://confluence.atlassian.com/x/yodKLg) for one or
   /// more projects, if the UI modification is created with contexts.
+  ///
+  /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not
+  /// using it won't break your app. However, we recommend adding it to your
+  /// app's scope list because we will eventually make it mandatory.
   Future<UiModificationIdentifiers> createUiModification(
       {required CreateUiModificationDetails body}) async {
     return UiModificationIdentifiers.fromJson(await _client.send(
@@ -11984,10 +13284,30 @@ class UIModificationsAppsApi {
     ));
   }
 
+  /// Deletes a UI modification. All the contexts that belong to the UI
+  /// modification are deleted too. UI modification can only be deleted by Forge
+  /// apps.
+  ///
+  /// **[Permissions](#permissions) required:** None.
+  ///
+  /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not
+  /// using it won't break your app. However, we recommend adding it to your
+  /// app's scope list because we will eventually make it mandatory.
+  Future<dynamic> deleteUiModification(String uiModificationId) async {
+    return await _client.send(
+      'delete',
+      'rest/api/3/uiModifications/{uiModificationId}',
+      pathParameters: {
+        'uiModificationId': uiModificationId,
+      },
+    );
+  }
+
   /// Updates a UI modification. UI modification can only be updated by Forge
   /// apps.
   ///
-  /// Each UI modification can define up to 1000 contexts.
+  /// Each UI modification can define up to 1000 contexts. The same context can
+  /// be assigned to maximum 100 UI modifications.
   ///
   /// **[Permissions](#permissions) required:**
   ///
@@ -11995,6 +13315,10 @@ class UIModificationsAppsApi {
   ///  *  *Browse projects*
   /// [project permission](https://confluence.atlassian.com/x/yodKLg) for one or
   /// more projects, if the UI modification is created with contexts.
+  ///
+  /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not
+  /// using it won't break your app. However, we recommend adding it to your
+  /// app's scope list because we will eventually make it mandatory.
   Future<dynamic> updateUiModification(
       {required String uiModificationId,
       required UpdateUiModificationDetails body}) async {
@@ -12005,21 +13329,6 @@ class UIModificationsAppsApi {
         'uiModificationId': uiModificationId,
       },
       body: body.toJson(),
-    );
-  }
-
-  /// Deletes a UI modification. All the contexts that belong to the UI
-  /// modification are deleted too. UI modification can only be deleted by Forge
-  /// apps.
-  ///
-  /// **[Permissions](#permissions) required:** None.
-  Future<dynamic> deleteUiModification(String uiModificationId) async {
-    return await _client.send(
-      'delete',
-      'rest/api/3/uiModifications/{uiModificationId}',
-      pathParameters: {
-        'uiModificationId': uiModificationId,
-      },
     );
   }
 }
@@ -12054,6 +13363,37 @@ class UserPropertiesApi {
         if (username != null) 'username': username,
       },
     ));
+  }
+
+  /// Deletes a property from a user.
+  ///
+  /// Note: This operation does not access the
+  /// [user properties](https://confluence.atlassian.com/x/8YxjL) created and
+  /// maintained in Jira.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg), to delete
+  /// a property from any user.
+  ///  *  Access to Jira, to delete a property from the calling user's record.
+  Future<void> deleteUserProperty(
+      {String? accountId,
+      String? userKey,
+      String? username,
+      required String propertyKey}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/user/properties/{propertyKey}',
+      pathParameters: {
+        'propertyKey': propertyKey,
+      },
+      queryParameters: {
+        if (accountId != null) 'accountId': accountId,
+        if (userKey != null) 'userKey': userKey,
+        if (username != null) 'username': username,
+      },
+    );
   }
 
   /// Returns the value of a user's property. If no property key is provided
@@ -12119,37 +13459,6 @@ class UserPropertiesApi {
         if (username != null) 'username': username,
       },
       body: body,
-    );
-  }
-
-  /// Deletes a property from a user.
-  ///
-  /// Note: This operation does not access the
-  /// [user properties](https://confluence.atlassian.com/x/8YxjL) created and
-  /// maintained in Jira.
-  ///
-  /// **[Permissions](#permissions) required:**
-  ///
-  ///  *  *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg), to delete
-  /// a property from any user.
-  ///  *  Access to Jira, to delete a property from the calling user's record.
-  Future<void> deleteUserProperty(
-      {String? accountId,
-      String? userKey,
-      String? username,
-      required String propertyKey}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/user/properties/{propertyKey}',
-      pathParameters: {
-        'propertyKey': propertyKey,
-      },
-      queryParameters: {
-        if (accountId != null) 'accountId': accountId,
-        if (userKey != null) 'userKey': userKey,
-        if (username != null) 'username': username,
-      },
     );
   }
 }
@@ -12234,7 +13543,9 @@ class UserSearchApi {
   /// [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/)
   /// for more details.
   ///
-  /// **[Permissions](#permissions) required:** Permission to access Jira.
+  /// **[Permissions](#permissions) required:** *Browse users and groups*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Assign
+  /// issues* [project permission](https://confluence.atlassian.com/x/yodKLg)
   Future<List<User>> findAssignableUsers(
       {String? query,
       String? sessionId,
@@ -12376,7 +13687,7 @@ class UserSearchApi {
     ));
   }
 
-  /// Returns a list of users that match the search string and property.
+  /// Returns a list of active users that match the search string and property.
   ///
   /// This operation first applies a filter to match the search string and
   /// property, and then takes the filtered users in the range defined by
@@ -12512,14 +13823,14 @@ class UserSearchApi {
   /// `is assignee of PROJ AND [propertyKey].entity.property.path is "property
   /// value"`
   Future<PageBeanUserKey> findUserKeysByQuery(
-      {required String query, int? startAt, int? maxResults}) async {
+      {required String query, int? startAt, int? maxResult}) async {
     return PageBeanUserKey.fromJson(await _client.send(
       'get',
       'rest/api/3/user/search/query/key',
       queryParameters: {
         'query': query,
         if (startAt != null) 'startAt': '$startAt',
-        if (maxResults != null) 'maxResults': '$maxResults',
+        if (maxResult != null) 'maxResult': '$maxResult',
       },
     ));
   }
@@ -12588,6 +13899,26 @@ class UsersApi {
 
   UsersApi(this._client);
 
+  /// Deletes a user. If the operation completes successfully then the user is
+  /// removed from Jira's user base. This operation does not delete the user's
+  /// Atlassian account.
+  ///
+  /// **[Permissions](#permissions) required:** Site administration (that is,
+  /// membership of the *site-admin*
+  /// [group](https://confluence.atlassian.com/x/24xjL)).
+  Future<void> removeUser(
+      {required String accountId, String? username, String? key}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/user',
+      queryParameters: {
+        'accountId': accountId,
+        if (username != null) 'username': username,
+        if (key != null) 'key': key,
+      },
+    );
+  }
+
   /// Returns a user.
   ///
   /// Privacy controls are applied to the response based on the user's
@@ -12631,26 +13962,6 @@ class UsersApi {
       'rest/api/3/user',
       body: body.toJson(),
     ));
-  }
-
-  /// Deletes a user. If the operation completes successfully then the user is
-  /// removed from Jira's user base. This operation does not delete the user's
-  /// Atlassian account.
-  ///
-  /// **[Permissions](#permissions) required:** Site administration (that is,
-  /// membership of the *site-admin*
-  /// [group](https://confluence.atlassian.com/x/24xjL)).
-  Future<void> removeUser(
-      {required String accountId, String? username, String? key}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/user',
-      queryParameters: {
-        'accountId': accountId,
-        if (username != null) 'username': username,
-        if (key != null) 'key': key,
-      },
-    );
   }
 
   /// Returns a [paginated](#pagination) list of the users specified by one or
@@ -12701,6 +14012,28 @@ class UsersApi {
         .toList();
   }
 
+  /// Resets the default
+  /// [ issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the
+  /// user to the system default. If `accountId` is not passed, the calling
+  /// user's default columns are reset.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the
+  /// columns on any user.
+  ///  *  Permission to access Jira, to set the calling user's columns.
+  Future<void> resetUserColumns({String? accountId, String? username}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/user/columns',
+      queryParameters: {
+        if (accountId != null) 'accountId': accountId,
+        if (username != null) 'username': username,
+      },
+    );
+  }
+
   /// Returns the default
   /// [issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the
   /// user. If `accountId` is not passed in the request, the calling user's
@@ -12745,42 +14078,21 @@ class UsersApi {
   /// columns on any user.
   ///  *  Permission to access Jira, to set the calling user's columns.
   Future<dynamic> setUserColumns(
-      {String? accountId, required List<String> body}) async {
+      {String? accountId, required UserColumnRequestBody body}) async {
     return await _client.send(
       'put',
       'rest/api/3/user/columns',
       queryParameters: {
         if (accountId != null) 'accountId': accountId,
       },
-      body: body,
+      body: body.toJson(),
     );
   }
 
-  /// Resets the default
-  /// [ issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the
-  /// user to the system default. If `accountId` is not passed, the calling
-  /// user's default columns are reset.
-  ///
-  /// **[Permissions](#permissions) required:**
-  ///
-  ///  *  *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the
-  /// columns on any user.
-  ///  *  Permission to access Jira, to set the calling user's columns.
-  Future<void> resetUserColumns({String? accountId, String? username}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/user/columns',
-      queryParameters: {
-        if (accountId != null) 'accountId': accountId,
-        if (username != null) 'username': username,
-      },
-    );
-  }
-
-  /// Returns a user's email address. This API is only available to apps
-  /// approved by Atlassian, according to these
-  /// [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603).
+  /// Returns a user's email address regardless of the user's profile visibility
+  /// settings. For Connect apps, this API is only available to apps approved by
+  /// Atlassian, according to these
+  /// [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603)
   Future<UnrestrictedUserEmail> getUserEmail(String accountId) async {
     return UnrestrictedUserEmail.fromJson(await _client.send(
       'get',
@@ -12791,9 +14103,10 @@ class UsersApi {
     ));
   }
 
-  /// Returns a user's email address. This API is only available to apps
-  /// approved by Atlassian, according to these
-  /// [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603).
+  /// Returns a user's email address regardless of the user's profile visibility
+  /// settings. For Connect apps, this API is only available to apps approved by
+  /// Atlassian, according to these
+  /// [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603)
   Future<UnrestrictedUserEmail> getUserEmailBulk(List<String> accountId) async {
     return UnrestrictedUserEmail.fromJson(await _client.send(
       'get',
@@ -12879,6 +14192,23 @@ class WebhooksApi {
 
   WebhooksApi(this._client);
 
+  /// Removes webhooks by ID. Only webhooks registered by the calling app are
+  /// removed. If webhooks created by other apps are specified, they are
+  /// ignored.
+  ///
+  /// **[Permissions](#permissions) required:** Only
+  /// [Connect](https://developer.atlassian.com/cloud/jira/platform/#connect-apps)
+  /// and
+  /// [OAuth 2.0](https://developer.atlassian.com/cloud/jira/platform/oauth-2-3lo-apps)
+  /// apps can use this operation.
+  Future<void> deleteWebhookById({required ContainerForWebhookIDs body}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/webhook',
+      body: body.toJson(),
+    );
+  }
+
   /// Returns a [paginated](#pagination) list of the webhooks registered by the
   /// calling app.
   ///
@@ -12917,23 +14247,6 @@ class WebhooksApi {
       'rest/api/3/webhook',
       body: body.toJson(),
     ));
-  }
-
-  /// Removes webhooks by ID. Only webhooks registered by the calling app are
-  /// removed. If webhooks created by other apps are specified, they are
-  /// ignored.
-  ///
-  /// **[Permissions](#permissions) required:** Only
-  /// [Connect](https://developer.atlassian.com/cloud/jira/platform/#connect-apps)
-  /// and
-  /// [OAuth 2.0](https://developer.atlassian.com/cloud/jira/platform/oauth-2-3lo-apps)
-  /// apps can use this operation.
-  Future<void> deleteWebhookById({required ContainerForWebhookIDs body}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/webhook',
-      body: body.toJson(),
-    );
   }
 
   /// Returns webhooks that have recently failed to be delivered to the
@@ -13006,6 +14319,20 @@ class WorkflowSchemeDraftsApi {
     ));
   }
 
+  /// Deletes a draft workflow scheme.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> deleteWorkflowSchemeDraft(int id) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/workflowscheme/{id}/draft',
+      pathParameters: {
+        'id': '$id',
+      },
+    );
+  }
+
   /// Returns the draft workflow scheme for an active workflow scheme. Draft
   /// workflow schemes allow changes to be made to the active workflow schemes:
   /// When an active workflow scheme is updated, a draft copy is created. The
@@ -13048,18 +14375,19 @@ class WorkflowSchemeDraftsApi {
     ));
   }
 
-  /// Deletes a draft workflow scheme.
+  /// Resets the default workflow for a workflow scheme's draft. That is, the
+  /// default workflow is set to Jira's system workflow (the *jira* workflow).
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteWorkflowSchemeDraft(int id) async {
-    await _client.send(
+  Future<WorkflowScheme> deleteDraftDefaultWorkflow(int id) async {
+    return WorkflowScheme.fromJson(await _client.send(
       'delete',
-      'rest/api/3/workflowscheme/{id}/draft',
+      'rest/api/3/workflowscheme/{id}/draft/default',
       pathParameters: {
         'id': '$id',
       },
-    );
+    ));
   }
 
   /// Returns the default workflow for a workflow scheme's draft. The default
@@ -13096,17 +14424,19 @@ class WorkflowSchemeDraftsApi {
     ));
   }
 
-  /// Resets the default workflow for a workflow scheme's draft. That is, the
-  /// default workflow is set to Jira's system workflow (the *jira* workflow).
+  /// Deletes the issue type-workflow mapping for an issue type in a workflow
+  /// scheme's draft.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<WorkflowScheme> deleteDraftDefaultWorkflow(int id) async {
+  Future<WorkflowScheme> deleteWorkflowSchemeDraftIssueType(
+      {required int id, required String issueType}) async {
     return WorkflowScheme.fromJson(await _client.send(
       'delete',
-      'rest/api/3/workflowscheme/{id}/draft/default',
+      'rest/api/3/workflowscheme/{id}/draft/issuetype/{issueType}',
       pathParameters: {
         'id': '$id',
+        'issueType': issueType,
       },
     ));
   }
@@ -13147,23 +14477,6 @@ class WorkflowSchemeDraftsApi {
     ));
   }
 
-  /// Deletes the issue type-workflow mapping for an issue type in a workflow
-  /// scheme's draft.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<WorkflowScheme> deleteWorkflowSchemeDraftIssueType(
-      {required int id, required String issueType}) async {
-    return WorkflowScheme.fromJson(await _client.send(
-      'delete',
-      'rest/api/3/workflowscheme/{id}/draft/issuetype/{issueType}',
-      pathParameters: {
-        'id': '$id',
-        'issueType': issueType,
-      },
-    ));
-  }
-
   /// Publishes a draft workflow scheme.
   ///
   /// Where the draft workflow includes new workflow statuses for an issue type,
@@ -13190,6 +14503,25 @@ class WorkflowSchemeDraftsApi {
         if (validateOnly != null) 'validateOnly': '$validateOnly',
       },
       body: body.toJson(),
+    );
+  }
+
+  /// Deletes the workflow-issue type mapping for a workflow in a workflow
+  /// scheme's draft.
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> deleteDraftWorkflowMapping(
+      {required int id, required String workflowName}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/workflowscheme/{id}/draft/workflow',
+      pathParameters: {
+        'id': '$id',
+      },
+      queryParameters: {
+        'workflowName': workflowName,
+      },
     );
   }
 
@@ -13232,25 +14564,6 @@ class WorkflowSchemeDraftsApi {
       },
       body: body.toJson(),
     ));
-  }
-
-  /// Deletes the workflow-issue type mapping for a workflow in a workflow
-  /// scheme's draft.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteDraftWorkflowMapping(
-      {required int id, required String workflowName}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/workflowscheme/{id}/draft/workflow',
-      pathParameters: {
-        'id': '$id',
-      },
-      queryParameters: {
-        'workflowName': workflowName,
-      },
-    );
   }
 }
 
@@ -13337,6 +14650,88 @@ class WorkflowSchemesApi {
     ));
   }
 
+  /// Returns a list of workflow schemes by providing workflow scheme IDs or
+  /// project IDs.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer Jira* global permission to access all, including
+  /// project-scoped, workflow schemes
+  ///  *  *Administer projects* project permissions to access project-scoped
+  /// workflow schemes
+  Future<List<WorkflowSchemeReadResponse>> readWorkflowSchemes(
+      {String? expand, required WorkflowSchemeReadRequest body}) async {
+    return (await _client.send(
+      'post',
+      'rest/api/3/workflowscheme/read',
+      queryParameters: {
+        if (expand != null) 'expand': expand,
+      },
+      body: body.toJson(),
+    ) as List<Object?>)
+        .map((i) => WorkflowSchemeReadResponse.fromJson(
+            i as Map<String, Object?>? ?? const {}))
+        .toList();
+  }
+
+  /// Updates company-managed and team-managed project workflow schemes. This
+  /// API doesn't have a concept of draft, so any changes made to a workflow
+  /// scheme are immediately available. When changing the available statuses for
+  /// issue types, an [asynchronous task](#async) migrates the issues as defined
+  /// in the provided mappings.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer Jira* project permission to update all, including
+  /// global-scoped, workflow schemes.
+  ///  *  *Administer projects* project permission to update project-scoped
+  /// workflow schemes.
+  Future<dynamic> updateSchemes(
+      {required WorkflowSchemeUpdateRequest body}) async {
+    return await _client.send(
+      'post',
+      'rest/api/3/workflowscheme/update',
+      body: body.toJson(),
+    );
+  }
+
+  /// Gets the required status mappings for the desired changes to a workflow
+  /// scheme. The results are provided per issue type and workflow. When
+  /// updating a workflow scheme, status mappings can be provided per issue
+  /// type, per workflow, or both.
+  ///
+  /// **[Permissions](#permissions) required:**
+  ///
+  ///  *  *Administer Jira* permission to update all, including global-scoped,
+  /// workflow schemes.
+  ///  *  *Administer projects* project permission to update project-scoped
+  /// workflow schemes.
+  Future<WorkflowSchemeUpdateRequiredMappingsResponse>
+      updateWorkflowSchemeMappings(
+          {required WorkflowSchemeUpdateRequiredMappingsRequest body}) async {
+    return WorkflowSchemeUpdateRequiredMappingsResponse.fromJson(
+        await _client.send(
+      'post',
+      'rest/api/3/workflowscheme/update/mappings',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Deletes a workflow scheme. Note that a workflow scheme cannot be deleted
+  /// if it is active (that is, being used by at least one project).
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<dynamic> deleteWorkflowScheme(int id) async {
+    return await _client.send(
+      'delete',
+      'rest/api/3/workflowscheme/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+    );
+  }
+
   /// Returns a workflow scheme.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
@@ -13376,19 +14771,29 @@ class WorkflowSchemesApi {
     ));
   }
 
-  /// Deletes a workflow scheme. Note that a workflow scheme cannot be deleted
-  /// if it is active (that is, being used by at least one project).
+  /// Resets the default workflow for a workflow scheme. That is, the default
+  /// workflow is set to Jira's system workflow (the *jira* workflow).
+  ///
+  /// Note that active workflow schemes cannot be edited. If the workflow scheme
+  /// is active, set `updateDraftIfNeeded` to `true` and a draft workflow scheme
+  /// is created or updated with the default workflow reset. The draft workflow
+  /// scheme can be published in Jira.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<dynamic> deleteWorkflowScheme(int id) async {
-    return await _client.send(
+  Future<WorkflowScheme> deleteDefaultWorkflow(
+      {required int id, bool? updateDraftIfNeeded}) async {
+    return WorkflowScheme.fromJson(await _client.send(
       'delete',
-      'rest/api/3/workflowscheme/{id}',
+      'rest/api/3/workflowscheme/{id}/default',
       pathParameters: {
         'id': '$id',
       },
-    );
+      queryParameters: {
+        if (updateDraftIfNeeded != null)
+          'updateDraftIfNeeded': '$updateDraftIfNeeded',
+      },
+    ));
   }
 
   /// Returns the default workflow for a workflow scheme. The default workflow
@@ -13434,23 +14839,26 @@ class WorkflowSchemesApi {
     ));
   }
 
-  /// Resets the default workflow for a workflow scheme. That is, the default
-  /// workflow is set to Jira's system workflow (the *jira* workflow).
+  /// Deletes the issue type-workflow mapping for an issue type in a workflow
+  /// scheme.
   ///
   /// Note that active workflow schemes cannot be edited. If the workflow scheme
   /// is active, set `updateDraftIfNeeded` to `true` and a draft workflow scheme
-  /// is created or updated with the default workflow reset. The draft workflow
-  /// scheme can be published in Jira.
+  /// is created or updated with the issue type-workflow mapping deleted. The
+  /// draft workflow scheme can be published in Jira.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<WorkflowScheme> deleteDefaultWorkflow(
-      {required int id, bool? updateDraftIfNeeded}) async {
+  Future<WorkflowScheme> deleteWorkflowSchemeIssueType(
+      {required int id,
+      required String issueType,
+      bool? updateDraftIfNeeded}) async {
     return WorkflowScheme.fromJson(await _client.send(
       'delete',
-      'rest/api/3/workflowscheme/{id}/default',
+      'rest/api/3/workflowscheme/{id}/issuetype/{issueType}',
       pathParameters: {
         'id': '$id',
+        'issueType': issueType,
       },
       queryParameters: {
         if (updateDraftIfNeeded != null)
@@ -13506,32 +14914,32 @@ class WorkflowSchemesApi {
     ));
   }
 
-  /// Deletes the issue type-workflow mapping for an issue type in a workflow
+  /// Deletes the workflow-issue type mapping for a workflow in a workflow
   /// scheme.
   ///
   /// Note that active workflow schemes cannot be edited. If the workflow scheme
   /// is active, set `updateDraftIfNeeded` to `true` and a draft workflow scheme
-  /// is created or updated with the issue type-workflow mapping deleted. The
+  /// is created or updated with the workflow-issue type mapping deleted. The
   /// draft workflow scheme can be published in Jira.
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<WorkflowScheme> deleteWorkflowSchemeIssueType(
+  Future<void> deleteWorkflowMapping(
       {required int id,
-      required String issueType,
+      required String workflowName,
       bool? updateDraftIfNeeded}) async {
-    return WorkflowScheme.fromJson(await _client.send(
+    await _client.send(
       'delete',
-      'rest/api/3/workflowscheme/{id}/issuetype/{issueType}',
+      'rest/api/3/workflowscheme/{id}/workflow',
       pathParameters: {
         'id': '$id',
-        'issueType': issueType,
       },
       queryParameters: {
+        'workflowName': workflowName,
         if (updateDraftIfNeeded != null)
           'updateDraftIfNeeded': '$updateDraftIfNeeded',
       },
-    ));
+    );
   }
 
   /// Returns the workflow-issue type mappings for a workflow scheme.
@@ -13582,34 +14990,6 @@ class WorkflowSchemesApi {
       },
       body: body.toJson(),
     ));
-  }
-
-  /// Deletes the workflow-issue type mapping for a workflow in a workflow
-  /// scheme.
-  ///
-  /// Note that active workflow schemes cannot be edited. If the workflow scheme
-  /// is active, set `updateDraftIfNeeded` to `true` and a draft workflow scheme
-  /// is created or updated with the workflow-issue type mapping deleted. The
-  /// draft workflow scheme can be published in Jira.
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteWorkflowMapping(
-      {required int id,
-      required String workflowName,
-      bool? updateDraftIfNeeded}) async {
-    await _client.send(
-      'delete',
-      'rest/api/3/workflowscheme/{id}/workflow',
-      pathParameters: {
-        'id': '$id',
-      },
-      queryParameters: {
-        'workflowName': workflowName,
-        if (updateDraftIfNeeded != null)
-          'updateDraftIfNeeded': '$updateDraftIfNeeded',
-      },
-    );
   }
 }
 
@@ -13697,6 +15077,32 @@ class WorkflowTransitionPropertiesApi {
 
   WorkflowTransitionPropertiesApi(this._client);
 
+  /// Deletes a property from a workflow transition. Transition properties are
+  /// used to change the behavior of a transition. For more information, see
+  /// [Transition properties](https://confluence.atlassian.com/x/zIhKLg#Advancedworkflowconfiguration-transitionproperties)
+  /// and [Workflow properties](https://confluence.atlassian.com/x/JYlKLg).
+  ///
+  /// **[Permissions](#permissions) required:** *Administer Jira*
+  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
+  Future<void> deleteWorkflowTransitionProperty(
+      {required int transitionId,
+      required String key,
+      required String workflowName,
+      String? workflowMode}) async {
+    await _client.send(
+      'delete',
+      'rest/api/3/workflow/transitions/{transitionId}/properties',
+      pathParameters: {
+        'transitionId': '$transitionId',
+      },
+      queryParameters: {
+        'key': key,
+        'workflowName': workflowName,
+        if (workflowMode != null) 'workflowMode': workflowMode,
+      },
+    );
+  }
+
   /// Returns the properties on a workflow transition. Transition properties are
   /// used to change the behavior of a transition. For more information, see
   /// [Transition properties](https://confluence.atlassian.com/x/zIhKLg#Advancedworkflowconfiguration-transitionproperties)
@@ -13723,36 +15129,6 @@ class WorkflowTransitionPropertiesApi {
         'workflowName': workflowName,
         if (workflowMode != null) 'workflowMode': workflowMode,
       },
-    ));
-  }
-
-  /// Updates a workflow transition by changing the property value. Trying to
-  /// update a property that does not exist results in a new property being
-  /// added to the transition. Transition properties are used to change the
-  /// behavior of a transition. For more information, see
-  /// [Transition properties](https://confluence.atlassian.com/x/zIhKLg#Advancedworkflowconfiguration-transitionproperties)
-  /// and [Workflow properties](https://confluence.atlassian.com/x/JYlKLg).
-  ///
-  /// **[Permissions](#permissions) required:** *Administer Jira*
-  /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<WorkflowTransitionProperty> updateWorkflowTransitionProperty(
-      {required int transitionId,
-      required String key,
-      required String workflowName,
-      String? workflowMode,
-      required WorkflowTransitionProperty body}) async {
-    return WorkflowTransitionProperty.fromJson(await _client.send(
-      'put',
-      'rest/api/3/workflow/transitions/{transitionId}/properties',
-      pathParameters: {
-        'transitionId': '$transitionId',
-      },
-      queryParameters: {
-        'key': key,
-        'workflowName': workflowName,
-        if (workflowMode != null) 'workflowMode': workflowMode,
-      },
-      body: body.toJson(),
     ));
   }
 
@@ -13784,20 +15160,23 @@ class WorkflowTransitionPropertiesApi {
     ));
   }
 
-  /// Deletes a property from a workflow transition. Transition properties are
-  /// used to change the behavior of a transition. For more information, see
+  /// Updates a workflow transition by changing the property value. Trying to
+  /// update a property that does not exist results in a new property being
+  /// added to the transition. Transition properties are used to change the
+  /// behavior of a transition. For more information, see
   /// [Transition properties](https://confluence.atlassian.com/x/zIhKLg#Advancedworkflowconfiguration-transitionproperties)
   /// and [Workflow properties](https://confluence.atlassian.com/x/JYlKLg).
   ///
   /// **[Permissions](#permissions) required:** *Administer Jira*
   /// [global permission](https://confluence.atlassian.com/x/x4dKLg).
-  Future<void> deleteWorkflowTransitionProperty(
+  Future<WorkflowTransitionProperty> updateWorkflowTransitionProperty(
       {required int transitionId,
       required String key,
       required String workflowName,
-      String? workflowMode}) async {
-    await _client.send(
-      'delete',
+      String? workflowMode,
+      required WorkflowTransitionProperty body}) async {
+    return WorkflowTransitionProperty.fromJson(await _client.send(
+      'put',
       'rest/api/3/workflow/transitions/{transitionId}/properties',
       pathParameters: {
         'transitionId': '$transitionId',
@@ -13807,7 +15186,8 @@ class WorkflowTransitionPropertiesApi {
         'workflowName': workflowName,
         if (workflowMode != null) 'workflowMode': workflowMode,
       },
-    );
+      body: body.toJson(),
+    ));
   }
 }
 
@@ -14028,7 +15408,7 @@ class WorkflowsApi {
   ///        "type": "AllowOnlyAssignee"
   ///      }
   ///
-  /// ##### Only Bamboo notifications workflow condition #####
+  /// ##### Only Bamboo notifications workflow condition (deprecated) #####
   ///
   /// A condition that makes the transition available only to Bamboo build
   /// notifications.
@@ -14671,7 +16051,7 @@ class WorkflowsApi {
   ///  *  `copyType` Use `same` to copy the value from a field inside the issue,
   /// or `parent` to copy the value from the parent issue.
   ///
-  /// ##### Create Crucible review workflow function #####
+  /// ##### Create Crucible review workflow function (deprecated) #####
   ///
   /// A post function that creates a Crucible review for all unreviewed code for
   /// the issue.
@@ -14864,12 +16244,19 @@ class WorkflowsApi {
   ///  *  At least one of the *Administer projects* and *View (read-only)
   /// workflow* project permissions to access project-scoped workflows
   Future<WorkflowReadResponse> readWorkflows(
-      {String? expand, required WorkflowReadRequest body}) async {
+      {String? expand,
+      bool? useTransitionLinksFormat,
+      bool? useApprovalConfiguration,
+      required WorkflowReadRequest body}) async {
     return WorkflowReadResponse.fromJson(await _client.send(
       'post',
       'rest/api/3/workflows',
       queryParameters: {
         if (expand != null) 'expand': expand,
+        if (useTransitionLinksFormat != null)
+          'useTransitionLinksFormat': '$useTransitionLinksFormat',
+        if (useApprovalConfiguration != null)
+          'useApprovalConfiguration': '$useApprovalConfiguration',
       },
       body: body.toJson(),
     ));
@@ -14917,8 +16304,8 @@ class WorkflowsApi {
   ///
   /// ##### Parent or child blocking validator #####
   ///
-  /// A validator to block the child issue’s transition depending on the parent
-  /// issue’s status.
+  /// A validator to block the child issueu2019s transition depending on the
+  /// parent issueu2019s status.
   ///
   ///     {
   ///        "ruleKey" : "system:parent-or-child-blocking-validator"
@@ -15040,7 +16427,8 @@ class WorkflowsApi {
   ///
   /// Parameters:
   ///
-  ///  *  `regexp` the regular expression used to validate the field’s content.
+  ///  *  `regexp` the regular expression used to validate the fieldu2019s
+  /// content.
   ///  *  `fieldKey` the ID of the field to validate. For a custom field, it
   /// would look like `customfield_123`.
   ///
@@ -15144,7 +16532,8 @@ class WorkflowsApi {
   /// fields, it will look like `customfield_123`. Note: `fieldId` is used
   /// interchangeably with the idea of `fieldKey` here, they refer to the same
   /// field.
-  ///  *  `fieldValue` the list of values to check against the field’s value.
+  ///  *  `fieldValue` the list of values to check against the fieldu2019s
+  /// value.
   ///  *  `comparator` The comparison logic. Allowed values: `>`, `>=`, `=`,
   /// `<=`, `<`, `!=`.
   ///  *  `comparisonType` The type of data being compared. Allowed values:
@@ -15232,8 +16621,8 @@ class WorkflowsApi {
   ///
   /// ##### Parent or child blocking condition #####
   ///
-  /// A condition to block the parent’s issue transition depending on the
-  /// child’s issue status.
+  /// A condition to block the parentu2019s issue transition depending on the
+  /// childu2019s issue status.
   ///
   ///     {
   ///        "ruleKey" : "system:parent-or-child-blocking-condition"
@@ -16414,6 +17803,190 @@ class ApplicationRole {
       userCountDescription: userCountDescription ?? this.userCountDescription,
     );
   }
+}
+
+/// The approval configuration of a status within a workflow. Applies only to
+/// Jira Service Management approvals.
+class ApprovalConfiguration {
+  /// Whether the approval configuration is active.
+  final ApprovalConfigurationActive active;
+
+  /// How the required approval count is calculated. It may be configured to
+  /// require a specific number of approvals, or approval by a percentage of
+  /// approvers. If the approvers source field is Approver groups, you can
+  /// configure how many approvals per group are required for the request to be
+  /// approved. The number will be the same across all groups.
+  final ApprovalConfigurationConditionType conditionType;
+
+  /// The number or percentage of approvals required for a request to be
+  /// approved. If `conditionType` is `number`, the value must be 20 or less. If
+  /// `conditionType` is `percent`, the value must be 100 or less.
+  final String conditionValue;
+
+  /// A list of roles that should be excluded as possible approvers.
+  final List<ApprovalConfigurationExclude> exclude;
+
+  /// The custom field ID of the "Approvers" or "Approver Groups" field.
+  final String fieldId;
+
+  /// The custom field ID of the field used to pre-populate the Approver field.
+  /// Only supports the "Affected Services" field.
+  final String? prePopulatedFieldId;
+
+  /// The numeric ID of the transition to be executed if the request is
+  /// approved.
+  final String transitionApproved;
+
+  /// The numeric ID of the transition to be executed if the request is
+  /// declined.
+  final String transitionRejected;
+
+  ApprovalConfiguration(
+      {required this.active,
+      required this.conditionType,
+      required this.conditionValue,
+      List<ApprovalConfigurationExclude>? exclude,
+      required this.fieldId,
+      this.prePopulatedFieldId,
+      required this.transitionApproved,
+      required this.transitionRejected})
+      : exclude = exclude ?? [];
+
+  factory ApprovalConfiguration.fromJson(Map<String, Object?> json) {
+    return ApprovalConfiguration(
+      active: ApprovalConfigurationActive.fromValue(
+          json[r'active'] as String? ?? ''),
+      conditionType: ApprovalConfigurationConditionType.fromValue(
+          json[r'conditionType'] as String? ?? ''),
+      conditionValue: json[r'conditionValue'] as String? ?? '',
+      exclude: (json[r'exclude'] as List<Object?>?)
+              ?.map((i) =>
+                  ApprovalConfigurationExclude.fromValue(i as String? ?? ''))
+              .toList() ??
+          [],
+      fieldId: json[r'fieldId'] as String? ?? '',
+      prePopulatedFieldId: json[r'prePopulatedFieldId'] as String?,
+      transitionApproved: json[r'transitionApproved'] as String? ?? '',
+      transitionRejected: json[r'transitionRejected'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var active = this.active;
+    var conditionType = this.conditionType;
+    var conditionValue = this.conditionValue;
+    var exclude = this.exclude;
+    var fieldId = this.fieldId;
+    var prePopulatedFieldId = this.prePopulatedFieldId;
+    var transitionApproved = this.transitionApproved;
+    var transitionRejected = this.transitionRejected;
+
+    final json = <String, Object?>{};
+    json[r'active'] = active.value;
+    json[r'conditionType'] = conditionType.value;
+    json[r'conditionValue'] = conditionValue;
+    json[r'exclude'] = exclude.map((i) => i.value).toList();
+    json[r'fieldId'] = fieldId;
+    if (prePopulatedFieldId != null) {
+      json[r'prePopulatedFieldId'] = prePopulatedFieldId;
+    }
+    json[r'transitionApproved'] = transitionApproved;
+    json[r'transitionRejected'] = transitionRejected;
+    return json;
+  }
+
+  ApprovalConfiguration copyWith(
+      {ApprovalConfigurationActive? active,
+      ApprovalConfigurationConditionType? conditionType,
+      String? conditionValue,
+      List<ApprovalConfigurationExclude>? exclude,
+      String? fieldId,
+      String? prePopulatedFieldId,
+      String? transitionApproved,
+      String? transitionRejected}) {
+    return ApprovalConfiguration(
+      active: active ?? this.active,
+      conditionType: conditionType ?? this.conditionType,
+      conditionValue: conditionValue ?? this.conditionValue,
+      exclude: exclude ?? this.exclude,
+      fieldId: fieldId ?? this.fieldId,
+      prePopulatedFieldId: prePopulatedFieldId ?? this.prePopulatedFieldId,
+      transitionApproved: transitionApproved ?? this.transitionApproved,
+      transitionRejected: transitionRejected ?? this.transitionRejected,
+    );
+  }
+}
+
+class ApprovalConfigurationActive {
+  static const true$ = ApprovalConfigurationActive._('true');
+  static const false$ = ApprovalConfigurationActive._('false');
+
+  static const values = [
+    true$,
+    false$,
+  ];
+  final String value;
+
+  const ApprovalConfigurationActive._(this.value);
+
+  static ApprovalConfigurationActive fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ApprovalConfigurationActive._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class ApprovalConfigurationConditionType {
+  static const number = ApprovalConfigurationConditionType._('number');
+  static const percent = ApprovalConfigurationConditionType._('percent');
+  static const numberPerPrincipal =
+      ApprovalConfigurationConditionType._('numberPerPrincipal');
+
+  static const values = [
+    number,
+    percent,
+    numberPerPrincipal,
+  ];
+  final String value;
+
+  const ApprovalConfigurationConditionType._(this.value);
+
+  static ApprovalConfigurationConditionType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ApprovalConfigurationConditionType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class ApprovalConfigurationExclude {
+  static const assignee = ApprovalConfigurationExclude._('assignee');
+  static const reporter = ApprovalConfigurationExclude._('reporter');
+
+  static const values = [
+    assignee,
+    reporter,
+  ];
+  final String value;
+
+  const ApprovalConfigurationExclude._(this.value);
+
+  static ApprovalConfigurationExclude fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ApprovalConfigurationExclude._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 class ArchiveIssueAsyncRequest {
@@ -18372,6 +19945,76 @@ class BulkChangeOwnerDetails {
   }
 }
 
+/// Details of the contextual configuration for a custom field.
+class BulkContextualConfiguration {
+  /// The field configuration.
+  final dynamic configuration;
+
+  /// The ID of the custom field.
+  final String customFieldId;
+
+  /// The ID of the field context the configuration is associated with.
+  final String fieldContextId;
+
+  /// The ID of the configuration.
+  final String id;
+
+  /// The field value schema.
+  final dynamic schema;
+
+  BulkContextualConfiguration(
+      {this.configuration,
+      required this.customFieldId,
+      required this.fieldContextId,
+      required this.id,
+      this.schema});
+
+  factory BulkContextualConfiguration.fromJson(Map<String, Object?> json) {
+    return BulkContextualConfiguration(
+      configuration: json[r'configuration'],
+      customFieldId: json[r'customFieldId'] as String? ?? '',
+      fieldContextId: json[r'fieldContextId'] as String? ?? '',
+      id: json[r'id'] as String? ?? '',
+      schema: json[r'schema'],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var configuration = this.configuration;
+    var customFieldId = this.customFieldId;
+    var fieldContextId = this.fieldContextId;
+    var id = this.id;
+    var schema = this.schema;
+
+    final json = <String, Object?>{};
+    if (configuration != null) {
+      json[r'configuration'] = configuration;
+    }
+    json[r'customFieldId'] = customFieldId;
+    json[r'fieldContextId'] = fieldContextId;
+    json[r'id'] = id;
+    if (schema != null) {
+      json[r'schema'] = schema;
+    }
+    return json;
+  }
+
+  BulkContextualConfiguration copyWith(
+      {dynamic configuration,
+      String? customFieldId,
+      String? fieldContextId,
+      String? id,
+      dynamic schema}) {
+    return BulkContextualConfiguration(
+      configuration: configuration ?? this.configuration,
+      customFieldId: customFieldId ?? this.customFieldId,
+      fieldContextId: fieldContextId ?? this.fieldContextId,
+      id: id ?? this.id,
+      schema: schema ?? this.schema,
+    );
+  }
+}
+
 /// Details of the options to create for a custom field.
 class BulkCustomFieldOptionCreateRequest {
   /// Details of options to create.
@@ -18477,6 +20120,61 @@ class BulkEditActionError {
     return BulkEditActionError(
       errorMessages: errorMessages ?? this.errorMessages,
       errors: errors ?? this.errors,
+    );
+  }
+}
+
+/// Bulk Edit Get Fields Response.
+class BulkEditGetFields {
+  /// The end cursor for use in pagination.
+  final String? endingBefore;
+
+  /// List of all the fields
+  final List<IssueBulkEditField> fields;
+
+  /// The start cursor for use in pagination.
+  final String? startingAfter;
+
+  BulkEditGetFields(
+      {this.endingBefore, List<IssueBulkEditField>? fields, this.startingAfter})
+      : fields = fields ?? [];
+
+  factory BulkEditGetFields.fromJson(Map<String, Object?> json) {
+    return BulkEditGetFields(
+      endingBefore: json[r'endingBefore'] as String?,
+      fields: (json[r'fields'] as List<Object?>?)
+              ?.map((i) => IssueBulkEditField.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      startingAfter: json[r'startingAfter'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var endingBefore = this.endingBefore;
+    var fields = this.fields;
+    var startingAfter = this.startingAfter;
+
+    final json = <String, Object?>{};
+    if (endingBefore != null) {
+      json[r'endingBefore'] = endingBefore;
+    }
+    json[r'fields'] = fields.map((i) => i.toJson()).toList();
+    if (startingAfter != null) {
+      json[r'startingAfter'] = startingAfter;
+    }
+    return json;
+  }
+
+  BulkEditGetFields copyWith(
+      {String? endingBefore,
+      List<IssueBulkEditField>? fields,
+      String? startingAfter}) {
+    return BulkEditGetFields(
+      endingBefore: endingBefore ?? this.endingBefore,
+      fields: fields ?? this.fields,
+      startingAfter: startingAfter ?? this.startingAfter,
     );
   }
 }
@@ -18666,6 +20364,119 @@ class BulkEditShareableEntityResponseAction {
   String toString() => value;
 }
 
+class BulkFetchIssueRequestBean {
+  /// Use [expand](em>#expansion) to include additional information about issues
+  /// in the response. Note that, unlike the majority of instances where
+  /// `expand` is specified, `expand` is defined as a list of values. The expand
+  /// options are:
+  ///
+  ///  *  `renderedFields` Returns field values rendered in HTML format.
+  ///  *  `names` Returns the display name of each field.
+  ///  *  `schema` Returns the schema describing a field type.
+  ///  *  `changelog` Returns a list of recent updates to an issue, sorted by
+  /// date, starting from the most recent.
+  final List<String> expand;
+
+  /// A list of fields to return for each issue, use it to retrieve a subset of
+  /// fields. This parameter accepts a comma-separated list. Expand options
+  /// include:
+  ///
+  ///  *  `*all` Returns all fields.
+  ///  *  `*navigable` Returns navigable fields.
+  ///  *  Any issue field, prefixed with a minus to exclude.
+  ///
+  /// The default is `*navigable`.
+  ///
+  /// Examples:
+  ///
+  ///  *  `summary,comment` Returns the summary and comments fields only.
+  ///  *  `-description` Returns all navigable (default) fields except
+  /// description.
+  ///  *  `*all,-comment` Returns all fields except comments.
+  ///
+  /// Multiple `fields` parameters can be included in a request.
+  ///
+  /// Note: All navigable fields are returned by default. This differs from
+  /// [GET issue](#api-rest-api-3-issue-issueIdOrKey-get) where the default is
+  /// all fields.
+  final List<String> fields;
+
+  /// Reference fields by their key (rather than ID). The default is `false`.
+  final bool fieldsByKeys;
+
+  /// An array of issue IDs or issue keys to fetch. You can mix issue IDs and
+  /// keys in the same query.
+  final List<String> issueIdsOrKeys;
+
+  /// A list of issue property keys of issue properties to be included in the
+  /// results. A maximum of 5 issue property keys can be specified.
+  final List<String> properties;
+
+  BulkFetchIssueRequestBean(
+      {List<String>? expand,
+      List<String>? fields,
+      bool? fieldsByKeys,
+      required this.issueIdsOrKeys,
+      List<String>? properties})
+      : expand = expand ?? [],
+        fields = fields ?? [],
+        fieldsByKeys = fieldsByKeys ?? false,
+        properties = properties ?? [];
+
+  factory BulkFetchIssueRequestBean.fromJson(Map<String, Object?> json) {
+    return BulkFetchIssueRequestBean(
+      expand: (json[r'expand'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      fields: (json[r'fields'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      fieldsByKeys: json[r'fieldsByKeys'] as bool? ?? false,
+      issueIdsOrKeys: (json[r'issueIdsOrKeys'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      properties: (json[r'properties'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var expand = this.expand;
+    var fields = this.fields;
+    var fieldsByKeys = this.fieldsByKeys;
+    var issueIdsOrKeys = this.issueIdsOrKeys;
+    var properties = this.properties;
+
+    final json = <String, Object?>{};
+    json[r'expand'] = expand;
+    json[r'fields'] = fields;
+    json[r'fieldsByKeys'] = fieldsByKeys;
+    json[r'issueIdsOrKeys'] = issueIdsOrKeys;
+    json[r'properties'] = properties;
+    return json;
+  }
+
+  BulkFetchIssueRequestBean copyWith(
+      {List<String>? expand,
+      List<String>? fields,
+      bool? fieldsByKeys,
+      List<String>? issueIdsOrKeys,
+      List<String>? properties}) {
+    return BulkFetchIssueRequestBean(
+      expand: expand ?? this.expand,
+      fields: fields ?? this.fields,
+      fieldsByKeys: fieldsByKeys ?? this.fieldsByKeys,
+      issueIdsOrKeys: issueIdsOrKeys ?? this.issueIdsOrKeys,
+      properties: properties ?? this.properties,
+    );
+  }
+}
+
 /// A container for the watch status of a list of issues.
 class BulkIssueIsWatching {
   /// The map of issue ID to boolean watch status.
@@ -18757,6 +20568,87 @@ class BulkIssuePropertyUpdateRequest {
   }
 }
 
+/// The list of requested issues & fields.
+class BulkIssueResults {
+  /// When Jira can't return an issue enumerated in a request due to a retriable
+  /// error or payload constraint, we'll return the respective issue ID with a
+  /// corresponding error message. This list is empty when there are no errors
+  /// Issues which aren't found or that the user doesn't have permission to view
+  /// won't be returned in this list.
+  final List<IssueError> issueErrors;
+
+  /// The list of issues.
+  final List<IssueBean> issues;
+
+  BulkIssueResults({List<IssueError>? issueErrors, List<IssueBean>? issues})
+      : issueErrors = issueErrors ?? [],
+        issues = issues ?? [];
+
+  factory BulkIssueResults.fromJson(Map<String, Object?> json) {
+    return BulkIssueResults(
+      issueErrors: (json[r'issueErrors'] as List<Object?>?)
+              ?.map((i) =>
+                  IssueError.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      issues: (json[r'issues'] as List<Object?>?)
+              ?.map((i) =>
+                  IssueBean.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueErrors = this.issueErrors;
+    var issues = this.issues;
+
+    final json = <String, Object?>{};
+    json[r'issueErrors'] = issueErrors.map((i) => i.toJson()).toList();
+    json[r'issues'] = issues.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  BulkIssueResults copyWith(
+      {List<IssueError>? issueErrors, List<IssueBean>? issues}) {
+    return BulkIssueResults(
+      issueErrors: issueErrors ?? this.issueErrors,
+      issues: issues ?? this.issues,
+    );
+  }
+}
+
+class BulkOperationErrorResponse {
+  final List<ErrorMessage> errors;
+
+  BulkOperationErrorResponse({List<ErrorMessage>? errors})
+      : errors = errors ?? [];
+
+  factory BulkOperationErrorResponse.fromJson(Map<String, Object?> json) {
+    return BulkOperationErrorResponse(
+      errors: (json[r'errors'] as List<Object?>?)
+              ?.map((i) =>
+                  ErrorMessage.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var errors = this.errors;
+
+    final json = <String, Object?>{};
+    json[r'errors'] = errors.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  BulkOperationErrorResponse copyWith({List<ErrorMessage>? errors}) {
+    return BulkOperationErrorResponse(
+      errors: errors ?? this.errors,
+    );
+  }
+}
+
 class BulkOperationErrorResult {
   final ErrorCollection? elementErrors;
   final int? failedElementNumber;
@@ -18802,6 +20694,198 @@ class BulkOperationErrorResult {
       status: status ?? this.status,
     );
   }
+}
+
+class BulkOperationProgress {
+  /// A timestamp of when the task was submitted.
+  final DateTime? created;
+
+  /// Map of issue IDs for which the operation failed and that the user has
+  /// permission to view, to their one or more reasons for failure. These
+  /// reasons are open-ended text descriptions of the error and are not selected
+  /// from a predefined list of standard reasons.
+  final Map<String, dynamic>? failedAccessibleIssues;
+
+  /// The number of issues that are either invalid or issues that the user
+  /// doesn't have permission to view, regardless of the success or failure of
+  /// the operation.
+  final int? invalidOrInaccessibleIssueCount;
+
+  /// List of issue IDs for which the operation was successful and that the user
+  /// has permission to view.
+  final List<int> processedAccessibleIssues;
+
+  /// Progress of the task as a percentage.
+  final int? progressPercent;
+
+  /// A timestamp of when the task was started.
+  final DateTime? started;
+
+  /// The status of the task.
+  final BulkOperationProgressStatus? status;
+  final User? submittedBy;
+
+  /// The ID of the task.
+  final String? taskId;
+
+  /// The number of issues that the bulk operation was attempted on.
+  final int? totalIssueCount;
+
+  /// A timestamp of when the task progress was last updated.
+  final DateTime? updated;
+
+  BulkOperationProgress(
+      {this.created,
+      this.failedAccessibleIssues,
+      this.invalidOrInaccessibleIssueCount,
+      List<int>? processedAccessibleIssues,
+      this.progressPercent,
+      this.started,
+      this.status,
+      this.submittedBy,
+      this.taskId,
+      this.totalIssueCount,
+      this.updated})
+      : processedAccessibleIssues = processedAccessibleIssues ?? [];
+
+  factory BulkOperationProgress.fromJson(Map<String, Object?> json) {
+    return BulkOperationProgress(
+      created: DateTime.tryParse(json[r'created'] as String? ?? ''),
+      failedAccessibleIssues:
+          json[r'failedAccessibleIssues'] as Map<String, Object?>?,
+      invalidOrInaccessibleIssueCount:
+          (json[r'invalidOrInaccessibleIssueCount'] as num?)?.toInt(),
+      processedAccessibleIssues:
+          (json[r'processedAccessibleIssues'] as List<Object?>?)
+                  ?.map((i) => (i as num?)?.toInt() ?? 0)
+                  .toList() ??
+              [],
+      progressPercent: (json[r'progressPercent'] as num?)?.toInt(),
+      started: DateTime.tryParse(json[r'started'] as String? ?? ''),
+      status: json[r'status'] != null
+          ? BulkOperationProgressStatus.fromValue(json[r'status']! as String)
+          : null,
+      submittedBy: json[r'submittedBy'] != null
+          ? User.fromJson(json[r'submittedBy']! as Map<String, Object?>)
+          : null,
+      taskId: json[r'taskId'] as String?,
+      totalIssueCount: (json[r'totalIssueCount'] as num?)?.toInt(),
+      updated: DateTime.tryParse(json[r'updated'] as String? ?? ''),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var created = this.created;
+    var failedAccessibleIssues = this.failedAccessibleIssues;
+    var invalidOrInaccessibleIssueCount = this.invalidOrInaccessibleIssueCount;
+    var processedAccessibleIssues = this.processedAccessibleIssues;
+    var progressPercent = this.progressPercent;
+    var started = this.started;
+    var status = this.status;
+    var submittedBy = this.submittedBy;
+    var taskId = this.taskId;
+    var totalIssueCount = this.totalIssueCount;
+    var updated = this.updated;
+
+    final json = <String, Object?>{};
+    if (created != null) {
+      json[r'created'] = created.toIso8601String();
+    }
+    if (failedAccessibleIssues != null) {
+      json[r'failedAccessibleIssues'] = failedAccessibleIssues;
+    }
+    if (invalidOrInaccessibleIssueCount != null) {
+      json[r'invalidOrInaccessibleIssueCount'] =
+          invalidOrInaccessibleIssueCount;
+    }
+    json[r'processedAccessibleIssues'] = processedAccessibleIssues;
+    if (progressPercent != null) {
+      json[r'progressPercent'] = progressPercent;
+    }
+    if (started != null) {
+      json[r'started'] = started.toIso8601String();
+    }
+    if (status != null) {
+      json[r'status'] = status.value;
+    }
+    if (submittedBy != null) {
+      json[r'submittedBy'] = submittedBy.toJson();
+    }
+    if (taskId != null) {
+      json[r'taskId'] = taskId;
+    }
+    if (totalIssueCount != null) {
+      json[r'totalIssueCount'] = totalIssueCount;
+    }
+    if (updated != null) {
+      json[r'updated'] = updated.toIso8601String();
+    }
+    return json;
+  }
+
+  BulkOperationProgress copyWith(
+      {DateTime? created,
+      Map<String, dynamic>? failedAccessibleIssues,
+      int? invalidOrInaccessibleIssueCount,
+      List<int>? processedAccessibleIssues,
+      int? progressPercent,
+      DateTime? started,
+      BulkOperationProgressStatus? status,
+      User? submittedBy,
+      String? taskId,
+      int? totalIssueCount,
+      DateTime? updated}) {
+    return BulkOperationProgress(
+      created: created ?? this.created,
+      failedAccessibleIssues:
+          failedAccessibleIssues ?? this.failedAccessibleIssues,
+      invalidOrInaccessibleIssueCount: invalidOrInaccessibleIssueCount ??
+          this.invalidOrInaccessibleIssueCount,
+      processedAccessibleIssues:
+          processedAccessibleIssues ?? this.processedAccessibleIssues,
+      progressPercent: progressPercent ?? this.progressPercent,
+      started: started ?? this.started,
+      status: status ?? this.status,
+      submittedBy: submittedBy ?? this.submittedBy,
+      taskId: taskId ?? this.taskId,
+      totalIssueCount: totalIssueCount ?? this.totalIssueCount,
+      updated: updated ?? this.updated,
+    );
+  }
+}
+
+class BulkOperationProgressStatus {
+  static const enqueued = BulkOperationProgressStatus._('ENQUEUED');
+  static const running = BulkOperationProgressStatus._('RUNNING');
+  static const complete = BulkOperationProgressStatus._('COMPLETE');
+  static const failed = BulkOperationProgressStatus._('FAILED');
+  static const cancelRequested =
+      BulkOperationProgressStatus._('CANCEL_REQUESTED');
+  static const cancelled = BulkOperationProgressStatus._('CANCELLED');
+  static const dead = BulkOperationProgressStatus._('DEAD');
+
+  static const values = [
+    enqueued,
+    running,
+    complete,
+    failed,
+    cancelRequested,
+    cancelled,
+    dead,
+  ];
+  final String value;
+
+  const BulkOperationProgressStatus._(this.value);
+
+  static BulkOperationProgressStatus fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => BulkOperationProgressStatus._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 /// Details of global and project permissions granted to the user.
@@ -19459,6 +21543,35 @@ class ColumnItem {
   }
 }
 
+class ColumnRequestBody {
+  final List<String> columns;
+
+  ColumnRequestBody({List<String>? columns}) : columns = columns ?? [];
+
+  factory ColumnRequestBody.fromJson(Map<String, Object?> json) {
+    return ColumnRequestBody(
+      columns: (json[r'columns'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var columns = this.columns;
+
+    final json = <String, Object?>{};
+    json[r'columns'] = columns;
+    return json;
+  }
+
+  ColumnRequestBody copyWith({List<String>? columns}) {
+    return ColumnRequestBody(
+      columns: columns ?? this.columns,
+    );
+  }
+}
+
 /// A comment.
 class Comment {
   /// The ID of the user who created the comment.
@@ -19666,6 +21779,81 @@ class ComponentIssuesCount {
   ComponentIssuesCount copyWith({int? issueCount, String? self}) {
     return ComponentIssuesCount(
       issueCount: issueCount ?? this.issueCount,
+      self: self ?? this.self,
+    );
+  }
+}
+
+class ComponentJsonBean {
+  final String? ari;
+  final String? description;
+  final String? id;
+  final Map<String, dynamic>? metadata;
+  final String? name;
+  final String? self;
+
+  ComponentJsonBean(
+      {this.ari,
+      this.description,
+      this.id,
+      this.metadata,
+      this.name,
+      this.self});
+
+  factory ComponentJsonBean.fromJson(Map<String, Object?> json) {
+    return ComponentJsonBean(
+      ari: json[r'ari'] as String?,
+      description: json[r'description'] as String?,
+      id: json[r'id'] as String?,
+      metadata: json[r'metadata'] as Map<String, Object?>?,
+      name: json[r'name'] as String?,
+      self: json[r'self'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var ari = this.ari;
+    var description = this.description;
+    var id = this.id;
+    var metadata = this.metadata;
+    var name = this.name;
+    var self = this.self;
+
+    final json = <String, Object?>{};
+    if (ari != null) {
+      json[r'ari'] = ari;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (metadata != null) {
+      json[r'metadata'] = metadata;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    return json;
+  }
+
+  ComponentJsonBean copyWith(
+      {String? ari,
+      String? description,
+      String? id,
+      Map<String, dynamic>? metadata,
+      String? name,
+      String? self}) {
+    return ComponentJsonBean(
+      ari: ari ?? this.ari,
+      description: description ?? this.description,
+      id: id ?? this.id,
+      metadata: metadata ?? this.metadata,
+      name: name ?? this.name,
       self: self ?? this.self,
     );
   }
@@ -20293,6 +22481,38 @@ class Configuration {
           unassignedIssuesAllowed ?? this.unassignedIssuesAllowed,
       votingEnabled: votingEnabled ?? this.votingEnabled,
       watchingEnabled: watchingEnabled ?? this.watchingEnabled,
+    );
+  }
+}
+
+/// List of custom fields identifiers which will be used to filter
+/// configurations
+class ConfigurationsListParameters {
+  /// List of IDs or keys of the custom fields.
+  final List<String> fieldIdsOrKeys;
+
+  ConfigurationsListParameters({required this.fieldIdsOrKeys});
+
+  factory ConfigurationsListParameters.fromJson(Map<String, Object?> json) {
+    return ConfigurationsListParameters(
+      fieldIdsOrKeys: (json[r'fieldIdsOrKeys'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fieldIdsOrKeys = this.fieldIdsOrKeys;
+
+    final json = <String, Object?>{};
+    json[r'fieldIdsOrKeys'] = fieldIdsOrKeys;
+    return json;
+  }
+
+  ConfigurationsListParameters copyWith({List<String>? fieldIdsOrKeys}) {
+    return ConfigurationsListParameters(
+      fieldIdsOrKeys: fieldIdsOrKeys ?? this.fieldIdsOrKeys,
     );
   }
 }
@@ -21127,11 +23347,17 @@ class CreateNotificationSchemeDetails {
 
 /// Details of an issue priority.
 class CreatePriorityDetails {
+  /// The ID for the avatar for the priority. Either the iconUrl or avatarId
+  /// must be defined, but not both. This parameter is nullable and will become
+  /// mandatory once the iconUrl parameter is deprecated.
+  final int? avatarId;
+
   /// The description of the priority.
   final String? description;
 
   /// The URL of an icon for the priority. Accepted protocols are HTTP and
-  /// HTTPS. Built in icons can also be used.
+  /// HTTPS. Built in icons can also be used. Either the iconUrl or avatarId
+  /// must be defined, but not both.
   final CreatePriorityDetailsIconUrl? iconUrl;
 
   /// The name of the priority. Must be unique.
@@ -21141,13 +23367,15 @@ class CreatePriorityDetails {
   final String statusColor;
 
   CreatePriorityDetails(
-      {this.description,
+      {this.avatarId,
+      this.description,
       this.iconUrl,
       required this.name,
       required this.statusColor});
 
   factory CreatePriorityDetails.fromJson(Map<String, Object?> json) {
     return CreatePriorityDetails(
+      avatarId: (json[r'avatarId'] as num?)?.toInt(),
       description: json[r'description'] as String?,
       iconUrl: json[r'iconUrl'] != null
           ? CreatePriorityDetailsIconUrl.fromValue(json[r'iconUrl']! as String)
@@ -21158,12 +23386,16 @@ class CreatePriorityDetails {
   }
 
   Map<String, Object?> toJson() {
+    var avatarId = this.avatarId;
     var description = this.description;
     var iconUrl = this.iconUrl;
     var name = this.name;
     var statusColor = this.statusColor;
 
     final json = <String, Object?>{};
+    if (avatarId != null) {
+      json[r'avatarId'] = avatarId;
+    }
     if (description != null) {
       json[r'description'] = description;
     }
@@ -21176,11 +23408,13 @@ class CreatePriorityDetails {
   }
 
   CreatePriorityDetails copyWith(
-      {String? description,
+      {int? avatarId,
+      String? description,
       CreatePriorityDetailsIconUrl? iconUrl,
       String? name,
       String? statusColor}) {
     return CreatePriorityDetails(
+      avatarId: avatarId ?? this.avatarId,
       description: description ?? this.description,
       iconUrl: iconUrl ?? this.iconUrl,
       name: name ?? this.name,
@@ -21210,6 +23444,30 @@ class CreatePriorityDetailsIconUrl {
       CreatePriorityDetailsIconUrl._('/images/icons/priorities/minor.png');
   static const imagesIconsPrioritiesTrivialPng =
       CreatePriorityDetailsIconUrl._('/images/icons/priorities/trivial.png');
+  static const imagesIconsPrioritiesBlockerNewPng =
+      CreatePriorityDetailsIconUrl._(
+          '/images/icons/priorities/blocker_new.png');
+  static const imagesIconsPrioritiesCriticalNewPng =
+      CreatePriorityDetailsIconUrl._(
+          '/images/icons/priorities/critical_new.png');
+  static const imagesIconsPrioritiesHighNewPng =
+      CreatePriorityDetailsIconUrl._('/images/icons/priorities/high_new.png');
+  static const imagesIconsPrioritiesHighestNewPng =
+      CreatePriorityDetailsIconUrl._(
+          '/images/icons/priorities/highest_new.png');
+  static const imagesIconsPrioritiesLowNewPng =
+      CreatePriorityDetailsIconUrl._('/images/icons/priorities/low_new.png');
+  static const imagesIconsPrioritiesLowestNewPng =
+      CreatePriorityDetailsIconUrl._('/images/icons/priorities/lowest_new.png');
+  static const imagesIconsPrioritiesMajorNewPng =
+      CreatePriorityDetailsIconUrl._('/images/icons/priorities/major_new.png');
+  static const imagesIconsPrioritiesMediumNewPng =
+      CreatePriorityDetailsIconUrl._('/images/icons/priorities/medium_new.png');
+  static const imagesIconsPrioritiesMinorNewPng =
+      CreatePriorityDetailsIconUrl._('/images/icons/priorities/minor_new.png');
+  static const imagesIconsPrioritiesTrivialNewPng =
+      CreatePriorityDetailsIconUrl._(
+          '/images/icons/priorities/trivial_new.png');
 
   static const values = [
     imagesIconsPrioritiesBlockerPng,
@@ -21222,6 +23480,16 @@ class CreatePriorityDetailsIconUrl {
     imagesIconsPrioritiesMediumPng,
     imagesIconsPrioritiesMinorPng,
     imagesIconsPrioritiesTrivialPng,
+    imagesIconsPrioritiesBlockerNewPng,
+    imagesIconsPrioritiesCriticalNewPng,
+    imagesIconsPrioritiesHighNewPng,
+    imagesIconsPrioritiesHighestNewPng,
+    imagesIconsPrioritiesLowNewPng,
+    imagesIconsPrioritiesLowestNewPng,
+    imagesIconsPrioritiesMajorNewPng,
+    imagesIconsPrioritiesMediumNewPng,
+    imagesIconsPrioritiesMinorNewPng,
+    imagesIconsPrioritiesTrivialNewPng,
   ];
   final String value;
 
@@ -21236,6 +23504,95 @@ class CreatePriorityDetailsIconUrl {
 
   @override
   String toString() => value;
+}
+
+/// Details of a new priority scheme
+class CreatePrioritySchemeDetails {
+  /// The ID of the default priority for the priority scheme.
+  final int defaultPriorityId;
+
+  /// The description of the priority scheme.
+  final String? description;
+
+  /// Mappings of issue priorities for issues being migrated in and out of this
+  /// priority scheme.
+  final PriorityMapping? mappings;
+
+  /// The name of the priority scheme. Must be unique.
+  final String name;
+
+  /// The IDs of priorities in the scheme.
+  final List<int> priorityIds;
+
+  /// The IDs of projects that will use the priority scheme.
+  final List<int> projectIds;
+
+  CreatePrioritySchemeDetails(
+      {required this.defaultPriorityId,
+      this.description,
+      this.mappings,
+      required this.name,
+      required this.priorityIds,
+      List<int>? projectIds})
+      : projectIds = projectIds ?? [];
+
+  factory CreatePrioritySchemeDetails.fromJson(Map<String, Object?> json) {
+    return CreatePrioritySchemeDetails(
+      defaultPriorityId: (json[r'defaultPriorityId'] as num?)?.toInt() ?? 0,
+      description: json[r'description'] as String?,
+      mappings: json[r'mappings'] != null
+          ? PriorityMapping.fromJson(json[r'mappings']! as Map<String, Object?>)
+          : null,
+      name: json[r'name'] as String? ?? '',
+      priorityIds: (json[r'priorityIds'] as List<Object?>?)
+              ?.map((i) => (i as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
+      projectIds: (json[r'projectIds'] as List<Object?>?)
+              ?.map((i) => (i as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var defaultPriorityId = this.defaultPriorityId;
+    var description = this.description;
+    var mappings = this.mappings;
+    var name = this.name;
+    var priorityIds = this.priorityIds;
+    var projectIds = this.projectIds;
+
+    final json = <String, Object?>{};
+    json[r'defaultPriorityId'] = defaultPriorityId;
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (mappings != null) {
+      json[r'mappings'] = mappings.toJson();
+    }
+    json[r'name'] = name;
+    json[r'priorityIds'] = priorityIds;
+    json[r'projectIds'] = projectIds;
+    return json;
+  }
+
+  CreatePrioritySchemeDetails copyWith(
+      {int? defaultPriorityId,
+      String? description,
+      PriorityMapping? mappings,
+      String? name,
+      List<int>? priorityIds,
+      List<int>? projectIds}) {
+    return CreatePrioritySchemeDetails(
+      defaultPriorityId: defaultPriorityId ?? this.defaultPriorityId,
+      description: description ?? this.description,
+      mappings: mappings ?? this.mappings,
+      name: name ?? this.name,
+      priorityIds: priorityIds ?? this.priorityIds,
+      projectIds: projectIds ?? this.projectIds,
+    );
+  }
 }
 
 /// Details about the project.
@@ -21542,9 +23899,15 @@ class CreateProjectDetailsProjectTemplateKey {
   static const comPyxisGreenhopperJiraGhCrossTeamTemplate =
       CreateProjectDetailsProjectTemplateKey._(
           'com.pyxis.greenhopper.jira:gh-cross-team-template');
+  static const comPyxisGreenhopperJiraGhCrossTeamPlanningTemplate =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.pyxis.greenhopper.jira:gh-cross-team-planning-template');
   static const comAtlassianServicedeskSimplifiedItServiceManagement =
       CreateProjectDetailsProjectTemplateKey._(
           'com.atlassian.servicedesk:simplified-it-service-management');
+  static const comAtlassianServicedeskSimplifiedItServiceManagementBasic =
+      CreateProjectDetailsProjectTemplateKey._(
+          'com.atlassian.servicedesk:simplified-it-service-management-basic');
   static const comAtlassianServicedeskSimplifiedGeneralServiceDesk =
       CreateProjectDetailsProjectTemplateKey._(
           'com.atlassian.servicedesk:simplified-general-service-desk');
@@ -21661,7 +24024,9 @@ class CreateProjectDetailsProjectTemplateKey {
     comPyxisGreenhopperJiraGhSimplifiedKanbanClassic,
     comPyxisGreenhopperJiraGhSimplifiedScrumClassic,
     comPyxisGreenhopperJiraGhCrossTeamTemplate,
+    comPyxisGreenhopperJiraGhCrossTeamPlanningTemplate,
     comAtlassianServicedeskSimplifiedItServiceManagement,
+    comAtlassianServicedeskSimplifiedItServiceManagementBasic,
     comAtlassianServicedeskSimplifiedGeneralServiceDesk,
     comAtlassianServicedeskSimplifiedGeneralServiceDeskIt,
     comAtlassianServicedeskSimplifiedGeneralServiceDeskBusiness,
@@ -25217,6 +27582,135 @@ class DashboardGadgetUpdateRequest {
   }
 }
 
+/// The data classification.
+class DataClassificationLevelsBean {
+  /// The data classifications.
+  final List<DataClassificationTagBean> classifications;
+
+  DataClassificationLevelsBean(
+      {List<DataClassificationTagBean>? classifications})
+      : classifications = classifications ?? [];
+
+  factory DataClassificationLevelsBean.fromJson(Map<String, Object?> json) {
+    return DataClassificationLevelsBean(
+      classifications: (json[r'classifications'] as List<Object?>?)
+              ?.map((i) => DataClassificationTagBean.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var classifications = this.classifications;
+
+    final json = <String, Object?>{};
+    json[r'classifications'] = classifications.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  DataClassificationLevelsBean copyWith(
+      {List<DataClassificationTagBean>? classifications}) {
+    return DataClassificationLevelsBean(
+      classifications: classifications ?? this.classifications,
+    );
+  }
+}
+
+/// The data classification.
+class DataClassificationTagBean {
+  /// The color of the data classification object.
+  final String? color;
+
+  /// The description of the data classification object.
+  final String? description;
+
+  /// The guideline of the data classification object.
+  final String? guideline;
+
+  /// The ID of the data classification object.
+  final String id;
+
+  /// The name of the data classification object.
+  final String? name;
+
+  /// The rank of the data classification object.
+  final int? rank;
+
+  /// The status of the data classification object.
+  final String status;
+
+  DataClassificationTagBean(
+      {this.color,
+      this.description,
+      this.guideline,
+      required this.id,
+      this.name,
+      this.rank,
+      required this.status});
+
+  factory DataClassificationTagBean.fromJson(Map<String, Object?> json) {
+    return DataClassificationTagBean(
+      color: json[r'color'] as String?,
+      description: json[r'description'] as String?,
+      guideline: json[r'guideline'] as String?,
+      id: json[r'id'] as String? ?? '',
+      name: json[r'name'] as String?,
+      rank: (json[r'rank'] as num?)?.toInt(),
+      status: json[r'status'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var color = this.color;
+    var description = this.description;
+    var guideline = this.guideline;
+    var id = this.id;
+    var name = this.name;
+    var rank = this.rank;
+    var status = this.status;
+
+    final json = <String, Object?>{};
+    if (color != null) {
+      json[r'color'] = color;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (guideline != null) {
+      json[r'guideline'] = guideline;
+    }
+    json[r'id'] = id;
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (rank != null) {
+      json[r'rank'] = rank;
+    }
+    json[r'status'] = status;
+    return json;
+  }
+
+  DataClassificationTagBean copyWith(
+      {String? color,
+      String? description,
+      String? guideline,
+      String? id,
+      String? name,
+      int? rank,
+      String? status}) {
+    return DataClassificationTagBean(
+      color: color ?? this.color,
+      description: description ?? this.description,
+      guideline: guideline ?? this.guideline,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      rank: rank ?? this.rank,
+      status: status ?? this.status,
+    );
+  }
+}
+
 /// List issues archived within a specified date range.
 class DateRangeFilterRequest {
   /// List issues archived after a specified date, passed in the YYYY-MM-DD
@@ -25564,20 +28058,76 @@ class DeprecatedWorkflow {
   }
 }
 
-/// The version details of the workflow.
+class DetailedErrorCollection {
+  /// Map of objects representing additional details for an error
+  final Map<String, dynamic>? details;
+
+  /// The list of error messages produced by this operation. For example, "input
+  /// parameter 'key' must be provided"
+  final List<String> errorMessages;
+
+  /// The list of errors by parameter returned by the operation. For
+  /// example,"projectKey": "Project keys must start with an uppercase letter,
+  /// followed by one or more uppercase alphanumeric characters."
+  final Map<String, dynamic>? errors;
+
+  DetailedErrorCollection(
+      {this.details, List<String>? errorMessages, this.errors})
+      : errorMessages = errorMessages ?? [];
+
+  factory DetailedErrorCollection.fromJson(Map<String, Object?> json) {
+    return DetailedErrorCollection(
+      details: json[r'details'] as Map<String, Object?>?,
+      errorMessages: (json[r'errorMessages'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      errors: json[r'errors'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var details = this.details;
+    var errorMessages = this.errorMessages;
+    var errors = this.errors;
+
+    final json = <String, Object?>{};
+    if (details != null) {
+      json[r'details'] = details;
+    }
+    json[r'errorMessages'] = errorMessages;
+    if (errors != null) {
+      json[r'errors'] = errors;
+    }
+    return json;
+  }
+
+  DetailedErrorCollection copyWith(
+      {Map<String, dynamic>? details,
+      List<String>? errorMessages,
+      Map<String, dynamic>? errors}) {
+    return DetailedErrorCollection(
+      details: details ?? this.details,
+      errorMessages: errorMessages ?? this.errorMessages,
+      errors: errors ?? this.errors,
+    );
+  }
+}
+
+/// The current version details of this workflow scheme.
 class DocumentVersion {
   /// The version UUID.
-  final String? id;
+  final String id;
 
   /// The version number.
-  final int? versionNumber;
+  final int versionNumber;
 
-  DocumentVersion({this.id, this.versionNumber});
+  DocumentVersion({required this.id, required this.versionNumber});
 
   factory DocumentVersion.fromJson(Map<String, Object?> json) {
     return DocumentVersion(
-      id: json[r'id'] as String?,
-      versionNumber: (json[r'versionNumber'] as num?)?.toInt(),
+      id: json[r'id'] as String? ?? '',
+      versionNumber: (json[r'versionNumber'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -25586,12 +28136,8 @@ class DocumentVersion {
     var versionNumber = this.versionNumber;
 
     final json = <String, Object?>{};
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (versionNumber != null) {
-      json[r'versionNumber'] = versionNumber;
-    }
+    json[r'id'] = id;
+    json[r'versionNumber'] = versionNumber;
     return json;
   }
 
@@ -25783,15 +28329,27 @@ class ErrorCollection {
   }
 }
 
-class ErrorMessage {
-  /// The error message.
-  final String message;
+class ErrorCollections {
+  ErrorCollections();
 
-  ErrorMessage({required this.message});
+  factory ErrorCollections.fromJson(Map<String, Object?> json) {
+    return ErrorCollections();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+class ErrorMessage {
+  final String? message;
+
+  ErrorMessage({this.message});
 
   factory ErrorMessage.fromJson(Map<String, Object?> json) {
     return ErrorMessage(
-      message: json[r'message'] as String? ?? '',
+      message: json[r'message'] as String?,
     );
   }
 
@@ -25799,7 +28357,9 @@ class ErrorMessage {
     var message = this.message;
 
     final json = <String, Object?>{};
-    json[r'message'] = message;
+    if (message != null) {
+      json[r'message'] = message;
+    }
     return json;
   }
 
@@ -25815,12 +28375,14 @@ class Errors {
   final Error? issuesInArchivedProjects;
   final Error? issuesInUnlicensedProjects;
   final Error? issuesNotFound;
+  final Error? userDoesNotHavePermission;
 
   Errors(
       {this.issueIsSubtask,
       this.issuesInArchivedProjects,
       this.issuesInUnlicensedProjects,
-      this.issuesNotFound});
+      this.issuesNotFound,
+      this.userDoesNotHavePermission});
 
   factory Errors.fromJson(Map<String, Object?> json) {
     return Errors(
@@ -25838,6 +28400,10 @@ class Errors {
       issuesNotFound: json[r'issuesNotFound'] != null
           ? Error.fromJson(json[r'issuesNotFound']! as Map<String, Object?>)
           : null,
+      userDoesNotHavePermission: json[r'userDoesNotHavePermission'] != null
+          ? Error.fromJson(
+              json[r'userDoesNotHavePermission']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -25846,6 +28412,7 @@ class Errors {
     var issuesInArchivedProjects = this.issuesInArchivedProjects;
     var issuesInUnlicensedProjects = this.issuesInUnlicensedProjects;
     var issuesNotFound = this.issuesNotFound;
+    var userDoesNotHavePermission = this.userDoesNotHavePermission;
 
     final json = <String, Object?>{};
     if (issueIsSubtask != null) {
@@ -25860,6 +28427,9 @@ class Errors {
     if (issuesNotFound != null) {
       json[r'issuesNotFound'] = issuesNotFound.toJson();
     }
+    if (userDoesNotHavePermission != null) {
+      json[r'userDoesNotHavePermission'] = userDoesNotHavePermission.toJson();
+    }
     return json;
   }
 
@@ -25867,7 +28437,8 @@ class Errors {
       {Error? issueIsSubtask,
       Error? issuesInArchivedProjects,
       Error? issuesInUnlicensedProjects,
-      Error? issuesNotFound}) {
+      Error? issuesNotFound,
+      Error? userDoesNotHavePermission}) {
     return Errors(
       issueIsSubtask: issueIsSubtask ?? this.issueIsSubtask,
       issuesInArchivedProjects:
@@ -25875,6 +28446,8 @@ class Errors {
       issuesInUnlicensedProjects:
           issuesInUnlicensedProjects ?? this.issuesInUnlicensedProjects,
       issuesNotFound: issuesNotFound ?? this.issuesNotFound,
+      userDoesNotHavePermission:
+          userDoesNotHavePermission ?? this.userDoesNotHavePermission,
     );
   }
 }
@@ -26085,6 +28658,97 @@ class EventNotificationNotificationType {
 
   @override
   String toString() => value;
+}
+
+/// A priority scheme with less fields to be used in for an API expand response.
+class ExpandPrioritySchemeBean {
+  /// The ID of the priority scheme.
+  final String? id;
+
+  /// The name of the priority scheme.
+  final String? name;
+
+  /// The URL of the priority scheme.
+  final String? self;
+
+  ExpandPrioritySchemeBean({this.id, this.name, this.self});
+
+  factory ExpandPrioritySchemeBean.fromJson(Map<String, Object?> json) {
+    return ExpandPrioritySchemeBean(
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      self: json[r'self'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var name = this.name;
+    var self = this.self;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    return json;
+  }
+
+  ExpandPrioritySchemeBean copyWith({String? id, String? name, String? self}) {
+    return ExpandPrioritySchemeBean(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      self: self ?? this.self,
+    );
+  }
+}
+
+class ExpandPrioritySchemePage {
+  final int? maxResults;
+  final int? startAt;
+  final int? total;
+
+  ExpandPrioritySchemePage({this.maxResults, this.startAt, this.total});
+
+  factory ExpandPrioritySchemePage.fromJson(Map<String, Object?> json) {
+    return ExpandPrioritySchemePage(
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var maxResults = this.maxResults;
+    var startAt = this.startAt;
+    var total = this.total;
+
+    final json = <String, Object?>{};
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    return json;
+  }
+
+  ExpandPrioritySchemePage copyWith(
+      {int? maxResults, int? startAt, int? total}) {
+    return ExpandPrioritySchemePage(
+      maxResults: maxResults ?? this.maxResults,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+    );
+  }
 }
 
 /// The response for status request for a running/completed export task.
@@ -26310,6 +28974,9 @@ class Field {
   /// The searcher key of the field. Returned for custom fields.
   final String? searcherKey;
 
+  /// The stable ID of the field.
+  final String? stableId;
+
   Field(
       {this.contextsCount,
       this.description,
@@ -26322,7 +28989,8 @@ class Field {
       this.projectsCount,
       required this.schema,
       this.screensCount,
-      this.searcherKey})
+      this.searcherKey,
+      this.stableId})
       : isLocked = isLocked ?? false,
         isUnscreenable = isUnscreenable ?? false;
 
@@ -26343,6 +29011,7 @@ class Field {
           json[r'schema'] as Map<String, Object?>? ?? const {}),
       screensCount: (json[r'screensCount'] as num?)?.toInt(),
       searcherKey: json[r'searcherKey'] as String?,
+      stableId: json[r'stableId'] as String?,
     );
   }
 
@@ -26359,6 +29028,7 @@ class Field {
     var schema = this.schema;
     var screensCount = this.screensCount;
     var searcherKey = this.searcherKey;
+    var stableId = this.stableId;
 
     final json = <String, Object?>{};
     if (contextsCount != null) {
@@ -26387,6 +29057,9 @@ class Field {
     if (searcherKey != null) {
       json[r'searcherKey'] = searcherKey;
     }
+    if (stableId != null) {
+      json[r'stableId'] = stableId;
+    }
     return json;
   }
 
@@ -26402,7 +29075,8 @@ class Field {
       int? projectsCount,
       JsonTypeBean? schema,
       int? screensCount,
-      String? searcherKey}) {
+      String? searcherKey,
+      String? stableId}) {
     return Field(
       contextsCount: contextsCount ?? this.contextsCount,
       description: description ?? this.description,
@@ -26416,6 +29090,7 @@ class Field {
       schema: schema ?? this.schema,
       screensCount: screensCount ?? this.screensCount,
       searcherKey: searcherKey ?? this.searcherKey,
+      stableId: stableId ?? this.stableId,
     );
   }
 }
@@ -26919,6 +29594,140 @@ class FieldConfigurationToIssueTypeMapping {
     return FieldConfigurationToIssueTypeMapping(
       fieldConfigurationId: fieldConfigurationId ?? this.fieldConfigurationId,
       issueTypeId: issueTypeId ?? this.issueTypeId,
+    );
+  }
+}
+
+/// The metadata describing an issue field for createmeta.
+class FieldCreateMetadata {
+  /// The list of values allowed in the field.
+  final List<dynamic> allowedValues;
+
+  /// The URL that can be used to automatically complete the field.
+  final String? autoCompleteUrl;
+
+  /// The configuration properties.
+  final Map<String, dynamic>? configuration;
+
+  /// The default value of the field.
+  final dynamic defaultValue;
+
+  /// The field id.
+  final String fieldId;
+
+  /// Whether the field has a default value.
+  final bool hasDefaultValue;
+
+  /// The key of the field.
+  final String key;
+
+  /// The name of the field.
+  final String name;
+
+  /// The list of operations that can be performed on the field.
+  final List<String> operations;
+
+  /// Whether the field is required.
+  final bool required;
+
+  /// The data type of the field.
+  final JsonTypeBean schema;
+
+  FieldCreateMetadata(
+      {List<dynamic>? allowedValues,
+      this.autoCompleteUrl,
+      this.configuration,
+      this.defaultValue,
+      required this.fieldId,
+      bool? hasDefaultValue,
+      required this.key,
+      required this.name,
+      required this.operations,
+      required this.required,
+      required this.schema})
+      : allowedValues = allowedValues ?? [],
+        hasDefaultValue = hasDefaultValue ?? false;
+
+  factory FieldCreateMetadata.fromJson(Map<String, Object?> json) {
+    return FieldCreateMetadata(
+      allowedValues:
+          (json[r'allowedValues'] as List<Object?>?)?.map((i) => i).toList() ??
+              [],
+      autoCompleteUrl: json[r'autoCompleteUrl'] as String?,
+      configuration: json[r'configuration'] as Map<String, Object?>?,
+      defaultValue: json[r'defaultValue'],
+      fieldId: json[r'fieldId'] as String? ?? '',
+      hasDefaultValue: json[r'hasDefaultValue'] as bool? ?? false,
+      key: json[r'key'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      operations: (json[r'operations'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      required: json[r'required'] as bool? ?? false,
+      schema: JsonTypeBean.fromJson(
+          json[r'schema'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var allowedValues = this.allowedValues;
+    var autoCompleteUrl = this.autoCompleteUrl;
+    var configuration = this.configuration;
+    var defaultValue = this.defaultValue;
+    var fieldId = this.fieldId;
+    var hasDefaultValue = this.hasDefaultValue;
+    var key = this.key;
+    var name = this.name;
+    var operations = this.operations;
+    var required = this.required;
+    var schema = this.schema;
+
+    final json = <String, Object?>{};
+    json[r'allowedValues'] = allowedValues;
+    if (autoCompleteUrl != null) {
+      json[r'autoCompleteUrl'] = autoCompleteUrl;
+    }
+    if (configuration != null) {
+      json[r'configuration'] = configuration;
+    }
+    if (defaultValue != null) {
+      json[r'defaultValue'] = defaultValue;
+    }
+    json[r'fieldId'] = fieldId;
+    json[r'hasDefaultValue'] = hasDefaultValue;
+    json[r'key'] = key;
+    json[r'name'] = name;
+    json[r'operations'] = operations;
+    json[r'required'] = required;
+    json[r'schema'] = schema.toJson();
+    return json;
+  }
+
+  FieldCreateMetadata copyWith(
+      {List<dynamic>? allowedValues,
+      String? autoCompleteUrl,
+      Map<String, dynamic>? configuration,
+      dynamic defaultValue,
+      String? fieldId,
+      bool? hasDefaultValue,
+      String? key,
+      String? name,
+      List<String>? operations,
+      bool? required,
+      JsonTypeBean? schema}) {
+    return FieldCreateMetadata(
+      allowedValues: allowedValues ?? this.allowedValues,
+      autoCompleteUrl: autoCompleteUrl ?? this.autoCompleteUrl,
+      configuration: configuration ?? this.configuration,
+      defaultValue: defaultValue ?? this.defaultValue,
+      fieldId: fieldId ?? this.fieldId,
+      hasDefaultValue: hasDefaultValue ?? this.hasDefaultValue,
+      key: key ?? this.key,
+      name: name ?? this.name,
+      operations: operations ?? this.operations,
+      required: required ?? this.required,
+      schema: schema ?? this.schema,
     );
   }
 }
@@ -27862,6 +30671,12 @@ class Fields {
 
 /// Details about a filter.
 class Filter {
+  /// [Experimental] Approximate last used time. Returns the date and time when
+  /// the filter was last used. Returns `null` if the filter hasn't been used
+  /// after tracking was enabled. For performance reasons, timestamps aren't
+  /// updated in real time and therefore may not be exactly accurate.
+  final DateTime? approximateLastUsed;
+
   /// A description of the filter.
   final String? description;
 
@@ -27915,7 +30730,8 @@ class Filter {
   final String? viewUrl;
 
   Filter(
-      {this.description,
+      {this.approximateLastUsed,
+      this.description,
       List<SharePermission>? editPermissions,
       bool? favourite,
       this.favouritedCount,
@@ -27935,6 +30751,8 @@ class Filter {
 
   factory Filter.fromJson(Map<String, Object?> json) {
     return Filter(
+      approximateLastUsed:
+          DateTime.tryParse(json[r'approximateLastUsed'] as String? ?? ''),
       description: json[r'description'] as String?,
       editPermissions: (json[r'editPermissions'] as List<Object?>?)
               ?.map((i) => SharePermission.fromJson(
@@ -27968,6 +30786,7 @@ class Filter {
   }
 
   Map<String, Object?> toJson() {
+    var approximateLastUsed = this.approximateLastUsed;
     var description = this.description;
     var editPermissions = this.editPermissions;
     var favourite = this.favourite;
@@ -27984,6 +30803,9 @@ class Filter {
     var viewUrl = this.viewUrl;
 
     final json = <String, Object?>{};
+    if (approximateLastUsed != null) {
+      json[r'approximateLastUsed'] = approximateLastUsed.toIso8601String();
+    }
     if (description != null) {
       json[r'description'] = description;
     }
@@ -28023,7 +30845,8 @@ class Filter {
   }
 
   Filter copyWith(
-      {String? description,
+      {DateTime? approximateLastUsed,
+      String? description,
       List<SharePermission>? editPermissions,
       bool? favourite,
       int? favouritedCount,
@@ -28038,6 +30861,7 @@ class Filter {
       FilterSubscriptionsList? subscriptions,
       String? viewUrl}) {
     return Filter(
+      approximateLastUsed: approximateLastUsed ?? this.approximateLastUsed,
       description: description ?? this.description,
       editPermissions: editPermissions ?? this.editPermissions,
       favourite: favourite ?? this.favourite,
@@ -28058,6 +30882,12 @@ class Filter {
 
 /// Details of a filter.
 class FilterDetails {
+  /// [Experimental] Approximate last used time. Returns the date and time when
+  /// the filter was last used. Returns `null` if the filter hasn't been used
+  /// after tracking was enabled. For performance reasons, timestamps aren't
+  /// updated in real time and therefore may not be exactly accurate.
+  final DateTime? approximateLastUsed;
+
   /// The description of the filter.
   final String? description;
 
@@ -28112,7 +30942,8 @@ class FilterDetails {
   final String? viewUrl;
 
   FilterDetails(
-      {this.description,
+      {this.approximateLastUsed,
+      this.description,
       List<SharePermission>? editPermissions,
       this.expand,
       bool? favourite,
@@ -28133,6 +30964,8 @@ class FilterDetails {
 
   factory FilterDetails.fromJson(Map<String, Object?> json) {
     return FilterDetails(
+      approximateLastUsed:
+          DateTime.tryParse(json[r'approximateLastUsed'] as String? ?? ''),
       description: json[r'description'] as String?,
       editPermissions: (json[r'editPermissions'] as List<Object?>?)
               ?.map((i) => SharePermission.fromJson(
@@ -28165,6 +30998,7 @@ class FilterDetails {
   }
 
   Map<String, Object?> toJson() {
+    var approximateLastUsed = this.approximateLastUsed;
     var description = this.description;
     var editPermissions = this.editPermissions;
     var expand = this.expand;
@@ -28181,6 +31015,9 @@ class FilterDetails {
     var viewUrl = this.viewUrl;
 
     final json = <String, Object?>{};
+    if (approximateLastUsed != null) {
+      json[r'approximateLastUsed'] = approximateLastUsed.toIso8601String();
+    }
     if (description != null) {
       json[r'description'] = description;
     }
@@ -28218,7 +31055,8 @@ class FilterDetails {
   }
 
   FilterDetails copyWith(
-      {String? description,
+      {DateTime? approximateLastUsed,
+      String? description,
       List<SharePermission>? editPermissions,
       String? expand,
       bool? favourite,
@@ -28233,6 +31071,7 @@ class FilterDetails {
       List<FilterSubscription>? subscriptions,
       String? viewUrl}) {
     return FilterDetails(
+      approximateLastUsed: approximateLastUsed ?? this.approximateLastUsed,
       description: description ?? this.description,
       editPermissions: editPermissions ?? this.editPermissions,
       expand: expand ?? this.expand,
@@ -28647,6 +31486,10 @@ class FunctionReferenceData {
   /// Whether the function can take a list of arguments.
   final FunctionReferenceDataIsList? isList;
 
+  /// Whether the function supports both single and list value operators.
+  final FunctionReferenceDataSupportsListAndSingleValueOperators?
+      supportsListAndSingleValueOperators;
+
   /// The data types returned by the function.
   final List<String> types;
 
@@ -28654,7 +31497,11 @@ class FunctionReferenceData {
   final String? value;
 
   FunctionReferenceData(
-      {this.displayName, this.isList, List<String>? types, this.value})
+      {this.displayName,
+      this.isList,
+      this.supportsListAndSingleValueOperators,
+      List<String>? types,
+      this.value})
       : types = types ?? [];
 
   factory FunctionReferenceData.fromJson(Map<String, Object?> json) {
@@ -28663,6 +31510,12 @@ class FunctionReferenceData {
       isList: json[r'isList'] != null
           ? FunctionReferenceDataIsList.fromValue(json[r'isList']! as String)
           : null,
+      supportsListAndSingleValueOperators:
+          json[r'supportsListAndSingleValueOperators'] != null
+              ? FunctionReferenceDataSupportsListAndSingleValueOperators
+                  .fromValue(
+                      json[r'supportsListAndSingleValueOperators']! as String)
+              : null,
       types: (json[r'types'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -28674,6 +31527,8 @@ class FunctionReferenceData {
   Map<String, Object?> toJson() {
     var displayName = this.displayName;
     var isList = this.isList;
+    var supportsListAndSingleValueOperators =
+        this.supportsListAndSingleValueOperators;
     var types = this.types;
     var value = this.value;
 
@@ -28683,6 +31538,10 @@ class FunctionReferenceData {
     }
     if (isList != null) {
       json[r'isList'] = isList.value;
+    }
+    if (supportsListAndSingleValueOperators != null) {
+      json[r'supportsListAndSingleValueOperators'] =
+          supportsListAndSingleValueOperators.value;
     }
     json[r'types'] = types;
     if (value != null) {
@@ -28694,11 +31553,16 @@ class FunctionReferenceData {
   FunctionReferenceData copyWith(
       {String? displayName,
       FunctionReferenceDataIsList? isList,
+      FunctionReferenceDataSupportsListAndSingleValueOperators?
+          supportsListAndSingleValueOperators,
       List<String>? types,
       String? value}) {
     return FunctionReferenceData(
       displayName: displayName ?? this.displayName,
       isList: isList ?? this.isList,
+      supportsListAndSingleValueOperators:
+          supportsListAndSingleValueOperators ??
+              this.supportsListAndSingleValueOperators,
       types: types ?? this.types,
       value: value ?? this.value,
     );
@@ -28720,6 +31584,34 @@ class FunctionReferenceDataIsList {
   static FunctionReferenceDataIsList fromValue(String value) =>
       values.firstWhere((e) => e.value == value,
           orElse: () => FunctionReferenceDataIsList._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class FunctionReferenceDataSupportsListAndSingleValueOperators {
+  static const true$ =
+      FunctionReferenceDataSupportsListAndSingleValueOperators._('true');
+  static const false$ =
+      FunctionReferenceDataSupportsListAndSingleValueOperators._('false');
+
+  static const values = [
+    true$,
+    false$,
+  ];
+  final String value;
+
+  const FunctionReferenceDataSupportsListAndSingleValueOperators._(this.value);
+
+  static FunctionReferenceDataSupportsListAndSingleValueOperators fromValue(
+          String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () =>
+              FunctionReferenceDataSupportsListAndSingleValueOperators._(
+                  value));
 
   /// An enum received from the server but this version of the client doesn't recognize it.
   bool get isUnknown => values.every((v) => v.value != value);
@@ -29535,6 +32427,99 @@ class IdOrKeyBean {
   }
 }
 
+class IdSearchRequestBean {
+  /// A [JQL](https://confluence.atlassian.com/x/egORLQ) expression. Order by
+  /// clauses are not allowed.
+  final String? jql;
+
+  /// The maximum number of items to return per page.
+  final int? maxResults;
+
+  /// The continuation token to fetch the next page. This token is provided by
+  /// the response of this endpoint.
+  final String? nextPageToken;
+
+  IdSearchRequestBean({this.jql, this.maxResults, this.nextPageToken});
+
+  factory IdSearchRequestBean.fromJson(Map<String, Object?> json) {
+    return IdSearchRequestBean(
+      jql: json[r'jql'] as String?,
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      nextPageToken: json[r'nextPageToken'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var jql = this.jql;
+    var maxResults = this.maxResults;
+    var nextPageToken = this.nextPageToken;
+
+    final json = <String, Object?>{};
+    if (jql != null) {
+      json[r'jql'] = jql;
+    }
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (nextPageToken != null) {
+      json[r'nextPageToken'] = nextPageToken;
+    }
+    return json;
+  }
+
+  IdSearchRequestBean copyWith(
+      {String? jql, int? maxResults, String? nextPageToken}) {
+    return IdSearchRequestBean(
+      jql: jql ?? this.jql,
+      maxResults: maxResults ?? this.maxResults,
+      nextPageToken: nextPageToken ?? this.nextPageToken,
+    );
+  }
+}
+
+/// Result of your JQL search. Returns a list of issue IDs and a token to fetch
+/// the next page if one exists.
+class IdSearchResults {
+  /// The list of issue IDs found by the search.
+  final List<int> issueIds;
+
+  /// Continuation token to fetch the next page. If this result represents the
+  /// last or the only page this token will be null.
+  final String? nextPageToken;
+
+  IdSearchResults({List<int>? issueIds, this.nextPageToken})
+      : issueIds = issueIds ?? [];
+
+  factory IdSearchResults.fromJson(Map<String, Object?> json) {
+    return IdSearchResults(
+      issueIds: (json[r'issueIds'] as List<Object?>?)
+              ?.map((i) => (i as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
+      nextPageToken: json[r'nextPageToken'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueIds = this.issueIds;
+    var nextPageToken = this.nextPageToken;
+
+    final json = <String, Object?>{};
+    json[r'issueIds'] = issueIds;
+    if (nextPageToken != null) {
+      json[r'nextPageToken'] = nextPageToken;
+    }
+    return json;
+  }
+
+  IdSearchResults copyWith({List<int>? issueIds, String? nextPageToken}) {
+    return IdSearchResults(
+      issueIds: issueIds ?? this.issueIds,
+      nextPageToken: nextPageToken ?? this.nextPageToken,
+    );
+  }
+}
+
 class IncludedFields {
   final List<String> actuallyIncluded;
   final List<String> excluded;
@@ -29585,6 +32570,34 @@ class IncludedFields {
       actuallyIncluded: actuallyIncluded ?? this.actuallyIncluded,
       excluded: excluded ?? this.excluded,
       included: included ?? this.included,
+    );
+  }
+}
+
+class InputStreamSource {
+  final Map<String, dynamic>? inputStream;
+
+  InputStreamSource({this.inputStream});
+
+  factory InputStreamSource.fromJson(Map<String, Object?> json) {
+    return InputStreamSource(
+      inputStream: json[r'inputStream'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var inputStream = this.inputStream;
+
+    final json = <String, Object?>{};
+    if (inputStream != null) {
+      json[r'inputStream'] = inputStream;
+    }
+    return json;
+  }
+
+  InputStreamSource copyWith({Map<String, dynamic>? inputStream}) {
+    return InputStreamSource(
+      inputStream: inputStream ?? this.inputStream,
     );
   }
 }
@@ -29859,6 +32872,319 @@ class IssueBean {
   }
 }
 
+class IssueBulkEditField {
+  /// Description of the field.
+  final String? description;
+
+  /// A list of options related to the field, applicable in contexts where
+  /// multiple selections are allowed.
+  final List<IssueBulkOperationsFieldOption> fieldOptions;
+
+  /// The unique ID of the field.
+  final String? id;
+
+  /// Indicates whether the field is mandatory for the operation.
+  final bool isRequired;
+
+  /// Specifies supported actions (like add, replace, remove) on multi-select
+  /// fields via an enum.
+  final List<IssueBulkEditFieldMultiSelectFieldOptions> multiSelectFieldOptions;
+
+  /// The display name of the field.
+  final String? name;
+
+  /// A URL to fetch additional data for the field
+  final String? searchUrl;
+
+  /// The type of the field.
+  final String? type;
+
+  /// A message indicating why the field is unavailable for editing.
+  final String? unavailableMessage;
+
+  IssueBulkEditField(
+      {this.description,
+      List<IssueBulkOperationsFieldOption>? fieldOptions,
+      this.id,
+      bool? isRequired,
+      List<IssueBulkEditFieldMultiSelectFieldOptions>? multiSelectFieldOptions,
+      this.name,
+      this.searchUrl,
+      this.type,
+      this.unavailableMessage})
+      : fieldOptions = fieldOptions ?? [],
+        isRequired = isRequired ?? false,
+        multiSelectFieldOptions = multiSelectFieldOptions ?? [];
+
+  factory IssueBulkEditField.fromJson(Map<String, Object?> json) {
+    return IssueBulkEditField(
+      description: json[r'description'] as String?,
+      fieldOptions: (json[r'fieldOptions'] as List<Object?>?)
+              ?.map((i) => IssueBulkOperationsFieldOption.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      id: json[r'id'] as String?,
+      isRequired: json[r'isRequired'] as bool? ?? false,
+      multiSelectFieldOptions: (json[r'multiSelectFieldOptions']
+                  as List<Object?>?)
+              ?.map((i) => IssueBulkEditFieldMultiSelectFieldOptions.fromValue(
+                  i as String? ?? ''))
+              .toList() ??
+          [],
+      name: json[r'name'] as String?,
+      searchUrl: json[r'searchUrl'] as String?,
+      type: json[r'type'] as String?,
+      unavailableMessage: json[r'unavailableMessage'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var fieldOptions = this.fieldOptions;
+    var id = this.id;
+    var isRequired = this.isRequired;
+    var multiSelectFieldOptions = this.multiSelectFieldOptions;
+    var name = this.name;
+    var searchUrl = this.searchUrl;
+    var type = this.type;
+    var unavailableMessage = this.unavailableMessage;
+
+    final json = <String, Object?>{};
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    json[r'fieldOptions'] = fieldOptions.map((i) => i.toJson()).toList();
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    json[r'isRequired'] = isRequired;
+    json[r'multiSelectFieldOptions'] =
+        multiSelectFieldOptions.map((i) => i.value).toList();
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (searchUrl != null) {
+      json[r'searchUrl'] = searchUrl;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (unavailableMessage != null) {
+      json[r'unavailableMessage'] = unavailableMessage;
+    }
+    return json;
+  }
+
+  IssueBulkEditField copyWith(
+      {String? description,
+      List<IssueBulkOperationsFieldOption>? fieldOptions,
+      String? id,
+      bool? isRequired,
+      List<IssueBulkEditFieldMultiSelectFieldOptions>? multiSelectFieldOptions,
+      String? name,
+      String? searchUrl,
+      String? type,
+      String? unavailableMessage}) {
+    return IssueBulkEditField(
+      description: description ?? this.description,
+      fieldOptions: fieldOptions ?? this.fieldOptions,
+      id: id ?? this.id,
+      isRequired: isRequired ?? this.isRequired,
+      multiSelectFieldOptions:
+          multiSelectFieldOptions ?? this.multiSelectFieldOptions,
+      name: name ?? this.name,
+      searchUrl: searchUrl ?? this.searchUrl,
+      type: type ?? this.type,
+      unavailableMessage: unavailableMessage ?? this.unavailableMessage,
+    );
+  }
+}
+
+class IssueBulkEditFieldMultiSelectFieldOptions {
+  static const add = IssueBulkEditFieldMultiSelectFieldOptions._('ADD');
+  static const remove = IssueBulkEditFieldMultiSelectFieldOptions._('REMOVE');
+  static const replace = IssueBulkEditFieldMultiSelectFieldOptions._('REPLACE');
+  static const removeAll =
+      IssueBulkEditFieldMultiSelectFieldOptions._('REMOVE_ALL');
+
+  static const values = [
+    add,
+    remove,
+    replace,
+    removeAll,
+  ];
+  final String value;
+
+  const IssueBulkEditFieldMultiSelectFieldOptions._(this.value);
+
+  static IssueBulkEditFieldMultiSelectFieldOptions fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => IssueBulkEditFieldMultiSelectFieldOptions._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// Issue Bulk Edit Payload
+class IssueBulkEditPayload {
+  /// An object that defines the values to be updated in specified fields of an
+  /// issue. The structure and content of this parameter vary depending on the
+  /// type of field being edited. Although the order is not significant, ensure
+  /// that field IDs align with those in selectedActions.
+  final JiraIssueFields editedFieldsInput;
+
+  /// List of all the field IDs that are to be bulk edited. Each field ID in
+  /// this list corresponds to a specific attribute of an issue that is set to
+  /// be modified in the bulk edit operation. The relevant field ID can be
+  /// obtained by calling the Bulk Edit Get Fields REST API (documentation
+  /// available on this page itself).
+  final List<String> selectedActions;
+
+  /// List of issue IDs or keys which are to be bulk edited. These IDs or keys
+  /// can be from different projects and issue types.
+  final List<String> selectedIssueIdsOrKeys;
+
+  /// A boolean value that indicates whether to send a bulk change notification
+  /// when the issues are being edited.
+  ///
+  /// If `true`, dispatches a bulk notification email to users about the
+  /// updates.
+  final bool sendBulkNotification;
+
+  IssueBulkEditPayload(
+      {required this.editedFieldsInput,
+      required this.selectedActions,
+      required this.selectedIssueIdsOrKeys,
+      bool? sendBulkNotification})
+      : sendBulkNotification = sendBulkNotification ?? false;
+
+  factory IssueBulkEditPayload.fromJson(Map<String, Object?> json) {
+    return IssueBulkEditPayload(
+      editedFieldsInput: JiraIssueFields.fromJson(
+          json[r'editedFieldsInput'] as Map<String, Object?>? ?? const {}),
+      selectedActions: (json[r'selectedActions'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      selectedIssueIdsOrKeys:
+          (json[r'selectedIssueIdsOrKeys'] as List<Object?>?)
+                  ?.map((i) => i as String? ?? '')
+                  .toList() ??
+              [],
+      sendBulkNotification: json[r'sendBulkNotification'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var editedFieldsInput = this.editedFieldsInput;
+    var selectedActions = this.selectedActions;
+    var selectedIssueIdsOrKeys = this.selectedIssueIdsOrKeys;
+    var sendBulkNotification = this.sendBulkNotification;
+
+    final json = <String, Object?>{};
+    json[r'editedFieldsInput'] = editedFieldsInput.toJson();
+    json[r'selectedActions'] = selectedActions;
+    json[r'selectedIssueIdsOrKeys'] = selectedIssueIdsOrKeys;
+    json[r'sendBulkNotification'] = sendBulkNotification;
+    return json;
+  }
+
+  IssueBulkEditPayload copyWith(
+      {JiraIssueFields? editedFieldsInput,
+      List<String>? selectedActions,
+      List<String>? selectedIssueIdsOrKeys,
+      bool? sendBulkNotification}) {
+    return IssueBulkEditPayload(
+      editedFieldsInput: editedFieldsInput ?? this.editedFieldsInput,
+      selectedActions: selectedActions ?? this.selectedActions,
+      selectedIssueIdsOrKeys:
+          selectedIssueIdsOrKeys ?? this.selectedIssueIdsOrKeys,
+      sendBulkNotification: sendBulkNotification ?? this.sendBulkNotification,
+    );
+  }
+}
+
+/// Issue Bulk Move Payload
+class IssueBulkMovePayload {
+  /// A boolean value that indicates whether to send a bulk change notification
+  /// when the issues are being moved.
+  ///
+  /// If `true`, dispatches a bulk notification email to users about the
+  /// updates.
+  final bool sendBulkNotification;
+
+  /// An object representing the mapping of issues and data related to
+  /// destination entities, like fields and statuses, that are required during a
+  /// bulk move.
+  ///
+  /// The key is a string that is created by concatenating the following three
+  /// entities in order, separated by commas. The format is `<project ID or
+  /// key>,<issueType ID>,<parent ID or key>`. It should be unique across
+  /// mappings provided in the payload. If you provide multiple mappings for the
+  /// same key, only one will be processed. However, the operation won't fail,
+  /// so the error may be hard to track down.
+  ///
+  ///  *  ***Destination project*** (Required): ID or key of the project to
+  /// which the issues are being moved.
+  ///  *  ***Destination issueType*** (Required): ID of the issueType to which
+  /// the issues are being moved.
+  ///  *  ***Destination parent ID or key*** (Optional): ID or key of the issue
+  /// which will become the parent of the issues being moved. Only required when
+  /// the destination issueType is a subtask.
+  final Map<String, dynamic>? targetToSourcesMapping;
+
+  IssueBulkMovePayload(
+      {bool? sendBulkNotification, this.targetToSourcesMapping})
+      : sendBulkNotification = sendBulkNotification ?? false;
+
+  factory IssueBulkMovePayload.fromJson(Map<String, Object?> json) {
+    return IssueBulkMovePayload(
+      sendBulkNotification: json[r'sendBulkNotification'] as bool? ?? false,
+      targetToSourcesMapping:
+          json[r'targetToSourcesMapping'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var sendBulkNotification = this.sendBulkNotification;
+    var targetToSourcesMapping = this.targetToSourcesMapping;
+
+    final json = <String, Object?>{};
+    json[r'sendBulkNotification'] = sendBulkNotification;
+    if (targetToSourcesMapping != null) {
+      json[r'targetToSourcesMapping'] = targetToSourcesMapping;
+    }
+    return json;
+  }
+
+  IssueBulkMovePayload copyWith(
+      {bool? sendBulkNotification,
+      Map<String, dynamic>? targetToSourcesMapping}) {
+    return IssueBulkMovePayload(
+      sendBulkNotification: sendBulkNotification ?? this.sendBulkNotification,
+      targetToSourcesMapping:
+          targetToSourcesMapping ?? this.targetToSourcesMapping,
+    );
+  }
+}
+
+class IssueBulkOperationsFieldOption {
+  IssueBulkOperationsFieldOption();
+
+  factory IssueBulkOperationsFieldOption.fromJson(Map<String, Object?> json) {
+    return IssueBulkOperationsFieldOption();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
 /// A list of changelog IDs.
 class IssueChangelogIds {
   /// The list of changelog IDs.
@@ -30096,6 +33422,46 @@ class IssueEntityPropertiesForMultiUpdate {
     return IssueEntityPropertiesForMultiUpdate(
       issueId: issueId ?? this.issueId,
       properties: properties ?? this.properties,
+    );
+  }
+}
+
+/// Describes the error that occurred when retrieving data for a particular
+/// issue.
+class IssueError {
+  /// The error that occurred when fetching this issue.
+  final String? errorMessage;
+
+  /// The ID of the issue.
+  final String? id;
+
+  IssueError({this.errorMessage, this.id});
+
+  factory IssueError.fromJson(Map<String, Object?> json) {
+    return IssueError(
+      errorMessage: json[r'errorMessage'] as String?,
+      id: json[r'id'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var errorMessage = this.errorMessage;
+    var id = this.id;
+
+    final json = <String, Object?>{};
+    if (errorMessage != null) {
+      json[r'errorMessage'] = errorMessage;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    return json;
+  }
+
+  IssueError copyWith({String? errorMessage, String? id}) {
+    return IssueError(
+      errorMessage: errorMessage ?? this.errorMessage,
+      id: id ?? this.id,
     );
   }
 }
@@ -30484,6 +33850,96 @@ class IssueFilterForBulkPropertySet {
       currentValue: currentValue ?? this.currentValue,
       entityIds: entityIds ?? this.entityIds,
       hasProperty: hasProperty ?? this.hasProperty,
+    );
+  }
+}
+
+class IssueLimitReportRequest {
+  /// A list of fields and their respective approaching limit threshold.
+  /// Required for querying issues approaching limits. Optional for querying
+  /// issues breaching limits. Accepted fields are: `comment`, `worklog`,
+  /// `attachment`, `remoteIssueLinks`, and `issuelinks`. Example:
+  /// `{"issuesApproachingLimitParams": {"comment": 4500, "attachment": 1800}}`
+  final Map<String, dynamic>? issuesApproachingLimitParams;
+
+  IssueLimitReportRequest({this.issuesApproachingLimitParams});
+
+  factory IssueLimitReportRequest.fromJson(Map<String, Object?> json) {
+    return IssueLimitReportRequest(
+      issuesApproachingLimitParams:
+          json[r'issuesApproachingLimitParams'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issuesApproachingLimitParams = this.issuesApproachingLimitParams;
+
+    final json = <String, Object?>{};
+    if (issuesApproachingLimitParams != null) {
+      json[r'issuesApproachingLimitParams'] = issuesApproachingLimitParams;
+    }
+    return json;
+  }
+
+  IssueLimitReportRequest copyWith(
+      {Map<String, dynamic>? issuesApproachingLimitParams}) {
+    return IssueLimitReportRequest(
+      issuesApproachingLimitParams:
+          issuesApproachingLimitParams ?? this.issuesApproachingLimitParams,
+    );
+  }
+}
+
+class IssueLimitReportResponseBean {
+  /// A list of ids of issues approaching the limit and their field count
+  final Map<String, dynamic>? issuesApproachingLimit;
+
+  /// A list of ids of issues breaching the limit and their field count
+  final Map<String, dynamic>? issuesBreachingLimit;
+
+  /// The fields and their defined limits
+  final Map<String, dynamic>? limits;
+
+  IssueLimitReportResponseBean(
+      {this.issuesApproachingLimit, this.issuesBreachingLimit, this.limits});
+
+  factory IssueLimitReportResponseBean.fromJson(Map<String, Object?> json) {
+    return IssueLimitReportResponseBean(
+      issuesApproachingLimit:
+          json[r'issuesApproachingLimit'] as Map<String, Object?>?,
+      issuesBreachingLimit:
+          json[r'issuesBreachingLimit'] as Map<String, Object?>?,
+      limits: json[r'limits'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issuesApproachingLimit = this.issuesApproachingLimit;
+    var issuesBreachingLimit = this.issuesBreachingLimit;
+    var limits = this.limits;
+
+    final json = <String, Object?>{};
+    if (issuesApproachingLimit != null) {
+      json[r'issuesApproachingLimit'] = issuesApproachingLimit;
+    }
+    if (issuesBreachingLimit != null) {
+      json[r'issuesBreachingLimit'] = issuesBreachingLimit;
+    }
+    if (limits != null) {
+      json[r'limits'] = limits;
+    }
+    return json;
+  }
+
+  IssueLimitReportResponseBean copyWith(
+      {Map<String, dynamic>? issuesApproachingLimit,
+      Map<String, dynamic>? issuesBreachingLimit,
+      Map<String, dynamic>? limits}) {
+    return IssueLimitReportResponseBean(
+      issuesApproachingLimit:
+          issuesApproachingLimit ?? this.issuesApproachingLimit,
+      issuesBreachingLimit: issuesBreachingLimit ?? this.issuesBreachingLimit,
+      limits: limits ?? this.limits,
     );
   }
 }
@@ -30928,11 +34384,14 @@ class IssueSecurityLevelMember {
 
   /// The ID of the issue security level.
   final int issueSecurityLevelId;
+  final bool managed;
 
   IssueSecurityLevelMember(
       {required this.holder,
       required this.id,
-      required this.issueSecurityLevelId});
+      required this.issueSecurityLevelId,
+      bool? managed})
+      : managed = managed ?? false;
 
   factory IssueSecurityLevelMember.fromJson(Map<String, Object?> json) {
     return IssueSecurityLevelMember(
@@ -30941,6 +34400,7 @@ class IssueSecurityLevelMember {
       id: (json[r'id'] as num?)?.toInt() ?? 0,
       issueSecurityLevelId:
           (json[r'issueSecurityLevelId'] as num?)?.toInt() ?? 0,
+      managed: json[r'managed'] as bool? ?? false,
     );
   }
 
@@ -30948,20 +34408,26 @@ class IssueSecurityLevelMember {
     var holder = this.holder;
     var id = this.id;
     var issueSecurityLevelId = this.issueSecurityLevelId;
+    var managed = this.managed;
 
     final json = <String, Object?>{};
     json[r'holder'] = holder.toJson();
     json[r'id'] = id;
     json[r'issueSecurityLevelId'] = issueSecurityLevelId;
+    json[r'managed'] = managed;
     return json;
   }
 
   IssueSecurityLevelMember copyWith(
-      {PermissionHolder? holder, int? id, int? issueSecurityLevelId}) {
+      {PermissionHolder? holder,
+      int? id,
+      int? issueSecurityLevelId,
+      bool? managed}) {
     return IssueSecurityLevelMember(
       holder: holder ?? this.holder,
       id: id ?? this.id,
       issueSecurityLevelId: issueSecurityLevelId ?? this.issueSecurityLevelId,
+      managed: managed ?? this.managed,
     );
   }
 }
@@ -32947,6 +36413,230 @@ class IssuesUpdateBean {
   }
 }
 
+/// The description of the page of issues loaded by the provided JQL query.This
+/// bean will be replacing IssuesJqlMetaDataBean bean as part of new `evaluate`
+/// endpoint
+class JExpEvaluateIssuesJqlMetaDataBean {
+  /// Next Page token for the next page of issues.
+  final String nextPageToken;
+
+  JExpEvaluateIssuesJqlMetaDataBean({required this.nextPageToken});
+
+  factory JExpEvaluateIssuesJqlMetaDataBean.fromJson(
+      Map<String, Object?> json) {
+    return JExpEvaluateIssuesJqlMetaDataBean(
+      nextPageToken: json[r'nextPageToken'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var nextPageToken = this.nextPageToken;
+
+    final json = <String, Object?>{};
+    json[r'nextPageToken'] = nextPageToken;
+    return json;
+  }
+
+  JExpEvaluateIssuesJqlMetaDataBean copyWith({String? nextPageToken}) {
+    return JExpEvaluateIssuesJqlMetaDataBean(
+      nextPageToken: nextPageToken ?? this.nextPageToken,
+    );
+  }
+}
+
+/// Meta data describing the `issues` context variable.This bean will be
+/// replacing IssuesMetaBean bean as part of new `evaluate` endpoint
+class JExpEvaluateIssuesMetaBean {
+  final JExpEvaluateIssuesJqlMetaDataBean? jql;
+
+  JExpEvaluateIssuesMetaBean({this.jql});
+
+  factory JExpEvaluateIssuesMetaBean.fromJson(Map<String, Object?> json) {
+    return JExpEvaluateIssuesMetaBean(
+      jql: json[r'jql'] != null
+          ? JExpEvaluateIssuesJqlMetaDataBean.fromJson(
+              json[r'jql']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var jql = this.jql;
+
+    final json = <String, Object?>{};
+    if (jql != null) {
+      json[r'jql'] = jql.toJson();
+    }
+    return json;
+  }
+
+  JExpEvaluateIssuesMetaBean copyWith(
+      {JExpEvaluateIssuesJqlMetaDataBean? jql}) {
+    return JExpEvaluateIssuesMetaBean(
+      jql: jql ?? this.jql,
+    );
+  }
+}
+
+/// The result of evaluating a Jira expression.This bean will be replacing
+/// `JiraExpressionResultBean` bean as part of new evaluate endpoint
+class JExpEvaluateJiraExpressionResultBean {
+  /// Contains various characteristics of the performed expression evaluation.
+  final JExpEvaluateMetaDataBean? meta;
+
+  /// The value of the evaluated expression. It may be a primitive JSON value or
+  /// a Jira REST API object. (Some expressions do not produce any meaningful
+  /// results—for example, an expression that returns a lambda function—if
+  /// that's the case a simple string representation is returned. These string
+  /// representations should not be relied upon and may change without notice.)
+  final dynamic value;
+
+  JExpEvaluateJiraExpressionResultBean({this.meta, required this.value});
+
+  factory JExpEvaluateJiraExpressionResultBean.fromJson(
+      Map<String, Object?> json) {
+    return JExpEvaluateJiraExpressionResultBean(
+      meta: json[r'meta'] != null
+          ? JExpEvaluateMetaDataBean.fromJson(
+              json[r'meta']! as Map<String, Object?>)
+          : null,
+      value: json[r'value'],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var meta = this.meta;
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    json[r'value'] = value;
+    return json;
+  }
+
+  JExpEvaluateJiraExpressionResultBean copyWith(
+      {JExpEvaluateMetaDataBean? meta, dynamic value}) {
+    return JExpEvaluateJiraExpressionResultBean(
+      meta: meta ?? this.meta,
+      value: value ?? this.value,
+    );
+  }
+}
+
+/// Contains information about the expression evaluation. This bean will be
+/// replacing `JiraExpressionEvaluationMetaDataBean` bean as part of new
+/// `evaluate` endpoint
+class JExpEvaluateMetaDataBean {
+  /// Contains information about the expression complexity. For example, the
+  /// number of steps it took to evaluate the expression.
+  final JiraExpressionsComplexityBean? complexity;
+
+  /// Contains information about the `issues` variable in the context. For
+  /// example, is the issues were loaded with JQL, information about the page
+  /// will be included here.
+  final JExpEvaluateIssuesMetaBean? issues;
+
+  JExpEvaluateMetaDataBean({this.complexity, this.issues});
+
+  factory JExpEvaluateMetaDataBean.fromJson(Map<String, Object?> json) {
+    return JExpEvaluateMetaDataBean(
+      complexity: json[r'complexity'] != null
+          ? JiraExpressionsComplexityBean.fromJson(
+              json[r'complexity']! as Map<String, Object?>)
+          : null,
+      issues: json[r'issues'] != null
+          ? JExpEvaluateIssuesMetaBean.fromJson(
+              json[r'issues']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var complexity = this.complexity;
+    var issues = this.issues;
+
+    final json = <String, Object?>{};
+    if (complexity != null) {
+      json[r'complexity'] = complexity.toJson();
+    }
+    if (issues != null) {
+      json[r'issues'] = issues.toJson();
+    }
+    return json;
+  }
+
+  JExpEvaluateMetaDataBean copyWith(
+      {JiraExpressionsComplexityBean? complexity,
+      JExpEvaluateIssuesMetaBean? issues}) {
+    return JExpEvaluateMetaDataBean(
+      complexity: complexity ?? this.complexity,
+      issues: issues ?? this.issues,
+    );
+  }
+}
+
+class JQLCountRequestBean {
+  /// A [JQL](https://confluence.atlassian.com/x/egORLQ) expression. For
+  /// performance reasons, this field requires a bounded query. A bounded query
+  /// is a query with a search restriction.
+  final String? jql;
+
+  JQLCountRequestBean({this.jql});
+
+  factory JQLCountRequestBean.fromJson(Map<String, Object?> json) {
+    return JQLCountRequestBean(
+      jql: json[r'jql'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var jql = this.jql;
+
+    final json = <String, Object?>{};
+    if (jql != null) {
+      json[r'jql'] = jql;
+    }
+    return json;
+  }
+
+  JQLCountRequestBean copyWith({String? jql}) {
+    return JQLCountRequestBean(
+      jql: jql ?? this.jql,
+    );
+  }
+}
+
+class JQLCountResultsBean {
+  /// Number of issues matching JQL query.
+  final int? count;
+
+  JQLCountResultsBean({this.count});
+
+  factory JQLCountResultsBean.fromJson(Map<String, Object?> json) {
+    return JQLCountResultsBean(
+      count: (json[r'count'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var count = this.count;
+
+    final json = <String, Object?>{};
+    if (count != null) {
+      json[r'count'] = count;
+    }
+    return json;
+  }
+
+  JQLCountResultsBean copyWith({int? count}) {
+    return JQLCountResultsBean(
+      count: count ?? this.count,
+    );
+  }
+}
+
 /// The JQL queries to be converted.
 class JQLPersonalDataMigrationRequest {
   /// A list of queries with user identifiers. Maximum of 100 queries.
@@ -33085,6 +36775,98 @@ class JQLReferenceData {
 }
 
 /// The JQL specifying the issues available in the evaluated Jira expression
+/// under the `issues` context variable. This bean will be replacing
+/// `JexpIssues` bean as part of new `evaluate` endpoint
+class JexpEvaluateCtxIssues {
+  /// The JQL query that specifies the set of issues available in the Jira
+  /// expression.
+  final JexpEvaluateCtxJqlIssues? jql;
+
+  JexpEvaluateCtxIssues({this.jql});
+
+  factory JexpEvaluateCtxIssues.fromJson(Map<String, Object?> json) {
+    return JexpEvaluateCtxIssues(
+      jql: json[r'jql'] != null
+          ? JexpEvaluateCtxJqlIssues.fromJson(
+              json[r'jql']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var jql = this.jql;
+
+    final json = <String, Object?>{};
+    if (jql != null) {
+      json[r'jql'] = jql.toJson();
+    }
+    return json;
+  }
+
+  JexpEvaluateCtxIssues copyWith({JexpEvaluateCtxJqlIssues? jql}) {
+    return JexpEvaluateCtxIssues(
+      jql: jql ?? this.jql,
+    );
+  }
+}
+
+/// The JQL specifying the issues available in the evaluated Jira expression
+/// under the `issues` context variable. Not all issues returned by the JQL
+/// query are loaded, only those described by the `nextPageToken` and
+/// `maxResults` properties. This bean will be replacing JexpJqlIssues bean as
+/// part of new `evaluate` endpoint
+class JexpEvaluateCtxJqlIssues {
+  /// The maximum number of issues to return from the JQL query. max results
+  /// value considered may be lower than the number specific here.
+  final int? maxResults;
+
+  /// The token for a page to fetch that is not the first page. The first page
+  /// has a `nextPageToken` of `null`. Use the `nextPageToken` to fetch the next
+  /// page of issues.
+  final String? nextPageToken;
+
+  /// The JQL query, required to be bounded.
+  final String? query;
+
+  JexpEvaluateCtxJqlIssues({this.maxResults, this.nextPageToken, this.query});
+
+  factory JexpEvaluateCtxJqlIssues.fromJson(Map<String, Object?> json) {
+    return JexpEvaluateCtxJqlIssues(
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      nextPageToken: json[r'nextPageToken'] as String?,
+      query: json[r'query'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var maxResults = this.maxResults;
+    var nextPageToken = this.nextPageToken;
+    var query = this.query;
+
+    final json = <String, Object?>{};
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (nextPageToken != null) {
+      json[r'nextPageToken'] = nextPageToken;
+    }
+    if (query != null) {
+      json[r'query'] = query;
+    }
+    return json;
+  }
+
+  JexpEvaluateCtxJqlIssues copyWith(
+      {int? maxResults, String? nextPageToken, String? query}) {
+    return JexpEvaluateCtxJqlIssues(
+      maxResults: maxResults ?? this.maxResults,
+      nextPageToken: nextPageToken ?? this.nextPageToken,
+      query: query ?? this.query,
+    );
+  }
+}
+
+/// The JQL specifying the issues available in the evaluated Jira expression
 /// under the `issues` context variable.
 class JexpIssues {
   /// The JQL query that specifies the set of issues available in the Jira
@@ -33211,6 +36993,284 @@ class JexpJqlIssuesValidation {
 
   @override
   String toString() => value;
+}
+
+class JiraCascadingSelectField {
+  final JiraSelectedOptionField? childOptionValue;
+  final String fieldId;
+  final JiraSelectedOptionField parentOptionValue;
+
+  JiraCascadingSelectField(
+      {this.childOptionValue,
+      required this.fieldId,
+      required this.parentOptionValue});
+
+  factory JiraCascadingSelectField.fromJson(Map<String, Object?> json) {
+    return JiraCascadingSelectField(
+      childOptionValue: json[r'childOptionValue'] != null
+          ? JiraSelectedOptionField.fromJson(
+              json[r'childOptionValue']! as Map<String, Object?>)
+          : null,
+      fieldId: json[r'fieldId'] as String? ?? '',
+      parentOptionValue: JiraSelectedOptionField.fromJson(
+          json[r'parentOptionValue'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var childOptionValue = this.childOptionValue;
+    var fieldId = this.fieldId;
+    var parentOptionValue = this.parentOptionValue;
+
+    final json = <String, Object?>{};
+    if (childOptionValue != null) {
+      json[r'childOptionValue'] = childOptionValue.toJson();
+    }
+    json[r'fieldId'] = fieldId;
+    json[r'parentOptionValue'] = parentOptionValue.toJson();
+    return json;
+  }
+
+  JiraCascadingSelectField copyWith(
+      {JiraSelectedOptionField? childOptionValue,
+      String? fieldId,
+      JiraSelectedOptionField? parentOptionValue}) {
+    return JiraCascadingSelectField(
+      childOptionValue: childOptionValue ?? this.childOptionValue,
+      fieldId: fieldId ?? this.fieldId,
+      parentOptionValue: parentOptionValue ?? this.parentOptionValue,
+    );
+  }
+}
+
+class JiraColorField {
+  final JiraColorInput color;
+  final String fieldId;
+
+  JiraColorField({required this.color, required this.fieldId});
+
+  factory JiraColorField.fromJson(Map<String, Object?> json) {
+    return JiraColorField(
+      color: JiraColorInput.fromJson(
+          json[r'color'] as Map<String, Object?>? ?? const {}),
+      fieldId: json[r'fieldId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var color = this.color;
+    var fieldId = this.fieldId;
+
+    final json = <String, Object?>{};
+    json[r'color'] = color.toJson();
+    json[r'fieldId'] = fieldId;
+    return json;
+  }
+
+  JiraColorField copyWith({JiraColorInput? color, String? fieldId}) {
+    return JiraColorField(
+      color: color ?? this.color,
+      fieldId: fieldId ?? this.fieldId,
+    );
+  }
+}
+
+class JiraColorInput {
+  final String name;
+
+  JiraColorInput({required this.name});
+
+  factory JiraColorInput.fromJson(Map<String, Object?> json) {
+    return JiraColorInput(
+      name: json[r'name'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    json[r'name'] = name;
+    return json;
+  }
+
+  JiraColorInput copyWith({String? name}) {
+    return JiraColorInput(
+      name: name ?? this.name,
+    );
+  }
+}
+
+class JiraComponentField {
+  final int componentId;
+
+  JiraComponentField({required this.componentId});
+
+  factory JiraComponentField.fromJson(Map<String, Object?> json) {
+    return JiraComponentField(
+      componentId: (json[r'componentId'] as num?)?.toInt() ?? 0,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var componentId = this.componentId;
+
+    final json = <String, Object?>{};
+    json[r'componentId'] = componentId;
+    return json;
+  }
+
+  JiraComponentField copyWith({int? componentId}) {
+    return JiraComponentField(
+      componentId: componentId ?? this.componentId,
+    );
+  }
+}
+
+class JiraDateField {
+  final JiraDateInput? date;
+  final String fieldId;
+
+  JiraDateField({this.date, required this.fieldId});
+
+  factory JiraDateField.fromJson(Map<String, Object?> json) {
+    return JiraDateField(
+      date: json[r'date'] != null
+          ? JiraDateInput.fromJson(json[r'date']! as Map<String, Object?>)
+          : null,
+      fieldId: json[r'fieldId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var date = this.date;
+    var fieldId = this.fieldId;
+
+    final json = <String, Object?>{};
+    if (date != null) {
+      json[r'date'] = date.toJson();
+    }
+    json[r'fieldId'] = fieldId;
+    return json;
+  }
+
+  JiraDateField copyWith({JiraDateInput? date, String? fieldId}) {
+    return JiraDateField(
+      date: date ?? this.date,
+      fieldId: fieldId ?? this.fieldId,
+    );
+  }
+}
+
+class JiraDateInput {
+  final String formattedDate;
+
+  JiraDateInput({required this.formattedDate});
+
+  factory JiraDateInput.fromJson(Map<String, Object?> json) {
+    return JiraDateInput(
+      formattedDate: json[r'formattedDate'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var formattedDate = this.formattedDate;
+
+    final json = <String, Object?>{};
+    json[r'formattedDate'] = formattedDate;
+    return json;
+  }
+
+  JiraDateInput copyWith({String? formattedDate}) {
+    return JiraDateInput(
+      formattedDate: formattedDate ?? this.formattedDate,
+    );
+  }
+}
+
+class JiraDateTimeField {
+  final JiraDateTimeInput dateTime;
+  final String fieldId;
+
+  JiraDateTimeField({required this.dateTime, required this.fieldId});
+
+  factory JiraDateTimeField.fromJson(Map<String, Object?> json) {
+    return JiraDateTimeField(
+      dateTime: JiraDateTimeInput.fromJson(
+          json[r'dateTime'] as Map<String, Object?>? ?? const {}),
+      fieldId: json[r'fieldId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var dateTime = this.dateTime;
+    var fieldId = this.fieldId;
+
+    final json = <String, Object?>{};
+    json[r'dateTime'] = dateTime.toJson();
+    json[r'fieldId'] = fieldId;
+    return json;
+  }
+
+  JiraDateTimeField copyWith({JiraDateTimeInput? dateTime, String? fieldId}) {
+    return JiraDateTimeField(
+      dateTime: dateTime ?? this.dateTime,
+      fieldId: fieldId ?? this.fieldId,
+    );
+  }
+}
+
+class JiraDateTimeInput {
+  final String formattedDateTime;
+
+  JiraDateTimeInput({required this.formattedDateTime});
+
+  factory JiraDateTimeInput.fromJson(Map<String, Object?> json) {
+    return JiraDateTimeInput(
+      formattedDateTime: json[r'formattedDateTime'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var formattedDateTime = this.formattedDateTime;
+
+    final json = <String, Object?>{};
+    json[r'formattedDateTime'] = formattedDateTime;
+    return json;
+  }
+
+  JiraDateTimeInput copyWith({String? formattedDateTime}) {
+    return JiraDateTimeInput(
+      formattedDateTime: formattedDateTime ?? this.formattedDateTime,
+    );
+  }
+}
+
+class JiraDurationField {
+  final String originalEstimateField;
+
+  JiraDurationField({required this.originalEstimateField});
+
+  factory JiraDurationField.fromJson(Map<String, Object?> json) {
+    return JiraDurationField(
+      originalEstimateField: json[r'originalEstimateField'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var originalEstimateField = this.originalEstimateField;
+
+    final json = <String, Object?>{};
+    json[r'originalEstimateField'] = originalEstimateField;
+    return json;
+  }
+
+  JiraDurationField copyWith({String? originalEstimateField}) {
+    return JiraDurationField(
+      originalEstimateField:
+          originalEstimateField ?? this.originalEstimateField,
+    );
+  }
 }
 
 /// Details about the analysed Jira expression.
@@ -33512,6 +37572,188 @@ class JiraExpressionEvalRequestBean {
   JiraExpressionEvalRequestBean copyWith(
       {JiraExpressionEvalContextBean? context, String? expression}) {
     return JiraExpressionEvalRequestBean(
+      context: context ?? this.context,
+      expression: expression ?? this.expression,
+    );
+  }
+}
+
+class JiraExpressionEvaluateContextBean {
+  /// The ID of the board that is available under the `board` variable when
+  /// evaluating the expression.
+  final int? board;
+
+  /// Custom context variables and their types. These variable types are
+  /// available for use in a custom context:
+  ///
+  ///  *  `user`: A
+  /// [user](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#user)
+  /// specified as an Atlassian account ID.
+  ///  *  `issue`: An
+  /// [issue](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#issue)
+  /// specified by ID or key. All the fields of the issue object are available
+  /// in the Jira expression.
+  ///  *  `json`: A JSON object containing custom content.
+  ///  *  `list`: A JSON list of `user`, `issue`, or `json` variable types.
+  final List<CustomContextVariable> custom;
+
+  /// The ID of the customer request that is available under the
+  /// `customerRequest` variable when evaluating the expression. This is the
+  /// same as the ID of the underlying Jira issue, but the customer request
+  /// context variable will have a different type.
+  final int? customerRequest;
+
+  /// The issue that is available under the `issue` variable when evaluating the
+  /// expression.
+  final IdOrKeyBean? issue;
+
+  /// The collection of issues that is available under the `issues` variable
+  /// when evaluating the expression.
+  final JexpEvaluateCtxIssues? issues;
+
+  /// The project that is available under the `project` variable when evaluating
+  /// the expression.
+  final IdOrKeyBean? project;
+
+  /// The ID of the service desk that is available under the `serviceDesk`
+  /// variable when evaluating the expression.
+  final int? serviceDesk;
+
+  /// The ID of the sprint that is available under the `sprint` variable when
+  /// evaluating the expression.
+  final int? sprint;
+
+  JiraExpressionEvaluateContextBean(
+      {this.board,
+      List<CustomContextVariable>? custom,
+      this.customerRequest,
+      this.issue,
+      this.issues,
+      this.project,
+      this.serviceDesk,
+      this.sprint})
+      : custom = custom ?? [];
+
+  factory JiraExpressionEvaluateContextBean.fromJson(
+      Map<String, Object?> json) {
+    return JiraExpressionEvaluateContextBean(
+      board: (json[r'board'] as num?)?.toInt(),
+      custom: (json[r'custom'] as List<Object?>?)
+              ?.map((i) => CustomContextVariable.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      customerRequest: (json[r'customerRequest'] as num?)?.toInt(),
+      issue: json[r'issue'] != null
+          ? IdOrKeyBean.fromJson(json[r'issue']! as Map<String, Object?>)
+          : null,
+      issues: json[r'issues'] != null
+          ? JexpEvaluateCtxIssues.fromJson(
+              json[r'issues']! as Map<String, Object?>)
+          : null,
+      project: json[r'project'] != null
+          ? IdOrKeyBean.fromJson(json[r'project']! as Map<String, Object?>)
+          : null,
+      serviceDesk: (json[r'serviceDesk'] as num?)?.toInt(),
+      sprint: (json[r'sprint'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var board = this.board;
+    var custom = this.custom;
+    var customerRequest = this.customerRequest;
+    var issue = this.issue;
+    var issues = this.issues;
+    var project = this.project;
+    var serviceDesk = this.serviceDesk;
+    var sprint = this.sprint;
+
+    final json = <String, Object?>{};
+    if (board != null) {
+      json[r'board'] = board;
+    }
+    json[r'custom'] = custom.map((i) => i.toJson()).toList();
+    if (customerRequest != null) {
+      json[r'customerRequest'] = customerRequest;
+    }
+    if (issue != null) {
+      json[r'issue'] = issue.toJson();
+    }
+    if (issues != null) {
+      json[r'issues'] = issues.toJson();
+    }
+    if (project != null) {
+      json[r'project'] = project.toJson();
+    }
+    if (serviceDesk != null) {
+      json[r'serviceDesk'] = serviceDesk;
+    }
+    if (sprint != null) {
+      json[r'sprint'] = sprint;
+    }
+    return json;
+  }
+
+  JiraExpressionEvaluateContextBean copyWith(
+      {int? board,
+      List<CustomContextVariable>? custom,
+      int? customerRequest,
+      IdOrKeyBean? issue,
+      JexpEvaluateCtxIssues? issues,
+      IdOrKeyBean? project,
+      int? serviceDesk,
+      int? sprint}) {
+    return JiraExpressionEvaluateContextBean(
+      board: board ?? this.board,
+      custom: custom ?? this.custom,
+      customerRequest: customerRequest ?? this.customerRequest,
+      issue: issue ?? this.issue,
+      issues: issues ?? this.issues,
+      project: project ?? this.project,
+      serviceDesk: serviceDesk ?? this.serviceDesk,
+      sprint: sprint ?? this.sprint,
+    );
+  }
+}
+
+/// The request to evaluate a Jira expression. This bean will be replacing
+/// `JiraExpressionEvaluateRequest` as part of new `evaluate` endpoint
+class JiraExpressionEvaluateRequestBean {
+  /// The context in which the Jira expression is evaluated.
+  final JiraExpressionEvaluateContextBean? context;
+
+  /// The Jira expression to evaluate.
+  final String expression;
+
+  JiraExpressionEvaluateRequestBean({this.context, required this.expression});
+
+  factory JiraExpressionEvaluateRequestBean.fromJson(
+      Map<String, Object?> json) {
+    return JiraExpressionEvaluateRequestBean(
+      context: json[r'context'] != null
+          ? JiraExpressionEvaluateContextBean.fromJson(
+              json[r'context']! as Map<String, Object?>)
+          : null,
+      expression: json[r'expression'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var context = this.context;
+    var expression = this.expression;
+
+    final json = <String, Object?>{};
+    if (context != null) {
+      json[r'context'] = context.toJson();
+    }
+    json[r'expression'] = expression;
+    return json;
+  }
+
+  JiraExpressionEvaluateRequestBean copyWith(
+      {JiraExpressionEvaluateContextBean? context, String? expression}) {
+    return JiraExpressionEvaluateRequestBean(
       context: context ?? this.context,
       expression: expression ?? this.expression,
     );
@@ -33892,6 +38134,1213 @@ class JiraExpressionsComplexityValueBean {
   }
 }
 
+class JiraGroupInput {
+  final String groupName;
+
+  JiraGroupInput({required this.groupName});
+
+  factory JiraGroupInput.fromJson(Map<String, Object?> json) {
+    return JiraGroupInput(
+      groupName: json[r'groupName'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var groupName = this.groupName;
+
+    final json = <String, Object?>{};
+    json[r'groupName'] = groupName;
+    return json;
+  }
+
+  JiraGroupInput copyWith({String? groupName}) {
+    return JiraGroupInput(
+      groupName: groupName ?? this.groupName,
+    );
+  }
+}
+
+class JiraIssueFields {
+  /// Add or clear a cascading select field:
+  ///
+  ///  *  To add, specify `optionId` for both parent and child.
+  ///  *  To clear the child, set its `optionId` to null.
+  ///  *  To clear both, set the parent's `optionId` to null.
+  final List<JiraCascadingSelectField> cascadingSelectFields;
+
+  /// Add or clear a number field:
+  ///
+  ///  *  To add, specify a numeric `value`.
+  ///  *  To clear, set `value` to `null`.
+  final List<JiraNumberField> clearableNumberFields;
+
+  /// Add or clear a color field:
+  ///
+  ///  *  To add, specify the color `name`. Available colors are: `purple`,
+  /// `blue`, `green`, `teal`, `yellow`, `orange`, `grey`, `dark purple`, `dark
+  /// blue`, `dark green`, `dark teal`, `dark yellow`, `dark orange`, `dark
+  /// grey`.
+  ///  *  To clear, set the color `name` to an empty string.
+  final List<JiraColorField> colorFields;
+
+  /// Add or clear a date picker field:
+  ///
+  ///  *  To add, specify the date in `d/mmm/yy` format or ISO format
+  /// `dd-mm-yyyy`.
+  ///  *  To clear, set `formattedDate` to an empty string.
+  final List<JiraDateField> datePickerFields;
+
+  /// Add or clear the planned start date and time:
+  ///
+  ///  *  To add, specify the date and time in ISO format for
+  /// `formattedDateTime`.
+  ///  *  To clear, provide an empty string for `formattedDateTime`.
+  final List<JiraDateTimeField> dateTimePickerFields;
+
+  /// Set the issue type field by providing an `issueTypeId`.
+  final JiraIssueTypeField? issueType;
+
+  /// Edit a labels field:
+  ///
+  ///  *  Options include `ADD`, `REPLACE`, `REMOVE`, or `REMOVE_ALL` for bulk
+  /// edits.
+  ///  *  To clear labels, use the `REMOVE_ALL` option with an empty `labels`
+  /// array.
+  final List<JiraLabelsField> labelsFields;
+
+  /// Add or clear a multi-group picker field:
+  ///
+  ///  *  To add groups, provide an array of groups with `groupName`s.
+  ///  *  To clear all groups, use an empty `groups` array.
+  final List<JiraMultipleGroupPickerField> multipleGroupPickerFields;
+
+  /// Assign or unassign multiple users to/from a field:
+  ///
+  ///  *  To assign, provide an array of user `accountId`s.
+  ///  *  To clear, set `users` to `null`.
+  final List<JiraMultipleSelectUserPickerField>
+      multipleSelectClearableUserPickerFields;
+
+  /// Add or clear a multi-select field:
+  ///
+  ///  *  To add, provide an array of options with `optionId`s.
+  ///  *  To clear, use an empty `options` array.
+  final List<JiraMultipleSelectField> multipleSelectFields;
+
+  /// Edit a multi-version picker field like Fix Versions/Affects Versions:
+  ///
+  ///  *  Options include `ADD`, `REPLACE`, `REMOVE`, or `REMOVE_ALL` for bulk
+  /// edits.
+  ///  *  To clear the field, use the `REMOVE_ALL` option with an empty
+  /// `versions` array.
+  final List<JiraMultipleVersionPickerField> multipleVersionPickerFields;
+
+  /// Edit a multi select components field:
+  ///
+  ///  *  Options include `ADD`, `REPLACE`, `REMOVE`, or `REMOVE_ALL` for bulk
+  /// edits.
+  ///  *  To clear, use the `REMOVE_ALL` option with an empty `components`
+  /// array.
+  final JiraMultiSelectComponentField? multiselectComponents;
+
+  /// Edit the original estimate field.
+  final JiraDurationField? originalEstimateField;
+
+  /// Set the priority of an issue by specifying a `priorityId`.
+  final JiraPriorityField? priority;
+
+  /// Add or clear a rich text field:
+  ///
+  ///  *  To add, provide `adfValue`. Note that rich text fields only support
+  /// ADF values.
+  ///  *  To clear, use an empty `richText` object.
+  ///
+  /// For ADF format details, refer to:
+  /// [Atlassian Document Format](https://developer.atlassian.com/cloud/jira/platform/apis/document/structure).
+  final List<JiraRichTextField> richTextFields;
+
+  /// Add or clear a single group picker field:
+  ///
+  ///  *  To add, specify the group with `groupName`.
+  ///  *  To clear, set `groupName` to an empty string.
+  final List<JiraSingleGroupPickerField> singleGroupPickerFields;
+
+  /// Add or clear a single line text field:
+  ///
+  ///  *  To add, provide the `text` value.
+  ///  *  To clear, set `text` to an empty string.
+  final List<JiraSingleLineTextField> singleLineTextFields;
+
+  /// Edit assignment for single select user picker fields like
+  /// Assignee/Reporter:
+  ///
+  ///  *  To assign an issue, specify the user's `accountId`.
+  ///  *  To unassign an issue, set `user` to `null`.
+  ///  *  For automatic assignment, set `accountId` to `-1`.
+  final List<JiraSingleSelectUserPickerField>
+      singleSelectClearableUserPickerFields;
+
+  /// Add or clear a single select field:
+  ///
+  ///  *  To add, specify the option with an `optionId`.
+  ///  *  To clear, pass an option with `optionId` as `-1`.
+  final List<JiraSingleSelectField> singleSelectFields;
+
+  /// Add or clear a single version picker field:
+  ///
+  ///  *  To add, specify the version with a `versionId`.
+  ///  *  To clear, set `versionId` to `-1`.
+  final List<JiraSingleVersionPickerField> singleVersionPickerFields;
+
+  /// Edit the time tracking field.
+  final JiraTimeTrackingField? timeTrackingField;
+
+  /// Add or clear a URL field:
+  ///
+  ///  *  To add, provide the `url` with the desired URL value.
+  ///  *  To clear, set `url` to an empty string.
+  final List<JiraUrlField> urlFields;
+
+  JiraIssueFields(
+      {List<JiraCascadingSelectField>? cascadingSelectFields,
+      List<JiraNumberField>? clearableNumberFields,
+      List<JiraColorField>? colorFields,
+      List<JiraDateField>? datePickerFields,
+      List<JiraDateTimeField>? dateTimePickerFields,
+      this.issueType,
+      List<JiraLabelsField>? labelsFields,
+      List<JiraMultipleGroupPickerField>? multipleGroupPickerFields,
+      List<JiraMultipleSelectUserPickerField>?
+          multipleSelectClearableUserPickerFields,
+      List<JiraMultipleSelectField>? multipleSelectFields,
+      List<JiraMultipleVersionPickerField>? multipleVersionPickerFields,
+      this.multiselectComponents,
+      this.originalEstimateField,
+      this.priority,
+      List<JiraRichTextField>? richTextFields,
+      List<JiraSingleGroupPickerField>? singleGroupPickerFields,
+      List<JiraSingleLineTextField>? singleLineTextFields,
+      List<JiraSingleSelectUserPickerField>?
+          singleSelectClearableUserPickerFields,
+      List<JiraSingleSelectField>? singleSelectFields,
+      List<JiraSingleVersionPickerField>? singleVersionPickerFields,
+      this.timeTrackingField,
+      List<JiraUrlField>? urlFields})
+      : cascadingSelectFields = cascadingSelectFields ?? [],
+        clearableNumberFields = clearableNumberFields ?? [],
+        colorFields = colorFields ?? [],
+        datePickerFields = datePickerFields ?? [],
+        dateTimePickerFields = dateTimePickerFields ?? [],
+        labelsFields = labelsFields ?? [],
+        multipleGroupPickerFields = multipleGroupPickerFields ?? [],
+        multipleSelectClearableUserPickerFields =
+            multipleSelectClearableUserPickerFields ?? [],
+        multipleSelectFields = multipleSelectFields ?? [],
+        multipleVersionPickerFields = multipleVersionPickerFields ?? [],
+        richTextFields = richTextFields ?? [],
+        singleGroupPickerFields = singleGroupPickerFields ?? [],
+        singleLineTextFields = singleLineTextFields ?? [],
+        singleSelectClearableUserPickerFields =
+            singleSelectClearableUserPickerFields ?? [],
+        singleSelectFields = singleSelectFields ?? [],
+        singleVersionPickerFields = singleVersionPickerFields ?? [],
+        urlFields = urlFields ?? [];
+
+  factory JiraIssueFields.fromJson(Map<String, Object?> json) {
+    return JiraIssueFields(
+      cascadingSelectFields: (json[r'cascadingSelectFields'] as List<Object?>?)
+              ?.map((i) => JiraCascadingSelectField.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      clearableNumberFields: (json[r'clearableNumberFields'] as List<Object?>?)
+              ?.map((i) => JiraNumberField.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      colorFields: (json[r'colorFields'] as List<Object?>?)
+              ?.map((i) => JiraColorField.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      datePickerFields: (json[r'datePickerFields'] as List<Object?>?)
+              ?.map((i) => JiraDateField.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      dateTimePickerFields: (json[r'dateTimePickerFields'] as List<Object?>?)
+              ?.map((i) => JiraDateTimeField.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      issueType: json[r'issueType'] != null
+          ? JiraIssueTypeField.fromJson(
+              json[r'issueType']! as Map<String, Object?>)
+          : null,
+      labelsFields: (json[r'labelsFields'] as List<Object?>?)
+              ?.map((i) => JiraLabelsField.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      multipleGroupPickerFields:
+          (json[r'multipleGroupPickerFields'] as List<Object?>?)
+                  ?.map((i) => JiraMultipleGroupPickerField.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+                  .toList() ??
+              [],
+      multipleSelectClearableUserPickerFields:
+          (json[r'multipleSelectClearableUserPickerFields'] as List<Object?>?)
+                  ?.map((i) => JiraMultipleSelectUserPickerField.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+                  .toList() ??
+              [],
+      multipleSelectFields: (json[r'multipleSelectFields'] as List<Object?>?)
+              ?.map((i) => JiraMultipleSelectField.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      multipleVersionPickerFields:
+          (json[r'multipleVersionPickerFields'] as List<Object?>?)
+                  ?.map((i) => JiraMultipleVersionPickerField.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+                  .toList() ??
+              [],
+      multiselectComponents: json[r'multiselectComponents'] != null
+          ? JiraMultiSelectComponentField.fromJson(
+              json[r'multiselectComponents']! as Map<String, Object?>)
+          : null,
+      originalEstimateField: json[r'originalEstimateField'] != null
+          ? JiraDurationField.fromJson(
+              json[r'originalEstimateField']! as Map<String, Object?>)
+          : null,
+      priority: json[r'priority'] != null
+          ? JiraPriorityField.fromJson(
+              json[r'priority']! as Map<String, Object?>)
+          : null,
+      richTextFields: (json[r'richTextFields'] as List<Object?>?)
+              ?.map((i) => JiraRichTextField.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      singleGroupPickerFields:
+          (json[r'singleGroupPickerFields'] as List<Object?>?)
+                  ?.map((i) => JiraSingleGroupPickerField.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+                  .toList() ??
+              [],
+      singleLineTextFields: (json[r'singleLineTextFields'] as List<Object?>?)
+              ?.map((i) => JiraSingleLineTextField.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      singleSelectClearableUserPickerFields:
+          (json[r'singleSelectClearableUserPickerFields'] as List<Object?>?)
+                  ?.map((i) => JiraSingleSelectUserPickerField.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+                  .toList() ??
+              [],
+      singleSelectFields: (json[r'singleSelectFields'] as List<Object?>?)
+              ?.map((i) => JiraSingleSelectField.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      singleVersionPickerFields:
+          (json[r'singleVersionPickerFields'] as List<Object?>?)
+                  ?.map((i) => JiraSingleVersionPickerField.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+                  .toList() ??
+              [],
+      timeTrackingField: json[r'timeTrackingField'] != null
+          ? JiraTimeTrackingField.fromJson(
+              json[r'timeTrackingField']! as Map<String, Object?>)
+          : null,
+      urlFields: (json[r'urlFields'] as List<Object?>?)
+              ?.map((i) =>
+                  JiraUrlField.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var cascadingSelectFields = this.cascadingSelectFields;
+    var clearableNumberFields = this.clearableNumberFields;
+    var colorFields = this.colorFields;
+    var datePickerFields = this.datePickerFields;
+    var dateTimePickerFields = this.dateTimePickerFields;
+    var issueType = this.issueType;
+    var labelsFields = this.labelsFields;
+    var multipleGroupPickerFields = this.multipleGroupPickerFields;
+    var multipleSelectClearableUserPickerFields =
+        this.multipleSelectClearableUserPickerFields;
+    var multipleSelectFields = this.multipleSelectFields;
+    var multipleVersionPickerFields = this.multipleVersionPickerFields;
+    var multiselectComponents = this.multiselectComponents;
+    var originalEstimateField = this.originalEstimateField;
+    var priority = this.priority;
+    var richTextFields = this.richTextFields;
+    var singleGroupPickerFields = this.singleGroupPickerFields;
+    var singleLineTextFields = this.singleLineTextFields;
+    var singleSelectClearableUserPickerFields =
+        this.singleSelectClearableUserPickerFields;
+    var singleSelectFields = this.singleSelectFields;
+    var singleVersionPickerFields = this.singleVersionPickerFields;
+    var timeTrackingField = this.timeTrackingField;
+    var urlFields = this.urlFields;
+
+    final json = <String, Object?>{};
+    json[r'cascadingSelectFields'] =
+        cascadingSelectFields.map((i) => i.toJson()).toList();
+    json[r'clearableNumberFields'] =
+        clearableNumberFields.map((i) => i.toJson()).toList();
+    json[r'colorFields'] = colorFields.map((i) => i.toJson()).toList();
+    json[r'datePickerFields'] =
+        datePickerFields.map((i) => i.toJson()).toList();
+    json[r'dateTimePickerFields'] =
+        dateTimePickerFields.map((i) => i.toJson()).toList();
+    if (issueType != null) {
+      json[r'issueType'] = issueType.toJson();
+    }
+    json[r'labelsFields'] = labelsFields.map((i) => i.toJson()).toList();
+    json[r'multipleGroupPickerFields'] =
+        multipleGroupPickerFields.map((i) => i.toJson()).toList();
+    json[r'multipleSelectClearableUserPickerFields'] =
+        multipleSelectClearableUserPickerFields.map((i) => i.toJson()).toList();
+    json[r'multipleSelectFields'] =
+        multipleSelectFields.map((i) => i.toJson()).toList();
+    json[r'multipleVersionPickerFields'] =
+        multipleVersionPickerFields.map((i) => i.toJson()).toList();
+    if (multiselectComponents != null) {
+      json[r'multiselectComponents'] = multiselectComponents.toJson();
+    }
+    if (originalEstimateField != null) {
+      json[r'originalEstimateField'] = originalEstimateField.toJson();
+    }
+    if (priority != null) {
+      json[r'priority'] = priority.toJson();
+    }
+    json[r'richTextFields'] = richTextFields.map((i) => i.toJson()).toList();
+    json[r'singleGroupPickerFields'] =
+        singleGroupPickerFields.map((i) => i.toJson()).toList();
+    json[r'singleLineTextFields'] =
+        singleLineTextFields.map((i) => i.toJson()).toList();
+    json[r'singleSelectClearableUserPickerFields'] =
+        singleSelectClearableUserPickerFields.map((i) => i.toJson()).toList();
+    json[r'singleSelectFields'] =
+        singleSelectFields.map((i) => i.toJson()).toList();
+    json[r'singleVersionPickerFields'] =
+        singleVersionPickerFields.map((i) => i.toJson()).toList();
+    if (timeTrackingField != null) {
+      json[r'timeTrackingField'] = timeTrackingField.toJson();
+    }
+    json[r'urlFields'] = urlFields.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  JiraIssueFields copyWith(
+      {List<JiraCascadingSelectField>? cascadingSelectFields,
+      List<JiraNumberField>? clearableNumberFields,
+      List<JiraColorField>? colorFields,
+      List<JiraDateField>? datePickerFields,
+      List<JiraDateTimeField>? dateTimePickerFields,
+      JiraIssueTypeField? issueType,
+      List<JiraLabelsField>? labelsFields,
+      List<JiraMultipleGroupPickerField>? multipleGroupPickerFields,
+      List<JiraMultipleSelectUserPickerField>?
+          multipleSelectClearableUserPickerFields,
+      List<JiraMultipleSelectField>? multipleSelectFields,
+      List<JiraMultipleVersionPickerField>? multipleVersionPickerFields,
+      JiraMultiSelectComponentField? multiselectComponents,
+      JiraDurationField? originalEstimateField,
+      JiraPriorityField? priority,
+      List<JiraRichTextField>? richTextFields,
+      List<JiraSingleGroupPickerField>? singleGroupPickerFields,
+      List<JiraSingleLineTextField>? singleLineTextFields,
+      List<JiraSingleSelectUserPickerField>?
+          singleSelectClearableUserPickerFields,
+      List<JiraSingleSelectField>? singleSelectFields,
+      List<JiraSingleVersionPickerField>? singleVersionPickerFields,
+      JiraTimeTrackingField? timeTrackingField,
+      List<JiraUrlField>? urlFields}) {
+    return JiraIssueFields(
+      cascadingSelectFields:
+          cascadingSelectFields ?? this.cascadingSelectFields,
+      clearableNumberFields:
+          clearableNumberFields ?? this.clearableNumberFields,
+      colorFields: colorFields ?? this.colorFields,
+      datePickerFields: datePickerFields ?? this.datePickerFields,
+      dateTimePickerFields: dateTimePickerFields ?? this.dateTimePickerFields,
+      issueType: issueType ?? this.issueType,
+      labelsFields: labelsFields ?? this.labelsFields,
+      multipleGroupPickerFields:
+          multipleGroupPickerFields ?? this.multipleGroupPickerFields,
+      multipleSelectClearableUserPickerFields:
+          multipleSelectClearableUserPickerFields ??
+              this.multipleSelectClearableUserPickerFields,
+      multipleSelectFields: multipleSelectFields ?? this.multipleSelectFields,
+      multipleVersionPickerFields:
+          multipleVersionPickerFields ?? this.multipleVersionPickerFields,
+      multiselectComponents:
+          multiselectComponents ?? this.multiselectComponents,
+      originalEstimateField:
+          originalEstimateField ?? this.originalEstimateField,
+      priority: priority ?? this.priority,
+      richTextFields: richTextFields ?? this.richTextFields,
+      singleGroupPickerFields:
+          singleGroupPickerFields ?? this.singleGroupPickerFields,
+      singleLineTextFields: singleLineTextFields ?? this.singleLineTextFields,
+      singleSelectClearableUserPickerFields:
+          singleSelectClearableUserPickerFields ??
+              this.singleSelectClearableUserPickerFields,
+      singleSelectFields: singleSelectFields ?? this.singleSelectFields,
+      singleVersionPickerFields:
+          singleVersionPickerFields ?? this.singleVersionPickerFields,
+      timeTrackingField: timeTrackingField ?? this.timeTrackingField,
+      urlFields: urlFields ?? this.urlFields,
+    );
+  }
+}
+
+class JiraIssueTypeField {
+  final String issueTypeId;
+
+  JiraIssueTypeField({required this.issueTypeId});
+
+  factory JiraIssueTypeField.fromJson(Map<String, Object?> json) {
+    return JiraIssueTypeField(
+      issueTypeId: json[r'issueTypeId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueTypeId = this.issueTypeId;
+
+    final json = <String, Object?>{};
+    json[r'issueTypeId'] = issueTypeId;
+    return json;
+  }
+
+  JiraIssueTypeField copyWith({String? issueTypeId}) {
+    return JiraIssueTypeField(
+      issueTypeId: issueTypeId ?? this.issueTypeId,
+    );
+  }
+}
+
+class JiraLabelsField {
+  final JiraLabelsFieldBulkEditMultiSelectFieldOption
+      bulkEditMultiSelectFieldOption;
+  final String fieldId;
+  final List<JiraLabelsInput> labels;
+
+  JiraLabelsField(
+      {required this.bulkEditMultiSelectFieldOption,
+      required this.fieldId,
+      required this.labels});
+
+  factory JiraLabelsField.fromJson(Map<String, Object?> json) {
+    return JiraLabelsField(
+      bulkEditMultiSelectFieldOption:
+          JiraLabelsFieldBulkEditMultiSelectFieldOption.fromValue(
+              json[r'bulkEditMultiSelectFieldOption'] as String? ?? ''),
+      fieldId: json[r'fieldId'] as String? ?? '',
+      labels: (json[r'labels'] as List<Object?>?)
+              ?.map((i) => JiraLabelsInput.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var bulkEditMultiSelectFieldOption = this.bulkEditMultiSelectFieldOption;
+    var fieldId = this.fieldId;
+    var labels = this.labels;
+
+    final json = <String, Object?>{};
+    json[r'bulkEditMultiSelectFieldOption'] =
+        bulkEditMultiSelectFieldOption.value;
+    json[r'fieldId'] = fieldId;
+    json[r'labels'] = labels.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  JiraLabelsField copyWith(
+      {JiraLabelsFieldBulkEditMultiSelectFieldOption?
+          bulkEditMultiSelectFieldOption,
+      String? fieldId,
+      List<JiraLabelsInput>? labels}) {
+    return JiraLabelsField(
+      bulkEditMultiSelectFieldOption:
+          bulkEditMultiSelectFieldOption ?? this.bulkEditMultiSelectFieldOption,
+      fieldId: fieldId ?? this.fieldId,
+      labels: labels ?? this.labels,
+    );
+  }
+}
+
+class JiraLabelsFieldBulkEditMultiSelectFieldOption {
+  static const add = JiraLabelsFieldBulkEditMultiSelectFieldOption._('ADD');
+  static const remove =
+      JiraLabelsFieldBulkEditMultiSelectFieldOption._('REMOVE');
+  static const replace =
+      JiraLabelsFieldBulkEditMultiSelectFieldOption._('REPLACE');
+  static const removeAll =
+      JiraLabelsFieldBulkEditMultiSelectFieldOption._('REMOVE_ALL');
+
+  static const values = [
+    add,
+    remove,
+    replace,
+    removeAll,
+  ];
+  final String value;
+
+  const JiraLabelsFieldBulkEditMultiSelectFieldOption._(this.value);
+
+  static JiraLabelsFieldBulkEditMultiSelectFieldOption fromValue(
+          String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => JiraLabelsFieldBulkEditMultiSelectFieldOption._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class JiraLabelsInput {
+  final String name;
+
+  JiraLabelsInput({required this.name});
+
+  factory JiraLabelsInput.fromJson(Map<String, Object?> json) {
+    return JiraLabelsInput(
+      name: json[r'name'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    json[r'name'] = name;
+    return json;
+  }
+
+  JiraLabelsInput copyWith({String? name}) {
+    return JiraLabelsInput(
+      name: name ?? this.name,
+    );
+  }
+}
+
+class JiraMultiSelectComponentField {
+  final JiraMultiSelectComponentFieldBulkEditMultiSelectFieldOption
+      bulkEditMultiSelectFieldOption;
+  final List<JiraComponentField> components;
+  final String fieldId;
+
+  JiraMultiSelectComponentField(
+      {required this.bulkEditMultiSelectFieldOption,
+      required this.components,
+      required this.fieldId});
+
+  factory JiraMultiSelectComponentField.fromJson(Map<String, Object?> json) {
+    return JiraMultiSelectComponentField(
+      bulkEditMultiSelectFieldOption:
+          JiraMultiSelectComponentFieldBulkEditMultiSelectFieldOption.fromValue(
+              json[r'bulkEditMultiSelectFieldOption'] as String? ?? ''),
+      components: (json[r'components'] as List<Object?>?)
+              ?.map((i) => JiraComponentField.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      fieldId: json[r'fieldId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var bulkEditMultiSelectFieldOption = this.bulkEditMultiSelectFieldOption;
+    var components = this.components;
+    var fieldId = this.fieldId;
+
+    final json = <String, Object?>{};
+    json[r'bulkEditMultiSelectFieldOption'] =
+        bulkEditMultiSelectFieldOption.value;
+    json[r'components'] = components.map((i) => i.toJson()).toList();
+    json[r'fieldId'] = fieldId;
+    return json;
+  }
+
+  JiraMultiSelectComponentField copyWith(
+      {JiraMultiSelectComponentFieldBulkEditMultiSelectFieldOption?
+          bulkEditMultiSelectFieldOption,
+      List<JiraComponentField>? components,
+      String? fieldId}) {
+    return JiraMultiSelectComponentField(
+      bulkEditMultiSelectFieldOption:
+          bulkEditMultiSelectFieldOption ?? this.bulkEditMultiSelectFieldOption,
+      components: components ?? this.components,
+      fieldId: fieldId ?? this.fieldId,
+    );
+  }
+}
+
+class JiraMultiSelectComponentFieldBulkEditMultiSelectFieldOption {
+  static const add =
+      JiraMultiSelectComponentFieldBulkEditMultiSelectFieldOption._('ADD');
+  static const remove =
+      JiraMultiSelectComponentFieldBulkEditMultiSelectFieldOption._('REMOVE');
+  static const replace =
+      JiraMultiSelectComponentFieldBulkEditMultiSelectFieldOption._('REPLACE');
+  static const removeAll =
+      JiraMultiSelectComponentFieldBulkEditMultiSelectFieldOption._(
+          'REMOVE_ALL');
+
+  static const values = [
+    add,
+    remove,
+    replace,
+    removeAll,
+  ];
+  final String value;
+
+  const JiraMultiSelectComponentFieldBulkEditMultiSelectFieldOption._(
+      this.value);
+
+  static JiraMultiSelectComponentFieldBulkEditMultiSelectFieldOption fromValue(
+          String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () =>
+              JiraMultiSelectComponentFieldBulkEditMultiSelectFieldOption._(
+                  value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class JiraMultipleGroupPickerField {
+  final String fieldId;
+  final List<JiraGroupInput> groups;
+
+  JiraMultipleGroupPickerField({required this.fieldId, required this.groups});
+
+  factory JiraMultipleGroupPickerField.fromJson(Map<String, Object?> json) {
+    return JiraMultipleGroupPickerField(
+      fieldId: json[r'fieldId'] as String? ?? '',
+      groups: (json[r'groups'] as List<Object?>?)
+              ?.map((i) => JiraGroupInput.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fieldId = this.fieldId;
+    var groups = this.groups;
+
+    final json = <String, Object?>{};
+    json[r'fieldId'] = fieldId;
+    json[r'groups'] = groups.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  JiraMultipleGroupPickerField copyWith(
+      {String? fieldId, List<JiraGroupInput>? groups}) {
+    return JiraMultipleGroupPickerField(
+      fieldId: fieldId ?? this.fieldId,
+      groups: groups ?? this.groups,
+    );
+  }
+}
+
+class JiraMultipleSelectField {
+  final String fieldId;
+  final List<JiraSelectedOptionField> options;
+
+  JiraMultipleSelectField({required this.fieldId, required this.options});
+
+  factory JiraMultipleSelectField.fromJson(Map<String, Object?> json) {
+    return JiraMultipleSelectField(
+      fieldId: json[r'fieldId'] as String? ?? '',
+      options: (json[r'options'] as List<Object?>?)
+              ?.map((i) => JiraSelectedOptionField.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fieldId = this.fieldId;
+    var options = this.options;
+
+    final json = <String, Object?>{};
+    json[r'fieldId'] = fieldId;
+    json[r'options'] = options.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  JiraMultipleSelectField copyWith(
+      {String? fieldId, List<JiraSelectedOptionField>? options}) {
+    return JiraMultipleSelectField(
+      fieldId: fieldId ?? this.fieldId,
+      options: options ?? this.options,
+    );
+  }
+}
+
+class JiraMultipleSelectUserPickerField {
+  final String fieldId;
+  final List<JiraUserField> users;
+
+  JiraMultipleSelectUserPickerField(
+      {required this.fieldId, List<JiraUserField>? users})
+      : users = users ?? [];
+
+  factory JiraMultipleSelectUserPickerField.fromJson(
+      Map<String, Object?> json) {
+    return JiraMultipleSelectUserPickerField(
+      fieldId: json[r'fieldId'] as String? ?? '',
+      users: (json[r'users'] as List<Object?>?)
+              ?.map((i) => JiraUserField.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fieldId = this.fieldId;
+    var users = this.users;
+
+    final json = <String, Object?>{};
+    json[r'fieldId'] = fieldId;
+    json[r'users'] = users.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  JiraMultipleSelectUserPickerField copyWith(
+      {String? fieldId, List<JiraUserField>? users}) {
+    return JiraMultipleSelectUserPickerField(
+      fieldId: fieldId ?? this.fieldId,
+      users: users ?? this.users,
+    );
+  }
+}
+
+class JiraMultipleVersionPickerField {
+  final JiraMultipleVersionPickerFieldBulkEditMultiSelectFieldOption
+      bulkEditMultiSelectFieldOption;
+  final String fieldId;
+  final List<JiraVersionField> versions;
+
+  JiraMultipleVersionPickerField(
+      {required this.bulkEditMultiSelectFieldOption,
+      required this.fieldId,
+      required this.versions});
+
+  factory JiraMultipleVersionPickerField.fromJson(Map<String, Object?> json) {
+    return JiraMultipleVersionPickerField(
+      bulkEditMultiSelectFieldOption:
+          JiraMultipleVersionPickerFieldBulkEditMultiSelectFieldOption
+              .fromValue(
+                  json[r'bulkEditMultiSelectFieldOption'] as String? ?? ''),
+      fieldId: json[r'fieldId'] as String? ?? '',
+      versions: (json[r'versions'] as List<Object?>?)
+              ?.map((i) => JiraVersionField.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var bulkEditMultiSelectFieldOption = this.bulkEditMultiSelectFieldOption;
+    var fieldId = this.fieldId;
+    var versions = this.versions;
+
+    final json = <String, Object?>{};
+    json[r'bulkEditMultiSelectFieldOption'] =
+        bulkEditMultiSelectFieldOption.value;
+    json[r'fieldId'] = fieldId;
+    json[r'versions'] = versions.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  JiraMultipleVersionPickerField copyWith(
+      {JiraMultipleVersionPickerFieldBulkEditMultiSelectFieldOption?
+          bulkEditMultiSelectFieldOption,
+      String? fieldId,
+      List<JiraVersionField>? versions}) {
+    return JiraMultipleVersionPickerField(
+      bulkEditMultiSelectFieldOption:
+          bulkEditMultiSelectFieldOption ?? this.bulkEditMultiSelectFieldOption,
+      fieldId: fieldId ?? this.fieldId,
+      versions: versions ?? this.versions,
+    );
+  }
+}
+
+class JiraMultipleVersionPickerFieldBulkEditMultiSelectFieldOption {
+  static const add =
+      JiraMultipleVersionPickerFieldBulkEditMultiSelectFieldOption._('ADD');
+  static const remove =
+      JiraMultipleVersionPickerFieldBulkEditMultiSelectFieldOption._('REMOVE');
+  static const replace =
+      JiraMultipleVersionPickerFieldBulkEditMultiSelectFieldOption._('REPLACE');
+  static const removeAll =
+      JiraMultipleVersionPickerFieldBulkEditMultiSelectFieldOption._(
+          'REMOVE_ALL');
+
+  static const values = [
+    add,
+    remove,
+    replace,
+    removeAll,
+  ];
+  final String value;
+
+  const JiraMultipleVersionPickerFieldBulkEditMultiSelectFieldOption._(
+      this.value);
+
+  static JiraMultipleVersionPickerFieldBulkEditMultiSelectFieldOption fromValue(
+          String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () =>
+              JiraMultipleVersionPickerFieldBulkEditMultiSelectFieldOption._(
+                  value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class JiraNumberField {
+  final String fieldId;
+  final num? value;
+
+  JiraNumberField({required this.fieldId, this.value});
+
+  factory JiraNumberField.fromJson(Map<String, Object?> json) {
+    return JiraNumberField(
+      fieldId: json[r'fieldId'] as String? ?? '',
+      value: json[r'value'] as num?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fieldId = this.fieldId;
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    json[r'fieldId'] = fieldId;
+    if (value != null) {
+      json[r'value'] = value;
+    }
+    return json;
+  }
+
+  JiraNumberField copyWith({String? fieldId, num? value}) {
+    return JiraNumberField(
+      fieldId: fieldId ?? this.fieldId,
+      value: value ?? this.value,
+    );
+  }
+}
+
+class JiraPriorityField {
+  final String priorityId;
+
+  JiraPriorityField({required this.priorityId});
+
+  factory JiraPriorityField.fromJson(Map<String, Object?> json) {
+    return JiraPriorityField(
+      priorityId: json[r'priorityId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var priorityId = this.priorityId;
+
+    final json = <String, Object?>{};
+    json[r'priorityId'] = priorityId;
+    return json;
+  }
+
+  JiraPriorityField copyWith({String? priorityId}) {
+    return JiraPriorityField(
+      priorityId: priorityId ?? this.priorityId,
+    );
+  }
+}
+
+class JiraRichTextField {
+  final String fieldId;
+  final JiraRichTextInput richText;
+
+  JiraRichTextField({required this.fieldId, required this.richText});
+
+  factory JiraRichTextField.fromJson(Map<String, Object?> json) {
+    return JiraRichTextField(
+      fieldId: json[r'fieldId'] as String? ?? '',
+      richText: JiraRichTextInput.fromJson(
+          json[r'richText'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fieldId = this.fieldId;
+    var richText = this.richText;
+
+    final json = <String, Object?>{};
+    json[r'fieldId'] = fieldId;
+    json[r'richText'] = richText.toJson();
+    return json;
+  }
+
+  JiraRichTextField copyWith({String? fieldId, JiraRichTextInput? richText}) {
+    return JiraRichTextField(
+      fieldId: fieldId ?? this.fieldId,
+      richText: richText ?? this.richText,
+    );
+  }
+}
+
+class JiraRichTextInput {
+  final Map<String, dynamic>? adfValue;
+
+  JiraRichTextInput({this.adfValue});
+
+  factory JiraRichTextInput.fromJson(Map<String, Object?> json) {
+    return JiraRichTextInput(
+      adfValue: json[r'adfValue'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var adfValue = this.adfValue;
+
+    final json = <String, Object?>{};
+    if (adfValue != null) {
+      json[r'adfValue'] = adfValue;
+    }
+    return json;
+  }
+
+  JiraRichTextInput copyWith({Map<String, dynamic>? adfValue}) {
+    return JiraRichTextInput(
+      adfValue: adfValue ?? this.adfValue,
+    );
+  }
+}
+
+class JiraSelectedOptionField {
+  final int? optionId;
+
+  JiraSelectedOptionField({this.optionId});
+
+  factory JiraSelectedOptionField.fromJson(Map<String, Object?> json) {
+    return JiraSelectedOptionField(
+      optionId: (json[r'optionId'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var optionId = this.optionId;
+
+    final json = <String, Object?>{};
+    if (optionId != null) {
+      json[r'optionId'] = optionId;
+    }
+    return json;
+  }
+
+  JiraSelectedOptionField copyWith({int? optionId}) {
+    return JiraSelectedOptionField(
+      optionId: optionId ?? this.optionId,
+    );
+  }
+}
+
+class JiraSingleGroupPickerField {
+  final String fieldId;
+  final JiraGroupInput group;
+
+  JiraSingleGroupPickerField({required this.fieldId, required this.group});
+
+  factory JiraSingleGroupPickerField.fromJson(Map<String, Object?> json) {
+    return JiraSingleGroupPickerField(
+      fieldId: json[r'fieldId'] as String? ?? '',
+      group: JiraGroupInput.fromJson(
+          json[r'group'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fieldId = this.fieldId;
+    var group = this.group;
+
+    final json = <String, Object?>{};
+    json[r'fieldId'] = fieldId;
+    json[r'group'] = group.toJson();
+    return json;
+  }
+
+  JiraSingleGroupPickerField copyWith(
+      {String? fieldId, JiraGroupInput? group}) {
+    return JiraSingleGroupPickerField(
+      fieldId: fieldId ?? this.fieldId,
+      group: group ?? this.group,
+    );
+  }
+}
+
+class JiraSingleLineTextField {
+  final String fieldId;
+  final String text;
+
+  JiraSingleLineTextField({required this.fieldId, required this.text});
+
+  factory JiraSingleLineTextField.fromJson(Map<String, Object?> json) {
+    return JiraSingleLineTextField(
+      fieldId: json[r'fieldId'] as String? ?? '',
+      text: json[r'text'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fieldId = this.fieldId;
+    var text = this.text;
+
+    final json = <String, Object?>{};
+    json[r'fieldId'] = fieldId;
+    json[r'text'] = text;
+    return json;
+  }
+
+  JiraSingleLineTextField copyWith({String? fieldId, String? text}) {
+    return JiraSingleLineTextField(
+      fieldId: fieldId ?? this.fieldId,
+      text: text ?? this.text,
+    );
+  }
+}
+
+/// Add or clear a single select field:
+///
+///  *  To add, specify the option with an `optionId`.
+///  *  To clear, pass an option with `optionId` as `-1`.
+class JiraSingleSelectField {
+  final String fieldId;
+  final JiraSelectedOptionField option;
+
+  JiraSingleSelectField({required this.fieldId, required this.option});
+
+  factory JiraSingleSelectField.fromJson(Map<String, Object?> json) {
+    return JiraSingleSelectField(
+      fieldId: json[r'fieldId'] as String? ?? '',
+      option: JiraSelectedOptionField.fromJson(
+          json[r'option'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fieldId = this.fieldId;
+    var option = this.option;
+
+    final json = <String, Object?>{};
+    json[r'fieldId'] = fieldId;
+    json[r'option'] = option.toJson();
+    return json;
+  }
+
+  JiraSingleSelectField copyWith(
+      {String? fieldId, JiraSelectedOptionField? option}) {
+    return JiraSingleSelectField(
+      fieldId: fieldId ?? this.fieldId,
+      option: option ?? this.option,
+    );
+  }
+}
+
+class JiraSingleSelectUserPickerField {
+  final String fieldId;
+  final JiraUserField? user;
+
+  JiraSingleSelectUserPickerField({required this.fieldId, this.user});
+
+  factory JiraSingleSelectUserPickerField.fromJson(Map<String, Object?> json) {
+    return JiraSingleSelectUserPickerField(
+      fieldId: json[r'fieldId'] as String? ?? '',
+      user: json[r'user'] != null
+          ? JiraUserField.fromJson(json[r'user']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fieldId = this.fieldId;
+    var user = this.user;
+
+    final json = <String, Object?>{};
+    json[r'fieldId'] = fieldId;
+    if (user != null) {
+      json[r'user'] = user.toJson();
+    }
+    return json;
+  }
+
+  JiraSingleSelectUserPickerField copyWith(
+      {String? fieldId, JiraUserField? user}) {
+    return JiraSingleSelectUserPickerField(
+      fieldId: fieldId ?? this.fieldId,
+      user: user ?? this.user,
+    );
+  }
+}
+
+class JiraSingleVersionPickerField {
+  final String fieldId;
+  final JiraVersionField version;
+
+  JiraSingleVersionPickerField({required this.fieldId, required this.version});
+
+  factory JiraSingleVersionPickerField.fromJson(Map<String, Object?> json) {
+    return JiraSingleVersionPickerField(
+      fieldId: json[r'fieldId'] as String? ?? '',
+      version: JiraVersionField.fromJson(
+          json[r'version'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fieldId = this.fieldId;
+    var version = this.version;
+
+    final json = <String, Object?>{};
+    json[r'fieldId'] = fieldId;
+    json[r'version'] = version.toJson();
+    return json;
+  }
+
+  JiraSingleVersionPickerField copyWith(
+      {String? fieldId, JiraVersionField? version}) {
+    return JiraSingleVersionPickerField(
+      fieldId: fieldId ?? this.fieldId,
+      version: version ?? this.version,
+    );
+  }
+}
+
 /// Details of a status.
 class JiraStatus {
   /// The description of the status.
@@ -34026,6 +39475,117 @@ class JiraStatusStatusCategory {
   String toString() => value;
 }
 
+class JiraTimeTrackingField {
+  final String timeRemaining;
+
+  JiraTimeTrackingField({required this.timeRemaining});
+
+  factory JiraTimeTrackingField.fromJson(Map<String, Object?> json) {
+    return JiraTimeTrackingField(
+      timeRemaining: json[r'timeRemaining'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var timeRemaining = this.timeRemaining;
+
+    final json = <String, Object?>{};
+    json[r'timeRemaining'] = timeRemaining;
+    return json;
+  }
+
+  JiraTimeTrackingField copyWith({String? timeRemaining}) {
+    return JiraTimeTrackingField(
+      timeRemaining: timeRemaining ?? this.timeRemaining,
+    );
+  }
+}
+
+class JiraUrlField {
+  final String fieldId;
+  final String url;
+
+  JiraUrlField({required this.fieldId, required this.url});
+
+  factory JiraUrlField.fromJson(Map<String, Object?> json) {
+    return JiraUrlField(
+      fieldId: json[r'fieldId'] as String? ?? '',
+      url: json[r'url'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fieldId = this.fieldId;
+    var url = this.url;
+
+    final json = <String, Object?>{};
+    json[r'fieldId'] = fieldId;
+    json[r'url'] = url;
+    return json;
+  }
+
+  JiraUrlField copyWith({String? fieldId, String? url}) {
+    return JiraUrlField(
+      fieldId: fieldId ?? this.fieldId,
+      url: url ?? this.url,
+    );
+  }
+}
+
+class JiraUserField {
+  final String accountId;
+
+  JiraUserField({required this.accountId});
+
+  factory JiraUserField.fromJson(Map<String, Object?> json) {
+    return JiraUserField(
+      accountId: json[r'accountId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var accountId = this.accountId;
+
+    final json = <String, Object?>{};
+    json[r'accountId'] = accountId;
+    return json;
+  }
+
+  JiraUserField copyWith({String? accountId}) {
+    return JiraUserField(
+      accountId: accountId ?? this.accountId,
+    );
+  }
+}
+
+class JiraVersionField {
+  final String? versionId;
+
+  JiraVersionField({this.versionId});
+
+  factory JiraVersionField.fromJson(Map<String, Object?> json) {
+    return JiraVersionField(
+      versionId: json[r'versionId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var versionId = this.versionId;
+
+    final json = <String, Object?>{};
+    if (versionId != null) {
+      json[r'versionId'] = versionId;
+    }
+    return json;
+  }
+
+  JiraVersionField copyWith({String? versionId}) {
+    return JiraVersionField(
+      versionId: versionId ?? this.versionId,
+    );
+  }
+}
+
 /// Details of a workflow.
 class JiraWorkflow {
   /// The description of the workflow.
@@ -34049,7 +39609,9 @@ class JiraWorkflow {
   /// this workflow.
   final String? taskId;
 
-  /// The transitions of the workflow.
+  /// The transitions of the workflow. Note that a transition can have either
+  /// the deprecated `to`/`from` fields or the `toStatusReference`/`links`
+  /// fields, but never both nor a combination.
   final List<WorkflowTransitions> transitions;
 
   /// Use the optional `workflows.usages` expand to get additional information
@@ -34314,20 +39876,43 @@ class JiraWorkflowStatusStatusCategory {
 
 /// Jql function precomputation.
 class JqlFunctionPrecomputationBean {
+  /// The list of arguments function was invoked with.
   final List<String> arguments;
+
+  /// The timestamp of the precomputation creation.
   final DateTime? created;
+
+  /// The error message to be displayed to the user.
+  final String? error;
+
+  /// The field the function was executed against.
   final String? field;
+
+  /// The function key.
   final String? functionKey;
+
+  /// The name of the function.
   final String? functionName;
+
+  /// The id of the precomputation.
   final String? id;
+
+  /// The operator in context of which function was executed.
   final String? operator$;
+
+  /// The timestamp of the precomputation last update.
   final DateTime? updated;
+
+  /// The timestamp of the precomputation last usage.
   final DateTime? used;
+
+  /// The JQL fragment stored as the precomputation.
   final String? value;
 
   JqlFunctionPrecomputationBean(
       {List<String>? arguments,
       this.created,
+      this.error,
       this.field,
       this.functionKey,
       this.functionName,
@@ -34345,6 +39930,7 @@ class JqlFunctionPrecomputationBean {
               .toList() ??
           [],
       created: DateTime.tryParse(json[r'created'] as String? ?? ''),
+      error: json[r'error'] as String?,
       field: json[r'field'] as String?,
       functionKey: json[r'functionKey'] as String?,
       functionName: json[r'functionName'] as String?,
@@ -34359,6 +39945,7 @@ class JqlFunctionPrecomputationBean {
   Map<String, Object?> toJson() {
     var arguments = this.arguments;
     var created = this.created;
+    var error = this.error;
     var field = this.field;
     var functionKey = this.functionKey;
     var functionName = this.functionName;
@@ -34372,6 +39959,9 @@ class JqlFunctionPrecomputationBean {
     json[r'arguments'] = arguments;
     if (created != null) {
       json[r'created'] = created.toIso8601String();
+    }
+    if (error != null) {
+      json[r'error'] = error;
     }
     if (field != null) {
       json[r'field'] = field;
@@ -34403,6 +39993,7 @@ class JqlFunctionPrecomputationBean {
   JqlFunctionPrecomputationBean copyWith(
       {List<String>? arguments,
       DateTime? created,
+      String? error,
       String? field,
       String? functionKey,
       String? functionName,
@@ -34414,6 +40005,7 @@ class JqlFunctionPrecomputationBean {
     return JqlFunctionPrecomputationBean(
       arguments: arguments ?? this.arguments,
       created: created ?? this.created,
+      error: error ?? this.error,
       field: field ?? this.field,
       functionKey: functionKey ?? this.functionKey,
       functionName: functionName ?? this.functionName,
@@ -34428,31 +40020,48 @@ class JqlFunctionPrecomputationBean {
 
 /// Precomputation id and its new value.
 class JqlFunctionPrecomputationUpdateBean {
-  final String id;
-  final String value;
+  /// The error message to be displayed to the user if the given function clause
+  /// is no longer valid during recalculation of the precomputation.
+  final String? error;
 
-  JqlFunctionPrecomputationUpdateBean({required this.id, required this.value});
+  /// The id of the precomputation to update.
+  final String id;
+
+  /// The new value of the precomputation.
+  final String? value;
+
+  JqlFunctionPrecomputationUpdateBean(
+      {this.error, required this.id, this.value});
 
   factory JqlFunctionPrecomputationUpdateBean.fromJson(
       Map<String, Object?> json) {
     return JqlFunctionPrecomputationUpdateBean(
+      error: json[r'error'] as String?,
       id: json[r'id'] as String? ?? '',
-      value: json[r'value'] as String? ?? '',
+      value: json[r'value'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
+    var error = this.error;
     var id = this.id;
     var value = this.value;
 
     final json = <String, Object?>{};
+    if (error != null) {
+      json[r'error'] = error;
+    }
     json[r'id'] = id;
-    json[r'value'] = value;
+    if (value != null) {
+      json[r'value'] = value;
+    }
     return json;
   }
 
-  JqlFunctionPrecomputationUpdateBean copyWith({String? id, String? value}) {
+  JqlFunctionPrecomputationUpdateBean copyWith(
+      {String? error, String? id, String? value}) {
     return JqlFunctionPrecomputationUpdateBean(
+      error: error ?? this.error,
       id: id ?? this.id,
       value: value ?? this.value,
     );
@@ -35530,6 +41139,153 @@ class KeywordOperandKeyword {
   String toString() => value;
 }
 
+class LegacyJackson1ListAttachment {
+  LegacyJackson1ListAttachment();
+
+  factory LegacyJackson1ListAttachment.fromJson(Map<String, Object?> json) {
+    return LegacyJackson1ListAttachment();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+class LegacyJackson1ListColumnItem {
+  LegacyJackson1ListColumnItem();
+
+  factory LegacyJackson1ListColumnItem.fromJson(Map<String, Object?> json) {
+    return LegacyJackson1ListColumnItem();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+class LegacyJackson1ListIssueEvent {
+  LegacyJackson1ListIssueEvent();
+
+  factory LegacyJackson1ListIssueEvent.fromJson(Map<String, Object?> json) {
+    return LegacyJackson1ListIssueEvent();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+class LegacyJackson1ListIssueTypeWithStatus {
+  LegacyJackson1ListIssueTypeWithStatus();
+
+  factory LegacyJackson1ListIssueTypeWithStatus.fromJson(
+      Map<String, Object?> json) {
+    return LegacyJackson1ListIssueTypeWithStatus();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+class LegacyJackson1ListProject {
+  LegacyJackson1ListProject();
+
+  factory LegacyJackson1ListProject.fromJson(Map<String, Object?> json) {
+    return LegacyJackson1ListProject();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+class LegacyJackson1ListProjectComponent {
+  LegacyJackson1ListProjectComponent();
+
+  factory LegacyJackson1ListProjectComponent.fromJson(
+      Map<String, Object?> json) {
+    return LegacyJackson1ListProjectComponent();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+class LegacyJackson1ListProjectRoleDetails {
+  LegacyJackson1ListProjectRoleDetails();
+
+  factory LegacyJackson1ListProjectRoleDetails.fromJson(
+      Map<String, Object?> json) {
+    return LegacyJackson1ListProjectRoleDetails();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+class LegacyJackson1ListProjectType {
+  LegacyJackson1ListProjectType();
+
+  factory LegacyJackson1ListProjectType.fromJson(Map<String, Object?> json) {
+    return LegacyJackson1ListProjectType();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+class LegacyJackson1ListUserMigrationBean {
+  LegacyJackson1ListUserMigrationBean();
+
+  factory LegacyJackson1ListUserMigrationBean.fromJson(
+      Map<String, Object?> json) {
+    return LegacyJackson1ListUserMigrationBean();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+class LegacyJackson1ListVersion {
+  LegacyJackson1ListVersion();
+
+  factory LegacyJackson1ListVersion.fromJson(Map<String, Object?> json) {
+    return LegacyJackson1ListVersion();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
+class LegacyJackson1ListWorklog {
+  LegacyJackson1ListWorklog();
+
+  factory LegacyJackson1ListWorklog.fromJson(Map<String, Object?> json) {
+    return LegacyJackson1ListWorklog();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
 /// Details about a license for the Jira instance.
 class License {
   /// The applications under this license.
@@ -35964,6 +41720,257 @@ class Locale {
   }
 }
 
+/// List of string of inputs
+class MandatoryFieldValue {
+  /// If `true`, will try to retain original non-null issue field values on
+  /// move.
+  final bool retain;
+
+  /// Will treat as `MandatoryFieldValue` if type is `raw` or `empty`
+  final MandatoryFieldValueType? type;
+
+  /// Value for each field. Provide a `list of strings` for non-ADF fields.
+  final List<String> value;
+
+  MandatoryFieldValue({bool? retain, this.type, required this.value})
+      : retain = retain ?? false;
+
+  factory MandatoryFieldValue.fromJson(Map<String, Object?> json) {
+    return MandatoryFieldValue(
+      retain: json[r'retain'] as bool? ?? false,
+      type: json[r'type'] != null
+          ? MandatoryFieldValueType.fromValue(json[r'type']! as String)
+          : null,
+      value: (json[r'value'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var retain = this.retain;
+    var type = this.type;
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    json[r'retain'] = retain;
+    if (type != null) {
+      json[r'type'] = type.value;
+    }
+    json[r'value'] = value;
+    return json;
+  }
+
+  MandatoryFieldValue copyWith(
+      {bool? retain, MandatoryFieldValueType? type, List<String>? value}) {
+    return MandatoryFieldValue(
+      retain: retain ?? this.retain,
+      type: type ?? this.type,
+      value: value ?? this.value,
+    );
+  }
+}
+
+class MandatoryFieldValueType {
+  static const adf = MandatoryFieldValueType._('adf');
+  static const raw = MandatoryFieldValueType._('raw');
+
+  static const values = [
+    adf,
+    raw,
+  ];
+  final String value;
+
+  const MandatoryFieldValueType._(this.value);
+
+  static MandatoryFieldValueType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => MandatoryFieldValueType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// An object notation input
+class MandatoryFieldValueForADF {
+  /// If `true`, will try to retain original non-null issue field values on
+  /// move.
+  final bool retain;
+
+  /// Will treat as `MandatoryFieldValueForADF` if type is `adf`
+  final MandatoryFieldValueForADFType type;
+
+  /// Value for each field. Accepts Atlassian Document Format (ADF) for rich
+  /// text fields like `description`, `environments`. For ADF format details,
+  /// refer to:
+  /// [Atlassian Document Format](https://developer.atlassian.com/cloud/jira/platform/apis/document/structure)
+  final Map<String, dynamic> value;
+
+  MandatoryFieldValueForADF(
+      {bool? retain, required this.type, required this.value})
+      : retain = retain ?? false;
+
+  factory MandatoryFieldValueForADF.fromJson(Map<String, Object?> json) {
+    return MandatoryFieldValueForADF(
+      retain: json[r'retain'] as bool? ?? false,
+      type: MandatoryFieldValueForADFType.fromValue(
+          json[r'type'] as String? ?? ''),
+      value: json[r'value'] as Map<String, Object?>? ?? {},
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var retain = this.retain;
+    var type = this.type;
+    var value = this.value;
+
+    final json = <String, Object?>{};
+    json[r'retain'] = retain;
+    json[r'type'] = type.value;
+    json[r'value'] = value;
+    return json;
+  }
+
+  MandatoryFieldValueForADF copyWith(
+      {bool? retain,
+      MandatoryFieldValueForADFType? type,
+      Map<String, dynamic>? value}) {
+    return MandatoryFieldValueForADF(
+      retain: retain ?? this.retain,
+      type: type ?? this.type,
+      value: value ?? this.value,
+    );
+  }
+}
+
+class MandatoryFieldValueForADFType {
+  static const adf = MandatoryFieldValueForADFType._('adf');
+  static const raw = MandatoryFieldValueForADFType._('raw');
+
+  static const values = [
+    adf,
+    raw,
+  ];
+  final String value;
+
+  const MandatoryFieldValueForADFType._(this.value);
+
+  static MandatoryFieldValueForADFType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => MandatoryFieldValueForADFType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+/// Overrides, for the selected issue types, any status mappings provided in
+/// `statusMappingsByWorkflows`. Status mappings are required when the new
+/// workflow for an issue type doesn't contain all statuses that the old
+/// workflow has. Status mappings can be provided by a combination of
+/// `statusMappingsByWorkflows` and `statusMappingsByIssueTypeOverride`.
+class MappingsByIssueTypeOverride {
+  /// The ID of the issue type for this mapping.
+  final String issueTypeId;
+
+  /// The list of status mappings.
+  final List<WorkflowAssociationStatusMapping> statusMappings;
+
+  MappingsByIssueTypeOverride(
+      {required this.issueTypeId, required this.statusMappings});
+
+  factory MappingsByIssueTypeOverride.fromJson(Map<String, Object?> json) {
+    return MappingsByIssueTypeOverride(
+      issueTypeId: json[r'issueTypeId'] as String? ?? '',
+      statusMappings: (json[r'statusMappings'] as List<Object?>?)
+              ?.map((i) => WorkflowAssociationStatusMapping.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueTypeId = this.issueTypeId;
+    var statusMappings = this.statusMappings;
+
+    final json = <String, Object?>{};
+    json[r'issueTypeId'] = issueTypeId;
+    json[r'statusMappings'] = statusMappings.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  MappingsByIssueTypeOverride copyWith(
+      {String? issueTypeId,
+      List<WorkflowAssociationStatusMapping>? statusMappings}) {
+    return MappingsByIssueTypeOverride(
+      issueTypeId: issueTypeId ?? this.issueTypeId,
+      statusMappings: statusMappings ?? this.statusMappings,
+    );
+  }
+}
+
+/// The status mappings by workflows. Status mappings are required when the new
+/// workflow for an issue type doesn't contain all statuses that the old
+/// workflow has. Status mappings can be provided by a combination of
+/// `statusMappingsByWorkflows` and `statusMappingsByIssueTypeOverride`.
+class MappingsByWorkflow {
+  /// The ID of the new workflow.
+  final String newWorkflowId;
+
+  /// The ID of the old workflow.
+  final String oldWorkflowId;
+
+  /// The list of status mappings.
+  final List<WorkflowAssociationStatusMapping> statusMappings;
+
+  MappingsByWorkflow(
+      {required this.newWorkflowId,
+      required this.oldWorkflowId,
+      required this.statusMappings});
+
+  factory MappingsByWorkflow.fromJson(Map<String, Object?> json) {
+    return MappingsByWorkflow(
+      newWorkflowId: json[r'newWorkflowId'] as String? ?? '',
+      oldWorkflowId: json[r'oldWorkflowId'] as String? ?? '',
+      statusMappings: (json[r'statusMappings'] as List<Object?>?)
+              ?.map((i) => WorkflowAssociationStatusMapping.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var newWorkflowId = this.newWorkflowId;
+    var oldWorkflowId = this.oldWorkflowId;
+    var statusMappings = this.statusMappings;
+
+    final json = <String, Object?>{};
+    json[r'newWorkflowId'] = newWorkflowId;
+    json[r'oldWorkflowId'] = oldWorkflowId;
+    json[r'statusMappings'] = statusMappings.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  MappingsByWorkflow copyWith(
+      {String? newWorkflowId,
+      String? oldWorkflowId,
+      List<WorkflowAssociationStatusMapping>? statusMappings}) {
+    return MappingsByWorkflow(
+      newWorkflowId: newWorkflowId ?? this.newWorkflowId,
+      oldWorkflowId: oldWorkflowId ?? this.oldWorkflowId,
+      statusMappings: statusMappings ?? this.statusMappings,
+    );
+  }
+}
+
 class MoveFieldBean {
   /// The ID of the screen tab field after which to place the moved screen tab
   /// field. Required if `position` isn't provided.
@@ -36250,9 +42257,8 @@ class NewUserDetails {
   final String? password;
 
   /// Products the new user has access to. Valid products are: jira-core,
-  /// jira-servicedesk, jira-product-discovery, jira-software. If left empty,
-  /// the user will get default product access. To create a user without product
-  /// access, set this field to be an empty array.
+  /// jira-servicedesk, jira-product-discovery, jira-software. To create a user
+  /// without product access, set this field to be an empty array.
   final List<String> products;
 
   /// The URL of the user.
@@ -36265,10 +42271,9 @@ class NewUserDetails {
       this.key,
       this.name,
       this.password,
-      List<String>? products,
+      required this.products,
       this.self})
-      : applicationKeys = applicationKeys ?? [],
-        products = products ?? [];
+      : applicationKeys = applicationKeys ?? [];
 
   factory NewUserDetails.fromJson(Map<String, Object?> json) {
     return NewUserDetails(
@@ -37260,6 +43265,207 @@ class OrderOfIssueTypesPosition {
 
   @override
   String toString() => value;
+}
+
+/// A page of items.
+class PageBean2ComponentJsonBean {
+  /// Whether this is the last page.
+  final bool isLast;
+
+  /// The maximum number of items that could be returned.
+  final int? maxResults;
+
+  /// If there is another page of results, the URL of the next page.
+  final String? nextPage;
+
+  /// The URL of the page.
+  final String? self;
+
+  /// The index of the first item returned.
+  final int? startAt;
+
+  /// The number of items returned.
+  final int? total;
+
+  /// The list of items.
+  final List<ComponentJsonBean> values;
+
+  PageBean2ComponentJsonBean(
+      {bool? isLast,
+      this.maxResults,
+      this.nextPage,
+      this.self,
+      this.startAt,
+      this.total,
+      List<ComponentJsonBean>? values})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageBean2ComponentJsonBean.fromJson(Map<String, Object?> json) {
+    return PageBean2ComponentJsonBean(
+      isLast: json[r'isLast'] as bool? ?? false,
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      nextPage: json[r'nextPage'] as String?,
+      self: json[r'self'] as String?,
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => ComponentJsonBean.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var isLast = this.isLast;
+    var maxResults = this.maxResults;
+    var nextPage = this.nextPage;
+    var self = this.self;
+    var startAt = this.startAt;
+    var total = this.total;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    json[r'isLast'] = isLast;
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (nextPage != null) {
+      json[r'nextPage'] = nextPage;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageBean2ComponentJsonBean copyWith(
+      {bool? isLast,
+      int? maxResults,
+      String? nextPage,
+      String? self,
+      int? startAt,
+      int? total,
+      List<ComponentJsonBean>? values}) {
+    return PageBean2ComponentJsonBean(
+      isLast: isLast ?? this.isLast,
+      maxResults: maxResults ?? this.maxResults,
+      nextPage: nextPage ?? this.nextPage,
+      self: self ?? this.self,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      values: values ?? this.values,
+    );
+  }
+}
+
+/// A page of items.
+class PageBeanBulkContextualConfiguration {
+  /// Whether this is the last page.
+  final bool isLast;
+
+  /// The maximum number of items that could be returned.
+  final int? maxResults;
+
+  /// If there is another page of results, the URL of the next page.
+  final String? nextPage;
+
+  /// The URL of the page.
+  final String? self;
+
+  /// The index of the first item returned.
+  final int? startAt;
+
+  /// The number of items returned.
+  final int? total;
+
+  /// The list of items.
+  final List<BulkContextualConfiguration> values;
+
+  PageBeanBulkContextualConfiguration(
+      {bool? isLast,
+      this.maxResults,
+      this.nextPage,
+      this.self,
+      this.startAt,
+      this.total,
+      List<BulkContextualConfiguration>? values})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageBeanBulkContextualConfiguration.fromJson(
+      Map<String, Object?> json) {
+    return PageBeanBulkContextualConfiguration(
+      isLast: json[r'isLast'] as bool? ?? false,
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      nextPage: json[r'nextPage'] as String?,
+      self: json[r'self'] as String?,
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => BulkContextualConfiguration.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var isLast = this.isLast;
+    var maxResults = this.maxResults;
+    var nextPage = this.nextPage;
+    var self = this.self;
+    var startAt = this.startAt;
+    var total = this.total;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    json[r'isLast'] = isLast;
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (nextPage != null) {
+      json[r'nextPage'] = nextPage;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageBeanBulkContextualConfiguration copyWith(
+      {bool? isLast,
+      int? maxResults,
+      String? nextPage,
+      String? self,
+      int? startAt,
+      int? total,
+      List<BulkContextualConfiguration>? values}) {
+    return PageBeanBulkContextualConfiguration(
+      isLast: isLast ?? this.isLast,
+      maxResults: maxResults ?? this.maxResults,
+      nextPage: nextPage ?? this.nextPage,
+      self: self ?? this.self,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      values: values ?? this.values,
+    );
+  }
 }
 
 /// A page of items.
@@ -40575,6 +46781,208 @@ class PageBeanPriority {
 }
 
 /// A page of items.
+class PageBeanPrioritySchemeWithPaginatedPrioritiesAndProjects {
+  /// Whether this is the last page.
+  final bool isLast;
+
+  /// The maximum number of items that could be returned.
+  final int? maxResults;
+
+  /// If there is another page of results, the URL of the next page.
+  final String? nextPage;
+
+  /// The URL of the page.
+  final String? self;
+
+  /// The index of the first item returned.
+  final int? startAt;
+
+  /// The number of items returned.
+  final int? total;
+
+  /// The list of items.
+  final List<PrioritySchemeWithPaginatedPrioritiesAndProjects> values;
+
+  PageBeanPrioritySchemeWithPaginatedPrioritiesAndProjects(
+      {bool? isLast,
+      this.maxResults,
+      this.nextPage,
+      this.self,
+      this.startAt,
+      this.total,
+      List<PrioritySchemeWithPaginatedPrioritiesAndProjects>? values})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageBeanPrioritySchemeWithPaginatedPrioritiesAndProjects.fromJson(
+      Map<String, Object?> json) {
+    return PageBeanPrioritySchemeWithPaginatedPrioritiesAndProjects(
+      isLast: json[r'isLast'] as bool? ?? false,
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      nextPage: json[r'nextPage'] as String?,
+      self: json[r'self'] as String?,
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) =>
+                  PrioritySchemeWithPaginatedPrioritiesAndProjects.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var isLast = this.isLast;
+    var maxResults = this.maxResults;
+    var nextPage = this.nextPage;
+    var self = this.self;
+    var startAt = this.startAt;
+    var total = this.total;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    json[r'isLast'] = isLast;
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (nextPage != null) {
+      json[r'nextPage'] = nextPage;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageBeanPrioritySchemeWithPaginatedPrioritiesAndProjects copyWith(
+      {bool? isLast,
+      int? maxResults,
+      String? nextPage,
+      String? self,
+      int? startAt,
+      int? total,
+      List<PrioritySchemeWithPaginatedPrioritiesAndProjects>? values}) {
+    return PageBeanPrioritySchemeWithPaginatedPrioritiesAndProjects(
+      isLast: isLast ?? this.isLast,
+      maxResults: maxResults ?? this.maxResults,
+      nextPage: nextPage ?? this.nextPage,
+      self: self ?? this.self,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      values: values ?? this.values,
+    );
+  }
+}
+
+/// A page of items.
+class PageBeanPriorityWithSequence {
+  /// Whether this is the last page.
+  final bool isLast;
+
+  /// The maximum number of items that could be returned.
+  final int? maxResults;
+
+  /// If there is another page of results, the URL of the next page.
+  final String? nextPage;
+
+  /// The URL of the page.
+  final String? self;
+
+  /// The index of the first item returned.
+  final int? startAt;
+
+  /// The number of items returned.
+  final int? total;
+
+  /// The list of items.
+  final List<PriorityWithSequence> values;
+
+  PageBeanPriorityWithSequence(
+      {bool? isLast,
+      this.maxResults,
+      this.nextPage,
+      this.self,
+      this.startAt,
+      this.total,
+      List<PriorityWithSequence>? values})
+      : isLast = isLast ?? false,
+        values = values ?? [];
+
+  factory PageBeanPriorityWithSequence.fromJson(Map<String, Object?> json) {
+    return PageBeanPriorityWithSequence(
+      isLast: json[r'isLast'] as bool? ?? false,
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      nextPage: json[r'nextPage'] as String?,
+      self: json[r'self'] as String?,
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+      values: (json[r'values'] as List<Object?>?)
+              ?.map((i) => PriorityWithSequence.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var isLast = this.isLast;
+    var maxResults = this.maxResults;
+    var nextPage = this.nextPage;
+    var self = this.self;
+    var startAt = this.startAt;
+    var total = this.total;
+    var values = this.values;
+
+    final json = <String, Object?>{};
+    json[r'isLast'] = isLast;
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (nextPage != null) {
+      json[r'nextPage'] = nextPage;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    json[r'values'] = values.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PageBeanPriorityWithSequence copyWith(
+      {bool? isLast,
+      int? maxResults,
+      String? nextPage,
+      String? self,
+      int? startAt,
+      int? total,
+      List<PriorityWithSequence>? values}) {
+    return PageBeanPriorityWithSequence(
+      isLast: isLast ?? this.isLast,
+      maxResults: maxResults ?? this.maxResults,
+      nextPage: nextPage ?? this.nextPage,
+      self: self ?? this.self,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+      values: values ?? this.values,
+    );
+  }
+}
+
+/// A page of items.
 class PageBeanProject {
   /// Whether this is the last page.
   final bool isLast;
@@ -42598,6 +49006,169 @@ class PageOfComments {
   }
 }
 
+/// A page of CreateMetaIssueType with Field.
+class PageOfCreateMetaIssueTypeWithField {
+  /// The collection of FieldCreateMetaBeans.
+  final List<FieldCreateMetadata> fields;
+
+  /// The maximum number of items to return per page.
+  final int? maxResults;
+  final List<FieldCreateMetadata> results;
+
+  /// The index of the first item returned.
+  final int? startAt;
+
+  /// The total number of items in all pages.
+  final int? total;
+
+  PageOfCreateMetaIssueTypeWithField(
+      {List<FieldCreateMetadata>? fields,
+      this.maxResults,
+      List<FieldCreateMetadata>? results,
+      this.startAt,
+      this.total})
+      : fields = fields ?? [],
+        results = results ?? [];
+
+  factory PageOfCreateMetaIssueTypeWithField.fromJson(
+      Map<String, Object?> json) {
+    return PageOfCreateMetaIssueTypeWithField(
+      fields: (json[r'fields'] as List<Object?>?)
+              ?.map((i) => FieldCreateMetadata.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) => FieldCreateMetadata.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fields = this.fields;
+    var maxResults = this.maxResults;
+    var results = this.results;
+    var startAt = this.startAt;
+    var total = this.total;
+
+    final json = <String, Object?>{};
+    json[r'fields'] = fields.map((i) => i.toJson()).toList();
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    return json;
+  }
+
+  PageOfCreateMetaIssueTypeWithField copyWith(
+      {List<FieldCreateMetadata>? fields,
+      int? maxResults,
+      List<FieldCreateMetadata>? results,
+      int? startAt,
+      int? total}) {
+    return PageOfCreateMetaIssueTypeWithField(
+      fields: fields ?? this.fields,
+      maxResults: maxResults ?? this.maxResults,
+      results: results ?? this.results,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+    );
+  }
+}
+
+/// A page of CreateMetaIssueTypes.
+class PageOfCreateMetaIssueTypes {
+  final List<IssueTypeIssueCreateMetadata> createMetaIssueType;
+
+  /// The list of CreateMetaIssueType.
+  final List<IssueTypeIssueCreateMetadata> issueTypes;
+
+  /// The maximum number of items to return per page.
+  final int? maxResults;
+
+  /// The index of the first item returned.
+  final int? startAt;
+
+  /// The total number of items in all pages.
+  final int? total;
+
+  PageOfCreateMetaIssueTypes(
+      {List<IssueTypeIssueCreateMetadata>? createMetaIssueType,
+      List<IssueTypeIssueCreateMetadata>? issueTypes,
+      this.maxResults,
+      this.startAt,
+      this.total})
+      : createMetaIssueType = createMetaIssueType ?? [],
+        issueTypes = issueTypes ?? [];
+
+  factory PageOfCreateMetaIssueTypes.fromJson(Map<String, Object?> json) {
+    return PageOfCreateMetaIssueTypes(
+      createMetaIssueType: (json[r'createMetaIssueType'] as List<Object?>?)
+              ?.map((i) => IssueTypeIssueCreateMetadata.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      issueTypes: (json[r'issueTypes'] as List<Object?>?)
+              ?.map((i) => IssueTypeIssueCreateMetadata.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var createMetaIssueType = this.createMetaIssueType;
+    var issueTypes = this.issueTypes;
+    var maxResults = this.maxResults;
+    var startAt = this.startAt;
+    var total = this.total;
+
+    final json = <String, Object?>{};
+    json[r'createMetaIssueType'] =
+        createMetaIssueType.map((i) => i.toJson()).toList();
+    json[r'issueTypes'] = issueTypes.map((i) => i.toJson()).toList();
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    return json;
+  }
+
+  PageOfCreateMetaIssueTypes copyWith(
+      {List<IssueTypeIssueCreateMetadata>? createMetaIssueType,
+      List<IssueTypeIssueCreateMetadata>? issueTypes,
+      int? maxResults,
+      int? startAt,
+      int? total}) {
+    return PageOfCreateMetaIssueTypes(
+      createMetaIssueType: createMetaIssueType ?? this.createMetaIssueType,
+      issueTypes: issueTypes ?? this.issueTypes,
+      maxResults: maxResults ?? this.maxResults,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+    );
+  }
+}
+
 /// A page containing dashboard details.
 class PageOfDashboards {
   /// List of dashboards.
@@ -42977,6 +49548,128 @@ class PaginatedResponseComment {
   PaginatedResponseComment copyWith(
       {int? maxResults, List<Comment>? results, int? startAt, int? total}) {
     return PaginatedResponseComment(
+      maxResults: maxResults ?? this.maxResults,
+      results: results ?? this.results,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+    );
+  }
+}
+
+class PaginatedResponseFieldCreateMetadata {
+  final int? maxResults;
+  final List<FieldCreateMetadata> results;
+  final int? startAt;
+  final int? total;
+
+  PaginatedResponseFieldCreateMetadata(
+      {this.maxResults,
+      List<FieldCreateMetadata>? results,
+      this.startAt,
+      this.total})
+      : results = results ?? [];
+
+  factory PaginatedResponseFieldCreateMetadata.fromJson(
+      Map<String, Object?> json) {
+    return PaginatedResponseFieldCreateMetadata(
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) => FieldCreateMetadata.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var maxResults = this.maxResults;
+    var results = this.results;
+    var startAt = this.startAt;
+    var total = this.total;
+
+    final json = <String, Object?>{};
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    return json;
+  }
+
+  PaginatedResponseFieldCreateMetadata copyWith(
+      {int? maxResults,
+      List<FieldCreateMetadata>? results,
+      int? startAt,
+      int? total}) {
+    return PaginatedResponseFieldCreateMetadata(
+      maxResults: maxResults ?? this.maxResults,
+      results: results ?? this.results,
+      startAt: startAt ?? this.startAt,
+      total: total ?? this.total,
+    );
+  }
+}
+
+class PaginatedResponseIssueTypeIssueCreateMetadata {
+  final int? maxResults;
+  final List<IssueTypeIssueCreateMetadata> results;
+  final int? startAt;
+  final int? total;
+
+  PaginatedResponseIssueTypeIssueCreateMetadata(
+      {this.maxResults,
+      List<IssueTypeIssueCreateMetadata>? results,
+      this.startAt,
+      this.total})
+      : results = results ?? [];
+
+  factory PaginatedResponseIssueTypeIssueCreateMetadata.fromJson(
+      Map<String, Object?> json) {
+    return PaginatedResponseIssueTypeIssueCreateMetadata(
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) => IssueTypeIssueCreateMetadata.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+      total: (json[r'total'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var maxResults = this.maxResults;
+    var results = this.results;
+    var startAt = this.startAt;
+    var total = this.total;
+
+    final json = <String, Object?>{};
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    if (total != null) {
+      json[r'total'] = total;
+    }
+    return json;
+  }
+
+  PaginatedResponseIssueTypeIssueCreateMetadata copyWith(
+      {int? maxResults,
+      List<IssueTypeIssueCreateMetadata>? results,
+      int? startAt,
+      int? total}) {
+    return PaginatedResponseIssueTypeIssueCreateMetadata(
       maxResults: maxResults ?? this.maxResults,
       results: results ?? this.results,
       startAt: startAt ?? this.startAt,
@@ -43525,6 +50218,10 @@ class PermittedProjects {
 
 /// An issue priority.
 class Priority {
+  /// The avatarId of the avatar for the issue priority. This parameter is
+  /// nullable and when set, this avatar references the universal avatar APIs.
+  final int? avatarId;
+
   /// The description of the issue priority.
   final String? description;
 
@@ -43540,6 +50237,9 @@ class Priority {
   /// The name of the issue priority.
   final String? name;
 
+  /// Priority schemes associated with the issue priority.
+  final ExpandPrioritySchemePage? schemes;
+
   /// The URL of the issue priority.
   final String? self;
 
@@ -43547,37 +50247,49 @@ class Priority {
   final String? statusColor;
 
   Priority(
-      {this.description,
+      {this.avatarId,
+      this.description,
       this.iconUrl,
       this.id,
       bool? isDefault,
       this.name,
+      this.schemes,
       this.self,
       this.statusColor})
       : isDefault = isDefault ?? false;
 
   factory Priority.fromJson(Map<String, Object?> json) {
     return Priority(
+      avatarId: (json[r'avatarId'] as num?)?.toInt(),
       description: json[r'description'] as String?,
       iconUrl: json[r'iconUrl'] as String?,
       id: json[r'id'] as String?,
       isDefault: json[r'isDefault'] as bool? ?? false,
       name: json[r'name'] as String?,
+      schemes: json[r'schemes'] != null
+          ? ExpandPrioritySchemePage.fromJson(
+              json[r'schemes']! as Map<String, Object?>)
+          : null,
       self: json[r'self'] as String?,
       statusColor: json[r'statusColor'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
+    var avatarId = this.avatarId;
     var description = this.description;
     var iconUrl = this.iconUrl;
     var id = this.id;
     var isDefault = this.isDefault;
     var name = this.name;
+    var schemes = this.schemes;
     var self = this.self;
     var statusColor = this.statusColor;
 
     final json = <String, Object?>{};
+    if (avatarId != null) {
+      json[r'avatarId'] = avatarId;
+    }
     if (description != null) {
       json[r'description'] = description;
     }
@@ -43591,6 +50303,9 @@ class Priority {
     if (name != null) {
       json[r'name'] = name;
     }
+    if (schemes != null) {
+      json[r'schemes'] = schemes.toJson();
+    }
     if (self != null) {
       json[r'self'] = self;
     }
@@ -43601,19 +50316,23 @@ class Priority {
   }
 
   Priority copyWith(
-      {String? description,
+      {int? avatarId,
+      String? description,
       String? iconUrl,
       String? id,
       bool? isDefault,
       String? name,
+      ExpandPrioritySchemePage? schemes,
       String? self,
       String? statusColor}) {
     return Priority(
+      avatarId: avatarId ?? this.avatarId,
       description: description ?? this.description,
       iconUrl: iconUrl ?? this.iconUrl,
       id: id ?? this.id,
       isDefault: isDefault ?? this.isDefault,
       name: name ?? this.name,
+      schemes: schemes ?? this.schemes,
       self: self ?? this.self,
       statusColor: statusColor ?? this.statusColor,
     );
@@ -43644,6 +50363,396 @@ class PriorityId {
   PriorityId copyWith({String? id}) {
     return PriorityId(
       id: id ?? this.id,
+    );
+  }
+}
+
+/// Mapping of issue priorities for changes in priority schemes.
+class PriorityMapping {
+  /// The mapping of priorities for issues being migrated **into** this priority
+  /// scheme. Key is the old priority ID, value is the new priority ID (must
+  /// exist in this priority scheme).
+  final Map<String, dynamic>? in$;
+
+  /// The mapping of priorities for issues being migrated **out of** this
+  /// priority scheme. Key is the old priority ID (must exist in this priority
+  /// scheme), value is the new priority ID (must exist in the default priority
+  /// scheme). Required for updating an existing priority scheme. Not used when
+  /// creating a new priority scheme.
+  final Map<String, dynamic>? out;
+
+  PriorityMapping({this.in$, this.out});
+
+  factory PriorityMapping.fromJson(Map<String, Object?> json) {
+    return PriorityMapping(
+      in$: json[r'in'] as Map<String, Object?>?,
+      out: json[r'out'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var in$ = this.in$;
+    var out = this.out;
+
+    final json = <String, Object?>{};
+    if (in$ != null) {
+      json[r'in'] = in$;
+    }
+    if (out != null) {
+      json[r'out'] = out;
+    }
+    return json;
+  }
+
+  PriorityMapping copyWith(
+      {Map<String, dynamic>? in$, Map<String, dynamic>? out}) {
+    return PriorityMapping(
+      in$: in$ ?? this.in$,
+      out: out ?? this.out,
+    );
+  }
+}
+
+class PrioritySchemeChangesWithMappings {
+  /// Affected entity ids.
+  final List<int> ids;
+
+  /// Instructions to migrate issues.
+  final List<PriorityMapping> mappings;
+
+  PrioritySchemeChangesWithMappings(
+      {required this.ids, List<PriorityMapping>? mappings})
+      : mappings = mappings ?? [];
+
+  factory PrioritySchemeChangesWithMappings.fromJson(
+      Map<String, Object?> json) {
+    return PrioritySchemeChangesWithMappings(
+      ids: (json[r'ids'] as List<Object?>?)
+              ?.map((i) => (i as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
+      mappings: (json[r'mappings'] as List<Object?>?)
+              ?.map((i) => PriorityMapping.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var ids = this.ids;
+    var mappings = this.mappings;
+
+    final json = <String, Object?>{};
+    json[r'ids'] = ids;
+    json[r'mappings'] = mappings.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  PrioritySchemeChangesWithMappings copyWith(
+      {List<int>? ids, List<PriorityMapping>? mappings}) {
+    return PrioritySchemeChangesWithMappings(
+      ids: ids ?? this.ids,
+      mappings: mappings ?? this.mappings,
+    );
+  }
+}
+
+class PrioritySchemeChangesWithoutMappings {
+  /// Affected entity ids.
+  final List<int> ids;
+
+  PrioritySchemeChangesWithoutMappings({required this.ids});
+
+  factory PrioritySchemeChangesWithoutMappings.fromJson(
+      Map<String, Object?> json) {
+    return PrioritySchemeChangesWithoutMappings(
+      ids: (json[r'ids'] as List<Object?>?)
+              ?.map((i) => (i as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var ids = this.ids;
+
+    final json = <String, Object?>{};
+    json[r'ids'] = ids;
+    return json;
+  }
+
+  PrioritySchemeChangesWithoutMappings copyWith({List<int>? ids}) {
+    return PrioritySchemeChangesWithoutMappings(
+      ids: ids ?? this.ids,
+    );
+  }
+}
+
+/// The ID of a priority scheme.
+class PrioritySchemeId {
+  /// The ID of the priority scheme.
+  final String? id;
+
+  /// The in-progress issue migration task.
+  final TaskProgressBeanJsonNode? task;
+
+  PrioritySchemeId({this.id, this.task});
+
+  factory PrioritySchemeId.fromJson(Map<String, Object?> json) {
+    return PrioritySchemeId(
+      id: json[r'id'] as String?,
+      task: json[r'task'] != null
+          ? TaskProgressBeanJsonNode.fromJson(
+              json[r'task']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var task = this.task;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (task != null) {
+      json[r'task'] = task.toJson();
+    }
+    return json;
+  }
+
+  PrioritySchemeId copyWith({String? id, TaskProgressBeanJsonNode? task}) {
+    return PrioritySchemeId(
+      id: id ?? this.id,
+      task: task ?? this.task,
+    );
+  }
+}
+
+/// A priority scheme with paginated priorities and projects.
+class PrioritySchemeWithPaginatedPrioritiesAndProjects {
+  final bool default$;
+
+  /// The ID of the default issue priority.
+  final String? defaultPriorityId;
+
+  /// The description of the priority scheme
+  final String? description;
+
+  /// The ID of the priority scheme.
+  final String id;
+  final bool isDefault;
+
+  /// The name of the priority scheme
+  final String name;
+
+  /// The paginated list of priorities.
+  final PageBeanPriorityWithSequence? priorities;
+
+  /// The paginated list of projects.
+  final PageBeanProjectDetails? projects;
+
+  /// The URL of the priority scheme.
+  final String? self;
+
+  PrioritySchemeWithPaginatedPrioritiesAndProjects(
+      {bool? default$,
+      this.defaultPriorityId,
+      this.description,
+      required this.id,
+      bool? isDefault,
+      required this.name,
+      this.priorities,
+      this.projects,
+      this.self})
+      : default$ = default$ ?? false,
+        isDefault = isDefault ?? false;
+
+  factory PrioritySchemeWithPaginatedPrioritiesAndProjects.fromJson(
+      Map<String, Object?> json) {
+    return PrioritySchemeWithPaginatedPrioritiesAndProjects(
+      default$: json[r'default'] as bool? ?? false,
+      defaultPriorityId: json[r'defaultPriorityId'] as String?,
+      description: json[r'description'] as String?,
+      id: json[r'id'] as String? ?? '',
+      isDefault: json[r'isDefault'] as bool? ?? false,
+      name: json[r'name'] as String? ?? '',
+      priorities: json[r'priorities'] != null
+          ? PageBeanPriorityWithSequence.fromJson(
+              json[r'priorities']! as Map<String, Object?>)
+          : null,
+      projects: json[r'projects'] != null
+          ? PageBeanProjectDetails.fromJson(
+              json[r'projects']! as Map<String, Object?>)
+          : null,
+      self: json[r'self'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var default$ = this.default$;
+    var defaultPriorityId = this.defaultPriorityId;
+    var description = this.description;
+    var id = this.id;
+    var isDefault = this.isDefault;
+    var name = this.name;
+    var priorities = this.priorities;
+    var projects = this.projects;
+    var self = this.self;
+
+    final json = <String, Object?>{};
+    json[r'default'] = default$;
+    if (defaultPriorityId != null) {
+      json[r'defaultPriorityId'] = defaultPriorityId;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    json[r'id'] = id;
+    json[r'isDefault'] = isDefault;
+    json[r'name'] = name;
+    if (priorities != null) {
+      json[r'priorities'] = priorities.toJson();
+    }
+    if (projects != null) {
+      json[r'projects'] = projects.toJson();
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    return json;
+  }
+
+  PrioritySchemeWithPaginatedPrioritiesAndProjects copyWith(
+      {bool? default$,
+      String? defaultPriorityId,
+      String? description,
+      String? id,
+      bool? isDefault,
+      String? name,
+      PageBeanPriorityWithSequence? priorities,
+      PageBeanProjectDetails? projects,
+      String? self}) {
+    return PrioritySchemeWithPaginatedPrioritiesAndProjects(
+      default$: default$ ?? this.default$,
+      defaultPriorityId: defaultPriorityId ?? this.defaultPriorityId,
+      description: description ?? this.description,
+      id: id ?? this.id,
+      isDefault: isDefault ?? this.isDefault,
+      name: name ?? this.name,
+      priorities: priorities ?? this.priorities,
+      projects: projects ?? this.projects,
+      self: self ?? this.self,
+    );
+  }
+}
+
+/// An issue priority with sequence information.
+class PriorityWithSequence {
+  /// The description of the issue priority.
+  final String? description;
+
+  /// The URL of the icon for the issue priority.
+  final String? iconUrl;
+
+  /// The ID of the issue priority.
+  final String? id;
+
+  /// Whether this priority is the default.
+  final bool isDefault;
+
+  /// The name of the issue priority.
+  final String? name;
+
+  /// The URL of the issue priority.
+  final String? self;
+
+  /// The sequence of the issue priority.
+  final String? sequence;
+
+  /// The color used to indicate the issue priority.
+  final String? statusColor;
+
+  PriorityWithSequence(
+      {this.description,
+      this.iconUrl,
+      this.id,
+      bool? isDefault,
+      this.name,
+      this.self,
+      this.sequence,
+      this.statusColor})
+      : isDefault = isDefault ?? false;
+
+  factory PriorityWithSequence.fromJson(Map<String, Object?> json) {
+    return PriorityWithSequence(
+      description: json[r'description'] as String?,
+      iconUrl: json[r'iconUrl'] as String?,
+      id: json[r'id'] as String?,
+      isDefault: json[r'isDefault'] as bool? ?? false,
+      name: json[r'name'] as String?,
+      self: json[r'self'] as String?,
+      sequence: json[r'sequence'] as String?,
+      statusColor: json[r'statusColor'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var iconUrl = this.iconUrl;
+    var id = this.id;
+    var isDefault = this.isDefault;
+    var name = this.name;
+    var self = this.self;
+    var sequence = this.sequence;
+    var statusColor = this.statusColor;
+
+    final json = <String, Object?>{};
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (iconUrl != null) {
+      json[r'iconUrl'] = iconUrl;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    json[r'isDefault'] = isDefault;
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    if (sequence != null) {
+      json[r'sequence'] = sequence;
+    }
+    if (statusColor != null) {
+      json[r'statusColor'] = statusColor;
+    }
+    return json;
+  }
+
+  PriorityWithSequence copyWith(
+      {String? description,
+      String? iconUrl,
+      String? id,
+      bool? isDefault,
+      String? name,
+      String? self,
+      String? sequence,
+      String? statusColor}) {
+    return PriorityWithSequence(
+      description: description ?? this.description,
+      iconUrl: iconUrl ?? this.iconUrl,
+      id: id ?? this.id,
+      isDefault: isDefault ?? this.isDefault,
+      name: name ?? this.name,
+      self: self ?? this.self,
+      sequence: sequence ?? this.sequence,
+      statusColor: statusColor ?? this.statusColor,
     );
   }
 }
@@ -43695,7 +50804,8 @@ class Project {
   /// Insights about the project.
   final ProjectInsight? insight;
 
-  /// Whether the project is private.
+  /// Whether the project is private from the user's perspective. This means the
+  /// user can't see the project or any associated issues.
   final bool isPrivate;
 
   /// The issue type hierarchy for the project.
@@ -44291,6 +51401,10 @@ class ProjectCategory {
 
 /// Details about a project component.
 class ProjectComponent {
+  /// Compass component's ID. Can't be updated. Not required for creating a
+  /// Project Component.
+  final String? ari;
+
   /// The details of the user associated with `assigneeType`, if any. See
   /// `realAssignee` for details of the user assigned to issues created with
   /// this component.
@@ -44341,6 +51455,10 @@ class ProjectComponent {
   /// for details.
   final String? leadUserName;
 
+  /// Compass component's metadata. Can't be updated. Not required for creating
+  /// a Project Component.
+  final Map<String, dynamic>? metadata;
+
   /// The unique name for the component in the project. Required when creating a
   /// component. Optional when updating a component. The maximum length is 255
   /// characters.
@@ -44377,7 +51495,8 @@ class ProjectComponent {
   final String? self;
 
   ProjectComponent(
-      {this.assignee,
+      {this.ari,
+      this.assignee,
       this.assigneeType,
       this.description,
       this.id,
@@ -44385,6 +51504,7 @@ class ProjectComponent {
       this.lead,
       this.leadAccountId,
       this.leadUserName,
+      this.metadata,
       this.name,
       this.project,
       this.projectId,
@@ -44395,6 +51515,7 @@ class ProjectComponent {
 
   factory ProjectComponent.fromJson(Map<String, Object?> json) {
     return ProjectComponent(
+      ari: json[r'ari'] as String?,
       assignee: json[r'assignee'] != null
           ? User.fromJson(json[r'assignee']! as Map<String, Object?>)
           : null,
@@ -44410,6 +51531,7 @@ class ProjectComponent {
           : null,
       leadAccountId: json[r'leadAccountId'] as String?,
       leadUserName: json[r'leadUserName'] as String?,
+      metadata: json[r'metadata'] as Map<String, Object?>?,
       name: json[r'name'] as String?,
       project: json[r'project'] as String?,
       projectId: (json[r'projectId'] as num?)?.toInt(),
@@ -44425,6 +51547,7 @@ class ProjectComponent {
   }
 
   Map<String, Object?> toJson() {
+    var ari = this.ari;
     var assignee = this.assignee;
     var assigneeType = this.assigneeType;
     var description = this.description;
@@ -44433,6 +51556,7 @@ class ProjectComponent {
     var lead = this.lead;
     var leadAccountId = this.leadAccountId;
     var leadUserName = this.leadUserName;
+    var metadata = this.metadata;
     var name = this.name;
     var project = this.project;
     var projectId = this.projectId;
@@ -44441,6 +51565,9 @@ class ProjectComponent {
     var self = this.self;
 
     final json = <String, Object?>{};
+    if (ari != null) {
+      json[r'ari'] = ari;
+    }
     if (assignee != null) {
       json[r'assignee'] = assignee.toJson();
     }
@@ -44462,6 +51589,9 @@ class ProjectComponent {
     }
     if (leadUserName != null) {
       json[r'leadUserName'] = leadUserName;
+    }
+    if (metadata != null) {
+      json[r'metadata'] = metadata;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -44485,7 +51615,8 @@ class ProjectComponent {
   }
 
   ProjectComponent copyWith(
-      {User? assignee,
+      {String? ari,
+      User? assignee,
       ProjectComponentAssigneeType? assigneeType,
       String? description,
       String? id,
@@ -44493,6 +51624,7 @@ class ProjectComponent {
       User? lead,
       String? leadAccountId,
       String? leadUserName,
+      Map<String, dynamic>? metadata,
       String? name,
       String? project,
       int? projectId,
@@ -44500,6 +51632,7 @@ class ProjectComponent {
       ProjectComponentRealAssigneeType? realAssigneeType,
       String? self}) {
     return ProjectComponent(
+      ari: ari ?? this.ari,
       assignee: assignee ?? this.assignee,
       assigneeType: assigneeType ?? this.assigneeType,
       description: description ?? this.description,
@@ -44508,6 +51641,7 @@ class ProjectComponent {
       lead: lead ?? this.lead,
       leadAccountId: leadAccountId ?? this.leadAccountId,
       leadUserName: leadUserName ?? this.leadUserName,
+      metadata: metadata ?? this.metadata,
       name: name ?? this.name,
       project: project ?? this.project,
       projectId: projectId ?? this.projectId,
@@ -44573,6 +51707,71 @@ class ProjectComponentRealAssigneeType {
 
   @override
   String toString() => value;
+}
+
+/// Details about data policies for a list of projects.
+class ProjectDataPolicies {
+  /// List of projects with data policies.
+  final List<ProjectWithDataPolicy> projectDataPolicies;
+
+  ProjectDataPolicies({List<ProjectWithDataPolicy>? projectDataPolicies})
+      : projectDataPolicies = projectDataPolicies ?? [];
+
+  factory ProjectDataPolicies.fromJson(Map<String, Object?> json) {
+    return ProjectDataPolicies(
+      projectDataPolicies: (json[r'projectDataPolicies'] as List<Object?>?)
+              ?.map((i) => ProjectWithDataPolicy.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var projectDataPolicies = this.projectDataPolicies;
+
+    final json = <String, Object?>{};
+    json[r'projectDataPolicies'] =
+        projectDataPolicies.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  ProjectDataPolicies copyWith(
+      {List<ProjectWithDataPolicy>? projectDataPolicies}) {
+    return ProjectDataPolicies(
+      projectDataPolicies: projectDataPolicies ?? this.projectDataPolicies,
+    );
+  }
+}
+
+/// Details about data policy.
+class ProjectDataPolicy {
+  /// Whether the project contains any content inaccessible to the requesting
+  /// application.
+  final bool anyContentBlocked;
+
+  ProjectDataPolicy({bool? anyContentBlocked})
+      : anyContentBlocked = anyContentBlocked ?? false;
+
+  factory ProjectDataPolicy.fromJson(Map<String, Object?> json) {
+    return ProjectDataPolicy(
+      anyContentBlocked: json[r'anyContentBlocked'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var anyContentBlocked = this.anyContentBlocked;
+
+    final json = <String, Object?>{};
+    json[r'anyContentBlocked'] = anyContentBlocked;
+    return json;
+  }
+
+  ProjectDataPolicy copyWith({bool? anyContentBlocked}) {
+    return ProjectDataPolicy(
+      anyContentBlocked: anyContentBlocked ?? this.anyContentBlocked,
+    );
+  }
 }
 
 /// Details about a project.
@@ -46185,6 +53384,48 @@ class ProjectType {
   }
 }
 
+/// Details about data policies for a project.
+class ProjectWithDataPolicy {
+  /// Data policy.
+  final ProjectDataPolicy? dataPolicy;
+
+  /// The project ID.
+  final int? id;
+
+  ProjectWithDataPolicy({this.dataPolicy, this.id});
+
+  factory ProjectWithDataPolicy.fromJson(Map<String, Object?> json) {
+    return ProjectWithDataPolicy(
+      dataPolicy: json[r'dataPolicy'] != null
+          ? ProjectDataPolicy.fromJson(
+              json[r'dataPolicy']! as Map<String, Object?>)
+          : null,
+      id: (json[r'id'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var dataPolicy = this.dataPolicy;
+    var id = this.id;
+
+    final json = <String, Object?>{};
+    if (dataPolicy != null) {
+      json[r'dataPolicy'] = dataPolicy.toJson();
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    return json;
+  }
+
+  ProjectWithDataPolicy copyWith({ProjectDataPolicy? dataPolicy, int? id}) {
+    return ProjectWithDataPolicy(
+      dataPolicy: dataPolicy ?? this.dataPolicy,
+      id: id ?? this.id,
+    );
+  }
+}
+
 /// Property key details.
 class PropertyKey {
   /// The key of the property.
@@ -46818,6 +54059,102 @@ class ReorderIssueResolutionsRequest {
   }
 }
 
+/// The list of required status mappings by issue type.
+class RequiredMappingByIssueType {
+  /// The ID of the issue type.
+  final String? issueTypeId;
+
+  /// The status IDs requiring mapping.
+  final List<String> statusIds;
+
+  RequiredMappingByIssueType({this.issueTypeId, List<String>? statusIds})
+      : statusIds = statusIds ?? [];
+
+  factory RequiredMappingByIssueType.fromJson(Map<String, Object?> json) {
+    return RequiredMappingByIssueType(
+      issueTypeId: json[r'issueTypeId'] as String?,
+      statusIds: (json[r'statusIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueTypeId = this.issueTypeId;
+    var statusIds = this.statusIds;
+
+    final json = <String, Object?>{};
+    if (issueTypeId != null) {
+      json[r'issueTypeId'] = issueTypeId;
+    }
+    json[r'statusIds'] = statusIds;
+    return json;
+  }
+
+  RequiredMappingByIssueType copyWith(
+      {String? issueTypeId, List<String>? statusIds}) {
+    return RequiredMappingByIssueType(
+      issueTypeId: issueTypeId ?? this.issueTypeId,
+      statusIds: statusIds ?? this.statusIds,
+    );
+  }
+}
+
+/// The list of required status mappings by workflow.
+class RequiredMappingByWorkflows {
+  /// The ID of the source workflow.
+  final String? sourceWorkflowId;
+
+  /// The status IDs requiring mapping.
+  final List<String> statusIds;
+
+  /// The ID of the target workflow.
+  final String? targetWorkflowId;
+
+  RequiredMappingByWorkflows(
+      {this.sourceWorkflowId, List<String>? statusIds, this.targetWorkflowId})
+      : statusIds = statusIds ?? [];
+
+  factory RequiredMappingByWorkflows.fromJson(Map<String, Object?> json) {
+    return RequiredMappingByWorkflows(
+      sourceWorkflowId: json[r'sourceWorkflowId'] as String?,
+      statusIds: (json[r'statusIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      targetWorkflowId: json[r'targetWorkflowId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var sourceWorkflowId = this.sourceWorkflowId;
+    var statusIds = this.statusIds;
+    var targetWorkflowId = this.targetWorkflowId;
+
+    final json = <String, Object?>{};
+    if (sourceWorkflowId != null) {
+      json[r'sourceWorkflowId'] = sourceWorkflowId;
+    }
+    json[r'statusIds'] = statusIds;
+    if (targetWorkflowId != null) {
+      json[r'targetWorkflowId'] = targetWorkflowId;
+    }
+    return json;
+  }
+
+  RequiredMappingByWorkflows copyWith(
+      {String? sourceWorkflowId,
+      List<String>? statusIds,
+      String? targetWorkflowId}) {
+    return RequiredMappingByWorkflows(
+      sourceWorkflowId: sourceWorkflowId ?? this.sourceWorkflowId,
+      statusIds: statusIds ?? this.statusIds,
+      targetWorkflowId: targetWorkflowId ?? this.targetWorkflowId,
+    );
+  }
+}
+
 /// Details of an issue resolution.
 class Resolution {
   /// The description of the issue resolution.
@@ -46974,6 +54311,97 @@ class ResolutionJsonBean {
       id: id ?? this.id,
       name: name ?? this.name,
       self: self ?? this.self,
+    );
+  }
+}
+
+class Resource {
+  final String? description;
+  final String? file;
+  final String? filename;
+  final Map<String, dynamic>? inputStream;
+  final bool open;
+  final bool readable;
+  final String? uri;
+  final String? url;
+
+  Resource(
+      {this.description,
+      this.file,
+      this.filename,
+      this.inputStream,
+      bool? open,
+      bool? readable,
+      this.uri,
+      this.url})
+      : open = open ?? false,
+        readable = readable ?? false;
+
+  factory Resource.fromJson(Map<String, Object?> json) {
+    return Resource(
+      description: json[r'description'] as String?,
+      file: json[r'file'] as String?,
+      filename: json[r'filename'] as String?,
+      inputStream: json[r'inputStream'] as Map<String, Object?>?,
+      open: json[r'open'] as bool? ?? false,
+      readable: json[r'readable'] as bool? ?? false,
+      uri: json[r'uri'] as String?,
+      url: json[r'url'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var file = this.file;
+    var filename = this.filename;
+    var inputStream = this.inputStream;
+    var open = this.open;
+    var readable = this.readable;
+    var uri = this.uri;
+    var url = this.url;
+
+    final json = <String, Object?>{};
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (file != null) {
+      json[r'file'] = file;
+    }
+    if (filename != null) {
+      json[r'filename'] = filename;
+    }
+    if (inputStream != null) {
+      json[r'inputStream'] = inputStream;
+    }
+    json[r'open'] = open;
+    json[r'readable'] = readable;
+    if (uri != null) {
+      json[r'uri'] = uri;
+    }
+    if (url != null) {
+      json[r'url'] = url;
+    }
+    return json;
+  }
+
+  Resource copyWith(
+      {String? description,
+      String? file,
+      String? filename,
+      Map<String, dynamic>? inputStream,
+      bool? open,
+      bool? readable,
+      String? uri,
+      String? url}) {
+    return Resource(
+      description: description ?? this.description,
+      file: file ?? this.file,
+      filename: filename ?? this.filename,
+      inputStream: inputStream ?? this.inputStream,
+      open: open ?? this.open,
+      readable: readable ?? this.readable,
+      uri: uri ?? this.uri,
+      url: url ?? this.url,
     );
   }
 }
@@ -47673,7 +55101,7 @@ class ScreenTypes {
   final int? create;
 
   /// The ID of the default screen. Required when creating a screen scheme.
-  final int? default$;
+  final int default$;
 
   /// The ID of the edit screen.
   final int? edit;
@@ -47681,12 +55109,12 @@ class ScreenTypes {
   /// The ID of the view screen.
   final int? view;
 
-  ScreenTypes({this.create, this.default$, this.edit, this.view});
+  ScreenTypes({this.create, required this.default$, this.edit, this.view});
 
   factory ScreenTypes.fromJson(Map<String, Object?> json) {
     return ScreenTypes(
       create: (json[r'create'] as num?)?.toInt(),
-      default$: (json[r'default'] as num?)?.toInt(),
+      default$: (json[r'default'] as num?)?.toInt() ?? 0,
       edit: (json[r'edit'] as num?)?.toInt(),
       view: (json[r'view'] as num?)?.toInt(),
     );
@@ -47702,9 +55130,7 @@ class ScreenTypes {
     if (create != null) {
       json[r'create'] = create;
     }
-    if (default$ != null) {
-      json[r'default'] = default$;
-    }
+    json[r'default'] = default$;
     if (edit != null) {
       json[r'edit'] = edit;
     }
@@ -47872,6 +55298,224 @@ class ScreenableTab {
     return ScreenableTab(
       id: id ?? this.id,
       name: name ?? this.name,
+    );
+  }
+}
+
+class SearchAndReconcileRequestBean {
+  /// Use [expand](em>#expansion) to include additional information about issues
+  /// in the response. Note that, unlike the majority of instances where
+  /// `expand` is specified, `expand` is defined as a list of values. The expand
+  /// options are:
+  ///
+  ///  *  `renderedFields` Returns field values rendered in HTML format.
+  ///  *  `names` Returns the display name of each field.
+  ///  *  `schema` Returns the schema describing a field type.
+  ///  *  `changelog` Returns a list of recent updates to an issue, sorted by
+  /// date, starting from the most recent.
+  final String? expand;
+
+  /// A list of fields to return for each issue. Use it to retrieve a subset of
+  /// fields. This parameter accepts a comma-separated list. Expand options
+  /// include:
+  ///
+  ///  *  `*all` Returns all fields.
+  ///  *  `*navigable` Returns navigable fields.
+  ///  *  `id` Returns only issue IDs.
+  ///  *  Any issue field, prefixed with a dash to exclude.
+  ///
+  /// The default is `id`.
+  ///
+  /// Examples:
+  ///
+  ///  *  `summary,comment` Returns the summary and comments fields only.
+  ///  *  `*all,-comment` Returns all fields except comments.
+  ///
+  /// Multiple `fields` parameters can be included in a request.
+  ///
+  /// Note: By default, this resource returns IDs only. This differs from
+  /// [GET issue](#api-rest-api-3-issue-issueIdOrKey-get) where the default is
+  /// all fields.
+  final List<String> fields;
+
+  /// Reference fields by their key (rather than ID). The default is `false`.
+  final bool fieldsByKeys;
+
+  /// A [JQL](https://confluence.atlassian.com/x/egORLQ) expression. For
+  /// performance reasons, this field requires a bounded query. A bounded query
+  /// is a query with a search restriction.
+  ///
+  ///  *  Example of an unbounded query: `order by key desc`.
+  ///  *  Example of a bounded query: `assignee = currentUser() order by key`.
+  final String? jql;
+
+  /// The maximum number of items to return. Depending on search criteria, real
+  /// number of items returned may be smaller.
+  final int? maxResults;
+
+  /// The continuation token to fetch the next page. This token is provided by
+  /// the response of this endpoint.
+  final String? nextPageToken;
+
+  /// A list of up to 5 issue properties to include in the results. This
+  /// parameter accepts a comma-separated list.
+  final List<String> properties;
+
+  /// Strong consistency issue ids to be reconciled with search results. Accepts
+  /// max 50 ids. All issues must exist.
+  final List<int> reconcileIssues;
+
+  SearchAndReconcileRequestBean(
+      {this.expand,
+      List<String>? fields,
+      bool? fieldsByKeys,
+      this.jql,
+      this.maxResults,
+      this.nextPageToken,
+      List<String>? properties,
+      List<int>? reconcileIssues})
+      : fields = fields ?? [],
+        fieldsByKeys = fieldsByKeys ?? false,
+        properties = properties ?? [],
+        reconcileIssues = reconcileIssues ?? [];
+
+  factory SearchAndReconcileRequestBean.fromJson(Map<String, Object?> json) {
+    return SearchAndReconcileRequestBean(
+      expand: json[r'expand'] as String?,
+      fields: (json[r'fields'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      fieldsByKeys: json[r'fieldsByKeys'] as bool? ?? false,
+      jql: json[r'jql'] as String?,
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      nextPageToken: json[r'nextPageToken'] as String?,
+      properties: (json[r'properties'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      reconcileIssues: (json[r'reconcileIssues'] as List<Object?>?)
+              ?.map((i) => (i as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var expand = this.expand;
+    var fields = this.fields;
+    var fieldsByKeys = this.fieldsByKeys;
+    var jql = this.jql;
+    var maxResults = this.maxResults;
+    var nextPageToken = this.nextPageToken;
+    var properties = this.properties;
+    var reconcileIssues = this.reconcileIssues;
+
+    final json = <String, Object?>{};
+    if (expand != null) {
+      json[r'expand'] = expand;
+    }
+    json[r'fields'] = fields;
+    json[r'fieldsByKeys'] = fieldsByKeys;
+    if (jql != null) {
+      json[r'jql'] = jql;
+    }
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (nextPageToken != null) {
+      json[r'nextPageToken'] = nextPageToken;
+    }
+    json[r'properties'] = properties;
+    json[r'reconcileIssues'] = reconcileIssues;
+    return json;
+  }
+
+  SearchAndReconcileRequestBean copyWith(
+      {String? expand,
+      List<String>? fields,
+      bool? fieldsByKeys,
+      String? jql,
+      int? maxResults,
+      String? nextPageToken,
+      List<String>? properties,
+      List<int>? reconcileIssues}) {
+    return SearchAndReconcileRequestBean(
+      expand: expand ?? this.expand,
+      fields: fields ?? this.fields,
+      fieldsByKeys: fieldsByKeys ?? this.fieldsByKeys,
+      jql: jql ?? this.jql,
+      maxResults: maxResults ?? this.maxResults,
+      nextPageToken: nextPageToken ?? this.nextPageToken,
+      properties: properties ?? this.properties,
+      reconcileIssues: reconcileIssues ?? this.reconcileIssues,
+    );
+  }
+}
+
+/// The result of a JQL search with issues reconsilation.
+class SearchAndReconcileResults {
+  /// The list of issues found by the search or reconsiliation.
+  final List<IssueBean> issues;
+
+  /// The ID and name of each field in the search results.
+  final Map<String, dynamic>? names;
+
+  /// Continuation token to fetch the next page. If this result represents the
+  /// last or the only page this token will be null. This token will expire in 7
+  /// days.
+  final String? nextPageToken;
+
+  /// The schema describing the field types in the search results.
+  final Map<String, dynamic>? schema;
+
+  SearchAndReconcileResults(
+      {List<IssueBean>? issues, this.names, this.nextPageToken, this.schema})
+      : issues = issues ?? [];
+
+  factory SearchAndReconcileResults.fromJson(Map<String, Object?> json) {
+    return SearchAndReconcileResults(
+      issues: (json[r'issues'] as List<Object?>?)
+              ?.map((i) =>
+                  IssueBean.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      names: json[r'names'] as Map<String, Object?>?,
+      nextPageToken: json[r'nextPageToken'] as String?,
+      schema: json[r'schema'] as Map<String, Object?>?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issues = this.issues;
+    var names = this.names;
+    var nextPageToken = this.nextPageToken;
+    var schema = this.schema;
+
+    final json = <String, Object?>{};
+    json[r'issues'] = issues.map((i) => i.toJson()).toList();
+    if (names != null) {
+      json[r'names'] = names;
+    }
+    if (nextPageToken != null) {
+      json[r'nextPageToken'] = nextPageToken;
+    }
+    if (schema != null) {
+      json[r'schema'] = schema;
+    }
+    return json;
+  }
+
+  SearchAndReconcileResults copyWith(
+      {List<IssueBean>? issues,
+      Map<String, dynamic>? names,
+      String? nextPageToken,
+      Map<String, dynamic>? schema}) {
+    return SearchAndReconcileResults(
+      issues: issues ?? this.issues,
+      names: names ?? this.names,
+      nextPageToken: nextPageToken ?? this.nextPageToken,
+      schema: schema ?? this.schema,
     );
   }
 }
@@ -48334,12 +55978,15 @@ class SecurityLevelMember {
 
   /// The ID of the issue security scheme.
   final String issueSecuritySchemeId;
+  final bool managed;
 
   SecurityLevelMember(
       {required this.holder,
       required this.id,
       required this.issueSecurityLevelId,
-      required this.issueSecuritySchemeId});
+      required this.issueSecuritySchemeId,
+      bool? managed})
+      : managed = managed ?? false;
 
   factory SecurityLevelMember.fromJson(Map<String, Object?> json) {
     return SecurityLevelMember(
@@ -48348,6 +55995,7 @@ class SecurityLevelMember {
       id: json[r'id'] as String? ?? '',
       issueSecurityLevelId: json[r'issueSecurityLevelId'] as String? ?? '',
       issueSecuritySchemeId: json[r'issueSecuritySchemeId'] as String? ?? '',
+      managed: json[r'managed'] as bool? ?? false,
     );
   }
 
@@ -48356,12 +56004,14 @@ class SecurityLevelMember {
     var id = this.id;
     var issueSecurityLevelId = this.issueSecurityLevelId;
     var issueSecuritySchemeId = this.issueSecuritySchemeId;
+    var managed = this.managed;
 
     final json = <String, Object?>{};
     json[r'holder'] = holder.toJson();
     json[r'id'] = id;
     json[r'issueSecurityLevelId'] = issueSecurityLevelId;
     json[r'issueSecuritySchemeId'] = issueSecuritySchemeId;
+    json[r'managed'] = managed;
     return json;
   }
 
@@ -48369,13 +56019,15 @@ class SecurityLevelMember {
       {PermissionHolder? holder,
       String? id,
       String? issueSecurityLevelId,
-      String? issueSecuritySchemeId}) {
+      String? issueSecuritySchemeId,
+      bool? managed}) {
     return SecurityLevelMember(
       holder: holder ?? this.holder,
       id: id ?? this.id,
       issueSecurityLevelId: issueSecurityLevelId ?? this.issueSecurityLevelId,
       issueSecuritySchemeId:
           issueSecuritySchemeId ?? this.issueSecuritySchemeId,
+      managed: managed ?? this.managed,
     );
   }
 }
@@ -48765,6 +56417,15 @@ class ServerInformation {
   /// The type of server deployment. This is always returned as *Cloud*.
   final String? deploymentType;
 
+  /// The display URL of the Jira instance.
+  final String? displayUrl;
+
+  /// The display URL of Confluence.
+  final String? displayUrlConfluence;
+
+  /// The display URL of the Servicedesk Help Center.
+  final String? displayUrlServicedeskHelpCenter;
+
   /// Jira instance health check results. Deprecated and no longer returned.
   final List<HealthCheckResult> healthChecks;
 
@@ -48773,6 +56434,10 @@ class ServerInformation {
 
   /// The time in Jira when this request was responded to.
   final DateTime? serverTime;
+
+  /// The default timezone of the Jira server. In a format known as Olson Time
+  /// Zones, IANA Time Zones or TZ Database Time Zones.
+  final ServerInformationServerTimeZone? serverTimeZone;
 
   /// The name of the Jira instance.
   final String? serverTitle;
@@ -48788,9 +56453,13 @@ class ServerInformation {
       this.buildDate,
       this.buildNumber,
       this.deploymentType,
+      this.displayUrl,
+      this.displayUrlConfluence,
+      this.displayUrlServicedeskHelpCenter,
       List<HealthCheckResult>? healthChecks,
       this.scmInfo,
       this.serverTime,
+      this.serverTimeZone,
       this.serverTitle,
       this.version,
       List<int>? versionNumbers})
@@ -48803,6 +56472,10 @@ class ServerInformation {
       buildDate: DateTime.tryParse(json[r'buildDate'] as String? ?? ''),
       buildNumber: (json[r'buildNumber'] as num?)?.toInt(),
       deploymentType: json[r'deploymentType'] as String?,
+      displayUrl: json[r'displayUrl'] as String?,
+      displayUrlConfluence: json[r'displayUrlConfluence'] as String?,
+      displayUrlServicedeskHelpCenter:
+          json[r'displayUrlServicedeskHelpCenter'] as String?,
       healthChecks: (json[r'healthChecks'] as List<Object?>?)
               ?.map((i) => HealthCheckResult.fromJson(
                   i as Map<String, Object?>? ?? const {}))
@@ -48810,6 +56483,10 @@ class ServerInformation {
           [],
       scmInfo: json[r'scmInfo'] as String?,
       serverTime: DateTime.tryParse(json[r'serverTime'] as String? ?? ''),
+      serverTimeZone: json[r'serverTimeZone'] != null
+          ? ServerInformationServerTimeZone.fromJson(
+              json[r'serverTimeZone']! as Map<String, Object?>)
+          : null,
       serverTitle: json[r'serverTitle'] as String?,
       version: json[r'version'] as String?,
       versionNumbers: (json[r'versionNumbers'] as List<Object?>?)
@@ -48824,9 +56501,13 @@ class ServerInformation {
     var buildDate = this.buildDate;
     var buildNumber = this.buildNumber;
     var deploymentType = this.deploymentType;
+    var displayUrl = this.displayUrl;
+    var displayUrlConfluence = this.displayUrlConfluence;
+    var displayUrlServicedeskHelpCenter = this.displayUrlServicedeskHelpCenter;
     var healthChecks = this.healthChecks;
     var scmInfo = this.scmInfo;
     var serverTime = this.serverTime;
+    var serverTimeZone = this.serverTimeZone;
     var serverTitle = this.serverTitle;
     var version = this.version;
     var versionNumbers = this.versionNumbers;
@@ -48844,12 +56525,25 @@ class ServerInformation {
     if (deploymentType != null) {
       json[r'deploymentType'] = deploymentType;
     }
+    if (displayUrl != null) {
+      json[r'displayUrl'] = displayUrl;
+    }
+    if (displayUrlConfluence != null) {
+      json[r'displayUrlConfluence'] = displayUrlConfluence;
+    }
+    if (displayUrlServicedeskHelpCenter != null) {
+      json[r'displayUrlServicedeskHelpCenter'] =
+          displayUrlServicedeskHelpCenter;
+    }
     json[r'healthChecks'] = healthChecks.map((i) => i.toJson()).toList();
     if (scmInfo != null) {
       json[r'scmInfo'] = scmInfo;
     }
     if (serverTime != null) {
       json[r'serverTime'] = serverTime.toIso8601String();
+    }
+    if (serverTimeZone != null) {
+      json[r'serverTimeZone'] = serverTimeZone.toJson();
     }
     if (serverTitle != null) {
       json[r'serverTitle'] = serverTitle;
@@ -48866,9 +56560,13 @@ class ServerInformation {
       DateTime? buildDate,
       int? buildNumber,
       String? deploymentType,
+      String? displayUrl,
+      String? displayUrlConfluence,
+      String? displayUrlServicedeskHelpCenter,
       List<HealthCheckResult>? healthChecks,
       String? scmInfo,
       DateTime? serverTime,
+      ServerInformationServerTimeZone? serverTimeZone,
       String? serverTitle,
       String? version,
       List<int>? versionNumbers}) {
@@ -48877,12 +56575,70 @@ class ServerInformation {
       buildDate: buildDate ?? this.buildDate,
       buildNumber: buildNumber ?? this.buildNumber,
       deploymentType: deploymentType ?? this.deploymentType,
+      displayUrl: displayUrl ?? this.displayUrl,
+      displayUrlConfluence: displayUrlConfluence ?? this.displayUrlConfluence,
+      displayUrlServicedeskHelpCenter: displayUrlServicedeskHelpCenter ??
+          this.displayUrlServicedeskHelpCenter,
       healthChecks: healthChecks ?? this.healthChecks,
       scmInfo: scmInfo ?? this.scmInfo,
       serverTime: serverTime ?? this.serverTime,
+      serverTimeZone: serverTimeZone ?? this.serverTimeZone,
       serverTitle: serverTitle ?? this.serverTitle,
       version: version ?? this.version,
       versionNumbers: versionNumbers ?? this.versionNumbers,
+    );
+  }
+}
+
+/// The default timezone of the Jira server. In a format known as Olson Time
+/// Zones, IANA Time Zones or TZ Database Time Zones.
+class ServerInformationServerTimeZone {
+  final String? displayName;
+  final int? dstsavings;
+  final String? id;
+  final int? rawOffset;
+
+  ServerInformationServerTimeZone(
+      {this.displayName, this.dstsavings, this.id, this.rawOffset});
+
+  factory ServerInformationServerTimeZone.fromJson(Map<String, Object?> json) {
+    return ServerInformationServerTimeZone(
+      displayName: json[r'displayName'] as String?,
+      dstsavings: (json[r'dstsavings'] as num?)?.toInt(),
+      id: json[r'id'] as String?,
+      rawOffset: (json[r'rawOffset'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var displayName = this.displayName;
+    var dstsavings = this.dstsavings;
+    var id = this.id;
+    var rawOffset = this.rawOffset;
+
+    final json = <String, Object?>{};
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
+    if (dstsavings != null) {
+      json[r'dstsavings'] = dstsavings;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (rawOffset != null) {
+      json[r'rawOffset'] = rawOffset;
+    }
+    return json;
+  }
+
+  ServerInformationServerTimeZone copyWith(
+      {String? displayName, int? dstsavings, String? id, int? rawOffset}) {
+    return ServerInformationServerTimeZone(
+      displayName: displayName ?? this.displayName,
+      dstsavings: dstsavings ?? this.dstsavings,
+      id: id ?? this.id,
+      rawOffset: rawOffset ?? this.rawOffset,
     );
   }
 }
@@ -48927,6 +56683,164 @@ class ServiceManagementNavigationInfo {
       queueCategory: queueCategory ?? this.queueCategory,
       queueId: queueId ?? this.queueId,
       queueName: queueName ?? this.queueName,
+    );
+  }
+}
+
+class ServiceRegistry {
+  /// service description
+  final String? description;
+
+  /// service ID
+  final String? id;
+
+  /// service name
+  final String? name;
+
+  /// organization ID
+  final String? organizationId;
+
+  /// service revision
+  final String? revision;
+  final ServiceRegistryTier? serviceTier;
+
+  ServiceRegistry(
+      {this.description,
+      this.id,
+      this.name,
+      this.organizationId,
+      this.revision,
+      this.serviceTier});
+
+  factory ServiceRegistry.fromJson(Map<String, Object?> json) {
+    return ServiceRegistry(
+      description: json[r'description'] as String?,
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+      organizationId: json[r'organizationId'] as String?,
+      revision: json[r'revision'] as String?,
+      serviceTier: json[r'serviceTier'] != null
+          ? ServiceRegistryTier.fromJson(
+              json[r'serviceTier']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var id = this.id;
+    var name = this.name;
+    var organizationId = this.organizationId;
+    var revision = this.revision;
+    var serviceTier = this.serviceTier;
+
+    final json = <String, Object?>{};
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (organizationId != null) {
+      json[r'organizationId'] = organizationId;
+    }
+    if (revision != null) {
+      json[r'revision'] = revision;
+    }
+    if (serviceTier != null) {
+      json[r'serviceTier'] = serviceTier.toJson();
+    }
+    return json;
+  }
+
+  ServiceRegistry copyWith(
+      {String? description,
+      String? id,
+      String? name,
+      String? organizationId,
+      String? revision,
+      ServiceRegistryTier? serviceTier}) {
+    return ServiceRegistry(
+      description: description ?? this.description,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      organizationId: organizationId ?? this.organizationId,
+      revision: revision ?? this.revision,
+      serviceTier: serviceTier ?? this.serviceTier,
+    );
+  }
+}
+
+class ServiceRegistryTier {
+  /// tier description
+  final String? description;
+
+  /// tier ID
+  final String? id;
+
+  /// tier level
+  final int? level;
+
+  /// tier name
+  final String? name;
+
+  /// name key of the tier
+  final String? nameKey;
+
+  ServiceRegistryTier(
+      {this.description, this.id, this.level, this.name, this.nameKey});
+
+  factory ServiceRegistryTier.fromJson(Map<String, Object?> json) {
+    return ServiceRegistryTier(
+      description: json[r'description'] as String?,
+      id: json[r'id'] as String?,
+      level: (json[r'level'] as num?)?.toInt(),
+      name: json[r'name'] as String?,
+      nameKey: json[r'nameKey'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var id = this.id;
+    var level = this.level;
+    var name = this.name;
+    var nameKey = this.nameKey;
+
+    final json = <String, Object?>{};
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (level != null) {
+      json[r'level'] = level;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (nameKey != null) {
+      json[r'nameKey'] = nameKey;
+    }
+    return json;
+  }
+
+  ServiceRegistryTier copyWith(
+      {String? description,
+      String? id,
+      int? level,
+      String? name,
+      String? nameKey}) {
+    return ServiceRegistryTier(
+      description: description ?? this.description,
+      id: id ?? this.id,
+      level: level ?? this.level,
+      name: name ?? this.name,
+      nameKey: nameKey ?? this.nameKey,
     );
   }
 }
@@ -49648,6 +57562,44 @@ class SimpleListWrapperGroupName {
   }
 }
 
+/// Represents a usage of an entity by a project ID and related issue type IDs.
+class SimpleUsage {
+  /// The issue type IDs for the usage.
+  final List<String> issueTypeIds;
+
+  /// The project ID for the usage.
+  final String projectId;
+
+  SimpleUsage({required this.issueTypeIds, required this.projectId});
+
+  factory SimpleUsage.fromJson(Map<String, Object?> json) {
+    return SimpleUsage(
+      issueTypeIds: (json[r'issueTypeIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      projectId: json[r'projectId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueTypeIds = this.issueTypeIds;
+    var projectId = this.projectId;
+
+    final json = <String, Object?>{};
+    json[r'issueTypeIds'] = issueTypeIds;
+    json[r'projectId'] = projectId;
+    return json;
+  }
+
+  SimpleUsage copyWith({List<String>? issueTypeIds, String? projectId}) {
+    return SimpleUsage(
+      issueTypeIds: issueTypeIds ?? this.issueTypeIds,
+      projectId: projectId ?? this.projectId,
+    );
+  }
+}
+
 class SimplifiedHierarchyLevel {
   /// The ID of the level above this one in the hierarchy. This property is
   /// deprecated, see
@@ -50069,6 +58021,9 @@ class StatusDetails {
   /// The name of the status.
   final String? name;
 
+  /// The scope of the field.
+  final Scope? scope;
+
   /// The URL of the status.
   final String? self;
 
@@ -50080,6 +58035,7 @@ class StatusDetails {
       this.iconUrl,
       this.id,
       this.name,
+      this.scope,
       this.self,
       this.statusCategory});
 
@@ -50089,6 +58045,9 @@ class StatusDetails {
       iconUrl: json[r'iconUrl'] as String?,
       id: json[r'id'] as String?,
       name: json[r'name'] as String?,
+      scope: json[r'scope'] != null
+          ? Scope.fromJson(json[r'scope']! as Map<String, Object?>)
+          : null,
       self: json[r'self'] as String?,
       statusCategory: json[r'statusCategory'] != null
           ? StatusCategory.fromJson(
@@ -50102,6 +58061,7 @@ class StatusDetails {
     var iconUrl = this.iconUrl;
     var id = this.id;
     var name = this.name;
+    var scope = this.scope;
     var self = this.self;
     var statusCategory = this.statusCategory;
 
@@ -50118,6 +58078,9 @@ class StatusDetails {
     if (name != null) {
       json[r'name'] = name;
     }
+    if (scope != null) {
+      json[r'scope'] = scope.toJson();
+    }
     if (self != null) {
       json[r'self'] = self;
     }
@@ -50132,6 +58095,7 @@ class StatusDetails {
       String? iconUrl,
       String? id,
       String? name,
+      Scope? scope,
       String? self,
       StatusCategory? statusCategory}) {
     return StatusDetails(
@@ -50139,6 +58103,7 @@ class StatusDetails {
       iconUrl: iconUrl ?? this.iconUrl,
       id: id ?? this.id,
       name: name ?? this.name,
+      scope: scope ?? this.scope,
       self: self ?? this.self,
       statusCategory: statusCategory ?? this.statusCategory,
     );
@@ -50147,6 +58112,7 @@ class StatusDetails {
 
 /// The statuses associated with this workflow.
 class StatusLayoutUpdate {
+  final ApprovalConfiguration? approvalConfiguration;
   final WorkflowLayout? layout;
 
   /// The properties for this status layout.
@@ -50157,10 +58123,17 @@ class StatusLayoutUpdate {
   final String statusReference;
 
   StatusLayoutUpdate(
-      {this.layout, required this.properties, required this.statusReference});
+      {this.approvalConfiguration,
+      this.layout,
+      required this.properties,
+      required this.statusReference});
 
   factory StatusLayoutUpdate.fromJson(Map<String, Object?> json) {
     return StatusLayoutUpdate(
+      approvalConfiguration: json[r'approvalConfiguration'] != null
+          ? ApprovalConfiguration.fromJson(
+              json[r'approvalConfiguration']! as Map<String, Object?>)
+          : null,
       layout: json[r'layout'] != null
           ? WorkflowLayout.fromJson(json[r'layout']! as Map<String, Object?>)
           : null,
@@ -50170,11 +58143,15 @@ class StatusLayoutUpdate {
   }
 
   Map<String, Object?> toJson() {
+    var approvalConfiguration = this.approvalConfiguration;
     var layout = this.layout;
     var properties = this.properties;
     var statusReference = this.statusReference;
 
     final json = <String, Object?>{};
+    if (approvalConfiguration != null) {
+      json[r'approvalConfiguration'] = approvalConfiguration.toJson();
+    }
     if (layout != null) {
       json[r'layout'] = layout.toJson();
     }
@@ -50184,10 +58161,13 @@ class StatusLayoutUpdate {
   }
 
   StatusLayoutUpdate copyWith(
-      {WorkflowLayout? layout,
+      {ApprovalConfiguration? approvalConfiguration,
+      WorkflowLayout? layout,
       Map<String, dynamic>? properties,
       String? statusReference}) {
     return StatusLayoutUpdate(
+      approvalConfiguration:
+          approvalConfiguration ?? this.approvalConfiguration,
       layout: layout ?? this.layout,
       properties: properties ?? this.properties,
       statusReference: statusReference ?? this.statusReference,
@@ -50295,6 +58275,82 @@ class StatusMappingDTO {
   }
 }
 
+/// The details of the statuses in the associated workflows.
+class StatusMetadata {
+  /// The category of the status.
+  final StatusMetadataCategory? category;
+
+  /// The ID of the status.
+  final String? id;
+
+  /// The name of the status.
+  final String? name;
+
+  StatusMetadata({this.category, this.id, this.name});
+
+  factory StatusMetadata.fromJson(Map<String, Object?> json) {
+    return StatusMetadata(
+      category: json[r'category'] != null
+          ? StatusMetadataCategory.fromValue(json[r'category']! as String)
+          : null,
+      id: json[r'id'] as String?,
+      name: json[r'name'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var category = this.category;
+    var id = this.id;
+    var name = this.name;
+
+    final json = <String, Object?>{};
+    if (category != null) {
+      json[r'category'] = category.value;
+    }
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    return json;
+  }
+
+  StatusMetadata copyWith(
+      {StatusMetadataCategory? category, String? id, String? name}) {
+    return StatusMetadata(
+      category: category ?? this.category,
+      id: id ?? this.id,
+      name: name ?? this.name,
+    );
+  }
+}
+
+class StatusMetadataCategory {
+  static const todo = StatusMetadataCategory._('TODO');
+  static const inProgress = StatusMetadataCategory._('IN_PROGRESS');
+  static const done = StatusMetadataCategory._('DONE');
+
+  static const values = [
+    todo,
+    inProgress,
+    done,
+  ];
+  final String value;
+
+  const StatusMetadataCategory._(this.value);
+
+  static StatusMetadataCategory fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => StatusMetadataCategory._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 /// The mapping of old to new status ID.
 class StatusMigration {
   /// The new status ID.
@@ -50333,6 +58389,7 @@ class StatusMigration {
 }
 
 /// The status reference and port that a transition is connected to.
+@deprecated
 class StatusReferenceAndPort {
   /// The port this transition uses to connect to this status.
   final int? port;
@@ -50521,8 +58578,7 @@ class StatusUpdateRequest {
   /// The list of statuses that will be updated.
   final List<StatusUpdate> statuses;
 
-  StatusUpdateRequest({List<StatusUpdate>? statuses})
-      : statuses = statuses ?? [];
+  StatusUpdateRequest({required this.statuses});
 
   factory StatusUpdateRequest.fromJson(Map<String, Object?> json) {
     return StatusUpdateRequest(
@@ -50549,6 +58605,71 @@ class StatusUpdateRequest {
   }
 }
 
+/// The statuses associated with each workflow.
+class StatusesPerWorkflow {
+  /// The ID of the initial status for the workflow.
+  final String? initialStatusId;
+
+  /// The status IDs associated with the workflow.
+  final List<String> statuses;
+
+  /// The ID of the workflow.
+  final String? workflowId;
+
+  StatusesPerWorkflow(
+      {this.initialStatusId, List<String>? statuses, this.workflowId})
+      : statuses = statuses ?? [];
+
+  factory StatusesPerWorkflow.fromJson(Map<String, Object?> json) {
+    return StatusesPerWorkflow(
+      initialStatusId: json[r'initialStatusId'] as String?,
+      statuses: (json[r'statuses'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      workflowId: json[r'workflowId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var initialStatusId = this.initialStatusId;
+    var statuses = this.statuses;
+    var workflowId = this.workflowId;
+
+    final json = <String, Object?>{};
+    if (initialStatusId != null) {
+      json[r'initialStatusId'] = initialStatusId;
+    }
+    json[r'statuses'] = statuses;
+    if (workflowId != null) {
+      json[r'workflowId'] = workflowId;
+    }
+    return json;
+  }
+
+  StatusesPerWorkflow copyWith(
+      {String? initialStatusId, List<String>? statuses, String? workflowId}) {
+    return StatusesPerWorkflow(
+      initialStatusId: initialStatusId ?? this.initialStatusId,
+      statuses: statuses ?? this.statuses,
+      workflowId: workflowId ?? this.workflowId,
+    );
+  }
+}
+
+class StreamingResponseBody {
+  StreamingResponseBody();
+
+  factory StreamingResponseBody.fromJson(Map<String, Object?> json) {
+    return StreamingResponseBody();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
 class StringList {
   StringList();
 
@@ -50559,6 +58680,34 @@ class StringList {
   Map<String, Object?> toJson() {
     final json = <String, Object?>{};
     return json;
+  }
+}
+
+class SubmittedBulkOperation {
+  final String? taskId;
+
+  SubmittedBulkOperation({this.taskId});
+
+  factory SubmittedBulkOperation.fromJson(Map<String, Object?> json) {
+    return SubmittedBulkOperation(
+      taskId: json[r'taskId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var taskId = this.taskId;
+
+    final json = <String, Object?>{};
+    if (taskId != null) {
+      json[r'taskId'] = taskId;
+    }
+    return json;
+  }
+
+  SubmittedBulkOperation copyWith({String? taskId}) {
+    return SubmittedBulkOperation(
+      taskId: taskId ?? this.taskId,
+    );
   }
 }
 
@@ -50650,6 +58799,168 @@ class SuggestedIssue {
   }
 }
 
+/// Details of changes to a priority scheme's priorities that require suggested
+/// priority mappings.
+class SuggestedMappingsForPrioritiesRequestBean {
+  /// The ids of priorities being removed from the scheme.
+  final List<int> add;
+
+  /// The ids of priorities being removed from the scheme.
+  final List<int> remove;
+
+  SuggestedMappingsForPrioritiesRequestBean({List<int>? add, List<int>? remove})
+      : add = add ?? [],
+        remove = remove ?? [];
+
+  factory SuggestedMappingsForPrioritiesRequestBean.fromJson(
+      Map<String, Object?> json) {
+    return SuggestedMappingsForPrioritiesRequestBean(
+      add: (json[r'add'] as List<Object?>?)
+              ?.map((i) => (i as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
+      remove: (json[r'remove'] as List<Object?>?)
+              ?.map((i) => (i as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var add = this.add;
+    var remove = this.remove;
+
+    final json = <String, Object?>{};
+    json[r'add'] = add;
+    json[r'remove'] = remove;
+    return json;
+  }
+
+  SuggestedMappingsForPrioritiesRequestBean copyWith(
+      {List<int>? add, List<int>? remove}) {
+    return SuggestedMappingsForPrioritiesRequestBean(
+      add: add ?? this.add,
+      remove: remove ?? this.remove,
+    );
+  }
+}
+
+/// Details of changes to a priority scheme's projects that require suggested
+/// priority mappings.
+class SuggestedMappingsForProjectsRequestBean {
+  /// The ids of projects being added to the scheme.
+  final List<int> add;
+
+  SuggestedMappingsForProjectsRequestBean({List<int>? add}) : add = add ?? [];
+
+  factory SuggestedMappingsForProjectsRequestBean.fromJson(
+      Map<String, Object?> json) {
+    return SuggestedMappingsForProjectsRequestBean(
+      add: (json[r'add'] as List<Object?>?)
+              ?.map((i) => (i as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var add = this.add;
+
+    final json = <String, Object?>{};
+    json[r'add'] = add;
+    return json;
+  }
+
+  SuggestedMappingsForProjectsRequestBean copyWith({List<int>? add}) {
+    return SuggestedMappingsForProjectsRequestBean(
+      add: add ?? this.add,
+    );
+  }
+}
+
+/// Details of changes to a priority scheme that require suggested priority
+/// mappings.
+class SuggestedMappingsRequestBean {
+  /// The maximum number of results that could be on the page.
+  final int? maxResults;
+
+  /// The priority changes in the scheme.
+  final SuggestedMappingsForPrioritiesRequestBean? priorities;
+
+  /// The project changes in the scheme.
+  final SuggestedMappingsForProjectsRequestBean? projects;
+
+  /// The id of the priority scheme.
+  final int? schemeId;
+
+  /// The index of the first item returned on the page.
+  final int? startAt;
+
+  SuggestedMappingsRequestBean(
+      {this.maxResults,
+      this.priorities,
+      this.projects,
+      this.schemeId,
+      this.startAt});
+
+  factory SuggestedMappingsRequestBean.fromJson(Map<String, Object?> json) {
+    return SuggestedMappingsRequestBean(
+      maxResults: (json[r'maxResults'] as num?)?.toInt(),
+      priorities: json[r'priorities'] != null
+          ? SuggestedMappingsForPrioritiesRequestBean.fromJson(
+              json[r'priorities']! as Map<String, Object?>)
+          : null,
+      projects: json[r'projects'] != null
+          ? SuggestedMappingsForProjectsRequestBean.fromJson(
+              json[r'projects']! as Map<String, Object?>)
+          : null,
+      schemeId: (json[r'schemeId'] as num?)?.toInt(),
+      startAt: (json[r'startAt'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var maxResults = this.maxResults;
+    var priorities = this.priorities;
+    var projects = this.projects;
+    var schemeId = this.schemeId;
+    var startAt = this.startAt;
+
+    final json = <String, Object?>{};
+    if (maxResults != null) {
+      json[r'maxResults'] = maxResults;
+    }
+    if (priorities != null) {
+      json[r'priorities'] = priorities.toJson();
+    }
+    if (projects != null) {
+      json[r'projects'] = projects.toJson();
+    }
+    if (schemeId != null) {
+      json[r'schemeId'] = schemeId;
+    }
+    if (startAt != null) {
+      json[r'startAt'] = startAt;
+    }
+    return json;
+  }
+
+  SuggestedMappingsRequestBean copyWith(
+      {int? maxResults,
+      SuggestedMappingsForPrioritiesRequestBean? priorities,
+      SuggestedMappingsForProjectsRequestBean? projects,
+      int? schemeId,
+      int? startAt}) {
+    return SuggestedMappingsRequestBean(
+      maxResults: maxResults ?? this.maxResults,
+      priorities: priorities ?? this.priorities,
+      projects: projects ?? this.projects,
+      schemeId: schemeId ?? this.schemeId,
+      startAt: startAt ?? this.startAt,
+    );
+  }
+}
+
 /// List of system avatars.
 class SystemAvatars {
   /// A list of avatar details.
@@ -50680,6 +58991,490 @@ class SystemAvatars {
       system: system ?? this.system,
     );
   }
+}
+
+/// Classification mapping for classifications in source issues to respective
+/// target classification.
+class TargetClassification {
+  /// An object with the key as the ID of the target classification and value
+  /// with the list of the IDs of the current source classifications.
+  final Map<String, dynamic> classifications;
+
+  /// ID of the source issueType to which issues present in `issueIdOrKeys`
+  /// belongs.
+  final String? issueType;
+
+  /// ID or key of the source project to which issues present in `issueIdOrKeys`
+  /// belongs.
+  final String? projectKeyOrId;
+
+  TargetClassification(
+      {required this.classifications, this.issueType, this.projectKeyOrId});
+
+  factory TargetClassification.fromJson(Map<String, Object?> json) {
+    return TargetClassification(
+      classifications: json[r'classifications'] as Map<String, Object?>? ?? {},
+      issueType: json[r'issueType'] as String?,
+      projectKeyOrId: json[r'projectKeyOrId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var classifications = this.classifications;
+    var issueType = this.issueType;
+    var projectKeyOrId = this.projectKeyOrId;
+
+    final json = <String, Object?>{};
+    json[r'classifications'] = classifications;
+    if (issueType != null) {
+      json[r'issueType'] = issueType;
+    }
+    if (projectKeyOrId != null) {
+      json[r'projectKeyOrId'] = projectKeyOrId;
+    }
+    return json;
+  }
+
+  TargetClassification copyWith(
+      {Map<String, dynamic>? classifications,
+      String? issueType,
+      String? projectKeyOrId}) {
+    return TargetClassification(
+      classifications: classifications ?? this.classifications,
+      issueType: issueType ?? this.issueType,
+      projectKeyOrId: projectKeyOrId ?? this.projectKeyOrId,
+    );
+  }
+}
+
+/// Field mapping for mandatory fields in target
+class TargetMandatoryFields {
+  /// Contains the value of mandatory fields
+  final Map<String, dynamic> fields;
+
+  TargetMandatoryFields({required this.fields});
+
+  factory TargetMandatoryFields.fromJson(Map<String, Object?> json) {
+    return TargetMandatoryFields(
+      fields: json[r'fields'] as Map<String, Object?>? ?? {},
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fields = this.fields;
+
+    final json = <String, Object?>{};
+    json[r'fields'] = fields;
+    return json;
+  }
+
+  TargetMandatoryFields copyWith({Map<String, dynamic>? fields}) {
+    return TargetMandatoryFields(
+      fields: fields ?? this.fields,
+    );
+  }
+}
+
+/// Status mapping for statuses in source workflow to respective target status
+/// in target workflow.
+class TargetStatus {
+  /// An object with the key as the ID of the target status and value with the
+  /// list of the IDs of the current source statuses.
+  final Map<String, dynamic> statuses;
+
+  TargetStatus({required this.statuses});
+
+  factory TargetStatus.fromJson(Map<String, Object?> json) {
+    return TargetStatus(
+      statuses: json[r'statuses'] as Map<String, Object?>? ?? {},
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var statuses = this.statuses;
+
+    final json = <String, Object?>{};
+    json[r'statuses'] = statuses;
+    return json;
+  }
+
+  TargetStatus copyWith({Map<String, dynamic>? statuses}) {
+    return TargetStatus(
+      statuses: statuses ?? this.statuses,
+    );
+  }
+}
+
+/// An object representing the mapping of issues and data related to destination
+/// entities, like fields and statuses, that are required during a bulk move.
+class TargetToSourcesMapping {
+  /// If `true`, when issues are moved into this target group, they will adopt
+  /// the target project's default classification, if they don't have a
+  /// classification already. If they do have a classification, it will be kept
+  /// the same even after the move. Leave `targetClassification` empty when
+  /// using this.
+  ///
+  /// If `false`, you must provide a `targetClassification` mapping for each
+  /// classification associated with the selected issues.
+  ///
+  /// [Benefit from data classification](https://support.atlassian.com/security-and-access-policies/docs/what-is-data-classification/)
+  final bool inferClassificationDefaults;
+
+  /// If `true`, values from the source issues will be retained for the
+  /// mandatory fields in the field configuration of the destination project.
+  /// The `targetMandatoryFields` property shouldn't be defined.
+  ///
+  /// If `false`, the user is required to set values for mandatory fields
+  /// present in the field configuration of the destination project. Provide
+  /// input by defining the `targetMandatoryFields` property
+  final bool inferFieldDefaults;
+
+  /// If `true`, the statuses of issues being moved in this target group that
+  /// are not present in the target workflow will be changed to the default
+  /// status of the target workflow (see below). Leave `targetStatus` empty when
+  /// using this.
+  ///
+  /// If `false`, you must provide a `targetStatus` for each status not present
+  /// in the target workflow.
+  ///
+  /// The default status in a workflow is referred to as the "initial status".
+  /// Each workflow has its own unique initial status. When an issue is created,
+  /// it is automatically assigned to this initial status. Read more about
+  /// configuring initial statuses:
+  /// [Configure the initial status | Atlassian Support.](https://support.atlassian.com/jira-cloud-administration/docs/configure-the-initial-status/)
+  final bool inferStatusDefaults;
+
+  /// When an issue is moved, its subtasks (if there are any) need to be moved
+  /// with it. `inferSubtaskTypeDefault` helps with moving the subtasks by
+  /// picking a random subtask type in the target project.
+  ///
+  /// If `true`, subtasks will automatically move to the same project as their
+  /// parent.
+  ///
+  /// When they move:
+  ///
+  ///  *  Their `issueType` will be set to the default for subtasks in the
+  /// target project.
+  ///  *  Values for mandatory fields will be retained from the source issues
+  ///  *  Specifying separate mapping for implicit subtasks won’t be allowed.
+  ///
+  /// If `false`, you must manually move the subtasks. They will retain the
+  /// parent which they had in the current project after being moved.
+  final bool inferSubtaskTypeDefault;
+
+  /// List of issue IDs or keys to be moved. These issues must be from the same
+  /// project, have the same issue type, and be from the same parent (if they’re
+  /// subtasks).
+  final List<String> issueIdsOrKeys;
+
+  /// List of the objects containing classifications in the source issues and
+  /// their new values which need to be set during the bulk move operation.
+  ///
+  ///  *  **You should only define this property when
+  /// `inferClassificationDefaults` is `false`.**
+  ///  *  **In order to provide mapping for issues which don't have a
+  /// classification, use `"-1"`.**
+  final List<TargetClassification> targetClassification;
+
+  /// List of objects containing mandatory fields in the target field
+  /// configuration and new values that need to be set during the bulk move
+  /// operation.
+  ///
+  /// The new values will only be applied if the field is mandatory in the
+  /// target project and at least one issue from the source has that field
+  /// empty, or if the field context is different in the target project (e.g.
+  /// project-scoped version fields).
+  ///
+  /// **You should only define this property when `inferFieldDefaults` is
+  /// `false`.**
+  final List<TargetMandatoryFields> targetMandatoryFields;
+
+  /// List of the objects containing statuses in the source workflow and their
+  /// new values which need to be set during the bulk move operation.
+  ///
+  /// The new values will only be applied if the source status is invalid for
+  /// the target project and issue type.
+  ///
+  /// **You should only define this property when `inferStatusDefaults` is
+  /// `false`.**
+  final List<TargetStatus> targetStatus;
+
+  TargetToSourcesMapping(
+      {required this.inferClassificationDefaults,
+      required this.inferFieldDefaults,
+      required this.inferStatusDefaults,
+      required this.inferSubtaskTypeDefault,
+      List<String>? issueIdsOrKeys,
+      List<TargetClassification>? targetClassification,
+      List<TargetMandatoryFields>? targetMandatoryFields,
+      List<TargetStatus>? targetStatus})
+      : issueIdsOrKeys = issueIdsOrKeys ?? [],
+        targetClassification = targetClassification ?? [],
+        targetMandatoryFields = targetMandatoryFields ?? [],
+        targetStatus = targetStatus ?? [];
+
+  factory TargetToSourcesMapping.fromJson(Map<String, Object?> json) {
+    return TargetToSourcesMapping(
+      inferClassificationDefaults:
+          json[r'inferClassificationDefaults'] as bool? ?? false,
+      inferFieldDefaults: json[r'inferFieldDefaults'] as bool? ?? false,
+      inferStatusDefaults: json[r'inferStatusDefaults'] as bool? ?? false,
+      inferSubtaskTypeDefault:
+          json[r'inferSubtaskTypeDefault'] as bool? ?? false,
+      issueIdsOrKeys: (json[r'issueIdsOrKeys'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      targetClassification: (json[r'targetClassification'] as List<Object?>?)
+              ?.map((i) => TargetClassification.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      targetMandatoryFields: (json[r'targetMandatoryFields'] as List<Object?>?)
+              ?.map((i) => TargetMandatoryFields.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      targetStatus: (json[r'targetStatus'] as List<Object?>?)
+              ?.map((i) =>
+                  TargetStatus.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var inferClassificationDefaults = this.inferClassificationDefaults;
+    var inferFieldDefaults = this.inferFieldDefaults;
+    var inferStatusDefaults = this.inferStatusDefaults;
+    var inferSubtaskTypeDefault = this.inferSubtaskTypeDefault;
+    var issueIdsOrKeys = this.issueIdsOrKeys;
+    var targetClassification = this.targetClassification;
+    var targetMandatoryFields = this.targetMandatoryFields;
+    var targetStatus = this.targetStatus;
+
+    final json = <String, Object?>{};
+    json[r'inferClassificationDefaults'] = inferClassificationDefaults;
+    json[r'inferFieldDefaults'] = inferFieldDefaults;
+    json[r'inferStatusDefaults'] = inferStatusDefaults;
+    json[r'inferSubtaskTypeDefault'] = inferSubtaskTypeDefault;
+    json[r'issueIdsOrKeys'] = issueIdsOrKeys;
+    json[r'targetClassification'] =
+        targetClassification.map((i) => i.toJson()).toList();
+    json[r'targetMandatoryFields'] =
+        targetMandatoryFields.map((i) => i.toJson()).toList();
+    json[r'targetStatus'] = targetStatus.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  TargetToSourcesMapping copyWith(
+      {bool? inferClassificationDefaults,
+      bool? inferFieldDefaults,
+      bool? inferStatusDefaults,
+      bool? inferSubtaskTypeDefault,
+      List<String>? issueIdsOrKeys,
+      List<TargetClassification>? targetClassification,
+      List<TargetMandatoryFields>? targetMandatoryFields,
+      List<TargetStatus>? targetStatus}) {
+    return TargetToSourcesMapping(
+      inferClassificationDefaults:
+          inferClassificationDefaults ?? this.inferClassificationDefaults,
+      inferFieldDefaults: inferFieldDefaults ?? this.inferFieldDefaults,
+      inferStatusDefaults: inferStatusDefaults ?? this.inferStatusDefaults,
+      inferSubtaskTypeDefault:
+          inferSubtaskTypeDefault ?? this.inferSubtaskTypeDefault,
+      issueIdsOrKeys: issueIdsOrKeys ?? this.issueIdsOrKeys,
+      targetClassification: targetClassification ?? this.targetClassification,
+      targetMandatoryFields:
+          targetMandatoryFields ?? this.targetMandatoryFields,
+      targetStatus: targetStatus ?? this.targetStatus,
+    );
+  }
+}
+
+/// Details about a task.
+class TaskProgressBeanJsonNode {
+  /// The description of the task.
+  final String? description;
+
+  /// The execution time of the task, in milliseconds.
+  final int elapsedRuntime;
+
+  /// A timestamp recording when the task was finished.
+  final int? finished;
+
+  /// The ID of the task.
+  final String id;
+
+  /// A timestamp recording when the task progress was last updated.
+  final int lastUpdate;
+
+  /// Information about the progress of the task.
+  final String? message;
+
+  /// The progress of the task, as a percentage complete.
+  final int progress;
+
+  /// The result of the task execution.
+  final JsonNode? result;
+
+  /// The URL of the task.
+  final String self;
+
+  /// A timestamp recording when the task was started.
+  final int? started;
+
+  /// The status of the task.
+  final TaskProgressBeanJsonNodeStatus status;
+
+  /// A timestamp recording when the task was submitted.
+  final int submitted;
+
+  /// The ID of the user who submitted the task.
+  final int submittedBy;
+
+  TaskProgressBeanJsonNode(
+      {this.description,
+      required this.elapsedRuntime,
+      this.finished,
+      required this.id,
+      required this.lastUpdate,
+      this.message,
+      required this.progress,
+      this.result,
+      required this.self,
+      this.started,
+      required this.status,
+      required this.submitted,
+      required this.submittedBy});
+
+  factory TaskProgressBeanJsonNode.fromJson(Map<String, Object?> json) {
+    return TaskProgressBeanJsonNode(
+      description: json[r'description'] as String?,
+      elapsedRuntime: (json[r'elapsedRuntime'] as num?)?.toInt() ?? 0,
+      finished: (json[r'finished'] as num?)?.toInt(),
+      id: json[r'id'] as String? ?? '',
+      lastUpdate: (json[r'lastUpdate'] as num?)?.toInt() ?? 0,
+      message: json[r'message'] as String?,
+      progress: (json[r'progress'] as num?)?.toInt() ?? 0,
+      result: json[r'result'] != null
+          ? JsonNode.fromJson(json[r'result']! as Map<String, Object?>)
+          : null,
+      self: json[r'self'] as String? ?? '',
+      started: (json[r'started'] as num?)?.toInt(),
+      status: TaskProgressBeanJsonNodeStatus.fromValue(
+          json[r'status'] as String? ?? ''),
+      submitted: (json[r'submitted'] as num?)?.toInt() ?? 0,
+      submittedBy: (json[r'submittedBy'] as num?)?.toInt() ?? 0,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var elapsedRuntime = this.elapsedRuntime;
+    var finished = this.finished;
+    var id = this.id;
+    var lastUpdate = this.lastUpdate;
+    var message = this.message;
+    var progress = this.progress;
+    var result = this.result;
+    var self = this.self;
+    var started = this.started;
+    var status = this.status;
+    var submitted = this.submitted;
+    var submittedBy = this.submittedBy;
+
+    final json = <String, Object?>{};
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    json[r'elapsedRuntime'] = elapsedRuntime;
+    if (finished != null) {
+      json[r'finished'] = finished;
+    }
+    json[r'id'] = id;
+    json[r'lastUpdate'] = lastUpdate;
+    if (message != null) {
+      json[r'message'] = message;
+    }
+    json[r'progress'] = progress;
+    if (result != null) {
+      json[r'result'] = result.toJson();
+    }
+    json[r'self'] = self;
+    if (started != null) {
+      json[r'started'] = started;
+    }
+    json[r'status'] = status.value;
+    json[r'submitted'] = submitted;
+    json[r'submittedBy'] = submittedBy;
+    return json;
+  }
+
+  TaskProgressBeanJsonNode copyWith(
+      {String? description,
+      int? elapsedRuntime,
+      int? finished,
+      String? id,
+      int? lastUpdate,
+      String? message,
+      int? progress,
+      JsonNode? result,
+      String? self,
+      int? started,
+      TaskProgressBeanJsonNodeStatus? status,
+      int? submitted,
+      int? submittedBy}) {
+    return TaskProgressBeanJsonNode(
+      description: description ?? this.description,
+      elapsedRuntime: elapsedRuntime ?? this.elapsedRuntime,
+      finished: finished ?? this.finished,
+      id: id ?? this.id,
+      lastUpdate: lastUpdate ?? this.lastUpdate,
+      message: message ?? this.message,
+      progress: progress ?? this.progress,
+      result: result ?? this.result,
+      self: self ?? this.self,
+      started: started ?? this.started,
+      status: status ?? this.status,
+      submitted: submitted ?? this.submitted,
+      submittedBy: submittedBy ?? this.submittedBy,
+    );
+  }
+}
+
+class TaskProgressBeanJsonNodeStatus {
+  static const enqueued = TaskProgressBeanJsonNodeStatus._('ENQUEUED');
+  static const running = TaskProgressBeanJsonNodeStatus._('RUNNING');
+  static const complete = TaskProgressBeanJsonNodeStatus._('COMPLETE');
+  static const failed = TaskProgressBeanJsonNodeStatus._('FAILED');
+  static const cancelRequested =
+      TaskProgressBeanJsonNodeStatus._('CANCEL_REQUESTED');
+  static const cancelled = TaskProgressBeanJsonNodeStatus._('CANCELLED');
+  static const dead = TaskProgressBeanJsonNodeStatus._('DEAD');
+
+  static const values = [
+    enqueued,
+    running,
+    complete,
+    failed,
+    cancelRequested,
+    cancelled,
+    dead,
+  ];
+  final String value;
+
+  const TaskProgressBeanJsonNodeStatus._(this.value);
+
+  static TaskProgressBeanJsonNodeStatus fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => TaskProgressBeanJsonNodeStatus._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 /// Details about a task.
@@ -51486,7 +60281,9 @@ class TransitionScreenDetails {
   }
 }
 
-/// The transitions of this workflow.
+/// The transition update data. Note that a transition can have either the
+/// deprecated `to`/`from` fields or the `toStatusReference`/`links` fields, but
+/// never both nor a combination.
 class TransitionUpdateDTO {
   /// The post-functions of the transition.
   final List<WorkflowRuleConfiguration> actions;
@@ -51498,11 +60295,17 @@ class TransitionUpdateDTO {
   /// The description of the transition.
   final String? description;
 
-  /// The statuses the transition can start from.
+  /// The statuses and ports that the transition can start from. This field is
+  /// deprecated - use `toStatusReference`/`links` instead.
+  @deprecated
   final List<StatusReferenceAndPort> from;
 
   /// The ID of the transition.
   final String id;
+
+  /// The statuses the transition can start from, and the mapping of ports
+  /// between the statuses.
+  final List<WorkflowTransitionLinks> links;
 
   /// The name of the transition.
   final String name;
@@ -51510,6 +60313,9 @@ class TransitionUpdateDTO {
   /// The properties of the transition.
   final Map<String, dynamic>? properties;
   final StatusReferenceAndPort? to;
+
+  /// The status the transition goes to.
+  final String? toStatusReference;
   final WorkflowRuleConfiguration? transitionScreen;
 
   /// The triggers of the transition.
@@ -51528,15 +60334,18 @@ class TransitionUpdateDTO {
       this.description,
       List<StatusReferenceAndPort>? from,
       required this.id,
+      List<WorkflowTransitionLinks>? links,
       required this.name,
       this.properties,
       this.to,
+      this.toStatusReference,
       this.transitionScreen,
       List<WorkflowTrigger>? triggers,
       required this.type,
       List<WorkflowRuleConfiguration>? validators})
       : actions = actions ?? [],
         from = from ?? [],
+        links = links ?? [],
         triggers = triggers ?? [],
         validators = validators ?? [];
 
@@ -51559,12 +60368,18 @@ class TransitionUpdateDTO {
               .toList() ??
           [],
       id: json[r'id'] as String? ?? '',
+      links: (json[r'links'] as List<Object?>?)
+              ?.map((i) => WorkflowTransitionLinks.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
       name: json[r'name'] as String? ?? '',
       properties: json[r'properties'] as Map<String, Object?>?,
       to: json[r'to'] != null
           ? StatusReferenceAndPort.fromJson(
               json[r'to']! as Map<String, Object?>)
           : null,
+      toStatusReference: json[r'toStatusReference'] as String?,
       transitionScreen: json[r'transitionScreen'] != null
           ? WorkflowRuleConfiguration.fromJson(
               json[r'transitionScreen']! as Map<String, Object?>)
@@ -51590,9 +60405,11 @@ class TransitionUpdateDTO {
     var description = this.description;
     var from = this.from;
     var id = this.id;
+    var links = this.links;
     var name = this.name;
     var properties = this.properties;
     var to = this.to;
+    var toStatusReference = this.toStatusReference;
     var transitionScreen = this.transitionScreen;
     var triggers = this.triggers;
     var type = this.type;
@@ -51611,12 +60428,16 @@ class TransitionUpdateDTO {
     }
     json[r'from'] = from.map((i) => i.toJson()).toList();
     json[r'id'] = id;
+    json[r'links'] = links.map((i) => i.toJson()).toList();
     json[r'name'] = name;
     if (properties != null) {
       json[r'properties'] = properties;
     }
     if (to != null) {
       json[r'to'] = to.toJson();
+    }
+    if (toStatusReference != null) {
+      json[r'toStatusReference'] = toStatusReference;
     }
     if (transitionScreen != null) {
       json[r'transitionScreen'] = transitionScreen.toJson();
@@ -51634,9 +60455,11 @@ class TransitionUpdateDTO {
       String? description,
       List<StatusReferenceAndPort>? from,
       String? id,
+      List<WorkflowTransitionLinks>? links,
       String? name,
       Map<String, dynamic>? properties,
       StatusReferenceAndPort? to,
+      String? toStatusReference,
       WorkflowRuleConfiguration? transitionScreen,
       List<WorkflowTrigger>? triggers,
       TransitionUpdateDTOType? type,
@@ -51648,9 +60471,11 @@ class TransitionUpdateDTO {
       description: description ?? this.description,
       from: from ?? this.from,
       id: id ?? this.id,
+      links: links ?? this.links,
       name: name ?? this.name,
       properties: properties ?? this.properties,
       to: to ?? this.to,
+      toStatusReference: toStatusReference ?? this.toStatusReference,
       transitionScreen: transitionScreen ?? this.transitionScreen,
       triggers: triggers ?? this.triggers,
       type: type ?? this.type,
@@ -51737,31 +60562,40 @@ class UiModificationContextDetails {
   /// context becomes unavailable.
   final bool isAvailable;
 
-  /// The issue type ID of the context.
-  final String issueTypeId;
+  /// The issue type ID of the context. Null is treated as a wildcard, meaning
+  /// the UI modification will be applied to all issue types. Each UI
+  /// modification context can have a maximum of one wildcard.
+  final String? issueTypeId;
 
-  /// The project ID of the context.
-  final String projectId;
+  /// The project ID of the context. Null is treated as a wildcard, meaning the
+  /// UI modification will be applied to all projects. Each UI modification
+  /// context can have a maximum of one wildcard.
+  final String? projectId;
 
-  /// The view type of the context. Only `GIC` (Global Issue Create) is
-  /// supported.
-  final String viewType;
+  /// The view type of the context. Only `GIC`(Global Issue Create) and
+  /// `IssueView` are supported. Null is treated as a wildcard, meaning the UI
+  /// modification will be applied to all view types. Each UI modification
+  /// context can have a maximum of one wildcard.
+  final UiModificationContextDetailsViewType? viewType;
 
   UiModificationContextDetails(
       {this.id,
       bool? isAvailable,
-      required this.issueTypeId,
-      required this.projectId,
-      required this.viewType})
+      this.issueTypeId,
+      this.projectId,
+      this.viewType})
       : isAvailable = isAvailable ?? false;
 
   factory UiModificationContextDetails.fromJson(Map<String, Object?> json) {
     return UiModificationContextDetails(
       id: json[r'id'] as String?,
       isAvailable: json[r'isAvailable'] as bool? ?? false,
-      issueTypeId: json[r'issueTypeId'] as String? ?? '',
-      projectId: json[r'projectId'] as String? ?? '',
-      viewType: json[r'viewType'] as String? ?? '',
+      issueTypeId: json[r'issueTypeId'] as String?,
+      projectId: json[r'projectId'] as String?,
+      viewType: json[r'viewType'] != null
+          ? UiModificationContextDetailsViewType.fromValue(
+              json[r'viewType']! as String)
+          : null,
     );
   }
 
@@ -51777,9 +60611,15 @@ class UiModificationContextDetails {
       json[r'id'] = id;
     }
     json[r'isAvailable'] = isAvailable;
-    json[r'issueTypeId'] = issueTypeId;
-    json[r'projectId'] = projectId;
-    json[r'viewType'] = viewType;
+    if (issueTypeId != null) {
+      json[r'issueTypeId'] = issueTypeId;
+    }
+    if (projectId != null) {
+      json[r'projectId'] = projectId;
+    }
+    if (viewType != null) {
+      json[r'viewType'] = viewType.value;
+    }
     return json;
   }
 
@@ -51788,7 +60628,7 @@ class UiModificationContextDetails {
       bool? isAvailable,
       String? issueTypeId,
       String? projectId,
-      String? viewType}) {
+      UiModificationContextDetailsViewType? viewType}) {
     return UiModificationContextDetails(
       id: id ?? this.id,
       isAvailable: isAvailable ?? this.isAvailable,
@@ -51797,6 +60637,29 @@ class UiModificationContextDetails {
       viewType: viewType ?? this.viewType,
     );
   }
+}
+
+class UiModificationContextDetailsViewType {
+  static const gic = UiModificationContextDetailsViewType._('GIC');
+  static const issueView = UiModificationContextDetailsViewType._('IssueView');
+
+  static const values = [
+    gic,
+    issueView,
+  ];
+  final String value;
+
+  const UiModificationContextDetailsViewType._(this.value);
+
+  static UiModificationContextDetailsViewType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => UiModificationContextDetailsViewType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 /// The details of a UI modification.
@@ -52110,6 +60973,35 @@ class UpdateCustomFieldDetailsSearcherKey {
   String toString() => value;
 }
 
+/// The request for updating the default project classification level.
+class UpdateDefaultProjectClassificationBean {
+  /// The ID of the project classification.
+  final String id;
+
+  UpdateDefaultProjectClassificationBean({required this.id});
+
+  factory UpdateDefaultProjectClassificationBean.fromJson(
+      Map<String, Object?> json) {
+    return UpdateDefaultProjectClassificationBean(
+      id: json[r'id'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    return json;
+  }
+
+  UpdateDefaultProjectClassificationBean copyWith({String? id}) {
+    return UpdateDefaultProjectClassificationBean(
+      id: id ?? this.id,
+    );
+  }
+}
+
 /// The ID of a screen scheme.
 class UpdateDefaultScreenScheme {
   /// The ID of the screen scheme.
@@ -52297,13 +61189,66 @@ class UpdateNotificationSchemeDetails {
   }
 }
 
+/// Update priorities in a scheme
+class UpdatePrioritiesInSchemeRequestBean {
+  /// Priorities to add to a scheme
+  final PrioritySchemeChangesWithoutMappings? add;
+
+  /// Priorities to remove from a scheme
+  final PrioritySchemeChangesWithMappings? remove;
+
+  UpdatePrioritiesInSchemeRequestBean({this.add, this.remove});
+
+  factory UpdatePrioritiesInSchemeRequestBean.fromJson(
+      Map<String, Object?> json) {
+    return UpdatePrioritiesInSchemeRequestBean(
+      add: json[r'add'] != null
+          ? PrioritySchemeChangesWithoutMappings.fromJson(
+              json[r'add']! as Map<String, Object?>)
+          : null,
+      remove: json[r'remove'] != null
+          ? PrioritySchemeChangesWithMappings.fromJson(
+              json[r'remove']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var add = this.add;
+    var remove = this.remove;
+
+    final json = <String, Object?>{};
+    if (add != null) {
+      json[r'add'] = add.toJson();
+    }
+    if (remove != null) {
+      json[r'remove'] = remove.toJson();
+    }
+    return json;
+  }
+
+  UpdatePrioritiesInSchemeRequestBean copyWith(
+      {PrioritySchemeChangesWithoutMappings? add,
+      PrioritySchemeChangesWithMappings? remove}) {
+    return UpdatePrioritiesInSchemeRequestBean(
+      add: add ?? this.add,
+      remove: remove ?? this.remove,
+    );
+  }
+}
+
 /// Details of an issue priority.
 class UpdatePriorityDetails {
+  /// The ID for the avatar for the priority. This parameter is nullable and
+  /// both iconUrl and avatarId cannot be defined.
+  final int? avatarId;
+
   /// The description of the priority.
   final String? description;
 
   /// The URL of an icon for the priority. Accepted protocols are HTTP and
-  /// HTTPS. Built in icons can also be used.
+  /// HTTPS. Built in icons can also be used. Both iconUrl and avatarId cannot
+  /// be defined.
   final UpdatePriorityDetailsIconUrl? iconUrl;
 
   /// The name of the priority. Must be unique.
@@ -52313,10 +61258,15 @@ class UpdatePriorityDetails {
   final String? statusColor;
 
   UpdatePriorityDetails(
-      {this.description, this.iconUrl, this.name, this.statusColor});
+      {this.avatarId,
+      this.description,
+      this.iconUrl,
+      this.name,
+      this.statusColor});
 
   factory UpdatePriorityDetails.fromJson(Map<String, Object?> json) {
     return UpdatePriorityDetails(
+      avatarId: (json[r'avatarId'] as num?)?.toInt(),
       description: json[r'description'] as String?,
       iconUrl: json[r'iconUrl'] != null
           ? UpdatePriorityDetailsIconUrl.fromValue(json[r'iconUrl']! as String)
@@ -52327,12 +61277,16 @@ class UpdatePriorityDetails {
   }
 
   Map<String, Object?> toJson() {
+    var avatarId = this.avatarId;
     var description = this.description;
     var iconUrl = this.iconUrl;
     var name = this.name;
     var statusColor = this.statusColor;
 
     final json = <String, Object?>{};
+    if (avatarId != null) {
+      json[r'avatarId'] = avatarId;
+    }
     if (description != null) {
       json[r'description'] = description;
     }
@@ -52349,11 +61303,13 @@ class UpdatePriorityDetails {
   }
 
   UpdatePriorityDetails copyWith(
-      {String? description,
+      {int? avatarId,
+      String? description,
       UpdatePriorityDetailsIconUrl? iconUrl,
       String? name,
       String? statusColor}) {
     return UpdatePriorityDetails(
+      avatarId: avatarId ?? this.avatarId,
       description: description ?? this.description,
       iconUrl: iconUrl ?? this.iconUrl,
       name: name ?? this.name,
@@ -52383,6 +61339,30 @@ class UpdatePriorityDetailsIconUrl {
       UpdatePriorityDetailsIconUrl._('/images/icons/priorities/minor.png');
   static const imagesIconsPrioritiesTrivialPng =
       UpdatePriorityDetailsIconUrl._('/images/icons/priorities/trivial.png');
+  static const imagesIconsPrioritiesBlockerNewPng =
+      UpdatePriorityDetailsIconUrl._(
+          '/images/icons/priorities/blocker_new.png');
+  static const imagesIconsPrioritiesCriticalNewPng =
+      UpdatePriorityDetailsIconUrl._(
+          '/images/icons/priorities/critical_new.png');
+  static const imagesIconsPrioritiesHighNewPng =
+      UpdatePriorityDetailsIconUrl._('/images/icons/priorities/high_new.png');
+  static const imagesIconsPrioritiesHighestNewPng =
+      UpdatePriorityDetailsIconUrl._(
+          '/images/icons/priorities/highest_new.png');
+  static const imagesIconsPrioritiesLowNewPng =
+      UpdatePriorityDetailsIconUrl._('/images/icons/priorities/low_new.png');
+  static const imagesIconsPrioritiesLowestNewPng =
+      UpdatePriorityDetailsIconUrl._('/images/icons/priorities/lowest_new.png');
+  static const imagesIconsPrioritiesMajorNewPng =
+      UpdatePriorityDetailsIconUrl._('/images/icons/priorities/major_new.png');
+  static const imagesIconsPrioritiesMediumNewPng =
+      UpdatePriorityDetailsIconUrl._('/images/icons/priorities/medium_new.png');
+  static const imagesIconsPrioritiesMinorNewPng =
+      UpdatePriorityDetailsIconUrl._('/images/icons/priorities/minor_new.png');
+  static const imagesIconsPrioritiesTrivialNewPng =
+      UpdatePriorityDetailsIconUrl._(
+          '/images/icons/priorities/trivial_new.png');
 
   static const values = [
     imagesIconsPrioritiesBlockerPng,
@@ -52395,6 +61375,16 @@ class UpdatePriorityDetailsIconUrl {
     imagesIconsPrioritiesMediumPng,
     imagesIconsPrioritiesMinorPng,
     imagesIconsPrioritiesTrivialPng,
+    imagesIconsPrioritiesBlockerNewPng,
+    imagesIconsPrioritiesCriticalNewPng,
+    imagesIconsPrioritiesHighNewPng,
+    imagesIconsPrioritiesHighestNewPng,
+    imagesIconsPrioritiesLowNewPng,
+    imagesIconsPrioritiesLowestNewPng,
+    imagesIconsPrioritiesMajorNewPng,
+    imagesIconsPrioritiesMediumNewPng,
+    imagesIconsPrioritiesMinorNewPng,
+    imagesIconsPrioritiesTrivialNewPng,
   ];
   final String value;
 
@@ -52409,6 +61399,147 @@ class UpdatePriorityDetailsIconUrl {
 
   @override
   String toString() => value;
+}
+
+/// Details of a priority scheme.
+class UpdatePrioritySchemeRequestBean {
+  /// The default priority of the scheme.
+  final int? defaultPriorityId;
+
+  /// The description of the priority scheme.
+  final String? description;
+
+  /// Instructions to migrate issues.
+  final PriorityMapping? mappings;
+
+  /// The name of the priority scheme. Must be unique.
+  final String? name;
+
+  /// The priorities in the scheme.
+  final UpdatePrioritiesInSchemeRequestBean? priorities;
+
+  /// The projects in the scheme.
+  final UpdateProjectsInSchemeRequestBean? projects;
+
+  UpdatePrioritySchemeRequestBean(
+      {this.defaultPriorityId,
+      this.description,
+      this.mappings,
+      this.name,
+      this.priorities,
+      this.projects});
+
+  factory UpdatePrioritySchemeRequestBean.fromJson(Map<String, Object?> json) {
+    return UpdatePrioritySchemeRequestBean(
+      defaultPriorityId: (json[r'defaultPriorityId'] as num?)?.toInt(),
+      description: json[r'description'] as String?,
+      mappings: json[r'mappings'] != null
+          ? PriorityMapping.fromJson(json[r'mappings']! as Map<String, Object?>)
+          : null,
+      name: json[r'name'] as String?,
+      priorities: json[r'priorities'] != null
+          ? UpdatePrioritiesInSchemeRequestBean.fromJson(
+              json[r'priorities']! as Map<String, Object?>)
+          : null,
+      projects: json[r'projects'] != null
+          ? UpdateProjectsInSchemeRequestBean.fromJson(
+              json[r'projects']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var defaultPriorityId = this.defaultPriorityId;
+    var description = this.description;
+    var mappings = this.mappings;
+    var name = this.name;
+    var priorities = this.priorities;
+    var projects = this.projects;
+
+    final json = <String, Object?>{};
+    if (defaultPriorityId != null) {
+      json[r'defaultPriorityId'] = defaultPriorityId;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (mappings != null) {
+      json[r'mappings'] = mappings.toJson();
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (priorities != null) {
+      json[r'priorities'] = priorities.toJson();
+    }
+    if (projects != null) {
+      json[r'projects'] = projects.toJson();
+    }
+    return json;
+  }
+
+  UpdatePrioritySchemeRequestBean copyWith(
+      {int? defaultPriorityId,
+      String? description,
+      PriorityMapping? mappings,
+      String? name,
+      UpdatePrioritiesInSchemeRequestBean? priorities,
+      UpdateProjectsInSchemeRequestBean? projects}) {
+    return UpdatePrioritySchemeRequestBean(
+      defaultPriorityId: defaultPriorityId ?? this.defaultPriorityId,
+      description: description ?? this.description,
+      mappings: mappings ?? this.mappings,
+      name: name ?? this.name,
+      priorities: priorities ?? this.priorities,
+      projects: projects ?? this.projects,
+    );
+  }
+}
+
+/// Details of the updated priority scheme.
+class UpdatePrioritySchemeResponseBean {
+  final PrioritySchemeWithPaginatedPrioritiesAndProjects? priorityScheme;
+
+  /// The in-progress issue migration task.
+  final TaskProgressBeanJsonNode? task;
+
+  UpdatePrioritySchemeResponseBean({this.priorityScheme, this.task});
+
+  factory UpdatePrioritySchemeResponseBean.fromJson(Map<String, Object?> json) {
+    return UpdatePrioritySchemeResponseBean(
+      priorityScheme: json[r'priorityScheme'] != null
+          ? PrioritySchemeWithPaginatedPrioritiesAndProjects.fromJson(
+              json[r'priorityScheme']! as Map<String, Object?>)
+          : null,
+      task: json[r'task'] != null
+          ? TaskProgressBeanJsonNode.fromJson(
+              json[r'task']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var priorityScheme = this.priorityScheme;
+    var task = this.task;
+
+    final json = <String, Object?>{};
+    if (priorityScheme != null) {
+      json[r'priorityScheme'] = priorityScheme.toJson();
+    }
+    if (task != null) {
+      json[r'task'] = task.toJson();
+    }
+    return json;
+  }
+
+  UpdatePrioritySchemeResponseBean copyWith(
+      {PrioritySchemeWithPaginatedPrioritiesAndProjects? priorityScheme,
+      TaskProgressBeanJsonNode? task}) {
+    return UpdatePrioritySchemeResponseBean(
+      priorityScheme: priorityScheme ?? this.priorityScheme,
+      task: task ?? this.task,
+    );
+  }
 }
 
 /// Details about the project.
@@ -52605,6 +61736,54 @@ class UpdateProjectDetailsAssigneeType {
 
   @override
   String toString() => value;
+}
+
+/// Update projects in a scheme
+class UpdateProjectsInSchemeRequestBean {
+  /// Projects to add to a scheme
+  final PrioritySchemeChangesWithoutMappings? add;
+
+  /// Projects to remove from a scheme
+  final PrioritySchemeChangesWithoutMappings? remove;
+
+  UpdateProjectsInSchemeRequestBean({this.add, this.remove});
+
+  factory UpdateProjectsInSchemeRequestBean.fromJson(
+      Map<String, Object?> json) {
+    return UpdateProjectsInSchemeRequestBean(
+      add: json[r'add'] != null
+          ? PrioritySchemeChangesWithoutMappings.fromJson(
+              json[r'add']! as Map<String, Object?>)
+          : null,
+      remove: json[r'remove'] != null
+          ? PrioritySchemeChangesWithoutMappings.fromJson(
+              json[r'remove']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var add = this.add;
+    var remove = this.remove;
+
+    final json = <String, Object?>{};
+    if (add != null) {
+      json[r'add'] = add.toJson();
+    }
+    if (remove != null) {
+      json[r'remove'] = remove.toJson();
+    }
+    return json;
+  }
+
+  UpdateProjectsInSchemeRequestBean copyWith(
+      {PrioritySchemeChangesWithoutMappings? add,
+      PrioritySchemeChangesWithoutMappings? remove}) {
+    return UpdateProjectsInSchemeRequestBean(
+      add: add ?? this.add,
+      remove: remove ?? this.remove,
+    );
+  }
 }
 
 /// Details of an issue resolution.
@@ -53372,6 +62551,35 @@ class UserBeanAvatarUrls {
       $24X24: $24X24 ?? this.$24X24,
       $32X32: $32X32 ?? this.$32X32,
       $48X48: $48X48 ?? this.$48X48,
+    );
+  }
+}
+
+class UserColumnRequestBody {
+  final List<String> columns;
+
+  UserColumnRequestBody({List<String>? columns}) : columns = columns ?? [];
+
+  factory UserColumnRequestBody.fromJson(Map<String, Object?> json) {
+    return UserColumnRequestBody(
+      columns: (json[r'columns'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var columns = this.columns;
+
+    final json = <String, Object?>{};
+    json[r'columns'] = columns;
+    return json;
+  }
+
+  UserColumnRequestBody copyWith({List<String>? columns}) {
+    return UserColumnRequestBody(
+      columns: columns ?? this.columns,
     );
   }
 }
@@ -54165,13 +63373,21 @@ class ValueOperand {
 
 /// Details about a project version.
 class Version {
+  /// If the expand option `approvers` is used, returns a list containing the
+  /// approvers for this version.
+  final List<VersionApprover> approvers;
+
   /// Indicates that the version is archived. Optional when creating or updating
   /// a version.
   final bool archived;
 
   /// The description of the version. Optional when creating or updating a
-  /// version.
+  /// version. The maximum size is 16,384 bytes.
   final String? description;
+
+  /// If the expand option `driver` is used, returns the Atlassian account ID of
+  /// the driver.
+  final String? driver;
 
   /// Use [expand](em>#expansion) to include additional information about
   /// version in the response. This parameter accepts a comma-separated list.
@@ -54183,6 +63399,8 @@ class Version {
   /// the status categories *to do*, *in progress*, *done*, and *unmapped*. The
   /// *unmapped* property contains a count of issues with a status other than
   /// *to do*, *in progress*, and *done*.
+  ///  *  `driver` Returns the Atlassian account ID of the version driver.
+  ///  *  `approvers` Returns a list containing approvers for this version.
   ///
   /// Optional for create and update.
   final String? expand;
@@ -54244,8 +63462,10 @@ class Version {
   final String? userStartDate;
 
   Version(
-      {bool? archived,
+      {List<VersionApprover>? approvers,
+      bool? archived,
       this.description,
+      this.driver,
       this.expand,
       this.id,
       this.issuesStatusForFixVersion,
@@ -54261,15 +63481,22 @@ class Version {
       this.startDate,
       this.userReleaseDate,
       this.userStartDate})
-      : archived = archived ?? false,
+      : approvers = approvers ?? [],
+        archived = archived ?? false,
         operations = operations ?? [],
         overdue = overdue ?? false,
         released = released ?? false;
 
   factory Version.fromJson(Map<String, Object?> json) {
     return Version(
+      approvers: (json[r'approvers'] as List<Object?>?)
+              ?.map((i) => VersionApprover.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
       archived: json[r'archived'] as bool? ?? false,
       description: json[r'description'] as String?,
+      driver: json[r'driver'] as String?,
       expand: json[r'expand'] as String?,
       id: json[r'id'] as String?,
       issuesStatusForFixVersion: json[r'issuesStatusForFixVersion'] != null
@@ -54296,8 +63523,10 @@ class Version {
   }
 
   Map<String, Object?> toJson() {
+    var approvers = this.approvers;
     var archived = this.archived;
     var description = this.description;
+    var driver = this.driver;
     var expand = this.expand;
     var id = this.id;
     var issuesStatusForFixVersion = this.issuesStatusForFixVersion;
@@ -54315,9 +63544,13 @@ class Version {
     var userStartDate = this.userStartDate;
 
     final json = <String, Object?>{};
+    json[r'approvers'] = approvers.map((i) => i.toJson()).toList();
     json[r'archived'] = archived;
     if (description != null) {
       json[r'description'] = description;
+    }
+    if (driver != null) {
+      json[r'driver'] = driver;
     }
     if (expand != null) {
       json[r'expand'] = expand;
@@ -54362,8 +63595,10 @@ class Version {
   }
 
   Version copyWith(
-      {bool? archived,
+      {List<VersionApprover>? approvers,
+      bool? archived,
       String? description,
+      String? driver,
       String? expand,
       String? id,
       VersionIssuesStatus? issuesStatusForFixVersion,
@@ -54380,8 +63615,10 @@ class Version {
       String? userReleaseDate,
       String? userStartDate}) {
     return Version(
+      approvers: approvers ?? this.approvers,
       archived: archived ?? this.archived,
       description: description ?? this.description,
+      driver: driver ?? this.driver,
       expand: expand ?? this.expand,
       id: id ?? this.id,
       issuesStatusForFixVersion:
@@ -54398,6 +63635,69 @@ class Version {
       startDate: startDate ?? this.startDate,
       userReleaseDate: userReleaseDate ?? this.userReleaseDate,
       userStartDate: userStartDate ?? this.userStartDate,
+    );
+  }
+}
+
+/// Contains details about a version approver.
+class VersionApprover {
+  /// The Atlassian account ID of the approver.
+  final String? accountId;
+
+  /// A description of why the user is declining the approval.
+  final String? declineReason;
+
+  /// A description of what the user is approving within the specified version.
+  final String? description;
+
+  /// The status of the approval, which can be *PENDING*, *APPROVED*, or
+  /// *DECLINED*
+  final String? status;
+
+  VersionApprover(
+      {this.accountId, this.declineReason, this.description, this.status});
+
+  factory VersionApprover.fromJson(Map<String, Object?> json) {
+    return VersionApprover(
+      accountId: json[r'accountId'] as String?,
+      declineReason: json[r'declineReason'] as String?,
+      description: json[r'description'] as String?,
+      status: json[r'status'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var accountId = this.accountId;
+    var declineReason = this.declineReason;
+    var description = this.description;
+    var status = this.status;
+
+    final json = <String, Object?>{};
+    if (accountId != null) {
+      json[r'accountId'] = accountId;
+    }
+    if (declineReason != null) {
+      json[r'declineReason'] = declineReason;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    return json;
+  }
+
+  VersionApprover copyWith(
+      {String? accountId,
+      String? declineReason,
+      String? description,
+      String? status}) {
+    return VersionApprover(
+      accountId: accountId ?? this.accountId,
+      declineReason: declineReason ?? this.declineReason,
+      description: description ?? this.description,
+      status: status ?? this.status,
     );
   }
 }
@@ -54613,6 +63913,83 @@ class VersionMoveBeanPosition {
 
   @override
   String toString() => value;
+}
+
+/// Associated related work to a version
+class VersionRelatedWork {
+  /// The category of the related work
+  final String category;
+
+  /// The ID of the issue associated with the related work (if there is one).
+  /// Cannot be updated via the Rest API.
+  final int? issueId;
+
+  /// The id of the related work. For the native release note related work item,
+  /// this will be null, and Rest API does not support updating it.
+  final String? relatedWorkId;
+
+  /// The title of the related work
+  final String? title;
+
+  /// The URL of the related work. Will be null for the native release note
+  /// related work item, but is otherwise required.
+  final String? url;
+
+  VersionRelatedWork(
+      {required this.category,
+      this.issueId,
+      this.relatedWorkId,
+      this.title,
+      this.url});
+
+  factory VersionRelatedWork.fromJson(Map<String, Object?> json) {
+    return VersionRelatedWork(
+      category: json[r'category'] as String? ?? '',
+      issueId: (json[r'issueId'] as num?)?.toInt(),
+      relatedWorkId: json[r'relatedWorkId'] as String?,
+      title: json[r'title'] as String?,
+      url: json[r'url'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var category = this.category;
+    var issueId = this.issueId;
+    var relatedWorkId = this.relatedWorkId;
+    var title = this.title;
+    var url = this.url;
+
+    final json = <String, Object?>{};
+    json[r'category'] = category;
+    if (issueId != null) {
+      json[r'issueId'] = issueId;
+    }
+    if (relatedWorkId != null) {
+      json[r'relatedWorkId'] = relatedWorkId;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (url != null) {
+      json[r'url'] = url;
+    }
+    return json;
+  }
+
+  VersionRelatedWork copyWith(
+      {String? category,
+      int? issueId,
+      String? relatedWorkId,
+      String? title,
+      String? url}) {
+    return VersionRelatedWork(
+      category: category ?? this.category,
+      issueId: issueId ?? this.issueId,
+      relatedWorkId: relatedWorkId ?? this.relatedWorkId,
+      title: title ?? this.title,
+      url: url ?? this.url,
+    );
+  }
 }
 
 /// Count of a version's unresolved issues.
@@ -55454,6 +64831,44 @@ class Workflow {
   }
 }
 
+/// The list of status mappings.
+class WorkflowAssociationStatusMapping {
+  /// The ID of the status in the new workflow.
+  final String newStatusId;
+
+  /// The ID of the status in the old workflow that isn't present in the new
+  /// workflow.
+  final String oldStatusId;
+
+  WorkflowAssociationStatusMapping(
+      {required this.newStatusId, required this.oldStatusId});
+
+  factory WorkflowAssociationStatusMapping.fromJson(Map<String, Object?> json) {
+    return WorkflowAssociationStatusMapping(
+      newStatusId: json[r'newStatusId'] as String? ?? '',
+      oldStatusId: json[r'oldStatusId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var newStatusId = this.newStatusId;
+    var oldStatusId = this.oldStatusId;
+
+    final json = <String, Object?>{};
+    json[r'newStatusId'] = newStatusId;
+    json[r'oldStatusId'] = oldStatusId;
+    return json;
+  }
+
+  WorkflowAssociationStatusMapping copyWith(
+      {String? newStatusId, String? oldStatusId}) {
+    return WorkflowAssociationStatusMapping(
+      newStatusId: newStatusId ?? this.newStatusId,
+      oldStatusId: oldStatusId ?? this.oldStatusId,
+    );
+  }
+}
+
 class WorkflowCapabilities {
   /// The Connect provided ecosystem rules available.
   final List<AvailableWorkflowConnectRule> connectRules;
@@ -56111,6 +65526,117 @@ class WorkflowLayout {
   }
 }
 
+/// The workflow metadata and issue type IDs which use this workflow.
+class WorkflowMetadataAndIssueTypeRestModel {
+  /// The list of issue type IDs for the mapping.
+  final List<String> issueTypeIds;
+  final WorkflowMetadataRestModel workflow;
+
+  WorkflowMetadataAndIssueTypeRestModel(
+      {required this.issueTypeIds, required this.workflow});
+
+  factory WorkflowMetadataAndIssueTypeRestModel.fromJson(
+      Map<String, Object?> json) {
+    return WorkflowMetadataAndIssueTypeRestModel(
+      issueTypeIds: (json[r'issueTypeIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      workflow: WorkflowMetadataRestModel.fromJson(
+          json[r'workflow'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueTypeIds = this.issueTypeIds;
+    var workflow = this.workflow;
+
+    final json = <String, Object?>{};
+    json[r'issueTypeIds'] = issueTypeIds;
+    json[r'workflow'] = workflow.toJson();
+    return json;
+  }
+
+  WorkflowMetadataAndIssueTypeRestModel copyWith(
+      {List<String>? issueTypeIds, WorkflowMetadataRestModel? workflow}) {
+    return WorkflowMetadataAndIssueTypeRestModel(
+      issueTypeIds: issueTypeIds ?? this.issueTypeIds,
+      workflow: workflow ?? this.workflow,
+    );
+  }
+}
+
+/// Workflow metadata and usage detail.
+class WorkflowMetadataRestModel {
+  /// The description of the workflow.
+  final String description;
+
+  /// The ID of the workflow.
+  final String id;
+
+  /// The name of the workflow.
+  final String name;
+
+  /// Use the optional `workflows.usages` expand to get additional information
+  /// about the projects and issue types associated with the workflows in the
+  /// workflow scheme.
+  final List<SimpleUsage> usage;
+  final DocumentVersion version;
+
+  WorkflowMetadataRestModel(
+      {required this.description,
+      required this.id,
+      required this.name,
+      required this.usage,
+      required this.version});
+
+  factory WorkflowMetadataRestModel.fromJson(Map<String, Object?> json) {
+    return WorkflowMetadataRestModel(
+      description: json[r'description'] as String? ?? '',
+      id: json[r'id'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      usage: (json[r'usage'] as List<Object?>?)
+              ?.map((i) =>
+                  SimpleUsage.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      version: DocumentVersion.fromJson(
+          json[r'version'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var description = this.description;
+    var id = this.id;
+    var name = this.name;
+    var usage = this.usage;
+    var version = this.version;
+
+    final json = <String, Object?>{};
+    json[r'description'] = description;
+    json[r'id'] = id;
+    json[r'name'] = name;
+    json[r'usage'] = usage.map((i) => i.toJson()).toList();
+    json[r'version'] = version.toJson();
+    return json;
+  }
+
+  WorkflowMetadataRestModel copyWith(
+      {String? description,
+      String? id,
+      String? name,
+      List<SimpleUsage>? usage,
+      DocumentVersion? version}) {
+    return WorkflowMetadataRestModel(
+      description: description ?? this.description,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      usage: usage ?? this.usage,
+      version: version ?? this.version,
+    );
+  }
+}
+
 /// Operations allowed on a workflow
 class WorkflowOperations {
   /// Whether the workflow can be deleted.
@@ -56256,6 +65782,8 @@ class WorkflowReadResponse {
 
 /// The statuses referenced in the workflow.
 class WorkflowReferenceStatus {
+  final ApprovalConfiguration? approvalConfiguration;
+
   /// Indicates if the status is deprecated.
   final bool deprecated;
   final WorkflowStatusLayout? layout;
@@ -56267,11 +65795,19 @@ class WorkflowReferenceStatus {
   final String? statusReference;
 
   WorkflowReferenceStatus(
-      {bool? deprecated, this.layout, this.properties, this.statusReference})
+      {this.approvalConfiguration,
+      bool? deprecated,
+      this.layout,
+      this.properties,
+      this.statusReference})
       : deprecated = deprecated ?? false;
 
   factory WorkflowReferenceStatus.fromJson(Map<String, Object?> json) {
     return WorkflowReferenceStatus(
+      approvalConfiguration: json[r'approvalConfiguration'] != null
+          ? ApprovalConfiguration.fromJson(
+              json[r'approvalConfiguration']! as Map<String, Object?>)
+          : null,
       deprecated: json[r'deprecated'] as bool? ?? false,
       layout: json[r'layout'] != null
           ? WorkflowStatusLayout.fromJson(
@@ -56283,12 +65819,16 @@ class WorkflowReferenceStatus {
   }
 
   Map<String, Object?> toJson() {
+    var approvalConfiguration = this.approvalConfiguration;
     var deprecated = this.deprecated;
     var layout = this.layout;
     var properties = this.properties;
     var statusReference = this.statusReference;
 
     final json = <String, Object?>{};
+    if (approvalConfiguration != null) {
+      json[r'approvalConfiguration'] = approvalConfiguration.toJson();
+    }
     json[r'deprecated'] = deprecated;
     if (layout != null) {
       json[r'layout'] = layout.toJson();
@@ -56303,11 +65843,14 @@ class WorkflowReferenceStatus {
   }
 
   WorkflowReferenceStatus copyWith(
-      {bool? deprecated,
+      {ApprovalConfiguration? approvalConfiguration,
+      bool? deprecated,
       WorkflowStatusLayout? layout,
       Map<String, dynamic>? properties,
       String? statusReference}) {
     return WorkflowReferenceStatus(
+      approvalConfiguration:
+          approvalConfiguration ?? this.approvalConfiguration,
       deprecated: deprecated ?? this.deprecated,
       layout: layout ?? this.layout,
       properties: properties ?? this.properties,
@@ -56731,6 +66274,47 @@ class WorkflowScheme {
   }
 }
 
+/// The explicit association between issue types and a workflow in a workflow
+/// scheme.
+class WorkflowSchemeAssociation {
+  /// The issue types assigned to the workflow.
+  final List<String> issueTypeIds;
+
+  /// The ID of the workflow.
+  final String workflowId;
+
+  WorkflowSchemeAssociation(
+      {required this.issueTypeIds, required this.workflowId});
+
+  factory WorkflowSchemeAssociation.fromJson(Map<String, Object?> json) {
+    return WorkflowSchemeAssociation(
+      issueTypeIds: (json[r'issueTypeIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      workflowId: json[r'workflowId'] as String? ?? '',
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var issueTypeIds = this.issueTypeIds;
+    var workflowId = this.workflowId;
+
+    final json = <String, Object?>{};
+    json[r'issueTypeIds'] = issueTypeIds;
+    json[r'workflowId'] = workflowId;
+    return json;
+  }
+
+  WorkflowSchemeAssociation copyWith(
+      {List<String>? issueTypeIds, String? workflowId}) {
+    return WorkflowSchemeAssociation(
+      issueTypeIds: issueTypeIds ?? this.issueTypeIds,
+      workflowId: workflowId ?? this.workflowId,
+    );
+  }
+}
+
 /// A workflow scheme along with a list of projects that use it.
 class WorkflowSchemeAssociations {
   /// The list of projects that use the workflow scheme.
@@ -56843,6 +66427,445 @@ class WorkflowSchemeProjectAssociation {
     return WorkflowSchemeProjectAssociation(
       projectId: projectId ?? this.projectId,
       workflowSchemeId: workflowSchemeId ?? this.workflowSchemeId,
+    );
+  }
+}
+
+/// The workflow scheme read request body.
+class WorkflowSchemeReadRequest {
+  /// The list of project IDs to query.
+  final List<String> projectIds;
+
+  /// The list of workflow scheme IDs to query.
+  final List<String> workflowSchemeIds;
+
+  WorkflowSchemeReadRequest(
+      {List<String>? projectIds, List<String>? workflowSchemeIds})
+      : projectIds = projectIds ?? [],
+        workflowSchemeIds = workflowSchemeIds ?? [];
+
+  factory WorkflowSchemeReadRequest.fromJson(Map<String, Object?> json) {
+    return WorkflowSchemeReadRequest(
+      projectIds: (json[r'projectIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      workflowSchemeIds: (json[r'workflowSchemeIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var projectIds = this.projectIds;
+    var workflowSchemeIds = this.workflowSchemeIds;
+
+    final json = <String, Object?>{};
+    json[r'projectIds'] = projectIds;
+    json[r'workflowSchemeIds'] = workflowSchemeIds;
+    return json;
+  }
+
+  WorkflowSchemeReadRequest copyWith(
+      {List<String>? projectIds, List<String>? workflowSchemeIds}) {
+    return WorkflowSchemeReadRequest(
+      projectIds: projectIds ?? this.projectIds,
+      workflowSchemeIds: workflowSchemeIds ?? this.workflowSchemeIds,
+    );
+  }
+}
+
+class WorkflowSchemeReadResponse {
+  final WorkflowMetadataRestModel? defaultWorkflow;
+
+  /// The description of the workflow scheme.
+  final String? description;
+
+  /// The ID of the workflow scheme.
+  final String id;
+
+  /// The name of the workflow scheme.
+  final String name;
+
+  /// The IDs of projects using the workflow scheme.
+  final List<String> projectIdsUsingScheme;
+  final WorkflowScope scope;
+
+  /// Indicates if there's an [asynchronous task](#async-operations) for this
+  /// workflow scheme.
+  final String? taskId;
+  final DocumentVersion version;
+
+  /// Mappings from workflows to issue types.
+  final List<WorkflowMetadataAndIssueTypeRestModel> workflowsForIssueTypes;
+
+  WorkflowSchemeReadResponse(
+      {this.defaultWorkflow,
+      this.description,
+      required this.id,
+      required this.name,
+      required this.projectIdsUsingScheme,
+      required this.scope,
+      this.taskId,
+      required this.version,
+      required this.workflowsForIssueTypes});
+
+  factory WorkflowSchemeReadResponse.fromJson(Map<String, Object?> json) {
+    return WorkflowSchemeReadResponse(
+      defaultWorkflow: json[r'defaultWorkflow'] != null
+          ? WorkflowMetadataRestModel.fromJson(
+              json[r'defaultWorkflow']! as Map<String, Object?>)
+          : null,
+      description: json[r'description'] as String?,
+      id: json[r'id'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      projectIdsUsingScheme: (json[r'projectIdsUsingScheme'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      scope: WorkflowScope.fromJson(
+          json[r'scope'] as Map<String, Object?>? ?? const {}),
+      taskId: json[r'taskId'] as String?,
+      version: DocumentVersion.fromJson(
+          json[r'version'] as Map<String, Object?>? ?? const {}),
+      workflowsForIssueTypes:
+          (json[r'workflowsForIssueTypes'] as List<Object?>?)
+                  ?.map((i) => WorkflowMetadataAndIssueTypeRestModel.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+                  .toList() ??
+              [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var defaultWorkflow = this.defaultWorkflow;
+    var description = this.description;
+    var id = this.id;
+    var name = this.name;
+    var projectIdsUsingScheme = this.projectIdsUsingScheme;
+    var scope = this.scope;
+    var taskId = this.taskId;
+    var version = this.version;
+    var workflowsForIssueTypes = this.workflowsForIssueTypes;
+
+    final json = <String, Object?>{};
+    if (defaultWorkflow != null) {
+      json[r'defaultWorkflow'] = defaultWorkflow.toJson();
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    json[r'id'] = id;
+    json[r'name'] = name;
+    json[r'projectIdsUsingScheme'] = projectIdsUsingScheme;
+    json[r'scope'] = scope.toJson();
+    if (taskId != null) {
+      json[r'taskId'] = taskId;
+    }
+    json[r'version'] = version.toJson();
+    json[r'workflowsForIssueTypes'] =
+        workflowsForIssueTypes.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  WorkflowSchemeReadResponse copyWith(
+      {WorkflowMetadataRestModel? defaultWorkflow,
+      String? description,
+      String? id,
+      String? name,
+      List<String>? projectIdsUsingScheme,
+      WorkflowScope? scope,
+      String? taskId,
+      DocumentVersion? version,
+      List<WorkflowMetadataAndIssueTypeRestModel>? workflowsForIssueTypes}) {
+    return WorkflowSchemeReadResponse(
+      defaultWorkflow: defaultWorkflow ?? this.defaultWorkflow,
+      description: description ?? this.description,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      projectIdsUsingScheme:
+          projectIdsUsingScheme ?? this.projectIdsUsingScheme,
+      scope: scope ?? this.scope,
+      taskId: taskId ?? this.taskId,
+      version: version ?? this.version,
+      workflowsForIssueTypes:
+          workflowsForIssueTypes ?? this.workflowsForIssueTypes,
+    );
+  }
+}
+
+/// The update workflow scheme payload.
+class WorkflowSchemeUpdateRequest {
+  /// The ID of the workflow for issue types without having a mapping defined in
+  /// this workflow scheme. Only used in global-scoped workflow schemes. If the
+  /// `defaultWorkflowId` isn't specified, this is set to *Jira Workflow
+  /// (jira)*.
+  final String? defaultWorkflowId;
+
+  /// The new description for this workflow scheme.
+  final String description;
+
+  /// The ID of this workflow scheme.
+  final String id;
+
+  /// The new name for this workflow scheme.
+  final String name;
+
+  /// Overrides, for the selected issue types, any status mappings provided in
+  /// `statusMappingsByWorkflows`. Status mappings are required when the new
+  /// workflow for an issue type doesn't contain all statuses that the old
+  /// workflow has. Status mappings can be provided by a combination of
+  /// `statusMappingsByWorkflows` and `statusMappingsByIssueTypeOverride`.
+  final List<MappingsByIssueTypeOverride> statusMappingsByIssueTypeOverride;
+
+  /// The status mappings by workflows. Status mappings are required when the
+  /// new workflow for an issue type doesn't contain all statuses that the old
+  /// workflow has. Status mappings can be provided by a combination of
+  /// `statusMappingsByWorkflows` and `statusMappingsByIssueTypeOverride`.
+  final List<MappingsByWorkflow> statusMappingsByWorkflows;
+  final DocumentVersion version;
+
+  /// Mappings from workflows to issue types.
+  final List<WorkflowSchemeAssociation> workflowsForIssueTypes;
+
+  WorkflowSchemeUpdateRequest(
+      {this.defaultWorkflowId,
+      required this.description,
+      required this.id,
+      required this.name,
+      List<MappingsByIssueTypeOverride>? statusMappingsByIssueTypeOverride,
+      List<MappingsByWorkflow>? statusMappingsByWorkflows,
+      required this.version,
+      List<WorkflowSchemeAssociation>? workflowsForIssueTypes})
+      : statusMappingsByIssueTypeOverride =
+            statusMappingsByIssueTypeOverride ?? [],
+        statusMappingsByWorkflows = statusMappingsByWorkflows ?? [],
+        workflowsForIssueTypes = workflowsForIssueTypes ?? [];
+
+  factory WorkflowSchemeUpdateRequest.fromJson(Map<String, Object?> json) {
+    return WorkflowSchemeUpdateRequest(
+      defaultWorkflowId: json[r'defaultWorkflowId'] as String?,
+      description: json[r'description'] as String? ?? '',
+      id: json[r'id'] as String? ?? '',
+      name: json[r'name'] as String? ?? '',
+      statusMappingsByIssueTypeOverride:
+          (json[r'statusMappingsByIssueTypeOverride'] as List<Object?>?)
+                  ?.map((i) => MappingsByIssueTypeOverride.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+                  .toList() ??
+              [],
+      statusMappingsByWorkflows:
+          (json[r'statusMappingsByWorkflows'] as List<Object?>?)
+                  ?.map((i) => MappingsByWorkflow.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+                  .toList() ??
+              [],
+      version: DocumentVersion.fromJson(
+          json[r'version'] as Map<String, Object?>? ?? const {}),
+      workflowsForIssueTypes:
+          (json[r'workflowsForIssueTypes'] as List<Object?>?)
+                  ?.map((i) => WorkflowSchemeAssociation.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+                  .toList() ??
+              [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var defaultWorkflowId = this.defaultWorkflowId;
+    var description = this.description;
+    var id = this.id;
+    var name = this.name;
+    var statusMappingsByIssueTypeOverride =
+        this.statusMappingsByIssueTypeOverride;
+    var statusMappingsByWorkflows = this.statusMappingsByWorkflows;
+    var version = this.version;
+    var workflowsForIssueTypes = this.workflowsForIssueTypes;
+
+    final json = <String, Object?>{};
+    if (defaultWorkflowId != null) {
+      json[r'defaultWorkflowId'] = defaultWorkflowId;
+    }
+    json[r'description'] = description;
+    json[r'id'] = id;
+    json[r'name'] = name;
+    json[r'statusMappingsByIssueTypeOverride'] =
+        statusMappingsByIssueTypeOverride.map((i) => i.toJson()).toList();
+    json[r'statusMappingsByWorkflows'] =
+        statusMappingsByWorkflows.map((i) => i.toJson()).toList();
+    json[r'version'] = version.toJson();
+    json[r'workflowsForIssueTypes'] =
+        workflowsForIssueTypes.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  WorkflowSchemeUpdateRequest copyWith(
+      {String? defaultWorkflowId,
+      String? description,
+      String? id,
+      String? name,
+      List<MappingsByIssueTypeOverride>? statusMappingsByIssueTypeOverride,
+      List<MappingsByWorkflow>? statusMappingsByWorkflows,
+      DocumentVersion? version,
+      List<WorkflowSchemeAssociation>? workflowsForIssueTypes}) {
+    return WorkflowSchemeUpdateRequest(
+      defaultWorkflowId: defaultWorkflowId ?? this.defaultWorkflowId,
+      description: description ?? this.description,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      statusMappingsByIssueTypeOverride: statusMappingsByIssueTypeOverride ??
+          this.statusMappingsByIssueTypeOverride,
+      statusMappingsByWorkflows:
+          statusMappingsByWorkflows ?? this.statusMappingsByWorkflows,
+      version: version ?? this.version,
+      workflowsForIssueTypes:
+          workflowsForIssueTypes ?? this.workflowsForIssueTypes,
+    );
+  }
+}
+
+/// The request payload to get the required mappings for updating a workflow
+/// scheme.
+class WorkflowSchemeUpdateRequiredMappingsRequest {
+  /// The ID of the new default workflow for this workflow scheme. Only used in
+  /// global-scoped workflow schemes. If it isn't specified, is set to *Jira
+  /// Workflow (jira)*.
+  final String? defaultWorkflowId;
+
+  /// The ID of the workflow scheme.
+  final String id;
+
+  /// The new workflow to issue type mappings for this workflow scheme.
+  final List<WorkflowSchemeAssociation> workflowsForIssueTypes;
+
+  WorkflowSchemeUpdateRequiredMappingsRequest(
+      {this.defaultWorkflowId,
+      required this.id,
+      required this.workflowsForIssueTypes});
+
+  factory WorkflowSchemeUpdateRequiredMappingsRequest.fromJson(
+      Map<String, Object?> json) {
+    return WorkflowSchemeUpdateRequiredMappingsRequest(
+      defaultWorkflowId: json[r'defaultWorkflowId'] as String?,
+      id: json[r'id'] as String? ?? '',
+      workflowsForIssueTypes:
+          (json[r'workflowsForIssueTypes'] as List<Object?>?)
+                  ?.map((i) => WorkflowSchemeAssociation.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+                  .toList() ??
+              [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var defaultWorkflowId = this.defaultWorkflowId;
+    var id = this.id;
+    var workflowsForIssueTypes = this.workflowsForIssueTypes;
+
+    final json = <String, Object?>{};
+    if (defaultWorkflowId != null) {
+      json[r'defaultWorkflowId'] = defaultWorkflowId;
+    }
+    json[r'id'] = id;
+    json[r'workflowsForIssueTypes'] =
+        workflowsForIssueTypes.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  WorkflowSchemeUpdateRequiredMappingsRequest copyWith(
+      {String? defaultWorkflowId,
+      String? id,
+      List<WorkflowSchemeAssociation>? workflowsForIssueTypes}) {
+    return WorkflowSchemeUpdateRequiredMappingsRequest(
+      defaultWorkflowId: defaultWorkflowId ?? this.defaultWorkflowId,
+      id: id ?? this.id,
+      workflowsForIssueTypes:
+          workflowsForIssueTypes ?? this.workflowsForIssueTypes,
+    );
+  }
+}
+
+class WorkflowSchemeUpdateRequiredMappingsResponse {
+  /// The list of required status mappings by issue type.
+  final List<RequiredMappingByIssueType> statusMappingsByIssueTypes;
+
+  /// The list of required status mappings by workflow.
+  final List<RequiredMappingByWorkflows> statusMappingsByWorkflows;
+
+  /// The details of the statuses in the associated workflows.
+  final List<StatusMetadata> statuses;
+
+  /// The statuses associated with each workflow.
+  final List<StatusesPerWorkflow> statusesPerWorkflow;
+
+  WorkflowSchemeUpdateRequiredMappingsResponse(
+      {List<RequiredMappingByIssueType>? statusMappingsByIssueTypes,
+      List<RequiredMappingByWorkflows>? statusMappingsByWorkflows,
+      List<StatusMetadata>? statuses,
+      List<StatusesPerWorkflow>? statusesPerWorkflow})
+      : statusMappingsByIssueTypes = statusMappingsByIssueTypes ?? [],
+        statusMappingsByWorkflows = statusMappingsByWorkflows ?? [],
+        statuses = statuses ?? [],
+        statusesPerWorkflow = statusesPerWorkflow ?? [];
+
+  factory WorkflowSchemeUpdateRequiredMappingsResponse.fromJson(
+      Map<String, Object?> json) {
+    return WorkflowSchemeUpdateRequiredMappingsResponse(
+      statusMappingsByIssueTypes:
+          (json[r'statusMappingsByIssueTypes'] as List<Object?>?)
+                  ?.map((i) => RequiredMappingByIssueType.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+                  .toList() ??
+              [],
+      statusMappingsByWorkflows:
+          (json[r'statusMappingsByWorkflows'] as List<Object?>?)
+                  ?.map((i) => RequiredMappingByWorkflows.fromJson(
+                      i as Map<String, Object?>? ?? const {}))
+                  .toList() ??
+              [],
+      statuses: (json[r'statuses'] as List<Object?>?)
+              ?.map((i) => StatusMetadata.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      statusesPerWorkflow: (json[r'statusesPerWorkflow'] as List<Object?>?)
+              ?.map((i) => StatusesPerWorkflow.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var statusMappingsByIssueTypes = this.statusMappingsByIssueTypes;
+    var statusMappingsByWorkflows = this.statusMappingsByWorkflows;
+    var statuses = this.statuses;
+    var statusesPerWorkflow = this.statusesPerWorkflow;
+
+    final json = <String, Object?>{};
+    json[r'statusMappingsByIssueTypes'] =
+        statusMappingsByIssueTypes.map((i) => i.toJson()).toList();
+    json[r'statusMappingsByWorkflows'] =
+        statusMappingsByWorkflows.map((i) => i.toJson()).toList();
+    json[r'statuses'] = statuses.map((i) => i.toJson()).toList();
+    json[r'statusesPerWorkflow'] =
+        statusesPerWorkflow.map((i) => i.toJson()).toList();
+    return json;
+  }
+
+  WorkflowSchemeUpdateRequiredMappingsResponse copyWith(
+      {List<RequiredMappingByIssueType>? statusMappingsByIssueTypes,
+      List<RequiredMappingByWorkflows>? statusMappingsByWorkflows,
+      List<StatusMetadata>? statuses,
+      List<StatusesPerWorkflow>? statusesPerWorkflow}) {
+    return WorkflowSchemeUpdateRequiredMappingsResponse(
+      statusMappingsByIssueTypes:
+          statusMappingsByIssueTypes ?? this.statusMappingsByIssueTypes,
+      statusMappingsByWorkflows:
+          statusMappingsByWorkflows ?? this.statusMappingsByWorkflows,
+      statuses: statuses ?? this.statuses,
+      statusesPerWorkflow: statusesPerWorkflow ?? this.statusesPerWorkflow,
     );
   }
 }
@@ -57002,6 +67025,7 @@ class WorkflowStatus {
 }
 
 /// The status reference and port that a transition is connected to.
+@deprecated
 class WorkflowStatusAndPort {
   /// The port the transition is connected to this status.
   final int? port;
@@ -57206,6 +67230,57 @@ class WorkflowTransition {
     return WorkflowTransition(
       id: id ?? this.id,
       name: name ?? this.name,
+    );
+  }
+}
+
+/// The statuses the transition can start from, and the mapping of ports between
+/// the statuses.
+class WorkflowTransitionLinks {
+  /// The port that the transition starts from.
+  final int? fromPort;
+
+  /// The status that the transition starts from.
+  final String? fromStatusReference;
+
+  /// The port that the transition goes to.
+  final int? toPort;
+
+  WorkflowTransitionLinks(
+      {this.fromPort, this.fromStatusReference, this.toPort});
+
+  factory WorkflowTransitionLinks.fromJson(Map<String, Object?> json) {
+    return WorkflowTransitionLinks(
+      fromPort: (json[r'fromPort'] as num?)?.toInt(),
+      fromStatusReference: json[r'fromStatusReference'] as String?,
+      toPort: (json[r'toPort'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var fromPort = this.fromPort;
+    var fromStatusReference = this.fromStatusReference;
+    var toPort = this.toPort;
+
+    final json = <String, Object?>{};
+    if (fromPort != null) {
+      json[r'fromPort'] = fromPort;
+    }
+    if (fromStatusReference != null) {
+      json[r'fromStatusReference'] = fromStatusReference;
+    }
+    if (toPort != null) {
+      json[r'toPort'] = toPort;
+    }
+    return json;
+  }
+
+  WorkflowTransitionLinks copyWith(
+      {int? fromPort, String? fromStatusReference, int? toPort}) {
+    return WorkflowTransitionLinks(
+      fromPort: fromPort ?? this.fromPort,
+      fromStatusReference: fromStatusReference ?? this.fromStatusReference,
+      toPort: toPort ?? this.toPort,
     );
   }
 }
@@ -57528,7 +67603,9 @@ class WorkflowTransitionRulesUpdateErrors {
   }
 }
 
-/// The transitions of the workflow.
+/// The transitions of the workflow. Note that a transition can have either the
+/// deprecated `to`/`from` fields or the `toStatusReference`/`links` fields, but
+/// never both nor a combination.
 class WorkflowTransitions {
   /// The post-functions of the transition.
   final List<WorkflowRuleConfiguration> actions;
@@ -57540,11 +67617,17 @@ class WorkflowTransitions {
   /// The description of the transition.
   final String? description;
 
-  /// The statuses the transition can start from.
+  /// The statuses and ports that the transition can start from. This field is
+  /// deprecated - use `toStatusReference`/`links` instead.
+  @deprecated
   final List<WorkflowStatusAndPort> from;
 
   /// The ID of the transition.
   final String? id;
+
+  /// The statuses the transition can start from, and the mapping of ports
+  /// between the statuses.
+  final List<WorkflowTransitionLinks> links;
 
   /// The name of the transition.
   final String? name;
@@ -57552,6 +67635,9 @@ class WorkflowTransitions {
   /// The properties of the transition.
   final Map<String, dynamic>? properties;
   final WorkflowStatusAndPort? to;
+
+  /// The status the transition goes to.
+  final String? toStatusReference;
   final WorkflowRuleConfiguration? transitionScreen;
 
   /// The triggers of the transition.
@@ -57570,15 +67656,18 @@ class WorkflowTransitions {
       this.description,
       List<WorkflowStatusAndPort>? from,
       this.id,
+      List<WorkflowTransitionLinks>? links,
       this.name,
       this.properties,
       this.to,
+      this.toStatusReference,
       this.transitionScreen,
       List<WorkflowTrigger>? triggers,
       this.type,
       List<WorkflowRuleConfiguration>? validators})
       : actions = actions ?? [],
         from = from ?? [],
+        links = links ?? [],
         triggers = triggers ?? [],
         validators = validators ?? [];
 
@@ -57601,11 +67690,17 @@ class WorkflowTransitions {
               .toList() ??
           [],
       id: json[r'id'] as String?,
+      links: (json[r'links'] as List<Object?>?)
+              ?.map((i) => WorkflowTransitionLinks.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
       name: json[r'name'] as String?,
       properties: json[r'properties'] as Map<String, Object?>?,
       to: json[r'to'] != null
           ? WorkflowStatusAndPort.fromJson(json[r'to']! as Map<String, Object?>)
           : null,
+      toStatusReference: json[r'toStatusReference'] as String?,
       transitionScreen: json[r'transitionScreen'] != null
           ? WorkflowRuleConfiguration.fromJson(
               json[r'transitionScreen']! as Map<String, Object?>)
@@ -57633,9 +67728,11 @@ class WorkflowTransitions {
     var description = this.description;
     var from = this.from;
     var id = this.id;
+    var links = this.links;
     var name = this.name;
     var properties = this.properties;
     var to = this.to;
+    var toStatusReference = this.toStatusReference;
     var transitionScreen = this.transitionScreen;
     var triggers = this.triggers;
     var type = this.type;
@@ -57656,6 +67753,7 @@ class WorkflowTransitions {
     if (id != null) {
       json[r'id'] = id;
     }
+    json[r'links'] = links.map((i) => i.toJson()).toList();
     if (name != null) {
       json[r'name'] = name;
     }
@@ -57664,6 +67762,9 @@ class WorkflowTransitions {
     }
     if (to != null) {
       json[r'to'] = to.toJson();
+    }
+    if (toStatusReference != null) {
+      json[r'toStatusReference'] = toStatusReference;
     }
     if (transitionScreen != null) {
       json[r'transitionScreen'] = transitionScreen.toJson();
@@ -57683,9 +67784,11 @@ class WorkflowTransitions {
       String? description,
       List<WorkflowStatusAndPort>? from,
       String? id,
+      List<WorkflowTransitionLinks>? links,
       String? name,
       Map<String, dynamic>? properties,
       WorkflowStatusAndPort? to,
+      String? toStatusReference,
       WorkflowRuleConfiguration? transitionScreen,
       List<WorkflowTrigger>? triggers,
       WorkflowTransitionsType? type,
@@ -57697,9 +67800,11 @@ class WorkflowTransitions {
       description: description ?? this.description,
       from: from ?? this.from,
       id: id ?? this.id,
+      links: links ?? this.links,
       name: name ?? this.name,
       properties: properties ?? this.properties,
       to: to ?? this.to,
+      toStatusReference: toStatusReference ?? this.toStatusReference,
       transitionScreen: transitionScreen ?? this.transitionScreen,
       triggers: triggers ?? this.triggers,
       type: type ?? this.type,
@@ -58497,6 +68602,76 @@ class WorklogIdsRequestBean {
   WorklogIdsRequestBean copyWith({List<int>? ids}) {
     return WorklogIdsRequestBean(
       ids: ids ?? this.ids,
+    );
+  }
+}
+
+class WorklogsMoveRequestBean {
+  /// A list of worklog IDs.
+  final List<int> ids;
+
+  /// The issue id or key of the destination issue
+  final String? issueIdOrKey;
+
+  WorklogsMoveRequestBean({List<int>? ids, this.issueIdOrKey})
+      : ids = ids ?? [];
+
+  factory WorklogsMoveRequestBean.fromJson(Map<String, Object?> json) {
+    return WorklogsMoveRequestBean(
+      ids: (json[r'ids'] as List<Object?>?)
+              ?.map((i) => (i as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
+      issueIdOrKey: json[r'issueIdOrKey'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var ids = this.ids;
+    var issueIdOrKey = this.issueIdOrKey;
+
+    final json = <String, Object?>{};
+    json[r'ids'] = ids;
+    if (issueIdOrKey != null) {
+      json[r'issueIdOrKey'] = issueIdOrKey;
+    }
+    return json;
+  }
+
+  WorklogsMoveRequestBean copyWith({List<int>? ids, String? issueIdOrKey}) {
+    return WorklogsMoveRequestBean(
+      ids: ids ?? this.ids,
+      issueIdOrKey: issueIdOrKey ?? this.issueIdOrKey,
+    );
+  }
+}
+
+/// Details about data policy.
+class WorkspaceDataPolicy {
+  /// Whether the workspace contains any content inaccessible to the requesting
+  /// application.
+  final bool anyContentBlocked;
+
+  WorkspaceDataPolicy({bool? anyContentBlocked})
+      : anyContentBlocked = anyContentBlocked ?? false;
+
+  factory WorkspaceDataPolicy.fromJson(Map<String, Object?> json) {
+    return WorkspaceDataPolicy(
+      anyContentBlocked: json[r'anyContentBlocked'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var anyContentBlocked = this.anyContentBlocked;
+
+    final json = <String, Object?>{};
+    json[r'anyContentBlocked'] = anyContentBlocked;
+    return json;
+  }
+
+  WorkspaceDataPolicy copyWith({bool? anyContentBlocked}) {
+    return WorkspaceDataPolicy(
+      anyContentBlocked: anyContentBlocked ?? this.anyContentBlocked,
     );
   }
 }

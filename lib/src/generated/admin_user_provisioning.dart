@@ -10,6 +10,10 @@ class AdminUserProvisioningApi {
 
   AdminUserProvisioningApi(this._client);
 
+  /// These sets of APIs will require the organization API token rather than the
+  /// SCIM directory token.
+  late final adminAPIs = AdminAPIsApi(_client);
+
   late final groups = GroupsApi(_client);
 
   late final schemas = SchemasApi(_client);
@@ -36,12 +40,47 @@ class AdminUserProvisioningApi {
 
 /// Rest APIs
 
+class AdminAPIsApi {
+  final ApiClient _client;
+
+  AdminAPIsApi(this._client);
+
+  /// Delete the user in our SCIM DB with your Atlassian Account ID (AAID). This
+  /// will apply to all directories in your organization matching that AAID and
+  /// only works for managed users.
+  ///
+  ///
+  ///
+  ///
+  /// You will have to completely reprovision the deleted user to their
+  /// respective groups after deletion.
+  ///
+  ///
+  ///
+  ///
+  /// Tell me more about
+  /// [Updating managed SCIM email addresses](../../email-change/).
+  Future<void> deleteUserInSCIMDB(
+      {required String orgId, required String aaid}) async {
+    await _client.send(
+      'delete',
+      'admin/user-provisioning/v1/org/{orgId}/user/{AAID}/onlyDeleteUserInDB',
+      pathParameters: {
+        'orgId': orgId,
+        'AAID': aaid,
+      },
+    );
+  }
+}
+
+/// Rest APIs
+
 class GroupsApi {
   final ApiClient _client;
 
   GroupsApi(this._client);
 
-  /// Get a group from a directory by group ID.
+  /// Gets the details of a group based on the id.
   Future<ScimGroup> get(
       {required String directoryId, required String id}) async {
     return ScimGroup.fromJson(await _client.send(
@@ -54,7 +93,7 @@ class GroupsApi {
     ));
   }
 
-  /// Update a group in a directory by group ID.
+  /// Updates the details of a group with its unique ID.
   Future<ScimGroup> put(
       {required String directoryId,
       required String id,
@@ -70,15 +109,17 @@ class GroupsApi {
     ));
   }
 
-  /// Delete a group from a directory. An attempt to delete a non-existent
-  /// group fails with a 404 (Resource Not found) error.
+  /// Deletes a group to remove the group from the organization's directory.
   ///
-  /// **Note**: Deleting a synced group from your identity provider will delete
+  ///  **Note**: An attempt to delete a non-existent group will fail with a 404
+  /// (Resource Not found) error.
+  ///
+  ///  **Note**: Deleting a synced group from your identity provider will delete
   /// the group from your organization's directory and associated sites.
-  /// 1. If this group is used for allocating product license (granting role in
+  ///  1. If this group is used for allocating product license (granting role in
   /// a product), then members of this group may lose access to corresponding
   /// product after group deletion.
-  /// 2. If this group is used to grant permissions in product, then members of
+  ///  2. If this group is used to grant permissions in product, then members of
   /// this group may lose their permissions in the corresponding product.
   Future<void> deleteaGroup(
       {required String directoryId, required String id}) async {
@@ -92,9 +133,11 @@ class GroupsApi {
     );
   }
 
-  /// Get groups from a directory. Filtering is supported with a single exact
-  /// match (`eq`) against  the `displayName` attribute. Pagination is
-  /// supported. Sorting is not supported.
+  /// Get groups from the directory. Filter the groups by name supported with a
+  /// single exact match (`eq`) against the `displayName` attribute.
+  ///
+  /// **Note**: While this API enables pagination, sorting functionality is not
+  /// supported.
   Future<ScimGroupListResponse> getAllGroupsFromAnActiveDirectory(
       {required String directoryId,
       String? filter,
@@ -114,8 +157,11 @@ class GroupsApi {
     ));
   }
 
-  /// Create a group in a directory. An attempt to create a group with an
-  /// existing  name fails with a 409 (Conflict) error.
+  /// Creates a read-only group in the organization's directory. You can only
+  /// edit groups from your identity provider.
+  ///
+  /// **Note:** An attempt to create a group with an existing name will fail
+  /// with a 409 (Conflict) error.
   Future<ScimGroup> createaGroupInActiveDirectory(
       {required String directoryId, required ScimGroup body}) async {
     return ScimGroup.fromJson(await _client.send(
@@ -136,8 +182,9 @@ class SchemasApi {
 
   SchemasApi(this._client);
 
-  /// Get all SCIM features metadata. Filtering, pagination and sorting are  not
-  /// supported.
+  /// Get all SCIM features metadata of your organization.
+  ///
+  /// **Note:** This API does not support filtering, pagination, or sorting.
   Future<String> getSchemas(String directoryId) async {
     return await _client.send(
       'get',
@@ -148,8 +195,9 @@ class SchemasApi {
     ) as String;
   }
 
-  /// Get the user schemas from the SCIM provider. Filtering, pagination and
-  /// sorting  are not supported.
+  /// Get the user schemas from the SCIM provider.
+  ///
+  /// **Note:** This API does not support filtering, pagination, or sorting.
   Future<String> getUserSchemas(String directoryId) async {
     return await _client.send(
       'get',
@@ -160,8 +208,9 @@ class SchemasApi {
     ) as String;
   }
 
-  /// Get the group schemas from the SCIM provider. Filtering, pagination and
-  /// sorting are not  supported.
+  /// Get the group schemas from the SCIM provider.
+  ///
+  /// **Note:** This API does not support filtering, pagination, or sorting.
   Future<String> getGroupSchemas(String directoryId) async {
     return await _client.send(
       'get',
@@ -173,7 +222,8 @@ class SchemasApi {
   }
 
   /// Get the user enterprise extension schemas from the SCIM provider.
-  /// Filtering, pagination and  sorting are not supported.
+  ///
+  /// **Note:** This API does not support filtering, pagination, or sorting.
   Future<String> getExtensionUserSchemas(String directoryId) async {
     return await _client.send(
       'get',
@@ -185,8 +235,9 @@ class SchemasApi {
   }
 
   /// Get metadata about the supported SCIM features. This is a service provider
-  /// configuration  endpoint providing supported SCIM features. Filtering,
-  /// pagination and sorting are not  supported.
+  /// configuration  endpoint providing supported SCIM features.
+  ///
+  /// **Note:** This API does not support filtering, pagination, or sorting.
   Future<String> getConfig(String directoryId) async {
     return await _client.send(
       'get',
@@ -205,9 +256,9 @@ class ServiceProviderConfigurationApi {
 
   ServiceProviderConfigurationApi(this._client);
 
-  /// Get types of resources available on a SCIM service provider (e.g., Users
-  /// and Groups). This  is used to get all resources of the SCIM provider.
-  /// Filtering, pagination and sorting are  not supported.
+  /// Get different types of resources available on a SCIM service provider
+  /// (e.g., Users and Groups).
+  /// **Note:** This API does not support filtering, pagination, or sorting.
   Future<String> getResourceTypes(String directoryId) async {
     return await _client.send(
       'get',
@@ -218,8 +269,9 @@ class ServiceProviderConfigurationApi {
     ) as String;
   }
 
-  /// Retrieve user resource types from the SCIM service provider. Filtering,
-  /// pagination and  sorting are not supported.
+  /// Retrieves user resource types from the SCIM service provider.
+  ///
+  /// **Note:** This API does not support filtering, pagination, or sorting.
   Future<String> getUserResourceType(String directoryId) async {
     return await _client.send(
       'get',
@@ -230,8 +282,9 @@ class ServiceProviderConfigurationApi {
     ) as String;
   }
 
-  /// Retrieve group resource type of this SCIM service provider. Filtering,
-  /// pagination and sorting  are not supported.
+  /// Retrieves group resource type of this SCIM service provider.
+  ///
+  /// **Note:** This API does not support filtering, pagination, or sorting.
   Future<String> getGroupResourceType(String directoryId) async {
     return await _client.send(
       'get',
@@ -250,7 +303,7 @@ class UsersApi {
 
   UsersApi(this._client);
 
-  /// Get a user from a directory by `userId`.
+  /// Retrieves a user from the directory based on their `userId`.
   Future<ScimUser> getaUserFromActiveDirectory(
       {required String directoryId,
       required String userId,
@@ -271,10 +324,10 @@ class UsersApi {
     ));
   }
 
-  /// Updates a user's information in a directory by `userId` via user
-  /// attributes. User information  is replaced attribute-by-attribute, with the
-  /// exception of immutable and read-only  attributes. Existing values of
-  /// unspecified attributes are cleaned.
+  /// Update the directory-based user information using the user attributes
+  /// associated with their `userId`. User information  is replaced
+  /// attribute-by-attribute, with the exception of immutable and read-only
+  /// attributes. Existing values of unspecified attributes are cleaned.
   Future<ScimUser> updateUserInformationInAnActiveDirectory(
       {required String directoryId,
       required String userId,
@@ -297,9 +350,24 @@ class UsersApi {
     ));
   }
 
-  /// Deactivate a user by `userId`. The user is not available for future
-  /// requests until  activated again. Any future operation for the deactivated
-  /// user returns the 404  (resource not found) error.
+  /// Deactivates a user from the directory by their `userId`, along with its
+  /// group memberships. If the `userId` is linked to a managed Atlassian
+  /// account, the account is deactivated. The user is not available for future
+  /// requests until created with a new `userId`. Any future operation for the
+  /// deactivated user returns the 404 (resource not found) error.
+  ///
+  /// The deactivated user can be activated again via Atlassian Administration..
+  ///
+  ///
+  /// To deactivate the account instead, use the
+  /// [Update user by ID API](https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-userid-patch).
+  /// Update the `op` field to `replace` and `value` field to `active:false`
+  /// within the `operations` request body.
+  ///
+  /// **Note:** Executing this API call will result in the deletion of the SCIM
+  /// record, and there is no method to reverse these changes except by creating
+  /// a new SCIM record with
+  /// [Create a user API](https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-post).
   Future<void> deleteaUserFromAnActiveDirectory(
       {required String directoryId, required String userId}) async {
     await _client.send(
@@ -314,7 +382,10 @@ class UsersApi {
 
   /// Get users from the specified directory. Filtering is supported with a
   /// single exact match  (`eq`) against the `userName` and `externalId`
-  /// attributes. Pagination is supported. Sorting  is not supported.
+  /// attributes.
+  ///
+  ///  **Note**: While this API enables pagination, sorting functionality is not
+  /// supported.
   Future<ScimUserListResponse> getUsersFromAnActiveDirectory(
       {required String directoryId,
       String? attributes,
@@ -339,12 +410,15 @@ class UsersApi {
     ));
   }
 
-  /// Create a user in a directory. An attempt to create an existing user fails
-  /// with a 409 (Conflict) error. A user account can only be created if it has
-  /// an email address on a verified domain. If a managed Atlassian account
-  /// already exists on the Atlassian platform for the specified email address,
-  /// the user in your identity provider is linked to the user in your Atlassian
-  /// organization.
+  /// Creates a user in the directory.
+  /// **Note:** An attempt to create an existing user will fail with a 409
+  /// (Conflict) error.
+  /// Use this API to manage accounts outside your organization when assigning
+  /// these users to SCIM groups.
+  /// If there's already a managed Atlassian account associated with the
+  /// specified email address on the Atlassian platform, the user in your
+  /// identity provider will be connected or linked to the user in your
+  /// Atlassian organization.
   Future<ScimUser> createaUserInAnActiveDirectory(
       {required String directoryId,
       String? attributes,
@@ -691,7 +765,7 @@ class Failure {
   /// Human readable error message
   final String? error;
 
-  /// Trace ID that can be used to find log messages
+  /// Unique TraceId that can be used to find log messages.
   final String? traceId;
 
   Failure({this.error, this.traceId});
@@ -1152,11 +1226,11 @@ class ScimErrorScimType {
 /// SCIM group
 class ScimGroup {
   /// SCIM schemas that define the attributes present in the current JSON
-  /// structure. This field  is required during user creation or modification.
+  /// structure. This ia a required field  during user creation or modification.
   final List<String> schemas;
 
-  /// Unique identifier defined by Atlassian SCIM Service. This field is
-  /// read-only and case-sensitive.  It is ignored if specified in the payload
+  /// Unique identifier defined by Atlassian SCIM Service. This is a read-only
+  /// and case-sensitive field.  It is ignored if specified in the payload
   /// during user creation or modification.
   final String? id;
 
@@ -1164,7 +1238,7 @@ class ScimGroup {
   /// controlled by client.
   final String? externalId;
 
-  /// Group display name. This field is immutable, required, and read-only.
+  /// Group display name. This is a immutable, required, and read-only field.
   final String? displayName;
 
   /// Group members
@@ -1434,19 +1508,19 @@ class ScimGroupMember {
 
 /// SCIM metadata
 class ScimMetadata {
-  /// The name of the resource type of the resource. This field is read-only and
-  ///  case-sensitive.
+  /// The name of the resource type of the resource. This is a read-only and
+  /// case-sensitive field.
   final ScimMetadataResourceType? resourceType;
 
-  /// The URI of the resource being returned. This field is read-only.
+  /// The URI of the resource being returned. This is a read-only field.
   final String? location;
 
   /// The most recent DateTime that the details of this resource were updated.
-  /// This  field is read-only.
+  /// This  is a read-only field.
   final DateTime? lastModified;
 
   /// The DateTime that the resource was added to Atlassian SCIM service. This
-  /// field  is read-only.
+  /// is a read-only field.
   final DateTime? created;
 
   ScimMetadata(
@@ -1527,58 +1601,58 @@ class ScimMetadataResourceType {
 /// SCIM user
 class ScimUser {
   /// SCIM schemas that define the attributes present in the current JSON
-  /// structure This field is required during user creation or modification.
+  /// structure This is a required field during user creation or modification.
   final List<String> schemas;
 
   /// Unique identifier defined by the provisioning client. Atlassian SCIM
-  /// service will verify  the value and guarantee its uniqueness. This field is
-  /// required during  user creation or modification.
+  /// service will verify  the value and guarantee its uniqueness. This is a
+  /// required field during  user creation or modification.
   final String? userName;
 
-  /// Email addresses for the User. This field is required during user creation
+  /// Email addresses of the User. This is a required field during user creation
   /// or modification.  One value must be marked as primary.
   final List<ScimUserEmail> emails;
 
-  /// Unique identifier defined by Atlassian SCIM Service. CaseExact. This field
-  /// is read-only and is be ignored during user creation or modification if
-  /// specified in the payload.
+  /// Unique identifier defined by Atlassian SCIM Service. CaseExact. This is a
+  /// read-only field and will be disregarded if included in the payload during
+  /// user creation or modification..
   final String? id;
 
-  /// Identifier defined by provisioning client. This field is case-sensitive.
+  /// Identifier defined by provisioning client. This is a case-sensitive field.
   /// Uniqueness is  controlled by client.
   final String? externalId;
 
   /// The components of the user's name.
   final ScimUserName? name;
 
-  /// User display name.
+  /// User's display name.
   final String? displayName;
 
-  /// User nickname.
+  /// User's nickname.
   final String? nickName;
 
-  /// User title.
+  /// User's title.
   final String? title;
 
-  /// User preferred language.
+  /// User's preferred language.
   final String? preferredLanguage;
 
-  /// User department.
+  /// User's department.
   final String? department;
 
-  /// User organization.
+  /// User's organization.
   final String? organization;
 
-  /// User timezone. e.g. America/Los_Angeles .
+  /// User's timezone. e.g. America/Los_Angeles .
   final String? timezone;
 
-  /// Phone numbers for the user.
+  /// Phone numbers of the user.
   final List<ScimUserPhoneNumber> phoneNumbers;
 
   /// User metadata information.
   final ScimMetadata? meta;
 
-  /// SCIM groups user belongs to.
+  /// Groups to which the user is associated in SCIM.
   final List<ScimGroupForUser> groups;
 
   /// Enterprise user information

@@ -267,6 +267,10 @@ class ContentApi {
   /// By default, the following objects are expanded: `space`, `history`,
   /// `version`.
   ///
+  /// Starting on Dec 10, 2024, if the expand query parameter is used with the
+  /// `body.export_view` and/or `body.styled_view` properties, then the query
+  /// limit parameter will be restricted to a maximum value of 25.
+  ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
   /// Only content that the user has permission to view will be returned.
@@ -455,6 +459,10 @@ class ContentApi {
   /// ```
   /// The response to this will have a `prev` URL similar to the `next` in the
   /// example response.
+  ///
+  /// Starting on Dec 10, 2024, if the expand query parameter is used with the
+  /// `body.export_view` and/or `body.styled_view` properties, then the query
+  /// limit parameter will be restricted to a maximum value of 25.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
@@ -870,7 +878,16 @@ class ContentChildrenAndDescendantsApi {
   /// has different types of child content, depending on its type. These are
   /// the default parent-child content type relationships:
   ///
-  /// - `page`: child content is `page`, `comment`, `attachment`
+  /// - `page`: child content is `page`, `whiteboard`, `database`, `embed`,
+  /// `folder`, `comment`, `attachment`
+  /// - `whiteboard`: child content is `page`, `whiteboard`, `database`,
+  /// `embed`, `folder`, `comment`, `attachment`
+  /// - `database`: child content is `page`, `whiteboard`, `database`, `embed`,
+  /// `folder`, `comment`, `attachment`
+  /// - `embed`: child content is `page`, `whiteboard`, `database`, `embed`,
+  /// `folder`, `comment`, `attachment`
+  /// - `folder`: child content is `page`, `whiteboard`, `database`, `embed`,
+  /// `folder`, `comment`, `attachment`
   /// - `blogpost`: child content is `comment`, `attachment`
   /// - `attachment`: child content is `comment`
   /// - `comment`: child content is `attachment`
@@ -937,7 +954,16 @@ class ContentChildrenAndDescendantsApi {
   /// A piece of content has different types of child content, depending on its
   /// type:
   ///
-  /// - `page`: child content is `page`, `comment`, `attachment`
+  /// - `page`: child content is `page`, `whiteboard`, `database`, `embed`,
+  /// `folder`, `comment`, `attachment`
+  /// - `whiteboard`: child content is `page`, `whiteboard`, `database`,
+  /// `embed`, `folder`, `comment`, `attachment`
+  /// - `database`: child content is `page`, `whiteboard`, `database`, `embed`,
+  /// `folder`, `comment`, `attachment`
+  /// - `embed`: child content is `page`, `whiteboard`, `database`, `embed`,
+  /// `folder`, `comment`, `attachment`
+  /// - `folder`: child content is `page`, `whiteboard`, `database`, `embed`,
+  /// `folder`, `comment`, `attachment`
   /// - `blogpost`: child content is `comment`, `attachment`
   /// - `attachment`: child content is `comment`
   /// - `comment`: child content is `attachment`
@@ -947,6 +973,10 @@ class ContentChildrenAndDescendantsApi {
   /// Note, this method only returns direct children. To return children at all
   /// levels, use
   /// [Get descendants by type](#api-content-id-descendant-type-get).
+  ///
+  /// Starting on Dec 10, 2024, if the expand query parameter is used with the
+  /// `body.export_view` and/or `body.styled_view` properties, then the query
+  /// limit parameter will be restricted to a maximum value of 25.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'View' permission for the space,
@@ -983,7 +1013,16 @@ class ContentChildrenAndDescendantsApi {
   /// A piece of content has different types of descendants, depending on its
   /// type:
   ///
-  /// - `page`: descendant is `page`, `comment`, `attachment`
+  /// - `page`: descendant is `page`, `whiteboard`, `database`, `embed`,
+  /// `folder`, `comment`, `attachment`
+  /// - `whiteboard`: descendant is `page`, `whiteboard`, `database`, `embed`,
+  /// `folder`, `comment`, `attachment`
+  /// - `database`: descendant is `page`, `whiteboard`, `database`, `embed`,
+  /// `folder`, `comment`, `attachment`
+  /// - `embed`: descendant is `page`, `whiteboard`, `database`, `embed`,
+  /// `folder`, `comment`, `attachment`
+  /// - `folder`: descendant is `page`, `whiteboard`, `database`, `embed`,
+  /// `folder`, `comment`, `attachment`
   /// - `blogpost`: descendant is `comment`, `attachment`
   /// - `attachment`: descendant is `comment`
   /// - `comment`: descendant is `attachment`
@@ -1020,12 +1059,25 @@ class ContentChildrenAndDescendantsApi {
   /// A piece of content has different types of descendants, depending on its
   /// type:
   ///
-  /// - `page`: descendant is `page`, `comment`, `attachment`
+  /// - `page`: descendant is `page`, `whiteboard`, `database`, `embed`,
+  /// `folder`, `comment`, `attachment`
+  /// - `whiteboard`: descendant is `page`, `whiteboard`, `database`, `embed`,
+  /// `folder`, `comment`, `attachment`
+  /// - `database`: descendant is `page`, `whiteboard`, `database`, `embed`,
+  /// `folder`, `comment`, `attachment`
+  /// - `embed`: descendant is `page`, `whiteboard`, `database`, `embed`,
+  /// `folder`, `comment`, `attachment`
+  /// - `folder`: descendant is `page`, `whiteboard`, `database`, `embed`,
+  /// `folder`, `comment`, `attachment`
   /// - `blogpost`: descendant is `comment`, `attachment`
   /// - `attachment`: descendant is `comment`
   /// - `comment`: descendant is `attachment`
   ///
   /// Custom content types that are provided by apps can also be returned.
+  ///
+  /// Starting on Dec 10, 2024, if the expand query parameter is used with the
+  /// `body.export_view` and/or `body.styled_view` properties, then the query
+  /// limit parameter will be restricted to a maximum value of 25.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'View' permission for the space, and permission to view the content if it
@@ -1306,7 +1358,8 @@ class ContentBodyApi {
   ///
   /// Supported conversions:
   ///
-  /// - storage: export_view
+  /// - storage: editor, export_view, styled_view, view
+  /// - editor: storage
   ///
   /// No other conversions are supported at the moment.
   /// Once a conversion is completed, it will be available for 5 minutes at the
@@ -1361,6 +1414,59 @@ class ContentBodyApi {
       },
     ));
   }
+
+  /// Asynchronously converts content bodies from one format to another format
+  /// in bulk. Use the Content body
+  /// REST API to get the status of conversion tasks. Note that there is a
+  /// maximum limit of 10 conversions per
+  /// request to this endpoint.
+  ///
+  /// Supported conversions:
+  ///
+  /// - storage: editor, export_view, styled_view, view
+  /// - editor: storage
+  ///
+  /// Once a conversion task is completed, it is available for polling for up to
+  /// 5 minutes.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'View' permission for the space, and permission to view the content if the
+  /// `spaceKeyContext` or
+  /// `contentIdContext` are present.
+  Future<AsyncIdArray> bulkAsyncConvertContentBodyRequest(
+      {required ContentBodyConversionInputArray body}) async {
+    return AsyncIdArray.fromJson(await _client.send(
+      'post',
+      'wiki/rest/api/contentbody/convert/async/bulk/tasks',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Returns the content body for the corresponding `asyncId` of a completed
+  /// conversion task. If
+  /// the task is not completed, the task status is returned instead.
+  ///
+  /// Once a conversion task is completed, the result can be obtained for up to
+  /// 5 minutes, or
+  /// until an identical conversion request is made again with the `allowCache`
+  /// parameter set to
+  /// false.
+  ///
+  /// Note that there is a maximum limit of 50 task results per request to this
+  /// endpoint.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  Future<AsyncContentBodyArray> bulkAsyncConvertContentBodyResponse(
+      List<String> ids) async {
+    return AsyncContentBodyArray.fromJson(await _client.send(
+      'get',
+      'wiki/rest/api/contentbody/convert/async/bulk/tasks',
+      queryParameters: {
+        'ids': ids.map((e) => e).join(','),
+      },
+    ));
+  }
 }
 
 /// This document describes the REST API and resources provided by Confluence. The REST APIs are for developers who want to integrate Confluence into their application and for administrators who want to script interactions with the Confluence server.Confluence's REST APIs provide access to resources (data entities) via URI paths. To use a REST API, your application will make an HTTP request and parse the response. The response format is JSON. Your methods will be the standard HTTP methods like GET, PUT, POST and DELETE. Because the REST API is based on open standards, you can use any web development language to access the API.
@@ -1374,6 +1480,10 @@ class ContentCommentsApi {
   /// [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
   ///
   /// Returns the comments on a piece of content.
+  ///
+  /// Starting on Dec 10, 2024, if the expand query parameter is used with the
+  /// `body.export_view` and/or `body.styled_view` properties, then the query
+  /// limit parameter will be restricted to a maximum value of 25.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'View' permission for the space,
@@ -1854,86 +1964,6 @@ class ContentRestrictionsApi {
     ));
   }
 
-  /// Deprecated, use
-  /// [Get content restriction status for group via groupId](https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-restrictions/#api-wiki-rest-api-content-id-restriction-byoperation-operationkey-bygroupid-groupid-get).
-  /// Returns whether the specified content restriction applies to a group.
-  /// For example, if a page with `id=123` has a `read` restriction for the
-  /// `admins` group,
-  /// the following request will return `true`:
-  ///
-  /// `/wiki/rest/api/content/123/restriction/byOperation/read/group/admins`
-  ///
-  /// Note that a response of `true` does not guarantee that the group can view
-  /// the page, as it does not account for
-  /// account-inherited restrictions, space permissions, or even product access.
-  /// For more
-  /// information, see
-  /// [Confluence permissions](https://confluence.atlassian.com/x/_AozKw).
-  ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to view the content.
-  @deprecated
-  Future<void> getContentRestrictionStatusForGroup(
-      {required String id,
-      required String operationKey,
-      required String groupName}) async {
-    await _client.send(
-      'get',
-      'wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/group/{groupName}',
-      pathParameters: {
-        'id': id,
-        'operationKey': operationKey,
-        'groupName': groupName,
-      },
-    );
-  }
-
-  /// Deprecated, use
-  /// [Add group to content restriction via groupId](https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-restrictions/#api-wiki-rest-api-content-id-restriction-byoperation-operationkey-bygroupid-groupid-put).
-  /// Adds a group to a content restriction. That is, grant read or update
-  /// permission to the group for a piece of content.
-  ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to edit the content.
-  @deprecated
-  Future<void> addGroupToContentRestriction(
-      {required String id,
-      required String operationKey,
-      required String groupName}) async {
-    await _client.send(
-      'put',
-      'wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/group/{groupName}',
-      pathParameters: {
-        'id': id,
-        'operationKey': operationKey,
-        'groupName': groupName,
-      },
-    );
-  }
-
-  /// Deprecated, use
-  /// [Remove group from content restriction by groupId](https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-restrictions/#api-wiki-rest-api-content-id-restriction-byoperation-operationkey-user-delete).
-  /// Removes a group from a content restriction. That is, remove read or update
-  /// permission for the group for a piece of content.
-  ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to edit the content.
-  @deprecated
-  Future<void> removeGroupFromContentRestrictionById(
-      {required String id,
-      required String operationKey,
-      required String groupName}) async {
-    await _client.send(
-      'delete',
-      'wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/group/{groupName}',
-      pathParameters: {
-        'id': id,
-        'operationKey': operationKey,
-        'groupName': groupName,
-      },
-    );
-  }
-
   /// Returns whether the specified content restriction applies to a group.
   /// For example, if a page with `id=123` has a `read` restriction for the
   /// `123456` group id,
@@ -2199,24 +2229,6 @@ class ContentStatesApi {
     ));
   }
 
-  /// Creates a long running task that sets content state of draft or published
-  /// versions of pages specified.
-  ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**
-  /// Content Edit Permission for a content to have its state set via this
-  /// endpoint.
-  Future<AsyncId> bulkSetContentStates(
-      {required String status, required BulkContentStateSetInput body}) async {
-    return AsyncId.fromJson(await _client.send(
-      'put',
-      'wiki/rest/api/content-states',
-      queryParameters: {
-        'status': status,
-      },
-      body: body.toJson(),
-    ));
-  }
-
   /// Get custom content states that authenticated user has created.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**
@@ -2237,6 +2249,7 @@ class ContentStatesApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**
   /// Content Edit Permission for a content to have its state removed via this
   /// endpoint.
+  @deprecated
   Future<AsyncId> bulkRemoveContentStates(
       {required String status, required dynamic body}) async {
     return AsyncId.fromJson(await _client.send(
@@ -2249,13 +2262,14 @@ class ContentStatesApi {
     ));
   }
 
-  /// Get Status of long running task that was previously created to set or
-  /// remove content states from content.
-  /// User must first create a task by passing in details to
-  /// /wiki/rest/api/content-states PUT or DELETE endpoints.
+  /// Get Status of long running task that was previously created to remove
+  /// content states from content.
+  /// User must first create a task by passing in details to the
+  /// /wiki/rest/api/content-states DELETE endpoint.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**
   /// Must have created long running task
+  @deprecated
   Future<ContentStateBulkSetTaskUpdate> getTaskUpdate(String taskId) async {
     return ContentStateBulkSetTaskUpdate.fromJson(await _client.send(
       'get',
@@ -2267,8 +2281,9 @@ class ContentStatesApi {
   }
 
   /// Get content states that are suggested in the space.
+  ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Space view permission
+  /// 'View' permission for the space.
   Future<List<ContentState>> getSpaceContentStates(String spaceKey) async {
     return (await _client.send(
       'get',
@@ -2288,7 +2303,7 @@ class ContentStatesApi {
   /// if they are not restricted.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Space admin permission
+  /// 'Admin' permission for the space.
   Future<ContentStateSettings> getContentStateSettings(String spaceKey) async {
     return ContentStateSettings.fromJson(await _client.send(
       'get',
@@ -2299,10 +2314,14 @@ class ContentStatesApi {
     ));
   }
 
-  /// Finds paginated content with
+  /// Returns all content that has the provided content state in a space.
+  ///
+  /// Starting on Dec 10, 2024, if the expand query parameter is used with the
+  /// `body.export_view` and/or `body.styled_view` properties, then the query
+  /// limit parameter will be restricted to a maximum value of 25.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Space View Permission
+  /// 'View' permission for the space.
   Future<ContentArray> getContentsWithState(
       {required String spaceKey,
       required int stateId,
@@ -2991,36 +3010,6 @@ class GroupApi {
     ));
   }
 
-  /// Delete user group.
-  ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// User must be a site admin.
-  @deprecated
-  Future<void> removeGroup(String name) async {
-    await _client.send(
-      'delete',
-      'wiki/rest/api/group',
-      queryParameters: {
-        'name': name,
-      },
-    );
-  }
-
-  /// Returns a user group for a given group name.
-  ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to access the Confluence site ('Can use' global permission).
-  @deprecated
-  Future<Group> getGroupByQueryParam(String name) async {
-    return Group.fromJson(await _client.send(
-      'get',
-      'wiki/rest/api/group/by-name',
-      queryParameters: {
-        'name': name,
-      },
-    ));
-  }
-
   /// Returns a user group for a given group id.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -3049,70 +3038,6 @@ class GroupApi {
     );
   }
 
-  /// Returns a user group for a given group name.
-  ///
-  /// Use updated Get group API
-  ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to access the Confluence site ('Can use' global permission).
-  @deprecated
-  Future<Group> getGroupByName(String groupName) async {
-    return Group.fromJson(await _client.send(
-      'get',
-      'wiki/rest/api/group/{groupName}',
-      pathParameters: {
-        'groupName': groupName,
-      },
-    ));
-  }
-
-  /// Returns the users that are members of a group.
-  ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to access the Confluence site ('Can use' global permission).
-  @deprecated
-  Future<UserArray> getMembersByQueryParam(
-      {required String name,
-      int? start,
-      int? limit,
-      bool? shouldReturnTotalSize,
-      List<String>? expand}) async {
-    return UserArray.fromJson(await _client.send(
-      'get',
-      'wiki/rest/api/group/member',
-      queryParameters: {
-        'name': name,
-        if (start != null) 'start': '$start',
-        if (limit != null) 'limit': '$limit',
-        if (shouldReturnTotalSize != null)
-          'shouldReturnTotalSize': '$shouldReturnTotalSize',
-        if (expand != null) 'expand': expand.map((e) => e).join(','),
-      },
-    ));
-  }
-
-  /// Returns the users that are members of a group.
-  ///
-  /// Use updated Get group API
-  ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to access the Confluence site ('Can use' global permission).
-  @deprecated
-  Future<UserArray> getGroupMembers(
-      {required String groupName, int? start, int? limit}) async {
-    return UserArray.fromJson(await _client.send(
-      'get',
-      'wiki/rest/api/group/{groupName}/member',
-      pathParameters: {
-        'groupName': groupName,
-      },
-      queryParameters: {
-        if (start != null) 'start': '$start',
-        if (limit != null) 'limit': '$limit',
-      },
-    ));
-  }
-
   /// Get search results of groups by partial query provided.
   Future<GroupArrayWithLinks> searchGroups(
       {required String query,
@@ -3128,6 +3053,34 @@ class GroupApi {
         if (limit != null) 'limit': '$limit',
         if (shouldReturnTotalSize != null)
           'shouldReturnTotalSize': '$shouldReturnTotalSize',
+      },
+    ));
+  }
+
+  /// Returns the users that are members of a group.
+  ///
+  /// Use updated Get group API
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  Future<UserArray> getGroupMembersByGroupId(
+      {required String groupId,
+      int? start,
+      int? limit,
+      bool? shouldReturnTotalSize,
+      List<String>? expand}) async {
+    return UserArray.fromJson(await _client.send(
+      'get',
+      'wiki/rest/api/group/{groupId}/membersByGroupId',
+      pathParameters: {
+        'groupId': groupId,
+      },
+      queryParameters: {
+        if (start != null) 'start': '$start',
+        if (limit != null) 'limit': '$limit',
+        if (shouldReturnTotalSize != null)
+          'shouldReturnTotalSize': '$shouldReturnTotalSize',
+        if (expand != null) 'expand': expand.map((e) => e).join(','),
       },
     ));
   }
@@ -3162,73 +3115,6 @@ class GroupApi {
       'wiki/rest/api/group/userByGroupId',
       queryParameters: {
         'groupId': groupId,
-        if (key != null) 'key': key,
-        if (username != null) 'username': username,
-        if (accountId != null) 'accountId': accountId,
-      },
-    );
-  }
-
-  /// Returns the users that are members of a group.
-  ///
-  /// Use updated Get group API
-  ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to access the Confluence site ('Can use' global permission).
-  Future<UserArray> getGroupMembersByGroupId(
-      {required String groupId,
-      int? start,
-      int? limit,
-      bool? shouldReturnTotalSize,
-      List<String>? expand}) async {
-    return UserArray.fromJson(await _client.send(
-      'get',
-      'wiki/rest/api/group/{groupId}/membersByGroupId',
-      pathParameters: {
-        'groupId': groupId,
-      },
-      queryParameters: {
-        if (start != null) 'start': '$start',
-        if (limit != null) 'limit': '$limit',
-        if (shouldReturnTotalSize != null)
-          'shouldReturnTotalSize': '$shouldReturnTotalSize',
-        if (expand != null) 'expand': expand.map((e) => e).join(','),
-      },
-    ));
-  }
-
-  /// Adds a user as a member in a group.
-  ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// User must be a site admin.
-  @deprecated
-  Future<void> addUserToGroup(
-      {required String name, required AccountId body}) async {
-    await _client.send(
-      'post',
-      'wiki/rest/api/group/user',
-      queryParameters: {
-        'name': name,
-      },
-      body: body.toJson(),
-    );
-  }
-
-  /// Remove user as a member from a group.
-  ///
-  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// User must be a site admin.
-  @deprecated
-  Future<void> removeMemberFromGroup(
-      {required String name,
-      String? key,
-      String? username,
-      String? accountId}) async {
-    await _client.send(
-      'delete',
-      'wiki/rest/api/group/user',
-      queryParameters: {
-        'name': name,
         if (key != null) 'key': key,
         if (username != null) 'username': username,
         if (accountId != null) 'accountId': accountId,
@@ -3371,11 +3257,13 @@ class LongRunningTaskApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
-  Future<LongTaskStatusArray> getTasks({int? start, int? limit}) async {
+  Future<LongTaskStatusArray> getTasks(
+      {String? key, int? start, int? limit}) async {
     return LongTaskStatusArray.fromJson(await _client.send(
       'get',
       'wiki/rest/api/longtask',
       queryParameters: {
+        if (key != null) 'key': key,
         if (start != null) 'start': '$start',
         if (limit != null) 'limit': '$limit',
       },
@@ -3496,7 +3384,7 @@ class RelationApi {
   ///
   /// For example, the following method creates a 'sibling' relationship between
   /// two pieces of content:
-  /// `GET /wiki/rest/api/relation/sibling/from/content/123/to/content/456`
+  /// `PUT /wiki/rest/api/relation/sibling/from/content/123/to/content/456`
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
@@ -3664,6 +3552,10 @@ class SearchApi {
   /// ```
   /// The response to this will have a `prev` URL similar to the `next` in the
   /// example response.
+  ///
+  /// Starting on Dec 10, 2024, if the expand query parameter is used with the
+  /// `body.export_view` and/or `body.styled_view` properties, then the query
+  /// limit parameter will be restricted to a maximum value of 25.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the entities. Note, only entities that the user has
@@ -3968,7 +3860,8 @@ class SpaceApi {
     ));
   }
 
-  /// Deletes a space. Note, the space will be deleted in a long running task.
+  /// Permanently deletes a space without sending it to the trash. Note, the
+  /// space will be deleted in a long running task.
   /// Therefore, the space may not be deleted yet when this method has
   /// returned. Clients should poll the status link that is returned in the
   /// response until the task completes.
@@ -3990,6 +3883,10 @@ class SpaceApi {
   ///
   /// Returns all content in a space. The returned content is grouped by type
   /// (pages then blogposts), then ordered by content ID in ascending order.
+  ///
+  /// Starting on Dec 10, 2024, if the expand query parameter is used with the
+  /// `body.export_view` and/or `body.styled_view` properties, then the query
+  /// limit parameter will be restricted to a maximum value of 25.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'View' permission for the space. Note, the returned list will only
@@ -4021,6 +3918,10 @@ class SpaceApi {
   ///
   /// Returns all content of a given type, in a space. The returned content is
   /// ordered by content ID in ascending order.
+  ///
+  /// Starting on Dec 10, 2024, if the expand query parameter is used with the
+  /// `body.export_view` and/or `body.styled_view` properties, then the query
+  /// limit parameter will be restricted to a maximum value of 25.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// 'View' permission for the space. Note, the returned list will only
@@ -4454,12 +4355,7 @@ class ThemesApi {
 
   ThemesApi(this._client);
 
-  /// Returns all
-  /// [admin-driven themes](https://developer.atlassian.com/cloud/confluence/create-a-confluence-theme/),
-  /// not including the default theme. Note that this API only applies to themes
-  /// set for an entire space or site by the admin. User-driven theming controls
-  /// (Light, Dark, and match browser) are an unrelated feature. Admin-driven
-  /// themes will override user-driven themes.
+  /// Returns all themes, not including the default theme.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// None
@@ -4750,27 +4646,30 @@ class UsersApi {
     ));
   }
 
-  /// Returns user details for the ids provided in request.
+  /// Returns user details for the ids provided in the request.
+  /// Currently this API returns a maximum of 100 results.
+  /// If more than 100 account ids are passed in, then the first 100 will be
+  /// returned.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
   Future<BulkUserLookupArray> getBulkUserLookup(
-      {required String accountId, List<String>? expand, int? limit}) async {
+      {required String accountId, List<String>? expand}) async {
     return BulkUserLookupArray.fromJson(await _client.send(
       'get',
       'wiki/rest/api/user/bulk',
       queryParameters: {
         'accountId': accountId,
         if (expand != null) 'expand': expand.map((e) => e).join(','),
-        if (limit != null) 'limit': '$limit',
       },
     ));
   }
 
-  /// Returns a user's email address. This API is only available to apps
-  /// approved by
+  /// Returns a user's email address regardless of the user’s profile visibility
+  /// settings. For Connect apps, this API is only available to apps approved by
   /// Atlassian, according to these
   /// [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603).
+  /// For Forge apps, this API only supports access via asApp() requests.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
@@ -4785,10 +4684,11 @@ class UsersApi {
     ));
   }
 
-  /// Returns user email addresses for a set of accountIds. This API is only
-  /// available to apps approved by
+  /// Returns a user's email address regardless of the user’s profile visibility
+  /// settings. For Connect apps, this API is only available to apps approved by
   /// Atlassian, according to these
   /// [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603).
+  /// For Forge apps, this API only supports access via asApp() requests.
   ///
   /// Any accounts which are not available will not be included in the result.
   ///
@@ -5415,6 +5315,19 @@ class AsyncContentBodyStatus {
   String toString() => value;
 }
 
+class AsyncContentBodyArray {
+  AsyncContentBodyArray();
+
+  factory AsyncContentBodyArray.fromJson(Map<String, Object?> json) {
+    return AsyncContentBodyArray();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
 class AsyncContentBodyExpandable {
   final String? content;
   final String? embeddedContent;
@@ -5562,6 +5475,19 @@ class AsyncId {
     return AsyncId(
       asyncId: asyncId ?? this.asyncId,
     );
+  }
+}
+
+class AsyncIdArray {
+  AsyncIdArray();
+
+  factory AsyncIdArray.fromJson(Map<String, Object?> json) {
+    return AsyncIdArray();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
   }
 }
 
@@ -6082,10 +6008,16 @@ class AuditRecordAuthor {
   final String? userKey;
   final String? accountId;
   final String? accountType;
+
+  /// This is deprecated. Use `isGuest` instead.
   final bool externalCollaborator;
 
-  /// Whether the user is an external collaborator user
+  /// This is deprecated. Use `isGuest` instead. Whether the user is an external
+  /// collaborator user
   final bool isExternalCollaborator;
+
+  /// Whether the user is a guest user
+  final bool isGuest;
 
   /// The public name or nickname of the user. Will always contain a value.
   final String? publicName;
@@ -6100,9 +6032,11 @@ class AuditRecordAuthor {
       this.accountType,
       bool? externalCollaborator,
       bool? isExternalCollaborator,
+      bool? isGuest,
       this.publicName})
       : externalCollaborator = externalCollaborator ?? false,
-        isExternalCollaborator = isExternalCollaborator ?? false;
+        isExternalCollaborator = isExternalCollaborator ?? false,
+        isGuest = isGuest ?? false;
 
   factory AuditRecordAuthor.fromJson(Map<String, Object?> json) {
     return AuditRecordAuthor(
@@ -6115,6 +6049,7 @@ class AuditRecordAuthor {
       accountType: json[r'accountType'] as String?,
       externalCollaborator: json[r'externalCollaborator'] as bool? ?? false,
       isExternalCollaborator: json[r'isExternalCollaborator'] as bool? ?? false,
+      isGuest: json[r'isGuest'] as bool? ?? false,
       publicName: json[r'publicName'] as String?,
     );
   }
@@ -6129,6 +6064,7 @@ class AuditRecordAuthor {
     var accountType = this.accountType;
     var externalCollaborator = this.externalCollaborator;
     var isExternalCollaborator = this.isExternalCollaborator;
+    var isGuest = this.isGuest;
     var publicName = this.publicName;
 
     final json = <String, Object?>{};
@@ -6149,6 +6085,7 @@ class AuditRecordAuthor {
     }
     json[r'externalCollaborator'] = externalCollaborator;
     json[r'isExternalCollaborator'] = isExternalCollaborator;
+    json[r'isGuest'] = isGuest;
     if (publicName != null) {
       json[r'publicName'] = publicName;
     }
@@ -6165,6 +6102,7 @@ class AuditRecordAuthor {
       String? accountType,
       bool? externalCollaborator,
       bool? isExternalCollaborator,
+      bool? isGuest,
       String? publicName}) {
     return AuditRecordAuthor(
       type: type ?? this.type,
@@ -6177,6 +6115,7 @@ class AuditRecordAuthor {
       externalCollaborator: externalCollaborator ?? this.externalCollaborator,
       isExternalCollaborator:
           isExternalCollaborator ?? this.isExternalCollaborator,
+      isGuest: isGuest ?? this.isGuest,
       publicName: publicName ?? this.publicName,
     );
   }
@@ -6446,20 +6385,18 @@ class AuditRecordCreateAuthorType {
 }
 
 class AvailableContentStates {
-  /// Space suggested content states that can be used in the space. This can be
-  /// null if space content states are disabled in the space.
+  /// Space suggested content states that can be used in the space.
   /// This list can be empty if there are no space content states defined in the
-  /// space.
-  /// All spaces start with 3 default space content states, and this can be
+  /// space or if space content states are disabled in the space.
+  /// All spaces start with 4 default space content states, and this can be
   /// modified in the UI under space settings.
   final List<ContentState> spaceContentStates;
 
   /// Custom content states that can be used by the user on the content of this
   /// call.
-  /// This can be null if custom content states are disabled in the space of the
-  /// content.
   /// This list can be empty if there are no custom content states defined by
-  /// the user.
+  /// the user or if custom content states are disabled in the space of the
+  /// content.
   /// This will at most have 3 of the most recently published content states.
   /// Only the calling user has access to place these states on content, but all
   /// users can see these states once they are placed.
@@ -6788,43 +6725,6 @@ class Breadcrumb {
   }
 }
 
-class BulkContentStateSetInput {
-  /// maximum number of ids you can pass in is 300
-  final List<String> ids;
-  final ContentStateInput contentState;
-
-  BulkContentStateSetInput({required this.ids, required this.contentState});
-
-  factory BulkContentStateSetInput.fromJson(Map<String, Object?> json) {
-    return BulkContentStateSetInput(
-      ids: (json[r'ids'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      contentState: ContentStateInput.fromJson(
-          json[r'contentState'] as Map<String, Object?>? ?? const {}),
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var ids = this.ids;
-    var contentState = this.contentState;
-
-    final json = <String, Object?>{};
-    json[r'ids'] = ids;
-    json[r'contentState'] = contentState.toJson();
-    return json;
-  }
-
-  BulkContentStateSetInput copyWith(
-      {List<String>? ids, ContentStateInput? contentState}) {
-    return BulkContentStateSetInput(
-      ids: ids ?? this.ids,
-      contentState: contentState ?? this.contentState,
-    );
-  }
-}
-
 class BulkUserLookup {
   final BulkUserLookupType type;
   final String? username;
@@ -6850,8 +6750,12 @@ class BulkUserLookup {
   /// this may return null.
   final String? timeZone;
 
-  /// Whether the user is an external collaborator user
+  /// This is deprecated. Use `isGuest` instead to find out whether the user is
+  /// a guest user.
   final bool isExternalCollaborator;
+
+  /// Whether the user is a guest user
+  final bool isGuest;
   final List<OperationCheckResult> operations;
   final UserDetails? details;
   final Space? personalSpace;
@@ -6870,12 +6774,14 @@ class BulkUserLookup {
       required this.displayName,
       this.timeZone,
       bool? isExternalCollaborator,
+      bool? isGuest,
       List<OperationCheckResult>? operations,
       this.details,
       this.personalSpace,
       required this.expandable,
       required this.links})
       : isExternalCollaborator = isExternalCollaborator ?? false,
+        isGuest = isGuest ?? false,
         operations = operations ?? [];
 
   factory BulkUserLookup.fromJson(Map<String, Object?> json) {
@@ -6892,6 +6798,7 @@ class BulkUserLookup {
       displayName: json[r'displayName'] as String? ?? '',
       timeZone: json[r'timeZone'] as String?,
       isExternalCollaborator: json[r'isExternalCollaborator'] as bool? ?? false,
+      isGuest: json[r'isGuest'] as bool? ?? false,
       operations: (json[r'operations'] as List<Object?>?)
               ?.map((i) => OperationCheckResult.fromJson(
                   i as Map<String, Object?>? ?? const {}))
@@ -6922,6 +6829,7 @@ class BulkUserLookup {
     var displayName = this.displayName;
     var timeZone = this.timeZone;
     var isExternalCollaborator = this.isExternalCollaborator;
+    var isGuest = this.isGuest;
     var operations = this.operations;
     var details = this.details;
     var personalSpace = this.personalSpace;
@@ -6946,6 +6854,7 @@ class BulkUserLookup {
       json[r'timeZone'] = timeZone;
     }
     json[r'isExternalCollaborator'] = isExternalCollaborator;
+    json[r'isGuest'] = isGuest;
     json[r'operations'] = operations.map((i) => i.toJson()).toList();
     if (details != null) {
       json[r'details'] = details.toJson();
@@ -6970,6 +6879,7 @@ class BulkUserLookup {
       String? displayName,
       String? timeZone,
       bool? isExternalCollaborator,
+      bool? isGuest,
       List<OperationCheckResult>? operations,
       UserDetails? details,
       Space? personalSpace,
@@ -6988,6 +6898,7 @@ class BulkUserLookup {
       timeZone: timeZone ?? this.timeZone,
       isExternalCollaborator:
           isExternalCollaborator ?? this.isExternalCollaborator,
+      isGuest: isGuest ?? this.isGuest,
       operations: operations ?? this.operations,
       details: details ?? this.details,
       personalSpace: personalSpace ?? this.personalSpace,
@@ -8165,6 +8076,203 @@ class ContentBodyRepresentation {
   String toString() => value;
 }
 
+class ContentBodyConversionInput {
+  /// The name of the target format for the content body conversion.
+  final String to;
+
+  /// If `false`, the cache will erase its current value and begin a new
+  /// conversion. If `true`, the cache will not erase its current value, and
+  /// will set the status of the async conversion to “RERUNNING”. Once the data
+  /// is updated, the status will change to “COMPLETED”. Large macros that take
+  /// a long time to convert and that need not be immediately up to date (e.g. a
+  /// macro in which the new conversion result is the same as a previous
+  /// conversion result that was completed within the last 5 minutes) should set
+  /// this field to `true`. Cache values are stored per user per content body
+  /// and expansions.
+  final bool allowCache;
+
+  /// The space key used for resolving embedded content (page includes, files,
+  /// and links) in the content body. For example, if the source content
+  /// contains the link `<ac:link><ri:page ri:content-title="Example page"
+  /// /><ac:link>` and the `spaceKeyContext=TEST` parameter is provided, then
+  /// the link will be converted into a link to the "Example page" page in the
+  /// "TEST" space.
+  final String? spaceKeyContext;
+
+  /// The content ID used to find the space for resolving embedded content (page
+  /// includes, files, and links) in the content body. For example, if the
+  /// source content contains the link `<ac:link><ri:page
+  /// ri:content-title="Example page" /><ac:link>` and the
+  /// `contentIdContext=123` parameter is provided, then the link will be
+  /// converted into a link to the "Example page" page in the same space that
+  /// has the content with ID=123. Note that `spaceKeyContext` will be ignored
+  /// if this parameter is provided.
+  final String? contentIdContext;
+
+  /// Mode used for rendering embedded content, such as attachments. - `current`
+  /// renders the embedded content using the latest version. - `version-at-save`
+  /// renders the embedded content using the version at the time of save.
+  final ContentBodyConversionInputEmbeddedContentRender? embeddedContentRender;
+
+  /// A multi-value, comma-separated parameter indicating which properties of
+  /// the content to expand and populate. Expands are dependent
+  /// on the `to` conversion format and may be irrelevant for certain
+  /// conversions (e.g. `macroRenderedOutput` is redundant when
+  /// converting to `view` format).
+  ///
+  /// If rendering to `view` format, and the body content being converted
+  /// includes arbitrary nested content (such as macros); then it is
+  /// necessary to include webresource expands in the request. Webresources for
+  /// content body are the batched JS and CSS dependencies for
+  /// any nested dynamic content (i.e. macros).
+  ///
+  /// - `embeddedContent` returns metadata for nested content (e.g. page
+  /// included using page include macro)
+  /// - `mediaToken` returns JWT token for retrieving attachment data from Media
+  /// API
+  /// - `macroRenderedOutput` additionally converts body to view format
+  /// - `webresource.superbatch.uris.js` returns all common JS dependencies as
+  /// static URLs
+  /// - `webresource.superbatch.uris.css` returns all common CSS dependencies as
+  /// static URLs
+  /// - `webresource.superbatch.uris.all` returns all common dependencies as
+  /// static URLs
+  /// - `webresource.superbatch.tags.all` returns all common JS dependencies as
+  /// html `<script>` tags
+  /// - `webresource.superbatch.tags.css` returns all common CSS dependencies as
+  /// html `<style>` tags
+  /// - `webresource.superbatch.tags.js` returns all common dependencies as html
+  /// `<script>` and `<style>` tags
+  /// - `webresource.uris.js` returns JS dependencies specific to conversion
+  /// - `webresource.uris.css` returns CSS dependencies specific to conversion
+  /// - `webresource.uris.all` returns all dependencies specific to conversion
+  ///
+  /// - `webresource.tags.all` returns common JS dependencies as html `<script>`
+  /// tags
+  /// - `webresource.tags.css` returns common CSS dependencies as html `<style>`
+  /// tags
+  /// - `webresource.tags.js` returns common dependencies as html `<script>` and
+  /// `<style>` tags
+  final List<String> expand;
+  final ContentBodyCreate body;
+
+  ContentBodyConversionInput(
+      {required this.to,
+      bool? allowCache,
+      this.spaceKeyContext,
+      this.contentIdContext,
+      this.embeddedContentRender,
+      List<String>? expand,
+      required this.body})
+      : allowCache = allowCache ?? false,
+        expand = expand ?? [];
+
+  factory ContentBodyConversionInput.fromJson(Map<String, Object?> json) {
+    return ContentBodyConversionInput(
+      to: json[r'to'] as String? ?? '',
+      allowCache: json[r'allowCache'] as bool? ?? false,
+      spaceKeyContext: json[r'spaceKeyContext'] as String?,
+      contentIdContext: json[r'contentIdContext'] as String?,
+      embeddedContentRender: json[r'embeddedContentRender'] != null
+          ? ContentBodyConversionInputEmbeddedContentRender.fromValue(
+              json[r'embeddedContentRender']! as String)
+          : null,
+      expand: (json[r'expand'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+      body: ContentBodyCreate.fromJson(
+          json[r'body'] as Map<String, Object?>? ?? const {}),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var to = this.to;
+    var allowCache = this.allowCache;
+    var spaceKeyContext = this.spaceKeyContext;
+    var contentIdContext = this.contentIdContext;
+    var embeddedContentRender = this.embeddedContentRender;
+    var expand = this.expand;
+    var body = this.body;
+
+    final json = <String, Object?>{};
+    json[r'to'] = to;
+    json[r'allowCache'] = allowCache;
+    if (spaceKeyContext != null) {
+      json[r'spaceKeyContext'] = spaceKeyContext;
+    }
+    if (contentIdContext != null) {
+      json[r'contentIdContext'] = contentIdContext;
+    }
+    if (embeddedContentRender != null) {
+      json[r'embeddedContentRender'] = embeddedContentRender.value;
+    }
+    json[r'expand'] = expand;
+    json[r'body'] = body.toJson();
+    return json;
+  }
+
+  ContentBodyConversionInput copyWith(
+      {String? to,
+      bool? allowCache,
+      String? spaceKeyContext,
+      String? contentIdContext,
+      ContentBodyConversionInputEmbeddedContentRender? embeddedContentRender,
+      List<String>? expand,
+      ContentBodyCreate? body}) {
+    return ContentBodyConversionInput(
+      to: to ?? this.to,
+      allowCache: allowCache ?? this.allowCache,
+      spaceKeyContext: spaceKeyContext ?? this.spaceKeyContext,
+      contentIdContext: contentIdContext ?? this.contentIdContext,
+      embeddedContentRender:
+          embeddedContentRender ?? this.embeddedContentRender,
+      expand: expand ?? this.expand,
+      body: body ?? this.body,
+    );
+  }
+}
+
+class ContentBodyConversionInputEmbeddedContentRender {
+  static const current =
+      ContentBodyConversionInputEmbeddedContentRender._('current');
+  static const versionAtSave =
+      ContentBodyConversionInputEmbeddedContentRender._('version-at-save');
+
+  static const values = [
+    current,
+    versionAtSave,
+  ];
+  final String value;
+
+  const ContentBodyConversionInputEmbeddedContentRender._(this.value);
+
+  static ContentBodyConversionInputEmbeddedContentRender fromValue(
+          String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () =>
+              ContentBodyConversionInputEmbeddedContentRender._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class ContentBodyConversionInputArray {
+  ContentBodyConversionInputArray();
+
+  factory ContentBodyConversionInputArray.fromJson(Map<String, Object?> json) {
+    return ContentBodyConversionInputArray();
+  }
+
+  Map<String, Object?> toJson() {
+    final json = <String, Object?>{};
+    return json;
+  }
+}
+
 /// This object is used when creating or updating content.
 class ContentBodyCreate {
   /// The body of the content in the relevant format.
@@ -8863,9 +8971,19 @@ class ContentChildTypeExpandable {
   final String? comment;
   final String? page;
   final String? whiteboard;
+  final String? database;
+  final String? embed;
+  final String? folder;
 
   ContentChildTypeExpandable(
-      {this.all, this.attachment, this.comment, this.page, this.whiteboard});
+      {this.all,
+      this.attachment,
+      this.comment,
+      this.page,
+      this.whiteboard,
+      this.database,
+      this.embed,
+      this.folder});
 
   factory ContentChildTypeExpandable.fromJson(Map<String, Object?> json) {
     return ContentChildTypeExpandable(
@@ -8874,6 +8992,9 @@ class ContentChildTypeExpandable {
       comment: json[r'comment'] as String?,
       page: json[r'page'] as String?,
       whiteboard: json[r'whiteboard'] as String?,
+      database: json[r'database'] as String?,
+      embed: json[r'embed'] as String?,
+      folder: json[r'folder'] as String?,
     );
   }
 
@@ -8883,6 +9004,9 @@ class ContentChildTypeExpandable {
     var comment = this.comment;
     var page = this.page;
     var whiteboard = this.whiteboard;
+    var database = this.database;
+    var embed = this.embed;
+    var folder = this.folder;
 
     final json = <String, Object?>{};
     if (all != null) {
@@ -8900,6 +9024,15 @@ class ContentChildTypeExpandable {
     if (whiteboard != null) {
       json[r'whiteboard'] = whiteboard;
     }
+    if (database != null) {
+      json[r'database'] = database;
+    }
+    if (embed != null) {
+      json[r'embed'] = embed;
+    }
+    if (folder != null) {
+      json[r'folder'] = folder;
+    }
     return json;
   }
 
@@ -8908,13 +9041,19 @@ class ContentChildTypeExpandable {
       String? attachment,
       String? comment,
       String? page,
-      String? whiteboard}) {
+      String? whiteboard,
+      String? database,
+      String? embed,
+      String? folder}) {
     return ContentChildTypeExpandable(
       all: all ?? this.all,
       attachment: attachment ?? this.attachment,
       comment: comment ?? this.comment,
       page: page ?? this.page,
       whiteboard: whiteboard ?? this.whiteboard,
+      database: database ?? this.database,
+      embed: embed ?? this.embed,
+      folder: folder ?? this.folder,
     );
   }
 }
@@ -8955,11 +9094,23 @@ class ContentChildren {
   final ContentArray? attachment;
   final ContentArray? comment;
   final ContentArray? page;
+  final ContentArray? whiteboard;
+  final ContentArray? database;
+  final ContentArray? embed;
+  final ContentArray? folder;
   final ContentChildrenExpandable? expandable;
   final GenericLinks? links;
 
   ContentChildren(
-      {this.attachment, this.comment, this.page, this.expandable, this.links});
+      {this.attachment,
+      this.comment,
+      this.page,
+      this.whiteboard,
+      this.database,
+      this.embed,
+      this.folder,
+      this.expandable,
+      this.links});
 
   factory ContentChildren.fromJson(Map<String, Object?> json) {
     return ContentChildren(
@@ -8971,6 +9122,18 @@ class ContentChildren {
           : null,
       page: json[r'page'] != null
           ? ContentArray.fromJson(json[r'page']! as Map<String, Object?>)
+          : null,
+      whiteboard: json[r'whiteboard'] != null
+          ? ContentArray.fromJson(json[r'whiteboard']! as Map<String, Object?>)
+          : null,
+      database: json[r'database'] != null
+          ? ContentArray.fromJson(json[r'database']! as Map<String, Object?>)
+          : null,
+      embed: json[r'embed'] != null
+          ? ContentArray.fromJson(json[r'embed']! as Map<String, Object?>)
+          : null,
+      folder: json[r'folder'] != null
+          ? ContentArray.fromJson(json[r'folder']! as Map<String, Object?>)
           : null,
       expandable: json[r'_expandable'] != null
           ? ContentChildrenExpandable.fromJson(
@@ -8986,6 +9149,10 @@ class ContentChildren {
     var attachment = this.attachment;
     var comment = this.comment;
     var page = this.page;
+    var whiteboard = this.whiteboard;
+    var database = this.database;
+    var embed = this.embed;
+    var folder = this.folder;
     var expandable = this.expandable;
     var links = this.links;
 
@@ -8998,6 +9165,18 @@ class ContentChildren {
     }
     if (page != null) {
       json[r'page'] = page.toJson();
+    }
+    if (whiteboard != null) {
+      json[r'whiteboard'] = whiteboard.toJson();
+    }
+    if (database != null) {
+      json[r'database'] = database.toJson();
+    }
+    if (embed != null) {
+      json[r'embed'] = embed.toJson();
+    }
+    if (folder != null) {
+      json[r'folder'] = folder.toJson();
     }
     if (expandable != null) {
       json[r'_expandable'] = expandable.toJson();
@@ -9012,12 +9191,20 @@ class ContentChildren {
       {ContentArray? attachment,
       ContentArray? comment,
       ContentArray? page,
+      ContentArray? whiteboard,
+      ContentArray? database,
+      ContentArray? embed,
+      ContentArray? folder,
       ContentChildrenExpandable? expandable,
       GenericLinks? links}) {
     return ContentChildren(
       attachment: attachment ?? this.attachment,
       comment: comment ?? this.comment,
       page: page ?? this.page,
+      whiteboard: whiteboard ?? this.whiteboard,
+      database: database ?? this.database,
+      embed: embed ?? this.embed,
+      folder: folder ?? this.folder,
       expandable: expandable ?? this.expandable,
       links: links ?? this.links,
     );
@@ -9028,14 +9215,29 @@ class ContentChildrenExpandable {
   final String? attachment;
   final String? comment;
   final String? page;
+  final String? whiteboard;
+  final String? database;
+  final String? embed;
+  final String? folder;
 
-  ContentChildrenExpandable({this.attachment, this.comment, this.page});
+  ContentChildrenExpandable(
+      {this.attachment,
+      this.comment,
+      this.page,
+      this.whiteboard,
+      this.database,
+      this.embed,
+      this.folder});
 
   factory ContentChildrenExpandable.fromJson(Map<String, Object?> json) {
     return ContentChildrenExpandable(
       attachment: json[r'attachment'] as String?,
       comment: json[r'comment'] as String?,
       page: json[r'page'] as String?,
+      whiteboard: json[r'whiteboard'] as String?,
+      database: json[r'database'] as String?,
+      embed: json[r'embed'] as String?,
+      folder: json[r'folder'] as String?,
     );
   }
 
@@ -9043,6 +9245,10 @@ class ContentChildrenExpandable {
     var attachment = this.attachment;
     var comment = this.comment;
     var page = this.page;
+    var whiteboard = this.whiteboard;
+    var database = this.database;
+    var embed = this.embed;
+    var folder = this.folder;
 
     final json = <String, Object?>{};
     if (attachment != null) {
@@ -9054,15 +9260,37 @@ class ContentChildrenExpandable {
     if (page != null) {
       json[r'page'] = page;
     }
+    if (whiteboard != null) {
+      json[r'whiteboard'] = whiteboard;
+    }
+    if (database != null) {
+      json[r'database'] = database;
+    }
+    if (embed != null) {
+      json[r'embed'] = embed;
+    }
+    if (folder != null) {
+      json[r'folder'] = folder;
+    }
     return json;
   }
 
   ContentChildrenExpandable copyWith(
-      {String? attachment, String? comment, String? page}) {
+      {String? attachment,
+      String? comment,
+      String? page,
+      String? whiteboard,
+      String? database,
+      String? embed,
+      String? folder}) {
     return ContentChildrenExpandable(
       attachment: attachment ?? this.attachment,
       comment: comment ?? this.comment,
       page: page ?? this.page,
+      whiteboard: whiteboard ?? this.whiteboard,
+      database: database ?? this.database,
+      embed: embed ?? this.embed,
+      folder: folder ?? this.folder,
     );
   }
 }
@@ -11556,10 +11784,7 @@ class ContentRestrictionUpdateOperation {
 /// `user` or `group` must be specified for this object.
 class ContentRestrictionUpdateRestrictions {
   /// The groups that the restrictions will be applied to. This array must
-  /// have at least one item, otherwise it should be omitted. At least one of
-  /// `name` or `id` is required,
-  /// and `id` should be used where possible in advance of the `name`
-  /// deprecation.
+  /// have at least one item, otherwise it should be omitted.
   final List<ContentRestrictionUpdateRestrictionsGroupItem> group;
   final dynamic user;
 
@@ -11607,36 +11832,26 @@ class ContentRestrictionUpdateRestrictionsGroupItem {
   /// Set to 'group'.
   final ContentRestrictionUpdateRestrictionsGroupItemType type;
 
-  /// The name of the group.
-  @deprecated
-  final String? name;
-
   /// The id of the group.
   final String? id;
 
-  ContentRestrictionUpdateRestrictionsGroupItem(
-      {required this.type, this.name, this.id});
+  ContentRestrictionUpdateRestrictionsGroupItem({required this.type, this.id});
 
   factory ContentRestrictionUpdateRestrictionsGroupItem.fromJson(
       Map<String, Object?> json) {
     return ContentRestrictionUpdateRestrictionsGroupItem(
       type: ContentRestrictionUpdateRestrictionsGroupItemType.fromValue(
           json[r'type'] as String? ?? ''),
-      name: json[r'name'] as String?,
       id: json[r'id'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var type = this.type;
-    var name = this.name;
     var id = this.id;
 
     final json = <String, Object?>{};
     json[r'type'] = type.value;
-    if (name != null) {
-      json[r'name'] = name;
-    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -11644,12 +11859,9 @@ class ContentRestrictionUpdateRestrictionsGroupItem {
   }
 
   ContentRestrictionUpdateRestrictionsGroupItem copyWith(
-      {ContentRestrictionUpdateRestrictionsGroupItemType? type,
-      String? name,
-      String? id}) {
+      {ContentRestrictionUpdateRestrictionsGroupItemType? type, String? id}) {
     return ContentRestrictionUpdateRestrictionsGroupItem(
       type: type ?? this.type,
-      name: name ?? this.name,
       id: id ?? this.id,
     );
   }
@@ -11922,64 +12134,6 @@ class ContentStateFailure {
     return ContentStateFailure(
       contentId: contentId ?? this.contentId,
       failureReason: failureReason ?? this.failureReason,
-    );
-  }
-}
-
-class ContentStateInput {
-  final String? name;
-
-  /// Color of state. Must be in 6 digit hex form (#FFFFFF). The default colors
-  /// offered in the UI are:
-  ///  #ff7452 (red),
-  ///  #2684ff (blue),
-  ///  #ffc400 (yellow),
-  ///  #57d9a3 (green), and
-  ///  #8777d9 (purple)
-  final String? color;
-  final int? id;
-  final String? spaceKey;
-
-  ContentStateInput({this.name, this.color, this.id, this.spaceKey});
-
-  factory ContentStateInput.fromJson(Map<String, Object?> json) {
-    return ContentStateInput(
-      name: json[r'name'] as String?,
-      color: json[r'color'] as String?,
-      id: (json[r'id'] as num?)?.toInt(),
-      spaceKey: json[r'spaceKey'] as String?,
-    );
-  }
-
-  Map<String, Object?> toJson() {
-    var name = this.name;
-    var color = this.color;
-    var id = this.id;
-    var spaceKey = this.spaceKey;
-
-    final json = <String, Object?>{};
-    if (name != null) {
-      json[r'name'] = name;
-    }
-    if (color != null) {
-      json[r'color'] = color;
-    }
-    if (id != null) {
-      json[r'id'] = id;
-    }
-    if (spaceKey != null) {
-      json[r'spaceKey'] = spaceKey;
-    }
-    return json;
-  }
-
-  ContentStateInput copyWith(
-      {String? name, String? color, int? id, String? spaceKey}) {
-    return ContentStateInput(
-      name: name ?? this.name,
-      color: color ?? this.color,
-      id: id ?? this.id,
-      spaceKey: spaceKey ?? this.spaceKey,
     );
   }
 }
@@ -13938,43 +14092,34 @@ class GroupArrayWithLinks {
   }
 }
 
-/// The name property will soon be deprecated in favor of using id.
 class GroupCreate {
   final GroupCreateType type;
-  @deprecated
-  final String? name;
   final String? id;
 
-  GroupCreate({required this.type, this.name, this.id});
+  GroupCreate({required this.type, this.id});
 
   factory GroupCreate.fromJson(Map<String, Object?> json) {
     return GroupCreate(
       type: GroupCreateType.fromValue(json[r'type'] as String? ?? ''),
-      name: json[r'name'] as String?,
       id: json[r'id'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var type = this.type;
-    var name = this.name;
     var id = this.id;
 
     final json = <String, Object?>{};
     json[r'type'] = type.value;
-    if (name != null) {
-      json[r'name'] = name;
-    }
     if (id != null) {
       json[r'id'] = id;
     }
     return json;
   }
 
-  GroupCreate copyWith({GroupCreateType? type, String? name, String? id}) {
+  GroupCreate copyWith({GroupCreateType? type, String? id}) {
     return GroupCreate(
       type: type ?? this.type,
-      name: name ?? this.name,
       id: id ?? this.id,
     );
   }
@@ -15806,9 +15951,7 @@ class PermissionSubject {
   /// for `type=user`, identifier should be user's accountId or `anonymous` for
   /// anonymous users
   ///
-  /// for `type=group`, identifier should be the groupId. We are deprecating
-  /// groupName support in mid-2024
-  /// for this field but still accept it in the interim.
+  /// for `type=group`, identifier should be the groupId.
   final String identifier;
 
   PermissionSubject({required this.type, required this.identifier});
@@ -16729,6 +16872,7 @@ class SearchResult {
 class Space {
   final int? id;
   final String key;
+  final String? alias;
   final String name;
   final Icon? icon;
   final SpaceDescriptionValue? description;
@@ -16748,6 +16892,7 @@ class Space {
   Space(
       {this.id,
       required this.key,
+      this.alias,
       required this.name,
       this.icon,
       this.description,
@@ -16770,6 +16915,7 @@ class Space {
     return Space(
       id: (json[r'id'] as num?)?.toInt(),
       key: json[r'key'] as String? ?? '',
+      alias: json[r'alias'] as String?,
       name: json[r'name'] as String? ?? '',
       icon: json[r'icon'] != null
           ? Icon.fromJson(json[r'icon']! as Map<String, Object?>)
@@ -16818,6 +16964,7 @@ class Space {
   Map<String, Object?> toJson() {
     var id = this.id;
     var key = this.key;
+    var alias = this.alias;
     var name = this.name;
     var icon = this.icon;
     var description = this.description;
@@ -16839,6 +16986,9 @@ class Space {
       json[r'id'] = id;
     }
     json[r'key'] = key;
+    if (alias != null) {
+      json[r'alias'] = alias;
+    }
     json[r'name'] = name;
     if (icon != null) {
       json[r'icon'] = icon.toJson();
@@ -16876,6 +17026,7 @@ class Space {
   Space copyWith(
       {int? id,
       String? key,
+      String? alias,
       String? name,
       Icon? icon,
       SpaceDescriptionValue? description,
@@ -16894,6 +17045,7 @@ class Space {
     return Space(
       id: id ?? this.id,
       key: key ?? this.key,
+      alias: alias ?? this.alias,
       name: name ?? this.name,
       icon: icon ?? this.icon,
       description: description ?? this.description,
@@ -16976,12 +17128,19 @@ class SpaceArray {
 
 /// This is the request object used when creating a new space.
 class SpaceCreate {
-  /// The key for the new space. Format: See [Space
-  /// keys](https://confluence.atlassian.com/x/lqNMMQ).
-  final String key;
-
   /// The name of the new space.
   final String name;
+
+  /// The key for the new space. Format: See [Space
+  /// keys](https://confluence.atlassian.com/x/lqNMMQ). If `alias` is not
+  /// provided, this is required.
+  final String? key;
+
+  /// This field will be used as the new identifier for the space in confluence
+  /// page URLs.
+  /// If the property is not provided the alias will be the provided key.
+  /// This property is experimental and may be changed or removed in the future.
+  final String? alias;
   final SpaceDescriptionCreate? description;
 
   /// The permissions for the new space. If no permissions are provided, the
@@ -16995,16 +17154,18 @@ class SpaceCreate {
   final List<SpacePermissionCreate> permissions;
 
   SpaceCreate(
-      {required this.key,
-      required this.name,
+      {required this.name,
+      this.key,
+      this.alias,
       this.description,
       List<SpacePermissionCreate>? permissions})
       : permissions = permissions ?? [];
 
   factory SpaceCreate.fromJson(Map<String, Object?> json) {
     return SpaceCreate(
-      key: json[r'key'] as String? ?? '',
       name: json[r'name'] as String? ?? '',
+      key: json[r'key'] as String?,
+      alias: json[r'alias'] as String?,
       description: json[r'description'] != null
           ? SpaceDescriptionCreate.fromJson(
               json[r'description']! as Map<String, Object?>)
@@ -17018,14 +17179,20 @@ class SpaceCreate {
   }
 
   Map<String, Object?> toJson() {
-    var key = this.key;
     var name = this.name;
+    var key = this.key;
+    var alias = this.alias;
     var description = this.description;
     var permissions = this.permissions;
 
     final json = <String, Object?>{};
-    json[r'key'] = key;
     json[r'name'] = name;
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    if (alias != null) {
+      json[r'alias'] = alias;
+    }
     if (description != null) {
       json[r'description'] = description.toJson();
     }
@@ -17034,13 +17201,15 @@ class SpaceCreate {
   }
 
   SpaceCreate copyWith(
-      {String? key,
-      String? name,
+      {String? name,
+      String? key,
+      String? alias,
       SpaceDescriptionCreate? description,
       List<SpacePermissionCreate>? permissions}) {
     return SpaceCreate(
-      key: key ?? this.key,
       name: name ?? this.name,
+      key: key ?? this.key,
+      alias: alias ?? this.alias,
       description: description ?? this.description,
       permissions: permissions ?? this.permissions,
     );
@@ -19297,29 +19466,35 @@ class SystemInfoEntity {
   final String cloudId;
   final String commitHash;
   final String? baseUrl;
+  final String? fallbackBaseUrl;
   final String? edition;
   final String? siteTitle;
   final String? defaultLocale;
   final String? defaultTimeZone;
+  final String? microsPerimeter;
 
   SystemInfoEntity(
       {required this.cloudId,
       required this.commitHash,
       this.baseUrl,
+      this.fallbackBaseUrl,
       this.edition,
       this.siteTitle,
       this.defaultLocale,
-      this.defaultTimeZone});
+      this.defaultTimeZone,
+      this.microsPerimeter});
 
   factory SystemInfoEntity.fromJson(Map<String, Object?> json) {
     return SystemInfoEntity(
       cloudId: json[r'cloudId'] as String? ?? '',
       commitHash: json[r'commitHash'] as String? ?? '',
       baseUrl: json[r'baseUrl'] as String?,
+      fallbackBaseUrl: json[r'fallbackBaseUrl'] as String?,
       edition: json[r'edition'] as String?,
       siteTitle: json[r'siteTitle'] as String?,
       defaultLocale: json[r'defaultLocale'] as String?,
       defaultTimeZone: json[r'defaultTimeZone'] as String?,
+      microsPerimeter: json[r'microsPerimeter'] as String?,
     );
   }
 
@@ -19327,16 +19502,21 @@ class SystemInfoEntity {
     var cloudId = this.cloudId;
     var commitHash = this.commitHash;
     var baseUrl = this.baseUrl;
+    var fallbackBaseUrl = this.fallbackBaseUrl;
     var edition = this.edition;
     var siteTitle = this.siteTitle;
     var defaultLocale = this.defaultLocale;
     var defaultTimeZone = this.defaultTimeZone;
+    var microsPerimeter = this.microsPerimeter;
 
     final json = <String, Object?>{};
     json[r'cloudId'] = cloudId;
     json[r'commitHash'] = commitHash;
     if (baseUrl != null) {
       json[r'baseUrl'] = baseUrl;
+    }
+    if (fallbackBaseUrl != null) {
+      json[r'fallbackBaseUrl'] = fallbackBaseUrl;
     }
     if (edition != null) {
       json[r'edition'] = edition;
@@ -19350,6 +19530,9 @@ class SystemInfoEntity {
     if (defaultTimeZone != null) {
       json[r'defaultTimeZone'] = defaultTimeZone;
     }
+    if (microsPerimeter != null) {
+      json[r'microsPerimeter'] = microsPerimeter;
+    }
     return json;
   }
 
@@ -19357,18 +19540,22 @@ class SystemInfoEntity {
       {String? cloudId,
       String? commitHash,
       String? baseUrl,
+      String? fallbackBaseUrl,
       String? edition,
       String? siteTitle,
       String? defaultLocale,
-      String? defaultTimeZone}) {
+      String? defaultTimeZone,
+      String? microsPerimeter}) {
     return SystemInfoEntity(
       cloudId: cloudId ?? this.cloudId,
       commitHash: commitHash ?? this.commitHash,
       baseUrl: baseUrl ?? this.baseUrl,
+      fallbackBaseUrl: fallbackBaseUrl ?? this.fallbackBaseUrl,
       edition: edition ?? this.edition,
       siteTitle: siteTitle ?? this.siteTitle,
       defaultLocale: defaultLocale ?? this.defaultLocale,
       defaultTimeZone: defaultTimeZone ?? this.defaultTimeZone,
+      microsPerimeter: microsPerimeter ?? this.microsPerimeter,
     );
   }
 }
@@ -19937,11 +20124,16 @@ class User {
   /// this may return null.
   final String? timeZone;
 
-  /// Whether the user is an external collaborator user
+  /// This is deprecated. Use `isGuest` instead to find out whether the user is
+  /// a guest user.
+  final bool externalCollaborator;
+
+  /// This is deprecated. Use `isGuest` instead to find out whether the user is
+  /// a guest user.
   final bool isExternalCollaborator;
 
-  /// Whether the user is an external collaborator user
-  final bool externalCollaborator;
+  /// Whether the user is a guest user
+  final bool isGuest;
   final List<OperationCheckResult> operations;
   final UserDetails? details;
   final Space? personalSpace;
@@ -19959,15 +20151,17 @@ class User {
       this.profilePicture,
       this.displayName,
       this.timeZone,
-      bool? isExternalCollaborator,
       bool? externalCollaborator,
+      bool? isExternalCollaborator,
+      bool? isGuest,
       List<OperationCheckResult>? operations,
       this.details,
       this.personalSpace,
       this.expandable,
       this.links})
-      : isExternalCollaborator = isExternalCollaborator ?? false,
-        externalCollaborator = externalCollaborator ?? false,
+      : externalCollaborator = externalCollaborator ?? false,
+        isExternalCollaborator = isExternalCollaborator ?? false,
+        isGuest = isGuest ?? false,
         operations = operations ?? [];
 
   factory User.fromJson(Map<String, Object?> json) {
@@ -19986,8 +20180,9 @@ class User {
           : null,
       displayName: json[r'displayName'] as String?,
       timeZone: json[r'timeZone'] as String?,
-      isExternalCollaborator: json[r'isExternalCollaborator'] as bool? ?? false,
       externalCollaborator: json[r'externalCollaborator'] as bool? ?? false,
+      isExternalCollaborator: json[r'isExternalCollaborator'] as bool? ?? false,
+      isGuest: json[r'isGuest'] as bool? ?? false,
       operations: (json[r'operations'] as List<Object?>?)
               ?.map((i) => OperationCheckResult.fromJson(
                   i as Map<String, Object?>? ?? const {}))
@@ -20020,8 +20215,9 @@ class User {
     var profilePicture = this.profilePicture;
     var displayName = this.displayName;
     var timeZone = this.timeZone;
-    var isExternalCollaborator = this.isExternalCollaborator;
     var externalCollaborator = this.externalCollaborator;
+    var isExternalCollaborator = this.isExternalCollaborator;
+    var isGuest = this.isGuest;
     var operations = this.operations;
     var details = this.details;
     var personalSpace = this.personalSpace;
@@ -20057,8 +20253,9 @@ class User {
     if (timeZone != null) {
       json[r'timeZone'] = timeZone;
     }
-    json[r'isExternalCollaborator'] = isExternalCollaborator;
     json[r'externalCollaborator'] = externalCollaborator;
+    json[r'isExternalCollaborator'] = isExternalCollaborator;
+    json[r'isGuest'] = isGuest;
     json[r'operations'] = operations.map((i) => i.toJson()).toList();
     if (details != null) {
       json[r'details'] = details.toJson();
@@ -20086,8 +20283,9 @@ class User {
       Icon? profilePicture,
       String? displayName,
       String? timeZone,
-      bool? isExternalCollaborator,
       bool? externalCollaborator,
+      bool? isExternalCollaborator,
+      bool? isGuest,
       List<OperationCheckResult>? operations,
       UserDetails? details,
       Space? personalSpace,
@@ -20104,9 +20302,10 @@ class User {
       profilePicture: profilePicture ?? this.profilePicture,
       displayName: displayName ?? this.displayName,
       timeZone: timeZone ?? this.timeZone,
+      externalCollaborator: externalCollaborator ?? this.externalCollaborator,
       isExternalCollaborator:
           isExternalCollaborator ?? this.isExternalCollaborator,
-      externalCollaborator: externalCollaborator ?? this.externalCollaborator,
+      isGuest: isGuest ?? this.isGuest,
       operations: operations ?? this.operations,
       details: details ?? this.details,
       personalSpace: personalSpace ?? this.personalSpace,
@@ -20170,9 +20369,6 @@ class UserAnonymous {
   final Icon profilePicture;
   final String displayName;
   final List<OperationCheckResult> operations;
-
-  /// Whether the user is an external collaborator user
-  final bool isExternalCollaborator;
   final UserAnonymousExpandable? expandable;
   final GenericLinks links;
 
@@ -20181,11 +20377,9 @@ class UserAnonymous {
       required this.profilePicture,
       required this.displayName,
       List<OperationCheckResult>? operations,
-      bool? isExternalCollaborator,
       this.expandable,
       required this.links})
-      : operations = operations ?? [],
-        isExternalCollaborator = isExternalCollaborator ?? false;
+      : operations = operations ?? [];
 
   factory UserAnonymous.fromJson(Map<String, Object?> json) {
     return UserAnonymous(
@@ -20198,7 +20392,6 @@ class UserAnonymous {
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      isExternalCollaborator: json[r'isExternalCollaborator'] as bool? ?? false,
       expandable: json[r'_expandable'] != null
           ? UserAnonymousExpandable.fromJson(
               json[r'_expandable']! as Map<String, Object?>)
@@ -20213,7 +20406,6 @@ class UserAnonymous {
     var profilePicture = this.profilePicture;
     var displayName = this.displayName;
     var operations = this.operations;
-    var isExternalCollaborator = this.isExternalCollaborator;
     var expandable = this.expandable;
     var links = this.links;
 
@@ -20222,7 +20414,6 @@ class UserAnonymous {
     json[r'profilePicture'] = profilePicture.toJson();
     json[r'displayName'] = displayName;
     json[r'operations'] = operations.map((i) => i.toJson()).toList();
-    json[r'isExternalCollaborator'] = isExternalCollaborator;
     if (expandable != null) {
       json[r'_expandable'] = expandable.toJson();
     }
@@ -20235,7 +20426,6 @@ class UserAnonymous {
       Icon? profilePicture,
       String? displayName,
       List<OperationCheckResult>? operations,
-      bool? isExternalCollaborator,
       UserAnonymousExpandable? expandable,
       GenericLinks? links}) {
     return UserAnonymous(
@@ -20243,8 +20433,6 @@ class UserAnonymous {
       profilePicture: profilePicture ?? this.profilePicture,
       displayName: displayName ?? this.displayName,
       operations: operations ?? this.operations,
-      isExternalCollaborator:
-          isExternalCollaborator ?? this.isExternalCollaborator,
       expandable: expandable ?? this.expandable,
       links: links ?? this.links,
     );
@@ -21349,13 +21537,14 @@ class WatchUser {
   final String displayName;
   final String? timeZone;
   final List<OperationCheckResult> operations;
+  final bool externalCollaborator;
+  final bool isGuest;
   final bool isExternalCollaborator;
   final UserDetails? details;
   final String accountType;
   final String email;
   final String publicName;
   final Map<String, dynamic> personalSpace;
-  final bool externalCollaborator;
 
   WatchUser(
       {required this.type,
@@ -21366,13 +21555,14 @@ class WatchUser {
       required this.displayName,
       this.timeZone,
       required this.operations,
+      required this.externalCollaborator,
+      required this.isGuest,
       required this.isExternalCollaborator,
       this.details,
       required this.accountType,
       required this.email,
       required this.publicName,
-      required this.personalSpace,
-      required this.externalCollaborator});
+      required this.personalSpace});
 
   factory WatchUser.fromJson(Map<String, Object?> json) {
     return WatchUser(
@@ -21389,6 +21579,8 @@ class WatchUser {
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
+      externalCollaborator: json[r'externalCollaborator'] as bool? ?? false,
+      isGuest: json[r'isGuest'] as bool? ?? false,
       isExternalCollaborator: json[r'isExternalCollaborator'] as bool? ?? false,
       details: json[r'details'] != null
           ? UserDetails.fromJson(json[r'details']! as Map<String, Object?>)
@@ -21397,7 +21589,6 @@ class WatchUser {
       email: json[r'email'] as String? ?? '',
       publicName: json[r'publicName'] as String? ?? '',
       personalSpace: json[r'personalSpace'] as Map<String, Object?>? ?? {},
-      externalCollaborator: json[r'externalCollaborator'] as bool? ?? false,
     );
   }
 
@@ -21410,13 +21601,14 @@ class WatchUser {
     var displayName = this.displayName;
     var timeZone = this.timeZone;
     var operations = this.operations;
+    var externalCollaborator = this.externalCollaborator;
+    var isGuest = this.isGuest;
     var isExternalCollaborator = this.isExternalCollaborator;
     var details = this.details;
     var accountType = this.accountType;
     var email = this.email;
     var publicName = this.publicName;
     var personalSpace = this.personalSpace;
-    var externalCollaborator = this.externalCollaborator;
 
     final json = <String, Object?>{};
     json[r'type'] = type;
@@ -21433,6 +21625,8 @@ class WatchUser {
       json[r'timeZone'] = timeZone;
     }
     json[r'operations'] = operations.map((i) => i.toJson()).toList();
+    json[r'externalCollaborator'] = externalCollaborator;
+    json[r'isGuest'] = isGuest;
     json[r'isExternalCollaborator'] = isExternalCollaborator;
     if (details != null) {
       json[r'details'] = details.toJson();
@@ -21441,7 +21635,6 @@ class WatchUser {
     json[r'email'] = email;
     json[r'publicName'] = publicName;
     json[r'personalSpace'] = personalSpace;
-    json[r'externalCollaborator'] = externalCollaborator;
     return json;
   }
 
@@ -21454,13 +21647,14 @@ class WatchUser {
       String? displayName,
       String? timeZone,
       List<OperationCheckResult>? operations,
+      bool? externalCollaborator,
+      bool? isGuest,
       bool? isExternalCollaborator,
       UserDetails? details,
       String? accountType,
       String? email,
       String? publicName,
-      Map<String, dynamic>? personalSpace,
-      bool? externalCollaborator}) {
+      Map<String, dynamic>? personalSpace}) {
     return WatchUser(
       type: type ?? this.type,
       username: username ?? this.username,
@@ -21470,6 +21664,8 @@ class WatchUser {
       displayName: displayName ?? this.displayName,
       timeZone: timeZone ?? this.timeZone,
       operations: operations ?? this.operations,
+      externalCollaborator: externalCollaborator ?? this.externalCollaborator,
+      isGuest: isGuest ?? this.isGuest,
       isExternalCollaborator:
           isExternalCollaborator ?? this.isExternalCollaborator,
       details: details ?? this.details,
@@ -21477,7 +21673,6 @@ class WatchUser {
       email: email ?? this.email,
       publicName: publicName ?? this.publicName,
       personalSpace: personalSpace ?? this.personalSpace,
-      externalCollaborator: externalCollaborator ?? this.externalCollaborator,
     );
   }
 }
