@@ -22,6 +22,13 @@ class ApiClient {
         BasicAuthenticationClient(client, user: user, apiToken: apiToken));
   }
 
+  factory ApiClient.bearerAuthentication(Uri baseUri,
+      {required String token, Client? client}) {
+    client ??= Client();
+    return ApiClient(baseUri,
+        BearerAuthenticationClient(client, token: token));
+  }
+
   Future<T> send<T>(
     String method,
     String pathTemplate, {
@@ -159,6 +166,25 @@ class BasicAuthenticationClient extends BaseClient {
   Future<StreamedResponse> send(BaseRequest request) {
     request.headers['Authorization'] =
         'Basic ${base64Encode(ascii.encode('$user:$apiToken'))}';
+    return innerClient.send(request);
+  }
+
+  @override
+  void close() {
+    innerClient.close();
+    super.close();
+  }
+}
+
+class BearerAuthenticationClient extends BaseClient {
+  final Client innerClient;
+  final String token;
+
+  BearerAuthenticationClient(this.innerClient, {required this.token});
+
+  @override
+  Future<StreamedResponse> send(BaseRequest request) {
+    request.headers['Authorization'] = 'Bearer $token';
     return innerClient.send(request);
   }
 
