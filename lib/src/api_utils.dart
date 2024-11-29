@@ -25,8 +25,7 @@ class ApiClient {
   factory ApiClient.bearerAuthentication(Uri baseUri,
       {required String token, Client? client}) {
     client ??= Client();
-    return ApiClient(baseUri,
-        BearerAuthenticationClient(client, token: token));
+    return ApiClient(baseUri, BearerAuthenticationClient(client, token: token));
   }
 
   Future<T> send<T>(

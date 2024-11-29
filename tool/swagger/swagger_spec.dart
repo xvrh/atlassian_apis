@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'swagger_spec.g.dart';
@@ -290,8 +289,7 @@ class Schema {
   )   : properties = properties ?? const {},
         required = required ?? const [],
         description = description ?? '',
-        enums = _nullIfEmpty(enums
-            ?.whereNotNull()
+        enums = _nullIfEmpty(enums?.nonNulls
             .map((s) => '$s')
             .where((e) => e.isNotEmpty)
             .toList());
