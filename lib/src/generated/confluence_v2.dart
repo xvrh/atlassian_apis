@@ -18,6 +18,8 @@ class ConfluenceV2Api {
 
   late final children = ChildrenApi(_client);
 
+  late final classificationLevel = ClassificationLevelApi(_client);
+
   late final comment = CommentApi(_client);
 
   late final content = ContentApi(_client);
@@ -26,6 +28,12 @@ class ConfluenceV2Api {
 
   late final customContent = CustomContentApi(_client);
 
+  late final dataPolicies = DataPoliciesApi(_client);
+
+  late final database = DatabaseApi(_client);
+
+  late final folder = FolderApi(_client);
+
   late final label = LabelApi(_client);
 
   late final like = LikeApi(_client);
@@ -33,6 +41,8 @@ class ConfluenceV2Api {
   late final operation = OperationApi(_client);
 
   late final page = PageApi(_client);
+
+  late final smartLink = SmartLinkApi(_client);
 
   late final space = SpaceApi(_client);
 
@@ -46,6 +56,8 @@ class ConfluenceV2Api {
 
   late final version = VersionApi(_client);
 
+  late final whiteboard = WhiteboardApi(_client);
+
   void close() => _client.close();
 }
 
@@ -55,6 +67,135 @@ class AncestorsApi {
   final ApiClient _client;
 
   AncestorsApi(this._client);
+
+  /// Returns all ancestors for a given whiteboard by ID in top-to-bottom order
+  /// (that is, the highest ancestor is the first
+  /// item in the response payload). The number of results is limited by the
+  /// `limit` parameter and additional results (if available)
+  /// will be available by calling this endpoint with the ID of first ancestor
+  /// in the response payload.
+  ///
+  /// This endpoint returns minimal information about each ancestor. To fetch
+  /// more details, use a related endpoint, such
+  /// as
+  /// [Get whiteboard by id](https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-whiteboard/#api-whiteboards-id-get).
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  /// Permission to view the whiteboard and its corresponding space
+  Future<MultiEntityResult<Ancestor>> getWhiteboardAncestors(
+      {required int id, int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'whiteboards/{id}/ancestors',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Ancestor.fromJson(v as Map<String, Object?>),
+    );
+  }
+
+  /// Returns all ancestors for a given database by ID in top-to-bottom order
+  /// (that is, the highest ancestor is the first
+  /// item in the response payload). The number of results is limited by the
+  /// `limit` parameter and additional results (if available)
+  /// will be available by calling this endpoint with the ID of first ancestor
+  /// in the response payload.
+  ///
+  /// This endpoint returns minimal information about each ancestor. To fetch
+  /// more details, use a related endpoint, such
+  /// as
+  /// [Get database by id](https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-database/#api-databases-id-get).
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  /// Permission to view the database and its corresponding space
+  Future<MultiEntityResult<Ancestor>> getDatabaseAncestors(
+      {required int id, int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'databases/{id}/ancestors',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Ancestor.fromJson(v as Map<String, Object?>),
+    );
+  }
+
+  /// Returns all ancestors for a given Smart Link in the content tree by ID in
+  /// top-to-bottom order (that is, the highest ancestor is
+  /// the first item in the response payload). The number of results is limited
+  /// by the `limit` parameter and additional results
+  /// (if available) will be available by calling this endpoint with the ID of
+  /// first ancestor in the response payload.
+  ///
+  /// This endpoint returns minimal information about each ancestor. To fetch
+  /// more details, use a related endpoint, such
+  /// as
+  /// [Get Smart Link in the content tree by id](https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-smart-link/#api-embeds-id-get).
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  /// Permission to view the Smart Link in the content tree and its
+  /// corresponding space
+  Future<MultiEntityResult<Ancestor>> getSmartLinkAncestors(
+      {required int id, int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'embeds/{id}/ancestors',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Ancestor.fromJson(v as Map<String, Object?>),
+    );
+  }
+
+  /// Returns all ancestors for a given folder by ID in top-to-bottom order
+  /// (that is, the highest ancestor is
+  /// the first item in the response payload). The number of results is limited
+  /// by the `limit` parameter and additional results
+  /// (if available) will be available by calling this endpoint with the ID of
+  /// first ancestor in the response payload.
+  ///
+  /// This endpoint returns minimal information about each ancestor. To fetch
+  /// more details, use a related endpoint, such
+  /// as
+  /// [Get folder by id](https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-smart-link/#api-folders-id-get).
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  /// Permission to view the folder and its corresponding space
+  Future<MultiEntityResult<Ancestor>> getFolderAncestors(
+      {required int id, int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'folders/{id}/ancestors',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Ancestor.fromJson(v as Map<String, Object?>),
+    );
+  }
 
   /// Returns all ancestors for a given page by ID in top-to-bottom order (that
   /// is, the highest ancestor is the first
@@ -102,7 +243,7 @@ class AttachmentApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the container of the attachment.
-  Future<MultiEntityResult<Attachment>> getAttachments(
+  Future<MultiEntityResult<AttachmentBulk>> getAttachments(
       {String? sort,
       String? cursor,
       List<String>? status,
@@ -122,7 +263,7 @@ class AttachmentApi {
           if (limit != null) 'limit': '$limit',
         },
       ),
-      reviver: (v) => Attachment.fromJson(v as Map<String, Object?>),
+      reviver: (v) => AttachmentBulk.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -130,9 +271,15 @@ class AttachmentApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the attachment's container.
-  Future<Attachment> getAttachmentById(
-      {required String id, int? version}) async {
-    return Attachment.fromJson(await _client.send(
+  Future<dynamic> getAttachmentById(
+      {required String id,
+      int? version,
+      bool? includeLabels,
+      bool? includeProperties,
+      bool? includeOperations,
+      bool? includeVersions,
+      bool? includeVersion}) async {
+    return await _client.send(
       'get',
       'attachments/{id}',
       pathParameters: {
@@ -140,21 +287,37 @@ class AttachmentApi {
       },
       queryParameters: {
         if (version != null) 'version': '$version',
+        if (includeLabels != null) 'include-labels': '$includeLabels',
+        if (includeProperties != null)
+          'include-properties': '$includeProperties',
+        if (includeOperations != null)
+          'include-operations': '$includeOperations',
+        if (includeVersions != null) 'include-versions': '$includeVersions',
+        if (includeVersion != null) 'include-version': '$includeVersion',
       },
-    ));
+    );
   }
 
   /// Delete an attachment by id.
   ///
+  /// Deleting an attachment moves the attachment to the trash, where it can be
+  /// restored later. To permanently delete an attachment (or "purge" it),
+  /// the endpoint must be called on a **trashed** attachment with the following
+  /// param `purge=true`.
+  ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to view the container of the attachment. Permission to delete
-  /// attachments in the space.
-  Future<void> deleteAttachment(int id) async {
+  /// Permission to view the container of the attachment.
+  /// Permission to delete attachments in the space.
+  /// Permission to administer the space (if attempting to purge).
+  Future<void> deleteAttachment({required int id, bool? purge}) async {
     await _client.send(
       'delete',
       'attachments/{id}',
       pathParameters: {
         'id': '$id',
+      },
+      queryParameters: {
+        if (purge != null) 'purge': '$purge',
       },
     );
   }
@@ -167,7 +330,7 @@ class AttachmentApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the blog post and its corresponding
   /// space.
-  Future<MultiEntityResult<Attachment>> getBlogpostAttachments(
+  Future<MultiEntityResult<AttachmentBulk>> getBlogpostAttachments(
       {required int id,
       String? sort,
       String? cursor,
@@ -191,7 +354,7 @@ class AttachmentApi {
           if (limit != null) 'limit': '$limit',
         },
       ),
-      reviver: (v) => Attachment.fromJson(v as Map<String, Object?>),
+      reviver: (v) => AttachmentBulk.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -203,7 +366,7 @@ class AttachmentApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the custom content and its corresponding
   /// space.
-  Future<MultiEntityResult<Attachment>> getCustomContentAttachments(
+  Future<MultiEntityResult<AttachmentBulk>> getCustomContentAttachments(
       {required int id,
       String? sort,
       String? cursor,
@@ -227,7 +390,7 @@ class AttachmentApi {
           if (limit != null) 'limit': '$limit',
         },
       ),
-      reviver: (v) => Attachment.fromJson(v as Map<String, Object?>),
+      reviver: (v) => AttachmentBulk.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -238,7 +401,7 @@ class AttachmentApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the attachment and its corresponding space.
-  Future<MultiEntityResult<Attachment>> getLabelAttachments(
+  Future<MultiEntityResult<AttachmentBulk>> getLabelAttachments(
       {required int id, String? sort, String? cursor, int? limit}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
@@ -253,7 +416,7 @@ class AttachmentApi {
           if (limit != null) 'limit': '$limit',
         },
       ),
-      reviver: (v) => Attachment.fromJson(v as Map<String, Object?>),
+      reviver: (v) => AttachmentBulk.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -264,7 +427,7 @@ class AttachmentApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page and its corresponding space.
-  Future<MultiEntityResult<Attachment>> getPageAttachments(
+  Future<MultiEntityResult<AttachmentBulk>> getPageAttachments(
       {required int id,
       String? sort,
       String? cursor,
@@ -288,7 +451,7 @@ class AttachmentApi {
           if (limit != null) 'limit': '$limit',
         },
       ),
-      reviver: (v) => Attachment.fromJson(v as Map<String, Object?>),
+      reviver: (v) => AttachmentBulk.fromJson(v as Map<String, Object?>),
     );
   }
 }
@@ -344,28 +507,36 @@ class BlogPostApi {
   ///
   /// Currently only supports the storage representation specified in the
   /// body.representation enums below
-  Future<BlogPostSingle> createBlogPost(
+  Future<dynamic> createBlogPost(
       {bool? private, required BlogPostCreateRequest body}) async {
-    return BlogPostSingle.fromJson(await _client.send(
+    return await _client.send(
       'post',
       'blogposts',
       queryParameters: {
         if (private != null) 'private': '$private',
       },
       body: body.toJson(),
-    ));
+    );
   }
 
   /// Returns a specific blog post.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the blog post and its corresponding space.
-  Future<BlogPostSingle> getBlogPostById(
+  Future<dynamic> getBlogPostById(
       {required int id,
       String? bodyFormat,
       bool? getDraft,
-      int? version}) async {
-    return BlogPostSingle.fromJson(await _client.send(
+      List<String>? status,
+      int? version,
+      bool? includeLabels,
+      bool? includeProperties,
+      bool? includeOperations,
+      bool? includeLikes,
+      bool? includeVersions,
+      bool? includeVersion,
+      bool? includeFavoritedByCurrentUserStatus}) async {
+    return await _client.send(
       'get',
       'blogposts/{id}',
       pathParameters: {
@@ -374,9 +545,21 @@ class BlogPostApi {
       queryParameters: {
         if (bodyFormat != null) 'body-format': bodyFormat,
         if (getDraft != null) 'get-draft': '$getDraft',
+        if (status != null) 'status': status.map((e) => e).join(','),
         if (version != null) 'version': '$version',
+        if (includeLabels != null) 'include-labels': '$includeLabels',
+        if (includeProperties != null)
+          'include-properties': '$includeProperties',
+        if (includeOperations != null)
+          'include-operations': '$includeOperations',
+        if (includeLikes != null) 'include-likes': '$includeLikes',
+        if (includeVersions != null) 'include-versions': '$includeVersions',
+        if (includeVersion != null) 'include-version': '$includeVersion',
+        if (includeFavoritedByCurrentUserStatus != null)
+          'include-favorited-by-current-user-status':
+              '$includeFavoritedByCurrentUserStatus',
       },
-    ));
+    );
   }
 
   /// Update a blog post by id.
@@ -384,29 +567,45 @@ class BlogPostApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the blog post and its corresponding space. Permission
   /// to update blog posts in the space.
-  Future<BlogPostSingle> updateBlogPost(
+  Future<dynamic> updateBlogPost(
       {required int id, required BlogPostUpdateRequest body}) async {
-    return BlogPostSingle.fromJson(await _client.send(
+    return await _client.send(
       'put',
       'blogposts/{id}',
       pathParameters: {
         'id': '$id',
       },
       body: body.toJson(),
-    ));
+    );
   }
 
   /// Delete a blog post by id.
   ///
+  /// By default this will delete blog posts that are non-drafts. To delete a
+  /// blog post that is a draft, the endpoint must be called on a
+  /// draft with the following param `draft=true`. Discarded drafts are not sent
+  /// to the trash and are permanently deleted.
+  ///
+  /// Deleting a blog post that is not a draft moves the blog post to the trash,
+  /// where it can be restored later.
+  /// To permanently delete a blog post (or "purge" it), the endpoint must be
+  /// called on a **trashed** blog post with the following param `purge=true`.
+  ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to view the blog post and its corresponding space. Permission
-  /// to delete blog posts in the space.
-  Future<void> deleteBlogPost(int id) async {
+  /// Permission to view the blog post and its corresponding space.
+  /// Permission to delete blog posts in the space.
+  /// Permission to administer the space (if attempting to purge).
+  Future<void> deleteBlogPost(
+      {required int id, bool? purge, bool? draft}) async {
     await _client.send(
       'delete',
       'blogposts/{id}',
       pathParameters: {
         'id': '$id',
+      },
+      queryParameters: {
+        if (purge != null) 'purge': '$purge',
+        if (draft != null) 'draft': '$draft',
       },
     );
   }
@@ -547,10 +746,402 @@ class ChildrenApi {
 
 /// This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
 
+class ClassificationLevelApi {
+  final ApiClient _client;
+
+  ClassificationLevelApi(this._client);
+
+  /// Returns a list of
+  /// [classification levels](https://developer.atlassian.com/cloud/admin/dlp/rest/intro/#Classification%20level)
+  ///
+  /// available.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Permission to access the Confluence site ('Can use' global permission).
+  Future<List<ClassificationLevel>> getClassificationLevels() async {
+    return (await _client.send(
+      'get',
+      'classification-levels',
+    ) as List<Object?>)
+        .map((i) => ClassificationLevel.fromJson(
+            i as Map<String, Object?>? ?? const {}))
+        .toList();
+  }
+
+  /// Returns the
+  /// [default classification level](https://support.atlassian.com/security-and-access-policies/docs/what-is-a-default-classification-level/)
+  ///
+  /// for a specific space.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Permission to access the Confluence site ('Can use' global permission)
+  /// and permission to view the space.
+  Future<ClassificationLevel> getSpaceDefaultClassificationLevel(int id) async {
+    return ClassificationLevel.fromJson(await _client.send(
+      'get',
+      'spaces/{id}/classification-level/default',
+      pathParameters: {
+        'id': '$id',
+      },
+    ));
+  }
+
+  /// Update the
+  /// [default classification level](https://support.atlassian.com/security-and-access-policies/docs/what-is-a-default-classification-level/)
+  ///
+  /// for a specific space.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Permission to access the Confluence site ('Can use' global permission)
+  /// and 'Admin' permission for the space.
+  Future<void> putSpaceDefaultClassificationLevel(
+      {required int id,
+      required SpaceDefaultClassificationLevelUpdateRequest body}) async {
+    await _client.send(
+      'put',
+      'spaces/{id}/classification-level/default',
+      pathParameters: {
+        'id': '$id',
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Returns the
+  /// [default classification level](https://support.atlassian.com/security-and-access-policies/docs/what-is-a-default-classification-level/)
+  ///
+  /// for a specific space.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Permission to access the Confluence site ('Can use' global permission)
+  /// and 'Admin' permission for the space.
+  Future<void> deleteSpaceDefaultClassificationLevel(int id) async {
+    await _client.send(
+      'delete',
+      'spaces/{id}/classification-level/default',
+      pathParameters: {
+        'id': '$id',
+      },
+    );
+  }
+
+  /// Returns the
+  /// [classification level](https://developer.atlassian.com/cloud/admin/dlp/rest/intro/#Classification%20level)
+  /// for a specific page.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Permission to access the Confluence site ('Can use' global permission)
+  /// and permission to view the page.
+  /// 'Permission to edit the page is required if trying to view classification
+  /// level for a draft.
+  Future<ClassificationLevel> getPageClassificationLevel(
+      {required int id, String? status}) async {
+    return ClassificationLevel.fromJson(await _client.send(
+      'get',
+      'pages/{id}/classification-level',
+      pathParameters: {
+        'id': '$id',
+      },
+      queryParameters: {
+        if (status != null) 'status': status,
+      },
+    ));
+  }
+
+  /// Updates the
+  /// [classification level](https://developer.atlassian.com/cloud/admin/dlp/rest/intro/#Classification%20level)
+  /// for a specific page.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Permission to access the Confluence site ('Can use' global permission)
+  /// and permission to edit the page.
+  Future<void> putPageClassificationLevel(
+      {required int id,
+      required ContentClassificationLevelUpdateRequest body}) async {
+    await _client.send(
+      'put',
+      'pages/{id}/classification-level',
+      pathParameters: {
+        'id': '$id',
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Resets the
+  /// [classification level](https://developer.atlassian.com/cloud/admin/dlp/rest/intro/#Classification%20level)
+  /// for a specific page for the space
+  /// [default classification level](https://support.atlassian.com/security-and-access-policies/docs/what-is-a-default-classification-level/).
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Permission to access the Confluence site ('Can use' global permission)
+  /// and permission to view the page.
+  Future<void> postPageClassificationLevel(
+      {required int id,
+      required ContentClassificationLevelDeleteRequest body}) async {
+    await _client.send(
+      'post',
+      'pages/{id}/classification-level/reset',
+      pathParameters: {
+        'id': '$id',
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Returns the
+  /// [classification level](https://developer.atlassian.com/cloud/admin/dlp/rest/intro/#Classification%20level)
+  /// for a specific blog post.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Permission to access the Confluence site ('Can use' global permission)
+  /// and permission to view the blog post.
+  /// 'Permission to edit the blog post is required if trying to view
+  /// classification level for a draft.
+  Future<ClassificationLevel> getBlogPostClassificationLevel(
+      {required int id, String? status}) async {
+    return ClassificationLevel.fromJson(await _client.send(
+      'get',
+      'blogposts/{id}/classification-level',
+      pathParameters: {
+        'id': '$id',
+      },
+      queryParameters: {
+        if (status != null) 'status': status,
+      },
+    ));
+  }
+
+  /// Updates the
+  /// [classification level](https://developer.atlassian.com/cloud/admin/dlp/rest/intro/#Classification%20level)
+  /// for a specific blog post.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Permission to access the Confluence site ('Can use' global permission)
+  /// and permission to edit the blog post.
+  Future<void> putBlogPostClassificationLevel(
+      {required int id,
+      required ContentClassificationLevelUpdateRequest body}) async {
+    await _client.send(
+      'put',
+      'blogposts/{id}/classification-level',
+      pathParameters: {
+        'id': '$id',
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Resets the
+  /// [classification level](https://developer.atlassian.com/cloud/admin/dlp/rest/intro/#Classification%20level)
+  /// for a specific blog post for the space
+  /// [default classification level](https://support.atlassian.com/security-and-access-policies/docs/what-is-a-default-classification-level/).
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Permission to access the Confluence site ('Can use' global permission)
+  /// and permission to view the blog post.
+  Future<void> postBlogPostClassificationLevel(
+      {required int id,
+      required ContentClassificationLevelDeleteRequest body}) async {
+    await _client.send(
+      'post',
+      'blogposts/{id}/classification-level/reset',
+      pathParameters: {
+        'id': '$id',
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Returns the
+  /// [classification level](https://developer.atlassian.com/cloud/admin/dlp/rest/intro/#Classification%20level)
+  /// for a specific whiteboard.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Permission to access the Confluence site ('Can use' global permission)
+  /// and permission to view the whiteboard.
+  Future<ClassificationLevel> getWhiteboardClassificationLevel(int id) async {
+    return ClassificationLevel.fromJson(await _client.send(
+      'get',
+      'whiteboards/{id}/classification-level',
+      pathParameters: {
+        'id': '$id',
+      },
+    ));
+  }
+
+  /// Updates the
+  /// [classification level](https://developer.atlassian.com/cloud/admin/dlp/rest/intro/#Classification%20level)
+  /// for a specific whiteboard.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Permission to access the Confluence site ('Can use' global permission)
+  /// and permission to edit the whiteboard.
+  Future<void> putWhiteboardClassificationLevel(
+      {required int id,
+      required LiveEditContentClassificationLevelUpdateRequest body}) async {
+    await _client.send(
+      'put',
+      'whiteboards/{id}/classification-level',
+      pathParameters: {
+        'id': '$id',
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Resets the
+  /// [classification level](https://developer.atlassian.com/cloud/admin/dlp/rest/intro/#Classification%20level)
+  /// for a specific whiteboard for the space
+  /// [default classification level](https://support.atlassian.com/security-and-access-policies/docs/what-is-a-default-classification-level/).
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Permission to access the Confluence site ('Can use' global permission)
+  /// and permission to view the whiteboard.
+  Future<void> postWhiteboardClassificationLevel(
+      {required int id,
+      required LiveEditContentClassificationLevelResetRequest body}) async {
+    await _client.send(
+      'post',
+      'whiteboards/{id}/classification-level/reset',
+      pathParameters: {
+        'id': '$id',
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Returns the
+  /// [classification level](https://developer.atlassian.com/cloud/admin/dlp/rest/intro/#Classification%20level)
+  /// for a specific database.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Permission to access the Confluence site ('Can use' global permission)
+  /// and permission to view the database.
+  Future<ClassificationLevel> getDatabaseClassificationLevel(int id) async {
+    return ClassificationLevel.fromJson(await _client.send(
+      'get',
+      'databases/{id}/classification-level',
+      pathParameters: {
+        'id': '$id',
+      },
+    ));
+  }
+
+  /// Updates the
+  /// [classification level](https://developer.atlassian.com/cloud/admin/dlp/rest/intro/#Classification%20level)
+  /// for a specific database.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Permission to access the Confluence site ('Can use' global permission)
+  /// and permission to edit the database.
+  Future<void> putDatabaseClassificationLevel(
+      {required int id,
+      required LiveEditContentClassificationLevelUpdateRequest body}) async {
+    await _client.send(
+      'put',
+      'databases/{id}/classification-level',
+      pathParameters: {
+        'id': '$id',
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Resets the
+  /// [classification level](https://developer.atlassian.com/cloud/admin/dlp/rest/intro/#Classification%20level)
+  /// for a specific database for the space
+  /// [default classification level](https://support.atlassian.com/security-and-access-policies/docs/what-is-a-default-classification-level/).
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// 'Permission to access the Confluence site ('Can use' global permission)
+  /// and permission to view the database.
+  Future<void> postDatabaseClassificationLevel(
+      {required int id,
+      required LiveEditContentClassificationLevelResetRequest body}) async {
+    await _client.send(
+      'post',
+      'databases/{id}/classification-level/reset',
+      pathParameters: {
+        'id': '$id',
+      },
+      body: body.toJson(),
+    );
+  }
+}
+
+/// This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
+
 class CommentApi {
   final ApiClient _client;
 
   CommentApi(this._client);
+
+  /// Returns the comments of the specific attachment.
+  /// The number of results is limited by the `limit` parameter and additional
+  /// results (if available) will be available through
+  /// the `next` URL present in the `Link` response header.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the attachment and its corresponding containers.
+  Future<MultiEntityResult<AttachmentCommentModel>> getAttachmentComments(
+      {required String id,
+      String? bodyFormat,
+      String? cursor,
+      int? limit,
+      String? sort,
+      int? version}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'attachments/{id}/footer-comments',
+        pathParameters: {
+          'id': id,
+        },
+        queryParameters: {
+          if (bodyFormat != null) 'body-format': bodyFormat,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+          if (sort != null) 'sort': sort,
+          if (version != null) 'version': '$version',
+        },
+      ),
+      reviver: (v) =>
+          AttachmentCommentModel.fromJson(v as Map<String, Object?>),
+    );
+  }
+
+  /// Returns the comments of the specific custom content.
+  /// The number of results is limited by the `limit` parameter and additional
+  /// results (if available) will be available through
+  /// the `next` URL present in the `Link` response header.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the custom content and its corresponding containers.
+  Future<MultiEntityResult<CustomContentCommentModel>> getCustomContentComments(
+      {required int id,
+      String? bodyFormat,
+      String? cursor,
+      int? limit,
+      String? sort}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'custom-content/{id}/footer-comments',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (bodyFormat != null) 'body-format': bodyFormat,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+          if (sort != null) 'sort': sort,
+        },
+      ),
+      reviver: (v) =>
+          CustomContentCommentModel.fromJson(v as Map<String, Object?>),
+    );
+  }
 
   /// Returns the root footer comments of specific page. The number of results
   /// is limited by the `limit` parameter and additional results (if available)
@@ -562,6 +1153,7 @@ class CommentApi {
   Future<MultiEntityResult<PageCommentModel>> getPageFooterComments(
       {required int id,
       String? bodyFormat,
+      List<String>? status,
       String? sort,
       String? cursor,
       int? limit}) async {
@@ -574,6 +1166,7 @@ class CommentApi {
         },
         queryParameters: {
           if (bodyFormat != null) 'body-format': bodyFormat,
+          if (status != null) 'status': status.map((e) => e).join(','),
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
@@ -593,6 +1186,8 @@ class CommentApi {
   Future<MultiEntityResult<PageInlineCommentModel>> getPageInlineComments(
       {required int id,
       String? bodyFormat,
+      List<String>? status,
+      List<String>? resolutionStatus,
       String? sort,
       String? cursor,
       int? limit}) async {
@@ -605,6 +1200,9 @@ class CommentApi {
         },
         queryParameters: {
           if (bodyFormat != null) 'body-format': bodyFormat,
+          if (status != null) 'status': status.map((e) => e).join(','),
+          if (resolutionStatus != null)
+            'resolution-status': resolutionStatus.map((e) => e).join(','),
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
@@ -627,6 +1225,7 @@ class CommentApi {
   Future<MultiEntityResult<BlogPostCommentModel>> getBlogPostFooterComments(
       {required int id,
       String? bodyFormat,
+      List<String>? status,
       String? sort,
       String? cursor,
       int? limit}) async {
@@ -639,6 +1238,7 @@ class CommentApi {
         },
         queryParameters: {
           if (bodyFormat != null) 'body-format': bodyFormat,
+          if (status != null) 'status': status.map((e) => e).join(','),
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
@@ -661,6 +1261,8 @@ class CommentApi {
       getBlogPostInlineComments(
           {required int id,
           String? bodyFormat,
+          List<String>? status,
+          List<String>? resolutionStatus,
           String? sort,
           String? cursor,
           int? limit}) async {
@@ -673,6 +1275,9 @@ class CommentApi {
         },
         queryParameters: {
           if (bodyFormat != null) 'body-format': bodyFormat,
+          if (status != null) 'status': status.map((e) => e).join(','),
+          if (resolutionStatus != null)
+            'resolution-status': resolutionStatus.map((e) => e).join(','),
           if (sort != null) 'sort': sort,
           if (cursor != null) 'cursor': cursor,
           if (limit != null) 'limit': '$limit',
@@ -689,8 +1294,9 @@ class CommentApi {
   /// header.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to view the content of the page and its corresponding space.
-  Future<MultiEntityResult<InlineCommentModel>> getFooterComments(
+  /// Permission to view the content of the container and its corresponding
+  /// space.
+  Future<MultiEntityResult<FooterCommentModel>> getFooterComments(
       {String? bodyFormat, String? sort, String? cursor, int? limit}) async {
     return MultiEntityResult.fromJson(
       await _client.send(
@@ -703,34 +1309,47 @@ class CommentApi {
           if (limit != null) 'limit': '$limit',
         },
       ),
-      reviver: (v) => InlineCommentModel.fromJson(v as Map<String, Object?>),
+      reviver: (v) => FooterCommentModel.fromJson(v as Map<String, Object?>),
     );
   }
 
-  /// Create a footer comment. This can be at the top level (specifying pageId
-  /// or blogPostId in the request body)
-  /// or as a reply (specifying parentCommentId in the request body).
+  /// Create a footer comment.
+  ///
+  /// The footer comment can be made against several locations:
+  /// - at the top level (specifying pageId or blogPostId in the request body)
+  /// - as a reply (specifying parentCommentId in the request body)
+  /// - against an attachment (note: this is different than the comments added
+  /// via the attachment properties page on the UI, which are referred to as
+  /// version comments)
+  /// - against a custom content
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page or blogpost and its
   /// corresponding space. Permission to create comments in the space.
-  Future<FooterCommentModel> createFooterComment(
+  Future<dynamic> createFooterComment(
       {required CreateFooterCommentModel body}) async {
-    return FooterCommentModel.fromJson(await _client.send(
+    return await _client.send(
       'post',
       'footer-comments',
       body: body.toJson(),
-    ));
+    );
   }
 
   /// Retrieves a footer comment by id
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to view the content of the page or blogpost and its
-  /// corresponding space.
-  Future<FooterCommentModel> getFooterCommentById(
-      {required int commentId, String? bodyFormat, int? version}) async {
-    return FooterCommentModel.fromJson(await _client.send(
+  /// Permission to view the content of the container and its corresponding
+  /// space.
+  Future<dynamic> getFooterCommentById(
+      {required int commentId,
+      String? bodyFormat,
+      int? version,
+      bool? includeProperties,
+      bool? includeOperations,
+      bool? includeLikes,
+      bool? includeVersions,
+      bool? includeVersion}) async {
+    return await _client.send(
       'get',
       'footer-comments/{comment-id}',
       pathParameters: {
@@ -739,8 +1358,15 @@ class CommentApi {
       queryParameters: {
         if (bodyFormat != null) 'body-format': bodyFormat,
         if (version != null) 'version': '$version',
+        if (includeProperties != null)
+          'include-properties': '$includeProperties',
+        if (includeOperations != null)
+          'include-operations': '$includeOperations',
+        if (includeLikes != null) 'include-likes': '$includeLikes',
+        if (includeVersions != null) 'include-versions': '$includeVersions',
+        if (includeVersion != null) 'include-version': '$includeVersion',
       },
-    ));
+    );
   }
 
   /// Update a footer comment. This can be used to update the body text of a
@@ -844,13 +1470,13 @@ class CommentApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page or blogpost and its
   /// corresponding space. Permission to create comments in the space.
-  Future<InlineCommentModel> createInlineComment(
+  Future<dynamic> createInlineComment(
       {required CreateInlineCommentModel body}) async {
-    return InlineCommentModel.fromJson(await _client.send(
+    return await _client.send(
       'post',
       'inline-comments',
       body: body.toJson(),
-    ));
+    );
   }
 
   /// Retrieves an inline comment by id
@@ -858,9 +1484,16 @@ class CommentApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page or blogpost and its
   /// corresponding space.
-  Future<InlineCommentModel> getInlineCommentById(
-      {required int commentId, String? bodyFormat, int? version}) async {
-    return InlineCommentModel.fromJson(await _client.send(
+  Future<dynamic> getInlineCommentById(
+      {required int commentId,
+      String? bodyFormat,
+      int? version,
+      bool? includeProperties,
+      bool? includeOperations,
+      bool? includeLikes,
+      bool? includeVersions,
+      bool? includeVersion}) async {
+    return await _client.send(
       'get',
       'inline-comments/{comment-id}',
       pathParameters: {
@@ -869,8 +1502,15 @@ class CommentApi {
       queryParameters: {
         if (bodyFormat != null) 'body-format': bodyFormat,
         if (version != null) 'version': '$version',
+        if (includeProperties != null)
+          'include-properties': '$includeProperties',
+        if (includeOperations != null)
+          'include-operations': '$includeOperations',
+        if (includeLikes != null) 'include-likes': '$includeLikes',
+        if (includeVersions != null) 'include-versions': '$includeVersions',
+        if (includeVersion != null) 'include-version': '$includeVersion',
       },
-    ));
+    );
   }
 
   /// Update an inline comment. This can be used to update the body text of a
@@ -879,16 +1519,16 @@ class CommentApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page or blogpost and its
   /// corresponding space. Permission to create comments in the space.
-  Future<InlineCommentModel> updateInlineComment(
+  Future<dynamic> updateInlineComment(
       {required int commentId, required UpdateInlineCommentModel body}) async {
-    return InlineCommentModel.fromJson(await _client.send(
+    return await _client.send(
       'put',
       'inline-comments/{comment-id}',
       pathParameters: {
         'comment-id': '$commentId',
       },
       body: body.toJson(),
-    ));
+    );
   }
 
   /// Deletes an inline comment. This is a permanent deletion and cannot be
@@ -1365,6 +2005,392 @@ class ContentPropertiesApi {
     );
   }
 
+  /// Retrieves Content Properties tied to a specified whiteboard.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the whiteboard.
+  Future<MultiEntityResult<ContentProperty>> getWhiteboardContentProperties(
+      {required int id,
+      String? key,
+      String? sort,
+      String? cursor,
+      int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'whiteboards/{id}/properties',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (key != null) 'key': key,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>),
+    );
+  }
+
+  /// Creates a new content property for a whiteboard.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to update the whiteboard.
+  Future<ContentProperty> createWhiteboardProperty(
+      {required int id, required ContentPropertyCreateRequest body}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'post',
+      'whiteboards/{id}/properties',
+      pathParameters: {
+        'id': '$id',
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Retrieves a specific Content Property by ID that is attached to a
+  /// specified whiteboard.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the whiteboard.
+  Future<ContentProperty> getWhiteboardContentPropertiesById(
+      {required int whiteboardId, required int propertyId}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'get',
+      'whiteboards/{whiteboard-id}/properties/{property-id}',
+      pathParameters: {
+        'whiteboard-id': '$whiteboardId',
+        'property-id': '$propertyId',
+      },
+    ));
+  }
+
+  /// Update a content property for a whiteboard by its id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the whiteboard.
+  Future<ContentProperty> updateWhiteboardPropertyById(
+      {required int whiteboardId,
+      required int propertyId,
+      required ContentPropertyUpdateRequest body}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'put',
+      'whiteboards/{whiteboard-id}/properties/{property-id}',
+      pathParameters: {
+        'whiteboard-id': '$whiteboardId',
+        'property-id': '$propertyId',
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Deletes a content property for a whiteboard by its id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the whiteboard.
+  Future<void> deleteWhiteboardPropertyById(
+      {required int whiteboardId, required int propertyId}) async {
+    await _client.send(
+      'delete',
+      'whiteboards/{whiteboard-id}/properties/{property-id}',
+      pathParameters: {
+        'whiteboard-id': '$whiteboardId',
+        'property-id': '$propertyId',
+      },
+    );
+  }
+
+  /// Retrieves Content Properties tied to a specified database.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the database.
+  Future<MultiEntityResult<ContentProperty>> getDatabaseContentProperties(
+      {required int id,
+      String? key,
+      String? sort,
+      String? cursor,
+      int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'databases/{id}/properties',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (key != null) 'key': key,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>),
+    );
+  }
+
+  /// Creates a new content property for a database.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to update the database.
+  Future<ContentProperty> createDatabaseProperty(
+      {required int id, required ContentPropertyCreateRequest body}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'post',
+      'databases/{id}/properties',
+      pathParameters: {
+        'id': '$id',
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Retrieves a specific Content Property by ID that is attached to a
+  /// specified database.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the database.
+  Future<ContentProperty> getDatabaseContentPropertiesById(
+      {required int databaseId, required int propertyId}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'get',
+      'databases/{database-id}/properties/{property-id}',
+      pathParameters: {
+        'database-id': '$databaseId',
+        'property-id': '$propertyId',
+      },
+    ));
+  }
+
+  /// Update a content property for a database by its id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the database.
+  Future<ContentProperty> updateDatabasePropertyById(
+      {required int databaseId,
+      required int propertyId,
+      required ContentPropertyUpdateRequest body}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'put',
+      'databases/{database-id}/properties/{property-id}',
+      pathParameters: {
+        'database-id': '$databaseId',
+        'property-id': '$propertyId',
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Deletes a content property for a database by its id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the database.
+  Future<void> deleteDatabasePropertyById(
+      {required int databaseId, required int propertyId}) async {
+    await _client.send(
+      'delete',
+      'databases/{database-id}/properties/{property-id}',
+      pathParameters: {
+        'database-id': '$databaseId',
+        'property-id': '$propertyId',
+      },
+    );
+  }
+
+  /// Retrieves Content Properties tied to a specified Smart Link in the content
+  /// tree.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the Smart Link in the content tree.
+  Future<MultiEntityResult<ContentProperty>> getSmartLinkContentProperties(
+      {required int id,
+      String? key,
+      String? sort,
+      String? cursor,
+      int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'embeds/{id}/properties',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (key != null) 'key': key,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>),
+    );
+  }
+
+  /// Creates a new content property for a Smart Link in the content tree.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to update the Smart Link in the content tree.
+  Future<ContentProperty> createSmartLinkProperty(
+      {required int id, required ContentPropertyCreateRequest body}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'post',
+      'embeds/{id}/properties',
+      pathParameters: {
+        'id': '$id',
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Retrieves a specific Content Property by ID that is attached to a
+  /// specified Smart Link in the content tree.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the Smart Link in the content tree.
+  Future<ContentProperty> getSmartLinkContentPropertiesById(
+      {required int embedId, required int propertyId}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'get',
+      'embeds/{embed-id}/properties/{property-id}',
+      pathParameters: {
+        'embed-id': '$embedId',
+        'property-id': '$propertyId',
+      },
+    ));
+  }
+
+  /// Update a content property for a Smart Link in the content tree by its id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the Smart Link in the content tree.
+  Future<ContentProperty> updateSmartLinkPropertyById(
+      {required int embedId,
+      required int propertyId,
+      required ContentPropertyUpdateRequest body}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'put',
+      'embeds/{embed-id}/properties/{property-id}',
+      pathParameters: {
+        'embed-id': '$embedId',
+        'property-id': '$propertyId',
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Deletes a content property for a Smart Link in the content tree by its id.
+  ///
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the Smart Link in the content tree.
+  Future<void> deleteSmartLinkPropertyById(
+      {required int embedId, required int propertyId}) async {
+    await _client.send(
+      'delete',
+      'embeds/{embed-id}/properties/{property-id}',
+      pathParameters: {
+        'embed-id': '$embedId',
+        'property-id': '$propertyId',
+      },
+    );
+  }
+
+  /// Retrieves Content Properties tied to a specified folder.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the folder.
+  Future<MultiEntityResult<ContentProperty>> getFolderContentProperties(
+      {required int id,
+      String? key,
+      String? sort,
+      String? cursor,
+      int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'folders/{id}/properties',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (key != null) 'key': key,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => ContentProperty.fromJson(v as Map<String, Object?>),
+    );
+  }
+
+  /// Creates a new content property for a folder.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to update the folder.
+  Future<ContentProperty> createFolderProperty(
+      {required int id, required ContentPropertyCreateRequest body}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'post',
+      'folders/{id}/properties',
+      pathParameters: {
+        'id': '$id',
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Retrieves a specific Content Property by ID that is attached to a
+  /// specified folder.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the folder.
+  Future<ContentProperty> getFolderContentPropertiesById(
+      {required int folderId, required int propertyId}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'get',
+      'folders/{folder-id}/properties/{property-id}',
+      pathParameters: {
+        'folder-id': '$folderId',
+        'property-id': '$propertyId',
+      },
+    ));
+  }
+
+  /// Update a content property for a folder by its id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the folder.
+  Future<ContentProperty> updateFolderPropertyById(
+      {required int folderId,
+      required int propertyId,
+      required ContentPropertyUpdateRequest body}) async {
+    return ContentProperty.fromJson(await _client.send(
+      'put',
+      'folders/{folder-id}/properties/{property-id}',
+      pathParameters: {
+        'folder-id': '$folderId',
+        'property-id': '$propertyId',
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Deletes a content property for a folder by its id.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to edit the folder.
+  Future<void> deleteFolderPropertyById(
+      {required int folderId, required int propertyId}) async {
+    await _client.send(
+      'delete',
+      'folders/{folder-id}/properties/{property-id}',
+      pathParameters: {
+        'folder-id': '$folderId',
+        'property-id': '$propertyId',
+      },
+    );
+  }
+
   /// Retrieves Content Properties attached to a specified comment.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
@@ -1547,13 +2573,13 @@ class CustomContentApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page or blogpost and its
   /// corresponding space. Permission to create custom content in the space.
-  Future<CustomContentSingle> createCustomContent(
+  Future<dynamic> createCustomContent(
       {required CustomContentCreateRequest body}) async {
-    return CustomContentSingle.fromJson(await _client.send(
+    return await _client.send(
       'post',
       'custom-content',
       body: body.toJson(),
-    ));
+    );
   }
 
   /// Returns a specific piece of custom content.
@@ -1561,9 +2587,16 @@ class CustomContentApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the custom content, the container of the custom
   /// content, and the corresponding space (if different from the container).
-  Future<CustomContentSingle> getCustomContentById(
-      {required int id, String? bodyFormat, int? version}) async {
-    return CustomContentSingle.fromJson(await _client.send(
+  Future<dynamic> getCustomContentById(
+      {required int id,
+      String? bodyFormat,
+      int? version,
+      bool? includeLabels,
+      bool? includeProperties,
+      bool? includeOperations,
+      bool? includeVersions,
+      bool? includeVersion}) async {
+    return await _client.send(
       'get',
       'custom-content/{id}',
       pathParameters: {
@@ -1572,8 +2605,15 @@ class CustomContentApi {
       queryParameters: {
         if (bodyFormat != null) 'body-format': bodyFormat,
         if (version != null) 'version': '$version',
+        if (includeLabels != null) 'include-labels': '$includeLabels',
+        if (includeProperties != null)
+          'include-properties': '$includeProperties',
+        if (includeOperations != null)
+          'include-operations': '$includeOperations',
+        if (includeVersions != null) 'include-versions': '$includeVersions',
+        if (includeVersion != null) 'include-version': '$includeVersion',
       },
-    ));
+    );
   }
 
   /// Update a custom content by id.
@@ -1583,29 +2623,39 @@ class CustomContentApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page or blogpost and its
   /// corresponding space. Permission to update custom content in the space.
-  Future<CustomContentSingle> updateCustomContent(
+  Future<dynamic> updateCustomContent(
       {required int id, required CustomContentUpdateRequest body}) async {
-    return CustomContentSingle.fromJson(await _client.send(
+    return await _client.send(
       'put',
       'custom-content/{id}',
       pathParameters: {
         'id': '$id',
       },
       body: body.toJson(),
-    ));
+    );
   }
 
   /// Delete a custom content by id.
   ///
+  /// Deleting a custom content will either move it to the trash or permanently
+  /// delete it (purge it), depending on the apiSupport.
+  /// To permanently delete a **trashed** custom content, the endpoint must be
+  /// called with the following param `purge=true`.
+  ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page or blogpost and its
-  /// corresponding space. Permission to delete custom content in the space.
-  Future<void> deleteCustomContent(int id) async {
+  /// corresponding space.
+  /// Permission to delete custom content in the space.
+  /// Permission to administer the space (if attempting to purge).
+  Future<void> deleteCustomContent({required int id, bool? purge}) async {
     await _client.send(
       'delete',
       'custom-content/{id}',
       pathParameters: {
         'id': '$id',
+      },
+      queryParameters: {
+        if (purge != null) 'purge': '$purge',
       },
     );
   }
@@ -1680,6 +2730,167 @@ class CustomContentApi {
 
 /// This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
 
+class DataPoliciesApi {
+  final ApiClient _client;
+
+  DataPoliciesApi(this._client);
+
+  /// Returns data policy metadata for the workspace.
+  ///
+  /// **[Permissions](#permissions) required:**
+  /// Only apps can make this request.
+  /// Permission to access the Confluence site ('Can use' global permission).
+  Future<DataPolicyMetadata> getDataPolicyMetadata() async {
+    return DataPolicyMetadata.fromJson(await _client.send(
+      'get',
+      'data-policies/metadata',
+    ));
+  }
+
+  /// Returns all spaces. The results will be sorted by id ascending. The number
+  /// of results is limited by the `limit` parameter and
+  /// additional results (if available) will be available through the `next` URL
+  /// present in the `Link` response header.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Only apps can make this request.
+  /// Permission to access the Confluence site ('Can use' global permission).
+  /// Only spaces that the app has permission to view will be returned.
+  Future<MultiEntityResult<DataPolicySpace>> getDataPolicySpaces(
+      {List<int>? ids,
+      List<String>? keys,
+      String? sort,
+      String? cursor,
+      int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'data-policies/spaces',
+        queryParameters: {
+          if (ids != null) 'ids': ids.map((e) => '$e').join(','),
+          if (keys != null) 'keys': keys.map((e) => e).join(','),
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => DataPolicySpace.fromJson(v as Map<String, Object?>),
+    );
+  }
+}
+
+/// This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
+
+class DatabaseApi {
+  final ApiClient _client;
+
+  DatabaseApi(this._client);
+
+  /// Creates a database in the space.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the corresponding space. Permission to create a
+  /// database in the space.
+  Future<dynamic> createDatabase(
+      {bool? private, required DatabaseCreateRequest body}) async {
+    return await _client.send(
+      'post',
+      'databases',
+      queryParameters: {
+        if (private != null) 'private': '$private',
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Returns a specific database.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the database and its corresponding space.
+  Future<dynamic> getDatabaseById(int id) async {
+    return await _client.send(
+      'get',
+      'databases/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+    );
+  }
+
+  /// Delete a database by id.
+  ///
+  /// Deleting a database moves the database to the trash, where it can be
+  /// restored later
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the database and its corresponding space.
+  /// Permission to delete databases in the space.
+  Future<void> deleteDatabase(int id) async {
+    await _client.send(
+      'delete',
+      'databases/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+    );
+  }
+}
+
+/// This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
+
+class FolderApi {
+  final ApiClient _client;
+
+  FolderApi(this._client);
+
+  /// Creates a folder in the space.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the corresponding space. Permission to create a folder
+  /// in the space.
+  Future<dynamic> createFolder({required FolderCreateRequest body}) async {
+    return await _client.send(
+      'post',
+      'folders',
+      body: body.toJson(),
+    );
+  }
+
+  /// Returns a specific folder.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the folder and its corresponding space.
+  Future<dynamic> getFolderById(int id) async {
+    return await _client.send(
+      'get',
+      'folders/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+    );
+  }
+
+  /// Delete a folder by id.
+  ///
+  /// Deleting a folder moves the folder to the trash, where it can be restored
+  /// later
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the folder and its corresponding space.
+  /// Permission to delete folders in the space.
+  Future<void> deleteFolder(int id) async {
+    await _client.send(
+      'delete',
+      'folders/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+    );
+  }
+}
+
+/// This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
+
 class LabelApi {
   final ApiClient _client;
 
@@ -1693,6 +2904,7 @@ class LabelApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the parent content of the attachment and its
   /// corresponding space.
+  /// Only labels that the user has permission to view will be returned.
   Future<MultiEntityResult<Label>> getAttachmentLabels(
       {required int id,
       String? prefix,
@@ -1725,6 +2937,7 @@ class LabelApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the blog post and its corresponding
   /// space.
+  /// Only labels that the user has permission to view will be returned.
   Future<MultiEntityResult<Label>> getBlogPostLabels(
       {required int id,
       String? prefix,
@@ -1757,6 +2970,7 @@ class LabelApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the custom content and its corresponding space.
+  /// Only labels that the user has permission to view will be returned.
   Future<MultiEntityResult<Label>> getCustomContentLabels(
       {required int id,
       String? prefix,
@@ -1781,6 +2995,36 @@ class LabelApi {
     );
   }
 
+  /// Returns all labels. The number of results is limited by the `limit`
+  /// parameter and additional results (if available)
+  /// will be available through the `next` URL present in the `Link` response
+  /// header.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  /// Only labels that the user has permission to view will be returned.
+  Future<MultiEntityResult<Label>> getLabels(
+      {List<int>? labelId,
+      List<String>? prefix,
+      String? cursor,
+      String? sort,
+      int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'labels',
+        queryParameters: {
+          if (labelId != null) 'label-id': labelId.map((e) => '$e').join(','),
+          if (prefix != null) 'prefix': prefix.map((e) => e).join(','),
+          if (cursor != null) 'cursor': cursor,
+          if (sort != null) 'sort': sort,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Label.fromJson(v as Map<String, Object?>),
+    );
+  }
+
   /// Returns the labels of specific page. The number of results is limited by
   /// the `limit` parameter and additional results (if available)
   /// will be available through the `next` URL present in the `Link` response
@@ -1788,6 +3032,7 @@ class LabelApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the content of the page and its corresponding space.
+  /// Only labels that the user has permission to view will be returned.
   Future<MultiEntityResult<Label>> getPageLabels(
       {required int id,
       String? prefix,
@@ -1798,6 +3043,71 @@ class LabelApi {
       await _client.send(
         'get',
         'pages/{id}/labels',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (prefix != null) 'prefix': prefix,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Label.fromJson(v as Map<String, Object?>),
+    );
+  }
+
+  /// Returns the labels of specific space. The number of results is limited by
+  /// the `limit` parameter and additional results (if available)
+  /// will be available through the `next` URL present in the `Link` response
+  /// header.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the space.
+  /// Only labels that the user has permission to view will be returned.
+  Future<MultiEntityResult<Label>> getSpaceLabels(
+      {required int id,
+      String? prefix,
+      String? sort,
+      String? cursor,
+      int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'spaces/{id}/labels',
+        pathParameters: {
+          'id': '$id',
+        },
+        queryParameters: {
+          if (prefix != null) 'prefix': prefix,
+          if (sort != null) 'sort': sort,
+          if (cursor != null) 'cursor': cursor,
+          if (limit != null) 'limit': '$limit',
+        },
+      ),
+      reviver: (v) => Label.fromJson(v as Map<String, Object?>),
+    );
+  }
+
+  /// Returns the labels of space content (pages, blogposts etc). The number of
+  /// results is limited by the `limit` parameter and additional results (if
+  /// available)
+  /// will be available through the `next` URL present in the `Link` response
+  /// header.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the space.
+  /// Only labels that the user has permission to view will be returned.
+  Future<MultiEntityResult<Label>> getSpaceContentLabels(
+      {required int id,
+      String? prefix,
+      String? sort,
+      String? cursor,
+      int? limit}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'get',
+        'spaces/{id}/content/labels',
         pathParameters: {
           'id': '$id',
         },
@@ -1983,12 +3293,12 @@ class OperationApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the parent content of the attachment and its
   /// corresponding space.
-  Future<PermittedOperationsResponse> getAttachmentOperations(int id) async {
+  Future<PermittedOperationsResponse> getAttachmentOperations(String id) async {
     return PermittedOperationsResponse.fromJson(await _client.send(
       'get',
       'attachments/{id}/operations',
       pathParameters: {
-        'id': '$id',
+        'id': id,
       },
     ));
   }
@@ -2032,6 +3342,64 @@ class OperationApi {
     return PermittedOperationsResponse.fromJson(await _client.send(
       'get',
       'pages/{id}/operations',
+      pathParameters: {
+        'id': '$id',
+      },
+    ));
+  }
+
+  /// Returns the permitted operations on specific whiteboard.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the whiteboard and its corresponding space.
+  Future<PermittedOperationsResponse> getWhiteboardOperations(int id) async {
+    return PermittedOperationsResponse.fromJson(await _client.send(
+      'get',
+      'whiteboards/{id}/operations',
+      pathParameters: {
+        'id': '$id',
+      },
+    ));
+  }
+
+  /// Returns the permitted operations on specific database.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the database and its corresponding space.
+  Future<PermittedOperationsResponse> getDatabaseOperations(int id) async {
+    return PermittedOperationsResponse.fromJson(await _client.send(
+      'get',
+      'databases/{id}/operations',
+      pathParameters: {
+        'id': '$id',
+      },
+    ));
+  }
+
+  /// Returns the permitted operations on specific Smart Link in the content
+  /// tree.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the Smart Link in the content tree and its
+  /// corresponding space.
+  Future<PermittedOperationsResponse> getSmartLinkOperations(int id) async {
+    return PermittedOperationsResponse.fromJson(await _client.send(
+      'get',
+      'embeds/{id}/operations',
+      pathParameters: {
+        'id': '$id',
+      },
+    ));
+  }
+
+  /// Returns the permitted operations on specific folder.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the folder and its corresponding space.
+  Future<PermittedOperationsResponse> getFolderOperations(int id) async {
+    return PermittedOperationsResponse.fromJson(await _client.send(
+      'get',
+      'folders/{id}/operations',
       pathParameters: {
         'id': '$id',
       },
@@ -2168,29 +3536,41 @@ class PageApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the corresponding space. Permission to create a page in
   /// the space.
-  Future<PageSingle> createPage(
-      {bool? embedded, bool? private, required PageCreateRequest body}) async {
-    return PageSingle.fromJson(await _client.send(
+  Future<dynamic> createPage(
+      {bool? embedded,
+      bool? private,
+      bool? rootLevel,
+      required PageCreateRequest body}) async {
+    return await _client.send(
       'post',
       'pages',
       queryParameters: {
         if (embedded != null) 'embedded': '$embedded',
         if (private != null) 'private': '$private',
+        if (rootLevel != null) 'root-level': '$rootLevel',
       },
       body: body.toJson(),
-    ));
+    );
   }
 
   /// Returns a specific page.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the page and its corresponding space.
-  Future<PageSingle> getPageById(
+  Future<dynamic> getPageById(
       {required int id,
       String? bodyFormat,
       bool? getDraft,
-      int? version}) async {
-    return PageSingle.fromJson(await _client.send(
+      List<String>? status,
+      int? version,
+      bool? includeLabels,
+      bool? includeProperties,
+      bool? includeOperations,
+      bool? includeLikes,
+      bool? includeVersions,
+      bool? includeVersion,
+      bool? includeFavoritedByCurrentUserStatus}) async {
+    return await _client.send(
       'get',
       'pages/{id}',
       pathParameters: {
@@ -2199,9 +3579,21 @@ class PageApi {
       queryParameters: {
         if (bodyFormat != null) 'body-format': bodyFormat,
         if (getDraft != null) 'get-draft': '$getDraft',
+        if (status != null) 'status': status.map((e) => e).join(','),
         if (version != null) 'version': '$version',
+        if (includeLabels != null) 'include-labels': '$includeLabels',
+        if (includeProperties != null)
+          'include-properties': '$includeProperties',
+        if (includeOperations != null)
+          'include-operations': '$includeOperations',
+        if (includeLikes != null) 'include-likes': '$includeLikes',
+        if (includeVersions != null) 'include-versions': '$includeVersions',
+        if (includeVersion != null) 'include-version': '$includeVersion',
+        if (includeFavoritedByCurrentUserStatus != null)
+          'include-favorited-by-current-user-status':
+              '$includeFavoritedByCurrentUserStatus',
       },
-    ));
+    );
   }
 
   /// Update a page by id.
@@ -2209,29 +3601,44 @@ class PageApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the page and its corresponding space. Permission to
   /// update pages in the space.
-  Future<PageSingle> updatePage(
+  Future<dynamic> updatePage(
       {required int id, required PageUpdateRequest body}) async {
-    return PageSingle.fromJson(await _client.send(
+    return await _client.send(
       'put',
       'pages/{id}',
       pathParameters: {
         'id': '$id',
       },
       body: body.toJson(),
-    ));
+    );
   }
 
   /// Delete a page by id.
   ///
+  /// By default this will delete pages that are non-drafts. To delete a page
+  /// that is a draft, the endpoint must be called on a
+  /// draft with the following param `draft=true`. Discarded drafts are not sent
+  /// to the trash and are permanently deleted.
+  ///
+  /// Deleting a page moves the page to the trash, where it can be restored
+  /// later. To permanently delete a page (or "purge" it),
+  /// the endpoint must be called on a **trashed** page with the following param
+  /// `purge=true`.
+  ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
-  /// Permission to view the page and its corresponding space. Permission to
-  /// delete pages in the space.
-  Future<void> deletePage(int id) async {
+  /// Permission to view the page and its corresponding space.
+  /// Permission to delete pages in the space.
+  /// Permission to administer the space (if attempting to purge).
+  Future<void> deletePage({required int id, bool? purge, bool? draft}) async {
     await _client.send(
       'delete',
       'pages/{id}',
       pathParameters: {
         'id': '$id',
+      },
+      queryParameters: {
+        if (purge != null) 'purge': '$purge',
+        if (draft != null) 'draft': '$draft',
       },
     );
   }
@@ -2278,6 +3685,62 @@ class PageApi {
 
 /// This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
 
+class SmartLinkApi {
+  final ApiClient _client;
+
+  SmartLinkApi(this._client);
+
+  /// Creates a Smart Link in the content tree in the space.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the corresponding space. Permission to create a Smart
+  /// Link in the content tree in the space.
+  Future<dynamic> createSmartLink(
+      {required SmartLinkCreateRequest body}) async {
+    return await _client.send(
+      'post',
+      'embeds',
+      body: body.toJson(),
+    );
+  }
+
+  /// Returns a specific Smart Link in the content tree.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the Smart Link in the content tree and its
+  /// corresponding space.
+  Future<dynamic> getSmartLinkById(int id) async {
+    return await _client.send(
+      'get',
+      'embeds/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+    );
+  }
+
+  /// Delete a Smart Link in the content tree by id.
+  ///
+  /// Deleting a Smart Link in the content tree moves the Smart Link to the
+  /// trash, where it can be restored later
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the Smart Link in the content tree and its
+  /// corresponding space.
+  /// Permission to delete Smart Links in the content tree in the space.
+  Future<void> deleteSmartLink(int id) async {
+    await _client.send(
+      'delete',
+      'embeds/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+    );
+  }
+}
+
+/// This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
+
 class SpaceApi {
   final ApiClient _client;
 
@@ -2291,12 +3754,14 @@ class SpaceApi {
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
   /// Only spaces that the user has permission to view will be returned.
-  Future<MultiEntityResult<Space>> getSpaces(
+  Future<MultiEntityResult<SpaceBulk>> getSpaces(
       {List<int>? ids,
       List<String>? keys,
       String? type,
       String? status,
       List<String>? labels,
+      String? favoritedBy,
+      String? notFavoritedBy,
       String? sort,
       String? descriptionFormat,
       bool? includeIcon,
@@ -2312,6 +3777,8 @@ class SpaceApi {
           if (type != null) 'type': type,
           if (status != null) 'status': status,
           if (labels != null) 'labels': labels.map((e) => e).join(','),
+          if (favoritedBy != null) 'favorited-by': favoritedBy,
+          if (notFavoritedBy != null) 'not-favorited-by': notFavoritedBy,
           if (sort != null) 'sort': sort,
           if (descriptionFormat != null)
             'description-format': descriptionFormat,
@@ -2320,7 +3787,7 @@ class SpaceApi {
           if (limit != null) 'limit': '$limit',
         },
       ),
-      reviver: (v) => Space.fromJson(v as Map<String, Object?>),
+      reviver: (v) => SpaceBulk.fromJson(v as Map<String, Object?>),
     );
   }
 
@@ -2328,9 +3795,15 @@ class SpaceApi {
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to view the space.
-  Future<Space> getSpaceById(
-      {required int id, String? descriptionFormat, bool? includeIcon}) async {
-    return Space.fromJson(await _client.send(
+  Future<dynamic> getSpaceById(
+      {required int id,
+      String? descriptionFormat,
+      bool? includeIcon,
+      bool? includeOperations,
+      bool? includeProperties,
+      bool? includePermissions,
+      bool? includeLabels}) async {
+    return await _client.send(
       'get',
       'spaces/{id}',
       pathParameters: {
@@ -2339,8 +3812,15 @@ class SpaceApi {
       queryParameters: {
         if (descriptionFormat != null) 'description-format': descriptionFormat,
         if (includeIcon != null) 'include-icon': '$includeIcon',
+        if (includeOperations != null)
+          'include-operations': '$includeOperations',
+        if (includeProperties != null)
+          'include-properties': '$includeProperties',
+        if (includePermissions != null)
+          'include-permissions': '$includePermissions',
+        if (includeLabels != null) 'include-labels': '$includeLabels',
       },
-    ));
+    );
   }
 }
 
@@ -2567,18 +4047,24 @@ class TaskApi {
     ));
   }
 
-  /// Update a task by id.
+  /// Update a task by id. This endpoint currently only supports updating task
+  /// status.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to edit the containing page or blog post and view its
   /// corresponding space.
   Future<Task> updateTask(
-      {required int id, required TaskUpdateRequest body}) async {
+      {required int id,
+      String? bodyFormat,
+      required TaskUpdateRequest body}) async {
     return Task.fromJson(await _client.send(
       'put',
       'tasks/{id}',
       pathParameters: {
         'id': '$id',
+      },
+      queryParameters: {
+        if (bodyFormat != null) 'body-format': bodyFormat,
       },
       body: body.toJson(),
     ));
@@ -2591,6 +4077,23 @@ class UserApi {
   final ApiClient _client;
 
   UserApi(this._client);
+
+  /// Returns user details for the ids provided in the request body.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to access the Confluence site ('Can use' global permission).
+  /// The user must be able to view user profiles in the Confluence site.
+  Future<MultiEntityResult<User>> createBulkUserLookup(
+      {required BulkUsersRequest body}) async {
+    return MultiEntityResult.fromJson(
+      await _client.send(
+        'post',
+        'users-bulk',
+        body: body.toJson(),
+      ),
+      reviver: (v) => User.fromJson(v as Map<String, Object?>),
+    );
+  }
 
   /// Returns the list of emails from the input list that do not have access to
   /// site.
@@ -2610,6 +4113,8 @@ class UserApi {
   ///
   /// Ignores all invalid emails and no action is taken for the emails that
   /// already have access to the site.
+  ///
+  /// <b>NOTE:</b> This API is asynchronous and may take some time to complete.
   ///
   /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
   /// Permission to access the Confluence site ('Can use' global permission).
@@ -2896,11 +4401,129 @@ class VersionApi {
   }
 }
 
+/// This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
+
+class WhiteboardApi {
+  final ApiClient _client;
+
+  WhiteboardApi(this._client);
+
+  /// Creates a whiteboard in the space.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the corresponding space. Permission to create a
+  /// whiteboard in the space.
+  Future<dynamic> createWhiteboard(
+      {bool? private, required WhiteboardCreateRequest body}) async {
+    return await _client.send(
+      'post',
+      'whiteboards',
+      queryParameters: {
+        if (private != null) 'private': '$private',
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Returns a specific whiteboard.
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the whiteboard and its corresponding space.
+  Future<dynamic> getWhiteboardById(int id) async {
+    return await _client.send(
+      'get',
+      'whiteboards/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+    );
+  }
+
+  /// Delete a whiteboard by id.
+  ///
+  /// Deleting a whiteboard moves the whiteboard to the trash, where it can be
+  /// restored later
+  ///
+  /// **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+  /// Permission to view the whiteboard and its corresponding space.
+  /// Permission to delete whiteboards in the space.
+  Future<void> deleteWhiteboard(int id) async {
+    await _client.send(
+      'delete',
+      'whiteboards/{id}',
+      pathParameters: {
+        'id': '$id',
+      },
+    );
+  }
+}
+
+class AccountStatus {
+  static const active = AccountStatus._('active');
+  static const inactive = AccountStatus._('inactive');
+  static const closed = AccountStatus._('closed');
+  static const unknown = AccountStatus._('unknown');
+
+  static const values = [
+    active,
+    inactive,
+    closed,
+    unknown,
+  ];
+  final String value;
+
+  const AccountStatus._(this.value);
+
+  static AccountStatus fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => AccountStatus._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class AccountType {
+  static const atlassian = AccountType._('atlassian');
+  static const app = AccountType._('app');
+  static const customer = AccountType._('customer');
+  static const unknown = AccountType._('unknown');
+
+  static const values = [
+    atlassian,
+    app,
+    customer,
+    unknown,
+  ];
+  final String value;
+
+  const AccountType._(this.value);
+
+  static AccountType fromValue(String value) => values
+      .firstWhere((e) => e.value == value, orElse: () => AccountType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 class AncestorType {
   static const page = AncestorType._('page');
+  static const whiteboard = AncestorType._('whiteboard');
+  static const database = AncestorType._('database');
+  static const embed = AncestorType._('embed');
+  static const folder = AncestorType._('folder');
 
   static const values = [
     page,
+    whiteboard,
+    database,
+    embed,
+    folder,
   ];
   final String value;
 
@@ -2935,6 +4558,37 @@ class AttachmentSortOrder {
   static AttachmentSortOrder fromValue(String value) =>
       values.firstWhere((e) => e.value == value,
           orElse: () => AttachmentSortOrder._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class BlogPostContentStatus {
+  static const current = BlogPostContentStatus._('current');
+  static const draft = BlogPostContentStatus._('draft');
+  static const historical = BlogPostContentStatus._('historical');
+  static const trashed = BlogPostContentStatus._('trashed');
+  static const deleted = BlogPostContentStatus._('deleted');
+  static const any = BlogPostContentStatus._('any');
+
+  static const values = [
+    current,
+    draft,
+    historical,
+    trashed,
+    deleted,
+    any,
+  ];
+  final String value;
+
+  const BlogPostContentStatus._(this.value);
+
+  static BlogPostContentStatus fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => BlogPostContentStatus._(value));
 
   /// An enum received from the server but this version of the client doesn't recognize it.
   bool get isUnknown => values.every((v) => v.value != value);
@@ -3041,6 +4695,72 @@ class ChildPageSortOrder {
   String toString() => value;
 }
 
+class ClassificationLevelColor {
+  static const red = ClassificationLevelColor._('RED');
+  static const redBold = ClassificationLevelColor._('RED_BOLD');
+  static const orange = ClassificationLevelColor._('ORANGE');
+  static const yellow = ClassificationLevelColor._('YELLOW');
+  static const green = ClassificationLevelColor._('GREEN');
+  static const blue = ClassificationLevelColor._('BLUE');
+  static const navy = ClassificationLevelColor._('NAVY');
+  static const teal = ClassificationLevelColor._('TEAL');
+  static const purple = ClassificationLevelColor._('PURPLE');
+  static const grey = ClassificationLevelColor._('GREY');
+  static const lime = ClassificationLevelColor._('LIME');
+
+  static const values = [
+    red,
+    redBold,
+    orange,
+    yellow,
+    green,
+    blue,
+    navy,
+    teal,
+    purple,
+    grey,
+    lime,
+  ];
+  final String value;
+
+  const ClassificationLevelColor._(this.value);
+
+  static ClassificationLevelColor fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ClassificationLevelColor._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class ClassificationLevelStatus {
+  static const draft = ClassificationLevelStatus._('DRAFT');
+  static const published = ClassificationLevelStatus._('PUBLISHED');
+  static const archived = ClassificationLevelStatus._('ARCHIVED');
+
+  static const values = [
+    draft,
+    published,
+    archived,
+  ];
+  final String value;
+
+  const ClassificationLevelStatus._(this.value);
+
+  static ClassificationLevelStatus fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ClassificationLevelStatus._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 class CommentSortOrder {
   static const createdDate = CommentSortOrder._('created-date');
   static const createdDateDesc = CommentSortOrder._('-created-date');
@@ -3093,21 +4813,21 @@ class ContentPropertySortOrder {
 
 class ContentStatus {
   static const current = ContentStatus._('current');
-  static const trashed = ContentStatus._('trashed');
-  static const historical = ContentStatus._('historical');
-  static const deleted = ContentStatus._('deleted');
-  static const any = ContentStatus._('any');
   static const draft = ContentStatus._('draft');
   static const archived = ContentStatus._('archived');
+  static const historical = ContentStatus._('historical');
+  static const trashed = ContentStatus._('trashed');
+  static const deleted = ContentStatus._('deleted');
+  static const any = ContentStatus._('any');
 
   static const values = [
     current,
-    trashed,
-    historical,
-    deleted,
-    any,
     draft,
     archived,
+    historical,
+    trashed,
+    deleted,
+    any,
   ];
   final String value;
 
@@ -3116,26 +4836,6 @@ class ContentStatus {
   static ContentStatus fromValue(String value) =>
       values.firstWhere((e) => e.value == value,
           orElse: () => ContentStatus._(value));
-
-  /// An enum received from the server but this version of the client doesn't recognize it.
-  bool get isUnknown => values.every((v) => v.value != value);
-
-  @override
-  String toString() => value;
-}
-
-class ContentType {
-  static const page = ContentType._('page');
-
-  static const values = [
-    page,
-  ];
-  final String value;
-
-  const ContentType._(this.value);
-
-  static ContentType fromValue(String value) => values
-      .firstWhere((e) => e.value == value, orElse: () => ContentType._(value));
 
   /// An enum received from the server but this version of the client doesn't recognize it.
   bool get isUnknown => values.every((v) => v.value != value);
@@ -3355,6 +5055,35 @@ class PageSortOrder {
   String toString() => value;
 }
 
+class ParentContentType {
+  static const page = ParentContentType._('page');
+  static const whiteboard = ParentContentType._('whiteboard');
+  static const database = ParentContentType._('database');
+  static const embed = ParentContentType._('embed');
+  static const folder = ParentContentType._('folder');
+
+  static const values = [
+    page,
+    whiteboard,
+    database,
+    embed,
+    folder,
+  ];
+  final String value;
+
+  const ParentContentType._(this.value);
+
+  static ParentContentType fromValue(String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ParentContentType._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
 class PrimaryBodyRepresentation {
   static const storage = PrimaryBodyRepresentation._('storage');
   static const atlasDocFormat = PrimaryBodyRepresentation._('atlas_doc_format');
@@ -3386,6 +5115,8 @@ class PrimaryBodyRepresentationSingle {
   static const exportView = PrimaryBodyRepresentationSingle._('export_view');
   static const anonymousExportView =
       PrimaryBodyRepresentationSingle._('anonymous_export_view');
+  static const styledView = PrimaryBodyRepresentationSingle._('styled_view');
+  static const editor = PrimaryBodyRepresentationSingle._('editor');
 
   static const values = [
     storage,
@@ -3393,6 +5124,8 @@ class PrimaryBodyRepresentationSingle {
     view,
     exportView,
     anonymousExportView,
+    styledView,
+    editor,
   ];
   final String value;
 
@@ -3487,10 +5220,14 @@ class SpaceStatus {
 
 class SpaceType {
   static const global = SpaceType._('global');
+  static const collaboration = SpaceType._('collaboration');
+  static const knowledgeBase = SpaceType._('knowledge_base');
   static const personal = SpaceType._('personal');
 
   static const values = [
     global,
+    collaboration,
+    knowledgeBase,
     personal,
   ];
   final String value;
@@ -3613,7 +5350,7 @@ class Ancestor {
   }
 }
 
-class Attachment {
+class AttachmentBulk {
   /// ID of the attachment.
   final String? id;
   final String? status;
@@ -3667,7 +5404,7 @@ class Attachment {
   final Version? version;
   final AttachmentLinks? links;
 
-  Attachment(
+  AttachmentBulk(
       {this.id,
       this.status,
       this.title,
@@ -3685,8 +5422,8 @@ class Attachment {
       this.version,
       this.links});
 
-  factory Attachment.fromJson(Map<String, Object?> json) {
-    return Attachment(
+  factory AttachmentBulk.fromJson(Map<String, Object?> json) {
+    return AttachmentBulk(
       id: json[r'id'] as String?,
       status: json[r'status'] as String?,
       title: json[r'title'] as String?,
@@ -3780,7 +5517,7 @@ class Attachment {
     return json;
   }
 
-  Attachment copyWith(
+  AttachmentBulk copyWith(
       {String? id,
       String? status,
       String? title,
@@ -3797,7 +5534,7 @@ class Attachment {
       String? downloadLink,
       Version? version,
       AttachmentLinks? links}) {
-    return Attachment(
+    return AttachmentBulk(
       id: id ?? this.id,
       status: status ?? this.status,
       title: title ?? this.title,
@@ -3813,6 +5550,101 @@ class Attachment {
       webuiLink: webuiLink ?? this.webuiLink,
       downloadLink: downloadLink ?? this.downloadLink,
       version: version ?? this.version,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class AttachmentCommentModel {
+  /// ID of the comment.
+  final String? id;
+  final String? status;
+
+  /// Title of the comment.
+  final String? title;
+
+  /// ID of the attachment containing the comment.
+  final String? attachmentId;
+  final Version? version;
+  final BodySingle? body;
+  final CommentLinks? links;
+
+  AttachmentCommentModel(
+      {this.id,
+      this.status,
+      this.title,
+      this.attachmentId,
+      this.version,
+      this.body,
+      this.links});
+
+  factory AttachmentCommentModel.fromJson(Map<String, Object?> json) {
+    return AttachmentCommentModel(
+      id: json[r'id'] as String?,
+      status: json[r'status'] as String?,
+      title: json[r'title'] as String?,
+      attachmentId: json[r'attachmentId'] as String?,
+      version: json[r'version'] != null
+          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      body: json[r'body'] != null
+          ? BodySingle.fromJson(json[r'body']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? CommentLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var status = this.status;
+    var title = this.title;
+    var attachmentId = this.attachmentId;
+    var version = this.version;
+    var body = this.body;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (attachmentId != null) {
+      json[r'attachmentId'] = attachmentId;
+    }
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
+    if (body != null) {
+      json[r'body'] = body.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  AttachmentCommentModel copyWith(
+      {String? id,
+      String? status,
+      String? title,
+      String? attachmentId,
+      Version? version,
+      BodySingle? body,
+      CommentLinks? links}) {
+    return AttachmentCommentModel(
+      id: id ?? this.id,
+      status: status ?? this.status,
+      title: title ?? this.title,
+      attachmentId: attachmentId ?? this.attachmentId,
+      version: version ?? this.version,
+      body: body ?? this.body,
       links: links ?? this.links,
     );
   }
@@ -3852,6 +5684,472 @@ class AttachmentLinks {
     return AttachmentLinks(
       webui: webui ?? this.webui,
       download: download ?? this.download,
+    );
+  }
+}
+
+class AttachmentSingle {
+  /// ID of the attachment.
+  final String? id;
+  final String? status;
+
+  /// Title of the comment.
+  final String? title;
+
+  /// Date and time when the attachment was created. In format
+  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
+  final DateTime? createdAt;
+
+  /// ID of the containing page.
+  ///
+  /// Note: This is only returned if the attachment has a container that is a
+  /// page.
+  final String? pageId;
+
+  /// ID of the containing blog post.
+  ///
+  /// Note: This is only returned if the attachment has a container that is a
+  /// blog post.
+  final String? blogPostId;
+
+  /// ID of the containing custom content.
+  ///
+  /// Note: This is only returned if the attachment has a container that is
+  /// custom content.
+  final String? customContentId;
+
+  /// Media Type for the attachment.
+  final String? mediaType;
+
+  /// Media Type description for the attachment.
+  final String? mediaTypeDescription;
+
+  /// Comment for the attachment.
+  final String? comment;
+
+  /// File ID of the attachment. This is the ID referenced in `atlas_doc_format`
+  /// bodies and is distinct from the attachment ID.
+  final String? fileId;
+
+  /// File size of the attachment.
+  final int? fileSize;
+
+  /// WebUI link of the attachment.
+  final String? webuiLink;
+
+  /// Download link of the attachment.
+  final String? downloadLink;
+  final Version? version;
+  final AttachmentSingleLabels? labels;
+  final AttachmentSingleProperties? properties;
+  final AttachmentSingleOperations? operations;
+  final AttachmentSingleVersions? versions;
+  final AttachmentLinks? links;
+
+  AttachmentSingle(
+      {this.id,
+      this.status,
+      this.title,
+      this.createdAt,
+      this.pageId,
+      this.blogPostId,
+      this.customContentId,
+      this.mediaType,
+      this.mediaTypeDescription,
+      this.comment,
+      this.fileId,
+      this.fileSize,
+      this.webuiLink,
+      this.downloadLink,
+      this.version,
+      this.labels,
+      this.properties,
+      this.operations,
+      this.versions,
+      this.links});
+
+  factory AttachmentSingle.fromJson(Map<String, Object?> json) {
+    return AttachmentSingle(
+      id: json[r'id'] as String?,
+      status: json[r'status'] as String?,
+      title: json[r'title'] as String?,
+      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
+      pageId: json[r'pageId'] as String?,
+      blogPostId: json[r'blogPostId'] as String?,
+      customContentId: json[r'customContentId'] as String?,
+      mediaType: json[r'mediaType'] as String?,
+      mediaTypeDescription: json[r'mediaTypeDescription'] as String?,
+      comment: json[r'comment'] as String?,
+      fileId: json[r'fileId'] as String?,
+      fileSize: (json[r'fileSize'] as num?)?.toInt(),
+      webuiLink: json[r'webuiLink'] as String?,
+      downloadLink: json[r'downloadLink'] as String?,
+      version: json[r'version'] != null
+          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      labels: json[r'labels'] != null
+          ? AttachmentSingleLabels.fromJson(
+              json[r'labels']! as Map<String, Object?>)
+          : null,
+      properties: json[r'properties'] != null
+          ? AttachmentSingleProperties.fromJson(
+              json[r'properties']! as Map<String, Object?>)
+          : null,
+      operations: json[r'operations'] != null
+          ? AttachmentSingleOperations.fromJson(
+              json[r'operations']! as Map<String, Object?>)
+          : null,
+      versions: json[r'versions'] != null
+          ? AttachmentSingleVersions.fromJson(
+              json[r'versions']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? AttachmentLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var status = this.status;
+    var title = this.title;
+    var createdAt = this.createdAt;
+    var pageId = this.pageId;
+    var blogPostId = this.blogPostId;
+    var customContentId = this.customContentId;
+    var mediaType = this.mediaType;
+    var mediaTypeDescription = this.mediaTypeDescription;
+    var comment = this.comment;
+    var fileId = this.fileId;
+    var fileSize = this.fileSize;
+    var webuiLink = this.webuiLink;
+    var downloadLink = this.downloadLink;
+    var version = this.version;
+    var labels = this.labels;
+    var properties = this.properties;
+    var operations = this.operations;
+    var versions = this.versions;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt.toIso8601String();
+    }
+    if (pageId != null) {
+      json[r'pageId'] = pageId;
+    }
+    if (blogPostId != null) {
+      json[r'blogPostId'] = blogPostId;
+    }
+    if (customContentId != null) {
+      json[r'customContentId'] = customContentId;
+    }
+    if (mediaType != null) {
+      json[r'mediaType'] = mediaType;
+    }
+    if (mediaTypeDescription != null) {
+      json[r'mediaTypeDescription'] = mediaTypeDescription;
+    }
+    if (comment != null) {
+      json[r'comment'] = comment;
+    }
+    if (fileId != null) {
+      json[r'fileId'] = fileId;
+    }
+    if (fileSize != null) {
+      json[r'fileSize'] = fileSize;
+    }
+    if (webuiLink != null) {
+      json[r'webuiLink'] = webuiLink;
+    }
+    if (downloadLink != null) {
+      json[r'downloadLink'] = downloadLink;
+    }
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
+    if (labels != null) {
+      json[r'labels'] = labels.toJson();
+    }
+    if (properties != null) {
+      json[r'properties'] = properties.toJson();
+    }
+    if (operations != null) {
+      json[r'operations'] = operations.toJson();
+    }
+    if (versions != null) {
+      json[r'versions'] = versions.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  AttachmentSingle copyWith(
+      {String? id,
+      String? status,
+      String? title,
+      DateTime? createdAt,
+      String? pageId,
+      String? blogPostId,
+      String? customContentId,
+      String? mediaType,
+      String? mediaTypeDescription,
+      String? comment,
+      String? fileId,
+      int? fileSize,
+      String? webuiLink,
+      String? downloadLink,
+      Version? version,
+      AttachmentSingleLabels? labels,
+      AttachmentSingleProperties? properties,
+      AttachmentSingleOperations? operations,
+      AttachmentSingleVersions? versions,
+      AttachmentLinks? links}) {
+    return AttachmentSingle(
+      id: id ?? this.id,
+      status: status ?? this.status,
+      title: title ?? this.title,
+      createdAt: createdAt ?? this.createdAt,
+      pageId: pageId ?? this.pageId,
+      blogPostId: blogPostId ?? this.blogPostId,
+      customContentId: customContentId ?? this.customContentId,
+      mediaType: mediaType ?? this.mediaType,
+      mediaTypeDescription: mediaTypeDescription ?? this.mediaTypeDescription,
+      comment: comment ?? this.comment,
+      fileId: fileId ?? this.fileId,
+      fileSize: fileSize ?? this.fileSize,
+      webuiLink: webuiLink ?? this.webuiLink,
+      downloadLink: downloadLink ?? this.downloadLink,
+      version: version ?? this.version,
+      labels: labels ?? this.labels,
+      properties: properties ?? this.properties,
+      operations: operations ?? this.operations,
+      versions: versions ?? this.versions,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class AttachmentSingleLabels {
+  final List<Label> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  AttachmentSingleLabels({List<Label>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory AttachmentSingleLabels.fromJson(Map<String, Object?> json) {
+    return AttachmentSingleLabels(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map(
+                  (i) => Label.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  AttachmentSingleLabels copyWith(
+      {List<Label>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return AttachmentSingleLabels(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class AttachmentSingleOperations {
+  final List<Operation> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  AttachmentSingleOperations({List<Operation>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory AttachmentSingleOperations.fromJson(Map<String, Object?> json) {
+    return AttachmentSingleOperations(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) =>
+                  Operation.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  AttachmentSingleOperations copyWith(
+      {List<Operation>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return AttachmentSingleOperations(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class AttachmentSingleProperties {
+  final List<ContentProperty> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  AttachmentSingleProperties(
+      {List<ContentProperty>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory AttachmentSingleProperties.fromJson(Map<String, Object?> json) {
+    return AttachmentSingleProperties(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) => ContentProperty.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  AttachmentSingleProperties copyWith(
+      {List<ContentProperty>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return AttachmentSingleProperties(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class AttachmentSingleVersions {
+  final List<Version> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  AttachmentSingleVersions({List<Version>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory AttachmentSingleVersions.fromJson(Map<String, Object?> json) {
+    return AttachmentSingleVersions(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) =>
+                  Version.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  AttachmentSingleVersions copyWith(
+      {List<Version>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return AttachmentSingleVersions(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
     );
   }
 }
@@ -4499,6 +6797,14 @@ class BlogPostSingle {
   final DateTime? createdAt;
   final Version? version;
   final BodySingle? body;
+  final BlogPostSingleLabels? labels;
+  final BlogPostSingleProperties? properties;
+  final BlogPostSingleOperations? operations;
+  final BlogPostSingleLikes? likes;
+  final BlogPostSingleVersions? versions;
+
+  /// Whether the blog post has been favorited by the current user.
+  final bool isFavoritedByCurrentUser;
   final AbstractPageLinks? links;
 
   BlogPostSingle(
@@ -4510,7 +6816,14 @@ class BlogPostSingle {
       this.createdAt,
       this.version,
       this.body,
-      this.links});
+      this.labels,
+      this.properties,
+      this.operations,
+      this.likes,
+      this.versions,
+      bool? isFavoritedByCurrentUser,
+      this.links})
+      : isFavoritedByCurrentUser = isFavoritedByCurrentUser ?? false;
 
   factory BlogPostSingle.fromJson(Map<String, Object?> json) {
     return BlogPostSingle(
@@ -4526,6 +6839,28 @@ class BlogPostSingle {
       body: json[r'body'] != null
           ? BodySingle.fromJson(json[r'body']! as Map<String, Object?>)
           : null,
+      labels: json[r'labels'] != null
+          ? BlogPostSingleLabels.fromJson(
+              json[r'labels']! as Map<String, Object?>)
+          : null,
+      properties: json[r'properties'] != null
+          ? BlogPostSingleProperties.fromJson(
+              json[r'properties']! as Map<String, Object?>)
+          : null,
+      operations: json[r'operations'] != null
+          ? BlogPostSingleOperations.fromJson(
+              json[r'operations']! as Map<String, Object?>)
+          : null,
+      likes: json[r'likes'] != null
+          ? BlogPostSingleLikes.fromJson(
+              json[r'likes']! as Map<String, Object?>)
+          : null,
+      versions: json[r'versions'] != null
+          ? BlogPostSingleVersions.fromJson(
+              json[r'versions']! as Map<String, Object?>)
+          : null,
+      isFavoritedByCurrentUser:
+          json[r'isFavoritedByCurrentUser'] as bool? ?? false,
       links: json[r'_links'] != null
           ? AbstractPageLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
@@ -4541,6 +6876,12 @@ class BlogPostSingle {
     var createdAt = this.createdAt;
     var version = this.version;
     var body = this.body;
+    var labels = this.labels;
+    var properties = this.properties;
+    var operations = this.operations;
+    var likes = this.likes;
+    var versions = this.versions;
+    var isFavoritedByCurrentUser = this.isFavoritedByCurrentUser;
     var links = this.links;
 
     final json = <String, Object?>{};
@@ -4568,6 +6909,22 @@ class BlogPostSingle {
     if (body != null) {
       json[r'body'] = body.toJson();
     }
+    if (labels != null) {
+      json[r'labels'] = labels.toJson();
+    }
+    if (properties != null) {
+      json[r'properties'] = properties.toJson();
+    }
+    if (operations != null) {
+      json[r'operations'] = operations.toJson();
+    }
+    if (likes != null) {
+      json[r'likes'] = likes.toJson();
+    }
+    if (versions != null) {
+      json[r'versions'] = versions.toJson();
+    }
+    json[r'isFavoritedByCurrentUser'] = isFavoritedByCurrentUser;
     if (links != null) {
       json[r'_links'] = links.toJson();
     }
@@ -4583,6 +6940,12 @@ class BlogPostSingle {
       DateTime? createdAt,
       Version? version,
       BodySingle? body,
+      BlogPostSingleLabels? labels,
+      BlogPostSingleProperties? properties,
+      BlogPostSingleOperations? operations,
+      BlogPostSingleLikes? likes,
+      BlogPostSingleVersions? versions,
+      bool? isFavoritedByCurrentUser,
       AbstractPageLinks? links}) {
     return BlogPostSingle(
       id: id ?? this.id,
@@ -4593,6 +6956,279 @@ class BlogPostSingle {
       createdAt: createdAt ?? this.createdAt,
       version: version ?? this.version,
       body: body ?? this.body,
+      labels: labels ?? this.labels,
+      properties: properties ?? this.properties,
+      operations: operations ?? this.operations,
+      likes: likes ?? this.likes,
+      versions: versions ?? this.versions,
+      isFavoritedByCurrentUser:
+          isFavoritedByCurrentUser ?? this.isFavoritedByCurrentUser,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class BlogPostSingleLabels {
+  final List<Label> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  BlogPostSingleLabels({List<Label>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory BlogPostSingleLabels.fromJson(Map<String, Object?> json) {
+    return BlogPostSingleLabels(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map(
+                  (i) => Label.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  BlogPostSingleLabels copyWith(
+      {List<Label>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return BlogPostSingleLabels(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class BlogPostSingleLikes {
+  final List<Like> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  BlogPostSingleLikes({List<Like>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory BlogPostSingleLikes.fromJson(Map<String, Object?> json) {
+    return BlogPostSingleLikes(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map(
+                  (i) => Like.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  BlogPostSingleLikes copyWith(
+      {List<Like>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return BlogPostSingleLikes(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class BlogPostSingleOperations {
+  final List<Operation> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  BlogPostSingleOperations({List<Operation>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory BlogPostSingleOperations.fromJson(Map<String, Object?> json) {
+    return BlogPostSingleOperations(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) =>
+                  Operation.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  BlogPostSingleOperations copyWith(
+      {List<Operation>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return BlogPostSingleOperations(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class BlogPostSingleProperties {
+  final List<ContentProperty> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  BlogPostSingleProperties(
+      {List<ContentProperty>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory BlogPostSingleProperties.fromJson(Map<String, Object?> json) {
+    return BlogPostSingleProperties(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) => ContentProperty.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  BlogPostSingleProperties copyWith(
+      {List<ContentProperty>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return BlogPostSingleProperties(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class BlogPostSingleVersions {
+  final List<Version> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  BlogPostSingleVersions({List<Version>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory BlogPostSingleVersions.fromJson(Map<String, Object?> json) {
+    return BlogPostSingleVersions(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) =>
+                  Version.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  BlogPostSingleVersions copyWith(
+      {List<Version>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return BlogPostSingleVersions(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
       links: links ?? this.links,
     );
   }
@@ -4602,7 +7238,15 @@ class BlogPostUpdateRequest {
   /// Id of the blog post.
   final String id;
 
-  /// The status of the blog post.
+  /// The updated status of the blog post.
+  ///
+  /// Note, if you change the status of a blog post from 'current' to 'draft'
+  /// and it has an existing draft, the existing draft will be deleted in favor
+  /// of the updated draft.
+  /// Additionally, this endpoint can be used to restore a 'trashed' or
+  /// 'deleted' blog post to 'current' status. For restoration, blog post
+  /// contents will not be updated and only the blog post status will be
+  /// changed.
   final BlogPostUpdateRequestStatus status;
 
   /// Title of the blog post.
@@ -4678,12 +7322,10 @@ class BlogPostUpdateRequest {
 class BlogPostUpdateRequestStatus {
   static const current = BlogPostUpdateRequestStatus._('current');
   static const draft = BlogPostUpdateRequestStatus._('draft');
-  static const deleted = BlogPostUpdateRequestStatus._('deleted');
 
   static const values = [
     current,
     draft,
-    deleted,
   ];
   final String value;
 
@@ -4701,7 +7343,11 @@ class BlogPostUpdateRequestStatus {
 }
 
 class BlogPostUpdateRequestVersion {
-  /// The version number, must be incremented by one.
+  /// The new version number of the updated blog post.
+  /// Set this to the current version number plus one, unless you are updating
+  /// the status to 'draft' which requires a version number of 1.
+  ///
+  /// If you don't know the current version number, use Get blog post by id.
   final int? number;
 
   /// An optional message to be stored with the version.
@@ -4951,6 +7597,36 @@ class BodyType {
     return BodyType(
       representation: representation ?? this.representation,
       value: value ?? this.value,
+    );
+  }
+}
+
+class BulkUsersRequest {
+  /// List of accountIds to retrieve user info for.
+  final List<String> accountIds;
+
+  BulkUsersRequest({required this.accountIds});
+
+  factory BulkUsersRequest.fromJson(Map<String, Object?> json) {
+    return BulkUsersRequest(
+      accountIds: (json[r'accountIds'] as List<Object?>?)
+              ?.map((i) => i as String? ?? '')
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var accountIds = this.accountIds;
+
+    final json = <String, Object?>{};
+    json[r'accountIds'] = accountIds;
+    return json;
+  }
+
+  BulkUsersRequest copyWith({List<String>? accountIds}) {
+    return BulkUsersRequest(
+      accountIds: accountIds ?? this.accountIds,
     );
   }
 }
@@ -5219,6 +7895,108 @@ class ChildrenCommentModel {
   }
 }
 
+/// A unit of
+/// [data classification](https://support.atlassian.com/security-and-access-policies/docs/what-is-data-classification/)
+/// defined by an organiation.
+/// A classification level may be associated with specific storage and handling
+/// requirements or expectations.
+class ClassificationLevel {
+  /// The ID of the classification level.
+  final String? id;
+
+  /// The status of the classification level.
+  final String? status;
+
+  /// The order of the classification level object.
+  final num? order;
+
+  /// The name of the classification level object.
+  final String? name;
+
+  /// The description of the classification level object.
+  final String? description;
+
+  /// The guideline of the classification level object.
+  final String? guideline;
+
+  /// The color of the classification level object.
+  final String? color;
+
+  ClassificationLevel(
+      {this.id,
+      this.status,
+      this.order,
+      this.name,
+      this.description,
+      this.guideline,
+      this.color});
+
+  factory ClassificationLevel.fromJson(Map<String, Object?> json) {
+    return ClassificationLevel(
+      id: json[r'id'] as String?,
+      status: json[r'status'] as String?,
+      order: json[r'order'] as num?,
+      name: json[r'name'] as String?,
+      description: json[r'description'] as String?,
+      guideline: json[r'guideline'] as String?,
+      color: json[r'color'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var status = this.status;
+    var order = this.order;
+    var name = this.name;
+    var description = this.description;
+    var guideline = this.guideline;
+    var color = this.color;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (order != null) {
+      json[r'order'] = order;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (description != null) {
+      json[r'description'] = description;
+    }
+    if (guideline != null) {
+      json[r'guideline'] = guideline;
+    }
+    if (color != null) {
+      json[r'color'] = color;
+    }
+    return json;
+  }
+
+  ClassificationLevel copyWith(
+      {String? id,
+      String? status,
+      num? order,
+      String? name,
+      String? description,
+      String? guideline,
+      String? color}) {
+    return ClassificationLevel(
+      id: id ?? this.id,
+      status: status ?? this.status,
+      order: order ?? this.order,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      guideline: guideline ?? this.guideline,
+      color: color ?? this.color,
+    );
+  }
+}
+
 class CommentBodyWrite {
   /// Type of content representation used for the value field.
   final CommentBodyWriteRepresentation? representation;
@@ -5456,6 +8234,124 @@ class CommentVersion {
       comment: comment ?? this.comment,
     );
   }
+}
+
+class ContentClassificationLevelDeleteRequest {
+  /// Status of the content.
+  final ContentClassificationLevelDeleteRequestStatus status;
+
+  ContentClassificationLevelDeleteRequest({required this.status});
+
+  factory ContentClassificationLevelDeleteRequest.fromJson(
+      Map<String, Object?> json) {
+    return ContentClassificationLevelDeleteRequest(
+      status: ContentClassificationLevelDeleteRequestStatus.fromValue(
+          json[r'status'] as String? ?? ''),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var status = this.status;
+
+    final json = <String, Object?>{};
+    json[r'status'] = status.value;
+    return json;
+  }
+
+  ContentClassificationLevelDeleteRequest copyWith(
+      {ContentClassificationLevelDeleteRequestStatus? status}) {
+    return ContentClassificationLevelDeleteRequest(
+      status: status ?? this.status,
+    );
+  }
+}
+
+class ContentClassificationLevelDeleteRequestStatus {
+  static const current =
+      ContentClassificationLevelDeleteRequestStatus._('current');
+  static const draft = ContentClassificationLevelDeleteRequestStatus._('draft');
+
+  static const values = [
+    current,
+    draft,
+  ];
+  final String value;
+
+  const ContentClassificationLevelDeleteRequestStatus._(this.value);
+
+  static ContentClassificationLevelDeleteRequestStatus fromValue(
+          String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ContentClassificationLevelDeleteRequestStatus._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class ContentClassificationLevelUpdateRequest {
+  /// The ID of the classification level.
+  final String id;
+
+  /// Status of the content.
+  final ContentClassificationLevelUpdateRequestStatus status;
+
+  ContentClassificationLevelUpdateRequest(
+      {required this.id, required this.status});
+
+  factory ContentClassificationLevelUpdateRequest.fromJson(
+      Map<String, Object?> json) {
+    return ContentClassificationLevelUpdateRequest(
+      id: json[r'id'] as String? ?? '',
+      status: ContentClassificationLevelUpdateRequestStatus.fromValue(
+          json[r'status'] as String? ?? ''),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var status = this.status;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    json[r'status'] = status.value;
+    return json;
+  }
+
+  ContentClassificationLevelUpdateRequest copyWith(
+      {String? id, ContentClassificationLevelUpdateRequestStatus? status}) {
+    return ContentClassificationLevelUpdateRequest(
+      id: id ?? this.id,
+      status: status ?? this.status,
+    );
+  }
+}
+
+class ContentClassificationLevelUpdateRequestStatus {
+  static const current =
+      ContentClassificationLevelUpdateRequestStatus._('current');
+  static const draft = ContentClassificationLevelUpdateRequestStatus._('draft');
+
+  static const values = [
+    current,
+    draft,
+  ];
+  final String value;
+
+  const ContentClassificationLevelUpdateRequestStatus._(this.value);
+
+  static ContentClassificationLevelUpdateRequestStatus fromValue(
+          String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () => ContentClassificationLevelUpdateRequestStatus._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 class ContentIdToContentTypeRequest {
@@ -5721,16 +8617,31 @@ class CreateFooterCommentModel {
   /// ID of the parent comment, if intending to create a reply. Do not provide
   /// if creating a top level comment.
   final String? parentCommentId;
+
+  /// ID of the attachment, if intending to create a comment against an
+  /// attachment.
+  final String? attachmentId;
+
+  /// ID of the custom content, if intending to create a comment against a
+  /// custom content.
+  final String? customContentId;
   final dynamic body;
 
   CreateFooterCommentModel(
-      {this.blogPostId, this.pageId, this.parentCommentId, this.body});
+      {this.blogPostId,
+      this.pageId,
+      this.parentCommentId,
+      this.attachmentId,
+      this.customContentId,
+      this.body});
 
   factory CreateFooterCommentModel.fromJson(Map<String, Object?> json) {
     return CreateFooterCommentModel(
       blogPostId: json[r'blogPostId'] as String?,
       pageId: json[r'pageId'] as String?,
       parentCommentId: json[r'parentCommentId'] as String?,
+      attachmentId: json[r'attachmentId'] as String?,
+      customContentId: json[r'customContentId'] as String?,
       body: json[r'body'],
     );
   }
@@ -5739,6 +8650,8 @@ class CreateFooterCommentModel {
     var blogPostId = this.blogPostId;
     var pageId = this.pageId;
     var parentCommentId = this.parentCommentId;
+    var attachmentId = this.attachmentId;
+    var customContentId = this.customContentId;
     var body = this.body;
 
     final json = <String, Object?>{};
@@ -5751,6 +8664,12 @@ class CreateFooterCommentModel {
     if (parentCommentId != null) {
       json[r'parentCommentId'] = parentCommentId;
     }
+    if (attachmentId != null) {
+      json[r'attachmentId'] = attachmentId;
+    }
+    if (customContentId != null) {
+      json[r'customContentId'] = customContentId;
+    }
     if (body != null) {
       json[r'body'] = body;
     }
@@ -5761,11 +8680,15 @@ class CreateFooterCommentModel {
       {String? blogPostId,
       String? pageId,
       String? parentCommentId,
+      String? attachmentId,
+      String? customContentId,
       dynamic body}) {
     return CreateFooterCommentModel(
       blogPostId: blogPostId ?? this.blogPostId,
       pageId: pageId ?? this.pageId,
       parentCommentId: parentCommentId ?? this.parentCommentId,
+      attachmentId: attachmentId ?? this.attachmentId,
+      customContentId: customContentId ?? this.customContentId,
       body: body ?? this.body,
     );
   }
@@ -6280,26 +9203,121 @@ class CustomContentBulk {
   }
 }
 
+class CustomContentCommentModel {
+  /// ID of the comment.
+  final String? id;
+  final String? status;
+
+  /// Title of the comment.
+  final String? title;
+
+  /// ID of the custom content containing the comment.
+  final String? customContentId;
+  final Version? version;
+  final BodySingle? body;
+  final CommentLinks? links;
+
+  CustomContentCommentModel(
+      {this.id,
+      this.status,
+      this.title,
+      this.customContentId,
+      this.version,
+      this.body,
+      this.links});
+
+  factory CustomContentCommentModel.fromJson(Map<String, Object?> json) {
+    return CustomContentCommentModel(
+      id: json[r'id'] as String?,
+      status: json[r'status'] as String?,
+      title: json[r'title'] as String?,
+      customContentId: json[r'customContentId'] as String?,
+      version: json[r'version'] != null
+          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      body: json[r'body'] != null
+          ? BodySingle.fromJson(json[r'body']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? CommentLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var status = this.status;
+    var title = this.title;
+    var customContentId = this.customContentId;
+    var version = this.version;
+    var body = this.body;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (customContentId != null) {
+      json[r'customContentId'] = customContentId;
+    }
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
+    if (body != null) {
+      json[r'body'] = body.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  CustomContentCommentModel copyWith(
+      {String? id,
+      String? status,
+      String? title,
+      String? customContentId,
+      Version? version,
+      BodySingle? body,
+      CommentLinks? links}) {
+    return CustomContentCommentModel(
+      id: id ?? this.id,
+      status: status ?? this.status,
+      title: title ?? this.title,
+      customContentId: customContentId ?? this.customContentId,
+      version: version ?? this.version,
+      body: body ?? this.body,
+      links: links ?? this.links,
+    );
+  }
+}
+
 class CustomContentCreateRequest {
   /// Type of custom content.
   final String type;
 
-  /// The status of the custom content
+  /// The status of the custom content.
   final CustomContentCreateRequestStatus? status;
 
-  /// ID of the containing space
+  /// ID of the containing space.
   final String? spaceId;
 
-  /// ID of the containing page
+  /// ID of the containing page.
   final String? pageId;
 
-  /// ID of the containing Blog Post
+  /// ID of the containing Blog Post.
   final String? blogPostId;
 
-  /// ID of the containing custom content
+  /// ID of the containing custom content.
   final String? customContentId;
 
-  /// Title of the custom content
+  /// Title of the custom content.
   final String title;
   final dynamic body;
 
@@ -6532,6 +9550,10 @@ class CustomContentSingle {
   /// "YYYY-MM-DDTHH:mm:ss.sssZ".
   final DateTime? createdAt;
   final Version? version;
+  final CustomContentSingleLabels? labels;
+  final CustomContentSingleProperties? properties;
+  final CustomContentSingleOperations? operations;
+  final CustomContentSingleVersions? versions;
   final CustomContentBodySingle? body;
   final CustomContentLinks? links;
 
@@ -6547,6 +9569,10 @@ class CustomContentSingle {
       this.authorId,
       this.createdAt,
       this.version,
+      this.labels,
+      this.properties,
+      this.operations,
+      this.versions,
       this.body,
       this.links});
 
@@ -6564,6 +9590,22 @@ class CustomContentSingle {
       createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
       version: json[r'version'] != null
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      labels: json[r'labels'] != null
+          ? CustomContentSingleLabels.fromJson(
+              json[r'labels']! as Map<String, Object?>)
+          : null,
+      properties: json[r'properties'] != null
+          ? CustomContentSingleProperties.fromJson(
+              json[r'properties']! as Map<String, Object?>)
+          : null,
+      operations: json[r'operations'] != null
+          ? CustomContentSingleOperations.fromJson(
+              json[r'operations']! as Map<String, Object?>)
+          : null,
+      versions: json[r'versions'] != null
+          ? CustomContentSingleVersions.fromJson(
+              json[r'versions']! as Map<String, Object?>)
           : null,
       body: json[r'body'] != null
           ? CustomContentBodySingle.fromJson(
@@ -6588,6 +9630,10 @@ class CustomContentSingle {
     var authorId = this.authorId;
     var createdAt = this.createdAt;
     var version = this.version;
+    var labels = this.labels;
+    var properties = this.properties;
+    var operations = this.operations;
+    var versions = this.versions;
     var body = this.body;
     var links = this.links;
 
@@ -6625,6 +9671,18 @@ class CustomContentSingle {
     if (version != null) {
       json[r'version'] = version.toJson();
     }
+    if (labels != null) {
+      json[r'labels'] = labels.toJson();
+    }
+    if (properties != null) {
+      json[r'properties'] = properties.toJson();
+    }
+    if (operations != null) {
+      json[r'operations'] = operations.toJson();
+    }
+    if (versions != null) {
+      json[r'versions'] = versions.toJson();
+    }
     if (body != null) {
       json[r'body'] = body.toJson();
     }
@@ -6646,6 +9704,10 @@ class CustomContentSingle {
       String? authorId,
       DateTime? createdAt,
       Version? version,
+      CustomContentSingleLabels? labels,
+      CustomContentSingleProperties? properties,
+      CustomContentSingleOperations? operations,
+      CustomContentSingleVersions? versions,
       CustomContentBodySingle? body,
       CustomContentLinks? links}) {
     return CustomContentSingle(
@@ -6660,7 +9722,225 @@ class CustomContentSingle {
       authorId: authorId ?? this.authorId,
       createdAt: createdAt ?? this.createdAt,
       version: version ?? this.version,
+      labels: labels ?? this.labels,
+      properties: properties ?? this.properties,
+      operations: operations ?? this.operations,
+      versions: versions ?? this.versions,
       body: body ?? this.body,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class CustomContentSingleLabels {
+  final List<Label> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  CustomContentSingleLabels({List<Label>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory CustomContentSingleLabels.fromJson(Map<String, Object?> json) {
+    return CustomContentSingleLabels(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map(
+                  (i) => Label.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  CustomContentSingleLabels copyWith(
+      {List<Label>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return CustomContentSingleLabels(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class CustomContentSingleOperations {
+  final List<Operation> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  CustomContentSingleOperations(
+      {List<Operation>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory CustomContentSingleOperations.fromJson(Map<String, Object?> json) {
+    return CustomContentSingleOperations(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) =>
+                  Operation.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  CustomContentSingleOperations copyWith(
+      {List<Operation>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return CustomContentSingleOperations(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class CustomContentSingleProperties {
+  final List<ContentProperty> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  CustomContentSingleProperties(
+      {List<ContentProperty>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory CustomContentSingleProperties.fromJson(Map<String, Object?> json) {
+    return CustomContentSingleProperties(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) => ContentProperty.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  CustomContentSingleProperties copyWith(
+      {List<ContentProperty>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return CustomContentSingleProperties(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class CustomContentSingleVersions {
+  final List<Version> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  CustomContentSingleVersions({List<Version>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory CustomContentSingleVersions.fromJson(Map<String, Object?> json) {
+    return CustomContentSingleVersions(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) =>
+                  Version.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  CustomContentSingleVersions copyWith(
+      {List<Version>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return CustomContentSingleVersions(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
       links: links ?? this.links,
     );
   }
@@ -6673,22 +9953,22 @@ class CustomContentUpdateRequest {
   /// Type of custom content.
   final String type;
 
-  /// The status of the custom content
+  /// The status of the custom content.
   final CustomContentUpdateRequestStatus status;
 
-  /// ID of the containing space
+  /// ID of the containing space.
   final String? spaceId;
 
-  /// ID of the containing page
+  /// ID of the containing page.
   final String? pageId;
 
-  /// ID of the containing Blog Post
+  /// ID of the containing Blog Post.
   final String? blogPostId;
 
-  /// ID of the containing custom content
+  /// ID of the containing custom content.
   final String? customContentId;
 
-  /// Title of the custom content
+  /// Title of the custom content.
   final String title;
   final dynamic body;
   final CustomContentUpdateRequestVersion version;
@@ -6929,6 +10209,388 @@ class CustomContentVersion {
   }
 }
 
+/// Details about data policies.
+class DataPolicyMetadata {
+  /// Whether the workspace contains any content blocked for (inaccessible to)
+  /// the requesting client application.
+  final bool anyContentBlocked;
+
+  DataPolicyMetadata({bool? anyContentBlocked})
+      : anyContentBlocked = anyContentBlocked ?? false;
+
+  factory DataPolicyMetadata.fromJson(Map<String, Object?> json) {
+    return DataPolicyMetadata(
+      anyContentBlocked: json[r'anyContentBlocked'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var anyContentBlocked = this.anyContentBlocked;
+
+    final json = <String, Object?>{};
+    json[r'anyContentBlocked'] = anyContentBlocked;
+    return json;
+  }
+
+  DataPolicyMetadata copyWith({bool? anyContentBlocked}) {
+    return DataPolicyMetadata(
+      anyContentBlocked: anyContentBlocked ?? this.anyContentBlocked,
+    );
+  }
+}
+
+class DataPolicySpace {
+  /// ID of the space.
+  final String? id;
+
+  /// Key of the space.
+  final String? key;
+
+  /// Name of the space.
+  final String? name;
+  final SpaceDescription? description;
+  final DataPolicySpaceDataPolicy? dataPolicy;
+  final SpaceIcon? icon;
+  final SpaceLinks? links;
+
+  DataPolicySpace(
+      {this.id,
+      this.key,
+      this.name,
+      this.description,
+      this.dataPolicy,
+      this.icon,
+      this.links});
+
+  factory DataPolicySpace.fromJson(Map<String, Object?> json) {
+    return DataPolicySpace(
+      id: json[r'id'] as String?,
+      key: json[r'key'] as String?,
+      name: json[r'name'] as String?,
+      description: json[r'description'] != null
+          ? SpaceDescription.fromJson(
+              json[r'description']! as Map<String, Object?>)
+          : null,
+      dataPolicy: json[r'dataPolicy'] != null
+          ? DataPolicySpaceDataPolicy.fromJson(
+              json[r'dataPolicy']! as Map<String, Object?>)
+          : null,
+      icon: json[r'icon'] != null
+          ? SpaceIcon.fromJson(json[r'icon']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? SpaceLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var key = this.key;
+    var name = this.name;
+    var description = this.description;
+    var dataPolicy = this.dataPolicy;
+    var icon = this.icon;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (description != null) {
+      json[r'description'] = description.toJson();
+    }
+    if (dataPolicy != null) {
+      json[r'dataPolicy'] = dataPolicy.toJson();
+    }
+    if (icon != null) {
+      json[r'icon'] = icon.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  DataPolicySpace copyWith(
+      {String? id,
+      String? key,
+      String? name,
+      SpaceDescription? description,
+      DataPolicySpaceDataPolicy? dataPolicy,
+      SpaceIcon? icon,
+      SpaceLinks? links}) {
+    return DataPolicySpace(
+      id: id ?? this.id,
+      key: key ?? this.key,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      dataPolicy: dataPolicy ?? this.dataPolicy,
+      icon: icon ?? this.icon,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class DataPolicySpaceDataPolicy {
+  /// Whether the space contains any content blocked for (inaccessible to) the
+  /// requesting client application.
+  final bool anyContentBlocked;
+
+  DataPolicySpaceDataPolicy({bool? anyContentBlocked})
+      : anyContentBlocked = anyContentBlocked ?? false;
+
+  factory DataPolicySpaceDataPolicy.fromJson(Map<String, Object?> json) {
+    return DataPolicySpaceDataPolicy(
+      anyContentBlocked: json[r'anyContentBlocked'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var anyContentBlocked = this.anyContentBlocked;
+
+    final json = <String, Object?>{};
+    json[r'anyContentBlocked'] = anyContentBlocked;
+    return json;
+  }
+
+  DataPolicySpaceDataPolicy copyWith({bool? anyContentBlocked}) {
+    return DataPolicySpaceDataPolicy(
+      anyContentBlocked: anyContentBlocked ?? this.anyContentBlocked,
+    );
+  }
+}
+
+class DatabaseCreateRequest {
+  /// ID of the space.
+  final String spaceId;
+
+  /// Title of the database.
+  final String? title;
+
+  /// The parent content ID of the database.
+  final String? parentId;
+
+  DatabaseCreateRequest({required this.spaceId, this.title, this.parentId});
+
+  factory DatabaseCreateRequest.fromJson(Map<String, Object?> json) {
+    return DatabaseCreateRequest(
+      spaceId: json[r'spaceId'] as String? ?? '',
+      title: json[r'title'] as String?,
+      parentId: json[r'parentId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var spaceId = this.spaceId;
+    var title = this.title;
+    var parentId = this.parentId;
+
+    final json = <String, Object?>{};
+    json[r'spaceId'] = spaceId;
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (parentId != null) {
+      json[r'parentId'] = parentId;
+    }
+    return json;
+  }
+
+  DatabaseCreateRequest copyWith(
+      {String? spaceId, String? title, String? parentId}) {
+    return DatabaseCreateRequest(
+      spaceId: spaceId ?? this.spaceId,
+      title: title ?? this.title,
+      parentId: parentId ?? this.parentId,
+    );
+  }
+}
+
+class DatabaseLinks {
+  /// Web UI link of the content.
+  final String? webui;
+
+  DatabaseLinks({this.webui});
+
+  factory DatabaseLinks.fromJson(Map<String, Object?> json) {
+    return DatabaseLinks(
+      webui: json[r'webui'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var webui = this.webui;
+
+    final json = <String, Object?>{};
+    if (webui != null) {
+      json[r'webui'] = webui;
+    }
+    return json;
+  }
+
+  DatabaseLinks copyWith({String? webui}) {
+    return DatabaseLinks(
+      webui: webui ?? this.webui,
+    );
+  }
+}
+
+class DatabaseSingle {
+  /// ID of the database.
+  final String? id;
+
+  /// The content type of the object.
+  final String? type;
+  final String? status;
+
+  /// Title of the database.
+  final String? title;
+
+  /// ID of the parent content, or null if there is no parent content.
+  final String? parentId;
+  final String? parentType;
+
+  /// Position of the database within the given parent page tree.
+  final int? position;
+
+  /// The account ID of the user who created this database originally.
+  final String? authorId;
+
+  /// The account ID of the user who owns this database.
+  final String? ownerId;
+
+  /// Date and time when the database was created. In format
+  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
+  final DateTime? createdAt;
+  final Version? version;
+  final DatabaseLinks? links;
+
+  DatabaseSingle(
+      {this.id,
+      this.type,
+      this.status,
+      this.title,
+      this.parentId,
+      this.parentType,
+      this.position,
+      this.authorId,
+      this.ownerId,
+      this.createdAt,
+      this.version,
+      this.links});
+
+  factory DatabaseSingle.fromJson(Map<String, Object?> json) {
+    return DatabaseSingle(
+      id: json[r'id'] as String?,
+      type: json[r'type'] as String?,
+      status: json[r'status'] as String?,
+      title: json[r'title'] as String?,
+      parentId: json[r'parentId'] as String?,
+      parentType: json[r'parentType'] as String?,
+      position: (json[r'position'] as num?)?.toInt(),
+      authorId: json[r'authorId'] as String?,
+      ownerId: json[r'ownerId'] as String?,
+      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
+      version: json[r'version'] != null
+          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? DatabaseLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var type = this.type;
+    var status = this.status;
+    var title = this.title;
+    var parentId = this.parentId;
+    var parentType = this.parentType;
+    var position = this.position;
+    var authorId = this.authorId;
+    var ownerId = this.ownerId;
+    var createdAt = this.createdAt;
+    var version = this.version;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (parentId != null) {
+      json[r'parentId'] = parentId;
+    }
+    if (parentType != null) {
+      json[r'parentType'] = parentType;
+    }
+    if (position != null) {
+      json[r'position'] = position;
+    }
+    if (authorId != null) {
+      json[r'authorId'] = authorId;
+    }
+    if (ownerId != null) {
+      json[r'ownerId'] = ownerId;
+    }
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt.toIso8601String();
+    }
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  DatabaseSingle copyWith(
+      {String? id,
+      String? type,
+      String? status,
+      String? title,
+      String? parentId,
+      String? parentType,
+      int? position,
+      String? authorId,
+      String? ownerId,
+      DateTime? createdAt,
+      Version? version,
+      DatabaseLinks? links}) {
+    return DatabaseSingle(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      status: status ?? this.status,
+      title: title ?? this.title,
+      parentId: parentId ?? this.parentId,
+      parentType: parentType ?? this.parentType,
+      position: position ?? this.position,
+      authorId: authorId ?? this.authorId,
+      ownerId: ownerId ?? this.ownerId,
+      createdAt: createdAt ?? this.createdAt,
+      version: version ?? this.version,
+      links: links ?? this.links,
+    );
+  }
+}
+
 class DetailedVersion {
   /// The current version number.
   final int? number;
@@ -7051,6 +10713,230 @@ class DetailedVersion {
   }
 }
 
+class FolderCreateRequest {
+  /// ID of the space.
+  final String spaceId;
+
+  /// Title of the folder.
+  final String? title;
+
+  /// The parent content ID of the folder.
+  final String? parentId;
+
+  FolderCreateRequest({required this.spaceId, this.title, this.parentId});
+
+  factory FolderCreateRequest.fromJson(Map<String, Object?> json) {
+    return FolderCreateRequest(
+      spaceId: json[r'spaceId'] as String? ?? '',
+      title: json[r'title'] as String?,
+      parentId: json[r'parentId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var spaceId = this.spaceId;
+    var title = this.title;
+    var parentId = this.parentId;
+
+    final json = <String, Object?>{};
+    json[r'spaceId'] = spaceId;
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (parentId != null) {
+      json[r'parentId'] = parentId;
+    }
+    return json;
+  }
+
+  FolderCreateRequest copyWith(
+      {String? spaceId, String? title, String? parentId}) {
+    return FolderCreateRequest(
+      spaceId: spaceId ?? this.spaceId,
+      title: title ?? this.title,
+      parentId: parentId ?? this.parentId,
+    );
+  }
+}
+
+class FolderLinks {
+  /// Web UI link of the content.
+  final String? webui;
+
+  FolderLinks({this.webui});
+
+  factory FolderLinks.fromJson(Map<String, Object?> json) {
+    return FolderLinks(
+      webui: json[r'webui'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var webui = this.webui;
+
+    final json = <String, Object?>{};
+    if (webui != null) {
+      json[r'webui'] = webui;
+    }
+    return json;
+  }
+
+  FolderLinks copyWith({String? webui}) {
+    return FolderLinks(
+      webui: webui ?? this.webui,
+    );
+  }
+}
+
+class FolderSingle {
+  /// ID of the folder.
+  final String? id;
+
+  /// The content type of the object.
+  final String? type;
+  final String? status;
+
+  /// Title of the folder.
+  final String? title;
+
+  /// ID of the parent content, or null if there is no parent content.
+  final String? parentId;
+  final String? parentType;
+
+  /// Position of the folder within the given parent page tree.
+  final int? position;
+
+  /// The account ID of the user who created this folder.
+  final String? authorId;
+
+  /// The account ID of the user who owns this folder.
+  final String? ownerId;
+
+  /// Date and time when the folder was created. In format
+  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
+  final DateTime? createdAt;
+  final Version? version;
+  final FolderLinks? links;
+
+  FolderSingle(
+      {this.id,
+      this.type,
+      this.status,
+      this.title,
+      this.parentId,
+      this.parentType,
+      this.position,
+      this.authorId,
+      this.ownerId,
+      this.createdAt,
+      this.version,
+      this.links});
+
+  factory FolderSingle.fromJson(Map<String, Object?> json) {
+    return FolderSingle(
+      id: json[r'id'] as String?,
+      type: json[r'type'] as String?,
+      status: json[r'status'] as String?,
+      title: json[r'title'] as String?,
+      parentId: json[r'parentId'] as String?,
+      parentType: json[r'parentType'] as String?,
+      position: (json[r'position'] as num?)?.toInt(),
+      authorId: json[r'authorId'] as String?,
+      ownerId: json[r'ownerId'] as String?,
+      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
+      version: json[r'version'] != null
+          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? FolderLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var type = this.type;
+    var status = this.status;
+    var title = this.title;
+    var parentId = this.parentId;
+    var parentType = this.parentType;
+    var position = this.position;
+    var authorId = this.authorId;
+    var ownerId = this.ownerId;
+    var createdAt = this.createdAt;
+    var version = this.version;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (parentId != null) {
+      json[r'parentId'] = parentId;
+    }
+    if (parentType != null) {
+      json[r'parentType'] = parentType;
+    }
+    if (position != null) {
+      json[r'position'] = position;
+    }
+    if (authorId != null) {
+      json[r'authorId'] = authorId;
+    }
+    if (ownerId != null) {
+      json[r'ownerId'] = ownerId;
+    }
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt.toIso8601String();
+    }
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  FolderSingle copyWith(
+      {String? id,
+      String? type,
+      String? status,
+      String? title,
+      String? parentId,
+      String? parentType,
+      int? position,
+      String? authorId,
+      String? ownerId,
+      DateTime? createdAt,
+      Version? version,
+      FolderLinks? links}) {
+    return FolderSingle(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      status: status ?? this.status,
+      title: title ?? this.title,
+      parentId: parentId ?? this.parentId,
+      parentType: parentType ?? this.parentType,
+      position: position ?? this.position,
+      authorId: authorId ?? this.authorId,
+      ownerId: ownerId ?? this.ownerId,
+      createdAt: createdAt ?? this.createdAt,
+      version: version ?? this.version,
+      links: links ?? this.links,
+    );
+  }
+}
+
 class FooterCommentModel {
   /// ID of the comment.
   final String? id;
@@ -7066,9 +10952,21 @@ class FooterCommentModel {
   /// ID of the page containing the comment if the comment is on a page.
   final String? pageId;
 
+  /// ID of the attachment containing the comment if the comment is on an
+  /// attachment.
+  final String? attachmentId;
+
+  /// ID of the custom content containing the comment if the comment is on a
+  /// custom content.
+  final String? customContentId;
+
   /// ID of the parent comment if the comment is a reply.
   final String? parentCommentId;
   final Version? version;
+  final FooterCommentModelProperties? properties;
+  final FooterCommentModelOperations? operations;
+  final FooterCommentModelLikes? likes;
+  final FooterCommentModelVersions? versions;
   final BodySingle? body;
   final CommentLinks? links;
 
@@ -7078,8 +10976,14 @@ class FooterCommentModel {
       this.title,
       this.blogPostId,
       this.pageId,
+      this.attachmentId,
+      this.customContentId,
       this.parentCommentId,
       this.version,
+      this.properties,
+      this.operations,
+      this.likes,
+      this.versions,
       this.body,
       this.links});
 
@@ -7090,9 +10994,27 @@ class FooterCommentModel {
       title: json[r'title'] as String?,
       blogPostId: json[r'blogPostId'] as String?,
       pageId: json[r'pageId'] as String?,
+      attachmentId: json[r'attachmentId'] as String?,
+      customContentId: json[r'customContentId'] as String?,
       parentCommentId: json[r'parentCommentId'] as String?,
       version: json[r'version'] != null
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      properties: json[r'properties'] != null
+          ? FooterCommentModelProperties.fromJson(
+              json[r'properties']! as Map<String, Object?>)
+          : null,
+      operations: json[r'operations'] != null
+          ? FooterCommentModelOperations.fromJson(
+              json[r'operations']! as Map<String, Object?>)
+          : null,
+      likes: json[r'likes'] != null
+          ? FooterCommentModelLikes.fromJson(
+              json[r'likes']! as Map<String, Object?>)
+          : null,
+      versions: json[r'versions'] != null
+          ? FooterCommentModelVersions.fromJson(
+              json[r'versions']! as Map<String, Object?>)
           : null,
       body: json[r'body'] != null
           ? BodySingle.fromJson(json[r'body']! as Map<String, Object?>)
@@ -7109,8 +11031,14 @@ class FooterCommentModel {
     var title = this.title;
     var blogPostId = this.blogPostId;
     var pageId = this.pageId;
+    var attachmentId = this.attachmentId;
+    var customContentId = this.customContentId;
     var parentCommentId = this.parentCommentId;
     var version = this.version;
+    var properties = this.properties;
+    var operations = this.operations;
+    var likes = this.likes;
+    var versions = this.versions;
     var body = this.body;
     var links = this.links;
 
@@ -7130,11 +11058,29 @@ class FooterCommentModel {
     if (pageId != null) {
       json[r'pageId'] = pageId;
     }
+    if (attachmentId != null) {
+      json[r'attachmentId'] = attachmentId;
+    }
+    if (customContentId != null) {
+      json[r'customContentId'] = customContentId;
+    }
     if (parentCommentId != null) {
       json[r'parentCommentId'] = parentCommentId;
     }
     if (version != null) {
       json[r'version'] = version.toJson();
+    }
+    if (properties != null) {
+      json[r'properties'] = properties.toJson();
+    }
+    if (operations != null) {
+      json[r'operations'] = operations.toJson();
+    }
+    if (likes != null) {
+      json[r'likes'] = likes.toJson();
+    }
+    if (versions != null) {
+      json[r'versions'] = versions.toJson();
     }
     if (body != null) {
       json[r'body'] = body.toJson();
@@ -7151,8 +11097,14 @@ class FooterCommentModel {
       String? title,
       String? blogPostId,
       String? pageId,
+      String? attachmentId,
+      String? customContentId,
       String? parentCommentId,
       Version? version,
+      FooterCommentModelProperties? properties,
+      FooterCommentModelOperations? operations,
+      FooterCommentModelLikes? likes,
+      FooterCommentModelVersions? versions,
       BodySingle? body,
       CommentLinks? links}) {
     return FooterCommentModel(
@@ -7161,10 +11113,263 @@ class FooterCommentModel {
       title: title ?? this.title,
       blogPostId: blogPostId ?? this.blogPostId,
       pageId: pageId ?? this.pageId,
+      attachmentId: attachmentId ?? this.attachmentId,
+      customContentId: customContentId ?? this.customContentId,
       parentCommentId: parentCommentId ?? this.parentCommentId,
       version: version ?? this.version,
+      properties: properties ?? this.properties,
+      operations: operations ?? this.operations,
+      likes: likes ?? this.likes,
+      versions: versions ?? this.versions,
       body: body ?? this.body,
       links: links ?? this.links,
+    );
+  }
+}
+
+class FooterCommentModelLikes {
+  final List<Like> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  FooterCommentModelLikes({List<Like>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory FooterCommentModelLikes.fromJson(Map<String, Object?> json) {
+    return FooterCommentModelLikes(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map(
+                  (i) => Like.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  FooterCommentModelLikes copyWith(
+      {List<Like>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return FooterCommentModelLikes(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class FooterCommentModelOperations {
+  final List<Operation> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  FooterCommentModelOperations(
+      {List<Operation>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory FooterCommentModelOperations.fromJson(Map<String, Object?> json) {
+    return FooterCommentModelOperations(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) =>
+                  Operation.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  FooterCommentModelOperations copyWith(
+      {List<Operation>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return FooterCommentModelOperations(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class FooterCommentModelProperties {
+  final List<ContentProperty> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  FooterCommentModelProperties(
+      {List<ContentProperty>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory FooterCommentModelProperties.fromJson(Map<String, Object?> json) {
+    return FooterCommentModelProperties(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) => ContentProperty.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  FooterCommentModelProperties copyWith(
+      {List<ContentProperty>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return FooterCommentModelProperties(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class FooterCommentModelVersions {
+  final List<Version> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  FooterCommentModelVersions({List<Version>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory FooterCommentModelVersions.fromJson(Map<String, Object?> json) {
+    return FooterCommentModelVersions(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) =>
+                  Version.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  FooterCommentModelVersions copyWith(
+      {List<Version>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return FooterCommentModelVersions(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+/// This object represents an icon. If used as a profilePicture, this may be
+/// returned as null, depending on the user's privacy setting.
+class Icon {
+  final String path;
+  final bool isDefault;
+
+  Icon({required this.path, required this.isDefault});
+
+  factory Icon.fromJson(Map<String, Object?> json) {
+    return Icon(
+      path: json[r'path'] as String? ?? '',
+      isDefault: json[r'isDefault'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var path = this.path;
+    var isDefault = this.isDefault;
+
+    final json = <String, Object?>{};
+    json[r'path'] = path;
+    json[r'isDefault'] = isDefault;
+    return json;
+  }
+
+  Icon copyWith({String? path, bool? isDefault}) {
+    return Icon(
+      path: path ?? this.path,
+      isDefault: isDefault ?? this.isDefault,
     );
   }
 }
@@ -7313,7 +11518,10 @@ class InlineCommentModel {
   /// Null until comment is resolved or reopened.
   final DateTime? resolutionLastModifiedAt;
   final String? resolutionStatus;
-  final InlineCommentProperties? properties;
+  final InlineCommentModelProperties? properties;
+  final InlineCommentModelOperations? operations;
+  final InlineCommentModelLikes? likes;
+  final InlineCommentModelVersions? versions;
   final CommentLinks? links;
 
   InlineCommentModel(
@@ -7329,6 +11537,9 @@ class InlineCommentModel {
       this.resolutionLastModifiedAt,
       this.resolutionStatus,
       this.properties,
+      this.operations,
+      this.likes,
+      this.versions,
       this.links});
 
   factory InlineCommentModel.fromJson(Map<String, Object?> json) {
@@ -7350,8 +11561,20 @@ class InlineCommentModel {
           DateTime.tryParse(json[r'resolutionLastModifiedAt'] as String? ?? ''),
       resolutionStatus: json[r'resolutionStatus'] as String?,
       properties: json[r'properties'] != null
-          ? InlineCommentProperties.fromJson(
+          ? InlineCommentModelProperties.fromJson(
               json[r'properties']! as Map<String, Object?>)
+          : null,
+      operations: json[r'operations'] != null
+          ? InlineCommentModelOperations.fromJson(
+              json[r'operations']! as Map<String, Object?>)
+          : null,
+      likes: json[r'likes'] != null
+          ? InlineCommentModelLikes.fromJson(
+              json[r'likes']! as Map<String, Object?>)
+          : null,
+      versions: json[r'versions'] != null
+          ? InlineCommentModelVersions.fromJson(
+              json[r'versions']! as Map<String, Object?>)
           : null,
       links: json[r'_links'] != null
           ? CommentLinks.fromJson(json[r'_links']! as Map<String, Object?>)
@@ -7372,6 +11595,9 @@ class InlineCommentModel {
     var resolutionLastModifiedAt = this.resolutionLastModifiedAt;
     var resolutionStatus = this.resolutionStatus;
     var properties = this.properties;
+    var operations = this.operations;
+    var likes = this.likes;
+    var versions = this.versions;
     var links = this.links;
 
     final json = <String, Object?>{};
@@ -7412,6 +11638,15 @@ class InlineCommentModel {
     if (properties != null) {
       json[r'properties'] = properties.toJson();
     }
+    if (operations != null) {
+      json[r'operations'] = operations.toJson();
+    }
+    if (likes != null) {
+      json[r'likes'] = likes.toJson();
+    }
+    if (versions != null) {
+      json[r'versions'] = versions.toJson();
+    }
     if (links != null) {
       json[r'_links'] = links.toJson();
     }
@@ -7430,7 +11665,10 @@ class InlineCommentModel {
       String? resolutionLastModifierId,
       DateTime? resolutionLastModifiedAt,
       String? resolutionStatus,
-      InlineCommentProperties? properties,
+      InlineCommentModelProperties? properties,
+      InlineCommentModelOperations? operations,
+      InlineCommentModelLikes? likes,
+      InlineCommentModelVersions? versions,
       CommentLinks? links}) {
     return InlineCommentModel(
       id: id ?? this.id,
@@ -7447,6 +11685,248 @@ class InlineCommentModel {
           resolutionLastModifiedAt ?? this.resolutionLastModifiedAt,
       resolutionStatus: resolutionStatus ?? this.resolutionStatus,
       properties: properties ?? this.properties,
+      operations: operations ?? this.operations,
+      likes: likes ?? this.likes,
+      versions: versions ?? this.versions,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class InlineCommentModelLikes {
+  final List<Like> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  InlineCommentModelLikes({List<Like>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory InlineCommentModelLikes.fromJson(Map<String, Object?> json) {
+    return InlineCommentModelLikes(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map(
+                  (i) => Like.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  InlineCommentModelLikes copyWith(
+      {List<Like>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return InlineCommentModelLikes(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class InlineCommentModelOperations {
+  final List<Operation> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  InlineCommentModelOperations(
+      {List<Operation>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory InlineCommentModelOperations.fromJson(Map<String, Object?> json) {
+    return InlineCommentModelOperations(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) =>
+                  Operation.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  InlineCommentModelOperations copyWith(
+      {List<Operation>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return InlineCommentModelOperations(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class InlineCommentModelProperties {
+  final List<ContentProperty> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  /// Property value used to reference the highlighted element in DOM.
+  final String? inlineMarkerRef;
+
+  /// Text that is highlighted.
+  final String? inlineOriginalSelection;
+
+  InlineCommentModelProperties(
+      {List<ContentProperty>? results,
+      this.meta,
+      this.links,
+      this.inlineMarkerRef,
+      this.inlineOriginalSelection})
+      : results = results ?? [];
+
+  factory InlineCommentModelProperties.fromJson(Map<String, Object?> json) {
+    return InlineCommentModelProperties(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) => ContentProperty.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+      inlineMarkerRef: json[r'inlineMarkerRef'] as String?,
+      inlineOriginalSelection: json[r'inlineOriginalSelection'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+    var inlineMarkerRef = this.inlineMarkerRef;
+    var inlineOriginalSelection = this.inlineOriginalSelection;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    if (inlineMarkerRef != null) {
+      json[r'inlineMarkerRef'] = inlineMarkerRef;
+    }
+    if (inlineOriginalSelection != null) {
+      json[r'inlineOriginalSelection'] = inlineOriginalSelection;
+    }
+    return json;
+  }
+
+  InlineCommentModelProperties copyWith(
+      {List<ContentProperty>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links,
+      String? inlineMarkerRef,
+      String? inlineOriginalSelection}) {
+    return InlineCommentModelProperties(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+      inlineMarkerRef: inlineMarkerRef ?? this.inlineMarkerRef,
+      inlineOriginalSelection:
+          inlineOriginalSelection ?? this.inlineOriginalSelection,
+    );
+  }
+}
+
+class InlineCommentModelVersions {
+  final List<Version> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  InlineCommentModelVersions({List<Version>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory InlineCommentModelVersions.fromJson(Map<String, Object?> json) {
+    return InlineCommentModelVersions(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) =>
+                  Version.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  InlineCommentModelVersions copyWith(
+      {List<Version>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return InlineCommentModelVersions(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
       links: links ?? this.links,
     );
   }
@@ -7456,15 +11936,15 @@ class InlineCommentProperties {
   /// Property value used to reference the highlighted element in DOM.
   final String? inlineMarkerRef;
 
-  /// Text that is highlighted
+  /// Text that is highlighted.
   final String? inlineOriginalSelection;
 
   InlineCommentProperties({this.inlineMarkerRef, this.inlineOriginalSelection});
 
   factory InlineCommentProperties.fromJson(Map<String, Object?> json) {
     return InlineCommentProperties(
-      inlineMarkerRef: json[r'inline-marker-ref'] as String?,
-      inlineOriginalSelection: json[r'inline-original-selection'] as String?,
+      inlineMarkerRef: json[r'inlineMarkerRef'] as String?,
+      inlineOriginalSelection: json[r'inlineOriginalSelection'] as String?,
     );
   }
 
@@ -7474,10 +11954,10 @@ class InlineCommentProperties {
 
     final json = <String, Object?>{};
     if (inlineMarkerRef != null) {
-      json[r'inline-marker-ref'] = inlineMarkerRef;
+      json[r'inlineMarkerRef'] = inlineMarkerRef;
     }
     if (inlineOriginalSelection != null) {
-      json[r'inline-original-selection'] = inlineOriginalSelection;
+      json[r'inlineOriginalSelection'] = inlineOriginalSelection;
     }
     return json;
   }
@@ -7564,6 +12044,269 @@ class Like {
   Like copyWith({String? accountId}) {
     return Like(
       accountId: accountId ?? this.accountId,
+    );
+  }
+}
+
+class LiveEditContentClassificationLevelResetRequest {
+  /// Status of the content.
+  final LiveEditContentClassificationLevelResetRequestStatus status;
+
+  LiveEditContentClassificationLevelResetRequest({required this.status});
+
+  factory LiveEditContentClassificationLevelResetRequest.fromJson(
+      Map<String, Object?> json) {
+    return LiveEditContentClassificationLevelResetRequest(
+      status: LiveEditContentClassificationLevelResetRequestStatus.fromValue(
+          json[r'status'] as String? ?? ''),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var status = this.status;
+
+    final json = <String, Object?>{};
+    json[r'status'] = status.value;
+    return json;
+  }
+
+  LiveEditContentClassificationLevelResetRequest copyWith(
+      {LiveEditContentClassificationLevelResetRequestStatus? status}) {
+    return LiveEditContentClassificationLevelResetRequest(
+      status: status ?? this.status,
+    );
+  }
+}
+
+class LiveEditContentClassificationLevelResetRequestStatus {
+  static const current =
+      LiveEditContentClassificationLevelResetRequestStatus._('current');
+
+  static const values = [
+    current,
+  ];
+  final String value;
+
+  const LiveEditContentClassificationLevelResetRequestStatus._(this.value);
+
+  static LiveEditContentClassificationLevelResetRequestStatus fromValue(
+          String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () =>
+              LiveEditContentClassificationLevelResetRequestStatus._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class LiveEditContentClassificationLevelUpdateRequest {
+  /// The ID of the classification level.
+  final String id;
+
+  /// Status of the content.
+  final LiveEditContentClassificationLevelUpdateRequestStatus status;
+
+  LiveEditContentClassificationLevelUpdateRequest(
+      {required this.id, required this.status});
+
+  factory LiveEditContentClassificationLevelUpdateRequest.fromJson(
+      Map<String, Object?> json) {
+    return LiveEditContentClassificationLevelUpdateRequest(
+      id: json[r'id'] as String? ?? '',
+      status: LiveEditContentClassificationLevelUpdateRequestStatus.fromValue(
+          json[r'status'] as String? ?? ''),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var status = this.status;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    json[r'status'] = status.value;
+    return json;
+  }
+
+  LiveEditContentClassificationLevelUpdateRequest copyWith(
+      {String? id,
+      LiveEditContentClassificationLevelUpdateRequestStatus? status}) {
+    return LiveEditContentClassificationLevelUpdateRequest(
+      id: id ?? this.id,
+      status: status ?? this.status,
+    );
+  }
+}
+
+class LiveEditContentClassificationLevelUpdateRequestStatus {
+  static const current =
+      LiveEditContentClassificationLevelUpdateRequestStatus._('current');
+
+  static const values = [
+    current,
+  ];
+  final String value;
+
+  const LiveEditContentClassificationLevelUpdateRequestStatus._(this.value);
+
+  static LiveEditContentClassificationLevelUpdateRequestStatus fromValue(
+          String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () =>
+              LiveEditContentClassificationLevelUpdateRequestStatus._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
+}
+
+class MultiEntityLinks {
+  /// Used for pagination. Contains the relative URL for the next set of
+  /// results, using a cursor query parameter.
+  /// This property will not be present if there is no additional data
+  /// available.
+  final String? next;
+
+  /// Base url of the Confluence site.
+  final String? base;
+
+  MultiEntityLinks({this.next, this.base});
+
+  factory MultiEntityLinks.fromJson(Map<String, Object?> json) {
+    return MultiEntityLinks(
+      next: json[r'next'] as String?,
+      base: json[r'base'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var next = this.next;
+    var base = this.base;
+
+    final json = <String, Object?>{};
+    if (next != null) {
+      json[r'next'] = next;
+    }
+    if (base != null) {
+      json[r'base'] = base;
+    }
+    return json;
+  }
+
+  MultiEntityLinks copyWith({String? next, String? base}) {
+    return MultiEntityLinks(
+      next: next ?? this.next,
+      base: base ?? this.base,
+    );
+  }
+}
+
+class Operation {
+  /// The type of operation.
+  final String? operation;
+
+  /// The type of entity the operation type targets.
+  final String? targetType;
+
+  Operation({this.operation, this.targetType});
+
+  factory Operation.fromJson(Map<String, Object?> json) {
+    return Operation(
+      operation: json[r'operation'] as String?,
+      targetType: json[r'targetType'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var operation = this.operation;
+    var targetType = this.targetType;
+
+    final json = <String, Object?>{};
+    if (operation != null) {
+      json[r'operation'] = operation;
+    }
+    if (targetType != null) {
+      json[r'targetType'] = targetType;
+    }
+    return json;
+  }
+
+  Operation copyWith({String? operation, String? targetType}) {
+    return Operation(
+      operation: operation ?? this.operation,
+      targetType: targetType ?? this.targetType,
+    );
+  }
+}
+
+class OptionalFieldLinks {
+  /// A relative URL that can be used to fetch results beyond what this include
+  /// parameter retrieves.
+  final String? self;
+
+  OptionalFieldLinks({this.self});
+
+  factory OptionalFieldLinks.fromJson(Map<String, Object?> json) {
+    return OptionalFieldLinks(
+      self: json[r'self'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var self = this.self;
+
+    final json = <String, Object?>{};
+    if (self != null) {
+      json[r'self'] = self;
+    }
+    return json;
+  }
+
+  OptionalFieldLinks copyWith({String? self}) {
+    return OptionalFieldLinks(
+      self: self ?? this.self,
+    );
+  }
+}
+
+class OptionalFieldMeta {
+  /// Indicates if there are more available results that can be fetched.
+  final bool hasMore;
+
+  /// A token that can be used in the query parameter of the endpoint returned
+  /// in the `_links` property to retrieve the next set of results.
+  final String? cursor;
+
+  OptionalFieldMeta({bool? hasMore, this.cursor}) : hasMore = hasMore ?? false;
+
+  factory OptionalFieldMeta.fromJson(Map<String, Object?> json) {
+    return OptionalFieldMeta(
+      hasMore: json[r'hasMore'] as bool? ?? false,
+      cursor: json[r'cursor'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var hasMore = this.hasMore;
+    var cursor = this.cursor;
+
+    final json = <String, Object?>{};
+    json[r'hasMore'] = hasMore;
+    if (cursor != null) {
+      json[r'cursor'] = cursor;
+    }
+    return json;
+  }
+
+  OptionalFieldMeta copyWith({bool? hasMore, String? cursor}) {
+    return OptionalFieldMeta(
+      hasMore: hasMore ?? this.hasMore,
+      cursor: cursor ?? this.cursor,
     );
   }
 }
@@ -7657,6 +12400,13 @@ class PageBulk {
   /// The account ID of the user who created this page originally.
   final String? authorId;
 
+  /// The account ID of the user who owns this page.
+  final String? ownerId;
+
+  /// The account ID of the user who owned this page previously, or null if
+  /// there is no previous owner.
+  final String? lastOwnerId;
+
   /// Date and time when the page was created. In format
   /// "YYYY-MM-DDTHH:mm:ss.sssZ".
   final DateTime? createdAt;
@@ -7673,6 +12423,8 @@ class PageBulk {
       this.parentType,
       this.position,
       this.authorId,
+      this.ownerId,
+      this.lastOwnerId,
       this.createdAt,
       this.version,
       this.body,
@@ -7688,6 +12440,8 @@ class PageBulk {
       parentType: json[r'parentType'] as String?,
       position: (json[r'position'] as num?)?.toInt(),
       authorId: json[r'authorId'] as String?,
+      ownerId: json[r'ownerId'] as String?,
+      lastOwnerId: json[r'lastOwnerId'] as String?,
       createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
       version: json[r'version'] != null
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
@@ -7710,6 +12464,8 @@ class PageBulk {
     var parentType = this.parentType;
     var position = this.position;
     var authorId = this.authorId;
+    var ownerId = this.ownerId;
+    var lastOwnerId = this.lastOwnerId;
     var createdAt = this.createdAt;
     var version = this.version;
     var body = this.body;
@@ -7740,6 +12496,12 @@ class PageBulk {
     if (authorId != null) {
       json[r'authorId'] = authorId;
     }
+    if (ownerId != null) {
+      json[r'ownerId'] = ownerId;
+    }
+    if (lastOwnerId != null) {
+      json[r'lastOwnerId'] = lastOwnerId;
+    }
     if (createdAt != null) {
       json[r'createdAt'] = createdAt.toIso8601String();
     }
@@ -7764,6 +12526,8 @@ class PageBulk {
       String? parentType,
       int? position,
       String? authorId,
+      String? ownerId,
+      String? lastOwnerId,
       DateTime? createdAt,
       Version? version,
       BodyBulk? body,
@@ -7777,6 +12541,8 @@ class PageBulk {
       parentType: parentType ?? this.parentType,
       position: position ?? this.position,
       authorId: authorId ?? this.authorId,
+      ownerId: ownerId ?? this.ownerId,
+      lastOwnerId: lastOwnerId ?? this.lastOwnerId,
       createdAt: createdAt ?? this.createdAt,
       version: version ?? this.version,
       body: body ?? this.body,
@@ -7881,7 +12647,7 @@ class PageCommentModel {
 }
 
 class PageCreateRequest {
-  /// ID of the space
+  /// ID of the space.
   final String spaceId;
 
   /// The status of the page, published or draft.
@@ -7890,7 +12656,12 @@ class PageCreateRequest {
   /// Title of the page, required if page status is not draft.
   final String? title;
 
-  /// The parent content ID of the page.
+  /// The parent content ID of the page. If the `root-level` query parameter is
+  /// set to false and a value is
+  /// not supplied for this parameter, then the space homepage's ID will be
+  /// used. If the `root-level` query
+  /// parameter is set to true, then a value may not be supplied for this
+  /// parameter.
   final String? parentId;
   final dynamic body;
 
@@ -8167,11 +12938,26 @@ class PageSingle {
   /// The account ID of the user who created this page originally.
   final String? authorId;
 
+  /// The account ID of the user who owns this page.
+  final String? ownerId;
+
+  /// The account ID of the user who owned this page previously, or null if
+  /// there is no previous owner.
+  final String? lastOwnerId;
+
   /// Date and time when the page was created. In format
   /// "YYYY-MM-DDTHH:mm:ss.sssZ".
   final DateTime? createdAt;
   final Version? version;
   final BodySingle? body;
+  final PageSingleLabels? labels;
+  final PageSingleProperties? properties;
+  final PageSingleOperations? operations;
+  final PageSingleLikes? likes;
+  final PageSingleVersions? versions;
+
+  /// Whether the page has been favorited by the current user.
+  final bool isFavoritedByCurrentUser;
   final AbstractPageLinks? links;
 
   PageSingle(
@@ -8183,10 +12969,19 @@ class PageSingle {
       this.parentType,
       this.position,
       this.authorId,
+      this.ownerId,
+      this.lastOwnerId,
       this.createdAt,
       this.version,
       this.body,
-      this.links});
+      this.labels,
+      this.properties,
+      this.operations,
+      this.likes,
+      this.versions,
+      bool? isFavoritedByCurrentUser,
+      this.links})
+      : isFavoritedByCurrentUser = isFavoritedByCurrentUser ?? false;
 
   factory PageSingle.fromJson(Map<String, Object?> json) {
     return PageSingle(
@@ -8198,6 +12993,8 @@ class PageSingle {
       parentType: json[r'parentType'] as String?,
       position: (json[r'position'] as num?)?.toInt(),
       authorId: json[r'authorId'] as String?,
+      ownerId: json[r'ownerId'] as String?,
+      lastOwnerId: json[r'lastOwnerId'] as String?,
       createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
       version: json[r'version'] != null
           ? Version.fromJson(json[r'version']! as Map<String, Object?>)
@@ -8205,6 +13002,26 @@ class PageSingle {
       body: json[r'body'] != null
           ? BodySingle.fromJson(json[r'body']! as Map<String, Object?>)
           : null,
+      labels: json[r'labels'] != null
+          ? PageSingleLabels.fromJson(json[r'labels']! as Map<String, Object?>)
+          : null,
+      properties: json[r'properties'] != null
+          ? PageSingleProperties.fromJson(
+              json[r'properties']! as Map<String, Object?>)
+          : null,
+      operations: json[r'operations'] != null
+          ? PageSingleOperations.fromJson(
+              json[r'operations']! as Map<String, Object?>)
+          : null,
+      likes: json[r'likes'] != null
+          ? PageSingleLikes.fromJson(json[r'likes']! as Map<String, Object?>)
+          : null,
+      versions: json[r'versions'] != null
+          ? PageSingleVersions.fromJson(
+              json[r'versions']! as Map<String, Object?>)
+          : null,
+      isFavoritedByCurrentUser:
+          json[r'isFavoritedByCurrentUser'] as bool? ?? false,
       links: json[r'_links'] != null
           ? AbstractPageLinks.fromJson(json[r'_links']! as Map<String, Object?>)
           : null,
@@ -8220,9 +13037,17 @@ class PageSingle {
     var parentType = this.parentType;
     var position = this.position;
     var authorId = this.authorId;
+    var ownerId = this.ownerId;
+    var lastOwnerId = this.lastOwnerId;
     var createdAt = this.createdAt;
     var version = this.version;
     var body = this.body;
+    var labels = this.labels;
+    var properties = this.properties;
+    var operations = this.operations;
+    var likes = this.likes;
+    var versions = this.versions;
+    var isFavoritedByCurrentUser = this.isFavoritedByCurrentUser;
     var links = this.links;
 
     final json = <String, Object?>{};
@@ -8250,6 +13075,12 @@ class PageSingle {
     if (authorId != null) {
       json[r'authorId'] = authorId;
     }
+    if (ownerId != null) {
+      json[r'ownerId'] = ownerId;
+    }
+    if (lastOwnerId != null) {
+      json[r'lastOwnerId'] = lastOwnerId;
+    }
     if (createdAt != null) {
       json[r'createdAt'] = createdAt.toIso8601String();
     }
@@ -8259,6 +13090,22 @@ class PageSingle {
     if (body != null) {
       json[r'body'] = body.toJson();
     }
+    if (labels != null) {
+      json[r'labels'] = labels.toJson();
+    }
+    if (properties != null) {
+      json[r'properties'] = properties.toJson();
+    }
+    if (operations != null) {
+      json[r'operations'] = operations.toJson();
+    }
+    if (likes != null) {
+      json[r'likes'] = likes.toJson();
+    }
+    if (versions != null) {
+      json[r'versions'] = versions.toJson();
+    }
+    json[r'isFavoritedByCurrentUser'] = isFavoritedByCurrentUser;
     if (links != null) {
       json[r'_links'] = links.toJson();
     }
@@ -8274,9 +13121,17 @@ class PageSingle {
       String? parentType,
       int? position,
       String? authorId,
+      String? ownerId,
+      String? lastOwnerId,
       DateTime? createdAt,
       Version? version,
       BodySingle? body,
+      PageSingleLabels? labels,
+      PageSingleProperties? properties,
+      PageSingleOperations? operations,
+      PageSingleLikes? likes,
+      PageSingleVersions? versions,
+      bool? isFavoritedByCurrentUser,
       AbstractPageLinks? links}) {
     return PageSingle(
       id: id ?? this.id,
@@ -8287,9 +13142,283 @@ class PageSingle {
       parentType: parentType ?? this.parentType,
       position: position ?? this.position,
       authorId: authorId ?? this.authorId,
+      ownerId: ownerId ?? this.ownerId,
+      lastOwnerId: lastOwnerId ?? this.lastOwnerId,
       createdAt: createdAt ?? this.createdAt,
       version: version ?? this.version,
       body: body ?? this.body,
+      labels: labels ?? this.labels,
+      properties: properties ?? this.properties,
+      operations: operations ?? this.operations,
+      likes: likes ?? this.likes,
+      versions: versions ?? this.versions,
+      isFavoritedByCurrentUser:
+          isFavoritedByCurrentUser ?? this.isFavoritedByCurrentUser,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class PageSingleLabels {
+  final List<Label> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  PageSingleLabels({List<Label>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory PageSingleLabels.fromJson(Map<String, Object?> json) {
+    return PageSingleLabels(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map(
+                  (i) => Label.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PageSingleLabels copyWith(
+      {List<Label>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return PageSingleLabels(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class PageSingleLikes {
+  final List<Like> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  PageSingleLikes({List<Like>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory PageSingleLikes.fromJson(Map<String, Object?> json) {
+    return PageSingleLikes(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map(
+                  (i) => Like.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PageSingleLikes copyWith(
+      {List<Like>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return PageSingleLikes(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class PageSingleOperations {
+  final List<Operation> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  PageSingleOperations({List<Operation>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory PageSingleOperations.fromJson(Map<String, Object?> json) {
+    return PageSingleOperations(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) =>
+                  Operation.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PageSingleOperations copyWith(
+      {List<Operation>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return PageSingleOperations(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class PageSingleProperties {
+  final List<ContentProperty> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  PageSingleProperties({List<ContentProperty>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory PageSingleProperties.fromJson(Map<String, Object?> json) {
+    return PageSingleProperties(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) => ContentProperty.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PageSingleProperties copyWith(
+      {List<ContentProperty>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return PageSingleProperties(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class PageSingleVersions {
+  final List<Version> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  PageSingleVersions({List<Version>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory PageSingleVersions.fromJson(Map<String, Object?> json) {
+    return PageSingleVersions(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) =>
+                  Version.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  PageSingleVersions copyWith(
+      {List<Version>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return PageSingleVersions(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
       links: links ?? this.links,
     );
   }
@@ -8299,7 +13428,14 @@ class PageUpdateRequest {
   /// Id of the page.
   final String id;
 
-  /// The status of the page.
+  /// The updated status of the page.
+  ///
+  /// Note, if you change the status of a page from 'current' to 'draft' and it
+  /// has an existing draft, the existing draft will be deleted in favor of the
+  /// updated draft.
+  /// Additionally, this endpoint can be used to restore a 'trashed' or
+  /// 'deleted' page to 'current' status. For restoration, page contents will
+  /// not be updated and only the page status will be changed.
   final PageUpdateRequestStatus status;
 
   /// Title of the page.
@@ -8315,6 +13451,11 @@ class PageUpdateRequest {
   /// This allows the page to be moved under a different parent within the same
   /// space.
   final dynamic parentId;
+
+  /// Account ID of the page owner.
+  ///
+  /// This allows page ownership to be transferred to another user.
+  final dynamic ownerId;
   final dynamic body;
   final PageUpdateRequestVersion version;
 
@@ -8324,6 +13465,7 @@ class PageUpdateRequest {
       required this.title,
       this.spaceId,
       this.parentId,
+      this.ownerId,
       required this.body,
       required this.version});
 
@@ -8335,6 +13477,7 @@ class PageUpdateRequest {
       title: json[r'title'] as String? ?? '',
       spaceId: json[r'spaceId'],
       parentId: json[r'parentId'],
+      ownerId: json[r'ownerId'],
       body: json[r'body'],
       version: PageUpdateRequestVersion.fromJson(
           json[r'version'] as Map<String, Object?>? ?? const {}),
@@ -8347,6 +13490,7 @@ class PageUpdateRequest {
     var title = this.title;
     var spaceId = this.spaceId;
     var parentId = this.parentId;
+    var ownerId = this.ownerId;
     var body = this.body;
     var version = this.version;
 
@@ -8360,6 +13504,9 @@ class PageUpdateRequest {
     if (parentId != null) {
       json[r'parentId'] = parentId;
     }
+    if (ownerId != null) {
+      json[r'ownerId'] = ownerId;
+    }
     json[r'body'] = body;
     json[r'version'] = version.toJson();
     return json;
@@ -8371,6 +13518,7 @@ class PageUpdateRequest {
       String? title,
       dynamic spaceId,
       dynamic parentId,
+      dynamic ownerId,
       dynamic body,
       PageUpdateRequestVersion? version}) {
     return PageUpdateRequest(
@@ -8379,6 +13527,7 @@ class PageUpdateRequest {
       title: title ?? this.title,
       spaceId: spaceId ?? this.spaceId,
       parentId: parentId ?? this.parentId,
+      ownerId: ownerId ?? this.ownerId,
       body: body ?? this.body,
       version: version ?? this.version,
     );
@@ -8388,14 +13537,10 @@ class PageUpdateRequest {
 class PageUpdateRequestStatus {
   static const current = PageUpdateRequestStatus._('current');
   static const draft = PageUpdateRequestStatus._('draft');
-  static const archived = PageUpdateRequestStatus._('archived');
-  static const deleted = PageUpdateRequestStatus._('deleted');
 
   static const values = [
     current,
     draft,
-    archived,
-    deleted,
   ];
   final String value;
 
@@ -8413,7 +13558,11 @@ class PageUpdateRequestStatus {
 }
 
 class PageUpdateRequestVersion {
-  /// The version number, must be incremented by one.
+  /// The new version of the updated page.
+  /// Set this to the current version number plus one, unless you are updating
+  /// the status to 'draft' which requires a version number of 1.
+  ///
+  /// If you don't know the current version number, use Get page by id.
   final int? number;
 
   /// An optional message to be stored with the version.
@@ -8539,17 +13688,16 @@ class PageVersion {
 
 /// The list of operations permitted on entity.
 class PermittedOperationsResponse {
-  final List<PermittedOperationsResponseOperationsItem> operations;
+  final List<Operation> operations;
 
-  PermittedOperationsResponse(
-      {List<PermittedOperationsResponseOperationsItem>? operations})
+  PermittedOperationsResponse({List<Operation>? operations})
       : operations = operations ?? [];
 
   factory PermittedOperationsResponse.fromJson(Map<String, Object?> json) {
     return PermittedOperationsResponse(
       operations: (json[r'operations'] as List<Object?>?)
-              ?.map((i) => PermittedOperationsResponseOperationsItem.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
+              ?.map((i) =>
+                  Operation.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
     );
@@ -8563,55 +13711,261 @@ class PermittedOperationsResponse {
     return json;
   }
 
-  PermittedOperationsResponse copyWith(
-      {List<PermittedOperationsResponseOperationsItem>? operations}) {
+  PermittedOperationsResponse copyWith({List<Operation>? operations}) {
     return PermittedOperationsResponse(
       operations: operations ?? this.operations,
     );
   }
 }
 
-class PermittedOperationsResponseOperationsItem {
-  /// The type of operation.
-  final String? operation;
+class SmartLinkCreateRequest {
+  /// ID of the space.
+  final String spaceId;
 
-  /// The type of entity the operation type targets.
-  final String? targetType;
+  /// Title of the Smart Link in the content tree.
+  final String? title;
 
-  PermittedOperationsResponseOperationsItem({this.operation, this.targetType});
+  /// The parent content ID of the Smart Link in the content tree.
+  final String? parentId;
 
-  factory PermittedOperationsResponseOperationsItem.fromJson(
-      Map<String, Object?> json) {
-    return PermittedOperationsResponseOperationsItem(
-      operation: json[r'operation'] as String?,
-      targetType: json[r'targetType'] as String?,
+  /// The URL that the Smart Link in the content tree should be populated with.
+  final String? embedUrl;
+
+  SmartLinkCreateRequest(
+      {required this.spaceId, this.title, this.parentId, this.embedUrl});
+
+  factory SmartLinkCreateRequest.fromJson(Map<String, Object?> json) {
+    return SmartLinkCreateRequest(
+      spaceId: json[r'spaceId'] as String? ?? '',
+      title: json[r'title'] as String?,
+      parentId: json[r'parentId'] as String?,
+      embedUrl: json[r'embedUrl'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
-    var operation = this.operation;
-    var targetType = this.targetType;
+    var spaceId = this.spaceId;
+    var title = this.title;
+    var parentId = this.parentId;
+    var embedUrl = this.embedUrl;
 
     final json = <String, Object?>{};
-    if (operation != null) {
-      json[r'operation'] = operation;
+    json[r'spaceId'] = spaceId;
+    if (title != null) {
+      json[r'title'] = title;
     }
-    if (targetType != null) {
-      json[r'targetType'] = targetType;
+    if (parentId != null) {
+      json[r'parentId'] = parentId;
+    }
+    if (embedUrl != null) {
+      json[r'embedUrl'] = embedUrl;
     }
     return json;
   }
 
-  PermittedOperationsResponseOperationsItem copyWith(
-      {String? operation, String? targetType}) {
-    return PermittedOperationsResponseOperationsItem(
-      operation: operation ?? this.operation,
-      targetType: targetType ?? this.targetType,
+  SmartLinkCreateRequest copyWith(
+      {String? spaceId, String? title, String? parentId, String? embedUrl}) {
+    return SmartLinkCreateRequest(
+      spaceId: spaceId ?? this.spaceId,
+      title: title ?? this.title,
+      parentId: parentId ?? this.parentId,
+      embedUrl: embedUrl ?? this.embedUrl,
     );
   }
 }
 
-class Space {
+class SmartLinkLinks {
+  /// Web UI link of the content.
+  final String? webui;
+
+  SmartLinkLinks({this.webui});
+
+  factory SmartLinkLinks.fromJson(Map<String, Object?> json) {
+    return SmartLinkLinks(
+      webui: json[r'webui'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var webui = this.webui;
+
+    final json = <String, Object?>{};
+    if (webui != null) {
+      json[r'webui'] = webui;
+    }
+    return json;
+  }
+
+  SmartLinkLinks copyWith({String? webui}) {
+    return SmartLinkLinks(
+      webui: webui ?? this.webui,
+    );
+  }
+}
+
+class SmartLinkSingle {
+  /// ID of the Smart Link in the content tree.
+  final String? id;
+
+  /// The content type of the object.
+  final String? type;
+  final String? status;
+
+  /// Title of the Smart Link in the content tree.
+  final String? title;
+
+  /// ID of the parent content, or null if there is no parent content.
+  final String? parentId;
+  final String? parentType;
+
+  /// Position of the Smart Link within the given parent page tree.
+  final int? position;
+
+  /// The account ID of the user who created this Smart Link in the content tree
+  /// originally.
+  final String? authorId;
+
+  /// The account ID of the user who owns this Smart Link in the content tree.
+  final String? ownerId;
+
+  /// Date and time when the Smart Link in the content tree was created. In
+  /// format "YYYY-MM-DDTHH:mm:ss.sssZ".
+  final DateTime? createdAt;
+
+  /// The embedded URL of the Smart Link. If the Smart Link does not have an
+  /// embedded URL, this property will not be included in the response.
+  final String? embedUrl;
+  final Version? version;
+  final SmartLinkLinks? links;
+
+  SmartLinkSingle(
+      {this.id,
+      this.type,
+      this.status,
+      this.title,
+      this.parentId,
+      this.parentType,
+      this.position,
+      this.authorId,
+      this.ownerId,
+      this.createdAt,
+      this.embedUrl,
+      this.version,
+      this.links});
+
+  factory SmartLinkSingle.fromJson(Map<String, Object?> json) {
+    return SmartLinkSingle(
+      id: json[r'id'] as String?,
+      type: json[r'type'] as String?,
+      status: json[r'status'] as String?,
+      title: json[r'title'] as String?,
+      parentId: json[r'parentId'] as String?,
+      parentType: json[r'parentType'] as String?,
+      position: (json[r'position'] as num?)?.toInt(),
+      authorId: json[r'authorId'] as String?,
+      ownerId: json[r'ownerId'] as String?,
+      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
+      embedUrl: json[r'embedUrl'] as String?,
+      version: json[r'version'] != null
+          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? SmartLinkLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var type = this.type;
+    var status = this.status;
+    var title = this.title;
+    var parentId = this.parentId;
+    var parentType = this.parentType;
+    var position = this.position;
+    var authorId = this.authorId;
+    var ownerId = this.ownerId;
+    var createdAt = this.createdAt;
+    var embedUrl = this.embedUrl;
+    var version = this.version;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (parentId != null) {
+      json[r'parentId'] = parentId;
+    }
+    if (parentType != null) {
+      json[r'parentType'] = parentType;
+    }
+    if (position != null) {
+      json[r'position'] = position;
+    }
+    if (authorId != null) {
+      json[r'authorId'] = authorId;
+    }
+    if (ownerId != null) {
+      json[r'ownerId'] = ownerId;
+    }
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt.toIso8601String();
+    }
+    if (embedUrl != null) {
+      json[r'embedUrl'] = embedUrl;
+    }
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  SmartLinkSingle copyWith(
+      {String? id,
+      String? type,
+      String? status,
+      String? title,
+      String? parentId,
+      String? parentType,
+      int? position,
+      String? authorId,
+      String? ownerId,
+      DateTime? createdAt,
+      String? embedUrl,
+      Version? version,
+      SmartLinkLinks? links}) {
+    return SmartLinkSingle(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      status: status ?? this.status,
+      title: title ?? this.title,
+      parentId: parentId ?? this.parentId,
+      parentType: parentType ?? this.parentType,
+      position: position ?? this.position,
+      authorId: authorId ?? this.authorId,
+      ownerId: ownerId ?? this.ownerId,
+      createdAt: createdAt ?? this.createdAt,
+      embedUrl: embedUrl ?? this.embedUrl,
+      version: version ?? this.version,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class SpaceBulk {
   /// ID of the space.
   final String? id;
 
@@ -8634,8 +13988,9 @@ class Space {
   final String? homepageId;
   final SpaceDescription? description;
   final SpaceIcon? icon;
+  final SpaceLinks? links;
 
-  Space(
+  SpaceBulk(
       {this.id,
       this.key,
       this.name,
@@ -8645,10 +14000,11 @@ class Space {
       this.createdAt,
       this.homepageId,
       this.description,
-      this.icon});
+      this.icon,
+      this.links});
 
-  factory Space.fromJson(Map<String, Object?> json) {
-    return Space(
+  factory SpaceBulk.fromJson(Map<String, Object?> json) {
+    return SpaceBulk(
       id: json[r'id'] as String?,
       key: json[r'key'] as String?,
       name: json[r'name'] as String?,
@@ -8664,6 +14020,9 @@ class Space {
       icon: json[r'icon'] != null
           ? SpaceIcon.fromJson(json[r'icon']! as Map<String, Object?>)
           : null,
+      links: json[r'_links'] != null
+          ? SpaceLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
     );
   }
 
@@ -8678,6 +14037,7 @@ class Space {
     var homepageId = this.homepageId;
     var description = this.description;
     var icon = this.icon;
+    var links = this.links;
 
     final json = <String, Object?>{};
     if (id != null) {
@@ -8710,10 +14070,13 @@ class Space {
     if (icon != null) {
       json[r'icon'] = icon.toJson();
     }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
     return json;
   }
 
-  Space copyWith(
+  SpaceBulk copyWith(
       {String? id,
       String? key,
       String? name,
@@ -8723,8 +14086,9 @@ class Space {
       DateTime? createdAt,
       String? homepageId,
       SpaceDescription? description,
-      SpaceIcon? icon}) {
-    return Space(
+      SpaceIcon? icon,
+      SpaceLinks? links}) {
+    return SpaceBulk(
       id: id ?? this.id,
       key: key ?? this.key,
       name: name ?? this.name,
@@ -8735,8 +14099,75 @@ class Space {
       homepageId: homepageId ?? this.homepageId,
       description: description ?? this.description,
       icon: icon ?? this.icon,
+      links: links ?? this.links,
     );
   }
+}
+
+class SpaceDefaultClassificationLevelUpdateRequest {
+  /// The ID of the classification level.
+  final String id;
+
+  /// Status of the content.
+  final SpaceDefaultClassificationLevelUpdateRequestStatus status;
+
+  SpaceDefaultClassificationLevelUpdateRequest(
+      {required this.id, required this.status});
+
+  factory SpaceDefaultClassificationLevelUpdateRequest.fromJson(
+      Map<String, Object?> json) {
+    return SpaceDefaultClassificationLevelUpdateRequest(
+      id: json[r'id'] as String? ?? '',
+      status: SpaceDefaultClassificationLevelUpdateRequestStatus.fromValue(
+          json[r'status'] as String? ?? ''),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var status = this.status;
+
+    final json = <String, Object?>{};
+    json[r'id'] = id;
+    json[r'status'] = status.value;
+    return json;
+  }
+
+  SpaceDefaultClassificationLevelUpdateRequest copyWith(
+      {String? id,
+      SpaceDefaultClassificationLevelUpdateRequestStatus? status}) {
+    return SpaceDefaultClassificationLevelUpdateRequest(
+      id: id ?? this.id,
+      status: status ?? this.status,
+    );
+  }
+}
+
+class SpaceDefaultClassificationLevelUpdateRequestStatus {
+  static const current =
+      SpaceDefaultClassificationLevelUpdateRequestStatus._('current');
+  static const draft =
+      SpaceDefaultClassificationLevelUpdateRequestStatus._('draft');
+
+  static const values = [
+    current,
+    draft,
+  ];
+  final String value;
+
+  const SpaceDefaultClassificationLevelUpdateRequestStatus._(this.value);
+
+  static SpaceDefaultClassificationLevelUpdateRequestStatus fromValue(
+          String value) =>
+      values.firstWhere((e) => e.value == value,
+          orElse: () =>
+              SpaceDefaultClassificationLevelUpdateRequestStatus._(value));
+
+  /// An enum received from the server but this version of the client doesn't recognize it.
+  bool get isUnknown => values.every((v) => v.value != value);
+
+  @override
+  String toString() => value;
 }
 
 /// Contains fields for each representation type requested.
@@ -8786,27 +14217,71 @@ class SpaceIcon {
   /// `/wiki/aa-avatar/...`
   final String? path;
 
-  SpaceIcon({this.path});
+  /// The path (relative to base URL) that can be used to retrieve a link to
+  /// download the space icon. 3LO apps should use this link instead of the
+  /// value provided
+  /// in the `path` property to retrieve the icon.
+  ///
+  /// Currently this field is only returned for `global` spaces and not
+  /// `personal` spaces.
+  final String? apiDownloadLink;
+
+  SpaceIcon({this.path, this.apiDownloadLink});
 
   factory SpaceIcon.fromJson(Map<String, Object?> json) {
     return SpaceIcon(
       path: json[r'path'] as String?,
+      apiDownloadLink: json[r'apiDownloadLink'] as String?,
     );
   }
 
   Map<String, Object?> toJson() {
     var path = this.path;
+    var apiDownloadLink = this.apiDownloadLink;
 
     final json = <String, Object?>{};
     if (path != null) {
       json[r'path'] = path;
     }
+    if (apiDownloadLink != null) {
+      json[r'apiDownloadLink'] = apiDownloadLink;
+    }
     return json;
   }
 
-  SpaceIcon copyWith({String? path}) {
+  SpaceIcon copyWith({String? path, String? apiDownloadLink}) {
     return SpaceIcon(
       path: path ?? this.path,
+      apiDownloadLink: apiDownloadLink ?? this.apiDownloadLink,
+    );
+  }
+}
+
+class SpaceLinks {
+  /// Web UI link of the space.
+  final String? webui;
+
+  SpaceLinks({this.webui});
+
+  factory SpaceLinks.fromJson(Map<String, Object?> json) {
+    return SpaceLinks(
+      webui: json[r'webui'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var webui = this.webui;
+
+    final json = <String, Object?>{};
+    if (webui != null) {
+      json[r'webui'] = webui;
+    }
+    return json;
+  }
+
+  SpaceLinks copyWith({String? webui}) {
+    return SpaceLinks(
+      webui: webui ?? this.webui,
     );
   }
 }
@@ -8969,6 +14444,9 @@ class SpacePermissionOperationTargetType {
   static const comment = SpacePermissionOperationTargetType._('comment');
   static const attachment = SpacePermissionOperationTargetType._('attachment');
   static const whiteboard = SpacePermissionOperationTargetType._('whiteboard');
+  static const database = SpacePermissionOperationTargetType._('database');
+  static const embed = SpacePermissionOperationTargetType._('embed');
+  static const folder = SpacePermissionOperationTargetType._('folder');
   static const space = SpacePermissionOperationTargetType._('space');
   static const application =
       SpacePermissionOperationTargetType._('application');
@@ -8981,6 +14459,9 @@ class SpacePermissionOperationTargetType {
     comment,
     attachment,
     whiteboard,
+    database,
+    embed,
+    folder,
     space,
     application,
     userProfile,
@@ -9345,6 +14826,405 @@ class SpacePropertyVersion {
   }
 }
 
+class SpaceSingle {
+  /// ID of the space.
+  final String? id;
+
+  /// Key of the space.
+  final String? key;
+
+  /// Name of the space.
+  final String? name;
+  final String? type;
+  final String? status;
+
+  /// The account ID of the user who created this space originally.
+  final String? authorId;
+
+  /// Date and time when the space was created. In format
+  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
+  final DateTime? createdAt;
+
+  /// ID of the space's homepage.
+  final String? homepageId;
+  final SpaceDescription? description;
+  final SpaceIcon? icon;
+  final SpaceSingleLabels? labels;
+  final SpaceSingleProperties? properties;
+  final SpaceSingleOperations? operations;
+  final SpaceSinglePermissions? permissions;
+  final SpaceLinks? links;
+
+  SpaceSingle(
+      {this.id,
+      this.key,
+      this.name,
+      this.type,
+      this.status,
+      this.authorId,
+      this.createdAt,
+      this.homepageId,
+      this.description,
+      this.icon,
+      this.labels,
+      this.properties,
+      this.operations,
+      this.permissions,
+      this.links});
+
+  factory SpaceSingle.fromJson(Map<String, Object?> json) {
+    return SpaceSingle(
+      id: json[r'id'] as String?,
+      key: json[r'key'] as String?,
+      name: json[r'name'] as String?,
+      type: json[r'type'] as String?,
+      status: json[r'status'] as String?,
+      authorId: json[r'authorId'] as String?,
+      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
+      homepageId: json[r'homepageId'] as String?,
+      description: json[r'description'] != null
+          ? SpaceDescription.fromJson(
+              json[r'description']! as Map<String, Object?>)
+          : null,
+      icon: json[r'icon'] != null
+          ? SpaceIcon.fromJson(json[r'icon']! as Map<String, Object?>)
+          : null,
+      labels: json[r'labels'] != null
+          ? SpaceSingleLabels.fromJson(json[r'labels']! as Map<String, Object?>)
+          : null,
+      properties: json[r'properties'] != null
+          ? SpaceSingleProperties.fromJson(
+              json[r'properties']! as Map<String, Object?>)
+          : null,
+      operations: json[r'operations'] != null
+          ? SpaceSingleOperations.fromJson(
+              json[r'operations']! as Map<String, Object?>)
+          : null,
+      permissions: json[r'permissions'] != null
+          ? SpaceSinglePermissions.fromJson(
+              json[r'permissions']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? SpaceLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var key = this.key;
+    var name = this.name;
+    var type = this.type;
+    var status = this.status;
+    var authorId = this.authorId;
+    var createdAt = this.createdAt;
+    var homepageId = this.homepageId;
+    var description = this.description;
+    var icon = this.icon;
+    var labels = this.labels;
+    var properties = this.properties;
+    var operations = this.operations;
+    var permissions = this.permissions;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (key != null) {
+      json[r'key'] = key;
+    }
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (authorId != null) {
+      json[r'authorId'] = authorId;
+    }
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt.toIso8601String();
+    }
+    if (homepageId != null) {
+      json[r'homepageId'] = homepageId;
+    }
+    if (description != null) {
+      json[r'description'] = description.toJson();
+    }
+    if (icon != null) {
+      json[r'icon'] = icon.toJson();
+    }
+    if (labels != null) {
+      json[r'labels'] = labels.toJson();
+    }
+    if (properties != null) {
+      json[r'properties'] = properties.toJson();
+    }
+    if (operations != null) {
+      json[r'operations'] = operations.toJson();
+    }
+    if (permissions != null) {
+      json[r'permissions'] = permissions.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  SpaceSingle copyWith(
+      {String? id,
+      String? key,
+      String? name,
+      String? type,
+      String? status,
+      String? authorId,
+      DateTime? createdAt,
+      String? homepageId,
+      SpaceDescription? description,
+      SpaceIcon? icon,
+      SpaceSingleLabels? labels,
+      SpaceSingleProperties? properties,
+      SpaceSingleOperations? operations,
+      SpaceSinglePermissions? permissions,
+      SpaceLinks? links}) {
+    return SpaceSingle(
+      id: id ?? this.id,
+      key: key ?? this.key,
+      name: name ?? this.name,
+      type: type ?? this.type,
+      status: status ?? this.status,
+      authorId: authorId ?? this.authorId,
+      createdAt: createdAt ?? this.createdAt,
+      homepageId: homepageId ?? this.homepageId,
+      description: description ?? this.description,
+      icon: icon ?? this.icon,
+      labels: labels ?? this.labels,
+      properties: properties ?? this.properties,
+      operations: operations ?? this.operations,
+      permissions: permissions ?? this.permissions,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class SpaceSingleLabels {
+  final List<Label> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  SpaceSingleLabels({List<Label>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory SpaceSingleLabels.fromJson(Map<String, Object?> json) {
+    return SpaceSingleLabels(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map(
+                  (i) => Label.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  SpaceSingleLabels copyWith(
+      {List<Label>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return SpaceSingleLabels(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class SpaceSingleOperations {
+  final List<Operation> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  SpaceSingleOperations({List<Operation>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory SpaceSingleOperations.fromJson(Map<String, Object?> json) {
+    return SpaceSingleOperations(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) =>
+                  Operation.fromJson(i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  SpaceSingleOperations copyWith(
+      {List<Operation>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return SpaceSingleOperations(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class SpaceSinglePermissions {
+  final List<SpacePermission> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  SpaceSinglePermissions(
+      {List<SpacePermission>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory SpaceSinglePermissions.fromJson(Map<String, Object?> json) {
+    return SpaceSinglePermissions(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) => SpacePermission.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  SpaceSinglePermissions copyWith(
+      {List<SpacePermission>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return SpaceSinglePermissions(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
+class SpaceSingleProperties {
+  final List<SpaceProperty> results;
+  final OptionalFieldMeta? meta;
+  final OptionalFieldLinks? links;
+
+  SpaceSingleProperties({List<SpaceProperty>? results, this.meta, this.links})
+      : results = results ?? [];
+
+  factory SpaceSingleProperties.fromJson(Map<String, Object?> json) {
+    return SpaceSingleProperties(
+      results: (json[r'results'] as List<Object?>?)
+              ?.map((i) => SpaceProperty.fromJson(
+                  i as Map<String, Object?>? ?? const {}))
+              .toList() ??
+          [],
+      meta: json[r'meta'] != null
+          ? OptionalFieldMeta.fromJson(json[r'meta']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? OptionalFieldLinks.fromJson(
+              json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var results = this.results;
+    var meta = this.meta;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    json[r'results'] = results.map((i) => i.toJson()).toList();
+    if (meta != null) {
+      json[r'meta'] = meta.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  SpaceSingleProperties copyWith(
+      {List<SpaceProperty>? results,
+      OptionalFieldMeta? meta,
+      OptionalFieldLinks? links}) {
+    return SpaceSingleProperties(
+      results: results ?? this.results,
+      meta: meta ?? this.meta,
+      links: links ?? this.links,
+    );
+  }
+}
+
 class Task {
   /// ID of the task.
   final String? id;
@@ -9364,7 +15244,7 @@ class Task {
 
   /// Status of the task.
   final TaskStatus? status;
-  final BodySingle? body;
+  final TaskBodySingle? body;
 
   /// Account ID of the user who created this task.
   final String? createdBy;
@@ -9417,7 +15297,7 @@ class Task {
           ? TaskStatus.fromValue(json[r'status']! as String)
           : null,
       body: json[r'body'] != null
-          ? BodySingle.fromJson(json[r'body']! as Map<String, Object?>)
+          ? TaskBodySingle.fromJson(json[r'body']! as Map<String, Object?>)
           : null,
       createdBy: json[r'createdBy'] as String?,
       assignedTo: json[r'assignedTo'] as String?,
@@ -9498,7 +15378,7 @@ class Task {
       String? pageId,
       String? blogPostId,
       TaskStatus? status,
-      BodySingle? body,
+      TaskBodySingle? body,
       String? createdBy,
       String? assignedTo,
       String? completedBy,
@@ -9545,6 +15425,47 @@ class TaskStatus {
 
   @override
   String toString() => value;
+}
+
+/// Contains fields for each representation type requested.
+class TaskBodySingle {
+  final BodyType? storage;
+  final BodyType? atlasDocFormat;
+
+  TaskBodySingle({this.storage, this.atlasDocFormat});
+
+  factory TaskBodySingle.fromJson(Map<String, Object?> json) {
+    return TaskBodySingle(
+      storage: json[r'storage'] != null
+          ? BodyType.fromJson(json[r'storage']! as Map<String, Object?>)
+          : null,
+      atlasDocFormat: json[r'atlas_doc_format'] != null
+          ? BodyType.fromJson(
+              json[r'atlas_doc_format']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var storage = this.storage;
+    var atlasDocFormat = this.atlasDocFormat;
+
+    final json = <String, Object?>{};
+    if (storage != null) {
+      json[r'storage'] = storage.toJson();
+    }
+    if (atlasDocFormat != null) {
+      json[r'atlas_doc_format'] = atlasDocFormat.toJson();
+    }
+    return json;
+  }
+
+  TaskBodySingle copyWith({BodyType? storage, BodyType? atlasDocFormat}) {
+    return TaskBodySingle(
+      storage: storage ?? this.storage,
+      atlasDocFormat: atlasDocFormat ?? this.atlasDocFormat,
+    );
+  }
 }
 
 class TaskUpdateRequest {
@@ -9906,6 +15827,135 @@ class UpdateInlineCommentModelVersion {
   }
 }
 
+class User {
+  /// Display name of the user.
+  final String? displayName;
+
+  /// Time zone of the user. Depending on the user's privacy
+  /// setting, this may return null.
+  final String? timeZone;
+
+  /// Space ID of the user's personal space. Returns null, if no personal space
+  /// for the user.
+  final String? personalSpaceId;
+
+  /// Whether the user is an external collaborator.
+  final bool isExternalCollaborator;
+  final String? accountStatus;
+
+  /// Account ID of the user.
+  final String? accountId;
+
+  /// The email address of the user. Depending on the user's privacy setting,
+  /// this may return an empty string.
+  final String? email;
+  final String? accountType;
+
+  /// Public name of the user.
+  final String? publicName;
+  final Icon? profilePicture;
+
+  User(
+      {this.displayName,
+      this.timeZone,
+      this.personalSpaceId,
+      bool? isExternalCollaborator,
+      this.accountStatus,
+      this.accountId,
+      this.email,
+      this.accountType,
+      this.publicName,
+      this.profilePicture})
+      : isExternalCollaborator = isExternalCollaborator ?? false;
+
+  factory User.fromJson(Map<String, Object?> json) {
+    return User(
+      displayName: json[r'displayName'] as String?,
+      timeZone: json[r'timeZone'] as String?,
+      personalSpaceId: json[r'personalSpaceId'] as String?,
+      isExternalCollaborator: json[r'isExternalCollaborator'] as bool? ?? false,
+      accountStatus: json[r'accountStatus'] as String?,
+      accountId: json[r'accountId'] as String?,
+      email: json[r'email'] as String?,
+      accountType: json[r'accountType'] as String?,
+      publicName: json[r'publicName'] as String?,
+      profilePicture: json[r'profilePicture'] != null
+          ? Icon.fromJson(json[r'profilePicture']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var displayName = this.displayName;
+    var timeZone = this.timeZone;
+    var personalSpaceId = this.personalSpaceId;
+    var isExternalCollaborator = this.isExternalCollaborator;
+    var accountStatus = this.accountStatus;
+    var accountId = this.accountId;
+    var email = this.email;
+    var accountType = this.accountType;
+    var publicName = this.publicName;
+    var profilePicture = this.profilePicture;
+
+    final json = <String, Object?>{};
+    if (displayName != null) {
+      json[r'displayName'] = displayName;
+    }
+    if (timeZone != null) {
+      json[r'timeZone'] = timeZone;
+    }
+    if (personalSpaceId != null) {
+      json[r'personalSpaceId'] = personalSpaceId;
+    }
+    json[r'isExternalCollaborator'] = isExternalCollaborator;
+    if (accountStatus != null) {
+      json[r'accountStatus'] = accountStatus;
+    }
+    if (accountId != null) {
+      json[r'accountId'] = accountId;
+    }
+    if (email != null) {
+      json[r'email'] = email;
+    }
+    if (accountType != null) {
+      json[r'accountType'] = accountType;
+    }
+    if (publicName != null) {
+      json[r'publicName'] = publicName;
+    }
+    if (profilePicture != null) {
+      json[r'profilePicture'] = profilePicture.toJson();
+    }
+    return json;
+  }
+
+  User copyWith(
+      {String? displayName,
+      String? timeZone,
+      String? personalSpaceId,
+      bool? isExternalCollaborator,
+      String? accountStatus,
+      String? accountId,
+      String? email,
+      String? accountType,
+      String? publicName,
+      Icon? profilePicture}) {
+    return User(
+      displayName: displayName ?? this.displayName,
+      timeZone: timeZone ?? this.timeZone,
+      personalSpaceId: personalSpaceId ?? this.personalSpaceId,
+      isExternalCollaborator:
+          isExternalCollaborator ?? this.isExternalCollaborator,
+      accountStatus: accountStatus ?? this.accountStatus,
+      accountId: accountId ?? this.accountId,
+      email: email ?? this.email,
+      accountType: accountType ?? this.accountType,
+      publicName: publicName ?? this.publicName,
+      profilePicture: profilePicture ?? this.profilePicture,
+    );
+  }
+}
+
 class Version {
   /// Date and time when the version was created. In format
   /// "YYYY-MM-DDTHH:mm:ss.sssZ".
@@ -10025,6 +16075,239 @@ class VersionedEntity {
       title: title ?? this.title,
       id: id ?? this.id,
       body: body ?? this.body,
+    );
+  }
+}
+
+class WhiteboardCreateRequest {
+  /// ID of the space.
+  final String spaceId;
+
+  /// Title of the whiteboard.
+  final String? title;
+
+  /// The parent content ID of the whiteboard.
+  final String? parentId;
+
+  WhiteboardCreateRequest({required this.spaceId, this.title, this.parentId});
+
+  factory WhiteboardCreateRequest.fromJson(Map<String, Object?> json) {
+    return WhiteboardCreateRequest(
+      spaceId: json[r'spaceId'] as String? ?? '',
+      title: json[r'title'] as String?,
+      parentId: json[r'parentId'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var spaceId = this.spaceId;
+    var title = this.title;
+    var parentId = this.parentId;
+
+    final json = <String, Object?>{};
+    json[r'spaceId'] = spaceId;
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (parentId != null) {
+      json[r'parentId'] = parentId;
+    }
+    return json;
+  }
+
+  WhiteboardCreateRequest copyWith(
+      {String? spaceId, String? title, String? parentId}) {
+    return WhiteboardCreateRequest(
+      spaceId: spaceId ?? this.spaceId,
+      title: title ?? this.title,
+      parentId: parentId ?? this.parentId,
+    );
+  }
+}
+
+class WhiteboardLinks {
+  /// Web UI link of the content.
+  final String? webui;
+
+  /// Edit UI link of the content.
+  final String? editui;
+
+  WhiteboardLinks({this.webui, this.editui});
+
+  factory WhiteboardLinks.fromJson(Map<String, Object?> json) {
+    return WhiteboardLinks(
+      webui: json[r'webui'] as String?,
+      editui: json[r'editui'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var webui = this.webui;
+    var editui = this.editui;
+
+    final json = <String, Object?>{};
+    if (webui != null) {
+      json[r'webui'] = webui;
+    }
+    if (editui != null) {
+      json[r'editui'] = editui;
+    }
+    return json;
+  }
+
+  WhiteboardLinks copyWith({String? webui, String? editui}) {
+    return WhiteboardLinks(
+      webui: webui ?? this.webui,
+      editui: editui ?? this.editui,
+    );
+  }
+}
+
+class WhiteboardSingle {
+  /// ID of the whiteboard.
+  final String? id;
+
+  /// The content type of the object.
+  final String? type;
+  final String? status;
+
+  /// Title of the whiteboard.
+  final String? title;
+
+  /// ID of the parent content, or null if there is no parent content.
+  final String? parentId;
+  final String? parentType;
+
+  /// Position of the whiteboard within the given parent page tree.
+  final int? position;
+
+  /// The account ID of the user who created this whiteboard originally.
+  final String? authorId;
+
+  /// The account ID of the user who owns this whiteboard.
+  final String? ownerId;
+
+  /// Date and time when the whiteboard was created. In format
+  /// "YYYY-MM-DDTHH:mm:ss.sssZ".
+  final DateTime? createdAt;
+  final Version? version;
+  final WhiteboardLinks? links;
+
+  WhiteboardSingle(
+      {this.id,
+      this.type,
+      this.status,
+      this.title,
+      this.parentId,
+      this.parentType,
+      this.position,
+      this.authorId,
+      this.ownerId,
+      this.createdAt,
+      this.version,
+      this.links});
+
+  factory WhiteboardSingle.fromJson(Map<String, Object?> json) {
+    return WhiteboardSingle(
+      id: json[r'id'] as String?,
+      type: json[r'type'] as String?,
+      status: json[r'status'] as String?,
+      title: json[r'title'] as String?,
+      parentId: json[r'parentId'] as String?,
+      parentType: json[r'parentType'] as String?,
+      position: (json[r'position'] as num?)?.toInt(),
+      authorId: json[r'authorId'] as String?,
+      ownerId: json[r'ownerId'] as String?,
+      createdAt: DateTime.tryParse(json[r'createdAt'] as String? ?? ''),
+      version: json[r'version'] != null
+          ? Version.fromJson(json[r'version']! as Map<String, Object?>)
+          : null,
+      links: json[r'_links'] != null
+          ? WhiteboardLinks.fromJson(json[r'_links']! as Map<String, Object?>)
+          : null,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var id = this.id;
+    var type = this.type;
+    var status = this.status;
+    var title = this.title;
+    var parentId = this.parentId;
+    var parentType = this.parentType;
+    var position = this.position;
+    var authorId = this.authorId;
+    var ownerId = this.ownerId;
+    var createdAt = this.createdAt;
+    var version = this.version;
+    var links = this.links;
+
+    final json = <String, Object?>{};
+    if (id != null) {
+      json[r'id'] = id;
+    }
+    if (type != null) {
+      json[r'type'] = type;
+    }
+    if (status != null) {
+      json[r'status'] = status;
+    }
+    if (title != null) {
+      json[r'title'] = title;
+    }
+    if (parentId != null) {
+      json[r'parentId'] = parentId;
+    }
+    if (parentType != null) {
+      json[r'parentType'] = parentType;
+    }
+    if (position != null) {
+      json[r'position'] = position;
+    }
+    if (authorId != null) {
+      json[r'authorId'] = authorId;
+    }
+    if (ownerId != null) {
+      json[r'ownerId'] = ownerId;
+    }
+    if (createdAt != null) {
+      json[r'createdAt'] = createdAt.toIso8601String();
+    }
+    if (version != null) {
+      json[r'version'] = version.toJson();
+    }
+    if (links != null) {
+      json[r'_links'] = links.toJson();
+    }
+    return json;
+  }
+
+  WhiteboardSingle copyWith(
+      {String? id,
+      String? type,
+      String? status,
+      String? title,
+      String? parentId,
+      String? parentType,
+      int? position,
+      String? authorId,
+      String? ownerId,
+      DateTime? createdAt,
+      Version? version,
+      WhiteboardLinks? links}) {
+    return WhiteboardSingle(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      status: status ?? this.status,
+      title: title ?? this.title,
+      parentId: parentId ?? this.parentId,
+      parentType: parentType ?? this.parentType,
+      position: position ?? this.position,
+      authorId: authorId ?? this.authorId,
+      ownerId: ownerId ?? this.ownerId,
+      createdAt: createdAt ?? this.createdAt,
+      version: version ?? this.version,
+      links: links ?? this.links,
     );
   }
 }

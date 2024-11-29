@@ -83,7 +83,7 @@ class Api {
       var definitionName = definitionEntry.key;
       var definition = definitionEntry.value;
 
-      if (definition.type != 'string') {
+      if (definition.type != 'string' && definitionName != 'MultipartFile') {
         _complexTypes.add(
             ComplexType(this, _typeNameToDartType(definitionName), definition));
       }
@@ -388,7 +388,7 @@ class Operation {
     }
     if (body != null) {
       encodedParameters.add(
-          'required ${body.typeName} ${body.isFileUpload ? 'file' : 'body'}');
+          'required ${body.typeName} ${body.isFileUpload ? 'file${body.isFileUploadArray ? 's' : ''}' : 'body'}');
     }
     if (encodedParameters.isNotEmpty) {
       var joinedParameters = encodedParameters.join(', ');
@@ -470,7 +470,8 @@ class Operation {
           parametersCode += ', body: $jsonEncodeCode';
         } else {
           assert(body.isFileUpload);
-          parametersCode += ', file: file';
+          parametersCode +=
+              ', file${body.isFileUploadArray ? 's' : ''}: file${body.isFileUploadArray ? 's' : ''}';
         }
       }
     }
@@ -539,14 +540,18 @@ class RequestBody {
   final Api _api;
   final sw.Request request;
   bool _isFileUpload = false;
+  bool _isFileUploadArray = false;
   DartType? _jsonDartType;
 
   RequestBody.fromContents(
       this._api, this.request, Map<String, sw.Content> contents) {
     var content = contents.entries.first;
     if (content.key == 'multipart/form-data' &&
-        content.value.schema?.format == 'binary') {
+        (content.value.schema?.format == 'binary' ||
+            content.value.schema?.items?.ref ==
+                '#/components/schemas/MultipartFile')) {
       _isFileUpload = true;
+      _isFileUploadArray = content.value.schema?.type == 'array';
     } else {
       _jsonDartType = _api.typeFromSchema(content.value.schema!);
     }
@@ -557,6 +562,7 @@ class RequestBody {
   bool get isRequired => request.required;
 
   bool get isFileUpload => _isFileUpload;
+  bool get isFileUploadArray => _isFileUploadArray;
 
   DartType? get jsonDartType => _jsonDartType;
 
@@ -566,7 +572,11 @@ class RequestBody {
       return jsonType.toString();
     } else {
       assert(_isFileUpload);
-      return 'MultipartFile';
+      if (_isFileUploadArray) {
+        return 'List<MultipartFile>';
+      } else {
+        return 'MultipartFile';
+      }
     }
   }
 }

@@ -31,6 +31,8 @@ void main() {
 void fixApi(String name, Map<String, dynamic> api) {
   if (name == 'service_management') {
     var schemas = api['components']!['schemas']! as Map<String, dynamic>;
+    assert(!schemas.containsKey('TemporaryAttachments'));
+    assert(!schemas.containsKey('TemporaryAttachment'));
     schemas['TemporaryAttachments'] = jsonDecode(r'''
       {
         "type": "object",
@@ -69,5 +71,23 @@ void fixApi(String name, Map<String, dynamic> api) {
         ['get'] as Map<String, dynamic>;
     assert(downloadEndpoint['operationId'] == 'downloadAttatchment');
     downloadEndpoint['operationId'] = 'downloadAttachment';
+  } else if (name == 'confluence_v2') {
+    var properties = api['components']['schemas']['InlineCommentProperties']
+        ['properties'] as Map<String, dynamic>;
+    assert(properties.containsKey('inline-marker-ref'));
+    properties.remove('inline-marker-ref');
+    assert(properties.containsKey('inline-original-selection'));
+    properties.remove('inline-original-selection');
+
+    properties = api['components']['schemas']['InlineCommentModel']
+        ['properties']['properties']['properties'] as Map<String, dynamic>;
+    assert(properties.containsKey('inline-marker-ref'));
+    properties.remove('inline-marker-ref');
+    assert(properties.containsKey('inline-original-selection'));
+    properties.remove('inline-original-selection');
+  } else if (name == 'jira_platform') {
+    var schemas = api['components']['schemas'] as Map<String, dynamic>;
+    assert(schemas.containsKey('fields'));
+    schemas.remove('fields');
   }
 }

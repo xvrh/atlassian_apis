@@ -1,3 +1,6 @@
+## 0.16.0
+- Update to the latest API schemas
+
 ## 0.15.0
 - Update to the latest API schemas
 - Add some missing body parameters in `ConfluenceV2Api`

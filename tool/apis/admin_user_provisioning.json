@@ -15,12 +15,12 @@
       {
         "title": "Authentication and authorization",
         "anchor": "auth",
-        "body": "To manage users and groups with the user provisioning REST API, you need an API key separate from\nyour Cloud admin API key. This key gives full administrative access to your organization's directory, \nallowing the API client to create and update user attributes and change user group membership. \n\nSee [Configure user provisioning](https://confluence.atlassian.com/x/_w2eOQ).\n\nOnce you have your API key, you can provide it as a bearer token \nin the `Authorization` part of your HTTPS header.\n\nIf you need to \"rotate\" or regenerate an API key, use the following steps:\n\n1. Go to [admin.atlassian.com](https://admin.atlassian.com/) and select your organization.\n2. From the top menu select **Security**, then from left hand pane select **Identity providers**. \n3. Choose the Directory Name for which you want to rotate or regenerate an API key.\n4. Click on the **three dots menu** under the User provisioning section (on the bottom right hand side).\n5. From the list select the **Regenerate API key** option.\n6. Select **Regenerate key**.\n7. Copy the value of _Directory base URL_ and the _API key_ to a safe place. Once you close the API key information screen, we won't show you this information again.\n8. Select **Done**."
+        "body": "### Directory Token Authentication\nTo manage users and groups using the User Provisioning APIs, you will require an API key (distinct from your Cloud admin API key). This unique key grants you full administrative control over your organization's directory, enabling you to create and update user attributes as well as modify user group memberships. To authenticate your script and administer your directory, utilize this API key as a Bearer access token.\n\nFurthermore, each directory is distinguished by a Unique ID, specifically the directoryId found after 'directory/' in the Directory's base URL. For instance, if the Directory base URL is https://api.atlassian.com/scim/directory/abcdeg1234, the directoryId is abcdeg1234.\n\nLearn more about [Configuring user provisioning](https://confluence.atlassian.com/x/_w2eOQ).\n\nTo make requests to the API with the client/tool of your choice, follow these steps to create an API key and obtain the directory ID\n\n1. Go to [admin.atlassian.com](https://admin.atlassian.com/) and select your organization.\n2. From the top menu, navigate to **Security**, and then select **Identity providers** from the left-hand panel.\n3. Choose the relevent Directory.\n4. Click the three dots menu located under the User Provisioning section (bottom right-hand side).\n5. Select **Regenerate API key**.\n6. Select **Regenerate key**.\n7. Copy the value of Directory base URL and the API key and keep them in a safe place. We won’t show them to you again.\n8. Click **Done** to end the process.\n\n### Organization API Token Authentication\nTo access certain Admin APIs w/ relation to SCIM, you can use the Organization API token. [Create an api key and get the organization ID.](https://support.atlassian.com/organization-administration/docs/manage-an-organization-with-the-admin-apis/)\nNote that this is the same API key that's generated for the [Organizations REST API](https://developer.atlassian.com/cloud/admin/organization/rest/intro/)."
       },
       {
         "title": "Version and URI",
         "anchor": "uri",
-        "body": "This documentation is for version 1 of the user provisioning REST API. The URIs for resources \nhave the following structure:\n\n```\nhttps://api.atlassian.com/scim/<resource-name>\n```"
+        "body": "### Group and User SCIM URI\nThis documentation is for version 1 of the user provisioning REST API. The URIs for resources \nhave the following structure:\n\n```\nhttps://api.atlassian.com/scim/<resource-name>\n```\n\n### Org API Token URI\n```\nhttps://api.atlassian.com/admin/user-provisioning/<resource-name>\n```"
       },
       {
         "title": "Pagination",
@@ -35,7 +35,7 @@
       {
         "title": "Limitations",
         "anchor": "limitations",
-        "body": "### User limitations\n\n* Deleting a managed user account via the user provisioning API is not supported. The DELETE operation\n  deactivates the managed user account in Adminhub, which is the same as setting the `active` flag to `false`.\n* There is a 150,000 user limit per directory. This limit is enforced for compatibility with products\n  that have an upper bound for total supported users. Also, you can only sync up to 35,000 users for each group. In case you want to sync upto 50,000 users per group, [contact support](https://support.atlassian.com/contact/)\n\n### Group limitations\n\n**Note:** If you have the [improved user management experience](https://confluence.atlassian.com/x/_w2eOQ), any references in the documentation below to “your site” or “your organization’s sites” are now “your organization”.\n\n* When you create a group that has the same name as an existing group in the organization, the \n  group creation fails with a 409 (conflict) error.\n* You cannot create a group with same name as default access group or Atlassian built-in groups. \n  In case you'll try to do this, you'll see a success message in the API response but the group will not be synced to your site. For more information about default and Atlassian built-in group refer [Default groups and permissions](https://support.atlassian.com/user-management/docs/default-groups-and-permissions/)\n* Changing group names isn't supported. Renaming groups after they've synced to your Atlassian \n  organization isn't supported in this release of User Provisioning API. This is because some \n  parts of the products rely on group names and changing the group name would result in users \n  not being able to interact with the products correctly. To rename a group, create a new group \n  with the desired name, update membership, and then delete the old group.\n\n### Authorization limitations\n\n* You can only view and store the Access Token (API key) during directory creation. If you\n  lose your token, you can regenerate a new one. See \n  [Authentication and authorization](/cloud/admin/user-provisioning/authorization/)"
+        "body": "### User limitations\n\n* Deleting a managed user account via the user provisioning API is not supported. The DELETE operation\n  deactivates the managed user account in Adminhub, which is the same as setting the `active` flag to `false`.\n* There is a 150,000 user limit per directory. This limit is enforced for compatibility with products\n  that have an upper bound for total supported users. Also, you can only sync up to 35,000 users for each group. In case you want to sync upto 50,000 users per group, [contact support](https://support.atlassian.com/contact/)\n\n### Group limitations\n\n**Note:** If you have the [improved user management experience](https://confluence.atlassian.com/x/_w2eOQ), any references in the documentation below to “your site” or “your organization’s sites” are now “your organization”.\n\n* When you create a group that has the same name as an existing group in the organization, the \n  group creation fails with a 409 (conflict) error.\n* You cannot create a group with same name as default access group or Atlassian built-in groups. \n  In case you'll try to do this, you'll see a success message in the API response but the group will not be synced to your site. For more information about default and Atlassian built-in group refer [Default groups and permissions](https://support.atlassian.com/user-management/docs/default-groups-and-permissions/)\n* Changing group names isn't supported. Renaming groups after they've synced to your Atlassian \n  organization isn't supported in this release of User Provisioning API. This is because some \n  parts of the products rely on group names and changing the group name would result in users \n  not being able to interact with the products correctly. To rename a group, create a new group \n  with the desired name, update membership, and then delete the old group.\n\n### Authorization limitations\n\n* You can only view and store the Access Token (API key) during directory creation. If you\n  lose your token, you can regenerate a new one. See \n  [Authentication and authorization](/cloud/admin/user-provisioning/rest/intro/#auth)"
       }
     ]
   },
@@ -57,6 +57,10 @@
     },
     {
       "name": "Service Provider Configuration"
+    },
+    {
+      "name": "Admin APIs",
+      "description": "These sets of APIs will require the organization API token rather than the SCIM directory token."
     }
   ],
   "paths": {
@@ -66,13 +70,13 @@
           "Groups"
         ],
         "summary": "Get a group by ID",
-        "description": "Get a group from a directory by group ID.",
+        "description": "Gets the details of a group based on the id.",
         "operationId": "get",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
-            "description": "Directory Id",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -81,7 +85,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "Group Id",
+            "description": "Unique SCIM id that serves as reference to the group. Use the [Get groups API](https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-groups/#api-scim-directory-directoryid-groups-get) to get the SCIM id.",
             "required": true,
             "schema": {
               "type": "string"
@@ -90,7 +94,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Group has been returned successfully.",
+            "description": "Group details has been returned successfully.",
             "content": {
               "application/json": {
                 "schema": {
@@ -186,12 +190,13 @@
           "Groups"
         ],
         "summary": "Update a group by ID",
-        "description": "Update a group in a directory by group ID.",
+        "description": "Updates the details of a group with its unique ID.",
         "operationId": "put",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -200,7 +205,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "Group Id",
+            "description": "Unique SCIM id that serves as reference to the group. Use the [Get groups API] (https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-groups/#api-scim-directory-directoryid-groups-get) to get the SCIM id.",
             "required": true,
             "schema": {
               "type": "string"
@@ -323,13 +328,13 @@
           "Groups"
         ],
         "summary": "Delete a group by ID",
-        "description": "Delete a group from a directory. An attempt to delete a non-existent\ngroup fails with a 404 (Resource Not found) error.\n\n**Note**: Deleting a synced group from your identity provider will delete the group from your organization's directory and associated sites. \n1. If this group is used for allocating product license (granting role in a product), then members of this group may lose access to corresponding product after group deletion. \n2. If this group is used to grant permissions in product, then members of this group may lose their permissions in the corresponding product. ",
+        "description": "Deletes a group to remove the group from the organization's directory.\n \n **Note**: An attempt to delete a non-existent group will fail with a 404 (Resource Not found) error.\n\n **Note**: Deleting a synced group from your identity provider will delete the group from your organization's directory and associated sites. \n 1. If this group is used for allocating product license (granting role in a product), then members of this group may lose access to corresponding product after group deletion. \n 2. If this group is used to grant permissions in product, then members of this group may lose their permissions in the corresponding product. ",
         "operationId": "DeleteAGroup",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
-            "description": "Directory Id",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -338,7 +343,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "Group Id",
+            "description": "Unique SCIM id that serves as reference to the group. Use the [Get groups API](https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-groups/#api-scim-directory-directoryid-groups-get) to get the SCIM id.",
             "required": true,
             "schema": {
               "type": "string"
@@ -446,13 +451,13 @@
           "Groups"
         ],
         "summary": "Update a group by ID (PATCH)",
-        "description": "Update a group's information in a directory by `groupId` via `PATCH`.\nYou can use this API to manage group membership.\n\n**Note:** Renaming groups after they've synced to your Atlassian organization isn't supported in this \nrelease of the User Provisioning API. To rename a group, create a new group with the desired \nname, update membership, and then delete the old group.\n\n#### Example\n\nSome HTTP headers omitted and JSON payloads formatted for readability.\n\n```\n# Request\nPATCH /scim/directory/2fb21891-7bee-4c2d-a61a-ade3834c8b2b/Groups/50202593-bc47-45df-8fa0-3f63343aa3c1 HTTP/1.1\nAccept: application/scim+json\nAccept-Charset: utf-8\nContent-Type: application/scim+json; charset=utf-8\nAuthorization: Bearer 0j6lDgrjU7HmGagocgLe\nHost: api.atlassian.com\n\n{\n   \"schemas\":[\n      \"urn:ietf:params:scim:api:messages:2.0:PatchOp\"\n   ],\n   \"Operations\":[\n      {\n         \"op\":\"add\",\n         \"path\":\"members\",\n         \"value\":[\n            {\n               \"value\":\"c6993c94-dbda-40f1-b6f0-18c855522ade\",\n               \"display\":\"dave.meyer@demotime.authteam.com\"\n            },\n            {\n               \"value\":\"f0ae48f7-1466-445e-85ea-e83ef754aefd\",\n               \"display\":\"lingbo.lu@demotime.authteam.com\"\n            },\n            {\n               \"value\":\"432d6f10-2e28-454e-be99-0f8c732a046f\",\n               \"display\":\"joanna@demotime.authteam.com\"\n            }\n         ]\n      }\n   ]\n}\n\n# Response\nHTTP/1.1 200\nContent-Type: application/scim+json\n\n{\n   \"schemas\":[\n      \"urn:ietf:params:scim:schemas:core:2.0:Group\"\n   ],\n   \"id\":\"50202593-bc47-45df-8fa0-3f63343aa3c1\",\n   \"displayName\":\"demotime-confluence-users\",\n   \"members\":[\n      {\n         \"type\":\"User\",\n         \"value\":\"f0ae48f7-1466-445e-85ea-e83ef754aefd\",\n         \"display\":\"lingbo.lu@demotime.authteam.com\",\n         \"$ref\":\"https://api.atlassian.com/scim/directory/2fb21891-7bee-4c2d-a61a-ade3834c8b2b/Users/f0ae48f7-1466-445e-85ea-e83ef754aefd\"\n      },\n      {\n         \"type\":\"User\",\n         \"value\":\"c6993c94-dbda-40f1-b6f0-18c855522ade\",\n         \"display\":\"dave.meyer@demotime.authteam.com\",\n         \"$ref\":\"https://api.atlassian.com/scim/directory/2fb21891-7bee-4c2d-a61a-ade3834c8b2b/Users/c6993c94-dbda-40f1-b6f0-18c855522ade\"\n      },\n      {\n         \"type\":\"User\",\n         \"value\":\"432d6f10-2e28-454e-be99-0f8c732a046f\",\n         \"display\":\"joanna@demotime.authteam.com\",\n         \"$ref\":\"https://api.atlassian.com/scim/directory/2fb21891-7bee-4c2d-a61a-ade3834c8b2b/Users/432d6f10-2e28-454e-be99-0f8c732a046f\"\n      }\n   ],\n   \"meta\":{\n      \"resourceType\":\"Group\",\n      \"location\":\"https://api.atlassian.com/scim/directory/2fb21891-7bee-4c2d-a61a-ade3834c8b2b/Groups/50202593-bc47-45df-8fa0-3f63343aa3c1\",\n      \"lastModified\":\"2018-09-26T17:49:09.420654Z\",\n      \"created\":\"2018-09-26T17:41:35.49073Z\"\n   }\n}\n```",
+        "description": "Updates a group's information in the directory and manages group membership.\n\n**Note:** Renaming groups after they've synced to your Atlassian organization isn't supported in this \nrelease of User Provisioning API. To rename a group, create a new group with the desired \nname, update membership, and then delete the old group.\n\n#### Example\n\nSome HTTP headers omitted and JSON payloads formatted for readability.\n\n```\n# Request\nPATCH /scim/directory/2fb21891-7bee-4c2d-a61a-ade3834c8b2b/Groups/50202593-bc47-45df-8fa0-3f63343aa3c1 HTTP/1.1\nAccept: application/scim+json\nAccept-Charset: utf-8\nContent-Type: application/scim+json; charset=utf-8\nAuthorization: Bearer 0j6lDgrjU7HmGagocgLe\nHost: api.atlassian.com\n\n{\n   \"schemas\":[\n      \"urn:ietf:params:scim:api:messages:2.0:PatchOp\"\n   ],\n   \"Operations\":[\n      {\n         \"op\":\"add\",\n         \"path\":\"members\",\n         \"value\":[\n            {\n               \"value\":\"c6993c94-dbda-40f1-b6f0-18c855522ade\",\n               \"display\":\"dave.meyer@demotime.authteam.com\"\n            },\n            {\n               \"value\":\"f0ae48f7-1466-445e-85ea-e83ef754aefd\",\n               \"display\":\"lingbo.lu@demotime.authteam.com\"\n            },\n            {\n               \"value\":\"432d6f10-2e28-454e-be99-0f8c732a046f\",\n               \"display\":\"joanna@demotime.authteam.com\"\n            }\n         ]\n      }\n   ]\n}\n\n# Response\nHTTP/1.1 200\nContent-Type: application/scim+json\n\n{\n   \"schemas\":[\n      \"urn:ietf:params:scim:schemas:core:2.0:Group\"\n   ],\n   \"id\":\"50202593-bc47-45df-8fa0-3f63343aa3c1\",\n   \"displayName\":\"demotime-confluence-users\",\n   \"members\":[\n      {\n         \"type\":\"User\",\n         \"value\":\"f0ae48f7-1466-445e-85ea-e83ef754aefd\",\n         \"display\":\"lingbo.lu@demotime.authteam.com\",\n         \"$ref\":\"https://api.atlassian.com/scim/directory/2fb21891-7bee-4c2d-a61a-ade3834c8b2b/Users/f0ae48f7-1466-445e-85ea-e83ef754aefd\"\n      },\n      {\n         \"type\":\"User\",\n         \"value\":\"c6993c94-dbda-40f1-b6f0-18c855522ade\",\n         \"display\":\"dave.meyer@demotime.authteam.com\",\n         \"$ref\":\"https://api.atlassian.com/scim/directory/2fb21891-7bee-4c2d-a61a-ade3834c8b2b/Users/c6993c94-dbda-40f1-b6f0-18c855522ade\"\n      },\n      {\n         \"type\":\"User\",\n         \"value\":\"432d6f10-2e28-454e-be99-0f8c732a046f\",\n         \"display\":\"joanna@demotime.authteam.com\",\n         \"$ref\":\"https://api.atlassian.com/scim/directory/2fb21891-7bee-4c2d-a61a-ade3834c8b2b/Users/432d6f10-2e28-454e-be99-0f8c732a046f\"\n      }\n   ],\n   \"meta\":{\n      \"resourceType\":\"Group\",\n      \"location\":\"https://api.atlassian.com/scim/directory/2fb21891-7bee-4c2d-a61a-ade3834c8b2b/Groups/50202593-bc47-45df-8fa0-3f63343aa3c1\",\n      \"lastModified\":\"2018-09-26T17:49:09.420654Z\",\n      \"created\":\"2018-09-26T17:41:35.49073Z\"\n   }\n}\n```",
         "operationId": "patch",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
-            "description": "Directory ID",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -461,7 +466,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "Group ID",
+            "description": "Unique SCIM id that serves as reference to the group. Use the [Get groups API](https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-groups/#api-scim-directory-directoryid-groups-get) to get the SCIM id.",
             "required": true,
             "schema": {
               "type": "string"
@@ -598,13 +603,13 @@
           "Groups"
         ],
         "summary": "Get groups",
-        "description": "Get groups from a directory. Filtering is supported with a single exact match (`eq`) against  the `displayName` attribute. Pagination is supported. Sorting is not supported.\n",
+        "description": "Get groups from the directory. Filter the groups by name supported with a single exact match (`eq`) against the `displayName` attribute. \n\n**Note**: While this API enables pagination, sorting functionality is not supported.\n",
         "operationId": "getAllGroupsFromAnActiveDirectory",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
-            "description": "Directory Id",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -754,12 +759,13 @@
           "Groups"
         ],
         "summary": "Create a group",
-        "description": "Create a group in a directory. An attempt to create a group with an existing  name fails with a 409 (Conflict) error.\n",
+        "description": "Creates a read-only group in the organization's directory. You can only edit groups from your identity provider. \n\n**Note:** An attempt to create a group with an existing name will fail with a 409 (Conflict) error.\n",
         "operationId": "createAGroupInActiveDirectory",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -899,12 +905,13 @@
           "Schemas"
         ],
         "summary": "Get all schemas",
-        "description": "Get all SCIM features metadata. Filtering, pagination and sorting are  not supported.\n",
+        "description": "Get all SCIM features metadata of your organization. \n\n**Note:** This API does not support filtering, pagination, or sorting.\n",
         "operationId": "getSchemas",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -1011,12 +1018,13 @@
           "Service Provider Configuration"
         ],
         "summary": "Get resource types",
-        "description": "Get types of resources available on a SCIM service provider (e.g., Users and Groups). This  is used to get all resources of the SCIM provider. Filtering, pagination and sorting are  not supported.\n",
+        "description": "Get different types of resources available on a SCIM service provider (e.g., Users and Groups).  \n**Note:** This API does not support filtering, pagination, or sorting.\n",
         "operationId": "getResourceTypes",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -1123,12 +1131,13 @@
           "Service Provider Configuration"
         ],
         "summary": "Get user resource types",
-        "description": "Retrieve user resource types from the SCIM service provider. Filtering, pagination and  sorting are not supported.\n",
+        "description": "Retrieves user resource types from the SCIM service provider. \n\n**Note:** This API does not support filtering, pagination, or sorting.\n",
         "operationId": "getUserResourceType",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -1235,12 +1244,13 @@
           "Service Provider Configuration"
         ],
         "summary": "Get group resource types",
-        "description": "Retrieve group resource type of this SCIM service provider. Filtering, pagination and sorting  are not supported.\n",
+        "description": "Retrieves group resource type of this SCIM service provider. \n\n**Note:** This API does not support filtering, pagination, or sorting.\n",
         "operationId": "getGroupResourceType",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -1347,12 +1357,13 @@
           "Schemas"
         ],
         "summary": "Get user schemas",
-        "description": "Get the user schemas from the SCIM provider. Filtering, pagination and sorting  are not supported.\n",
+        "description": "Get the user schemas from the SCIM provider. \n\n**Note:** This API does not support filtering, pagination, or sorting.\n",
         "operationId": "getUserSchemas",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -1459,12 +1470,13 @@
           "Schemas"
         ],
         "summary": "Get group schemas",
-        "description": "Get the group schemas from the SCIM provider. Filtering, pagination and sorting are not  supported.\n",
+        "description": "Get the group schemas from the SCIM provider. \n\n**Note:** This API does not support filtering, pagination, or sorting.\n",
         "operationId": "getGroupSchemas",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -1571,12 +1583,13 @@
           "Schemas"
         ],
         "summary": "Get user enterprise extension schemas",
-        "description": "Get the user enterprise extension schemas from the SCIM provider. Filtering, pagination and  sorting are not supported.\n",
+        "description": "Get the user enterprise extension schemas from the SCIM provider. \n\n**Note:** This API does not support filtering, pagination, or sorting.\n",
         "operationId": "getExtensionUserSchemas",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -1683,12 +1696,13 @@
           "Schemas"
         ],
         "summary": "Get feature metadata",
-        "description": "Get metadata about the supported SCIM features. This is a service provider configuration  endpoint providing supported SCIM features. Filtering, pagination and sorting are not  supported.\n",
+        "description": "Get metadata about the supported SCIM features. This is a service provider configuration  endpoint providing supported SCIM features. \n\n**Note:** This API does not support filtering, pagination, or sorting.\n",
         "operationId": "getConfig",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -1795,13 +1809,13 @@
           "Users"
         ],
         "summary": "Get a user by ID",
-        "description": "Get a user from a directory by `userId`. \n",
+        "description": "Retrieves a user from the directory based on their `userId`. \n",
         "operationId": "getAUserFromActiveDirectory",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
-            "description": "Directory Id",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -1810,7 +1824,7 @@
           {
             "name": "userId",
             "in": "path",
-            "description": "The user ID",
+            "description": "Unique ID to identiy the users. Use the [Get users API](https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-get) to get the userId.",
             "required": true,
             "schema": {
               "type": "string"
@@ -1934,13 +1948,13 @@
           "Users"
         ],
         "summary": "Update user via user attributes",
-        "description": "Updates a user's information in a directory by `userId` via user attributes. User information  is replaced attribute-by-attribute, with the exception of immutable and read-only  attributes. Existing values of unspecified attributes are cleaned.\n",
+        "description": "Update the directory-based user information using the user attributes associated with their `userId`. User information  is replaced attribute-by-attribute, with the exception of immutable and read-only  attributes. Existing values of unspecified attributes are cleaned.\n",
         "operationId": "updateUserInformationInAnActiveDirectory",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
-            "description": "Directory Id",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -1949,7 +1963,7 @@
           {
             "name": "userId",
             "in": "path",
-            "description": "User ID",
+            "description": "Unique ID to identiy the users. Use the [Get users API](https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-get) to get the userId.",
             "required": true,
             "schema": {
               "type": "string"
@@ -1958,7 +1972,7 @@
           {
             "name": "attributes",
             "in": "query",
-            "description": "Resource attributes to be included in the response. Mutually exclusive with  `excludedAttributes`. Example: `userName,emails.value`\n",
+            "description": "Resource attributes to be included in the response. Mutually exclusive from  `excludedAttributes`. Example: `userName,emails.value`\n",
             "required": false,
             "schema": {
               "type": "string"
@@ -1967,7 +1981,7 @@
           {
             "name": "excludedAttributes",
             "in": "query",
-            "description": "Resource attributes to be excluded in the response. Mutually exclusive with `attributes`.  Example: `timezone,emails.type,department`\n",
+            "description": "Resource attributes to be excluded in the response. Mutually exclusive from `attributes`.  Example: `timezone,emails.type,department`\n",
             "required": false,
             "schema": {
               "type": "string"
@@ -1987,7 +2001,7 @@
               }
             }
           },
-          "description": "User information. The `userName` is required.",
+          "description": "User information. The `userName` is a required field.",
           "required": true
         },
         "responses": {
@@ -2103,13 +2117,13 @@
           "Users"
         ],
         "summary": "Deactivate a user",
-        "description": "Deactivate a user by `userId`. The user is not available for future requests until  activated again. Any future operation for the deactivated user returns the 404  (resource not found) error.\n",
+        "description": "Deactivates a user from the directory by their `userId`, along with its group memberships. If the `userId` is linked to a managed Atlassian account, the account is deactivated. The user is not available for future requests until created with a new `userId`. Any future operation for the deactivated user returns the 404 (resource not found) error.\n\nThe deactivated user can be activated again via Atlassian Administration.. \n\nTo deactivate the account instead, use the [Update user by ID API](https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-userid-patch). Update the `op` field to `replace` and `value` field to `active:false` within the `operations` request body.\n\n**Note:** Executing this API call will result in the deletion of the SCIM record, and there is no method to reverse these changes except by creating a new SCIM record with [Create a user API](https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-post).\n",
         "operationId": "deleteAUserFromAnActiveDirectory",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
-            "description": "Directory Id",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -2118,7 +2132,7 @@
           {
             "name": "userId",
             "in": "path",
-            "description": "User Id",
+            "description": "Unique ID to identiy the users. Use the [Get users API](https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-get) to get the userId.",
             "required": true,
             "schema": {
               "type": "string"
@@ -2211,13 +2225,13 @@
           "Users"
         ],
         "summary": "Update user by ID (PATCH)",
-        "description": "This operation updates a user's information in a directory by `userId` via `PATCH`. Refer to  `GET /ServiceProviderConfig` for details on the supported operations.\n",
+        "description": "Updates a user's information in the directory based on their `userId` via `PATCH`. Refer to  [Service Provider Configuration APIs](https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-service-provider-configuration/#api-group-service-provider-configuration) for details on supported operations.\n",
         "operationId": "patchUserInformationInAnActiveDirectory",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
-            "description": "Directory Id",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -2226,7 +2240,7 @@
           {
             "name": "userId",
             "in": "path",
-            "description": "User Id",
+            "description": "Unique ID to identiy the users. Use the [Get users API](https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-get) to get the userId.",
             "required": true,
             "schema": {
               "type": "string"
@@ -2235,7 +2249,7 @@
           {
             "name": "attributes",
             "in": "query",
-            "description": "Resource attributes to be included in the response. Mutually exclusive with  `excludedAttributes`. Example: `userName,emails.value`\n",
+            "description": "Resource attributes to be included in the response. Mutually exclusive from  `excludedAttributes`. Example: `userName,emails.value`\n",
             "required": false,
             "schema": {
               "type": "string"
@@ -2244,7 +2258,7 @@
           {
             "name": "excludedAttributes",
             "in": "query",
-            "description": "Resource attributes to be included in the response. Mutually exclusive with `attributes`.  Example: `timezone,emails.type,department`\n",
+            "description": "Resource attributes to be included in the response. Mutually exclusive from `attributes`.  Example: `timezone,emails.type,department`\n",
             "required": false,
             "schema": {
               "type": "string"
@@ -2382,13 +2396,13 @@
           "Users"
         ],
         "summary": "Get users",
-        "description": "Get users from the specified directory. Filtering is supported with a single exact match  (`eq`) against the `userName` and `externalId` attributes. Pagination is supported. Sorting  is not supported.\n",
+        "description": "Get users from the specified directory. Filtering is supported with a single exact match  (`eq`) against the `userName` and `externalId` attributes.\n\n **Note**: While this API enables pagination, sorting functionality is not supported.\n",
         "operationId": "getUsersFromAnActiveDirectory",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
-            "description": "Directory Id",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -2397,7 +2411,7 @@
           {
             "name": "attributes",
             "in": "query",
-            "description": "Resource attributes to be included in response. Mutually exclusive with `excludedAttributes`.  Example: `userName,emails.value`\n",
+            "description": "Resource attributes to be included in response. Mutually exclusive from `excludedAttributes`.  Example: `userName,emails.value`\n",
             "required": false,
             "schema": {
               "type": "string"
@@ -2406,7 +2420,7 @@
           {
             "name": "excludedAttributes",
             "in": "query",
-            "description": "Resource attributes to be excluded from response. Mutually exclusive with `attributes`.  Example: `timezone,emails.type,department`\n",
+            "description": "Resource attributes to be excluded from response. Mutually exclusive from `attributes`.  Example: `timezone,emails.type,department`\n",
             "required": false,
             "schema": {
               "type": "string"
@@ -2556,13 +2570,13 @@
           "Users"
         ],
         "summary": "Create a user",
-        "description": "Create a user in a directory. An attempt to create an existing user fails with a 409 (Conflict) error. A user account can only be created if it has an email address on a verified domain. If a managed Atlassian account already exists on the Atlassian platform for the specified email address, the user in your identity provider is linked to the user in your Atlassian organization.",
+        "description": "Creates a user in the directory.\n**Note:** An attempt to create an existing user will fail with a 409 (Conflict) error.\nUse this API to manage accounts outside your organization when assigning these users to SCIM groups.\nIf there's already a managed Atlassian account associated with the specified email address on the Atlassian platform, the user in your identity provider will be connected or linked to the user in your Atlassian organization.",
         "operationId": "createAUserInAnActiveDirectory",
         "parameters": [
           {
             "name": "directoryId",
             "in": "path",
-            "description": "Directory Id",
+            "description": "Your directory is identified by a Unique ID. You get your directory ID and API key simultaneously.",
             "required": true,
             "schema": {
               "type": "string"
@@ -2571,7 +2585,7 @@
           {
             "name": "attributes",
             "in": "query",
-            "description": "Resource attributes to be included in response. Mutually exclusive with `excludedAttributes`.  Example: `userName,emails.value`\n",
+            "description": "Resource attributes to be included in response. Mutually exclusive from `excludedAttributes`.  Example: `userName,emails.value`\n",
             "required": false,
             "schema": {
               "type": "string"
@@ -2580,7 +2594,7 @@
           {
             "name": "excludedAttributes",
             "in": "query",
-            "description": "Resource attributes to be excluded from response. Mutually exclusive with  `attributes`. Example: `timezone,emails.type,department`\n",
+            "description": "Resource attributes to be excluded from response. Mutually exclusive from  `attributes`. Example: `timezone,emails.type,department`\n",
             "required": false,
             "schema": {
               "type": "string"
@@ -2726,6 +2740,115 @@
           }
         }
       }
+    },
+    "/admin/user-provisioning/v1/org/{orgId}/user/{AAID}/onlyDeleteUserInDB": {
+      "delete": {
+        "tags": [
+          "Admin APIs"
+        ],
+        "description": "Delete the user in our SCIM DB with your Atlassian Account ID (AAID). This will apply to all directories in your organization matching that AAID and only works for managed users. \n<br/>\n<br/>\nYou will have to completely reprovision the deleted user to their respective groups after deletion. \n<br/>\n<br/>\nTell me more about [Updating managed SCIM email addresses](../../email-change/).\n",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "Your organization is identified by a Unique ID. You get your organization ID and Organization API key simultaneously.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "AAID",
+            "in": "path",
+            "description": "Unique ID of the user's account.\nThe AAID is in the URL once you click into a user in either the users tab or the managed users tab.\nThe URL could look like:\n\n```https://admin.atlassian.com/o/{orgId}/users/{aaId}```\n\n```https://admin.atlassian.com/o/{orgId}/members/{aaId}```\n\n```https://admin.atlassian.com/s/{siteId}/users/{aaId}```\n",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "summary": "Delete user in SCIM DB",
+        "responses": {
+          "204": {
+            "description": "Users deleted via Aaid"
+          },
+          "401": {
+            "description": "Missing authorization header.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failure"
+                }
+              },
+              "application/scim+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failure"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "You are not authorized to call the API.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failure"
+                }
+              },
+              "application/scim+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failure"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found or User that is found is not a managed user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScimError"
+                }
+              },
+              "application/scim+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScimError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error. You can retry calls.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScimError"
+                }
+              },
+              "application/scim+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScimError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable. You can retry calls.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScimError"
+                }
+              },
+              "application/scim+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScimError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "servers": [
@@ -2773,7 +2896,7 @@
           },
           "traceId": {
             "type": "string",
-            "description": "Trace ID that can be used to find log messages",
+            "description": "Unique TraceId that can be used to find log messages.",
             "readOnly": true
           }
         }
@@ -2826,7 +2949,7 @@
         "properties": {
           "schemas": {
             "type": "array",
-            "description": "SCIM schemas that define the attributes present in the current JSON structure. This field  is required during user creation or modification.\n",
+            "description": "SCIM schemas that define the attributes present in the current JSON structure. This ia a required field  during user creation or modification.\n",
             "readOnly": true,
             "uniqueItems": true,
             "items": {
@@ -2835,7 +2958,7 @@
           },
           "id": {
             "type": "string",
-            "description": "Unique identifier defined by Atlassian SCIM Service. This field is read-only and case-sensitive.  It is ignored if specified in the payload during user creation or modification.\n",
+            "description": "Unique identifier defined by Atlassian SCIM Service. This is a read-only and case-sensitive field.  It is ignored if specified in the payload during user creation or modification.\n",
             "readOnly": true
           },
           "externalId": {
@@ -2845,7 +2968,7 @@
           },
           "displayName": {
             "type": "string",
-            "description": "Group display name. This field is immutable, required, and read-only."
+            "description": "Group display name. This is a immutable, required, and read-only field."
           },
           "members": {
             "type": "array",
@@ -2895,7 +3018,7 @@
         "properties": {
           "resourceType": {
             "type": "string",
-            "description": "The name of the resource type of the resource. This field is read-only and  case-sensitive.\n",
+            "description": "The name of the resource type of the resource. This is a read-only and  case-sensitive field.\n",
             "readOnly": true,
             "enum": [
               "USER",
@@ -2905,19 +3028,19 @@
           },
           "location": {
             "type": "string",
-            "description": "The URI of the resource being returned. This field is read-only.",
+            "description": "The URI of the resource being returned. This is a read-only field.",
             "readOnly": true
           },
           "lastModified": {
             "type": "string",
             "format": "date-time",
-            "description": "The most recent DateTime that the details of this resource were updated. This  field is read-only.\n",
+            "description": "The most recent DateTime that the details of this resource were updated. This  is a read-only field.\n",
             "readOnly": true
           },
           "created": {
             "type": "string",
             "format": "date-time",
-            "description": "The DateTime that the resource was added to Atlassian SCIM service. This field  is read-only.\n",
+            "description": "The DateTime that the resource was added to Atlassian SCIM service. This is a read-only field.\n",
             "readOnly": true
           }
         },
@@ -2997,7 +3120,7 @@
         "properties": {
           "schemas": {
             "type": "array",
-            "description": "SCIM schemas that define the attributes present in the current JSON structure This field is required during user creation or modification.\n",
+            "description": "SCIM schemas that define the attributes present in the current JSON structure This is a required field during user creation or modification. \n",
             "readOnly": true,
             "uniqueItems": true,
             "items": {
@@ -3006,11 +3129,11 @@
           },
           "userName": {
             "type": "string",
-            "description": "Unique identifier defined by the provisioning client. Atlassian SCIM service will verify  the value and guarantee its uniqueness. This field is required during  user creation or modification.\n"
+            "description": "Unique identifier defined by the provisioning client. Atlassian SCIM service will verify  the value and guarantee its uniqueness. This is a required field during  user creation or modification.\n"
           },
           "emails": {
             "type": "array",
-            "description": "Email addresses for the User. This field is required during user creation or modification.  One value must be marked as primary.\n",
+            "description": "Email addresses of the User. This is a required field during user creation or modification.  One value must be marked as primary.\n",
             "uniqueItems": true,
             "items": {
               "$ref": "#/components/schemas/ScimUserEmail"
@@ -3018,12 +3141,12 @@
           },
           "id": {
             "type": "string",
-            "description": "Unique identifier defined by Atlassian SCIM Service. CaseExact. This field is read-only and is be ignored during user creation or modification if specified in the payload.\n",
+            "description": "Unique identifier defined by Atlassian SCIM Service. CaseExact. This is a read-only field and will be disregarded if included in the payload during user creation or modification..\n",
             "readOnly": true
           },
           "externalId": {
             "type": "string",
-            "description": "Identifier defined by provisioning client. This field is case-sensitive. Uniqueness is  controlled by client. \n",
+            "description": "Identifier defined by provisioning client. This is a case-sensitive field. Uniqueness is  controlled by client. \n",
             "readOnly": true
           },
           "name": {
@@ -3036,35 +3159,35 @@
           },
           "displayName": {
             "type": "string",
-            "description": "User display name."
+            "description": "User's display name."
           },
           "nickName": {
             "type": "string",
-            "description": "User nickname."
+            "description": "User's nickname."
           },
           "title": {
             "type": "string",
-            "description": "User title."
+            "description": "User's title."
           },
           "preferredLanguage": {
             "type": "string",
-            "description": "User preferred language."
+            "description": "User's preferred language."
           },
           "department": {
             "type": "string",
-            "description": "User department."
+            "description": "User's department."
           },
           "organization": {
             "type": "string",
-            "description": "User organization."
+            "description": "User's organization."
           },
           "timezone": {
             "type": "string",
-            "description": "User timezone. e.g. America/Los_Angeles ."
+            "description": "User's timezone. e.g. America/Los_Angeles ."
           },
           "phoneNumbers": {
             "type": "array",
-            "description": "Phone numbers for the user.",
+            "description": "Phone numbers of the user.",
             "uniqueItems": true,
             "items": {
               "$ref": "#/components/schemas/ScimUserPhoneNumber"
@@ -3081,7 +3204,7 @@
           },
           "groups": {
             "type": "array",
-            "description": "SCIM groups user belongs to.",
+            "description": "Groups to which the user is associated in SCIM.",
             "readOnly": true,
             "items": {
               "$ref": "#/components/schemas/ScimGroupForUser"

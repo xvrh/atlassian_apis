@@ -158,7 +158,7 @@
           {
             "name": "startDate",
             "in": "query",
-            "description": "Filters the results to the records on or after the `startDate`.\nThe `startDate` must be specified as a [timestamp](https://www.unixtimestamp.com/).",
+            "description": "Filters the results to the records on or after the `startDate`.\nThe `startDate` must be specified as [epoch time](https://www.epochconverter.com/) in milliseconds.",
             "schema": {
               "type": "string"
             }
@@ -166,7 +166,7 @@
           {
             "name": "endDate",
             "in": "query",
-            "description": "Filters the results to the records on or before the `endDate`.\nThe `endDate` must be specified as a [timestamp](https://www.unixtimestamp.com/).",
+            "description": "Filters the results to the records on or before the `endDate`.\nThe `endDate` must be specified as [epoch time](https://www.epochconverter.com/) in milliseconds.",
             "schema": {
               "type": "string"
             }
@@ -241,6 +241,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
       },
       "post": {
@@ -302,6 +307,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "INACCESSIBLE"
       }
@@ -318,7 +328,7 @@
           {
             "name": "startDate",
             "in": "query",
-            "description": "Filters the exported results to the records on or after the `startDate`.\nThe `startDate` must be specified as a [timestamp](https://www.unixtimestamp.com/).",
+            "description": "Filters the exported results to the records on or after the `startDate`.\nThe `startDate` must be specified as [epoch time](https://www.epochconverter.com/) in milliseconds.",
             "schema": {
               "type": "string"
             }
@@ -326,7 +336,7 @@
           {
             "name": "endDate",
             "in": "query",
-            "description": "Filters the exported results to the records on or before the `endDate`.\nThe `endDate` must be specified as a [timestamp](https://www.unixtimestamp.com/).",
+            "description": "Filters the exported results to the records on or before the `endDate`.\nThe `endDate` must be specified as [epoch time](https://www.epochconverter.com/) in milliseconds.",
             "schema": {
               "type": "string"
             }
@@ -395,6 +405,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
       }
     },
@@ -439,6 +454,11 @@
             "scopes": [
               "read:audit-log:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
@@ -494,6 +514,11 @@
             "scopes": [
               "write:audit-log:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -609,6 +634,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
       }
     },
@@ -619,7 +649,7 @@
         ],
         "summary": "Get content",
         "deprecated": true,
-        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns all content in a Confluence instance.\n\nBy default, the following objects are expanded: `space`, `history`, `version`.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).\nOnly content that the user has permission to view will be returned.",
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns all content in a Confluence instance.\n\nBy default, the following objects are expanded: `space`, `history`, `version`.\n\nStarting on Dec 10, 2024, if the expand query parameter is used with the `body.export_view` and/or `body.styled_view` properties, then the query limit parameter will be restricted to a maximum value of 25.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).\nOnly content that the user has permission to view will be returned.",
         "operationId": "getContent",
         "parameters": [
           {
@@ -778,6 +808,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "post": {
@@ -871,6 +906,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-codegen-request-body-name": "content",
         "x-atlassian-connect-scope": "WRITE"
       }
@@ -956,6 +996,11 @@
               "read:content.metadata:confluence",
               "write:page:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-experimental": true,
@@ -1050,6 +1095,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "WRITE"
       },
@@ -1140,6 +1190,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "WRITE"
       }
@@ -1150,7 +1205,7 @@
           "Content"
         ],
         "summary": "Search content by CQL",
-        "description": "Returns the list of content that matches a Confluence Query Language\n(CQL) query. For information on CQL, see:\n[Advanced searching using CQL](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/).\n\nExample initial call:\n```\n/wiki/rest/api/content/search?cql=type=page&limit=25\n```\n\nExample response:\n```\n{\n  \"results\": [\n    { ... },\n    { ... },\n    ...\n    { ... }\n  ],\n  \"limit\": 25,\n  \"size\": 25,\n  ...\n  \"_links\": {\n    \"base\": \"<url>\",\n    \"context\": \"<url>\",\n    \"next\": \"/rest/api/content/search?cql=type=page&limit=25&cursor=raNDoMsTRiNg\",\n    \"self\": \"<url>\"\n  }\n}\n```\n\nWhen additional results are available, returns `next` and `prev` URLs to retrieve them in subsequent calls. The URLs each contain a cursor that points to the appropriate set of results. Use `limit` to specify the number of results returned in each call.\nExample subsequent call (taken from example response):\n```\n/wiki/rest/api/content/search?cql=type=page&limit=25&cursor=raNDoMsTRiNg\n```\nThe response to this will have a `prev` URL similar to the `next` in the example response.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).\nOnly content that the user has permission to view will be returned.",
+        "description": "Returns the list of content that matches a Confluence Query Language\n(CQL) query. For information on CQL, see:\n[Advanced searching using CQL](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/).\n\nExample initial call:\n```\n/wiki/rest/api/content/search?cql=type=page&limit=25\n```\n\nExample response:\n```\n{\n  \"results\": [\n    { ... },\n    { ... },\n    ...\n    { ... }\n  ],\n  \"limit\": 25,\n  \"size\": 25,\n  ...\n  \"_links\": {\n    \"base\": \"<url>\",\n    \"context\": \"<url>\",\n    \"next\": \"/rest/api/content/search?cql=type=page&limit=25&cursor=raNDoMsTRiNg\",\n    \"self\": \"<url>\"\n  }\n}\n```\n\nWhen additional results are available, returns `next` and `prev` URLs to retrieve them in subsequent calls. The URLs each contain a cursor that points to the appropriate set of results. Use `limit` to specify the number of results returned in each call.\nExample subsequent call (taken from example response):\n```\n/wiki/rest/api/content/search?cql=type=page&limit=25&cursor=raNDoMsTRiNg\n```\nThe response to this will have a `prev` URL similar to the `next` in the example response.\n\nStarting on Dec 10, 2024, if the expand query parameter is used with the `body.export_view` and/or `body.styled_view` properties, then the query limit parameter will be restricted to a maximum value of 25.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).\nOnly content that the user has permission to view will be returned.",
         "operationId": "searchContentByCQL",
         "parameters": [
           {
@@ -1239,6 +1294,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -1277,6 +1337,7 @@
               ],
               "enum": [
                 "current",
+                "archived",
                 "trashed",
                 "deleted",
                 "historical",
@@ -1374,6 +1435,11 @@
             "scopes": [
               "read:content-details:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -1499,6 +1565,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-codegen-request-body-name": "content",
         "x-atlassian-connect-scope": "WRITE"
       },
@@ -1577,6 +1648,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "DELETE"
       }
     },
@@ -1653,6 +1729,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "DELETE"
       }
     },
@@ -1663,7 +1744,7 @@
         ],
         "summary": "Get content children",
         "deprecated": true,
-        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns a map of the direct children of a piece of content. A piece of content\nhas different types of child content, depending on its type. These are\nthe default parent-child content type relationships:\n\n- `page`: child content is `page`, `comment`, `attachment`\n- `blogpost`: child content is `comment`, `attachment`\n- `attachment`: child content is `comment`\n- `comment`: child content is `attachment`\n\nApps can override these default relationships. Apps can also introduce\nnew content types that create new parent-child content relationships.\n\nNote, the map will always include all child content types that are valid\nfor the content. However, if the content has no instances of a child content\ntype, the map will contain an empty array for that child content type.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'View' permission for the space,\nand permission to view the content if it is a page.",
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns a map of the direct children of a piece of content. A piece of content\nhas different types of child content, depending on its type. These are\nthe default parent-child content type relationships:\n\n- `page`: child content is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `whiteboard`: child content is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `database`: child content is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `embed`: child content is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `folder`: child content is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `blogpost`: child content is `comment`, `attachment`\n- `attachment`: child content is `comment`\n- `comment`: child content is `attachment`\n\nApps can override these default relationships. Apps can also introduce\nnew content types that create new parent-child content relationships.\n\nNote, the map will always include all child content types that are valid\nfor the content. However, if the content has no instances of a child content\ntype, the map will contain an empty array for that child content type.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'View' permission for the space,\nand permission to view the content if it is a page.",
         "operationId": "getContentChildren",
         "parameters": [
           {
@@ -1678,7 +1759,7 @@
           {
             "name": "expand",
             "in": "query",
-            "description": "A multi-value parameter indicating which properties of the children to expand, where:\n\n- `attachment` returns all attachments for the content.\n- `comments` returns all comments for the content.\n- `page` returns all child pages of the content.\n- Custom content types that are provided by apps are also supported.",
+            "description": "A multi-value parameter indicating which properties of the children to expand, where:\n\n- `attachment` returns all attachments for the content.\n- `comments` returns all comments for the content.\n- `page` returns all child pages of the content.\n- `whiteboard` returns all child whiteboards of the content.\n- `database` returns all child databases of the content.\n- `embed` returns all child embeds of the content.\n- `folder` returns all child folders of the content.\n- Custom content types that are provided by apps are also supported.",
             "style": "form",
             "explode": false,
             "schema": {
@@ -1739,6 +1820,11 @@
             "scopes": [
               "read:content-details:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -1839,6 +1925,11 @@
             "scopes": [
               "write:page:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -1945,6 +2036,11 @@
             "scopes": [
               "read:content-details:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -2055,6 +2151,11 @@
               "read:content-details:confluence",
               "write:attachment:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -2171,6 +2272,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       }
     },
@@ -2268,6 +2374,11 @@
               "read:content-details:confluence",
               "write:attachment:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -2379,6 +2490,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       }
     },
@@ -2458,6 +2574,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -2468,7 +2589,7 @@
         ],
         "summary": "Get content comments",
         "deprecated": true,
-        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns the comments on a piece of content.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'View' permission for the space,\nand permission to view the content if it is a page.",
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns the comments on a piece of content.\n\nStarting on Dec 10, 2024, if the expand query parameter is used with the `body.export_view` and/or `body.styled_view` properties, then the query limit parameter will be restricted to a maximum value of 25.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'View' permission for the space,\nand permission to view the content if it is a page.",
         "operationId": "getContentComments",
         "parameters": [
           {
@@ -2583,6 +2704,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -2593,7 +2719,7 @@
         ],
         "summary": "Get content children by type",
         "deprecated": true,
-        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns all children of a given type, for a piece of content.\nA piece of content has different types of child content, depending on its type:\n\n- `page`: child content is `page`, `comment`, `attachment`\n- `blogpost`: child content is `comment`, `attachment`\n- `attachment`: child content is `comment`\n- `comment`: child content is `attachment`\n\nCustom content types that are provided by apps can also be returned.\n\nNote, this method only returns direct children. To return children at all\nlevels, use [Get descendants by type](#api-content-id-descendant-type-get).\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'View' permission for the space,\nand permission to view the content if it is a page.",
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns all children of a given type, for a piece of content.\nA piece of content has different types of child content, depending on its type:\n\n- `page`: child content is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `whiteboard`: child content is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `database`: child content is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `embed`: child content is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `folder`: child content is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `blogpost`: child content is `comment`, `attachment`\n- `attachment`: child content is `comment`\n- `comment`: child content is `attachment`\n\nCustom content types that are provided by apps can also be returned.\n\nNote, this method only returns direct children. To return children at all\nlevels, use [Get descendants by type](#api-content-id-descendant-type-get).\n\nStarting on Dec 10, 2024, if the expand query parameter is used with the `body.export_view` and/or `body.styled_view` properties, then the query limit parameter will be restricted to a maximum value of 25.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'View' permission for the space,\nand permission to view the content if it is a page.",
         "operationId": "getContentChildrenByType",
         "parameters": [
           {
@@ -2695,6 +2821,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -2704,7 +2835,7 @@
           "Content - children and descendants"
         ],
         "summary": "Get content descendants",
-        "description": "Returns a map of the descendants of a piece of content. This is similar\nto [Get content children](#api-content-id-child-get), except that this\nmethod returns child pages at all levels, rather than just the direct\nchild pages.\n\nA piece of content has different types of descendants, depending on its type:\n\n- `page`: descendant is `page`, `comment`, `attachment`\n- `blogpost`: descendant is `comment`, `attachment`\n- `attachment`: descendant is `comment`\n- `comment`: descendant is `attachment`\n\nThe map will always include all descendant types that are valid for the content.\nHowever, if the content has no instances of a descendant type, the map will\ncontain an empty array for that descendant type.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space, and permission to view the content if it\nis a page.",
+        "description": "Returns a map of the descendants of a piece of content. This is similar\nto [Get content children](#api-content-id-child-get), except that this\nmethod returns child pages at all levels, rather than just the direct\nchild pages.\n\nA piece of content has different types of descendants, depending on its type:\n\n- `page`: descendant is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `whiteboard`: descendant is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `database`: descendant is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `embed`: descendant is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `folder`: descendant is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `blogpost`: descendant is `comment`, `attachment`\n- `attachment`: descendant is `comment`\n- `comment`: descendant is `attachment`\n\nThe map will always include all descendant types that are valid for the content.\nHowever, if the content has no instances of a descendant type, the map will\ncontain an empty array for that descendant type.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space, and permission to view the content if it\nis a page.",
         "operationId": "getContentDescendants",
         "parameters": [
           {
@@ -2719,7 +2850,7 @@
           {
             "name": "expand",
             "in": "query",
-            "description": "A multi-value parameter indicating which properties of the children to\nexpand, where:\n\n- `attachment` returns all attachments for the content.\n- `comments` returns all comments for the content.\n- `page` returns all child pages of the content.",
+            "description": "A multi-value parameter indicating which properties of the children to\nexpand, where:\n\n- `attachment` returns all attachments for the content.\n- `comments` returns all comments for the content.\n- `page` returns all child pages of the content.\n- `whiteboard` returns all child whiteboards of the content.\n- `database` returns all child databases of the content.\n- `embed` returns all child embeds of the content.\n- `folder` returns all child folders of the content.",
             "style": "form",
             "explode": false,
             "schema": {
@@ -2777,6 +2908,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -2786,7 +2922,7 @@
           "Content - children and descendants"
         ],
         "summary": "Get content descendants by type",
-        "description": "Returns all descendants of a given type, for a piece of content. This is\nsimilar to [Get content children by type](#api-content-id-child-type-get),\nexcept that this method returns child pages at all levels, rather than just\nthe direct child pages.\n\nA piece of content has different types of descendants, depending on its type:\n\n- `page`: descendant is `page`, `comment`, `attachment`\n- `blogpost`: descendant is `comment`, `attachment`\n- `attachment`: descendant is `comment`\n- `comment`: descendant is `attachment`\n\nCustom content types that are provided by apps can also be returned.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space, and permission to view the content if it\nis a page.",
+        "description": "Returns all descendants of a given type, for a piece of content. This is\nsimilar to [Get content children by type](#api-content-id-child-type-get),\nexcept that this method returns child pages at all levels, rather than just\nthe direct child pages.\n\nA piece of content has different types of descendants, depending on its type:\n\n- `page`: descendant is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `whiteboard`: descendant is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `database`: descendant is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `embed`: descendant is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `folder`: descendant is `page`, `whiteboard`, `database`, `embed`, `folder`, `comment`, `attachment`\n- `blogpost`: descendant is `comment`, `attachment`\n- `attachment`: descendant is `comment`\n- `comment`: descendant is `attachment`\n\nCustom content types that are provided by apps can also be returned.\n\nStarting on Dec 10, 2024, if the expand query parameter is used with the `body.export_view` and/or `body.styled_view` properties, then the query limit parameter will be restricted to a maximum value of 25.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space, and permission to view the content if it\nis a page.",
         "operationId": "getDescendantsOfType",
         "parameters": [
           {
@@ -2898,6 +3034,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -2991,6 +3132,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -3076,6 +3222,11 @@
             "scopes": [
               "read:content.metadata:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -3199,6 +3350,11 @@
             "scopes": [
               "read:content.metadata:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -3335,6 +3491,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -3439,6 +3600,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "post": {
@@ -3528,6 +3694,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "WRITE"
       },
@@ -3596,6 +3767,11 @@
             "scopes": [
               "write:label:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -3671,6 +3847,11 @@
             "scopes": [
               "write:label:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -3760,6 +3941,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -3847,6 +4033,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -3928,6 +4119,11 @@
               "read:content.metadata:confluence",
               "write:page:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-codegen-request-body-name": "request",
@@ -4021,6 +4217,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-codegen-request-body-name": "request",
         "x-atlassian-connect-scope": "WRITE"
       }
@@ -4107,6 +4308,11 @@
             "scopes": [
               "read:content.permission:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -4226,6 +4432,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "post": {
@@ -4307,6 +4518,11 @@
               "read:content.property:confluence",
               "write:content.property:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -4426,6 +4642,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "put": {
@@ -4526,6 +4747,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "WRITE"
       },
@@ -4619,6 +4845,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "WRITE"
       },
@@ -4688,6 +4919,11 @@
             "scopes": [
               "write:content.property:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -4798,6 +5034,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "put": {
@@ -4892,6 +5133,11 @@
               "read:content-details:confluence",
               "write:content.restriction:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -4991,6 +5237,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "WRITE"
       },
@@ -5085,6 +5336,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "DELETE"
       }
     },
@@ -5171,6 +5427,11 @@
             "scopes": [
               "read:content-details:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -5286,250 +5547,12 @@
             ]
           }
         ],
-        "x-atlassian-connect-scope": "READ"
-      }
-    },
-    "/wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/group/{groupName}": {
-      "get": {
-        "tags": [
-          "Content restrictions"
-        ],
-        "summary": "Get content restriction status for group",
-        "deprecated": true,
-        "description": "Deprecated, use [Get content restriction status for group via groupId](https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-restrictions/#api-wiki-rest-api-content-id-restriction-byoperation-operationkey-bygroupid-groupid-get).\nReturns whether the specified content restriction applies to a group.\nFor example, if a page with `id=123` has a `read` restriction for the `admins` group,\nthe following request will return `true`:\n\n`/wiki/rest/api/content/123/restriction/byOperation/read/group/admins`\n\nNote that a response of `true` does not guarantee that the group can view the page, as it does not account for\naccount-inherited restrictions, space permissions, or even product access. For more\ninformation, see [Confluence permissions](https://confluence.atlassian.com/x/_AozKw).\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the content.",
-        "operationId": "getContentRestrictionStatusForGroup",
-        "parameters": [
+        "x-atlassian-data-security-policy": [
           {
-            "name": "id",
-            "in": "path",
-            "description": "The ID of the content that the restriction applies to.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "operationKey",
-            "in": "path",
-            "description": "The operation that the restriction applies to.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "read",
-                "update"
-              ]
-            }
-          },
-          {
-            "name": "groupName",
-            "in": "path",
-            "description": "The name of the group to be queried for whether the content restriction\napplies to it.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returns true if the content restriction applies to the group. The response\nwill not return a response body.",
-            "content": {}
-          },
-          "400": {
-            "description": "Returned if;\n\n- Group name is missing",
-            "content": {}
-          },
-          "404": {
-            "description": "Returned if;\n\n- There is no content with the given ID.\n- The calling user does not have permission to view the content.\n- An invalid operation or group is specified.",
-            "content": {}
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "oAuthDefinitions": [
-              "read:confluence-content.all"
-            ]
-          }
-        ],
-        "x-atlassian-oauth2-scopes": [
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Current",
-            "scopes": [
-              "read:confluence-content.all"
-            ]
-          },
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Beta",
-            "scopes": [
-              "read:content.restriction:confluence"
-            ]
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "READ"
-      },
-      "put": {
-        "tags": [
-          "Content restrictions"
-        ],
-        "summary": "Add group to content restriction",
-        "deprecated": true,
-        "description": "Deprecated, use [Add group to content restriction via groupId](https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-restrictions/#api-wiki-rest-api-content-id-restriction-byoperation-operationkey-bygroupid-groupid-put).\nAdds a group to a content restriction. That is, grant read or update\npermission to the group for a piece of content.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the content.",
-        "operationId": "addGroupToContentRestriction",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "The ID of the content that the restriction applies to.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "operationKey",
-            "in": "path",
-            "description": "The operation that the restriction applies to.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "read",
-                "update"
-              ]
-            }
-          },
-          {
-            "name": "groupName",
-            "in": "path",
-            "description": "The name of the group to add to the content restriction.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returned if the group is added to the content restriction. The response\nbody will be empty.",
-            "content": {}
-          },
-          "404": {
-            "description": "Returned if;\n\n- There is no content with the given ID.\n- The calling user does not have permission to view the content.\n- An invalid operation or group is specified.",
-            "content": {}
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "oAuthDefinitions": [
-              "write:confluence-content"
-            ]
-          }
-        ],
-        "x-atlassian-oauth2-scopes": [
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Current",
-            "scopes": [
-              "write:confluence-content"
-            ]
-          },
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Beta",
-            "scopes": [
-              "write:content.restriction:confluence"
-            ]
-          }
-        ],
-        "x-atlassian-connect-scope": "WRITE"
-      },
-      "delete": {
-        "tags": [
-          "Content restrictions"
-        ],
-        "summary": "Remove group from content restriction",
-        "deprecated": true,
-        "description": "Deprecated, use [Remove group from content restriction by groupId](https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-restrictions/#api-wiki-rest-api-content-id-restriction-byoperation-operationkey-user-delete).\nRemoves a group from a content restriction. That is, remove read or update\npermission for the group for a piece of content.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to edit the content.",
-        "operationId": "removeGroupFromContentRestrictionById",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "The ID of the content that the restriction applies to.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "operationKey",
-            "in": "path",
-            "description": "The operation that the restriction applies to.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "read",
-                "update"
-              ]
-            }
-          },
-          {
-            "name": "groupName",
-            "in": "path",
-            "description": "The name of the group to remove from the content restriction.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returned if the group is removed from the content restriction. The response\nbody will be empty.",
-            "content": {}
-          },
-          "404": {
-            "description": "Returned if;\n\n- There is no content with the given ID.\n- The calling user does not have permission to view the content.\n- The restriction to be deleted does not exist.",
-            "content": {}
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "oAuthDefinitions": [
-              "write:confluence-content"
-            ]
-          }
-        ],
-        "x-atlassian-oauth2-scopes": [
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Current",
-            "scopes": [
-              "write:confluence-content"
-            ]
-          },
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Beta",
-            "scopes": [
-              "write:content.restriction:confluence"
-            ]
-          }
-        ],
-        "x-atlassian-connect-scope": "WRITE"
       }
     },
     "/wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/byGroupId/{groupId}": {
@@ -5611,6 +5634,11 @@
             "scopes": [
               "read:content.restriction:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -5699,6 +5727,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       },
       "delete": {
@@ -5785,6 +5818,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       }
     },
@@ -5859,6 +5897,11 @@
             "scopes": [
               "read:content.restriction:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -5939,6 +5982,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       },
       "delete": {
@@ -6015,6 +6063,11 @@
             "scopes": [
               "write:content.restriction:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -6098,6 +6151,11 @@
             "scopes": [
               "read:content-details:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -6194,6 +6252,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       },
       "delete": {
@@ -6274,6 +6337,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       }
     },
@@ -6344,6 +6412,11 @@
             "scopes": [
               "write:content:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -6446,6 +6519,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "post": {
@@ -6535,6 +6613,11 @@
               "read:content-details:confluence",
               "write:content:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -6630,6 +6713,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "delete": {
@@ -6700,90 +6788,15 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "DELETE"
       }
     },
     "/wiki/rest/api/content-states": {
-      "put": {
-        "tags": [
-          "Content states"
-        ],
-        "summary": "Bulk set content state of many contents",
-        "description": "Creates a long running task that sets content state of draft or published versions of pages specified.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**\nContent Edit Permission for a content to have its state set via this endpoint.",
-        "operationId": "bulkSetContentStates",
-        "parameters": [
-          {
-            "name": "status",
-            "in": "query",
-            "required": true,
-            "description": "Set status to one of [current,draft].",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "current",
-                "draft"
-              ]
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "The content state and ids to set it to.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BulkContentStateSetInput"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Returned if a task to set content states is created. Returns the taskId.\nThis task id can be passed into /wiki/rest/api/content-states/task/{taskId} for a result",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AsyncId"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Returned if too many contents, no contents, no content state, or no status are passed in."
-          },
-          "404": {
-            "description": "Returned if content cannot be found with the provided context."
-          }
-        },
-        "security": [
-          {
-            "oAuthDefinitions": [
-              "write:confluence-content"
-            ]
-          },
-          {
-            "basicAuth": []
-          }
-        ],
-        "x-atlassian-oauth2-scopes": [
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Current",
-            "scopes": [
-              "write:confluence-content"
-            ]
-          },
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Beta",
-            "scopes": [
-              "write:content:confluence",
-              "read:content-details:confluence"
-            ]
-          }
-        ],
-        "x-atlassian-connect-scope": "WRITE"
-      },
       "get": {
         "tags": [
           "Content states"
@@ -6835,6 +6848,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -6844,6 +6862,7 @@
           "Content states"
         ],
         "summary": "Bulk remove content states from content",
+        "deprecated": true,
         "description": "Creates a long running task that Removes content state from draft or published versions of pages specified.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**\nContent Edit Permission for a content to have its state removed via this endpoint.",
         "operationId": "bulkRemoveContentStates",
         "parameters": [
@@ -6931,6 +6950,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       }
     },
@@ -6940,7 +6964,8 @@
           "Content states"
         ],
         "summary": "Get update on long running task for setting of content state.",
-        "description": "Get Status of long running task that was previously created to set or remove content states from content.\nUser must first create a task by passing in details to /wiki/rest/api/content-states PUT or DELETE endpoints.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**\nMust have created long running task",
+        "deprecated": true,
+        "description": "Get Status of long running task that was previously created to remove content states from content.\nUser must first create a task by passing in details to the /wiki/rest/api/content-states DELETE endpoint.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**\nMust have created long running task",
         "operationId": "getTaskUpdate",
         "parameters": [
           {
@@ -6949,7 +6974,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "taskId returned by put or delete requests to /wiki/rest/api/content-states",
+            "description": "taskId returned by delete requests to /wiki/rest/api/content-states",
             "required": true
           }
         ],
@@ -6995,6 +7020,11 @@
             "scopes": [
               "read:content:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -7108,6 +7138,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "READ"
       }
@@ -7118,7 +7153,7 @@
           "Content body"
         ],
         "summary": "Asynchronously convert content body",
-        "description": "Converts a content body from one format to another format asynchronously.\nReturns the asyncId for the asynchronous task.\n\nSupported conversions:\n\n- storage: export_view\n\nNo other conversions are supported at the moment.\nOnce a conversion is completed, it will be available for 5 minutes at the result endpoint.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nIf request specifies 'contentIdContext', 'View' permission for the space, and permission to view the content.",
+        "description": "Converts a content body from one format to another format asynchronously.\nReturns the asyncId for the asynchronous task.\n\nSupported conversions:\n\n- storage: editor, export_view, styled_view, view\n- editor: storage\n\nNo other conversions are supported at the moment.\nOnce a conversion is completed, it will be available for 5 minutes at the result endpoint.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nIf request specifies 'contentIdContext', 'View' permission for the space, and permission to view the content.",
         "operationId": "asyncConvertContentBodyRequest",
         "parameters": [
           {
@@ -7232,6 +7267,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "READ"
       }
@@ -7307,6 +7347,152 @@
             "scopes": [
               "read:content.metadata:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
+        "x-codegen-request-body-name": "body",
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/wiki/rest/api/contentbody/convert/async/bulk/tasks": {
+      "post": {
+        "tags": [
+          "Content body"
+        ],
+        "summary": "Create asynchronous content body conversion tasks in bulk",
+        "description": "Asynchronously converts content bodies from one format to another format in bulk. Use the Content body\nREST API to get the status of conversion tasks. Note that there is a maximum limit of 10 conversions per\nrequest to this endpoint.\n\nSupported conversions:\n\n- storage: editor, export_view, styled_view, view\n- editor: storage\n\nOnce a conversion task is completed, it is available for polling for up to 5 minutes.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space, and permission to view the content if the `spaceKeyContext` or\n`contentIdContext` are present.",
+        "operationId": "bulkAsyncConvertContentBodyRequest",
+        "requestBody": {
+          "description": "An array of parameters to create content body conversion tasks.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContentBodyConversionInputArray"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Returned if asynchronous tasks are created to convert content bodies. If a conversion task fails to be created, a “FAILED_TO_QUEUE” string will be returned instead of an asyncId.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AsyncIdArray"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if there are more than 10 conversions requested.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:confluence-content.all"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:confluence-content.all"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "read:content.metadata:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
+        "x-codegen-request-body-name": "body",
+        "x-atlassian-connect-scope": "READ"
+      },
+      "get": {
+        "tags": [
+          "Content body"
+        ],
+        "summary": "Get asynchronous content body conversion task result in bulk",
+        "description": "Returns the content body for the corresponding `asyncId` of a completed conversion task. If\nthe task is not completed, the task status is returned instead.\n\nOnce a conversion task is completed, the result can be obtained for up to 5 minutes, or\nuntil an identical conversion request is made again with the `allowCache` parameter set to\nfalse.\n\nNote that there is a maximum limit of 50 task results per request to this endpoint.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
+        "operationId": "bulkAsyncConvertContentBodyResponse",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "The asyncIds of the conversion tasks.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if asynchronous conversion tasks are successfully found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AsyncContentBodyArray"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if there are more than 50 results requested.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:confluence-content.all"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:confluence-content.all"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "read:content.metadata:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -7498,6 +7684,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -7559,6 +7750,11 @@
             "scopes": [
               "read:inlinetask:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -7636,6 +7832,11 @@
               "read:inlinetask:confluence",
               "write:inlinetask:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -7747,6 +7948,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -7839,6 +8045,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "post": {
@@ -7910,146 +8121,13 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "INACCESSIBLE"
-      },
-      "delete": {
-        "tags": [
-          "Group"
-        ],
-        "summary": "Delete user group",
-        "description": "Delete user group.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nUser must be a site admin.",
-        "operationId": "removeGroup",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the group to delete.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Returned if the group was removed successfully.",
-            "content": {}
-          },
-          "400": {
-            "description": "Returned if the name is missing or invalid.",
-            "content": {}
-          },
-          "401": {
-            "description": "Returned if the calling user is not logged in to Confluence.",
-            "content": {}
-          },
-          "403": {
-            "description": "Returned if the user is not a site admin.",
-            "content": {}
-          },
-          "404": {
-            "description": "If no user group by the give name exists.",
-            "content": {}
-          }
-        },
-        "deprecated": true,
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "oAuthDefinitions": [
-              "write:confluence-groups"
-            ]
-          }
-        ],
-        "x-atlassian-oauth2-scopes": [
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Current",
-            "scopes": [
-              "write:confluence-groups"
-            ]
-          },
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Beta",
-            "scopes": [
-              "write:group:confluence"
-            ]
-          }
-        ],
-        "x-atlassian-connect-scope": "INACCESSIBLE"
-      }
-    },
-    "/wiki/rest/api/group/by-name": {
-      "get": {
-        "tags": [
-          "Group"
-        ],
-        "summary": "Get group",
-        "description": "Returns a user group for a given group name.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
-        "operationId": "getGroupByQueryParam",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "description": "The name of the group. This is the same as the group name shown in\nthe Confluence administration console.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returned if the requested group is returned.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Group"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Returned if the calling user does not have permission to view\ngroups.",
-            "content": {}
-          },
-          "404": {
-            "description": "Returned if the group does not exist.",
-            "content": {}
-          }
-        },
-        "deprecated": true,
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "oAuthDefinitions": [
-              "read:confluence-groups"
-            ]
-          }
-        ],
-        "x-atlassian-oauth2-scopes": [
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Current",
-            "scopes": [
-              "read:confluence-groups"
-            ]
-          },
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Beta",
-            "scopes": [
-              "read:group:confluence"
-            ]
-          }
-        ],
-        "x-atlassian-connect-scope": "READ"
       }
     },
     "/wiki/rest/api/group/by-id": {
@@ -8115,6 +8193,11 @@
             "scopes": [
               "read:group:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -8185,230 +8268,12 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
-      }
-    },
-    "/wiki/rest/api/group/{groupName}": {
-      "get": {
-        "tags": [
-          "Group"
-        ],
-        "summary": "Get group",
-        "description": "Returns a user group for a given group name.\n\nUse updated Get group API\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
-        "operationId": "getGroupByName",
-        "parameters": [
-          {
-            "name": "groupName",
-            "in": "path",
-            "description": "The name of the group. This is the same as the group name shown in\nthe Confluence administration console.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returned if the requested group is returned.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Group"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Returned if the calling user does not have permission to view\ngroups.",
-            "content": {}
-          },
-          "404": {
-            "description": "Returned if the group does not exist.",
-            "content": {}
-          }
-        },
-        "deprecated": true,
-        "x-atlassian-connect-scope": "READ"
-      }
-    },
-    "/wiki/rest/api/group/member": {
-      "get": {
-        "tags": [
-          "Group"
-        ],
-        "summary": "Get group members",
-        "description": "Returns the users that are members of a group.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
-        "operationId": "getMembersByQueryParam",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "description": "The name of the group to be queried for its members.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "start",
-            "in": "query",
-            "description": "The starting index of the returned users.",
-            "schema": {
-              "minimum": 0,
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of users to return per page.\nNote, this is restricted by fixed system limit of 200 which is to say if the limit parameter\nexceeds 200, this API will return a maximum of 200 users per page.",
-            "schema": {
-              "minimum": 0,
-              "type": "integer",
-              "format": "int32",
-              "default": 200
-            }
-          },
-          {
-            "name": "shouldReturnTotalSize",
-            "in": "query",
-            "description": "Whether to include total size parameter in the results.\nNote, fetching total size property is an expensive operation; use it if your use case needs this value.",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "expand",
-            "in": "query",
-            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - `personalSpace` returns the user's personal space, if it exists.\n  - `isExternalCollaborator` returns whether the user is an external collaborator user.",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "operations",
-                  "personalSpace",
-                  "isExternalCollaborator"
-                ]
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returned if the requested users are returned.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserArray"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Returned if the calling user does not have permission to view users.",
-            "content": {}
-          }
-        },
-        "deprecated": true,
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "oAuthDefinitions": [
-              "read:confluence-groups"
-            ]
-          }
-        ],
-        "x-atlassian-oauth2-scopes": [
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Current",
-            "scopes": [
-              "read:confluence-groups"
-            ]
-          },
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Beta",
-            "scopes": [
-              "read:group:confluence",
-              "read:user:confluence"
-            ]
-          }
-        ],
-        "x-atlassian-connect-scope": "READ"
-      }
-    },
-    "/wiki/rest/api/group/{groupName}/member": {
-      "get": {
-        "tags": [
-          "Group"
-        ],
-        "summary": "Get group members",
-        "description": "Returns the users that are members of a group.\n\nUse updated Get group API\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
-        "operationId": "getGroupMembers",
-        "parameters": [
-          {
-            "name": "groupName",
-            "in": "path",
-            "description": "The name of the group to be queried for its members.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "start",
-            "in": "query",
-            "description": "The starting index of the returned users.",
-            "schema": {
-              "minimum": 0,
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of users to return per page.\nNote, this may be restricted by fixed system limits.",
-            "schema": {
-              "minimum": 0,
-              "type": "integer",
-              "format": "int32",
-              "default": 200
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returned if the requested users are returned.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserArray"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Returned if given limit is greater than 200",
-            "content": {}
-          },
-          "403": {
-            "description": "Returned if the calling user does not have permission to view users.",
-            "content": {}
-          }
-        },
-        "deprecated": true,
-        "x-atlassian-connect-scope": "READ"
       }
     },
     "/wiki/rest/api/group/picker": {
@@ -8503,6 +8368,134 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
+        "x-atlassian-connect-scope": "READ"
+      }
+    },
+    "/wiki/rest/api/group/{groupId}/membersByGroupId": {
+      "get": {
+        "tags": [
+          "Group"
+        ],
+        "summary": "Get group members",
+        "description": "Returns the users that are members of a group.\n\nUse updated Get group API\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
+        "operationId": "getGroupMembersByGroupId",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "The id of the group to be queried for its members.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "description": "The starting index of the returned users.",
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The maximum number of users to return per page.\nNote, this may be restricted by fixed system limits.",
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32",
+              "default": 200
+            }
+          },
+          {
+            "name": "shouldReturnTotalSize",
+            "in": "query",
+            "description": "Whether to include total size parameter in the results.\nNote, fetching total size property is an expensive operation; use it if your use case needs this value.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "expand",
+            "in": "query",
+            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - `personalSpace` returns the user's personal space, if it exists.\n  - `isExternalCollaborator`(@deprecated) see `isGuest` in response to find out whether the user is a guest.",
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "operations",
+                  "personalSpace",
+                  "isExternalCollaborator"
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the requested users are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserArray"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned if given limit is greater than 200",
+            "content": {}
+          },
+          "403": {
+            "description": "Returned if the calling user does not have permission to view users.",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "oAuthDefinitions": [
+              "read:confluence-groups"
+            ]
+          }
+        ],
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Current",
+            "scopes": [
+              "read:confluence-groups"
+            ]
+          },
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "read:group:confluence",
+              "read:user:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -8584,6 +8577,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "INACCESSIBLE"
       },
@@ -8662,283 +8660,9 @@
             ]
           }
         ],
-        "x-atlassian-connect-scope": "INACCESSIBLE"
-      }
-    },
-    "/wiki/rest/api/group/{groupId}/membersByGroupId": {
-      "get": {
-        "tags": [
-          "Group"
-        ],
-        "summary": "Get group members",
-        "description": "Returns the users that are members of a group.\n\nUse updated Get group API\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
-        "operationId": "getGroupMembersByGroupId",
-        "parameters": [
+        "x-atlassian-data-security-policy": [
           {
-            "name": "groupId",
-            "in": "path",
-            "description": "The id of the group to be queried for its members.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "start",
-            "in": "query",
-            "description": "The starting index of the returned users.",
-            "schema": {
-              "minimum": 0,
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of users to return per page.\nNote, this may be restricted by fixed system limits.",
-            "schema": {
-              "minimum": 0,
-              "type": "integer",
-              "format": "int32",
-              "default": 200
-            }
-          },
-          {
-            "name": "shouldReturnTotalSize",
-            "in": "query",
-            "description": "Whether to include total size parameter in the results.\nNote, fetching total size property is an expensive operation; use it if your use case needs this value.",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "expand",
-            "in": "query",
-            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - `personalSpace` returns the user's personal space, if it exists.\n  - `isExternalCollaborator` returns whether the user is an external collaborator user.",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "operations",
-                  "personalSpace",
-                  "isExternalCollaborator"
-                ]
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returned if the requested users are returned.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserArray"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Returned if given limit is greater than 200",
-            "content": {}
-          },
-          "403": {
-            "description": "Returned if the calling user does not have permission to view users.",
-            "content": {}
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "oAuthDefinitions": [
-              "read:confluence-groups"
-            ]
-          }
-        ],
-        "x-atlassian-oauth2-scopes": [
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Current",
-            "scopes": [
-              "read:confluence-groups"
-            ]
-          },
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Beta",
-            "scopes": [
-              "read:group:confluence",
-              "read:user:confluence"
-            ]
-          }
-        ],
-        "x-atlassian-connect-scope": "READ"
-      }
-    },
-    "/wiki/rest/api/group/user": {
-      "post": {
-        "tags": [
-          "Group"
-        ],
-        "summary": "Add member to group",
-        "description": "Adds a user as a member in a group.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nUser must be a site admin.",
-        "operationId": "addUserToGroup",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the group whose membership is updated",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "AccountId of the user who needs to be added as member.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AccountId"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "Returned if the group was created successfully.",
-            "content": {}
-          },
-          "400": {
-            "description": "Returned if the name or accountId are missing or invalid.",
-            "content": {}
-          },
-          "401": {
-            "description": "Returned if the calling user is not logged in to Confluence.",
-            "content": {}
-          },
-          "403": {
-            "description": "Returned if the user is not a site admin.",
-            "content": {}
-          },
-          "404": {
-            "description": "If no user group by the give name exists.",
-            "content": {}
-          }
-        },
-        "deprecated": true,
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "oAuthDefinitions": [
-              "write:confluence-groups"
-            ]
-          }
-        ],
-        "x-atlassian-oauth2-scopes": [
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Current",
-            "scopes": [
-              "write:confluence-groups"
-            ]
-          },
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Beta",
-            "scopes": [
-              "write:group:confluence"
-            ]
-          }
-        ],
-        "x-codegen-request-body-name": "body",
-        "x-atlassian-connect-scope": "INACCESSIBLE"
-      },
-      "delete": {
-        "tags": [
-          "Group"
-        ],
-        "summary": "Remove member from group",
-        "description": "Remove user as a member from a group.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nUser must be a site admin.",
-        "operationId": "removeMemberFromGroup",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the group whose membership is updated.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "$ref": "#/components/parameters/userLookupKey"
-          },
-          {
-            "$ref": "#/components/parameters/userLookupUsername"
-          },
-          {
-            "$ref": "#/components/parameters/userLookupAccountId"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Returned if the group was removed successfully.",
-            "content": {}
-          },
-          "400": {
-            "description": "Returned if the name is missing or invalid.",
-            "content": {}
-          },
-          "401": {
-            "description": "Returned if the calling user is not logged in to Confluence.",
-            "content": {}
-          },
-          "403": {
-            "description": "Returned if the user is not a site admin.\nNote: A 204 is returned if the user is not part of the\ngroup.",
-            "content": {}
-          },
-          "404": {
-            "description": "If no user group by the give name exists or if no user exists\nfor the given accountId.",
-            "content": {}
-          }
-        },
-        "deprecated": true,
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "oAuthDefinitions": [
-              "write:confluence-groups"
-            ]
-          }
-        ],
-        "x-atlassian-oauth2-scopes": [
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Current",
-            "scopes": [
-              "write:confluence-groups"
-            ]
-          },
-          {
-            "scheme": "oAuthDefinitions",
-            "state": "Beta",
-            "scopes": [
-              "write:group:confluence"
-            ]
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
@@ -8953,6 +8677,15 @@
         "description": "Returns information about all active long-running tasks (e.g. space export),\nsuch as how long each task has been running and the percentage of each task\nthat has completed.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
         "operationId": "getTasks",
         "parameters": [
+          {
+            "name": "key",
+            "in": "query",
+            "description": "The key of the tasks.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "start",
             "in": "query",
@@ -9009,6 +8742,11 @@
             "scopes": [
               "read:content.metadata:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -9077,6 +8815,11 @@
             "scopes": [
               "read:content.metadata:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -9263,6 +9006,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -9438,6 +9186,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "put": {
@@ -9445,7 +9198,7 @@
           "Relation"
         ],
         "summary": "Create relationship",
-        "description": "Creates a relationship between two entities (user, space, content). The\n'favourite' relationship is supported by default, but you can use this method\nto create any type of relationship between two entities.\n\nFor example, the following method creates a 'sibling' relationship between\ntwo pieces of content:\n`GET /wiki/rest/api/relation/sibling/from/content/123/to/content/456`\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
+        "description": "Creates a relationship between two entities (user, space, content). The\n'favourite' relationship is supported by default, but you can use this method\nto create any type of relationship between two entities.\n\nFor example, the following method creates a 'sibling' relationship between\ntwo pieces of content:\n`PUT /wiki/rest/api/relation/sibling/from/content/123/to/content/456`\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
         "operationId": "createRelationship",
         "parameters": [
           {
@@ -9596,6 +9349,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       },
       "delete": {
@@ -9742,6 +9500,11 @@
             "scopes": [
               "write:relation:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -9928,6 +9691,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -9937,7 +9705,7 @@
           "Search"
         ],
         "summary": "Search content",
-        "description": "Searches for content using the\n[Confluence Query Language (CQL)](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/).\n\n**Note that CQL input queries submitted through the `/wiki/rest/api/search` endpoint no longer support user-specific fields like `user`, `user.fullname`, `user.accountid`, and `user.userkey`.** \nSee this [deprecation notice](https://developer.atlassian.com/cloud/confluence/deprecation-notice-search-api/) for more details.\n\nExample initial call:\n```\n/wiki/rest/api/search?cql=type=page&limit=25\n```\n\nExample response:\n```\n{\n  \"results\": [\n    { ... },\n    { ... },\n    ...\n    { ... }\n  ],\n  \"limit\": 25,\n  \"size\": 25,\n  ...\n  \"_links\": {\n    \"base\": \"<url>\",\n    \"context\": \"<url>\",\n    \"next\": \"/rest/api/search?cql=type=page&limit=25&cursor=raNDoMsTRiNg\",\n    \"self\": \"<url>\"\n  }\n}\n```\n\nWhen additional results are available, returns `next` and `prev` URLs to retrieve them in subsequent calls. The URLs each contain a cursor that points to the appropriate set of results. Use `limit` to specify the number of results returned in each call.\n\nExample subsequent call (taken from example response):\n```\n/wiki/rest/api/search?cql=type=page&limit=25&cursor=raNDoMsTRiNg\n```\nThe response to this will have a `prev` URL similar to the `next` in the example response.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the entities. Note, only entities that the user has\npermission to view will be returned.",
+        "description": "Searches for content using the\n[Confluence Query Language (CQL)](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/).\n\n**Note that CQL input queries submitted through the `/wiki/rest/api/search` endpoint no longer support user-specific fields like `user`, `user.fullname`, `user.accountid`, and `user.userkey`.** \nSee this [deprecation notice](https://developer.atlassian.com/cloud/confluence/deprecation-notice-search-api/) for more details.\n\nExample initial call:\n```\n/wiki/rest/api/search?cql=type=page&limit=25\n```\n\nExample response:\n```\n{\n  \"results\": [\n    { ... },\n    { ... },\n    ...\n    { ... }\n  ],\n  \"limit\": 25,\n  \"size\": 25,\n  ...\n  \"_links\": {\n    \"base\": \"<url>\",\n    \"context\": \"<url>\",\n    \"next\": \"/rest/api/search?cql=type=page&limit=25&cursor=raNDoMsTRiNg\",\n    \"self\": \"<url>\"\n  }\n}\n```\n\nWhen additional results are available, returns `next` and `prev` URLs to retrieve them in subsequent calls. The URLs each contain a cursor that points to the appropriate set of results. Use `limit` to specify the number of results returned in each call.\n\nExample subsequent call (taken from example response):\n```\n/wiki/rest/api/search?cql=type=page&limit=25&cursor=raNDoMsTRiNg\n```\nThe response to this will have a `prev` URL similar to the `next` in the example response.\n\nStarting on Dec 10, 2024, if the expand query parameter is used with the `body.export_view` and/or `body.styled_view` properties, then the query limit parameter will be restricted to a maximum value of 25.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to view the entities. Note, only entities that the user has\npermission to view will be returned.",
         "operationId": "searchByCQL",
         "parameters": [
           {
@@ -10118,6 +9886,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -10133,7 +9906,7 @@
           {
             "name": "cql",
             "in": "query",
-            "description": "The CQL query to be used for the search. See\n[Advanced Searching using CQL](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/)\nfor instructions on how to build a CQL query.\n\nExample queries:\n          cql=type=user will return all users\n          cql=user=\"1234\" will return user with accountId \"1234\"\n          You can also use IN, NOT IN, != operators\n          cql=user IN (\"12\", \"34\") will return users with accountids \"12\" and \"34\"\n          cql=user.fullname~jo will return users with nickname/full name starting with \"jo\"\n          cql=user.accountid=\"123\" will return user with accountId \"123\"",
+            "description": "The CQL query to be used for the search. See\n[Advanced Searching using CQL](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/)\nfor instructions on how to build a CQL query.\n\nExample queries:\n          cql=type=user will return up to 10k users\n          cql=user=\"1234\" will return user with accountId \"1234\"\n          You can also use IN, NOT IN, != operators\n          cql=user IN (\"12\", \"34\") will return users with accountids \"12\" and \"34\"\n          cql=user.fullname~jo will return users with nickname/full name starting with \"jo\"\n          cql=user.accountid=\"123\" will return user with accountId \"123\"",
             "required": true,
             "schema": {
               "type": "string"
@@ -10228,6 +10001,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -10294,6 +10072,11 @@
               "read:configuration:confluence",
               "read:space.setting:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -10369,6 +10152,11 @@
               "read:space.setting:confluence",
               "write:space.setting:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -10457,6 +10245,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "WRITE"
       },
@@ -10520,6 +10313,11 @@
               "write:configuration:confluence",
               "write:space.setting:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "DELETE"
@@ -10613,6 +10411,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "WRITE"
       }
@@ -10667,6 +10470,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -10676,7 +10484,7 @@
           "Themes"
         ],
         "summary": "Get themes",
-        "description": "Returns all [admin-driven themes](https://developer.atlassian.com/cloud/confluence/create-a-confluence-theme/), not including the default theme. Note that this API only applies to themes set for an entire space or site by the admin. User-driven theming controls (Light, Dark, and match browser) are an unrelated feature. Admin-driven themes will override user-driven themes.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: None",
+        "description": "Returns all themes, not including the default theme.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: None",
         "operationId": "getThemes",
         "parameters": [
           {
@@ -10740,6 +10548,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -10791,6 +10604,11 @@
             "scopes": [
               "read:configuration:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -10857,6 +10675,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -10905,6 +10728,8 @@
               "type": "string",
               "enum": [
                 "global",
+                "collaboration",
+                "knowledge_base",
                 "personal"
               ]
             }
@@ -11022,6 +10847,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "post": {
@@ -11092,6 +10922,11 @@
               "write:space:confluence",
               "write:space.permission:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -11169,6 +11004,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-codegen-request-body-name": "SpacePrivateCreate",
         "x-atlassian-connect-scope": "WRITE"
       }
@@ -11240,6 +11080,11 @@
             "scopes": [
               "read:content-details:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -11321,6 +11166,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "WRITE"
       },
@@ -11329,7 +11179,7 @@
           "Space"
         ],
         "summary": "Delete space",
-        "description": "Deletes a space. Note, the space will be deleted in a long running task.\nTherefore, the space may not be deleted yet when this method has\nreturned. Clients should poll the status link that is returned in the\nresponse until the task completes.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Admin' permission for the space.",
+        "description": "Permanently deletes a space without sending it to the trash. Note, the space will be deleted in a long running task.\nTherefore, the space may not be deleted yet when this method has\nreturned. Clients should poll the status link that is returned in the\nresponse until the task completes.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Admin' permission for the space.",
         "operationId": "deleteSpace",
         "parameters": [
           {
@@ -11389,6 +11239,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "DELETE"
       }
     },
@@ -11399,7 +11254,7 @@
         ],
         "summary": "Get content for space",
         "deprecated": true,
-        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns all content in a space. The returned content is grouped by type\n(pages then blogposts), then ordered by content ID in ascending order.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space. Note, the returned list will only\ncontain content that the current user has permission to view.",
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns all content in a space. The returned content is grouped by type\n(pages then blogposts), then ordered by content ID in ascending order.\n\nStarting on Dec 10, 2024, if the expand query parameter is used with the `body.export_view` and/or `body.styled_view` properties, then the query limit parameter will be restricted to a maximum value of 25.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space. Note, the returned list will only\ncontain content that the current user has permission to view.",
         "operationId": "getContentForSpace",
         "parameters": [
           {
@@ -11507,6 +11362,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -11590,6 +11450,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
       }
     },
@@ -11667,6 +11532,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       }
     },
@@ -11739,6 +11609,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
       }
     },
@@ -11749,7 +11624,7 @@
         ],
         "summary": "Get content by type for space",
         "deprecated": true,
-        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns all content of a given type, in a space. The returned content is\nordered by content ID in ascending order.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space. Note, the returned list will only\ncontain content that the current user has permission to view.",
+        "description": "Deprecated, use [Confluence's v2 API](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).\n\nReturns all content of a given type, in a space. The returned content is\nordered by content ID in ascending order.\n\nStarting on Dec 10, 2024, if the expand query parameter is used with the `body.export_view` and/or `body.styled_view` properties, then the query limit parameter will be restricted to a maximum value of 25.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space. Note, the returned list will only\ncontain content that the current user has permission to view.",
         "operationId": "getContentByTypeForSpace",
         "parameters": [
           {
@@ -11853,6 +11728,11 @@
             "scopes": [
               "read:content-details:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -11959,6 +11839,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "post": {
@@ -12048,6 +11933,11 @@
               "read:space.property:confluence",
               "write:space.property:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -12140,6 +12030,11 @@
             "scopes": [
               "read:content-details:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -12242,6 +12137,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "WRITE"
       },
@@ -12335,6 +12235,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "WRITE"
       },
@@ -12406,6 +12311,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       }
     },
@@ -12472,6 +12382,11 @@
             "scopes": [
               "read:space.setting:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -12552,6 +12467,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-codegen-request-body-name": "SpaceSettingsUpdate",
         "x-atlassian-connect-scope": "WRITE"
       }
@@ -12562,7 +12482,7 @@
           "Content states"
         ],
         "summary": "Get space suggested content states",
-        "description": "Get content states that are suggested in the space.\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nSpace view permission",
+        "description": "Get content states that are suggested in the space.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space.",
         "operationId": "getSpaceContentStates",
         "parameters": [
           {
@@ -12626,6 +12546,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -12635,7 +12560,7 @@
           "Content states"
         ],
         "summary": "Get content state settings for space",
-        "description": "Get object describing whether content states are allowed at all, if custom content states or space content states\nare restricted, and a list of space content states allowed for the space if they are not restricted.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nSpace admin permission",
+        "description": "Get object describing whether content states are allowed at all, if custom content states or space content states\nare restricted, and a list of space content states allowed for the space if they are not restricted.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'Admin' permission for the space.",
         "operationId": "getContentStateSettings",
         "parameters": [
           {
@@ -12695,6 +12620,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -12704,7 +12634,7 @@
           "Content states"
         ],
         "summary": "Get content in space with given content state",
-        "description": "Finds paginated content with \n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nSpace View Permission",
+        "description": "Returns all content that has the provided content state in a space.\n\nStarting on Dec 10, 2024, if the expand query parameter is used with the `body.export_view` and/or `body.styled_view` properties, then the query limit parameter will be restricted to a maximum value of 25.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\n'View' permission for the space.",
         "operationId": "getContentsWithState",
         "parameters": [
           {
@@ -12813,6 +12743,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -12875,6 +12810,11 @@
             "scopes": [
               "read:space.setting:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -12954,6 +12894,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "WRITE"
       },
@@ -13009,6 +12954,11 @@
             "scopes": [
               "write:space.setting:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "DELETE"
@@ -13084,6 +13034,11 @@
               "read:watcher:confluence",
               "read:user:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -13185,6 +13140,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-experimental": true,
         "x-atlassian-connect-scope": "READ"
       },
@@ -13271,6 +13231,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-experimental": true,
         "x-atlassian-connect-scope": "WRITE"
       },
@@ -13350,6 +13315,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-experimental": true,
         "x-atlassian-connect-scope": "WRITE"
       }
@@ -13425,6 +13395,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "WRITE"
       },
@@ -13492,6 +13467,11 @@
               "read:content-details:confluence",
               "write:template:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -13597,6 +13577,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -13699,6 +13684,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -13764,6 +13754,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "delete": {
@@ -13819,6 +13814,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "DELETE"
       }
     },
@@ -13843,7 +13843,7 @@
           {
             "name": "expand",
             "in": "query",
-            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - `personalSpace` returns the user's personal space, if it exists.\n  - `isExternalCollaborator` returns whether the user is an external collaborator user.",
+            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - `personalSpace` returns the user's personal space, if it exists.\n  - `isExternalCollaborator`(@deprecated) see `isGuest` in response to find out whether the user is a guest.",
             "style": "form",
             "explode": false,
             "schema": {
@@ -13907,6 +13907,11 @@
             "scopes": [
               "read:content-details:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -13980,6 +13985,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -13995,7 +14005,7 @@
           {
             "name": "expand",
             "in": "query",
-            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - `personalSpace` returns the user's personal space, if it exists.\n  - `isExternalCollaborator` returns whether the user is an external collaborator user.",
+            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - `personalSpace` returns the user's personal space, if it exists.\n  - `isExternalCollaborator`(@deprecated) see `isGuest` in response to find out whether the user is a guest.",
             "style": "form",
             "explode": false,
             "schema": {
@@ -14051,6 +14061,11 @@
             "scopes": [
               "read:content-details:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -14140,6 +14155,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -14149,7 +14169,7 @@
           "Users"
         ],
         "summary": "Get multiple users using ids",
-        "description": "Returns user details for the ids provided in request.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
+        "description": "Returns user details for the ids provided in the request.\nCurrently this API returns a maximum of 100 results.\nIf more than 100 account ids are passed in, then the first 100 will be returned.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
         "operationId": "getBulkUserLookup",
         "parameters": [
           {
@@ -14164,7 +14184,7 @@
           {
             "name": "expand",
             "in": "query",
-            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - `personalSpace` returns the user's personal space, if it exists.\n  - `isExternalCollaborator` returns whether the user is an external collaborator user.",
+            "description": "A multi-value parameter indicating which properties of the user to\nexpand.\n\n  - `operations` returns the operations that the user is allowed to do.\n  - `personalSpace` returns the user's personal space, if it exists.\n  - `isExternalCollaborator`(@deprecated) use `isGuest` instead to return whether the user is a guest.",
             "style": "form",
             "explode": false,
             "schema": {
@@ -14177,17 +14197,6 @@
                   "isExternalCollaborator"
                 ]
               }
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results returned.\nCurrently API returns 200 results max.\nIf more that 200 ids are passed first 200 will be returned.",
-            "schema": {
-              "maximum": 200,
-              "minimum": 1,
-              "type": "integer",
-              "format": "int32"
             }
           }
         ],
@@ -14231,6 +14240,11 @@
             "scopes": [
               "read:content-details:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -14310,6 +14324,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       },
       "post": {
@@ -14377,6 +14396,11 @@
             "scopes": [
               "write:watcher:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -14458,6 +14482,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       }
     },
@@ -14533,6 +14562,11 @@
             "scopes": [
               "read:watcher:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -14614,6 +14648,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       },
       "delete": {
@@ -14681,6 +14720,11 @@
             "scopes": [
               "write:watcher:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "WRITE"
@@ -14758,6 +14802,11 @@
             "scopes": [
               "read:watcher:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -14839,6 +14888,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       },
       "delete": {
@@ -14908,6 +14962,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       }
     },
@@ -14917,7 +14976,7 @@
           "Users"
         ],
         "summary": "Get user email address",
-        "description": "Returns a user's email address. This API is only available to apps approved by\nAtlassian, according to these [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603).\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
+        "description": "Returns a user's email address regardless of the user’s profile visibility settings. For Connect apps, this API is only available to apps approved by\nAtlassian, according to these [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603).\nFor Forge apps, this API only supports access via asApp() requests.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
         "operationId": "getPrivacyUnsafeUserEmail",
         "parameters": [
           {
@@ -14958,6 +15017,20 @@
             "content": {}
           }
         },
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "read:email-address:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "ACCESS_EMAIL_ADDRESSES"
       }
     },
@@ -14967,7 +15040,7 @@
           "Users"
         ],
         "summary": "Get user email addresses in batch",
-        "description": "Returns user email addresses for a set of accountIds. This API is only available to apps approved by\nAtlassian, according to these [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603).\n\nAny accounts which are not available will not be included in the result.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
+        "description": "Returns a user's email address regardless of the user’s profile visibility settings. For Connect apps, this API is only available to apps approved by\nAtlassian, according to these [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603).\nFor Forge apps, this API only supports access via asApp() requests.\n\nAny accounts which are not available will not be included in the result.\n\n**[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:\nPermission to access the Confluence site ('Can use' global permission).",
         "operationId": "getPrivacyUnsafeUserEmailBulk",
         "parameters": [
           {
@@ -15009,6 +15082,20 @@
             "content": {}
           }
         },
+        "x-atlassian-oauth2-scopes": [
+          {
+            "scheme": "oAuthDefinitions",
+            "state": "Beta",
+            "scopes": [
+              "read:email-address:confluence"
+            ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "ACCESS_EMAIL_ADDRESSES"
       }
     },
@@ -15047,6 +15134,11 @@
         },
         "deprecated": false,
         "x-experimental": true,
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
       },
       "post": {
@@ -15100,6 +15192,11 @@
         },
         "deprecated": false,
         "x-experimental": true,
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "INACCESSIBLE"
       },
@@ -15147,6 +15244,11 @@
         },
         "deprecated": false,
         "x-experimental": true,
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "INACCESSIBLE"
       }
     },
@@ -15238,6 +15340,11 @@
             "scopes": [
               "read:analytics.content:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -15333,6 +15440,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": false
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -15425,6 +15537,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "READ"
       }
     },
@@ -15502,6 +15619,11 @@
             "scopes": [
               "read:user.property:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-atlassian-connect-scope": "READ"
@@ -15583,6 +15705,11 @@
             "scopes": [
               "write:user.property:confluence"
             ]
+          }
+        ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
           }
         ],
         "x-codegen-request-body-name": "body",
@@ -15671,6 +15798,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-codegen-request-body-name": "body",
         "x-atlassian-connect-scope": "WRITE"
       },
@@ -15742,6 +15874,11 @@
             ]
           }
         ],
+        "x-atlassian-data-security-policy": [
+          {
+            "app-access-rule-exempt": true
+          }
+        ],
         "x-atlassian-connect-scope": "WRITE"
       }
     }
@@ -15804,6 +15941,12 @@
           "asyncId": {
             "type": "string"
           }
+        }
+      },
+      "AsyncIdArray": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/AsyncId"
         }
       },
       "AttachmentUpdate": {
@@ -15928,11 +16071,16 @@
                 "type": "string"
               },
               "externalCollaborator": {
-                "type": "boolean"
+                "type": "boolean",
+                "description": "This is deprecated. Use `isGuest` instead."
               },
               "isExternalCollaborator": {
                 "type": "boolean",
-                "description": "Whether the user is an external collaborator user"
+                "description": "This is deprecated. Use `isGuest` instead. Whether the user is an external collaborator user"
+              },
+              "isGuest": {
+                "type": "boolean",
+                "description": "Whether the user is a guest user"
               },
               "publicName": {
                 "type": "string",
@@ -16109,7 +16257,7 @@
               "type": "object",
               "$ref": "#/components/schemas/ContentState"
             },
-            "description": "Space suggested content states that can be used in the space. This can be null if space content states are disabled in the space.\nThis list can be empty if there are no space content states defined in the space.\nAll spaces start with 3 default space content states, and this can be modified in the UI under space settings."
+            "description": "Space suggested content states that can be used in the space.\nThis list can be empty if there are no space content states defined in the space or if space content states are disabled in the space.\nAll spaces start with 4 default space content states, and this can be modified in the UI under space settings."
           },
           "customContentStates": {
             "type": "array",
@@ -16117,7 +16265,7 @@
               "type": "object",
               "$ref": "#/components/schemas/ContentState"
             },
-            "description": "Custom content states that can be used by the user on the content of this call.\nThis can be null if custom content states are disabled in the space of the content.\nThis list can be empty if there are no custom content states defined by the user.\nThis will at most have 3 of the most recently published content states. \nOnly the calling user has access to place these states on content, but all users can see these states once they are placed."
+            "description": "Custom content states that can be used by the user on the content of this call.\nThis list can be empty if there are no custom content states defined by the user or if custom content states are disabled in the space of the content.\nThis will at most have 3 of the most recently published content states. \nOnly the calling user has access to place these states on content, but all users can see these states once they are placed."
           }
         }
       },
@@ -16909,6 +17057,12 @@
           }
         }
       },
+      "AsyncContentBodyArray": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/AsyncContentBody"
+        }
+      },
       "ContentBody": {
         "required": [
           "representation",
@@ -17036,6 +17190,18 @@
           "page": {
             "$ref": "#/components/schemas/ContentArray"
           },
+          "whiteboard": {
+            "$ref": "#/components/schemas/ContentArray"
+          },
+          "database": {
+            "$ref": "#/components/schemas/ContentArray"
+          },
+          "embed": {
+            "$ref": "#/components/schemas/ContentArray"
+          },
+          "folder": {
+            "$ref": "#/components/schemas/ContentArray"
+          },
           "_expandable": {
             "type": "object",
             "additionalProperties": true,
@@ -17047,6 +17213,18 @@
                 "type": "string"
               },
               "page": {
+                "type": "string"
+              },
+              "whiteboard": {
+                "type": "string"
+              },
+              "database": {
+                "type": "string"
+              },
+              "embed": {
+                "type": "string"
+              },
+              "folder": {
                 "type": "string"
               }
             }
@@ -17150,6 +17328,15 @@
                 "type": "string"
               },
               "whiteboard": {
+                "type": "string"
+              },
+              "database": {
+                "type": "string"
+              },
+              "embed": {
+                "type": "string"
+              },
+              "folder": {
                 "type": "string"
               }
             }
@@ -17964,7 +18151,7 @@
             "properties": {
               "group": {
                 "type": "array",
-                "description": "The groups that the restrictions will be applied to. This array must\nhave at least one item, otherwise it should be omitted. At least one of `name` or `id` is required,\nand `id` should be used where possible in advance of the `name` deprecation.",
+                "description": "The groups that the restrictions will be applied to. This array must\nhave at least one item, otherwise it should be omitted.",
                 "items": {
                   "required": [
                     "type"
@@ -17977,11 +18164,6 @@
                       "enum": [
                         "group"
                       ]
-                    },
-                    "name": {
-                      "type": "string",
-                      "description": "The name of the group.",
-                      "deprecated": true
                     },
                     "id": {
                       "type": "string",
@@ -18142,25 +18324,6 @@
           "$ref": "#/components/schemas/AddContentRestriction"
         }
       },
-      "BulkContentStateSetInput": {
-        "type": "object",
-        "required": [
-          "ids",
-          "contentState"
-        ],
-        "properties": {
-          "ids": {
-            "description": "maximum number of ids you can pass in is 300",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ContentId"
-            }
-          },
-          "contentState": {
-            "$ref": "#/components/schemas/ContentStateInput"
-          }
-        }
-      },
       "ContentPageResponse": {
         "required": [
           "limit",
@@ -18264,25 +18427,6 @@
           }
         },
         "description": "Object describing why a content state set failed"
-      },
-      "ContentStateInput": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "color": {
-            "description": "Color of state. Must be in 6 digit hex form (#FFFFFF). The default colors offered in the UI are:\n #ff7452 (red),\n #2684ff (blue),\n #ffc400 (yellow),\n #57d9a3 (green), and\n #8777d9 (purple)",
-            "type": "string"
-          },
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "spaceKey": {
-            "type": "string"
-          }
-        }
       },
       "ContentStateRestInput": {
         "type": "object",
@@ -18726,6 +18870,57 @@
           }
         }
       },
+      "ContentBodyConversionInput": {
+        "required": [
+          "to",
+          "body"
+        ],
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "string",
+            "description": "The name of the target format for the content body conversion."
+          },
+          "allowCache": {
+            "type": "boolean",
+            "description": "If `false`, the cache will erase its current value and begin a new conversion. If `true`, the cache will not erase its current value, and will set the status of the async conversion to “RERUNNING”. Once the data is updated, the status will change to “COMPLETED”. Large macros that take a long time to convert and that need not be immediately up to date (e.g. a macro in which the new conversion result is the same as a previous conversion result that was completed within the last 5 minutes) should set this field to `true`. Cache values are stored per user per content body and expansions.",
+            "default": false
+          },
+          "spaceKeyContext": {
+            "type": "string",
+            "description": "The space key used for resolving embedded content (page includes, files, and links) in the content body. For example, if the source content contains the link `<ac:link><ri:page ri:content-title=\"Example page\" /><ac:link>` and the `spaceKeyContext=TEST` parameter is provided, then the link will be converted into a link to the \"Example page\" page in the \"TEST\" space."
+          },
+          "contentIdContext": {
+            "type": "string",
+            "description": "The content ID used to find the space for resolving embedded content (page includes, files, and links) in the content body. For example, if the source content contains the link `<ac:link><ri:page ri:content-title=\"Example page\" /><ac:link>` and the `contentIdContext=123` parameter is provided, then the link will be converted into a link to the \"Example page\" page in the same space that has the content with ID=123. Note that `spaceKeyContext` will be ignored if this parameter is provided."
+          },
+          "embeddedContentRender": {
+            "type": "string",
+            "description": "Mode used for rendering embedded content, such as attachments. - `current` renders the embedded content using the latest version. - `version-at-save` renders the embedded content using the version at the time of save.",
+            "default": "current",
+            "enum": [
+              "current",
+              "version-at-save"
+            ]
+          },
+          "expand": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "A multi-value, comma-separated parameter indicating which properties of the content to expand and populate. Expands are dependent\non the `to` conversion format and may be irrelevant for certain conversions (e.g. `macroRenderedOutput` is redundant when\nconverting to `view` format). \n\nIf rendering to `view` format, and the body content being converted includes arbitrary nested content (such as macros); then it is \nnecessary to include webresource expands in the request. Webresources for content body are the batched JS and CSS dependencies for\nany nested dynamic content (i.e. macros).\n\n- `embeddedContent` returns metadata for nested content (e.g. page included using page include macro)\n- `mediaToken` returns JWT token for retrieving attachment data from Media API\n- `macroRenderedOutput` additionally converts body to view format\n- `webresource.superbatch.uris.js` returns all common JS dependencies as static URLs\n- `webresource.superbatch.uris.css` returns all common CSS dependencies as static URLs\n- `webresource.superbatch.uris.all` returns all common dependencies as static URLs\n- `webresource.superbatch.tags.all` returns all common JS dependencies as html `<script>` tags\n- `webresource.superbatch.tags.css` returns all common CSS dependencies as html `<style>` tags\n- `webresource.superbatch.tags.js` returns all common dependencies as html `<script>` and `<style>` tags\n- `webresource.uris.js` returns JS dependencies specific to conversion\n- `webresource.uris.css` returns CSS dependencies specific to conversion\n- `webresource.uris.all` returns all dependencies specific to conversion     \n- `webresource.tags.all` returns common JS dependencies as html `<script>` tags\n- `webresource.tags.css` returns common CSS dependencies as html `<style>` tags\n- `webresource.tags.js` returns common dependencies as html `<script>` and `<style>` tags"
+          },
+          "body": {
+            "$ref": "#/components/schemas/ContentBodyCreate"
+          }
+        }
+      },
+      "ContentBodyConversionInputArray": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ContentBodyConversionInput"
+        }
+      },
       "CopyPageHierarchyRequest": {
         "required": [
           "destinationPageId"
@@ -19001,7 +19196,6 @@
           "type"
         ],
         "type": "object",
-        "description": "The name property will soon be deprecated in favor of using id.",
         "additionalProperties": true,
         "properties": {
           "type": {
@@ -19010,10 +19204,6 @@
             "enum": [
               "group"
             ]
-          },
-          "name": {
-            "type": "string",
-            "deprecated": true
           },
           "id": {
             "type": "string"
@@ -19815,7 +20005,11 @@
           },
           "isExternalCollaborator": {
             "type": "boolean",
-            "description": "Whether the user is an external collaborator user"
+            "description": "This is deprecated. Use `isGuest` instead to find out whether the user is a guest user."
+          },
+          "isGuest": {
+            "type": "boolean",
+            "description": "Whether the user is a guest user"
           },
           "operations": {
             "type": "array",
@@ -20360,6 +20554,9 @@
           "key": {
             "type": "string"
           },
+          "alias": {
+            "type": "string"
+          },
           "name": {
             "type": "string"
           },
@@ -20522,20 +20719,23 @@
       },
       "SpaceCreate": {
         "required": [
-          "key",
           "name"
         ],
         "type": "object",
         "additionalProperties": true,
         "properties": {
-          "key": {
-            "type": "string",
-            "description": "The key for the new space. Format: See [Space\nkeys](https://confluence.atlassian.com/x/lqNMMQ)."
-          },
           "name": {
             "maxLength": 200,
             "type": "string",
             "description": "The name of the new space."
+          },
+          "key": {
+            "type": "string",
+            "description": "The key for the new space. Format: See [Space\nkeys](https://confluence.atlassian.com/x/lqNMMQ). If `alias` is not provided, this is required."
+          },
+          "alias": {
+            "type": "string",
+            "description": "This field will be used as the new identifier for the space in confluence page URLs.\nIf the property is not provided the alias will be the provided key.\nThis property is experimental and may be changed or removed in the future."
           },
           "description": {
             "$ref": "#/components/schemas/SpaceDescriptionCreate"
@@ -21169,6 +21369,9 @@
           "baseUrl": {
             "type": "string"
           },
+          "fallbackBaseUrl": {
+            "type": "string"
+          },
           "edition": {
             "type": "string"
           },
@@ -21179,6 +21382,9 @@
             "type": "string"
           },
           "defaultTimeZone": {
+            "type": "string"
+          },
+          "microsPerimeter": {
             "type": "string"
           }
         }
@@ -21438,13 +21644,17 @@
             "type": "string",
             "description": "This displays user time zone. Depending on the user's privacy setting, this may return null."
           },
-          "isExternalCollaborator": {
-            "type": "boolean",
-            "description": "Whether the user is an external collaborator user"
-          },
           "externalCollaborator": {
             "type": "boolean",
-            "description": "Whether the user is an external collaborator user"
+            "description": "This is deprecated. Use `isGuest` instead to find out whether the user is a guest user."
+          },
+          "isExternalCollaborator": {
+            "type": "boolean",
+            "description": "This is deprecated. Use `isGuest` instead to find out whether the user is a guest user."
+          },
+          "isGuest": {
+            "type": "boolean",
+            "description": "Whether the user is a guest user"
           },
           "operations": {
             "nullable": true,
@@ -21501,10 +21711,6 @@
             "items": {
               "$ref": "#/components/schemas/OperationCheckResult"
             }
-          },
-          "isExternalCollaborator": {
-            "type": "boolean",
-            "description": "Whether the user is an external collaborator user"
           },
           "_expandable": {
             "type": "object",
@@ -21944,6 +22150,7 @@
           "displayName",
           "operations",
           "isExternalCollaborator",
+          "isGuest",
           "accountType",
           "email",
           "publicName",
@@ -21981,7 +22188,16 @@
               "$ref": "#/components/schemas/OperationCheckResult"
             }
           },
+          "externalCollaborator": {
+            "nullable": false,
+            "type": "boolean"
+          },
+          "isGuest": {
+            "nullable": true,
+            "type": "boolean"
+          },
           "isExternalCollaborator": {
+            "nullable": false,
             "type": "boolean"
           },
           "details": {
@@ -21999,9 +22215,6 @@
           "personalSpace": {
             "type": "object",
             "nullable": true
-          },
-          "externalCollaborator": {
-            "type": "boolean"
           }
         },
         "description": "This essentially the same as the `User` object, but no `_links` property and\nno `_expandable` property (therefore, different required fields)."
@@ -22156,7 +22369,7 @@
           },
           "identifier": {
             "type": "string",
-            "description": "for `type=user`, identifier should be user's accountId or `anonymous` for anonymous users\n\nfor `type=group`, identifier should be the groupId. We are deprecating groupName support in mid-2024 \nfor this field but still accept it in the interim."
+            "description": "for `type=user`, identifier should be user's accountId or `anonymous` for anonymous users\n\nfor `type=group`, identifier should be the groupId."
           }
         },
         "description": "The user or group that the permission applies to."
@@ -22389,7 +22602,7 @@
       "contentExpand": {
         "name": "expand",
         "in": "query",
-        "description": "A multi-value parameter indicating which properties of the content to expand.\n\n- `childTypes.all` returns whether the content has attachments, comments, or child pages/whiteboards.\nUse this if you only need to check whether the content has children of a particular type.\n- `childTypes.attachment` returns whether the content has attachments.\n- `childTypes.comment` returns whether the content has comments.\n- `childTypes.page` returns whether the content has child pages.\n- `container` returns the space that the content is in. This is the same as the information\nreturned by [Get space](#api-space-spaceKey-get).\n- `metadata.currentuser` returns information about the current user in relation to the content,\nincluding when they last viewed it, modified it, contributed to it, or added it as a favorite.\n- `metadata.properties` returns content properties that have been set via the Confluence REST API.\n- `metadata.labels` returns the labels that have been added to the content.\n- `metadata.frontend` this property is only used by Atlassian.\n- `operations` returns the operations for the content, which are used when setting permissions.\n- `children.page` returns pages that are descendants at the level immediately below the content.\n- `children.attachment` returns all attachments for the content.\n- `children.comment` returns all comments on the content.\n- `restrictions.read.restrictions.user` returns the users that have permission to read the content.\n- `restrictions.read.restrictions.group` returns the groups that have permission to read the content. Note that\nthis may return deleted groups, because deleting a group doesn't remove associated restrictions.\n- `restrictions.update.restrictions.user` returns the users that have permission to update the content.\n- `restrictions.update.restrictions.group` returns the groups that have permission to update the content. Note that\nthis may return deleted groups because deleting a group doesn't remove associated restrictions.\n- `history` returns the history of the content, including the date it was created.\n- `history.lastUpdated` returns information about the most recent update of the content, including\nwho updated it and when it was updated.\n- `history.previousVersion` returns information about the update prior to the current content update.\n- `history.contributors` returns all of the users who have contributed to the content.\n- `history.nextVersion` returns information about the update after to the current content update.\n- `ancestors` returns the parent content, if the content is a page or whiteboard.\n- `body` returns the body of the content in different formats, including the editor format,\nview format, and export format.\n- `body.storage` returns the body of content in storage format.\n- `body.view` returns the body of content in view format.\n- `version` returns information about the most recent update of the content, including who updated it\nand when it was updated.\n- `descendants.page` returns pages that are descendants at any level below the content.\n- `descendants.attachment` returns all attachments for the content, same as `children.attachment`.\n- `descendants.comment` returns all comments on the content, same as `children.comment`.\n- `space` returns the space that the content is in. This is the same as the information returned by\n[Get space](#api-space-spaceKey-get).\n\nIn addition, the following comment-specific expansions can be used:\n- `extensions.inlineProperties` returns inline comment-specific properties.\n- `extensions.resolution` returns the resolution status of each comment.",
+        "description": "A multi-value parameter indicating which properties of the content to expand.\n\n- `childTypes.all` returns whether the content has attachments, comments, or child pages/whiteboards.\nUse this if you only need to check whether the content has children of a particular type.\n- `childTypes.attachment` returns whether the content has attachments.\n- `childTypes.comment` returns whether the content has comments.\n- `childTypes.page` returns whether the content has child pages.\n- `childTypes.whiteboard` returns whether the content has child whiteboards.\n- `childTypes.database` returns whether the content has child databases.\n- `childTypes.embed` returns whether the content has child embeds (smartlinks).\n- `childTypes.folder` returns whether the content has child folders.\n- `container` returns the space that the content is in. This is the same as the information\nreturned by [Get space](#api-space-spaceKey-get).\n- `metadata.currentuser` returns information about the current user in relation to the content,\nincluding when they last viewed it, modified it, contributed to it, or added it as a favorite.\n- `metadata.properties` returns content properties that have been set via the Confluence REST API.\n- `metadata.labels` returns the labels that have been added to the content.\n- `metadata.frontend` this property is only used by Atlassian.\n- `operations` returns the operations for the content, which are used when setting permissions.\n- `children.page` returns pages that are descendants at the level immediately below the content.\n- `children.whiteboard` returns whiteboards that are descendants at the level immediately below the content.\n- `children.database` returns databases that are descendants at the level immediately below the content.\n- `children.embed` returns embeds (smartlinks) that are descendants at the level immediately below the content.\n- `children.folder` returns folders that are descendants at the level immediately below the content.\n- `children.attachment` returns all attachments for the content.\n- `children.comment` returns all comments on the content.\n- `restrictions.read.restrictions.user` returns the users that have permission to read the content.\n- `restrictions.read.restrictions.group` returns the groups that have permission to read the content. Note that\nthis may return deleted groups, because deleting a group doesn't remove associated restrictions.\n- `restrictions.update.restrictions.user` returns the users that have permission to update the content.\n- `restrictions.update.restrictions.group` returns the groups that have permission to update the content. Note that\nthis may return deleted groups because deleting a group doesn't remove associated restrictions.\n- `history` returns the history of the content, including the date it was created.\n- `history.lastUpdated` returns information about the most recent update of the content, including\nwho updated it and when it was updated.\n- `history.previousVersion` returns information about the update prior to the current content update.\n- `history.contributors` returns all of the users who have contributed to the content.\n- `history.nextVersion` returns information about the update after to the current content update.\n- `ancestors` returns the parent content, if the content is a page or whiteboard.\n- `body` returns the body of the content in different formats, including the editor format,\nview format, and export format.\n- `body.storage` returns the body of content in storage format.\n- `body.view` returns the body of content in view format.\n- `version` returns information about the most recent update of the content, including who updated it\nand when it was updated.\n- `descendants.page` returns pages that are descendants at any level below the content.\n- `descendants.whiteboard` returns whiteboards that are descendants at any level below the content.\n- `descendants.database` returns databases that are descendants at any level below the content.\n- `descendants.embed` returns embeds (smartlinks) that are descendants at any level below the content.\n- `descendants.folder` returns folders that are descendants at any level below the content.\n- `descendants.attachment` returns all attachments for the content, same as `children.attachment`.\n- `descendants.comment` returns all comments on the content, same as `children.comment`.\n- `space` returns the space that the content is in. This is the same as the information returned by\n[Get space](#api-space-spaceKey-get).\n\nIn addition, the following comment-specific expansions can be used:\n- `extensions.inlineProperties` returns inline comment-specific properties.\n- `extensions.resolution` returns the resolution status of each comment.",
         "style": "form",
         "explode": false,
         "schema": {
@@ -22415,7 +22628,7 @@
       "contentExpandWithSubExpandLimit": {
         "name": "expand",
         "in": "query",
-        "description": "A multi-value parameter indicating which properties of the content to expand.\nMaximum sub-expansions allowed is `8`.\n\n- `childTypes.all` returns whether the content has attachments, comments, or child pages/whiteboards.\nUse this if you only need to check whether the content has children of a particular type.\n- `childTypes.attachment` returns whether the content has attachments.\n- `childTypes.comment` returns whether the content has comments.\n- `childTypes.page` returns whether the content has child pages.\n- `container` returns the space that the content is in. This is the same as the information\nreturned by [Get space](#api-space-spaceKey-get).\n- `metadata.currentuser` returns information about the current user in relation to the content,\nincluding when they last viewed it, modified it, contributed to it, or added it as a favorite.\n- `metadata.properties` returns content properties that have been set via the Confluence REST API.\n- `metadata.labels` returns the labels that have been added to the content.\n- `metadata.frontend` this property is only used by Atlassian.\n- `operations` returns the operations for the content, which are used when setting permissions.\n- `children.page` returns pages that are descendants at the level immediately below the content.\n- `children.attachment` returns all attachments for the content.\n- `children.comment` returns all comments on the content.\n- `restrictions.read.restrictions.user` returns the users that have permission to read the content.\n- `restrictions.read.restrictions.group` returns the groups that have permission to read the content. Note that\nthis may return deleted groups, because deleting a group doesn't remove associated restrictions.\n- `restrictions.update.restrictions.user` returns the users that have permission to update the content.\n- `restrictions.update.restrictions.group` returns the groups that have permission to update the content. Note that\nthis may return deleted groups because deleting a group doesn't remove associated restrictions.\n- `history` returns the history of the content, including the date it was created.\n- `history.lastUpdated` returns information about the most recent update of the content, including\nwho updated it and when it was updated.\n- `history.previousVersion` returns information about the update prior to the current content update.\n- `history.contributors` returns all of the users who have contributed to the content.\n- `history.nextVersion` returns information about the update after to the current content update.\n- `ancestors` returns the parent content, if the content is a page or whiteboard.\n- `body` returns the body of the content in different formats, including the editor format,\nview format, and export format.\n- `body.storage` returns the body of content in storage format.\n- `body.view` returns the body of content in view format.\n- `version` returns information about the most recent update of the content, including who updated it\nand when it was updated.\n- `descendants.page` returns pages that are descendants at any level below the content.\n- `descendants.attachment` returns all attachments for the content, same as `children.attachment`.\n- `descendants.comment` returns all comments on the content, same as `children.comment`.\n- `space` returns the space that the content is in. This is the same as the information returned by\n[Get space](#api-space-spaceKey-get).\n\nIn addition, the following comment-specific expansions can be used:\n- `extensions.inlineProperties` returns inline comment-specific properties.\n- `extensions.resolution` returns the resolution status of each comment.",
+        "description": "A multi-value parameter indicating which properties of the content to expand.\nMaximum sub-expansions allowed is `8`.\n\n- `childTypes.all` returns whether the content has attachments, comments, or child pages/whiteboards.\nUse this if you only need to check whether the content has children of a particular type.\n- `childTypes.attachment` returns whether the content has attachments.\n- `childTypes.comment` returns whether the content has comments.\n- `childTypes.page` returns whether the content has child pages.\n- `childTypes.whiteboard` returns whether the content has child whiteboards.\n- `childTypes.database` returns whether the content has child databases.\n- `childTypes.embed` returns whether the content has child embeds (smartlinks).\n- `childTypes.folder` returns whether the content has child folder.\n- `container` returns the space that the content is in. This is the same as the information\nreturned by [Get space](#api-space-spaceKey-get).\n- `metadata.currentuser` returns information about the current user in relation to the content,\nincluding when they last viewed it, modified it, contributed to it, or added it as a favorite.\n- `metadata.properties` returns content properties that have been set via the Confluence REST API.\n- `metadata.labels` returns the labels that have been added to the content.\n- `metadata.frontend` this property is only used by Atlassian.\n- `operations` returns the operations for the content, which are used when setting permissions.\n- `children.page` returns pages that are descendants at the level immediately below the content.\n- `children.whiteboard` returns whiteboards that are descendants at the level immediately below the content.\n- `children.database` returns databases that are descendants at the level immediately below the content.\n- `children.embed` returns embeds (smartlinks) that are descendants at the level immediately below the content.\n- `children.folder` returns folders that are descendants at the level immediately below the content.\n- `children.attachment` returns all attachments for the content.\n- `children.comment` returns all comments on the content.\n- `restrictions.read.restrictions.user` returns the users that have permission to read the content.\n- `restrictions.read.restrictions.group` returns the groups that have permission to read the content. Note that\nthis may return deleted groups, because deleting a group doesn't remove associated restrictions.\n- `restrictions.update.restrictions.user` returns the users that have permission to update the content.\n- `restrictions.update.restrictions.group` returns the groups that have permission to update the content. Note that\nthis may return deleted groups because deleting a group doesn't remove associated restrictions.\n- `history` returns the history of the content, including the date it was created.\n- `history.lastUpdated` returns information about the most recent update of the content, including\nwho updated it and when it was updated.\n- `history.previousVersion` returns information about the update prior to the current content update.\n- `history.contributors` returns all of the users who have contributed to the content.\n- `history.nextVersion` returns information about the update after to the current content update.\n- `ancestors` returns the parent content, if the content is a page or whiteboard.\n- `body` returns the body of the content in different formats, including the editor format,\nview format, and export format.\n- `body.storage` returns the body of content in storage format.\n- `body.view` returns the body of content in view format.\n- `version` returns information about the most recent update of the content, including who updated it\nand when it was updated.\n- `descendants.page` returns pages that are descendants at any level below the content.\n- `descendants.whiteboard` returns whiteboards that are descendants at any level below the content.\n- `descendants.database` returns databases that are descendants at any level below the content.\n- `descendants.embed` returns embeds (smartlinks) that are descendants at any level below the content.\n- `descendants.folder` returns folders that are descendants at any level below the content.\n- `descendants.attachment` returns all attachments for the content, same as `children.attachment`.\n- `descendants.comment` returns all comments on the content, same as `children.comment`.\n- `space` returns the space that the content is in. This is the same as the information returned by\n[Get space](#api-space-spaceKey-get).\n\nIn addition, the following comment-specific expansions can be used:\n- `extensions.inlineProperties` returns inline comment-specific properties.\n- `extensions.resolution` returns the resolution status of each comment.",
         "style": "form",
         "explode": false,
         "schema": {
@@ -22525,6 +22738,9 @@
               "read:blogpost:confluence": "View blogposts.",
               "write:blogpost:confluence": "Create and update blogposts.",
               "delete:blogpost:confluence": "Delete blogposts.",
+              "read:whiteboard:confluence": "View whiteboards.",
+              "write:whiteboard:confluence": "Create and update whiteboards.",
+              "delete:whiteboard:confluence": "Delete whiteboards.",
               "read:custom-content:confluence": "View custom content.",
               "write:custom-content:confluence": "Create and update custom content.",
               "delete:custom-content:confluence": "Delete custom content.",
@@ -22563,7 +22779,10 @@
               "write:user.property:confluence": "Create, update and delete user properties.",
               "read:space.setting:confluence": "View space settings.",
               "write:space.setting:confluence": "Update space settings.",
-              "read:user:confluence": "View user details."
+              "read:user:confluence": "View user details.",
+              "moderate:core-content:confluence": "Moderate core contents",
+              "moderate:comment:confluence": "Moderate comments",
+              "read:email-address:confluence": "View email addresses of all users regardless of the user’s profile visibility settings."
             }
           }
         }
